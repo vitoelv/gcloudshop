@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="com/jcommerce/core/util/SendMail.java|com/jcommerce/core/payment/|com/jcommerce/core/module/" kind="src" path="core/src"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/App Engine SDK Impl pkg"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/mylib"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>

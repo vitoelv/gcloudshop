@@ -1,0 +1,8 @@
+<!-- Indices written at Fri, 26 Jun 2009 10:23:09 CST -->
+
+<datastore-indexes>
+
+    <!-- Used 2 times in query history -->
+    <datastore-index kind="Attribute" ancestor="true" source="auto"/>
+
+</datastore-indexes>
