@@ -239,9 +239,9 @@ public class PaymentMetaList extends ContentWidget {
         public ActionCellRenderer(Grid grid) {
         }
         
-        public String render(BeanObject model, String property, ColumnData config,
-                final int rowIndex, final int colIndex, ListStore<BeanObject> store) {
-            
+		public Object render(BeanObject model, String property,
+				ColumnData config, int rowIndex, int colIndex,
+				ListStore<BeanObject> store, Grid<BeanObject> grid) {
             Boolean install = (Boolean)model.get(PaymentConfigMetaForm.INSTALL);
             System.out.println("install: "+install);
             String code = (String)model.get(PaymentConfigMetaForm.CODE);
@@ -271,6 +271,6 @@ public class PaymentMetaList extends ContentWidget {
             }
            
             return sb.toString();
-        }
+		}
     }
 }

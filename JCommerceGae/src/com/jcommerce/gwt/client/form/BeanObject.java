@@ -8,7 +8,7 @@ import com.extjs.gxt.ui.client.data.BaseTreeModel;
 import com.jcommerce.gwt.client.ValidationException;
 
 
-public class BeanObject extends BaseTreeModel<BeanObject> implements
+public class BeanObject extends BaseTreeModel implements
         Serializable {
     private String modelName;
     
