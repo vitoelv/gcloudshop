@@ -63,7 +63,7 @@ public class GoodsTypePanel extends ContentWidget {
         
         
         
-        TextField nameField = GoodsTypeForm.getNameField("商品类型名称：");
+        TextField<String> nameField = GoodsTypeForm.getNameField("商品类型名称：");
         nameField.setFieldLabel("商品类型名称");
         formPanel.add(nameField);
         
@@ -104,7 +104,7 @@ public class GoodsTypePanel extends ContentWidget {
             		gotoSuccessPanel();
             		return;
             	}
-            	List<Field> fields = formPanel.getFields();
+            	List<Field<?>> fields = formPanel.getFields();
             	
             	Map<String, Object> props = new HashMap<String, Object>();
             	for(Field field:fields) {
@@ -161,7 +161,7 @@ public class GoodsTypePanel extends ContentWidget {
         			// NOTE by Leon
         			// this will not correctly set the selected value for lstGoodsType, 
         			// as the last async query for listGoodsType has not finished
-        			List<Field> fields = formPanel.getFields();
+        			List<Field<?>> fields = formPanel.getFields();
         			for(Field field:fields) {
         				String name = field.getName();
         				Object value = mapAttribute.get(name);

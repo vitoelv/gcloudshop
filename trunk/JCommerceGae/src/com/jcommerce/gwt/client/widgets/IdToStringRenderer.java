@@ -26,18 +26,7 @@ public class IdToStringRenderer implements GridCellRenderer<BeanObject>{
 		idToString.add(idInfo);
 	}
 	
-	public String render(BeanObject model, String property, ColumnData config,
-			int rowIndex, int colIndex, ListStore<BeanObject> store) {
-		// TODO Auto-generated method stub
-		Object name = store.getAt(rowIndex).get(property);
-		for(IdInfo idInfo:idToString){
-			if(name.toString().equals(idInfo.id)){
-				return idInfo.string;
-			}
-		}
-		
-		return null;
-	}
+
 	public static class IdInfo{
 		String id;
 		String string;
@@ -66,6 +55,19 @@ public class IdToStringRenderer implements GridCellRenderer<BeanObject>{
 			this.string = string;
 		}
 		
+	}
+	public Object render(BeanObject model, String property, ColumnData config,
+			int rowIndex, int colIndex, ListStore<BeanObject> store,
+			Grid<BeanObject> grid) {
+		// TODO Auto-generated method stub
+		Object name = store.getAt(rowIndex).get(property);
+		for(IdInfo idInfo:idToString){
+			if(name.toString().equals(idInfo.id)){
+				return idInfo.string;
+			}
+		}
+		
+		return null;
 	}
 
 }

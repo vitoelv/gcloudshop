@@ -25,13 +25,13 @@ public class GoodsTypeForm extends BeanObject implements IGoodsType {
 		
 	}
 	
-	public static TextField getNameField(String fieldTitle) {
-		TextField nameField = new TextField();
+	public static TextField<String> getNameField(String fieldTitle) {
+		TextField<String> nameField = new TextField<String>();
 		nameField.setName(NAME);
 		nameField.setMaxLength(10);
 		nameField.setAutoValidate(true);
 		nameField.setAllowBlank(false);
-		TextField.TextFieldMessages tfm = nameField.new TextFieldMessages();
+		TextField<String>.TextFieldMessages tfm = nameField.new TextFieldMessages();
 		tfm.setBlankText(Resources.messages.blankText(fieldTitle));
 		nameField.setMessages(tfm);
 		return nameField;

@@ -26,46 +26,6 @@ public class ActionCellRenderer implements GridCellRenderer<BeanObject> {
         acts.add(act);
     }
     
-    public String render(BeanObject model, String property, ColumnData config,
-            final int rowIndex, final int colIndex, ListStore<BeanObject> store) {
-
-        StringBuffer sb = new StringBuffer(); 
-        for (ActionInfo act : acts) {
-            sb.append("<a href=\"");
-
-            String a = act.getAction();
-            // deleteGoods($id)
-            if (a != null && a.indexOf("$") >= 0) {
-                int i = a.indexOf("$");
-                int j = i + 1;
-                while (j < a.length()) {
-                    if (a.charAt(j) == ' ' || a.charAt(j) == ',' || a.charAt(j) == ')') {
-                        break;
-                    }                    
-                    j++;
-                }
-                String name = a.substring(i+1, j); 
-                Object value = store.getAt(rowIndex).get(name);
-                a = a.substring(0, i) + "'"+ value + "'" + a.substring(j);
-            }
-            sb.append("javascript:" + a +";");
-            sb.append("\"");
-            String tip = act.getTooltip();
-            if (tip != null && tip.trim().length() > 0) {
-                sb.append(" title=\"").append(tip).append("\"");
-            }
-            sb.append(">");
-            if (act.getImage() != null && act.getImage().trim().length() > 0) {
-                sb.append("<img border=\"0\" src=\""+act.getImage()+"\">");
-            }
-            if (act.getText() != null && act.getText().trim().length() > 0) {
-                sb.append(act.getText());
-            }
-            sb.append("</a>");
-        }
-//        System.out.println("sb:"+sb);
-        return sb.toString();
-    }
     
     public static class ActionInfo {
         String image;
@@ -105,4 +65,45 @@ public class ActionCellRenderer implements GridCellRenderer<BeanObject> {
             this.tooltip = tooltip;
         }
     }
+
+	public Object render(BeanObject model, String property, ColumnData config,
+			int rowIndex, int colIndex, ListStore<BeanObject> store,
+			Grid<BeanObject> grid) {
+        StringBuffer sb = new StringBuffer(); 
+        for (ActionInfo act : acts) {
+            sb.append("<a href=\"");
+
+            String a = act.getAction();
+            // deleteGoods($id)
+            if (a != null && a.indexOf("$") >= 0) {
+                int i = a.indexOf("$");
+                int j = i + 1;
+                while (j < a.length()) {
+                    if (a.charAt(j) == ' ' || a.charAt(j) == ',' || a.charAt(j) == ')') {
+                        break;
+                    }                    
+                    j++;
+                }
+                String name = a.substring(i+1, j); 
+                Object value = store.getAt(rowIndex).get(name);
+                a = a.substring(0, i) + "'"+ value + "'" + a.substring(j);
+            }
+            sb.append("javascript:" + a +";");
+            sb.append("\"");
+            String tip = act.getTooltip();
+            if (tip != null && tip.trim().length() > 0) {
+                sb.append(" title=\"").append(tip).append("\"");
+            }
+            sb.append(">");
+            if (act.getImage() != null && act.getImage().trim().length() > 0) {
+                sb.append("<img border=\"0\" src=\""+act.getImage()+"\">");
+            }
+            if (act.getText() != null && act.getText().trim().length() > 0) {
+                sb.append(act.getText());
+            }
+            sb.append("</a>");
+        }
+//        System.out.println("sb:"+sb);
+        return sb.toString();
+	}
 }

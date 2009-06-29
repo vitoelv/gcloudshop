@@ -26,17 +26,25 @@ public class MyPagingListService extends RemoteService {
         }
         
         final IShopServiceAsync service = getService();
-        MyProxy<ListLoadConfig, ListLoadResult> proxy = new MyProxy<ListLoadConfig, ListLoadResult>() {
-            public void load(ListLoadConfig loadConfig, AsyncCallback<ListLoadResult> callback) {
-//                service.getMyPaymentMetaList(loadConfig, callback);
-            }
+        MyProxy<ListLoadResult> proxy = new MyProxy<ListLoadResult>() {
+        	
+//            public void load(ListLoadConfig loadConfig, AsyncCallback<ListLoadResult> callback) {
+////                service.getMyPaymentMetaList(loadConfig, callback);
+//            }
+
+			@Override
+			protected void load(Object loadConfig,
+					AsyncCallback<ListLoadResult> callback) {
+				// TODO Auto-generated method stub
+				
+			}
             
         };
         
         // convert from ListLoadResult<Map<String, Object>> to ListLoadResult<BeanObject>
-        DataReader<ListLoadConfig, ListLoadResult> reader = new DataReader<ListLoadConfig, ListLoadResult>() {
+        DataReader<ListLoadResult> reader = new DataReader<ListLoadResult>() {
 
-            public ListLoadResult<BeanObject> read(ListLoadConfig loadConfig, Object data) {
+            public ListLoadResult<BeanObject> read(Object loadConfig, Object data) {
                 System.out.println("my reader: "+data.getClass().getName());
                 List<BeanObject> destdatas = new ArrayList<BeanObject>();
                 ListLoadResult<Map<String, Object>> casteddata = (ListLoadResult)data;
@@ -49,10 +57,12 @@ public class MyPagingListService extends RemoteService {
                 return res;
             }
 
+
+
             
         };
         // loader
-        BaseListLoader loader = new BaseListLoader<ListLoadConfig, ListLoadResult>(proxy, reader);
+        BaseListLoader loader = new BaseListLoader<ListLoadResult>(proxy, reader);
         loader.setRemoteSort(true);
 
         return loader;
@@ -78,7 +88,7 @@ public class MyPagingListService extends RemoteService {
 //        return loader;
 //    }
     
-    public abstract class MyProxy<C, D> extends RpcProxy<C, D> {
+    public abstract class MyProxy<D> extends RpcProxy<D> {
         Criteria criteria = null;
         public void setCriteria(Criteria criteria) {
             this.criteria = criteria;

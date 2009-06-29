@@ -26,8 +26,10 @@ public class BeanCellRenderer implements GridCellRenderer<BeanObject> {
         this.view = grid.getView();
     }
     
-    public String render(BeanObject model, String property, ColumnData config,
-            final int rowIndex, final int colIndex, ListStore<BeanObject> store) {
+
+	public Object render(BeanObject model, String property, ColumnData config,
+			final int rowIndex, final int colIndex, ListStore<BeanObject> store,
+			Grid<BeanObject> grid) {
         final IShopServiceAsync service = (IShopServiceAsync)Registry.get("service");
         
         String id = (String) model.get(property);
@@ -48,5 +50,5 @@ public class BeanCellRenderer implements GridCellRenderer<BeanObject> {
         });
         
         return "waiting";
-    }
+	}
 }
