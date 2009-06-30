@@ -180,8 +180,12 @@ public class Application extends Composite implements WindowResizeListener {
     contentWrapper = new SimplePanel();
     contentTitleLeftWrapper = new HTML("ISHOP管理中心");
     contentTitleRightWrapper = new SimplePanel();
+    
+//    contentTitleLayout.setWidth("100%");
     contentTitleLayout.setWidget(0,0, contentTitleLeftWrapper);
     contentTitleLayout.setWidget(0,1, contentTitleRightWrapper);
+    
+//    contentLayout.setWidth("100%");
     contentLayout.setWidget(0, 0, contentTitleLayout);
     contentLayout.setWidget(1, 0, contentWrapper);
     
@@ -324,13 +328,18 @@ public class Application extends Composite implements WindowResizeListener {
   }
 
   protected void onWindowResizedImpl(int width) {
+	  
     int menuWidth = mainMenu.getOffsetWidth();
     int contentWidth = width - menuWidth - 30;
     int contentWidthInner = contentWidth - 10;
     bottomPanel.setCellWidth(mainMenu, menuWidth + "px");
     bottomPanel.setCellWidth(contentDecorator, contentWidth + "px");
-    contentLayout.getCellFormatter().setWidth(0, 0, contentWidthInner + "px");
-    contentLayout.getCellFormatter().setWidth(1, 0, contentWidthInner + "px");
+    contentTitleLayout.setWidth(contentWidth + "px");
+    contentLayout.setWidth(contentWidth + "px");
+    
+    System.out.println("resizing to "+width+", contentWidth="+contentWidth);
+//    contentLayout.getCellFormatter().setWidth(0, 0, contentWidthInner + "px");
+//    contentLayout.getCellFormatter().setWidth(1, 0, contentWidthInner + "px");
   }
 
   /**

@@ -115,7 +115,7 @@ public class GoodsTypeListPanel extends ContentWidget {
 		
 		GoodsTypePanel.State newState = new GoodsTypePanel.State();
 		newState.setIsEdit(true);
-		newState.setGoodsTypeID(id);
+		newState.setId(id);
 		newState.execute();
 	}
 	private void deleteGoodsType(final String id) {

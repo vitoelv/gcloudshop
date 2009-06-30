@@ -30,5 +30,6 @@
   <servlet path="/ishopService.do" class="com.jcommerce.gwt.server.IShopServiceImpl" />		
   
   <servlet path="/customizedService.do" class="com.jcommerce.gwt.server.CustomizedServiceImpl" />
+  <servlet path="/uploadService" class="com.jcommerce.gwt.server.UploadFileServlet" />
   
 </module>
