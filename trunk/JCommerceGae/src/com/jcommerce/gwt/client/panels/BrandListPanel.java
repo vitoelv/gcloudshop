@@ -89,7 +89,14 @@ public class BrandListPanel extends ContentWidget {
     
     @Override
     public Button getShortCutButton() {
-    	return btnAdd;
+//    	return btnAdd;
+      Button buttonAddClone = new Button("添加品牌");
+      buttonAddClone.addSelectionListener(new SelectionListener<ButtonEvent>() {
+          public void componentSelected(ButtonEvent ce) {
+          	onButtonAddClicked();
+          }
+      });
+      return buttonAddClone;
     }
     
     private static BrandListPanel instance;
@@ -170,21 +177,28 @@ public class BrandListPanel extends ContentWidget {
         panel.setHeading("Paging Grid");
         panel.setLayout(new FitLayout());
         panel.add(grid);
-        panel.setSize(750, 350);
+//        panel.setSize(750, 350);
+        panel.setSize("100%", "350px");
         panel.setBottomComponent(toolBar);     
         
         panel.setButtonAlign(HorizontalAlignment.CENTER);
         btnAdd.addSelectionListener(new SelectionListener<ButtonEvent>() {
             public void componentSelected(ButtonEvent ce) {
-				BrandPanel.State newState = new BrandPanel.State();
-				newState.setIsEdit(false);
-				newState.execute();
+            	onButtonAddClicked();
             }
         });
+        
+
         panel.addButton(btnAdd);
         
         add(panel);       
     }    
+    
+    public void onButtonAddClicked() {
+		BrandPanel.State newState = new BrandPanel.State();
+		newState.setIsEdit(false);
+		newState.execute();
+    }
     
     private native void initJS(BrandListPanel me) /*-{
     $wnd.changeBrand = function (id) {
@@ -198,7 +212,7 @@ public class BrandListPanel extends ContentWidget {
     private void modifyBrandAndRefrsh(final String id) {    
 		BrandPanel.State newState = new BrandPanel.State();
 		newState.setIsEdit(true);
-		newState.setBrandID(id);
+		newState.setId(id);
 		newState.execute();
     }
     

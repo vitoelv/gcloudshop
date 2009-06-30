@@ -42,7 +42,13 @@
         <servlet-class>com.jcommerce.gwt.server.CustomizedServiceImpl</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-
+    
+    <servlet>
+        <servlet-name>ishopupload</servlet-name>
+        <servlet-class>com.jcommerce.gwt.server.UploadFileServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    
 	<servlet-mapping>
 		<servlet-name>freemarker</servlet-name>
 		<url-pattern>*.ftl</url-pattern>
@@ -58,7 +64,10 @@
         <servlet-name>customized</servlet-name>
         <url-pattern>/jcommercegae/customizedService.do</url-pattern>
     </servlet-mapping>
-
+    <servlet-mapping>
+        <servlet-name>ishopupload</servlet-name>
+        <url-pattern>/jcommercegae/uploadService</url-pattern>
+    </servlet-mapping>
 	<filter-mapping>
   		<filter-name>OpenPersistenceManagerInView</filter-name>
   		<url-pattern>*.do</url-pattern>

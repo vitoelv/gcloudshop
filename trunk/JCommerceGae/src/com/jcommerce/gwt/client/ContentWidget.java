@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.extjs.gxt.ui.client.Style.Orientation;
+import com.extjs.gxt.ui.client.widget.Component;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.Layout;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
@@ -33,7 +34,10 @@ public abstract class ContentWidget extends LayoutContainer {
     	contentPanel.add(panel);
     	return true;
     }
-    
+    public boolean add(Component panel) {
+    	contentPanel.add(panel);
+    	return true;
+    }
     public boolean removeMyPanel(Widget panel) {
         contentPanel.remove(panel);
         return true;
@@ -55,9 +59,9 @@ public abstract class ContentWidget extends LayoutContainer {
         // descWidget.setStyleName(DEFAULT_STYLE_NAME + "-description");
         // contentPanel.add(descWidget);
         
-        table.setCellSpacing(6);
+//        table.setCellSpacing(6);
         
-        contentPanel.add(table);
+//        contentPanel.add(table);
     }
     
     /**
@@ -89,8 +93,6 @@ public abstract class ContentWidget extends LayoutContainer {
         return Utils.getService();
     }
     
-    protected PageState getCurState() {
-    	return null;
-    }
+    protected abstract PageState getCurState();
     
 }
