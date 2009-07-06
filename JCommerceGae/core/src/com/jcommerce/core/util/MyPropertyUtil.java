@@ -139,6 +139,10 @@ public class MyPropertyUtil {
 			if("class".equals(name)) {
 				continue;
 			}
+			if("id".equals(name) || "keyName".equals(name)) {
+				// TODO hardcoded.  for update, never change Id field
+				continue;
+			}
 			Class type = pd.getPropertyType();
 			debug("name=" + name + ", type=" + type);
 			if (Collection.class.isAssignableFrom(type)) {
@@ -241,6 +245,6 @@ public class MyPropertyUtil {
     
     public static void debug(String s) {
     	
-    	System.out.println("MyPropertyUtil: "+s);
+//    	System.out.println("MyPropertyUtil: "+s);
     }
 }

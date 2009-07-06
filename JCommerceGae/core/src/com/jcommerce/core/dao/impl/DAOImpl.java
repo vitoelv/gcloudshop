@@ -14,13 +14,17 @@ import java.util.List;
 import java.util.Set;
 
 import javax.jdo.JDOException;
+import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.springframework.orm.jdo.JdoCallback;
+import org.springframework.orm.jdo.JdoObjectRetrievalFailureException;
 import org.springframework.orm.jdo.JdoTemplate;
 import org.springframework.orm.jdo.support.JdoDaoSupport;
 
@@ -81,6 +85,7 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
     public boolean delete (String modelName, String id) {
     	try {
     		JdoTemplate jdoTemplate =getJdoTemplate();
+    		
     		Object obj = (Object)jdoTemplate.getObjectById(Class.forName(modelName), id);
     					
 //			Brand brand = (Brand)obj;
@@ -93,6 +98,12 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
     			jdoTemplate.deletePersistent(obj);
     		}
 //			res = String.valueOf(obj.getId());
+			return true;
+    	} catch (JDOObjectNotFoundException e) {
+    		return true;
+    	} catch (NucleusObjectNotFoundException e) {
+    		return true;
+		} catch( JdoObjectRetrievalFailureException e) {
 			return true;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -135,6 +146,10 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
     	
     	String id = null;
     	try {
+    		// TODO leon temporary solution for case that id is blank in form
+    		if(StringUtils.isEmpty(to.getId())) {
+    			to.setId(null);
+    		}
     		to.setKeyName(UUIDHexGenerator.newUUID());
 			getJdoTemplate().makePersistent(to);
 			id = to.getId();

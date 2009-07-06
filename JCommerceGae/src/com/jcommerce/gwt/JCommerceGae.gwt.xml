@@ -30,6 +30,8 @@
   <servlet path="/ishopService.do" class="com.jcommerce.gwt.server.IShopServiceImpl" />		
   
   <servlet path="/customizedService.do" class="com.jcommerce.gwt.server.CustomizedServiceImpl" />
-  <servlet path="/uploadService" class="com.jcommerce.gwt.server.UploadFileServlet" />
+  <servlet path="/gwtHttpService.do" class="com.jcommerce.gwt.server.GWTHttpServlet" />
+  <servlet path="/dynaImageService.do" class="example.DynaImageServlet" />
   
+
 </module>

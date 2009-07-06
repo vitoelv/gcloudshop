@@ -34,15 +34,23 @@ import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 import com.extjs.gxt.ui.client.widget.grid.Grid;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.toolbar.PagingToolBar;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.RequestException;
+import com.google.gwt.http.client.Response;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ListBox;
 import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.BeanObject;
+import com.jcommerce.gwt.client.form.GWTHttpDynaForm;
 import com.jcommerce.gwt.client.model.IBrand;
 import com.jcommerce.gwt.client.resources.Resources;
-import com.jcommerce.gwt.client.service.DeleteService;
 import com.jcommerce.gwt.client.service.PagingListService;
 import com.jcommerce.gwt.client.widgets.ActionCellRenderer;
 import com.jcommerce.gwt.client.widgets.ColumnPanel;
@@ -217,12 +225,22 @@ public class BrandListPanel extends ContentWidget {
     }
     
     private void deleteBrandAndRefrsh(final String id) {
-        new DeleteService().deleteBean(ModelNames.BRAND, id,
-				new DeleteService.Listener() {
-					public void onSuccess(Boolean success) {
-						toolBar.refresh();
-					}
-				});
+    	GWTHttpDynaForm form = new GWTHttpDynaForm();
+    	form.setAction("com.jcommerce.gwt.server.BrandGWTAction");
+    	form.setMethod("delete");
+    	form.addParam(IBrand.ID, id);
+    	form.SetListener(new GWTHttpDynaForm.Listener() {
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("error: "+caught.getMessage());
+			}
+			@Override
+			public void onSuccess(String response) {
+				toolBar.refresh();
+			}
+    	});
+    	form.submit();
+
     }
     public void refresh(){
     	System.out.println("refresh..");
