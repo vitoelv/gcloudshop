@@ -12,4 +12,6 @@ import com.jcommerce.gwt.client.service.Criteria;
 public interface CustomizedServiceAsync {
     public void getGoodsTypeListWithAttrCount(String modelName, Criteria criteria, 
             List<String> wantedFields, PagingLoadConfig config, AsyncCallback<PagingLoadResult<BeanObject>> callback);
+    
+
 }

@@ -8,12 +8,14 @@ import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.form.CheckBox;
 import com.extjs.gxt.ui.client.widget.form.FileUploadField;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
+import com.extjs.gxt.ui.client.widget.form.HiddenField;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BrandForm;
+import com.jcommerce.gwt.client.form.GWTHttpDynaForm;
 
 /**
  * Example file.
@@ -74,8 +76,13 @@ public class BrandPanel extends BaseEntityEditPanel {
 //        editting = brand != null;
 //    }
     
+    HiddenField<String> idField;
+    
     @Override
     public void setupPanelLayout() {
+    	idField = BrandForm.getIdField();
+    	formPanel.add(idField);
+    	
         TextField<String> nameField = BrandForm.getNameField("品牌名称：");
         nameField.setFieldLabel("品牌名称");
         formPanel.add(nameField);
@@ -114,68 +121,49 @@ public class BrandPanel extends BaseEntityEditPanel {
 //        HorizontalPanel panel = new HorizontalPanel();
 //        panel.setSpacing(10);
 
-        formPanel.setAction(GWT.getModuleBaseURL() + "uploadService");
+//        formPanel.setAction(GWT.getModuleBaseURL() + "uploadService?class=Brand");
         formPanel.setEncoding(FormPanel.Encoding.MULTIPART);
         formPanel.setMethod(FormPanel.Method.POST);
         formPanel.addListener(Events.Submit, new Listener<FormEvent>() {
 			public void handleEvent(FormEvent be) {
 				// TODO Auto-generated method stub
 				String result = be.getResultHtml();
-				Window.alert("result: "+result);
+				if("0".equals(result)) {
+					gotoSuccessPanel();
+				}
+				else {
+					Window.alert("Error: "+result);	
+				}
+	
 			} 
         });
         
+        
         btnNew.addSelectionListener(new SelectionListener<ButtonEvent>() {
         	public void componentSelected(ButtonEvent sender) {
-        		
         		formPanel.submit();
         		
-        		
-//                if (!logoUpload.submit()) {
-//                    return;
-//                }
-//               
-//                new WaitService(new WaitService.Job() {
-//                    public boolean isReady() {
-//                        return logoUpload.isFinish();
-//                    }
-//
-//                    public void run() {
-//                        brand = new BeanObject(ModelNames.BRAND, formPanel.getValues());
-//                        if (getCurState().getIsEdit()) {
-//                            new UpdateService().updateBean(getCurState().getBrandID(), brand, new UpdateService.Listener() {
-//								@Override
-//								public void onSuccess(Boolean success) {
-//		                        	Success.State newState = new Success.State();
-//		                        	newState.setMessage("添加商品品牌成功");
-//		                        	
-//		                        	BrandListPanel.State choice1 = new BrandListPanel.State();
-//		                        	newState.addChoice(BrandListPanel.getInstance().getName(), choice1.getFullHistoryToken());
-//		                        	
-//		                        	newState.execute();
-//								}
-//                            	
-//                            });
-//                        } else {
-//                            new CreateService().createBean(brand, new CreateService.Listener() {
-//                                public void onSuccess(String id) {
-//		                        	Success.State newState = new Success.State();
-//		                        	newState.setMessage("修改商品品牌成功");
-//		                        	
-//		                        	BrandListPanel.State choice1 = new BrandListPanel.State();
-//		                        	newState.addChoice(BrandListPanel.getInstance().getName(), choice1.getFullHistoryToken());
-//		                        	
-//		                        	newState.execute();                                   
-//                                }
-//                            });
-//                        }
-//                    }
-//                });
             }
         });
 
                
     }  
+    
+    @Override
+    public void refresh() {
+    	super.refresh();
+    	String action="com.jcommerce.gwt.server.BrandGWTAction";
+    	String method="";
+    	
+    	if(getCurState().getIsEdit()) {
+    		method = "update";
+    		idField.setValue(getCurState().getId());
+    	}else {
+    		method = "add";
+    		idField.setValue(null);
+    	}
+    	formPanel.setAction(GWTHttpDynaForm.constructURL(action, method));
+    }
     
     @Override
     protected void submit() {

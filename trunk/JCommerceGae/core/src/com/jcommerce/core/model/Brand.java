@@ -30,6 +30,11 @@ public class Brand extends ModelObject {
     
     @Persistent
     private String logo;
+
+    // TODO leon combine logo and logoFileId to a DSFile instance, 
+    // in order to make DSFile a child of Brand, and thus can be put in a DS transaction
+    @Persistent
+    private String logoFileId;
     
     @Persistent
     private String description;
@@ -107,4 +112,12 @@ public class Brand extends ModelObject {
     public String getKeyName() {
     	return keyName;
     }
+
+	public String getLogoFileId() {
+		return logoFileId;
+	}
+
+	public void setLogoFileId(String logoFileId) {
+		this.logoFileId = logoFileId;
+	}
 }

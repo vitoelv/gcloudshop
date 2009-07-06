@@ -1,14 +1,30 @@
 package com.jcommerce.gwt.client.form;
 
+import java.util.Map;
+
 import com.extjs.gxt.ui.client.widget.form.CheckBox;
 import com.extjs.gxt.ui.client.widget.form.FileUploadField;
+import com.extjs.gxt.ui.client.widget.form.HiddenField;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.jcommerce.gwt.client.model.IBrand;
 import com.jcommerce.gwt.client.resources.Resources;
 
 public class BrandForm extends BeanObject implements IBrand{
-	
+    public BrandForm(){
+    	super();
+    }
+    
+    public BrandForm (String modelName, Map<String, Object> values) {
+        super(modelName, values);
+    }
+    
+	public static HiddenField<String> getIdField() {
+		HiddenField<String> idField = new HiddenField<String>();
+		idField.setName(ID);
+		return idField;
+	}
+    
 	public static TextField<String> getNameField(String fieldTitle) {
 		TextField<String> nameField = new TextField<String>();
 		nameField.setName(NAME);
