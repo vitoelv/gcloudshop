@@ -8,8 +8,10 @@ import java.util.Set;
 
 import org.apache.commons.logging.LogFactory;
 
+import com.google.appengine.api.datastore.Blob;
 import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Brand;
+import com.jcommerce.core.model.DSFile;
 import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.service.Condition;
@@ -19,7 +21,6 @@ import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.util.MyPropertyUtil;
 import com.jcommerce.gwt.client.form.AttributeForm;
 import com.jcommerce.gwt.client.form.GoodsTypeForm;
-import com.jcommerce.gwt.client.model.IBrand;
 
 
 public class TestManagerImpl extends BaseDAOTestCase {
@@ -276,18 +277,39 @@ public class TestManagerImpl extends BaseDAOTestCase {
     public void testCreateBrand() {
     	System.out.println("start of testCreateBrand");
     	try {
-    		IDefaultManager manager = getDefaultManager();
-    		Map<String, Object> props = new HashMap<String, Object>();
-    		props.put(IBrand.NAME, "xxx");
+//    		IDefaultManager manager = getDefaultManager();
+//    		Map<String, Object> props = new HashMap<String, Object>();
+//    		props.put(IBrand.NAME, "xxx");
+//    		
+//        	ModelObject to1 = (ModelObject)Brand.class.newInstance();
+//            MyPropertyUtil.form2To(to1, props);
+//            
+//    		String modelName = Brand.class.getName();
+//    		System.out.println("modelName: "+modelName);
+//    		String id = manager.add(to1);
+//    		
+//    		System.out.println("id: "+id);
     		
-        	ModelObject to1 = (ModelObject)Brand.class.newInstance();
-            MyPropertyUtil.form2To(to1, props);
-            
-    		String modelName = Brand.class.getName();
-    		System.out.println("modelName: "+modelName);
-    		String id = manager.add(to1);
+    		CustomizedManager manager = getCustomizedManager();
+//    		BrandForm to = new BrandForm(ModelNames.BRAND);
+//    		to.set(IBrand.NAME, "brand1");
+//    		FileForm dsf = new FileForm();
+//    		dsf.setContent("xxx".getBytes());
+//    		dsf.setFileName("abc.jpg");
+//    		dsf.setMimeType("IMG");
+//    		to.set(IBrand.LOGO, to);
     		
-    		System.out.println("id: "+id);
+    		Brand to = new Brand();
+    		to.setName("brand1");
+    		DSFile logo = new DSFile();
+    		logo.setContent(new Blob("xxx".getBytes()));
+    		logo.setFileName("xyz.jpg");
+//    		to.setLogo(logo);
+
+    		String bid = manager.addBrand(to);
+    		
+    		
+    		System.out.println("bid: "+bid);
     		
     		
     		
@@ -420,4 +442,6 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		assertTrue(false);
     	}
     }
+    
+    
 }

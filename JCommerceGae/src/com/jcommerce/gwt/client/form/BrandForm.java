@@ -15,6 +15,10 @@ public class BrandForm extends BeanObject implements IBrand{
     	super();
     }
     
+    public BrandForm(String modelName) {
+    	super(modelName);
+    }
+    
     public BrandForm (String modelName, Map<String, Object> values) {
         super(modelName, values);
     }

@@ -29,6 +29,7 @@ import org.springframework.orm.jdo.JdoTemplate;
 import org.springframework.orm.jdo.support.JdoDaoSupport;
 
 import com.jcommerce.core.dao.DAO;
+import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.service.Criteria;
@@ -72,6 +73,12 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
 				GoodsType gt = (GoodsType)obj;
 				Set set = gt.getAttributes();
 				System.out.println("size: "+set.size());
+			}
+			if(obj instanceof Goods) {
+				Goods g = (Goods)obj;
+				Set set = g.getCategoryIds();
+				System.out.println("size: "+(set==null? "null":set.size()));
+				
 			}
 			
     		return obj;

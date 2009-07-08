@@ -3,13 +3,15 @@ package com.jcommerce.gwt.server;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.appengine.api.datastore.Blob;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.DSFile;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.util.MyPropertyUtil;
-import com.jcommerce.gwt.client.form.BeanObject;
+import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BrandForm;
+import com.jcommerce.gwt.client.form.FileForm;
 import com.jcommerce.gwt.client.model.IBrand;
 
 public class BrandGWTAction extends BaseGWTHttpAction {
@@ -17,18 +19,20 @@ public class BrandGWTAction extends BaseGWTHttpAction {
 	public void add(Map<String, Object> form) {
     	
     	IDefaultManager manager = getDefaultManager();
+		
+//		CustomizedManager manager = getCustomizedManager();
     	String res = null;
     	try {
-    		String fileId = null;
-    		DSFile file = (DSFile)form.get(IBrand.LOGO);
-    		if(file!=null) {
-    			fileId = manager.add(file);
+    		String logoFileId = null;
+    		FileForm fileForm = (FileForm)form.get(IBrand.LOGO);
+    		if(fileForm!=null) {
+    			DSFile file = new DSFile();
+    			file.setContent(new Blob(fileForm.getContent()));
+    			logoFileId = manager.add(file);
     		}
     		
-    		BrandForm bean = getForm(form);
-    		
-        	ModelObject to = (ModelObject)Class.forName(bean.getModelName()).newInstance();
-            MyPropertyUtil.form2To(to, bean.getProperties());
+    		Brand to = form2To(form);
+    		to.setLogoFileId(logoFileId);
         	res = manager.add(to);
     		
     		
@@ -46,8 +50,12 @@ public class BrandGWTAction extends BaseGWTHttpAction {
     	boolean res;
     	try {
     		String newLogoFileId = null;
-    		DSFile file = (DSFile)form.get(IBrand.LOGO);
-    		if(file!=null) {
+    		FileForm fileForm = (FileForm)form.get(IBrand.LOGO);
+    		if(fileForm!=null) {
+    			DSFile file = new DSFile();
+    			file.setContent(new Blob(fileForm.getContent()));
+    			file.setFileName(fileForm.getFileName());
+    			file.setMimeType(fileForm.getMimeType());
     			newLogoFileId = manager.add(file);
     		}
     		System.out.println("newLogoFileId: "+newLogoFileId);
@@ -59,11 +67,9 @@ public class BrandGWTAction extends BaseGWTHttpAction {
     		System.out.println("oldLogoFileId: "+oldLogoFileId);
     		
     		manager.delete(DSFile.class.getName(), oldLogoFileId);
-    		
-    		BrandForm bean = getForm(form);
-    		
-        	ModelObject to = (ModelObject)Class.forName(bean.getModelName()).newInstance();
-            MyPropertyUtil.form2To(to, bean.getProperties());
+
+    		Brand to = form2To(form);
+    		to.setLogoFileId(newLogoFileId);
         	res = manager.update(to);
     		
     		
@@ -93,22 +99,25 @@ public class BrandGWTAction extends BaseGWTHttpAction {
     		throw new RuntimeException(ex);
     	}
     }
-	public BrandForm getForm(Map<String, Object> form) {
-		Map<String, Object> props = new HashMap<String, Object>();
-		DSFile file = (DSFile)form.get(IBrand.LOGO);
-		for(String name:form.keySet()) {
-			if(IBrand.LOGO.equals(name)) {
-				props.put(name, file.getFilename());
-			}
-			else {
-				props.put(name, form.get(name));
-			}
-		}
+	public Brand form2To(Map<String, Object> form) {
+		Brand to = new Brand();
+		
+		form.put(IBrand.LOGO, ((FileForm)form.get(IBrand.LOGO)).getFileName());
+//		Map<String, Object> props = new HashMap<String, Object>();
+//		for(String name:form.keySet()) {
+//			Object value = form.get(name);
+//			if(value instanceof FileForm) {
+//				FileForm ff = (FileForm)value;
+//				props.put(name, ff.getFileName());
+//			}
+//			props.put(name, value);
+//		}
 
+//		
+//		props.put(IBrand.LOGOFILEID, file.getId());
 		
-		props.put(IBrand.LOGOFILEID, file.getId());
-		
-		BrandForm bean = new BrandForm(Brand.class.getName(), props);
-		return bean;
+		BrandForm bean = new BrandForm(Brand.class.getName(), form);
+		MyPropertyUtil.form2To(to, bean.getProperties());
+		return to;
 	}
 }

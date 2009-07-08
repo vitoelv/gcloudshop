@@ -152,12 +152,16 @@ public class DefaultManagerImpl implements IDefaultManager {
 	        			continue;
 	        		}
     				String id = toPopulate.getId();
-    				
+    				if(id==null) {
+    					// TODO a new one
+    				}
+    				else {
     				ModelObject po = get(toPopulate.getClass().getName(), id);
     				if(po==null) {
         				// TODO could be a new one    					
     				}
     				BeanUtils.setProperty(to, name, po);
+    				}
 	        	}
 	        }
     		

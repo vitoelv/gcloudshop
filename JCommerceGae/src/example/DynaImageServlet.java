@@ -46,12 +46,12 @@ public class DynaImageServlet extends HttpServlet {
             String logoFileId = null;
             for(Brand brand:res) {
             	logoFileId = brand.getLogoFileId();
-            	String fileName = brand.getLogo();
-            	String name = brand.getName();
-            	System.out.println("name: "+name+", fileName: "+fileName+", fileId: "+logoFileId);
-            	if(!StringUtils.isEmpty(logoFileId) && "bbb".equals(name)) {
-            		break;
-            	}
+//            	String fileName = brand.getLogo();
+//            	String name = brand.getName();
+//            	System.out.println("name: "+name+", fileName: "+fileName+", fileId: "+logoFileId);
+//            	if(!StringUtils.isEmpty(logoFileId) && "bbb".equals(name)) {
+//            		break;
+//            	}
             	
             }
             

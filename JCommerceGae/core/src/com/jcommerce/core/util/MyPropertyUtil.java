@@ -39,7 +39,7 @@ public class MyPropertyUtil {
 	        	}
 
 	        	Class type = pd.getPropertyType();
-	        	debug("name="+name+", type="+type);
+	        	debug("to2Form-- name="+name+", type="+type);
 	        	
 	        	if(ModelObject.class.isAssignableFrom(type)) {
 //	        		continue;
@@ -62,6 +62,7 @@ public class MyPropertyUtil {
 		        		if(t!=null) {
 		        			t2.addAll(t);
 		        		}
+		        		res.put(name, t2);
 	        		}
 	        	}
 	        	
@@ -115,7 +116,7 @@ public class MyPropertyUtil {
 			
 			String type = field.getGenericType().toString();
 			String paraType = type.substring(type.indexOf('<')+1, type.indexOf('>'));
-			System.out.println("paraType="+paraType);
+			debug("paraType="+paraType);
 			if(ModelObject.class.isAssignableFrom(Class.forName(paraType))) {
 				res = true;
 			} else {
@@ -144,16 +145,26 @@ public class MyPropertyUtil {
 				continue;
 			}
 			Class type = pd.getPropertyType();
-			debug("name=" + name + ", type=" + type);
+			debug("copySimpleProperties--  name=" + name + ", type=" + type);
 			if (Collection.class.isAssignableFrom(type)) {
-				continue;
+        		Field field = dest.getClass().getDeclaredField(name);
+        		if(MyPropertyUtil.isFieldCollectionOfModel(field)) {
+        			// ingore collection of Model
+        			continue;
+        		} else {
+        			
+	        		PropertyUtils.setProperty(dest, name, PropertyUtils.getProperty(orig, name));
+        		}
 			}
-			if (ModelObject.class.isAssignableFrom(type)) {
+			else if (ModelObject.class.isAssignableFrom(type)) {
 				// we do not support editing of associated object at this point
 				// nor pointing to another associated object
 				continue;
 			}
-			PropertyUtils.setProperty(dest, name, PropertyUtils.getProperty(orig, name));
+			else { 
+				PropertyUtils.setProperty(dest, name, PropertyUtils.getProperty(orig, name));
+			}
+			
 		} 
     	} catch (Exception e) {
     		throw new RuntimeException(e);
@@ -161,7 +172,7 @@ public class MyPropertyUtil {
 	}
 	
     public static void form2To(ModelObject dest, Map<String, Object> orig) {
-        System.out.println("props:"+orig);
+    	debug("form2To-- props:"+orig);
         
         try {
         HashMap<String, Object> _props = new HashMap<String, Object>(); 
@@ -189,7 +200,7 @@ public class MyPropertyUtil {
                 String bean = type.getSimpleName();
                 if (value instanceof String) {
                     // the value is ID
-                	debug("type="+type);
+                	debug("form2To-- type="+type);
                 	ModelObject mo = (ModelObject)type.newInstance();
                 	mo.setId((String)value);
 //                    ModelObject mo = getModelObject(bean, (String)value);
@@ -213,6 +224,8 @@ public class MyPropertyUtil {
 //                            ModelObject mo = getModelObject(bean, ids[j]);
 //                            set.add(mo);
 //                        }
+                    	col = (Collection)PropertyUtils.getProperty(dest, fn);
+                    	col.add(value);
                     } else if (value instanceof Collection) {
                     	
                         Collection c = (Collection)value;
@@ -234,7 +247,7 @@ public class MyPropertyUtil {
             }
         }
         
-        System.out.println("_props:"+_props);
+        debug("form2To-- _props:"+_props);
 
             BeanUtils.populate(dest, _props);
             
@@ -245,6 +258,6 @@ public class MyPropertyUtil {
     
     public static void debug(String s) {
     	
-//    	System.out.println("MyPropertyUtil: "+s);
+    	System.out.println("MyPropertyUtil: "+s);
     }
 }

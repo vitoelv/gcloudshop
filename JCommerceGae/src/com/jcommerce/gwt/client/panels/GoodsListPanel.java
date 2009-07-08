@@ -495,7 +495,7 @@ public class GoodsListPanel extends ContentWidget {
 		
 		GoodsPanel.State newState = new GoodsPanel.State();
 		newState.setIsEdit(true);
-		newState.setGoodsId(id);
+		newState.setId(id);
 		newState.execute();
 		
 //		new ReadService().getBean(ModelNames.GOODS, id,

@@ -36,6 +36,15 @@ public class Brand extends ModelObject {
     @Persistent
     private String logoFileId;
     
+//    @Persistent
+//    private DSFile logo;
+//    
+//    @Persistent
+//    private String logoFileName;
+//    
+//    @Persistent
+//    private String logoFileId;
+    
     @Persistent
     private String description;
     
@@ -59,13 +68,13 @@ public class Brand extends ModelObject {
         this.name = name;
     }
     
-    public String getLogo() {
-        return logo;
-    }
-    
-    public void setLogo(String logo) {
-        this.logo = logo;
-    }
+//    public DSFile getLogo() {
+//        return logo;
+//    }
+//    
+//    public void setLogo(DSFile logo) {
+//        this.logo = logo;
+//    }
     
     public String getDescription() {
         return description;
@@ -120,4 +129,20 @@ public class Brand extends ModelObject {
 	public void setLogoFileId(String logoFileId) {
 		this.logoFileId = logoFileId;
 	}
+
+	public String getLogo() {
+		return logo;
+	}
+
+	public void setLogo(String logo) {
+		this.logo = logo;
+	}
+
+//	public String getLogoFileName() {
+//		return logoFileName;
+//	}
+//
+//	public void setLogoFileName(String logoFileName) {
+//		this.logoFileName = logoFileName;
+//	}
 }

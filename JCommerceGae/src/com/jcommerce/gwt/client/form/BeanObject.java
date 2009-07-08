@@ -24,7 +24,9 @@ public class BeanObject extends BaseTreeModel implements
         this.modelName = modelName;
         setValues(values);
     }
-
+    public BeanObject(Map<String, Object> values) {
+    	setValues(values);
+    }
     protected void validate() throws ValidationException{
     	
     }

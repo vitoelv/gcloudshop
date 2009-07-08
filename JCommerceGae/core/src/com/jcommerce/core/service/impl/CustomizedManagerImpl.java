@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.jcommerce.core.dao.DAO;
 import com.jcommerce.core.model.Attribute;
+import com.jcommerce.core.model.Brand;
+import com.jcommerce.core.model.DSFile;
 import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
@@ -47,7 +49,27 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     	}
     }
 
+    
+    public String addBrand(Brand to) {
+    	try {
+    		populateIdWithPo(to);
+			String res = dao.add(to);
+			
+//			DSFile logo = to.getLogo();
+//			String id = logo.getId();
+//			System.out.println("id: "+id);
 
+			// NOTE: This does not work
+			// throw exception: 
+			// can't update the same entity twice in a transaction or operation
+//			to.setLogoFileId(id);
+			return res;
+    	} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+    }
 
 	public DAO getDao() {
 		return dao;

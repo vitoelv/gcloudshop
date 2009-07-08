@@ -191,7 +191,7 @@ public class JCommerceGae implements EntryPoint, ValueChangeHandler<String>, GWT
       setupMainMenuOption(catGoods, new GoodsTypeListPanel.State(), Resources.images.catWidgets());
       setupMainMenuOption(catGoods, new GoodsListPanel.State(), Resources.images.catWidgets());
       	setupMainMenuOption(catGoods, new BrandListPanel.State(), Resources.images.catWidgets());
-//		setupMainMenuOption(catGoods, new NewGoods.State(), Resources.images.catWidgets());
+		setupMainMenuOption(catGoods, new GoodsPanel.State(), Resources.images.catWidgets());
 		setupMainMenuOption(catGoods, new CategoryListPanel.State(), Resources.images.catWidgets());
 //		setupMainMenuOption(catGoods, new UserComments.State(), Resources.images.catWidgets());		
 //
