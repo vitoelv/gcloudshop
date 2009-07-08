@@ -104,7 +104,13 @@ public class Goods extends ModelObject {
     private String thumb;
     
     @Persistent
+    private String thumbFileId;
+    
+    @Persistent
     private String image;
+    
+    @Persistent
+    private String imageFileId;
     
     @Persistent
     private String originalImage;
@@ -512,4 +518,20 @@ public class Goods extends ModelObject {
     public String getKeyName() {
     	return keyName;
     }
+
+	public String getThumbFileId() {
+		return thumbFileId;
+	}
+
+	public void setThumbFileId(String thumbFileId) {
+		this.thumbFileId = thumbFileId;
+	}
+
+	public String getImageFileId() {
+		return imageFileId;
+	}
+
+	public void setImageFileId(String imageFileId) {
+		this.imageFileId = imageFileId;
+	}
 }

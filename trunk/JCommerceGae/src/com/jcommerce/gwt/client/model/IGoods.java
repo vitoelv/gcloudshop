@@ -35,7 +35,9 @@ public interface IGoods {
     public static final String BRIEF = "brief";
     public static final String DESCRIPTION = "description";
     public static final String THUMB = "thumb";
+    public static final String THUMBFILEID = "thumbFileId";
     public static final String IMAGE = "image";
+    public static final String IMAGEFILEID = "imageFileId";
     public static final String ORIGINALIMAGE = "originalImage";
     public static final String REALGOODS = "realGoods";
     public static final String EXTENSIONCODE = "extensionCode";

@@ -139,12 +139,12 @@ public class BrandPanel extends BaseEntityEditPanel {
         });
         
         
-        btnNew.addSelectionListener(new SelectionListener<ButtonEvent>() {
-        	public void componentSelected(ButtonEvent sender) {
-        		formPanel.submit();
-        		
-            }
-        });
+//        btnNew.addSelectionListener(new SelectionListener<ButtonEvent>() {
+//        	public void componentSelected(ButtonEvent sender) {
+//        		formPanel.submit();
+//        		
+//            }
+//        });
 
                
     }  

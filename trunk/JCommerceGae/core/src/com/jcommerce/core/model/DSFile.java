@@ -25,7 +25,7 @@ public class DSFile extends ModelObject {
     private Blob content;
     
     @Persistent
-    private String filename;
+    private String fileName;
     
     @Persistent
     private String mimeType;
@@ -59,13 +59,7 @@ public class DSFile extends ModelObject {
 		this.content = content;
 	}
 
-	public String getFilename() {
-		return filename;
-	}
 
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
 
 	public String getMimeType() {
 		return mimeType;
@@ -73,6 +67,14 @@ public class DSFile extends ModelObject {
 
 	public void setMimeType(String mimeType) {
 		this.mimeType = mimeType;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 }

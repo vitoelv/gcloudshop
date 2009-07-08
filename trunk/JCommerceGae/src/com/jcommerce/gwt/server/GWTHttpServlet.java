@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,10 +21,10 @@ import org.apache.commons.fileupload.util.Streams;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.google.appengine.api.datastore.Blob;
-import com.jcommerce.core.model.DSFile;
 import com.jcommerce.core.service.CustomizedManager;
 import com.jcommerce.core.service.IDefaultManager;
+import com.jcommerce.core.util.ConvertUtil;
+import com.jcommerce.gwt.client.form.FileForm;
 
 public class GWTHttpServlet extends HttpServlet {
 
@@ -53,11 +54,10 @@ public class GWTHttpServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		System.out
-				.println("==========================UploadFileServlet doPost()==================================");
+		debug("==========================UploadFileServlet doPost()==================================");
 
 		int contentLength = request.getContentLength();
-		System.out.println("contentLength: " + contentLength);
+		debug("contentLength: " + contentLength);
 		if (contentLength < 0) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
@@ -95,9 +95,13 @@ public class GWTHttpServlet extends HttpServlet {
 						continue;
 					}
 					String[] values = request.getParameterValues(key);
-					// TODO we do not support list value yet
-					if(values !=null && values.length>0) {
-						form.put(key, values[0].trim());
+					if(values !=null) {
+						if(values.length==1) {
+							form.put(key, values[0].trim());
+						}
+						else {
+							form.put(key, Arrays.asList(values));
+						}
 					}
 				}
 				 
@@ -115,18 +119,30 @@ public class GWTHttpServlet extends HttpServlet {
 					InputStream stream = item.openStream();
 					if (item.isFormField()) {
 						String val = Streams.asString(stream);
-						System.out.println("Form field " + name
+						debug("Form field " + name
 								+ " with value " + val + " detected.");
-						form.put(name, val);
+
+
+						
+						// TODO escape of "," ??
+						if(val.indexOf(",")>0) {
+							String[] values = ConvertUtil.split(val, ",");
+							form.put(name, Arrays.asList(values));
+						} else {
+							form.put(name, val);
+						}
+						
+
+						
 					} else {
-						System.out.println("File field " + name
+						debug("File field " + name
 								+ " with file name " + item.getName()
 								+ " detected, contentType="
 								+ item.getContentType());
 
 						// Process the input stream
 
-						DSFile file = null;
+						FileForm file = null;
 
 						ByteArrayOutputStream baos = new ByteArrayOutputStream();
 						// only write files out that are less than 1MB
@@ -142,9 +158,9 @@ public class GWTHttpServlet extends HttpServlet {
 								data = new String(bytes);
 							}
 
-							file = new DSFile();
-							file.setContent(new Blob(bytes));
-							file.setFilename(item.getName());
+							file = new FileForm(name);
+							file.setContent(bytes);
+							file.setFileName(item.getName());
 							file.setMimeType(item.getContentType());
 
 						} else {
@@ -166,8 +182,19 @@ public class GWTHttpServlet extends HttpServlet {
 			}
 
 			for(String key:form.keySet()) {
-				System.out.println("key="+key+", value="+form.get(key)+", valueclass="+form.get(key).getClass().getName());
+				debug("key="+key+", value="+form.get(key)+", valueclass="+form.get(key).getClass().getName());
 			}
+			
+			// special handling for GXT-ComboBox
+			for(String name:form.keySet()) {
+				if(name.endsWith("-hidden")) {
+					String orginalName = name.substring(0, name.indexOf("-hidden"));
+					debug("orginalName: "+orginalName);
+					// override the old value
+					form.put(orginalName, form.get(name));
+				}
+			}
+			
 			Object o = form.get("id");
 			if(o!=null) {
 				String id = o.toString();
@@ -203,5 +230,8 @@ public class GWTHttpServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-
+	
+	void debug(String s) {
+		System.out.println("[GWTHttpServlet]: "+s);
+	}
 }
