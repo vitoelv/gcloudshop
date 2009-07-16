@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <constant name="struts.objectFactory" value="spring" />
+    <constant name="struts.devMode" value="true" />
+    <include file="example.xml"/>
+	<package name="shop" namespace="/web" extends="struts-default">
+	
+		<action name="home" method="execute" class="homeAction">
+			<result name="success" type="freemarker">/web/front/index.ftl</result>
+		</action>
+		
+		<action name="goods" method="goods" class="homeAction">
+			<result name="success" type="freemarker">/web/front/goods.ftl</result>
+			<result name="error" type="redirectAction">home</result>
+		</action>
+
+		<action name="category" method="category" class="homeAction">
+			<result name="success" type="freemarker">/web/front/category.ftl</result>
+			<result name="error" type="redirectAction">home</result>
+		</action>
+	</package>
+</struts>
+
+

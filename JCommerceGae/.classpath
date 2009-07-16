@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="lib" path="hotfix/gwt-dev-patch.jar"/>
+	<classpathentry kind="src" path="admin"/>
+	<classpathentry excluding="src/|com/jcommerce/core/model/Comment.java|com/jcommerce/core/model/Region.java|com/jcommerce/core/module/payment/|com/jcommerce/core/payment/|com/jcommerce/core/util/SendMail.java|com/jcommerce/core/module/ModuleLoader.java|com/jcommerce/core/module/IModule.java|com/jcommerce/core/module/shipping/" kind="src" path="core"/>
+	<classpathentry excluding="com/jcommerce/web/action/PaymentRespondAction.java|com/jcommerce/web/action/JspInitAction.java" kind="src" path="web"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
