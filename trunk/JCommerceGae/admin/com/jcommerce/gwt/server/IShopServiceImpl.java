@@ -18,13 +18,6 @@ import com.extjs.gxt.ui.client.data.BasePagingLoadResult;
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
 import com.extjs.gxt.ui.client.data.PagingLoadResult;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.jcommerce.core.action.BeanConfig;
-import com.jcommerce.core.action.DeleteAction;
-import com.jcommerce.core.action.MapCreateAction;
-import com.jcommerce.core.action.MapListAction;
-import com.jcommerce.core.action.MapReadAction;
-import com.jcommerce.core.action.MapUpdateAction;
-import com.jcommerce.core.action.PropertyBeanConfig;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.util.MyPropertyUtil;
@@ -35,12 +28,8 @@ import com.jcommerce.gwt.client.service.Condition;
 import com.jcommerce.gwt.client.service.Criteria;
 
 public class IShopServiceImpl extends RemoteServiceServlet implements IShopService {
-    private DeleteAction deleteAction;
-    private MapReadAction readAction;
-    private MapCreateAction createAction;
-    private MapListAction listAction;
-    private MapUpdateAction updateAction;
-    private PagingListAction pagingAction;
+
+//    private PagingListAction pagingAction;
 //    private RegionManager regionManager;
 //    private GoodsTypeManager goodsTypeManager;
 //    private AttributeManager attributeManager; 
@@ -69,13 +58,6 @@ public class IShopServiceImpl extends RemoteServiceServlet implements IShopServi
             e.printStackTrace();
         }
         
-        BeanConfig config = new PropertyBeanConfig(beanProps);
-        deleteAction = new DeleteAction(ctx, config);
-        readAction = new MapReadAction(ctx, config);
-        createAction = new MapCreateAction(ctx, config);
-        listAction = new MapListAction(ctx, config);
-        updateAction = new MapUpdateAction(ctx, config);
-        pagingAction = new PagingListAction(ctx, config);
         
 //      regionManager = (RegionManager)ctx.getBean("RegionManager");
 //      goodsTypeManager = (GoodsTypeManager)ctx.getBean("GoodsTypeManager");
@@ -211,28 +193,25 @@ public class IShopServiceImpl extends RemoteServiceServlet implements IShopServi
     
     public List<BeanObject> getBeans(String modelName, String[] ids) {
         System.out.println("getBeans("+modelName);
-        List<BeanObject> beans = new ArrayList<BeanObject>();
-        if (ids == null || ids.length == 0) {
-            throw new IllegalArgumentException("ids = null");
-        }
-        
-        for (String id : ids) {
-            beans.add(new BeanObject(modelName, readAction.getBean(modelName, id)));
-        }
-        return beans;
+//        List<BeanObject> beans = new ArrayList<BeanObject>();
+//        if (ids == null || ids.length == 0) {
+//            throw new IllegalArgumentException("ids = null");
+//        }
+//        
+//        for (String id : ids) {
+//            beans.add(new BeanObject(modelName, readAction.getBean(modelName, id)));
+//        }
+//        return beans;
+        throw new RuntimeException("not supported");
     }
     
     public BeanObject getBean(String modelName, String id) {
         System.out.println("getBean("+modelName+","+id); 
         try {
-        if(IShopConstants.useJDO) {
         	IDefaultManager manager = getDefaultManager();
         	ModelObject obj = manager.get(modelName, id);
         	return new BeanObject(modelName, MyPropertyUtil.to2Form(obj, null));
-        	
-        } else {
-        	return new BeanObject(modelName, readAction.getBean(modelName, id));
-        } 
+  
         }catch (RuntimeException e) {
         	throw e;
         }catch (Exception e) {
@@ -253,8 +232,7 @@ public class IShopServiceImpl extends RemoteServiceServlet implements IShopServi
     public List<BeanObject> getList(String modelName, Criteria criteria, List<String> wantedFields) {
         try {
         	System.out.println("getList("+modelName);
-        	if(IShopConstants.useJDO) {
-        		
+      		
         		IDefaultManager manager = getDefaultManager();
         		List<ModelObject> rs =  (List<ModelObject>)manager.getList(modelName, convert(criteria));
         		List<BeanObject> res = new ArrayList<BeanObject>();
@@ -264,15 +242,8 @@ public class IShopServiceImpl extends RemoteServiceServlet implements IShopServi
         		}
         		return res;
         			
-        	} else {
-			
-			List<Map<String, Object>> maps = listAction.getList(modelName, convert(criteria), wantedFields);
-			List<BeanObject> objs = new ArrayList<BeanObject>();
-			for (Map<String, Object> map : maps) {
-			    objs.add(new BeanObject(modelName, map));
-			}
-			return objs;
-        	}
+ 
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

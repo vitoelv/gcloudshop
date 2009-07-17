@@ -72,6 +72,7 @@ public class GoodsPanel extends BaseEntityEditPanel {
         String NewGoods_tabLink();
         String NewGoods_tabAccessories();
         String NewGoods_tabArticle();
+        
     }
     
 //	private ColumnPanel contentPanelGeneral = new ColumnPanel();
