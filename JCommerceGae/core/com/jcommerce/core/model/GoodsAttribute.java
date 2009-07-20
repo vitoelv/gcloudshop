@@ -28,6 +28,7 @@ public class GoodsAttribute extends ModelObject {
     @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
     private String keyName;
     
+    @Persistent
 	private Goods goods;
 	private Attribute attribute;
 	private String value;

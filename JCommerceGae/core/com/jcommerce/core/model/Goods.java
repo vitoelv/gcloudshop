@@ -46,7 +46,10 @@ public class Goods extends ModelObject {
     private Set<Gallery> galleries = new HashSet<Gallery>();
     
 //    private Set<Article> articles;
-//    private Set<GoodsAttribute> attributes = new HashSet<GoodsAttribute>();
+    
+    // uni-direction owned
+    @Persistent
+    private Set<GoodsAttribute> attributes = new HashSet<GoodsAttribute>();
     
     @Persistent
     private String brandId;
