@@ -1,5 +1,6 @@
 package com.jcommerce.core.test.case1;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -7,12 +8,18 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import com.jcommerce.core.dao.impl.PMF;
-import com.jcommerce.core.model.Category;
-import com.jcommerce.core.test.BaseDataStoreTestCase;
-import com.jcommerce.core.util.UUIDHexGenerator;
+import com.jcommerce.core.service.IDefaultManager;
+import com.jcommerce.core.test.BaseDAOTestCase;
 
-public class TestJDO extends BaseDataStoreTestCase {
-	
+public class TestJDO extends BaseDAOTestCase {
+    protected String getDbStorePath() {
+    	return "D:/logs/Datastore1";
+    }
+    protected boolean needCleanOnStartup() {
+    	return true;
+    }
+    
+    
 	public void testAddPerson() throws Exception{
 		System.out.println("start of testAddPerson");
 		PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -35,11 +42,13 @@ public class TestJDO extends BaseDataStoreTestCase {
 	}
 	
 	public void testAddPersonWithSetString() throws Exception{
-		System.out.println("start of testAddPerson");
+		System.out.println("start of testAddPersonWithSetString");
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
+			clearDS();
 			pm.currentTransaction().begin();
 			Person p = new Person();
+			p.setKeyName("p1");
 			p.setName("xxx");
 			p.getAliasList().add("123");
 			p.getAliasList().add("456");
@@ -50,6 +59,7 @@ public class TestJDO extends BaseDataStoreTestCase {
 			pm.currentTransaction().begin();
 			
 			p = new Person();
+			p.setKeyName("p2");
 			p.setName("yyy");
 			p.getAliasList().add("123yyy");
 			p.getAliasList().add("456yyy");
@@ -69,6 +79,15 @@ public class TestJDO extends BaseDataStoreTestCase {
 			System.out.println("size="+persons.size());
 			
 			
+			query = pm.newQuery("select from com.jcommerce.core.test.case1.Person");
+			persons = (List<Person>)query.execute();
+			for(Person person:persons) {
+				System.out.println("id:"+person.getId()+", name: "+person.getName());
+			}
+//			pm.currentTransaction().commit();
+			System.out.println("size="+persons.size());
+			
+			
 			pm.currentTransaction().begin();
 			query = pm.newQuery(Person.class);
 			query.setResult("count(this)");
@@ -76,7 +95,12 @@ public class TestJDO extends BaseDataStoreTestCase {
 			System.out.println("count="+res);
 			pm.currentTransaction().commit();
 			
+			IDefaultManager manager = getDefaultManager();
+			persons = new ArrayList<Person>();
+			manager.getList(persons, Person.class.getName(), null, -1, -1);
+			System.out.println("size="+persons.size());
 			
+			System.out.println("start of testAddPersonWithSetString");
 		}catch (Exception e) {
 			e.printStackTrace();
 			assertTrue(false);
