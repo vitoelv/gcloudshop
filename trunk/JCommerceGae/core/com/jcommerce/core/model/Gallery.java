@@ -44,6 +44,9 @@ public class Gallery extends ModelObject {
 	private String thumbFileId;
     
     @Persistent
+	private DSFile thumbFile;
+    
+    @Persistent
 	private String description;
     
     @Persistent
@@ -122,6 +125,22 @@ public class Gallery extends ModelObject {
 
 	public void setThumbFileId(String thumbFileId) {
 		this.thumbFileId = thumbFileId;
+	}
+
+	public DSFile getImageFile() {
+		return imageFile;
+	}
+
+	public void setImageFile(DSFile imageFile) {
+		this.imageFile = imageFile;
+	}
+
+	public DSFile getThumbFile() {
+		return thumbFile;
+	}
+
+	public void setThumbFile(DSFile thumbFile) {
+		this.thumbFile = thumbFile;
 	}
 
 }
