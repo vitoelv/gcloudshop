@@ -35,6 +35,9 @@ public class Gallery extends ModelObject {
 	private String imageFileId;
     
     @Persistent
+	private DSFile imageFile;
+    
+    @Persistent
 	private String thumb;
     
     @Persistent
@@ -56,8 +59,6 @@ public class Gallery extends ModelObject {
     public void setGoods(Goods goods) {
         this.goods = goods;
     }
-
-
 
     public String getDescription() {
         return description;

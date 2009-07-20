@@ -9,10 +9,11 @@ import javax.jdo.Query;
 
 import com.jcommerce.core.dao.impl.PMF;
 import com.jcommerce.core.test.BaseDAOTestCase;
+import com.jcommerce.core.test.case1.Person;
 
 
 /**
- *  case that multile parents with uni-direction owned relation to child 
+ *  case that multiple parents with uni-direction owned relation to child 
  * @author yli
  *
  */
@@ -27,7 +28,37 @@ public class TestMultiParents2 extends BaseDAOTestCase {
     	return true;
     }
     
-    
+    public void testQuery() {
+    	System.out.println("start of testQuery");
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			pm.currentTransaction().begin();
+			Parent51 p1 = new Parent51();
+			p1.setName("xxx");
+			p1 = pm.makePersistent(p1);
+
+//			pm.currentTransaction().commit();
+//			pm.currentTransaction().begin();
+			p1 = new Parent51();
+			p1.setName("yyy");
+			p1 = pm.makePersistent(p1);
+
+			pm.currentTransaction().commit();
+			
+			Query query = pm.newQuery(Parent51.class);
+			List<Parent51> parents = (List<Parent51>)query.execute();
+			for(Parent51 parent:parents) {
+				System.out.println("id:"+parent.getId()+", name: "+parent.getName());
+			}
+			System.out.println("size="+parents.size());
+			System.out.println("end of testQuery");
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertTrue(false);
+		} finally {
+			pm.close();
+		}
+    }
     public void testAdd() {
 		System.out.println("start of testAdd");
 		
@@ -114,14 +145,13 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			// verify delete
 			try {
 				a = pm.getObjectById(Child5.class, aid);
+				System.out.println("id: "+a.getId()+", name: "+a.getName());
 				// TODO why?
 				assertTrue(false);
 			} catch (JDOObjectNotFoundException e) {
 				System.out.println("a: "+aid+" cannot find");
 				assertTrue(true);
 			}
-			
-			
 			
 			
 		}catch (Exception e) {
@@ -365,9 +395,8 @@ public class TestMultiParents2 extends BaseDAOTestCase {
     	
     }
     
-    public void testDeleteBothUniDirectionParents() {
-		System.out.println("start of testDeleteBothUniDirectionParents");
-		// delete unowned side of unowned one-to-one relation
+    public void testAttachMultiParents() {
+		System.out.println("start of testAttachMultiParents");
 		
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
@@ -395,6 +424,7 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			pm.currentTransaction().commit();
 
 			pm.currentTransaction().begin();
+			// Exception: org.datanucleus.exceptions.NucleusUserException: Detected attempt to establish !gmail.com:Parent52(2) as the parent 
 			p2.getChildren2().add(a);
 			pm.currentTransaction().commit();
 			
@@ -406,7 +436,7 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 
 
 			
-			System.out.println("end of testDeleteBothUniDirectionParents");
+			System.out.println("end of testAttachMultiParents");
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -416,4 +446,77 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 		}
     }
     
+    
+    public void testReplaceChildAutoDeleteOld() {
+		System.out.println("start of testReplaceChildAutoDeleteOld");
+		
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			clearDS();
+			// prepare
+			pm.currentTransaction().begin();
+			Parent51 p1 = new Parent51();
+			p1.setName("xxx");
+			p1 = pm.makePersistent(p1);
+			
+			pm.currentTransaction().commit();
+			
+
+			pm.currentTransaction().begin();
+			Child51 c = new Child51();
+			c.setName("x11");
+			p1.setChild51(c);
+			p1 = pm.makePersistent(p1);
+			pm.currentTransaction().commit();
+			
+			String pid = p1.getId();
+			String cid = c.getId();
+			System.out.println("pid: "+pid+", cid: "+cid);
+			
+			// verify relation
+			p1 = pm.getObjectById(Parent51.class, pid);
+			c = p1.getChild51();
+			System.out.println("cid: "+c.getId()+", cname:"+c.getName());
+			assertTrue(cid.equals(c.getId()));
+
+			// replace
+			pm.currentTransaction().begin();
+			Child51 c2 = new Child51();
+			c2.setName("x11");
+			p1.setChild51(c2);
+			p1 = pm.makePersistent(p1);
+			pm.currentTransaction().commit();
+			
+			String pid2 = p1.getId();
+			String cid2 = c2.getId();
+			System.out.println("pid2: "+pid2+", cid2: "+cid2);
+			assertTrue(pid.equals(pid2));
+			
+			// verify new relation
+			p1 = pm.getObjectById(Parent51.class, pid2);
+			c2 = p1.getChild51();
+			System.out.println("cid: "+c2.getId()+", cname:"+c2.getName());
+			assertTrue(cid2.equals(c2.getId()));
+			
+			// verify old auto-deleted
+			try {
+				c = pm.getObjectById(Child51.class, cid);
+				// This assertion will fail
+				// TODO why?
+				assertTrue(false);
+			} catch (JDOObjectNotFoundException e) {
+				assertTrue(true);
+			}
+			
+
+			
+			System.out.println("end of testReplaceChildAutoDeleteOld");
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			assertTrue(false);
+		}finally {
+			pm.close();
+		}
+    }
 }
