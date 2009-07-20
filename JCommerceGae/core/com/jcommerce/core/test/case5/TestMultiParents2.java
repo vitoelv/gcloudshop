@@ -59,6 +59,86 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			pm.close();
 		}
     }
+    
+    public void testAddTwoFieldofSameChildKind() {
+		System.out.println("start of testAddTwoFieldofSameChildKind");
+		
+		// 
+		
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			
+
+			clearDS();
+			
+			pm.currentTransaction().begin();
+			Parent51 p1 = new Parent51();
+			p1.setName("xxx");
+			p1 = pm.makePersistent(p1);
+			
+			pm.currentTransaction().commit();
+			pm.currentTransaction().begin();
+			
+			Child51 c1 = new Child51();
+			c1.setName("x11");
+			p1.setChild51(c1);
+			
+			Child51 c2 = new Child51();
+			c2.setName("x22");
+			p1.setChild512(c2);
+			
+			p1 = pm.makePersistent(p1);
+			pm.currentTransaction().commit();
+			
+			String pid = p1.getId();
+			String cid1 = c1.getId();
+			String cid2 = c2.getId();
+			System.out.println("pid: "+p1.getId()+", cid1: "+c1.getId()+", cid2: "+cid2);
+			assertTrue(true);
+
+			// verify add
+			p1 = pm.getObjectById(Parent51.class, pid);
+			c1 = p1.getChild51();
+			c2 = p1.getChild512();
+			System.out.println("c1: "+c1+", c2: "+c2);
+			assertTrue(c1!=null && c2!=null);
+			
+			// cascade delete
+			pm.currentTransaction().begin();
+			pm.deletePersistent(p1);
+			pm.currentTransaction().commit();
+			// verify cascade delete
+			try {
+				System.out.println("search c1");
+				c1 = pm.getObjectById(Child51.class, cid1);
+			} catch (JDOObjectNotFoundException e) {
+				System.out.println("c1: "+cid1+" cannot find");
+				c1=null;
+			}
+			
+			try {
+				System.out.println("search c2");
+				c2 = pm.getObjectById(Child51.class, cid2);
+			} catch (JDOObjectNotFoundException e) {
+				System.out.println("c2: "+cid2+" cannot find");
+				c2=null;
+			}
+			
+			// TODO why?
+			// assertion fail
+			assertTrue(c1==null && c2==null);
+
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			assertTrue(false);
+		}finally {
+			pm.close();
+			System.out.println("end of testAddTwoFieldofSameChildKind");
+		}
+		
+    }
+    
     public void testAdd() {
 		System.out.println("start of testAdd");
 		

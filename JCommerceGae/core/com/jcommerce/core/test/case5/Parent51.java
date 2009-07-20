@@ -26,6 +26,9 @@ public class Parent51 {
     @Persistent
     private Child51 child51;
     
+    @Persistent
+    private Child51 child512;
+    
 	public String getId() {
 		return id;
 	}
@@ -56,6 +59,14 @@ public class Parent51 {
 
 	public void setChild51(Child51 child51) {
 		this.child51 = child51;
+	}
+
+	public Child51 getChild512() {
+		return child512;
+	}
+
+	public void setChild512(Child51 child512) {
+		this.child512 = child512;
 	}
     
 }
