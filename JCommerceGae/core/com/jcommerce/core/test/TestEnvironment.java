@@ -17,7 +17,7 @@ class TestEnvironment implements ApiProxy.Environment {
     public void setDefaultNamespace(String s) { }
 
     public String getRequestNamespace() {
-        return "gmail.com";
+        return "";
     }
 
     public String getDefaultNamespace() { 
