@@ -22,7 +22,7 @@ public class Test3 extends BaseDataStoreTestCase {
     }
     
 	public void test1() {
-		// this is the case submitted to code.google about cascadingly delete issue
+		// this is the #91 issue submitted to code.google about cascadingly delete issue
 		System.out.println("start of test1");
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {

@@ -1,5 +1,8 @@
 package com.jcommerce.core.test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.apphosting.api.ApiProxy;
 
 class TestEnvironment implements ApiProxy.Environment {
@@ -8,7 +11,7 @@ class TestEnvironment implements ApiProxy.Environment {
     }
 
     public String getVersionId() {
-        return "1";
+        return "2";
     }
 
     public void setDefaultNamespace(String s) { }
@@ -36,4 +39,9 @@ class TestEnvironment implements ApiProxy.Environment {
     public boolean isAdmin() {
         return false;
     }
+
+	public Map<String, Object> getAttributes() {
+        Map<String, Object> map = new HashMap<String, Object> ();
+        return map; 
+	}
 }
