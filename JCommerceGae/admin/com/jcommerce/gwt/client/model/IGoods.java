@@ -10,11 +10,12 @@ public interface IGoods {
     public static final String MAINCATEGORYID = "mainCategoryId";
     public static final String CATEGORYIDS = "categoryIds";
     public static final String BRANDID = "brandId";
+    public static final String GOODSTYPEID = "goodsTypeId";
 //    public static final String MAINCATEGORY = "mainCategory";
 //    public static final String CATEGORIES = "categories";
     public static final String GALLERIES = "galleries";
 //    public static final String ARTICLES = "articles";
-//    public static final String ATTRIBUTES = "attributes";
+    public static final String ATTRIBUTES = "attributes";
 //    public static final String BRAND = "brand";
     
     
@@ -53,7 +54,7 @@ public interface IGoods {
     public static final String PROMOTED = "promoted";
     public static final String BONUSTYPE = "bonusType";
     public static final String LASTUPDATE = "lastUpdate";
-    public static final String TYPE = "type";
+
     public static final String SELLERNOTE = "sellerNote";
     public static final String GIVEINTEGRAL = "giveIntegral";
 

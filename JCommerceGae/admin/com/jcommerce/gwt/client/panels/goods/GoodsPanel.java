@@ -36,9 +36,9 @@ import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.FileUploadField;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.HiddenField;
-import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
 import com.extjs.gxt.ui.client.widget.form.ListField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
 import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
@@ -52,6 +52,7 @@ import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.GWTHttpDynaForm;
 import com.jcommerce.gwt.client.form.GoodsForm;
+import com.jcommerce.gwt.client.model.IGoods;
 import com.jcommerce.gwt.client.panels.BaseEntityEditPanel;
 import com.jcommerce.gwt.client.panels.GoodsListPanel;
 import com.jcommerce.gwt.client.panels.Success;
@@ -77,15 +78,21 @@ public class GoodsPanel extends BaseEntityEditPanel {
     
 //	private ColumnPanel contentPanelGeneral = new ColumnPanel();
 //    private ColumnPanel contentPanelOther = new ColumnPanel();
-    private AttributePanel attrPanel = new AttributePanel();
+//    private GoodsAttributePanel attrPanel = new GoodsAttributePanel();
 //    private GalleryPanel galleryPanel = new GalleryPanel();
 	 
     ListStore<BeanObject> brandList;
+    ComboBox<BeanObject> fListBrand;
+    
     ListStore<BeanObject> catgoryList;
-
+    ListField<BeanObject> fListCategory;
+    
     HiddenField<String> idField;
     CheckBox bestSoldField;
     GalleryPanel4 contentPanelGallery;
+    GoodsAttributePanel contentPanelAttrs;
+    
+    
     // leon to integrate with history-based page navigation mechnism. 
     // State should contain all info needed to render this page.
     // This is a minimum skeleton, more fields may be added, see leontest.Attribute
@@ -108,10 +115,14 @@ public class GoodsPanel extends BaseEntityEditPanel {
 		this.curState = curState;
 	}
     
-    /**
-     * Initialize this example.
-     */
-    public GoodsPanel() {       
+	private static GoodsPanel instance;
+    private GoodsPanel() {       
+    }
+    public static GoodsPanel getInstance() {
+    	if(instance == null) {
+    		instance = new GoodsPanel();
+    	}
+    	return instance;
     }
     
     @Override
@@ -177,32 +188,33 @@ public class GoodsPanel extends BaseEntityEditPanel {
         contentPanelGeneral.add(field, formData);
         
         brandList = new ListStore<BeanObject>();
-        ComboBox<BeanObject> lstBrand = GoodsForm.getBrandIdField();
-        lstBrand.setFieldLabel(Resources.constants.Goods_brand());
-        lstBrand.setStore(brandList);
+        fListBrand = GoodsForm.getBrandIdField();
+        fListBrand.setFieldLabel(Resources.constants.Goods_brand());
+        fListBrand.setStore(brandList);
 
-        lstBrand.setEmptyText("Select a Brand...");   
-        lstBrand.setWidth(150);   
-        lstBrand.setTypeAhead(true);   
-        lstBrand.setTriggerAction(TriggerAction.ALL);   
-        contentPanelGeneral.add(lstBrand);
+        fListBrand.setEmptyText("Select a Brand...");   
+        fListBrand.setWidth(150);   
+        fListBrand.setTypeAhead(true);   
+        fListBrand.setTriggerAction(TriggerAction.ALL);   
+        contentPanelGeneral.add(fListBrand);
         
         
-        ListField<BeanObject> listCategory = GoodsForm.getCategoryIdsField();
-        listCategory.setFieldLabel(Resources.constants.Goods_category());
+        fListCategory = GoodsForm.getCategoryIdsField();
+        fListCategory.setFieldLabel(Resources.constants.Goods_category());
         catgoryList = new ListStore<BeanObject>();
-        listCategory.setStore(catgoryList);
-        listCategory.setEmptyText("Select one or more Categories...");   
-        listCategory.setWidth(150);   
-        contentPanelGeneral.add(listCategory);
+        fListCategory.setStore(catgoryList);
+        fListCategory.setEmptyText("Select one or more Categories...");   
+        fListCategory.setWidth(150);   
+        contentPanelGeneral.add(fListCategory);
         
-        field = GoodsForm.getImageField();
-        field.setFieldLabel(Resources.constants.Goods_image());
-        contentPanelGeneral.add(field, formData);
+//        field = GoodsForm.getImageField();
+//        field.setFieldLabel(Resources.constants.Goods_image());
+//        contentPanelGeneral.add(field, formData);
+//        
+//        field = GoodsForm.getThumbField();
+//        field.setFieldLabel(Resources.constants.Goods_thumb());
+//        contentPanelGeneral.add(field, formData);
         
-        field = GoodsForm.getThumbField();
-        field.setFieldLabel(Resources.constants.Goods_thumb());
-        contentPanelGeneral.add(field, formData);
         
 //    	contentPanelGeneral.createPanel(IGoods.NAME, Resources.constants.Goods_name(), new TextBox());
 //    	contentPanelGeneral.createPanel(IGoods.SN, Resources.constants.Goods_SN(), new TextBox());
@@ -235,6 +247,7 @@ public class GoodsPanel extends BaseEntityEditPanel {
         contentPanelDetail.setText(Resources.constants.NewGoods_tabDetail());
         contentPanelDetail.setLayout(new FormLayout());
         
+        
         // Create the text area and toolbar
         HtmlEditor area = GoodsForm.getDescField(); 
         area.setFieldLabel("Descritpion");
@@ -246,6 +259,7 @@ public class GoodsPanel extends BaseEntityEditPanel {
 //        contentPanelDetail.add(toolbar);
         contentPanelDetail.add(area, formData);
         
+
         tabs.add(contentPanelDetail);
         
         
@@ -350,6 +364,21 @@ public class GoodsPanel extends BaseEntityEditPanel {
         contentPanelGallery.setText(Resources.constants.NewGoods_tabGallery());
         
         tabs.add(contentPanelGallery);
+        
+        
+        contentPanelAttrs = new GoodsAttributePanel(this);
+        contentPanelAttrs.setStyleAttribute("padding", "10px");
+        contentPanelAttrs.setText(Resources.constants.NewGoods_tabProperty());
+        tabs.add(contentPanelAttrs);
+        
+        // below as a sample of adding listener
+//        contentPanelAttrs.addListener(Events.Select, new Listener<TabPanelEvent>(){
+//        	  public void handleEvent(TabPanelEvent be)
+//        	  {
+//        	    MessageBox.alert("Test", be.item.getText(), null);
+//        	  }
+//        	});
+
         
         formPanel.add(tabs);
         
@@ -508,45 +537,61 @@ public class GoodsPanel extends BaseEntityEditPanel {
 //        });  
     }
     
- 
-    public void refresh() {    	
+    @Override
+    public void postSuperRefresh() {
+    	// let them run parallelly 
     	new ListService().listBeans(ModelNames.BRAND, new ListService.Listener() {
         	// TODO need only Id and Name, rather than all fields of Brand/Category
     		public void onSuccess(List<BeanObject> beans) {
     	    	brandList.removeAll();
     			brandList.add(beans);
-    			new ListService().listBeans(ModelNames.CATEGORY, new ListService.Listener() {
-					@Override
-					public void onSuccess(List<BeanObject> beans) {
-				    	catgoryList.removeAll();
-						catgoryList.add(beans);
-						superrefresh();
-					}
-    			});
+    			populateField(fListBrand);
     		}
     	});
-    }
-    public void superrefresh() {
-    	super.refresh();
+    	
+		new ListService().listBeans(ModelNames.CATEGORY, new ListService.Listener() {
+			@Override
+			public void onSuccess(List<BeanObject> beans) {
+		    	catgoryList.removeAll();
+				catgoryList.add(beans);
+				populateField(fListCategory);
+			}
+		});
+		
     	String action="com.jcommerce.gwt.server.GoodsGWTAction";
     	String method="";
     	
     	if(getCurState().getIsEdit()) {
     		method = "update";
     		idField.setValue(getCurState().getId());
+    		BeanObject bo = getEntity();
+    		String goodsTypeId = bo.getString(IGoods.GOODSTYPEID);
     		contentPanelGallery.refresh(getCurState().getId());
+    		contentPanelAttrs.refresh(getCurState().getId(), goodsTypeId);
     	}else {
     		method = "add";
     		idField.setValue(null);
     		contentPanelGallery.refresh(null);
+    		contentPanelAttrs.refresh(null, null);
     	}
     	
-    	
+    	System.out.println("method="+method);
     	formPanel.setAction(GWTHttpDynaForm.constructURL(action, method));
     }
+
     @Override
     protected void submit() {
-    	System.out.println("before Submit(): bestSoldField="+bestSoldField);
+    	
+        try {
+        	// mannually render it.
+        	// HTMLEditor has some initilizing work to do in render
+        	// submit without clicking into detail tab
+//        	area.render(contentPanelDetail.getElement(), -1);
+        } catch (Exception ex) {
+        	ex.printStackTrace();
+        }
+    	
+    	System.out.println("before Submit(): bestSoldField="+bestSoldField+", action="+formPanel.getAction());
     	Boolean value = bestSoldField.getValue();
     	System.out.println("bestSoldField value: "+value);
     	

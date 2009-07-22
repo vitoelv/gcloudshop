@@ -46,6 +46,5 @@ public abstract class ModelObject implements Serializable {
 	public abstract void setKeyName(String kn);
     public abstract String getKeyName();
     
-
     public abstract ModelObject getParent();
 }

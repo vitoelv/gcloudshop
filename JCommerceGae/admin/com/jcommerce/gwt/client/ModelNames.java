@@ -15,7 +15,7 @@ public interface ModelNames {
     public static final String USERRANK = "UserRank";
     public static final String ATTRIBUTE = "com.jcommerce.core.model.Attribute";
     public static final String GOODSTYPE = "com.jcommerce.core.model.GoodsType";
-    public static final String GOODSATTRIBUTE = "GoodsAttribute";
+    public static final String GOODSATTRIBUTE = "com.jcommerce.core.model.GoodsAttribute";
     public static final String REGION = "Region";
     public static final String SHOPCONFIG= "ShopConfig";  
     public static final String PAYMENT_META = "PaymentMeta";

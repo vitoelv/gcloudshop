@@ -26,7 +26,7 @@ public class TestManager extends BaseDAOTestCase {
 			// prepare
 			Person p = new Person();
 			p.setName("xxx");
-			String pid = manager.add(p);
+			String pid = manager.txadd(p);
 			System.out.println("pid="+pid+", p="+p);
 			System.out.println("p.getId="+p.getId());
 			
@@ -45,7 +45,7 @@ public class TestManager extends BaseDAOTestCase {
 			System.out.println("buildaid="+buildaid);
 			a.setId(buildaid);
 			
-			String aid = manager.add(a);
+			String aid = manager.txadd(a);
 			System.out.println("aid="+aid+", a="+a);
 			
 //			String akn = a.getKeyName();
@@ -83,7 +83,7 @@ public class TestManager extends BaseDAOTestCase {
 			assertTrue(1==size);
 
 			// cascalate delete
-			manager.delete(Person.class.getName(), pid);
+			manager.txdelete(Person.class.getName(), pid);
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -111,7 +111,7 @@ public class TestManager extends BaseDAOTestCase {
 			
 			p.getAddresses().add(a);
 			
-			String pid = manager.add(p);
+			String pid = manager.txadd(p);
 
 			System.out.println("pid="+pid+", p="+p);
 
@@ -144,7 +144,7 @@ public class TestManager extends BaseDAOTestCase {
 			assertTrue(p!=null && "xxx".equals(p.getName()));
 			
 			// cascalate delete
-			manager.delete(Person.class.getName(), pid);
+			manager.txdelete(Person.class.getName(), pid);
 			
 			// work 2
 //			res = new ArrayList<Address>();
@@ -206,7 +206,7 @@ public class TestManager extends BaseDAOTestCase {
 			assertTrue(p!=null && "xxx".equals(p.getName()));
 			
 			// cascalate delete
-			manager.delete(Person.class.getName(), pid);
+			manager.txdelete(Person.class.getName(), pid);
 			
 			// work 2
 //			res = new ArrayList<Address>();

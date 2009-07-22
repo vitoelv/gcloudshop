@@ -8,12 +8,13 @@ import com.extjs.gxt.ui.client.widget.form.FileUploadField;
 import com.extjs.gxt.ui.client.widget.form.HiddenField;
 import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
 import com.extjs.gxt.ui.client.widget.form.ListField;
-import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.jcommerce.gwt.client.model.IBrand;
 import com.jcommerce.gwt.client.model.ICategory;
 import com.jcommerce.gwt.client.model.IGoods;
+import com.jcommerce.gwt.client.model.IGoodsType;
 import com.jcommerce.gwt.client.resources.Resources;
+import com.jcommerce.gwt.client.widgets.MyHTMLEditor;
 
 public class GoodsForm extends BeanObject implements IGoods {
 	
@@ -51,6 +52,15 @@ public class GoodsForm extends BeanObject implements IGoods {
         field.setValueField(IBrand.ID);
 		return field;
 	}
+	
+	public static ComboBox<BeanObject> getGoodsTypeIdField() {
+		ComboBox<BeanObject> field = new ComboBox<BeanObject>();
+		field.setName(GOODSTYPEID);
+		field.setDisplayField(IGoodsType.NAME);
+        field.setValueField(IGoodsType.ID);
+		return field;
+	}
+	
 	public static ListField<BeanObject> getCategoryIdsField() {
 		ListField<BeanObject> field = new ListField<BeanObject>();
 		field.setName(CATEGORYIDS);
@@ -106,7 +116,7 @@ public class GoodsForm extends BeanObject implements IGoods {
 	}
 	
 	public static HtmlEditor getDescField() {
-		HtmlEditor field = new HtmlEditor();
+		MyHTMLEditor field = new MyHTMLEditor();
 		field.setName(DESCRIPTION);
 		field.setAutoValidate(true);
 		return field;

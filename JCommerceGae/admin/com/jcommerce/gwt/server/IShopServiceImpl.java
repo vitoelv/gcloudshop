@@ -159,7 +159,7 @@ public class IShopServiceImpl extends RemoteServiceServlet implements IShopServi
         IDefaultManager manager = getDefaultManager();
         boolean res;
         try {
-        	res = manager.delete(modelName, id);
+        	res = manager.txdelete(modelName, id);
         	
         } catch (Exception e) {
         	e.printStackTrace();
@@ -177,7 +177,7 @@ public class IShopServiceImpl extends RemoteServiceServlet implements IShopServi
     	for (String id : ids) {
     		boolean r = false;
 			try {
-				r = manager.delete(modelName, id);
+				r = manager.txdelete(modelName, id);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -292,7 +292,7 @@ public class IShopServiceImpl extends RemoteServiceServlet implements IShopServi
 				ModelObject to = (ModelObject) Class.forName(props.getModelName()).newInstance();
 				MyPropertyUtil.form2To(to, props.getProperties());
 				to.setId(id);
-				boolean res = manager.update(to);
+				boolean res = manager.txupdate(to);
 				return res;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -312,7 +312,7 @@ public class IShopServiceImpl extends RemoteServiceServlet implements IShopServi
         try {
         	ModelObject to = (ModelObject)Class.forName(props.getModelName()).newInstance();
             MyPropertyUtil.form2To(to, props.getProperties());
-        	res = manager.add(to);
+        	res = manager.txadd(to);
         	
         } catch (Exception e) {
         	e.printStackTrace();

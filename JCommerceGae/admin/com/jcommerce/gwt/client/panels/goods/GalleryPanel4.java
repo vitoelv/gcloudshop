@@ -50,11 +50,6 @@ public class GalleryPanel4 extends TabItem {
 	public GalleryPanel4(GoodsPanel gp) {
 		super();
 		this.gp = gp;
-		
-//		VBoxLayout layout = new VBoxLayout();  
-//		layout.setPadding(new Padding(5));  
-//		layout.setVBoxLayoutAlign(VBoxLayoutAlign.STRETCH);
-//		setLayout(layout);
 				
 		TableLayout layout = new TableLayout(1);
 		layout.setCellSpacing(5);
@@ -66,29 +61,16 @@ public class GalleryPanel4 extends TabItem {
 		tl.setBorder(1);
 		lc1.setLayout(tl);
 		lc1.setAutoHeight(true);
-//		lc1.add(new Button("lc1"));
-//		lc1.add(new Button("lc2"));
-//		lc1.add(new Button("lc3"));
-//		lc1.add(new Button("lc4"));
-		
-//		testAddImage();
-//		testAddImage();
-		
-		
-//		VBoxLayoutData flex = new VBoxLayoutData(new Margins(0, 0, 5, 0));  
-//		flex.setFlex(1);
-//		add(lc1, flex);
-//
-//		VBoxLayoutData flex2 = new VBoxLayoutData(new Margins(0));
-//		flex2.setFlex(1);
-//		add(lc2, flex2);
+
 		TableData td = new TableData();
 		td.setWidth("100%");
 		add(lc1, td);
 		add(lc2, td);
 		
 		lc2.setAutoHeight(true);
-		test1();
+		RowLayout rl = new RowLayout();
+		rl.setOrientation(Orientation.VERTICAL);
+		lc2.setLayout(rl);
 
 	}
 
@@ -118,70 +100,8 @@ public class GalleryPanel4 extends TabItem {
 		
 		lc1.add(lc);
 	}
-	
-	
-	public void test2() {
-		// this does not work
-		// seems bug of nested VBoxLayout 
-		VBoxLayout layout = new VBoxLayout();  
-		layout.setPadding(new Padding(5));  
-		layout.setVBoxLayoutAlign(VBoxLayoutAlign.STRETCH);
-		lc2.setLayout(layout);
-		lc2.add(new Text("xxxxx"), new VBoxLayoutData(new Margins(0, 0, 5, 0)));
-		lc2.add(new Text("yy"), new VBoxLayoutData(new Margins(0)));		
-	}
-	public void test3() {
-		// this does not work
-		// seems bug of HBoxLayout nested in HBoxLayout
-		RowLayout layout = new RowLayout();
-		layout.setOrientation(Orientation.VERTICAL);
-		lc2.setLayout(layout);
-		
-		LayoutContainer lcc = new LayoutContainer();
-		HBoxLayout hbl = new HBoxLayout();
-		hbl.setHBoxLayoutAlign(HBoxLayoutAlign.MIDDLE);
-		lcc.setLayout(hbl);
-		lcc.add(new Button("yyyyy"));
-		lc2.add(lcc, new RowData(-1, 1));		
-	}
-	public void test4() {
-		// this does not work
-		// seems bug of nested RowLayout
-		RowLayout layout = new RowLayout();
-		layout.setOrientation(Orientation.VERTICAL);
-		lc2.setLayout(layout);
-		
-		LayoutContainer lcc = new LayoutContainer();
-		layout = new RowLayout();
-		layout.setOrientation(Orientation.HORIZONTAL);
-		lcc.setLayout(layout);
-		lcc.add(new Text("yyyyy"), new RowData(100, 1));
-		lc2.add(lcc, new RowData(1, -1));		
-	}
-	public void test5() {
-		// this works finally...
-		RowLayout layout = new RowLayout();
-		layout.setOrientation(Orientation.VERTICAL);
-		lc2.setLayout(layout);
 
-		LayoutContainer lcc = new LayoutContainer();
-		CenterLayout cl = new CenterLayout();
-		lcc.setLayout(cl);
-		lcc.add(new Button("yyyyy"));
-		lc2.add(lcc, new RowData(1, -1));
-	}
-	public void test1() {
-		System.out.println("test1");
-
-		RowLayout layout = new RowLayout();
-		layout.setOrientation(Orientation.VERTICAL);
-		lc2.setLayout(layout);
-		
-
-		
-	}
-
-	private void addNewRow(boolean isFirst) {
+	private void addUploader(boolean isFirst) {
 		uploaderCount++;
 		final LayoutContainer lcc = new LayoutContainer();
 		TableRowLayout cl = new TableRowLayout();
@@ -207,7 +127,7 @@ public class GalleryPanel4 extends TabItem {
 				public void componentSelected(ButtonEvent ce) {
 					System.out.println("+ button clicked");
 					// TODO remove the gallery 
-					addNewRow(false);
+					addUploader(false);
 					
 				}
 			});
@@ -257,7 +177,7 @@ public class GalleryPanel4 extends TabItem {
 		lc2.removeAll();
 		uploaderCount = 0;
 		
-		addNewRow(true);
+		addUploader(true);
 		
 		if(goodsId!=null) {
 		new ListService().listBeans(ModelNames.GALLERY, IGallery.GOODS, goodsId, new ListService.Listener() {
@@ -276,6 +196,7 @@ public class GalleryPanel4 extends TabItem {
 	
 	private void addImage(BeanObject gallery) {
 		System.out.println("addImage: ");
+		uploaderCount++;
 		String imageFileId = gallery.getString(IGallery.IMAGEFILEID);
 		String image = gallery.getString(IGallery.IMAGE);
 		final String id = gallery.getString(IGallery.ID);
@@ -313,9 +234,10 @@ public class GalleryPanel4 extends TabItem {
 		descField.setMaxLength(20);
 		descField.setValue(description);
 		
-		final HiddenField<String> imageField = new HiddenField<String>();
-		imageField.setName(buildElementName(GalleryForm.IMAGE));
-		imageField.setValue(image);
+		// do not show fileName
+//		final HiddenField<String> imageField = new HiddenField<String>();
+//		imageField.setName(buildElementName(GalleryForm.IMAGE));
+//		imageField.setValue(image);
 		Button link = new Button("[-]");
 		link.addSelectionListener(new SelectionListener<ButtonEvent>() {
 			public void componentSelected(ButtonEvent ce) {
@@ -327,7 +249,7 @@ public class GalleryPanel4 extends TabItem {
 						lc1.remove(lc);
 						gp.removeDynaField(idField);
 						gp.removeDynaField(descField);
-						gp.removeDynaField(imageField);
+//						gp.removeDynaField(imageField);
 						gp.removeDynaField(imageFileIdField);
 						Info.display("Great", "Gallery item deleted");
 					}
@@ -347,77 +269,18 @@ public class GalleryPanel4 extends TabItem {
 		lc.add(im);
 		lc.add(idField);
 		lc.add(descField);
-		lc.add(imageField);
+//		lc.add(imageField);
 		lc.add(imageFileIdField);
 		
 		gp.addDynaField(idField);
 		gp.addDynaField(descField);
-		gp.addDynaField(imageField);
+//		gp.addDynaField(imageField);
 		gp.addDynaField(imageFileIdField);
 		
 		lc1.add(lc);
 	}
 	
-    private void addUploader(boolean isInitilizing) {
-    	
-    	uploaderCount++;
-    	System.out.println("addUploader: ");
-		final LayoutContainer lc = new LayoutContainer();
-		lc.setLayout(new FormLayout());
-		
-		Button link = null;
-		if(isInitilizing) {
-			link = new Button("[+]");
-			link.addSelectionListener(new SelectionListener<ButtonEvent>() {
-				public void componentSelected(ButtonEvent ce) {
-					System.out.println("+ button clicked");
-					addUploader(false);
-			    	Info.display("ooops", "You were hit by a bug that the new uploader won't appear automatcially. Try click other tab and comeback to see the effect");
-				}
-			});		
-		} else {
-			link = new Button("[-]");
-			link.addSelectionListener(new SelectionListener<ButtonEvent>() {
-				public void componentSelected(ButtonEvent ce) {
-					System.out.println("- button clicked");
-					lc2.remove(lc);
-					lc2.layout();
-				}
-			});
-		}
 
-		HiddenField<String> id = new HiddenField<String>();
-		id.setName(buildElementName(GalleryForm.ID));
-		id.setValue("");
-		lc.add(id);
-		
-		TextField<String> desc = new TextField<String>();
-		desc.setName(buildElementName(GalleryForm.DESCRIPTION));
-		desc.setFieldLabel("descrition:");
-		desc.setMaxLength(20);
-		
-		FileUploadField file = new FileUploadField();
-		file.setName(buildElementName(GalleryForm.IMAGE));
-		file.setFieldLabel("file: ");
-		
-		HiddenField<String> imageFileIdField = new HiddenField<String>();
-		imageFileIdField.setName(buildElementName(GalleryForm.IMAGEFILEID));
-		imageFileIdField.setValue("");
-		lc.add(imageFileIdField);
-		
-		lc.add(new AdapterField(link));
-		lc.add(desc);
-		lc.add(file);
-		
-//		RowData rd = new RowData(1, -1);
-//		lc2.add(lc, rd);
-//		lc2.add(new AdapterField(new Button("test")));
-		lc2.add(lc, new VBoxLayoutData(new Margins(0)));
-//        lc2.layout();
-//        lc.layout();
-//        this.layout();
-
-    }
 
     private String buildElementName(String fieldName) {
     	return formSufix+"["+uploaderCount+"]."+fieldName;

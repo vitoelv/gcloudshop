@@ -28,12 +28,12 @@ public class BrandGWTAction extends BaseGWTHttpAction {
     		if(fileForm!=null) {
     			DSFile file = new DSFile();
     			file.setContent(new Blob(fileForm.getContent()));
-    			logoFileId = manager.add(file);
+    			logoFileId = manager.txadd(file);
     		}
     		
     		Brand to = form2To(form);
     		to.setLogoFileId(logoFileId);
-        	res = manager.add(to);
+        	res = manager.txadd(to);
     		
     		
     		
@@ -56,7 +56,7 @@ public class BrandGWTAction extends BaseGWTHttpAction {
     			file.setContent(new Blob(fileForm.getContent()));
     			file.setFileName(fileForm.getFileName());
     			file.setMimeType(fileForm.getMimeType());
-    			newLogoFileId = manager.add(file);
+    			newLogoFileId = manager.txadd(file);
     		}
     		System.out.println("newLogoFileId: "+newLogoFileId);
     		
@@ -66,11 +66,11 @@ public class BrandGWTAction extends BaseGWTHttpAction {
     		String oldLogoFileId = brand.getLogoFileId();
     		System.out.println("oldLogoFileId: "+oldLogoFileId);
     		
-    		manager.delete(DSFile.class.getName(), oldLogoFileId);
+    		manager.txdelete(DSFile.class.getName(), oldLogoFileId);
 
     		Brand to = form2To(form);
     		to.setLogoFileId(newLogoFileId);
-        	res = manager.update(to);
+        	res = manager.txupdate(to);
     		
     		
     	} catch (Exception ex) {
@@ -91,8 +91,8 @@ public class BrandGWTAction extends BaseGWTHttpAction {
     		String oldLogoFileId = brand.getLogoFileId();
     		System.out.println("oldLogoFileId: "+oldLogoFileId);
     		
-    		manager.delete(DSFile.class.getName(), oldLogoFileId);
-        	res = manager.delete(Brand.class.getName(), id);
+    		manager.txdelete(DSFile.class.getName(), oldLogoFileId);
+        	res = manager.txdelete(Brand.class.getName(), id);
     		
     	} catch (Exception ex) {
     		ex.printStackTrace();

@@ -22,7 +22,7 @@ public class TestGoods extends BaseDAOTestCase {
 			
 			goods.getCategoryIds().addAll(Arrays.asList(catIds));
 			
-			String id = manager.add(goods);
+			String id = manager.txadd(goods);
 			
 			System.out.println("id="+id);
 			
@@ -34,7 +34,7 @@ public class TestGoods extends BaseDAOTestCase {
 			}
 			
 			g.getCategoryIds().add("zzz");
-			manager.update(g);
+			manager.txupdate(g);
 			
 			
 			g = (Goods)manager.get(Goods.class.getName(), id);

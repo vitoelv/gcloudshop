@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.button.Button;
@@ -145,55 +146,28 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 	
 	public abstract void gotoSuccessPanel();
 	
+	protected abstract void postSuperRefresh();
+	
     public void refresh() {
-    	formPanel.clear();
+    	try {
+    		formPanel.clear();
+    	} catch (Exception ex) {
+    		ex.printStackTrace();
+    	}
         if(getCurState().getIsEdit()) {
         	new ReadService().getBean(getEntityClassName(), getCurState().getId(),
 				new ReadService.Listener() {
         		public void onSuccess(BeanObject bean) {
         			obj = bean;
-        			Map<String, Object> mapAttribute = bean.getProperties();
-
-        			List<Field<?>> fields = formPanel.getFields();
-        			for(Field field:fields) {
-        				String name = field.getName();
-        				Object value = mapAttribute.get(name);        				
-        				log("name:"+name+", value:"+(value==null?"null":value.toString()+", valueclass: "+value.getClass().getName()));
-        				
-        				if(value==null) {
-        					continue;
-        				}
-        				if(field instanceof ComboBox) {
-        					ComboBox<BeanObject> box = (ComboBox<BeanObject>)field;
-        					ListStore<BeanObject> store = box.getStore();
-        					List<BeanObject> selection = new ArrayList<BeanObject>();
-        					BeanObject bo = store.findModel("id", value);
-        					selection.add(bo);
-    						box.setSelection(selection);
-        					
-        				} else if(field instanceof ListField){
-        					ListField<BeanObject> lf = (ListField<BeanObject>)field;
-        					ListStore<BeanObject> store = lf.getStore();
-        					
-        					Collection<String> v = (Collection<String>)value;
-        					List<BeanObject> selection = new ArrayList<BeanObject>();
-        					for(String vv:v) {
-        						BeanObject bo = store.findModel("id", vv);
-        						if(bo!=null) {
-        							selection.add(bo);
-        						}
-        					}
-        					lf.setSelection(selection);
-        					
-        				} else if(field instanceof TextField || field instanceof TextArea || field instanceof HtmlEditor) {
-            				field.setOriginalValue(value);
-            				field.setValue(value);
-        				} else if (field instanceof CheckBox) {
-        					((CheckBox)field).setValue((Boolean)value);
-        				}
-        			}
+        			// populate those statically rendered fields
+        			populateFields();
+        			// sub-class should populate those "dynamic" fields including combox/list, etc 
+        			postSuperRefresh();
         		}
         	});
+        } else {
+        	obj = new BeanObject();
+        	postSuperRefresh();
         }
 
     }
@@ -202,7 +176,59 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
     	StringBuffer buf = new StringBuffer();
     	Logger.getClientLogger().log(
     			buf.append("[").append(this.getClass().getName()).append("]:").append(s).toString());
-    	
     }
-    BeanObject obj;
+    public BeanObject getEntity() {
+    	return obj;
+    }
+
+    
+	public void populateField(Field field) {
+		Map<String, Object> mapAttribute = obj.getProperties();
+			String name = field.getName();
+			Object value = mapAttribute.get(name);        				
+			log("name:"+name+", value:"+(value==null?"null":value.toString()+", valueclass: "+value.getClass().getName()));
+
+			if(value==null) {
+				return;
+			}
+			
+			if(field instanceof ComboBox) {
+				ComboBox<BeanObject> box = (ComboBox<BeanObject>)field;
+				
+				ListStore<BeanObject> store = box.getStore();
+				List<BeanObject> selection = new ArrayList<BeanObject>();
+				BeanObject bo = store.findModel("id", value);
+				selection.add(bo);
+				box.setSelection(selection);
+				
+				
+			} else if(field instanceof ListField){
+				ListField<BeanObject> lf = (ListField<BeanObject>)field;
+				ListStore<BeanObject> store = lf.getStore();
+				
+				Collection<String> v = (Collection<String>)value;
+				List<BeanObject> selection = new ArrayList<BeanObject>();
+				for(String vv:v) {
+					BeanObject bo = store.findModel("id", vv);
+					if(bo!=null) {
+						selection.add(bo);
+					}
+				}
+				lf.setSelection(selection);
+				
+			} else if(field instanceof TextField || field instanceof TextArea || field instanceof HtmlEditor) {
+				field.setOriginalValue(value);
+				field.setValue(value);
+			} else if (field instanceof CheckBox) {
+				((CheckBox)field).setValue((Boolean)value);
+			}
+	}
+	
+	public void populateFields() {
+		List<Field<?>> fields = formPanel.getFields();
+		for(Field field:fields) {
+			populateField(field);
+		}
+	}
+    private BeanObject obj;
 }

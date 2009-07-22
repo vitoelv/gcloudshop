@@ -189,9 +189,9 @@ public class JCommerceGae implements EntryPoint, ValueChangeHandler<String>, GWT
         Tree mainMenu = app.getMainMenu();      
         
       TreeItem catGoods = mainMenu.addItem(Resources.constants.categoryGoods());
-      
+		setupMainMenuOption(catGoods, new GoodsPanel.State(), Resources.images.catWidgets());      
       setupMainMenuOption(catGoods, new GoodsListPanel.State(), Resources.images.catWidgets());
-		setupMainMenuOption(catGoods, new GoodsPanel.State(), Resources.images.catWidgets());
+
       setupMainMenuOption(catGoods, new GoodsTypeListPanel.State(), Resources.images.catWidgets());
       
       	setupMainMenuOption(catGoods, new BrandListPanel.State(), Resources.images.catWidgets());
@@ -383,7 +383,7 @@ public class JCommerceGae implements EntryPoint, ValueChangeHandler<String>, GWT
 			// classes we have in project
 			} else if (pageClassName.equals(GoodsPanel.class.getName())) {
 				// page = (ContentWidget)GWT.create(GoodsTypeList.class);
-				page = new GoodsPanel();
+				page = GoodsPanel.getInstance();
 			} else if (pageClassName.equals(AttributePanel.class.getName())) {
 				page = AttributePanel.getInstance();
 			} else if (pageClassName.equals(AttributeListPanel.class.getName())) {

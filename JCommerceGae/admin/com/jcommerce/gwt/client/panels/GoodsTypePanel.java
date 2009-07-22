@@ -75,6 +75,9 @@ public class GoodsTypePanel extends BaseEntityEditPanel {
         return "商品类型编辑版2";
 	}
 
+	public void postSuperRefresh() {
+		System.out.println("postSuperRefresh do nothing");
+	}
 
 
 	
