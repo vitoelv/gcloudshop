@@ -6,27 +6,66 @@ package com.jcommerce.core.service.impl;
 
 import java.beans.PropertyDescriptor;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.PropertyUtils;
 
 import com.jcommerce.core.dao.DAO;
-import com.jcommerce.core.model.Attribute;
-import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
-import com.jcommerce.gwt.client.form.AttributeForm;
 
 public class DefaultManagerImpl implements IDefaultManager {
     private DAO dao;
     
     
+    public String txadd (ModelObject to) {
+    	try {
+    		populateIdWithPo(to);
+			String res = getDao().add(to);
+
+			return res;
+    		
+    	} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+    }
+    public String txattach (ModelObject to) {
+    	try {
+			String res = getDao().attach(to);
+			return res;
+    	} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+    }
+	/**
+	 * update only simple attributes
+	 * @param to
+	 * @return
+	 */
+	public boolean txupdate (ModelObject to) {
+		try {
+			// TODO need not this?
+//			populateIdWithPo(to);
+			return getDao().update(to);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+    public boolean txdelete (String modelName, String id) {
+    	
+    	boolean res = getDao().delete(modelName, id);
+    	return res;
+    }
+    
 	public ModelObject get (String modelName, String id) {
-		ModelObject obj = dao.get(modelName, id);
+		ModelObject obj = getDao().get(modelName, id);
 //		if(obj instanceof GoodsType) {
 //			GoodsType gt = (GoodsType)obj;
 //			Set set = gt.getAttributes();
@@ -44,76 +83,35 @@ public class DefaultManagerImpl implements IDefaultManager {
 		return obj;
 	}
 	
-	public boolean update (ModelObject to) {
-		try {
-			// TODO need not this?
-//			populateIdWithPo(to);
-			return dao.update(to);
+	
 
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
 
 	
-	
+    public DAO getDao() {
+        return this.dao;
+    }
     public void setDao(DAO dao) {
         this.dao = dao;
     }
     
-    public String attach (ModelObject to) {
-    	try {
-			String res = dao.attach(to);
-			return res;
-    	} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-    }
-    public String add (ModelObject to) {
-    	try {
-    		populateIdWithPo(to);
-			String res = dao.add(to);
 
-			return res;
-    		
-    	} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-    }
-    public boolean delete (String modelName, String id) {
-    	
-    	boolean res = dao.delete(modelName, id);
-    	
-    	return res;
-    }
+
     public List getList(String modelName, Criteria criteria) {
-    	int totalLength = 0;
-//        String hql = getHql(modelName, criteria);   
-        String hql = "";
-        debug("[getList]: modelName="+modelName+", hql="+hql);
+        debug("[getList]: modelName="+modelName);
         
-        return dao.getList(modelName, criteria, -1, -1);
+        return getDao().getList(modelName, criteria, -1, -1);
 
     }
     public int getList(List res, String modelName, Criteria criteria, int firstRow, int maxRow) {
     	int totalLength = 0;
-//        String hql = getHql(modelName, criteria); 
-    	String hql = "";
-        List list = null;
-        debug("[getList]: modelName="+modelName+", hql="+hql+", firstRow: "+firstRow+", maxRow: "+maxRow);
+        debug("[getList]: modelName="+modelName+", firstRow: "+firstRow+", maxRow: "+maxRow);
         
         if (maxRow < 0) {
-            res.addAll(dao.getList(modelName, criteria, -1, -1));
+            res.addAll(getDao().getList(modelName, criteria, -1, -1));
         } else {
-            res.addAll(dao.getList(modelName, criteria, firstRow, maxRow));
+            res.addAll(getDao().getList(modelName, criteria, firstRow, maxRow));
         }
-        totalLength = dao.getCount(modelName, criteria);
+        totalLength = getDao().getCount(modelName, criteria);
         debug("[getList]: totalLength: "+totalLength);
         return totalLength;
     }
@@ -128,7 +126,7 @@ public class DefaultManagerImpl implements IDefaultManager {
     		cond.setValue(parentId);
     		criteria.addCondition(cond);
     		
-    		List<ModelObject> res1 = dao.getList(modelName, criteria, -1, -1);
+    		List<ModelObject> res1 = getDao().getList(modelName, criteria, -1, -1);
     		res.addAll(res1);
     		
 //    		return dao.getCount(modelName, criteria);
@@ -140,26 +138,12 @@ public class DefaultManagerImpl implements IDefaultManager {
     
     public int getCount(String modelName, Criteria criteria) {
 		try {
-			return dao.getCount(modelName, criteria);
+			return getDao().getCount(modelName, criteria);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new RuntimeException(ex);
 		}
 	}
-    
-    
-
-    
-    public String getModelName() {
-//        return dao.getModelClass().getSimpleName();
-    	return null;
-    }
-
-	public List getList(String hsql) {
-		List list = null;
-//		list = dao.getList(hsql);
-		return list;
-	}   
 	
 	
     protected void populateIdWithPo(ModelObject to) {

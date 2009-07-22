@@ -41,9 +41,8 @@
     <property name="target" ref="DefaultManagerImpl"/>
     <property name="transactionAttributes">
       <props>
-        <prop key="get*">PROPAGATION_NEVER</prop>
-        <prop key="someOtherBusinessMethod">PROPAGATION_REQUIRES_NEW</prop>
-        <prop key="*">PROPAGATION_REQUIRED</prop>
+        <prop key="tx*">PROPAGATION_REQUIRED</prop>
+        <prop key="*">PROPAGATION_NEVER</prop>
       </props>
     </property>
   </bean>
@@ -54,9 +53,10 @@
     <property name="target" ref="CustomizedManagerImpl"/>
     <property name="transactionAttributes">
       <props>
-        <prop key="get*">PROPAGATION_NEVER</prop>
-        <prop key="someOtherBusinessMethod">PROPAGATION_REQUIRES_NEW</prop>
-        <prop key="*">PROPAGATION_REQUIRED</prop>
+        <!--prop key="get*">PROPAGATION_NEVER</prop>
+        < prop key="someOtherBusinessMethod">PROPAGATION_REQUIRES_NEW</prop -->
+        <prop key="tx*">PROPAGATION_REQUIRED</prop>
+        <prop key="*">PROPAGATION_NEVER</prop>
       </props>
     </property>
   </bean>

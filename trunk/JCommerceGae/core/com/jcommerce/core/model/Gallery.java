@@ -14,6 +14,7 @@ import javax.jdo.annotations.PrimaryKey;
 @PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true")
 public class Gallery extends ModelObject {
 	
+	
     @Override
     public ModelObject getParent() {
     	return goods;
@@ -55,13 +56,7 @@ public class Gallery extends ModelObject {
 	@Persistent
 	private Goods goods;
 
-    public Goods getGoods() {
-        return goods;
-    }
 
-    public void setGoods(Goods goods) {
-        this.goods = goods;
-    }
 
     public String getDescription() {
         return description;
@@ -142,5 +137,15 @@ public class Gallery extends ModelObject {
 	public void setThumbFile(DSFile thumbFile) {
 		this.thumbFile = thumbFile;
 	}
+
+	public Goods getGoods() {
+		return goods;
+	}
+
+	public void setGoods(Goods goods) {
+		this.goods = goods;
+	}
+
+
 
 }

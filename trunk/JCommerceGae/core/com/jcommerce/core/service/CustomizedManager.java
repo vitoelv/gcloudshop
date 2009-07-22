@@ -17,6 +17,6 @@ public interface CustomizedManager {
     
     public String addPerson(Person to, Address a);
     
-    public String addGoods(Goods to, List<Gallery> galleries);
-    public String updateGoods(Goods to, List<Gallery> galleries);
+    public String addGoods(Goods to);
+    public boolean updateGoods(Goods to);
 }

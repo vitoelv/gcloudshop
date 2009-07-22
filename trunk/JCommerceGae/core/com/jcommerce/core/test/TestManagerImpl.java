@@ -12,6 +12,8 @@ import com.google.appengine.api.datastore.Blob;
 import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.DSFile;
+import com.jcommerce.core.model.Gallery;
+import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.service.Condition;
@@ -47,7 +49,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
         	ModelObject to1 = (ModelObject)GoodsType.class.newInstance();
             MyPropertyUtil.form2To(to1,props1);
     		
-    		String gtid = manager.add(to1);
+    		String gtid = manager.txadd(to1);
     		System.out.println("gt.getId(): "+gtid);
     		
 
@@ -61,7 +63,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
         	ModelObject to2 = (ModelObject)Attribute.class.newInstance();
             MyPropertyUtil.form2To(to2, props2);
     		
-    		String id = manager.add(to2);
+    		String id = manager.txadd(to2);
     		
     		System.out.println("id: "+id);
     		
@@ -93,7 +95,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
         	ModelObject to1 = (ModelObject)GoodsType.class.newInstance();
             MyPropertyUtil.form2To(to1,props1);
     		
-    		String gtid = manager.add(to1);
+    		String gtid = manager.txadd(to1);
     		System.out.println("gt.getId(): "+gtid);
     		
     		Map<String, Object> props2 = new HashMap<String, Object>();
@@ -103,7 +105,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
         	ModelObject to2 = (ModelObject)Attribute.class.newInstance();
             MyPropertyUtil.form2To(to2, props2);
     		
-    		String id = manager.add(to2);
+    		String id = manager.txadd(to2);
     		System.out.println("id: "+id);
     		
     		
@@ -167,7 +169,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
         	ModelObject to1 = (ModelObject)GoodsType.class.newInstance();
             MyPropertyUtil.form2To(to1,props1);
     		
-    		String gtid = manager.add(to1);
+    		String gtid = manager.txadd(to1);
     		System.out.println("gt.getId(): "+gtid);
     		
     		
@@ -176,7 +178,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		props2.put(AttributeForm.NAME, "yyy");
         	ModelObject to2 = (ModelObject)Attribute.class.newInstance();
             MyPropertyUtil.form2To(to2, props2);
-    		String id = manager.add(to2);
+    		String id = manager.txadd(to2);
     		System.out.println("id: "+id);
     		
     		Map<String, Object> props3 = new HashMap<String, Object>();
@@ -186,7 +188,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
         	ModelObject to3 = (ModelObject)Attribute.class.newInstance();
             MyPropertyUtil.form2To(to3, props3);
     		
-    		id = manager.add(to3);
+    		id = manager.txadd(to3);
     		System.out.println("id: "+id);    		
     		
     		
@@ -227,7 +229,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		IDefaultManager manager = getDefaultManager();
     		GoodsType gt1 = new GoodsType();
     		gt1.setName("xxx");
-    		String gtid = manager.add(gt1);
+    		String gtid = manager.txadd(gt1);
     		System.out.println("gt.getId(): "+gtid);
     		
     		Map<String, Object> props2 = new HashMap<String, Object>();
@@ -235,7 +237,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		props2.put(AttributeForm.NAME, "yyy");
         	ModelObject to2 = (ModelObject)Attribute.class.newInstance();
             MyPropertyUtil.form2To(to2, props2);
-    		String id = manager.add(to2);
+    		String id = manager.txadd(to2);
     		System.out.println("id: "+id);
     		
     		
@@ -248,7 +250,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
             MyPropertyUtil.form2To( to3, props3);
             to3.setId(id);
             
-            manager.update(to3);
+            manager.txupdate(to3);
     		
             
             // verify
@@ -328,7 +330,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		IDefaultManager manager = getDefaultManager();
     		GoodsType to1 = new GoodsType();
     		to1.setName("xxx");
-    		String gtid = manager.add(to1);
+    		String gtid = manager.txadd(to1);
     		System.out.println("id: "+gtid);
     		
     		Map<String, Object> props2 = new HashMap<String, Object>();
@@ -336,7 +338,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		props2.put(AttributeForm.NAME, "yyy");
         	ModelObject to2 = (ModelObject)Attribute.class.newInstance();
             MyPropertyUtil.form2To(to2, props2);
-    		String id = manager.add(to2);
+    		String id = manager.txadd(to2);
     		System.out.println("id: "+id);
     		
     		
@@ -349,7 +351,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
         	ModelObject to3 = (ModelObject)GoodsType.class.newInstance();
             MyPropertyUtil.form2To(to3, props1);
     		
-    		manager.update(to3);
+    		manager.txupdate(to3);
     		
     		System.out.println("after update");
 
@@ -375,7 +377,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		IDefaultManager manager = getDefaultManager();
     		GoodsType to1 = new GoodsType();
     		to1.setName("xxx");
-    		String gtid = manager.add(to1);
+    		String gtid = manager.txadd(to1);
     		System.out.println("id: "+gtid);
     		
     		Map<String, Object> props2 = new HashMap<String, Object>();
@@ -383,12 +385,12 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		props2.put(AttributeForm.NAME, "yyy");
         	ModelObject to2 = (ModelObject)Attribute.class.newInstance();
             MyPropertyUtil.form2To(to2, props2);
-    		String id = manager.add(to2);
+    		String id = manager.txadd(to2);
     		System.out.println("id: "+id);
     		
     		
     		// work
-    		manager.delete(GoodsType.class.getName(), gtid);
+    		manager.txdelete(GoodsType.class.getName(), gtid);
     			
 
     		// validate
@@ -417,7 +419,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		IDefaultManager manager = getDefaultManager();
     		Brand to1 = new Brand();
     		to1.setName("xxx");
-    		String bid = manager.add(to1);
+    		String bid = manager.txadd(to1);
     		System.out.println("id: "+bid);
 
     		
@@ -426,7 +428,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		Brand b2 = new Brand();
     		b2.setId(bid);
     		b2.setName("yyy");
-    		manager.update(b2);
+    		manager.txupdate(b2);
 
     		System.out.println("after update");
 
@@ -443,5 +445,23 @@ public class TestManagerImpl extends BaseDAOTestCase {
     	}
     }
     
-    
+    public void testAddGoods() {
+    	Goods goods = new Goods();
+    	goods.setName("mygoods");
+    	Gallery g = new Gallery();
+    	g.setDescription("abc");
+    	DSFile f = new DSFile();
+    	f.setContent(new Blob("xxx".getBytes()));
+    	f.setFileName("myfile.txt");
+    	g.setImageFile(f);
+    	g.setImage("myfile.txt");
+    	goods.getGalleries().add(g);
+    	
+    	CustomizedManager cm = getCustomizedManager();
+    	cm.addGoods(goods);
+    	
+    	
+    	
+    	
+    }
 }

@@ -16,7 +16,7 @@ public class GoodsAttribute extends ModelObject {
 	
     @Override
     public ModelObject getParent() {
-    	return null;
+    	return goods;
     }
     
     @PrimaryKey
@@ -29,28 +29,16 @@ public class GoodsAttribute extends ModelObject {
     private String keyName;
     
     @Persistent
-	private Goods goods;
-	private Attribute attribute;
+	private String attributeId;
+    
+    @Persistent
 	private String value;
+    
+    @Persistent
 	private String price;
 
-
-
-    public Goods getGoods() {
-        return goods;
-    }
-
-    public void setGoods(Goods goods) {
-        this.goods = goods;
-    }
-
-    public Attribute getAttribute() {
-        return attribute;
-    }
-
-    public void setAttribute(Attribute attribute) {
-        this.attribute = attribute;
-    }
+	@Persistent
+	private Goods goods;
 
     public String getValue() {
         return value;
@@ -82,6 +70,22 @@ public class GoodsAttribute extends ModelObject {
 
 	public void setKeyName(String keyName) {
 		this.keyName = keyName;
+	}
+
+	public String getAttributeId() {
+		return attributeId;
+	}
+
+	public void setAttributeId(String attributeId) {
+		this.attributeId = attributeId;
+	}
+
+	public Goods getGoods() {
+		return goods;
+	}
+
+	public void setGoods(Goods goods) {
+		this.goods = goods;
 	}
 
 }

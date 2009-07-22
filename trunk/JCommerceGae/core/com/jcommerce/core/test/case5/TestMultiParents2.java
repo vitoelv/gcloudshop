@@ -37,8 +37,8 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			p1.setName("xxx");
 			p1 = pm.makePersistent(p1);
 
-//			pm.currentTransaction().commit();
-//			pm.currentTransaction().begin();
+			pm.currentTransaction().commit();
+			pm.currentTransaction().begin();
 			p1 = new Parent51();
 			p1.setName("yyy");
 			p1 = pm.makePersistent(p1);
@@ -226,7 +226,6 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			try {
 				a = pm.getObjectById(Child5.class, aid);
 				System.out.println("id: "+a.getId()+", name: "+a.getName());
-				// TODO why?
 				assertTrue(false);
 			} catch (JDOObjectNotFoundException e) {
 				System.out.println("a: "+aid+" cannot find");

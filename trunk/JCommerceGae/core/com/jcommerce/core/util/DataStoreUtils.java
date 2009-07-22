@@ -25,7 +25,6 @@ import com.jcommerce.core.model.Category;
 import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.service.IDefaultManager;
-import com.jcommerce.core.test.TestMisc;
 
 public class DataStoreUtils implements IConstants{
 	
@@ -258,7 +257,7 @@ public class DataStoreUtils implements IConstants{
     					}
     				}
     				
-    				manager.attach(obj);
+    				manager.txattach(obj);
     			}
     			
     			
@@ -364,7 +363,7 @@ public class DataStoreUtils implements IConstants{
 	            
 	            if("keyName".equals(fn)) {
 	            	StringBuffer buf1 = new StringBuffer();
-	            	getChainedKeyName(buf1, (ModelObject)obj);
+	            	getChainedKeyName(buf1, (ModelObject)obj, manager);
 	            	strValue = buf1.toString();
 	            }
 	            else if(value==null) {
@@ -402,10 +401,22 @@ public class DataStoreUtils implements IConstants{
     public static final String SEP_END_COMMENT = "-->";
     public static final String SEP_COMMENT = "#";
     
-    public static void getChainedKeyName(StringBuffer buf, ModelObject obj) {
-    	ModelObject parent = obj.getParent();
+    public static void getChainedKeyName(StringBuffer buf, ModelObject obj, IDefaultManager manager) {
+    	Object parent = obj.getParent();
     	if(parent != null) {
-    		getChainedKeyName(buf, parent);
+    		getChainedKeyName(buf, (ModelObject)parent, manager);
+//    		if(parent instanceof ModelObject) {
+//    			getChainedKeyName(buf, (ModelObject)parent, manager);
+//    		} else if(parent instanceof String[]) {
+//    			String[] parentInfo = (String[])parent;
+//    			if(parentInfo.length!=2) {
+//    				throw new RuntimeException("getParent() do not return valid result");
+//    			}
+//    			ModelObject mo = manager.get(parentInfo[0], parentInfo[1]);
+//    			getChainedKeyName(buf, mo, manager);
+//    		} else {
+//    			throw new RuntimeException("getParent() do not return valid result");
+//    		}
     		buf.append(SEP_PARENT_CHILD);
     	} 
     	String keyName = KeyFactory.stringToKey(obj.getId()).getName();

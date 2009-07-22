@@ -47,6 +47,9 @@ public class Goods extends ModelObject {
     
 //    private Set<Article> articles;
     
+    @Persistent
+    private String goodsTypeId;
+    
     // uni-direction owned
     @Persistent
     private Set<GoodsAttribute> attributes = new HashSet<GoodsAttribute>();
@@ -55,9 +58,6 @@ public class Goods extends ModelObject {
     private String brandId;
     
 //    private Brand brand;
-    
-    @Persistent
-    private String typeId;
     
 //    private GoodsType type;   // GoodsType table list all the types available
     
@@ -118,10 +118,16 @@ public class Goods extends ModelObject {
     private String thumbFileId;
     
     @Persistent
+    private DSFile thumbFile;
+    
+    @Persistent
     private String image;
     
     @Persistent
     private String imageFileId;
+    
+    @Persistent
+    private DSFile imageFile;
     
     @Persistent
     private String originalImage;
@@ -470,13 +476,7 @@ public class Goods extends ModelObject {
 		this.brandId = brandId;
 	}
 
-	public String getTypeId() {
-		return typeId;
-	}
 
-	public void setTypeId(String typeId) {
-		this.typeId = typeId;
-	}
 
 
 //    public BonusType getBonusType() {
@@ -554,5 +554,37 @@ public class Goods extends ModelObject {
 
 	public void setNeewAdded(boolean neewAdded) {
 		this.neewAdded = neewAdded;
+	}
+
+	public DSFile getThumbFile() {
+		return thumbFile;
+	}
+
+	public void setThumbFile(DSFile thumbFile) {
+		this.thumbFile = thumbFile;
+	}
+
+	public DSFile getImageFile() {
+		return imageFile;
+	}
+
+	public void setImageFile(DSFile imageFile) {
+		this.imageFile = imageFile;
+	}
+
+	public Set<GoodsAttribute> getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(Set<GoodsAttribute> attributes) {
+		this.attributes = attributes;
+	}
+
+	public String getGoodsTypeId() {
+		return goodsTypeId;
+	}
+
+	public void setGoodsTypeId(String goodsTypeId) {
+		this.goodsTypeId = goodsTypeId;
 	}
 }

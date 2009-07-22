@@ -121,12 +121,12 @@ public class TestBulkLoader extends BaseDAOTestCase {
 			p = new Person();
 			p.setId(pid);
 			p.setName("xxx");
-			manager.attach(p);
+			manager.txattach(p);
 			
 			a = new Address();
 			a.setId(aid);
 			a.setLoc("x11");
-			manager.attach(a);
+			manager.txattach(a);
 			
 			System.out.println("pid="+p.getId());
 			System.out.println("aid="+a.getId());
@@ -176,7 +176,7 @@ public class TestBulkLoader extends BaseDAOTestCase {
 			b.setName("微软");
 			b.setDescription("microsoft");			 
 //			b.setKeyName(bkn1);
-			manager.add(b);
+			manager.txadd(b);
 			bkn1 = b.getKeyName();
 			
 			
@@ -185,7 +185,7 @@ public class TestBulkLoader extends BaseDAOTestCase {
 			b.setName("诺基亚");
 			b.setDescription("nokia");			 
 //			b.setKeyName(bkn1);
-			manager.add(b);
+			manager.txadd(b);
 			bkn2 = b.getKeyName();
 			
 			System.out.println("bkn1="+bkn1+", bkn2="+bkn2);
@@ -215,24 +215,24 @@ public class TestBulkLoader extends BaseDAOTestCase {
 			
 			GoodsType g = new GoodsType();
 			g.setName("手机");
-			manager.add(g);
+			manager.txadd(g);
 			
 			Attribute a = new Attribute();
 			a.setName("颜色");
 			a.setGoodsType(g);
-			manager.add(a);
+			manager.txadd(a);
 			
 			Brand b = new Brand();
 			b.setName("微软");
 			b.setDescription("microsoft");			 
-			manager.add(b);
+			manager.txadd(b);
 			
 			Category c = new Category();
 			c.setName("手机通讯");
 			c.setMeasureUnit("台");
 			c.setShow(true);
 			c.setShowInNavigator(true);
-			manager.add(c);
+			manager.txadd(c);
 			
 			ByteArrayOutputStream out = new ByteArrayOutputStream(); 
 			
@@ -264,32 +264,32 @@ public class TestBulkLoader extends BaseDAOTestCase {
 			
 			GoodsType b = new GoodsType();
 			b.setName("手机");
-			manager.add(b);
+			manager.txadd(b);
 			
 			Attribute a = new Attribute();
 			a.setName("颜色");
 			a.setGoodsType(b);
-			manager.add(a);
+			manager.txadd(a);
 			
 			a = new Attribute();
 			a.setName("大小");
 			a.setGoodsType(b);
-			manager.add(a);
+			manager.txadd(a);
 			
 			
 			b = new GoodsType();
 			b.setName("电脑");			 
-			manager.add(b);
+			manager.txadd(b);
 			
 			a = new Attribute();
 			a.setName("功能");
 			a.setGoodsType(b);
-			manager.add(a);
+			manager.txadd(a);
 
 			a = new Attribute();
 			a.setName("耗电");
 			a.setGoodsType(b);
-			manager.add(a);
+			manager.txadd(a);
 			
 			
 			
@@ -396,7 +396,7 @@ public class TestBulkLoader extends BaseDAOTestCase {
 //    		g1.setBrandId(bid1);
     		g1.getCategoryIds().add("123");
     		g1.getCategoryIds().add("456");
-    		String gid1 = manager.add(g1);
+    		String gid1 = manager.txadd(g1);
     		System.out.println("gid1: "+gid1);
     		
     		Goods g2 = new Goods();
@@ -404,7 +404,7 @@ public class TestBulkLoader extends BaseDAOTestCase {
 //    		g2.setBrandId(bid2);
     		g2.getCategoryIds().add("123sss");
     		g2.getCategoryIds().add("456xxx");
-    		String gid2 = manager.add(g2);
+    		String gid2 = manager.txadd(g2);
     		System.out.println("gid2: "+gid2);
     		
     		List res = new ArrayList();
@@ -413,7 +413,7 @@ public class TestBulkLoader extends BaseDAOTestCase {
     		
     		for(Iterator it = res.iterator();it.hasNext();) {
     			ModelObject mo = (ModelObject)it.next();
-    			manager.delete(Goods.class.getName(), mo.getId());
+    			manager.txdelete(Goods.class.getName(), mo.getId());
     		}
     		
     		

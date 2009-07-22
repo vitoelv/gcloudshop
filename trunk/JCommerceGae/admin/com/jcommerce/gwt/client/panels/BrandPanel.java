@@ -147,8 +147,7 @@ public class BrandPanel extends BaseEntityEditPanel {
     }  
     
     @Override
-    public void refresh() {
-    	super.refresh();
+    public void postSuperRefresh() {
     	String action="com.jcommerce.gwt.server.BrandGWTAction";
     	String method="";
     	

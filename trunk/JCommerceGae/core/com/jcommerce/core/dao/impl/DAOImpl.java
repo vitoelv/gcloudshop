@@ -44,6 +44,49 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
     	setPersistenceManagerFactory(PMF.get());
     }
     
+    public String add(ModelObject to) {
+    	
+    	String id = null;
+    	try {
+    		// TODO leon temporary solution for case that id is blank in form
+    		if(StringUtils.isEmpty(to.getId())) {
+    			to.setId(null);
+    		}
+
+    		if(StringUtils.isEmpty(to.getId())) {
+    			// if id is not set, use keyname, otherwise use ID directly, same as attach
+    			to.setKeyName(UUIDHexGenerator.newUUID());
+    		}
+    		
+			getJdoTemplate().makePersistent(to);
+			id = to.getId();
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} finally {
+		}
+    	
+    	return id;
+    }
+    public String attach (ModelObject to) {
+    	String id = null;
+    	try {
+    		// TODO leon temporary solution for case that id is blank in form
+    		if(StringUtils.isEmpty(to.getId())) {
+    			to.setId(null);
+    		}
+			getJdoTemplate().makePersistent(to);
+			id = to.getId();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} finally {
+		}
+    	return id;
+    }
 	public boolean update (ModelObject to) {
 		try {
 			JdoTemplate jdoTemplate =getJdoTemplate();
@@ -63,33 +106,7 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
 			throw new RuntimeException(e);
 		} 
 	}
-
-	public ModelObject get (String modelName, String id) {
-		try {
-			JdoTemplate jdoTemplate =getJdoTemplate();
-			ModelObject obj = (ModelObject)jdoTemplate.getObjectById(Class.forName(modelName), id);
-			
-			// TODO these are temporary solution to avoid session-closed issue in TestCases
-			if(obj instanceof GoodsType) {
-				GoodsType gt = (GoodsType)obj;
-				Set set = gt.getAttributes();
-				System.out.println("size: "+set.size());
-			}
-			if(obj instanceof Goods) {
-				Goods g = (Goods)obj;
-				Set set = g.getCategoryIds();
-				System.out.println("size: "+(set==null? "null":set.size()));
-				
-			}
-			
-    		return obj;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		} finally {
-		}
-	}
+	
     public boolean delete (String modelName, String id) {
     	try {
     		JdoTemplate jdoTemplate =getJdoTemplate();
@@ -137,45 +154,37 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
 		} 
     }
     
-    public String attach (ModelObject to) {
-    	String id = null;
-    	try {
-			getJdoTemplate().makePersistent(to);
-			id = to.getId();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		} finally {
-		}
-    	return id;
-    }
-    public String add(ModelObject to) {
-    	
-    	String id = null;
-    	try {
-    		// TODO leon temporary solution for case that id is blank in form
-    		if(StringUtils.isEmpty(to.getId())) {
-    			to.setId(null);
-    		}
-
-    		if(StringUtils.isEmpty(to.getId())) {
-    			// if id is not set, use keyname, otherwise use ID directly, same as attach
-    			to.setKeyName(UUIDHexGenerator.newUUID());
-    		}
-    		
-			getJdoTemplate().makePersistent(to);
-			id = to.getId();
+	/**
+	 * return null if not found
+	 */
+	public ModelObject get (String modelName, String id) {
+		try {
+			JdoTemplate jdoTemplate =getJdoTemplate();
+			ModelObject obj = (ModelObject)jdoTemplate.getObjectById(Class.forName(modelName), id);
 			
+			// TODO these are temporary solution to avoid session-closed issue in TestCases
+			if(obj instanceof GoodsType) {
+				GoodsType gt = (GoodsType)obj;
+				Set set = gt.getAttributes();
+				System.out.println("size: "+set.size());
+			}
+			if(obj instanceof Goods) {
+				Goods g = (Goods)obj;
+				Set set = g.getCategoryIds();
+				System.out.println("size: "+(set==null? "null":set.size()));
+				
+			}
+			
+    		return obj;
+		} catch (org.springframework.orm.ObjectRetrievalFailureException e) {
+			return null;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new RuntimeException(e);
+			
 		} finally {
 		}
-    	
-    	return id;
-    }
+	}
     public List getList(final String modelName, final Criteria criteria, final int firstRow, final int maxRow) {
         Query query = null;
         try {        	
@@ -278,17 +287,7 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
         	}
         }
     }
-    
 
-    
-    public ModelObject getById(int id){        
-        return getById(new Integer(id));
-    }
-    
-    public ModelObject getById(Serializable id){
-//        return (ModelObject)getHibernateTemplate().get(modelClass, id);
-    	return null;
-    }
     
     public void save(ModelObject obj) {
         if (obj == null) {
@@ -304,23 +303,6 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
 //        ModelObject _obj = (ModelObject)getHibernateTemplate().merge(obj);
 //        setId(obj, getId(_obj));
     }    
-
-    public boolean deleteById(int id) {
-        return deleteById(new Integer(id));
-    }
-    
-    public boolean deleteById(Serializable id) {
-        ModelObject obj = getById(id);
-        if (obj == null) {
-//            throw new RuntimeException("Object not found for ID: "+id);
-            return false;
-        }
-        
-//        getHibernateTemplate().delete(obj);
-        return true;
-    }    
-    
- 
     
     public void deleteAll(Collection<ModelObject> objs) {
         if (objs == null) {
@@ -331,54 +313,5 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
     }    
 
     
-    /**
-     * Require all ModelObject have a getId() or getID() method
-     */
-    private Serializable getId(ModelObject obj) {
-        try {
-            Method m = obj.getClass().getMethod("getId", new Class[0]);
-            if (m == null) {
-                m = obj.getClass().getMethod("getID", new Class[0]);
-            }
-            if (m == null) {
-                throw new RuntimeException("Method getId() not found: "+obj.getClass().getName());
-            }
-            
-            Object id = m.invoke(obj, new Object[0]);
-            if (id instanceof Serializable) {
-                return (Serializable)id;
-            } else {
-                throw new RuntimeException("ID should be a Serializable object"+id+"obj is:"+obj);
-            }
-        } catch (SecurityException e) {
-            log.error("Failed to invoke method getId()", e);
-            throw new RuntimeException(e.toString());
-        } catch (IllegalArgumentException e) {
-            log.error("Failed to invoke method getId()", e);
-            throw new RuntimeException(e.toString());
-        } catch (NoSuchMethodException e) {
-            log.error("Failed to invoke method getId()", e);
-            throw new RuntimeException(e.toString());
-        } catch (IllegalAccessException e) {
-            log.error("Failed to invoke method getId()", e);
-            throw new RuntimeException(e.toString());
-        } catch (InvocationTargetException e) {
-            log.error("Failed to invoke method getId()", e);
-            throw new RuntimeException(e.toString());
-        }
-    }
-    
-    private void setId(ModelObject obj, Serializable id) {
-        try {
-            BeanUtils.setProperty(obj, "id", id);
-        } catch (Exception e) {
-            try {
-                BeanUtils.setProperty(obj, "ID", id);
-            } catch (IllegalAccessException e1) {
-                e1.printStackTrace();
-            } catch (InvocationTargetException e1) {
-                e1.printStackTrace();
-            }
-        }
-    }
+
 }
