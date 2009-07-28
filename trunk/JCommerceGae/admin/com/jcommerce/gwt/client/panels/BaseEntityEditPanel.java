@@ -16,6 +16,7 @@ import com.extjs.gxt.ui.client.widget.form.CheckBox;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
+import com.extjs.gxt.ui.client.widget.form.HiddenField;
 import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
 import com.extjs.gxt.ui.client.widget.form.ListField;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
@@ -221,6 +222,8 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 				field.setValue(value);
 			} else if (field instanceof CheckBox) {
 				((CheckBox)field).setValue((Boolean)value);
+			} else if (field instanceof HiddenField) {
+				((HiddenField)field).setValue(value);
 			}
 	}
 	
