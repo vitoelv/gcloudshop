@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.History;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.jcommerce.gwt.client.ContentWidget;
@@ -13,6 +15,10 @@ import com.jcommerce.gwt.client.PageState;
 public class Success extends ContentWidget {
 	
 	private VerticalPanel contentPanel = new VerticalPanel();
+	
+	private static final int WAITTIME = 3000;//ms
+	
+	private String firstHistoryToken = null;
 	
 	private static Success instance= null;
 	private Success(){
@@ -91,9 +97,24 @@ public class Success extends ContentWidget {
     	int i=0;
         table.setText(i++, 0, getCurState().getMessage());
         table.setText(i++, 0, "如果您不作出选择，将在3秒后跳到第一个链接");
+        
+        List<String[]> statusChoices = getCurState().getChoices();
+        if(statusChoices.size() > 0){
+        	firstHistoryToken = ((String[])statusChoices.get(0))[1];
+        }
         for(String[] choice:getCurState().getChoices()) {
         	table.setWidget(i++, 0, new Hyperlink("返回"+choice[0], choice[1]));
         }    	
+
+		Timer refreshTimer = new Timer() {
+			@Override
+			public void run() {
+				if(firstHistoryToken != null && firstHistoryToken.length() > 0){
+					History.newItem(firstHistoryToken);
+				}
+			}
+		};
+		refreshTimer.schedule(WAITTIME);
     }
 	public State getCurState() {
 		return curState;
