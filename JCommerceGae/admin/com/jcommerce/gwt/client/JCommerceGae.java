@@ -32,6 +32,7 @@ import com.jcommerce.gwt.client.panels.CategoryPanel;
 import com.jcommerce.gwt.client.panels.GoodsListPanel;
 import com.jcommerce.gwt.client.panels.GoodsTypeListPanel;
 import com.jcommerce.gwt.client.panels.GoodsTypePanel;
+import com.jcommerce.gwt.client.panels.RegionPanel;
 import com.jcommerce.gwt.client.panels.ShopConfigPanel;
 import com.jcommerce.gwt.client.panels.Success;
 import com.jcommerce.gwt.client.panels.goods.GoodsPanel;
@@ -198,6 +199,7 @@ public class JCommerceGae implements EntryPoint, ValueChangeHandler<String>, GWT
 		
 		TreeItem system = mainMenu.addItem(Resources.constants.categorySystem());
 		setupMainMenuOption(system, new ShopConfigPanel.State(), Resources.images.catWidgets());
+		setupMainMenuOption(system, new RegionPanel.State(), Resources.images.catWidgets());
 		
 //		setupMainMenuOption(catGoods, new UserComments.State(), Resources.images.catWidgets());		
 //
@@ -441,6 +443,8 @@ public class JCommerceGae implements EntryPoint, ValueChangeHandler<String>, GWT
 //				page = new UserComments();
 			} else if (pageClassName.equals(ShopConfigPanel.class.getName())) {
 				page = ShopConfigPanel.getInstance();
+			} else if (pageClassName.equals(RegionPanel.class.getName())) {
+				page = RegionPanel.getInstance();
 			}
 
 			if (page != null) {
