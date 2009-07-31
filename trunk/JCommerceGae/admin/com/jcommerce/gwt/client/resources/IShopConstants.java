@@ -5,14 +5,18 @@ import com.jcommerce.gwt.client.panels.AttributeListPanel;
 import com.jcommerce.gwt.client.panels.GoodsTypeListPanel;
 import com.jcommerce.gwt.client.panels.PaymentMetaList;
 import com.jcommerce.gwt.client.panels.GoodsListPanel;
+import com.jcommerce.gwt.client.panels.RegionPanel;
 import com.jcommerce.gwt.client.panels.goods.GoodsPanel;
 
 /**
  * Constants used throughout the showcase.
  */
 
-public interface IShopConstants extends Constants, AttributeListPanel.Constants,  
-            ShopConfigConstants,OrderConstants, PaymentMetaList.Constants, GoodsTypeListPanel.Constants, GoodsListPanel.Constants, GoodsPanel.Constants {
+public interface IShopConstants extends Constants, 
+			AttributeListPanel.Constants, ShopConfigConstants,OrderConstants, 
+			PaymentMetaList.Constants, GoodsTypeListPanel.Constants, 
+			GoodsListPanel.Constants, GoodsPanel.Constants,
+			RegionPanel.Constants {
 
 	
 	boolean useJDO = true;
