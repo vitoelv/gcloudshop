@@ -4,7 +4,9 @@
 
 package com.jcommerce.core.model;
 
-import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -15,6 +17,7 @@ import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true")
 public class Order extends ModelObject {
+	
     public static final int ORDER_UNCONFIRMED = Constants.ORDER_UNCONFIRMED; // 未确认
     public static final int ORDER_CONFIRMED = Constants.ORDER_CONFIRMED; // 已确认
     public static final int ORDER_CANCELED = Constants.ORDER_CANCELED; // 已取消
@@ -44,74 +47,197 @@ public class Order extends ModelObject {
     @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
     private String keyName;
     
+    @Persistent
+    private Set<OrderAction> orderActions = new HashSet<OrderAction>();
     
-    private String SN;
+    @Persistent
+    private Set<OrderGoods> orderGoods = new HashSet<OrderGoods>();
+
+	@Persistent
+    private String sn;
+    
+    @Persistent
     private User user;
+    
+    @Persistent
     private int status;         // ORDER_XXX 
+    
+    @Persistent
     private int shippingStatus; // SHIPPING_XXX
+    
+    @Persistent
     private int payStatus;      // // PAY_XXX
+    
+    @Persistent
     private String consignee;
+    
+    @Persistent
     private String email;
+    
 //    private Region region;
+    
+    @Persistent
     private String address;
+    
+    @Persistent
     private String zip;
+    
+    @Persistent
     private String phone;
+    
+    @Persistent
     private String mobile;
+    
+    @Persistent
     private String signBuilding;
+    
+    @Persistent
     private String bestTime;
+    
+    @Persistent
     private String postScript;
+    
+    @Persistent
     private String packName;
+    
+    @Persistent
     private String cardName;
+    
+    @Persistent
     private String cardMessage;
+    
+    @Persistent
     private String invoicePayee;
+    
+    @Persistent
     private String invoiceContent;
+    
+    @Persistent
     private double goodsAmount;
+    
+    @Persistent
     private double shippingFee;
+    
+    @Persistent
     private double insureFee;
+    
+    @Persistent
     private double payFee;
 //    private Payment payment;
 //    private Shipping shipping;
+    
+    @Persistent
     private String howOss;
+    
+    @Persistent
     private String howSurplus;
+    
+    @Persistent
     private double moneyPaid;
+    
+    @Persistent
     private double surplus;
+    
+    @Persistent
     private int integral;
+    
+    @Persistent
     private double integralMoney;
+    
+    @Persistent
     private double orderAmount;
+    
+    @Persistent
     private double bonusMoney;
+    
+    @Persistent
     private int fromAD;
+    
+    @Persistent
     private String referer;
-    private Timestamp addTime;
-    private Timestamp confirmTime;
-    private Timestamp payTime;
-    private Timestamp shippingTime;
+    
+    @Persistent
+    private Date addTime;
+    
+    @Persistent
+    private Date confirmTime;
+    
+    @Persistent
+    private Date payTime;
+    
+    @Persistent
+    private Date shippingTime;
 //    private Pack pack;
 //    private Card card;
 //    private UserBonus userBonus;
+    
+    @Persistent
     private String invoiceNO;
+    
+    @Persistent
     private String extensionCode;
+    
+    @Persistent
     private int extensionId;
+    
+    @Persistent
     private String toBuyer;
+    
+    @Persistent
     private String payNote;
 //    private Agency agency;
-    private String invoceType;
+    
+    @Persistent
+    private String invoiceType;
+    
+    @Persistent
     private double tax;
+    
+    @Persistent
     private boolean separate;
+    
+    @Persistent
     private double discount;
+    
+    @Persistent
     private Order parentOrder;
+    
+    @Persistent
     private double cardFee;
+    
+    @Persistent
     private int packFee;
+    
+    @Persistent
     private String shippingName;
+    
+    @Persistent
     private String payName;
     
 
 
-    public String getSN() {
-        return SN;
+    public Set<OrderAction> getOrderActions() {
+		return orderActions;
+	}
+
+	public void setOrderActions(Set<OrderAction> orderActions) {
+		this.orderActions = orderActions;
+	}
+
+	public Set<OrderGoods> getOrderGoods() {
+		return orderGoods;
+	}
+
+	public void setOrderGoods(Set<OrderGoods> orderGoods) {
+		this.orderGoods = orderGoods;
+	}
+
+    public String getSn() {
+        return sn;
     }
 
-    public void setSN(String sn) {
-        SN = sn;
+    public void setSn(String sn) {
+        this.sn = sn;
     }
 
     public User getUser() {
@@ -373,35 +499,35 @@ public class Order extends ModelObject {
         this.referer = referer;
     }
 
-    public Timestamp getAddTime() {
+    public Date getAddTime() {
         return addTime;
     }
 
-    public void setAddTime(Timestamp addTime) {
+    public void setAddTime(Date addTime) {
         this.addTime = addTime;
     }
 
-    public Timestamp getConfirmTime() {
+    public Date getConfirmTime() {
         return confirmTime;
     }
 
-    public void setConfirmTime(Timestamp confirmTime) {
+    public void setConfirmTime(Date confirmTime) {
         this.confirmTime = confirmTime;
     }
 
-    public Timestamp getPayTime() {
+    public Date getPayTime() {
         return payTime;
     }
 
-    public void setPayTime(Timestamp payTime) {
+    public void setPayTime(Date payTime) {
         this.payTime = payTime;
     }
 
-    public Timestamp getShippingTime() {
+    public Date getShippingTime() {
         return shippingTime;
     }
 
-    public void setShippingTime(Timestamp shippingTime) {
+    public void setShippingTime(Date shippingTime) {
         this.shippingTime = shippingTime;
     }
 
@@ -449,12 +575,12 @@ public class Order extends ModelObject {
     }
 
 
-    public String getInvoceType() {
-        return invoceType;
+    public String getInvoiceType() {
+        return invoiceType;
     }
 
-    public void setInvoceType(String invoceType) {
-        this.invoceType = invoceType;
+    public void setInvoiceType(String invoceType) {
+        this.invoiceType = invoceType;
     }
 
     public double getTax() {
