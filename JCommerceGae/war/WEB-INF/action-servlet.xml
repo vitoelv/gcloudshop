@@ -17,4 +17,20 @@
 
 	</bean>
 	
+	<bean name="goodsAction" scope="prototype"
+        class="com.jcommerce.web.front.action.GoodsAction">
+		<property name="defaultManager">
+			<ref bean="DefaultManager"/>
+		</property>
+	</bean>
+	<bean name="flowAction" scope="prototype"
+        class="com.jcommerce.web.front.action.FlowAction">
+		<property name="defaultManager">
+			<ref bean="DefaultManager"/>
+		</property>
+		<property name="webManager">
+			<ref bean="WebManager"/>
+		</property>
+		
+	</bean>
 </beans>

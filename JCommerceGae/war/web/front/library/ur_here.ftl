@@ -1,1 +1,1 @@
-<@s.text name="ur_here"/> {$ur_here}
+${lang.urHere} ${urHere}

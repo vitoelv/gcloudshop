@@ -23,6 +23,12 @@ public class Goods extends ModelObject {
     	return null;
     }
 	
+    
+
+    
+//    private String url;
+//    private String shortStyleName;
+    
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
@@ -62,16 +68,16 @@ public class Goods extends ModelObject {
 //    private GoodsType type;   // GoodsType table list all the types available
     
     @Persistent
-    private String SN;
+    private String goodsSn;
     
     @Persistent
-    private String name;
+    private String goodsName;
     
     @Persistent
-    private String nameStyle;
+    private String goodsNameStyle;
     
     @Persistent
-    private int clickCount;
+    private Integer clickCount = 0;
     
 
     
@@ -79,19 +85,19 @@ public class Goods extends ModelObject {
     private String providerName;
     
     @Persistent
-    private int number;
+    private Integer goodsNumber = 0;
     
     @Persistent
-    private double weight;
+    private Double goodsWeight = 0.0;
     
     @Persistent
-    private double marketPrice;
+    private Double marketPrice = 0.0;
     
     @Persistent
-    private double shopPrice;
+    private Double shopPrice = 0.0;
     
     @Persistent
-    private double promotePrice;
+    private Double promotePrice = 0.0;
     
     @Persistent
     private Date promoteStart;
@@ -100,7 +106,7 @@ public class Goods extends ModelObject {
     private Date promoteEnd;
     
     @Persistent
-    private int warnNumber;
+    private Integer warnNumber = 0;
     
     @Persistent
     private String keywords;
@@ -109,7 +115,7 @@ public class Goods extends ModelObject {
     private String brief;
     
     @Persistent
-    private String description;
+    private String goodsDesc;
     
     @Persistent
     private String thumb;
@@ -133,40 +139,40 @@ public class Goods extends ModelObject {
     private String originalImage;
     
     @Persistent
-    private boolean realGoods;
+    private Boolean realGoods = false;
     
     @Persistent
     private String extensionCode;
     
     @Persistent
-    private boolean onSale;
+    private Boolean onSale = false;
     
     @Persistent
-    private boolean aloneSale;
+    private Boolean aloneSale = false;
     
     @Persistent
-    private int integral;
+    private Integer integral = 0;
     
     @Persistent
     private Date addTime;
     
     @Persistent
-    private int sortOrder;  // sortOrder value is used in SQL ORDER BY
+    private Integer sortOrder = 0;  // sortOrder value is used in SQL ORDER BY
     
     @Persistent
-    private boolean deleted;
+    private Boolean deleted = false;
     
     @Persistent
-    private boolean bestSold;
+    private Boolean bestSold = false;
     
     @Persistent
-    private boolean neewAdded;
+    private Boolean neewAdded = false;
     
     @Persistent
-    private boolean hotSold;
+    private Boolean hotSold = false;
     
     @Persistent
-    private boolean promoted;
+    private Boolean promoted = false;
     
     
 //    private BonusType bonusType;
@@ -179,41 +185,15 @@ public class Goods extends ModelObject {
     private String sellerNote;
     
     @Persistent
-    private int giveIntegral;
+    private Integer giveIntegral = 0;
+    
     
 
 
-    public String getSN() {
-        return SN;
-    }
     
-    public void setSN(String sn) {
-        SN = sn;
-    }
+
     
-    public String getName() {
-        return name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    public String getNameStyle() {
-        return nameStyle;
-    }
-    
-    public void setNameStyle(String nameStyle) {
-        this.nameStyle = nameStyle;
-    }
-    
-    public int getClickCount() {
-        return clickCount;
-    }
-    
-    public void setClickCount(int clickCount) {
-        this.clickCount = clickCount;
-    }
+
     
 
     public String getProviderName() {
@@ -224,45 +204,12 @@ public class Goods extends ModelObject {
         this.providerName = providerName;
     }
 
-    public int getNumber() {
-        return number;
-    }
+
     
-    public void setNumber(int number) {
-        this.number = number;
-    }
+
+ 
     
-    public double getWeight() {
-        return weight;
-    }
-    
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-    
-    public double getMarketPrice() {
-        return marketPrice;
-    }
-    
-    public void setMarketPrice(double marketPrice) {
-        this.marketPrice = marketPrice;
-    }
-    
-    public double getShopPrice() {
-        return shopPrice;
-    }
-    
-    public void setShopPrice(double shopPrice) {
-        this.shopPrice = shopPrice;
-    }
-    
-    public double getPromotePrice() {
-        return promotePrice;
-    }
-    
-    public void setPromotePrice(double promotePrice) {
-        this.promotePrice = promotePrice;
-    }
+
     
     public Date getPromoteStart() {
         return promoteStart;
@@ -280,13 +227,7 @@ public class Goods extends ModelObject {
         this.promoteEnd = promoteEnd;
     }
     
-    public int getWarnNumber() {
-        return warnNumber;
-    }
-    
-    public void setWarnNumber(int warnNumber) {
-        this.warnNumber = warnNumber;
-    }
+
     
     public String getKeywords() {
         return keywords;
@@ -304,13 +245,7 @@ public class Goods extends ModelObject {
         this.brief = brief;
     }
     
-    public String getDescription() {
-        return description;
-    }
-    
-    public void setDescription(String description) {
-        this.description = description;
-    }
+
     
     public String getThumb() {
         return thumb;
@@ -336,13 +271,6 @@ public class Goods extends ModelObject {
         this.originalImage = originalImage;
     }
 
-    public boolean isRealGoods() {
-        return realGoods;
-    }
-
-    public void setRealGoods(boolean realGoods) {
-        this.realGoods = realGoods;
-    }
 
     public String getExtensionCode() {
         return extensionCode;
@@ -352,29 +280,7 @@ public class Goods extends ModelObject {
         this.extensionCode = extensionCode;
     }
     
-    public boolean isOnSale() {
-        return onSale;
-    }
-    
-    public void setOnSale(boolean onSale) {
-        this.onSale = onSale;
-    }
-    
-    public boolean isAloneSale() {
-        return aloneSale;
-    }
-    
-    public void setAloneSale(boolean aloneSale) {
-        this.aloneSale = aloneSale;
-    }
-    
-    public int getIntegral() {
-        return integral;
-    }
-    
-    public void setIntegral(int integral) {
-        this.integral = integral;
-    }
+
     
     public Date getAddTime() {
         return addTime;
@@ -384,47 +290,11 @@ public class Goods extends ModelObject {
         this.addTime = addTime;
     }
     
-    public int getSortOrder() {
-        return sortOrder;
-    }
-    
-    public void setSortOrder(int sortOrder) {
-        this.sortOrder = sortOrder;
-    }
-    
-    public boolean isDeleted() {
-        return deleted;
-    }
-    
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-    
-    public boolean isBestSold() {
-        return bestSold;
-    }
-    
-    public void setBestSold(boolean bestSold) {
-        this.bestSold = bestSold;
-    }
+
     
 
     
-    public boolean isHotSold() {
-        return hotSold;
-    }
-    
-    public void setHotSold(boolean hotSold) {
-        this.hotSold = hotSold;
-    }
-    
-    public boolean isPromoted() {
-        return promoted;
-    }
-    
-    public void setPromoted(boolean promoted) {
-        this.promoted = promoted;
-    }
+
     
     public Date getLastUpdate() {
         return lastUpdate;
@@ -444,13 +314,6 @@ public class Goods extends ModelObject {
         this.sellerNote = sellerNote;
     }
     
-    public int getGiveIntegral() {
-        return giveIntegral;
-    }
-    
-    public void setGiveIntegral(int giveIntegral) {
-        this.giveIntegral = giveIntegral;
-    }
 
 	public Set<String> getCategoryIds() {
 		return categoryIds;
@@ -474,6 +337,254 @@ public class Goods extends ModelObject {
 
 	public void setBrandId(String brandId) {
 		this.brandId = brandId;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getKeyName() {
+		return keyName;
+	}
+
+	public void setKeyName(String keyName) {
+		this.keyName = keyName;
+	}
+
+	public Set<Gallery> getGalleries() {
+		return galleries;
+	}
+
+	public void setGalleries(Set<Gallery> galleries) {
+		this.galleries = galleries;
+	}
+
+	public String getGoodsTypeId() {
+		return goodsTypeId;
+	}
+
+	public void setGoodsTypeId(String goodsTypeId) {
+		this.goodsTypeId = goodsTypeId;
+	}
+
+	public Set<GoodsAttribute> getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(Set<GoodsAttribute> attributes) {
+		this.attributes = attributes;
+	}
+
+	public String getGoodsSn() {
+		return goodsSn;
+	}
+
+	public void setGoodsSn(String goodsSn) {
+		this.goodsSn = goodsSn;
+	}
+
+	public String getGoodsName() {
+		return goodsName;
+	}
+
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
+	}
+
+	public String getGoodsNameStyle() {
+		return goodsNameStyle;
+	}
+
+	public void setGoodsNameStyle(String goodsNameStyle) {
+		this.goodsNameStyle = goodsNameStyle;
+	}
+
+	public Integer getClickCount() {
+		return clickCount;
+	}
+
+	public void setClickCount(Integer clickCount) {
+		this.clickCount = clickCount;
+	}
+
+	public Integer getGoodsNumber() {
+		return goodsNumber;
+	}
+
+	public void setGoodsNumber(Integer goodsNumber) {
+		this.goodsNumber = goodsNumber;
+	}
+
+	public Double getGoodsWeight() {
+		return goodsWeight;
+	}
+
+	public void setGoodsWeight(Double goodsWeight) {
+		this.goodsWeight = goodsWeight;
+	}
+
+	public Double getMarketPrice() {
+		return marketPrice;
+	}
+
+	public void setMarketPrice(Double marketPrice) {
+		this.marketPrice = marketPrice;
+	}
+
+	public Double getShopPrice() {
+		return shopPrice;
+	}
+
+	public void setShopPrice(Double shopPrice) {
+		this.shopPrice = shopPrice;
+	}
+
+	public Double getPromotePrice() {
+		return promotePrice;
+	}
+
+	public void setPromotePrice(Double promotePrice) {
+		this.promotePrice = promotePrice;
+	}
+
+	public Integer getWarnNumber() {
+		return warnNumber;
+	}
+
+	public void setWarnNumber(Integer warnNumber) {
+		this.warnNumber = warnNumber;
+	}
+
+	public String getGoodsDesc() {
+		return goodsDesc;
+	}
+
+	public void setGoodsDesc(String goodsDesc) {
+		this.goodsDesc = goodsDesc;
+	}
+
+	public String getThumbFileId() {
+		return thumbFileId;
+	}
+
+	public void setThumbFileId(String thumbFileId) {
+		this.thumbFileId = thumbFileId;
+	}
+
+	public DSFile getThumbFile() {
+		return thumbFile;
+	}
+
+	public void setThumbFile(DSFile thumbFile) {
+		this.thumbFile = thumbFile;
+	}
+
+	public String getImageFileId() {
+		return imageFileId;
+	}
+
+	public void setImageFileId(String imageFileId) {
+		this.imageFileId = imageFileId;
+	}
+
+	public DSFile getImageFile() {
+		return imageFile;
+	}
+
+	public void setImageFile(DSFile imageFile) {
+		this.imageFile = imageFile;
+	}
+
+	public Boolean getRealGoods() {
+		return realGoods;
+	}
+
+	public void setRealGoods(Boolean realGoods) {
+		this.realGoods = realGoods;
+	}
+
+	public Boolean getOnSale() {
+		return onSale;
+	}
+
+	public void setOnSale(Boolean onSale) {
+		this.onSale = onSale;
+	}
+
+	public Boolean getAloneSale() {
+		return aloneSale;
+	}
+
+	public void setAloneSale(Boolean aloneSale) {
+		this.aloneSale = aloneSale;
+	}
+
+	public Integer getIntegral() {
+		return integral;
+	}
+
+	public void setIntegral(Integer integral) {
+		this.integral = integral;
+	}
+
+	public Integer getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(Integer sortOrder) {
+		this.sortOrder = sortOrder;
+	}
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
+	}
+
+	public Boolean getBestSold() {
+		return bestSold;
+	}
+
+	public void setBestSold(Boolean bestSold) {
+		this.bestSold = bestSold;
+	}
+
+	public Boolean getNeewAdded() {
+		return neewAdded;
+	}
+
+	public void setNeewAdded(Boolean neewAdded) {
+		this.neewAdded = neewAdded;
+	}
+
+	public Boolean getHotSold() {
+		return hotSold;
+	}
+
+	public void setHotSold(Boolean hotSold) {
+		this.hotSold = hotSold;
+	}
+
+	public Boolean getPromoted() {
+		return promoted;
+	}
+
+	public void setPromoted(Boolean promoted) {
+		this.promoted = promoted;
+	}
+
+	public Integer getGiveIntegral() {
+		return giveIntegral;
+	}
+
+	public void setGiveIntegral(Integer giveIntegral) {
+		this.giveIntegral = giveIntegral;
 	}
 
 
@@ -510,81 +621,6 @@ public class Goods extends ModelObject {
 //    public void setAttributes(Set<GoodsAttribute> attributes) {
 //        this.attributes = attributes;
 //    }
-	public void setId(String id) {
-		this.id = id;
-	}
-    public String getId() {
-    	return id;
-    }
-    
-	public void setKeyName(String kn) {
-		this.keyName = kn;
-	}
-    public String getKeyName() {
-    	return keyName;
-    }
 
-	public String getThumbFileId() {
-		return thumbFileId;
-	}
 
-	public void setThumbFileId(String thumbFileId) {
-		this.thumbFileId = thumbFileId;
-	}
-
-	public String getImageFileId() {
-		return imageFileId;
-	}
-
-	public void setImageFileId(String imageFileId) {
-		this.imageFileId = imageFileId;
-	}
-
-	public Set<Gallery> getGalleries() {
-		return galleries;
-	}
-
-	public void setGalleries(Set<Gallery> galleries) {
-		this.galleries = galleries;
-	}
-
-	public boolean isNeewAdded() {
-		return neewAdded;
-	}
-
-	public void setNeewAdded(boolean neewAdded) {
-		this.neewAdded = neewAdded;
-	}
-
-	public DSFile getThumbFile() {
-		return thumbFile;
-	}
-
-	public void setThumbFile(DSFile thumbFile) {
-		this.thumbFile = thumbFile;
-	}
-
-	public DSFile getImageFile() {
-		return imageFile;
-	}
-
-	public void setImageFile(DSFile imageFile) {
-		this.imageFile = imageFile;
-	}
-
-	public Set<GoodsAttribute> getAttributes() {
-		return attributes;
-	}
-
-	public void setAttributes(Set<GoodsAttribute> attributes) {
-		this.attributes = attributes;
-	}
-
-	public String getGoodsTypeId() {
-		return goodsTypeId;
-	}
-
-	public void setGoodsTypeId(String goodsTypeId) {
-		this.goodsTypeId = goodsTypeId;
-	}
 }

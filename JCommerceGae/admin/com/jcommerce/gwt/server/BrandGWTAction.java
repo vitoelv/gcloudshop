@@ -24,7 +24,7 @@ public class BrandGWTAction extends BaseGWTHttpAction {
     	String res = null;
     	try {
     		String logoFileId = null;
-    		FileForm fileForm = (FileForm)form.get(IBrand.LOGO);
+    		FileForm fileForm = (FileForm)form.get(IBrand.BRAND_LOGO);
     		if(fileForm!=null) {
     			DSFile file = new DSFile();
     			file.setContent(new Blob(fileForm.getContent()));
@@ -50,7 +50,7 @@ public class BrandGWTAction extends BaseGWTHttpAction {
     	boolean res;
     	try {
     		String newLogoFileId = null;
-    		FileForm fileForm = (FileForm)form.get(IBrand.LOGO);
+    		FileForm fileForm = (FileForm)form.get(IBrand.BRAND_LOGO);
     		if(fileForm!=null) {
     			DSFile file = new DSFile();
     			file.setContent(new Blob(fileForm.getContent()));
@@ -102,7 +102,7 @@ public class BrandGWTAction extends BaseGWTHttpAction {
 	public Brand form2To(Map<String, Object> form) {
 		Brand to = new Brand();
 		
-		form.put(IBrand.LOGO, ((FileForm)form.get(IBrand.LOGO)).getFileName());
+		form.put(IBrand.BRAND_LOGO, ((FileForm)form.get(IBrand.BRAND_LOGO)).getFileName());
 //		Map<String, Object> props = new HashMap<String, Object>();
 //		for(String name:form.keySet()) {
 //			Object value = form.get(name);

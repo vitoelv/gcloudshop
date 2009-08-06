@@ -1,20 +1,22 @@
+
      <div class="box">
      <div class="box_1">
-      <h3><span class="text"><@s.text name="goods_tag"/></span></h3>
+      <h3><span class="text">${lang.goodsTag}</span></h3>
       <div class="boxCenterList clearfix ie6">
        <form name="tagForm" action="javascript:;" onSubmit="return submitTag(this)" id="tagForm">
         <p id="ECS_TAGS" style="margin-bottom:5px;">
           <#list tags as tag>
-          <a href="search.action?keywords=${tag.tagWords}" style="color:#006ace; text-decoration:none; margin-right:5px;">${tag.tagWords}[${tag.tagCount}]</a>
+          <a href="search.action?keywords=${tag.tagWords}" style="color:#006ace; text-decoration:none; margin-right:5px;">${tag.tagWords?html}[${tag.tagCount}]</a>
           </#list>
         </p>
         <p>
           <input type="text" name="tag" id="tag" class="inputBg" size="35" />
           <input type="submit" value="添 加" class="bnt_blue" style="border:none;" />
-          <input type="hidden" name="goods_id" value="${goods.id}"  />
+          <input type="hidden" name="goods_id" value="${goods.goodsId}"  />
         </p>
                 <script type="text/javascript">
                 //<![CDATA[
+                {literal}
                 /**
                  * 用户添加标记的处理函数
                  */
@@ -30,7 +32,7 @@
                       Ajax.call('user.action?act=add_tag', "id=" + idx + "&tag=" + tag, submitTagResponse, "POST", "JSON");
                     }
                   }
-                  catch (e) { alert(e); }
+                  catch (e) {alert(e);}
 
                   return false;
                 }
@@ -52,12 +54,13 @@
 
                       for (i = 0; i < tags.length; i++)
                       {
-                        div.innerHTML += '<a href="search.php?keywords='+tags[i].word+'" style="color:#006ace; text-decoration:none; margin-right:5px;">' +tags[i].word + '[' + tags[i].count + ']<\/a>&nbsp;&nbsp; ';
+                        div.innerHTML += '<a href="search.action?keywords='+tags[i].word+'">' +tags[i].word + '[' + tags[i].count + ']<\/a>&nbsp;&nbsp; ';
                       }
                     }
-                    catch (e) { alert(e); }
+                    catch (e) {alert(e);}
                   }
                 }
+                
                 //]]>
                 </script>
               </form>

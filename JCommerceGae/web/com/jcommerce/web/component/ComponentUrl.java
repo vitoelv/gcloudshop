@@ -2,24 +2,19 @@ package com.jcommerce.web.component;
 
 public class ComponentUrl {
     private String url;
-    private boolean opennew;
+    private int opennew;
     private String name;
-    private boolean active = false;
+    private int active = 0;
     
-    public boolean isActive() {
-        return active;
-    }
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-    public ComponentUrl(String url, String name, boolean opennew, boolean active) {
+
+    public ComponentUrl(String url, String name, int opennew, int active) {
         this.name = name;
         this.url = url;
         this.opennew = opennew;
         this.active = active;
     }
-    public ComponentUrl(String url, String name, boolean opennew) {
-        this(url, name, opennew, false);
+    public ComponentUrl(String url, String name, int opennew) {
+        this(url, name, opennew, 0);
     }
     public String getUrl() {
         return url;
@@ -27,16 +22,23 @@ public class ComponentUrl {
     public void setUrl(String url) {
         this.url = url;
     }
-    public boolean isOpennew() {
-        return opennew;
-    }
-    public void setOpennew(boolean opennew) {
-        this.opennew = opennew;
-    }
+
     public String getName() {
         return name;
     }
     public void setName(String name) {
         this.name = name;
     }
+	public int getOpennew() {
+		return opennew;
+	}
+	public void setOpennew(int opennew) {
+		this.opennew = opennew;
+	}
+	public int getActive() {
+		return active;
+	}
+	public void setActive(int active) {
+		this.active = active;
+	}
 }

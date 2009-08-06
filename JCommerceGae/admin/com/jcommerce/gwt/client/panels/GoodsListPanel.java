@@ -189,7 +189,7 @@ public class GoodsListPanel extends ContentWidget {
 				.Goods_name(), 100);
 		col.setEditor(new CellEditor(new TextField()));
 		columns.add(col);
-		col = new ColumnConfig(IGoods.SN, Resources.constants.Goods_SN(), 100);
+		col = new ColumnConfig(IGoods.GOODS_SN, Resources.constants.Goods_SN(), 100);
 		col.setEditor(new CellEditor(new TextField()));
 		columns.add(col);
 		col = new ColumnConfig(IGoods.SHOPPRICE, Resources.constants
@@ -210,7 +210,7 @@ public class GoodsListPanel extends ContentWidget {
 		CheckColumnConfig newadd = new CheckColumnConfig(IGoods.NEWADDED,
 				Resources.constants.Goods_newAdded(), 80);
 		columns.add(newadd);
-		col = new ColumnConfig(IGoods.NUMBER, Resources.constants
+		col = new ColumnConfig(IGoods.GOODS_NUMBER, Resources.constants
 				.Goods_number(), 80);
 		col.setAlignment(HorizontalAlignment.RIGHT);
 		col.setEditor(new CellEditor(new NumberField()));
@@ -552,7 +552,7 @@ public class GoodsListPanel extends ContentWidget {
 						for (Iterator<BeanObject> it = result.iterator(); it
 								.hasNext();) {
 							BeanObject brand = it.next();
-							lstBrand.addItem(brand.getString(IBrand.NAME),
+							lstBrand.addItem(brand.getString(IBrand.BRAND_NAME),
 									brand.getString(IBrand.ID));
 						}
 					}

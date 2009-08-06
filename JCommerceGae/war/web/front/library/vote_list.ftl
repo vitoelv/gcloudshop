@@ -1,1 +1,1 @@
-{insert name='vote'}
+<#include "vote.ftl">

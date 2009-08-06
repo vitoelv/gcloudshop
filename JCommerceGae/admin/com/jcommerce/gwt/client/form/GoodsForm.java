@@ -48,7 +48,7 @@ public class GoodsForm extends BeanObject implements IGoods {
 	public static ComboBox<BeanObject> getBrandIdField() {
 		ComboBox<BeanObject> field = new ComboBox<BeanObject>();
 		field.setName(BRANDID);
-		field.setDisplayField(IBrand.NAME);
+		field.setDisplayField(IBrand.BRAND_NAME);
         field.setValueField(IBrand.ID);
 		return field;
 	}
@@ -70,7 +70,7 @@ public class GoodsForm extends BeanObject implements IGoods {
 	}
 	public static TextField<String> getSnField() {
 		TextField<String> field = new TextField<String>();
-		field.setName(SN);
+		field.setName(GOODS_SN);
 		return field;
 	}
 	
@@ -86,13 +86,13 @@ public class GoodsForm extends BeanObject implements IGoods {
 	}
 	public static TextField<String> getWeightField(String fieldTitle) {
 		TextField<String> field = new TextField<String>();
-		field.setName(WEIGHT);
+		field.setName(GOODS_WEIGHT);
 		return field;
 	}
 	
 	public static TextField<String> getNumberField(String fieldTitle) {
 		TextField<String> field = new TextField<String>();
-		field.setName(NUMBER);
+		field.setName(GOODS_NUMBER);
 		return field;
 	}
 	
@@ -117,7 +117,7 @@ public class GoodsForm extends BeanObject implements IGoods {
 	
 	public static HtmlEditor getDescField() {
 		MyHTMLEditor field = new MyHTMLEditor();
-		field.setName(DESCRIPTION);
+		field.setName(GOODS_DESC);
 		field.setAutoValidate(true);
 		return field;
 	}

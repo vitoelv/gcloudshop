@@ -39,7 +39,7 @@ public class IShopServiceImpl extends RemoteServiceServlet implements IShopServi
 	public IShopServiceImpl() {
     }
 	
-	WebApplicationContext ctx = null;
+	WebApplicationContext springContext = null;
 	
 	@Override
 	public void init() {
@@ -47,7 +47,7 @@ public class IShopServiceImpl extends RemoteServiceServlet implements IShopServi
 //      String[] paths = {"../applicationContext.xml"};
 //      ApplicationContext ctx = new ClassPathXmlApplicationContext(paths);
 		
-		ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+		springContext = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		
         Properties beanProps = new Properties();
         InputStream is = getClass().getResourceAsStream("beans.properties");
@@ -149,7 +149,7 @@ public class IShopServiceImpl extends RemoteServiceServlet implements IShopServi
 //    }
     
 	public IDefaultManager getDefaultManager() {
-		return (IDefaultManager)ctx.getBean("DefaultManager");
+		return (IDefaultManager)springContext.getBean("DefaultManager");
 	}
 	
     public boolean deleteObject(String modelName, String id) {

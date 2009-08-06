@@ -30,159 +30,128 @@ public class Cart extends ModelObject {
     @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
     private String keyName;
     
-    private User user;
-    private Session session;
-    private Goods goods;
+    @Persistent
+    private String userId;
+    
+    private String sessionId;
+    private String goodsId;
     private String goodsSN;
     private String goodsName;
-    private double marketPrice;
-    private double goodsPrice;
-    private int goodsNumber;
+    private Double marketPrice = 0.0;
+    private Double goodsPrice = 0.0;
+    private Integer goodsNumber = 0;
     // String goodsAttribute;
-    private boolean realGoods;
+    private Boolean isReal = false;
     private String extensionCode;
-    private Cart parentCart;
-    private int type;   // TYPE_xxx
-    private boolean gift;
-    private boolean handSelectable;
-    private GoodsAttribute goodsAttribute;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Session getSession() {
-        return session;
-    }
-
-    public void setSession(Session session) {
-        this.session = session;
-    }
-
-    public Goods getGoods() {
-        return goods;
-    }
-
-    public void setGoods(Goods goods) {
-        this.goods = goods;
-    }
-
-    public String getGoodsSN() {
-        return goodsSN;
-    }
-
-    public void setGoodsSN(String goodsSN) {
-        this.goodsSN = goodsSN;
-    }
-
-    public String getGoodsName() {
-        return goodsName;
-    }
-
-    public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName;
-    }
-
-    public double getMarketPrice() {
-        return marketPrice;
-    }
-
-    public void setMarketPrice(double marketPrice) {
-        this.marketPrice = marketPrice;
-    }
-
-    public double getGoodsPrice() {
-        return goodsPrice;
-    }
-
-    public void setGoodsPrice(double goodsPrice) {
-        this.goodsPrice = goodsPrice;
-    }
-
-    public int getGoodsNumber() {
-        return goodsNumber;
-    }
-
-    public void setGoodsNumber(int goodsNumber) {
-        this.goodsNumber = goodsNumber;
-    }
-
-    public boolean isRealGoods() {
-        return realGoods;
-    }
-
-    public void setRealGoods(boolean realGoods) {
-        this.realGoods = realGoods;
-    }
-
-    public String getExtensionCode() {
-        return extensionCode;
-    }
-
-    public void setExtensionCode(String extensionCode) {
-        this.extensionCode = extensionCode;
-    }
-
-
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public boolean isGift() {
-        return gift;
-    }
-
-    public void setGift(boolean gift) {
-        this.gift = gift;
-    }
-
-    public boolean isHandSelectable() {
-        return handSelectable;
-    }
-
-    public void setHandSelectable(boolean handSelectable) {
-        this.handSelectable = handSelectable;
-    }
-
-    public GoodsAttribute getGoodsAttribute() {
-        return goodsAttribute;
-    }
-
-    public void setGoodsAttribute(GoodsAttribute goodsAttribute) {
-        this.goodsAttribute = goodsAttribute;
-    }
-
+    private String parentId;
+    private Integer recType = 0;   // TYPE_xxx
+    private Boolean isGift = false;
+    private Boolean canHandsel = false;
+    private String goodsAttrId;
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public String getKeyName() {
 		return keyName;
 	}
-
 	public void setKeyName(String keyName) {
 		this.keyName = keyName;
 	}
 
-	public Cart getParentCart() {
-		return parentCart;
+	public String getSessionId() {
+		return sessionId;
+	}
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+	public String getGoodsId() {
+		return goodsId;
+	}
+	public void setGoodsId(String goodsId) {
+		this.goodsId = goodsId;
+	}
+	public String getGoodsSN() {
+		return goodsSN;
+	}
+	public void setGoodsSN(String goodsSN) {
+		this.goodsSN = goodsSN;
+	}
+	public String getGoodsName() {
+		return goodsName;
+	}
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
+	}
+	public Double getMarketPrice() {
+		return marketPrice;
+	}
+	public void setMarketPrice(Double marketPrice) {
+		this.marketPrice = marketPrice;
+	}
+	public Double getGoodsPrice() {
+		return goodsPrice;
+	}
+	public void setGoodsPrice(Double goodsPrice) {
+		this.goodsPrice = goodsPrice;
+	}
+	public Integer getGoodsNumber() {
+		return goodsNumber;
+	}
+	public void setGoodsNumber(Integer goodsNumber) {
+		this.goodsNumber = goodsNumber;
 	}
 
-	public void setParentCart(Cart parentCart) {
-		this.parentCart = parentCart;
+	public String getUserId() {
+		return userId;
 	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public Boolean getIsReal() {
+		return isReal;
+	}
+	public void setIsReal(Boolean isReal) {
+		this.isReal = isReal;
+	}
+	public String getExtensionCode() {
+		return extensionCode;
+	}
+	public void setExtensionCode(String extensionCode) {
+		this.extensionCode = extensionCode;
+	}
+	public String getParentId() {
+		return parentId;
+	}
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
+	}
+	public Integer getRecType() {
+		return recType;
+	}
+	public void setRecType(Integer recType) {
+		this.recType = recType;
+	}
+	public Boolean getIsGift() {
+		return isGift;
+	}
+	public void setIsGift(Boolean isGift) {
+		this.isGift = isGift;
+	}
+	public Boolean getCanHandsel() {
+		return canHandsel;
+	}
+	public void setCanHandsel(Boolean canHandsel) {
+		this.canHandsel = canHandsel;
+	}
+	public String getGoodsAttrId() {
+		return goodsAttrId;
+	}
+	public void setGoodsAttrId(String goodsAttrId) {
+		this.goodsAttrId = goodsAttrId;
+	}
+
 
 }

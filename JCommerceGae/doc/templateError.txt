@@ -1,0 +1,6 @@
+----------
+==> if goods.giveIntegral [on line 183, column 8 in web/front/goods.ftl]
+----------
+----------
+==> if goods.integral [on line 199, column 8 in web/front/goods.ftl]
+----------

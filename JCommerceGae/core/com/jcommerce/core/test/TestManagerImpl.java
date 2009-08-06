@@ -6,9 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
+
 import org.apache.commons.logging.LogFactory;
 
 import com.google.appengine.api.datastore.Blob;
+import com.jcommerce.core.dao.impl.PMF;
 import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.DSFile;
@@ -21,8 +25,10 @@ import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.CustomizedManager;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.util.MyPropertyUtil;
+import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.AttributeForm;
 import com.jcommerce.gwt.client.form.GoodsTypeForm;
+import com.jcommerce.gwt.client.model.IGoods;
 
 
 public class TestManagerImpl extends BaseDAOTestCase {
@@ -302,7 +308,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
 //    		to.set(IBrand.LOGO, to);
     		
     		Brand to = new Brand();
-    		to.setName("brand1");
+    		to.setBrandName("brand1");
     		DSFile logo = new DSFile();
     		logo.setContent(new Blob("xxx".getBytes()));
     		logo.setFileName("xyz.jpg");
@@ -414,11 +420,12 @@ public class TestManagerImpl extends BaseDAOTestCase {
     }
     public void testUpdateBrand() {
     	System.out.println("start of testUpdateBrand");
+		PersistenceManager pm = PMF.get().getPersistenceManager();
     	try {
     		// prepare
     		IDefaultManager manager = getDefaultManager();
     		Brand to1 = new Brand();
-    		to1.setName("xxx");
+    		to1.setBrandName("xxx");
     		String bid = manager.txadd(to1);
     		System.out.println("id: "+bid);
 
@@ -427,13 +434,13 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		// work
     		Brand b2 = new Brand();
     		b2.setId(bid);
-    		b2.setName("yyy");
+    		b2.setBrandName("yyy");
     		manager.txupdate(b2);
 
     		System.out.println("after update");
 
     		Brand b3 = (Brand)manager.get(Brand.class.getName(), bid);
-    		String res = b3.getName();
+    		String res = b3.getBrandName();
     		System.out.println("res: "+res);
     		
     		assertTrue("yyy".equals(res));
@@ -442,12 +449,19 @@ public class TestManagerImpl extends BaseDAOTestCase {
     	} catch (Exception ex) {
     		ex.printStackTrace();
     		assertTrue(false);
+    	} finally {
+    		pm.close();
     	}
     }
     
     public void testAddGoods() {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+    	clearDS();
     	Goods goods = new Goods();
-    	goods.setName("mygoods");
+    	goods.setBestSold(true);
+    	goods.setHotSold(false);
+    	goods.setGoodsName("mygoods");
     	Gallery g = new Gallery();
     	g.setDescription("abc");
     	DSFile f = new DSFile();
@@ -461,7 +475,34 @@ public class TestManagerImpl extends BaseDAOTestCase {
     	cm.addGoods(goods);
     	
     	
+        Criteria c1 = new Criteria();
+        Condition cond1 = new Condition();
+        cond1.setField(IGoods.BESTSOLD);
+        cond1.setOperator(Condition.EQUALS);
+        cond1.setValue("true");
+    	c1.addCondition(cond1);
+        List<Goods> res =  (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1);
+    	System.out.println("size: "+res.size());
     	
+    	String hdoql= "select from com.jcommerce.core.model.Goods  where  bestSold == bestSoldParam parameters  boolean bestSoldParam";
+    	Query query = pm.newQuery(hdoql);
+    	res = (List<Goods>)query.execute(new Boolean(true));
+    	System.out.println("size: "+res.size());
+    	res = (List<Goods>)query.execute("true");
+    	System.out.println("size: "+res.size());
     	
+//        Criteria c1 = new Criteria();
+//        Condition cond1 = new Condition();
+//        cond1.setField(IGoods.HOTSOLD);
+//        cond1.setOperator(Condition.EQUALS);
+//        cond1.setValue("true");
+//        c1.addCondition(cond1);
+//        List<Goods> res =  (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1);
+//    	System.out.println("size: "+res.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pm.close();
+		}
     }
 }

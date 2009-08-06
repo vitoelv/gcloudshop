@@ -1,12 +1,12 @@
 <div id="append_parent"></div>
-<#if user_info??>
+<#if  userInfo??  >
 <font style="position:relative; top:10px;">
-<@s.text name="hello"/>，<font class="f4_b"> ${user_info.name}</font>, <@s.text name="welcome_return"/>！
-<a href="user.php"><@s.text name="user_center"/></a>|
- <a href="user.php?act=logout"><@s.text name="user_logout"/></a>
+${lang.hello}，<font class="f4_b">${userInfo.username}</font>, ${lang.welcomeReturn}！
+<a href="user.action">${lang.userCenter}</a>|
+ <a href="user.action?act=logout">${lang.userLogout}</a>
 </font>
 <#else>
- <@s.text name="welcome"/>&nbsp;&nbsp;&nbsp;&nbsp;
- <a href="user.php"><img src="${template_root}/images/bnt_log.gif" /></a>
- <a href="user.php?act=register"><img src="${template_root}/images/bnt_reg.gif" /></a>
+ ${lang.welcome}&nbsp;&nbsp;&nbsp;&nbsp;
+ <a href="user.action"><img src="images/bnt_log.gif" /></a>
+ <a href="user.action?act=register"><img src="images/bnt_reg.gif" /></a>
 </#if>

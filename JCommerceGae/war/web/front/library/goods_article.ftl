@@ -1,10 +1,10 @@
-<#if $goods_article_list??>
+<#if  goodsArticleList??  >
 <div class="box">
  <div class="box_1">
-  <h3><span><@s.text name="article_releate"/></span></h3>
+  <h3><span>${lang.articleReleate}</span></h3>
   <div class="boxCenterList RelaArticle">
-    <#list goods_article_list as article>
-    <a href="article.action?id={$article.id}" title="${article.title}">${article.shortTitle}</a><br />
+    <#list goodsArticleList as article>
+    <a href="${article.url}" title="${article.title?html}">${article.shortTitle?html}</a><br />
     </#list>
   </div>
  </div>

@@ -1,9 +1,9 @@
 package com.jcommerce.web.front.action;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,67 +13,27 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.ServletActionContext;
 
 import com.jcommerce.core.model.Brand;
-import com.jcommerce.core.model.Category;
+import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.OrderGoods;
 import com.jcommerce.core.model.Session;
-import com.jcommerce.core.model.User;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
-import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IGoods;
-import com.jcommerce.web.component.ComponentUrl;
-import com.jcommerce.web.component.Navigator;
 import com.jcommerce.web.front.action.helper.Pager;
+import com.jcommerce.web.to.BrandWrapper;
+import com.jcommerce.web.to.GoodsWrapper;
+import com.jcommerce.web.to.WrapperUtil;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionSupport;
 
-public class HomeAction extends ActionSupport {
+public class HomeAction extends BaseAction {
     private static Log log = LogFactory.getLog(HomeAction.class);
 
-    private IDefaultManager defaultManager;
+	public void debug(String s) {
+		System.out.println(" in [HomeAction]: "+s );
+	}
     
-    
-
-    //内部类 实现商品品牌的货物数量统计
-    public class BrandInfo {
-        private Brand brand = new Brand();
-        private int number = 0;
-
-        public BrandInfo(Brand brand, int goodsCount) {
-            this.brand = brand;
-            this.number = goodsCount;
-        }
-
-        public BrandInfo() {
-        }
-
-        public Brand getBrand() {
-            return brand;
-        }
-
-        public int getNumber() {
-            return number;
-        }
-
-        public void setBrand(Brand brand) {
-            this.brand = brand;
-        }
-
-        public void setNumber(int number) {
-            this.number = number;
-        }
-    }
-    
-    protected void initConfig(HttpServletRequest request) {
-        request.setAttribute("show_marketprice", true);
-    }
-    
-    protected void initPager(HttpServletRequest request) {
-        Pager pager = new Pager();
-        request.setAttribute("pager", pager);
-    }
 
     @Override
     public String getText(String s) {
@@ -82,52 +42,158 @@ public class HomeAction extends ActionSupport {
 //    	return super.getText(s);
     }
     
+    public void setCatRecSign(HttpServletRequest request) {
+        request.setAttribute("catRecSign", 1);
+    }
+    
+    public void includeBestSoldGoods(HttpServletRequest request) {
+    	setCatRecSign(request);
+        request.setAttribute("bestGoods", getBestSoldGoods());
+    }
+    public void includeHotSoldGoods(HttpServletRequest request) {
+    	setCatRecSign(request);
+        request.setAttribute("hotGoods", getHostSoldGoods());
+    }
+    public void includeNewlyAddedGoods(HttpServletRequest request) {
+    	setCatRecSign(request);
+        request.setAttribute("newGoods", getNewlyAddedGoods());
+    }
+    public void includeBrands(HttpServletRequest request) {
+    	// brands.ftl
+        List<Brand> brands = (List<Brand>)getDefaultManager().getList(ModelNames.BRAND, null);
+        
+        Criteria criteria = new Criteria();
+        Condition cond = new Condition();
+        cond.setField(IGoods.BRANDID);
+        cond.setOperator(Condition.EQUALS);
+        List<BrandWrapper> brandInfoList = new ArrayList<BrandWrapper>();
+        for (Brand brand:brands) {
+            cond.setValue(brand.getId());
+            criteria.addCondition(cond);
+            Integer goodsNum = getDefaultManager().getCount(ModelNames.GOODS, criteria);
+            BrandWrapper bw = new BrandWrapper(brand);
+            bw.put("goodsNum", goodsNum);
+            brandInfoList.add(bw);
+            criteria.removeAllCondition();
+        }        
+        request.setAttribute("brandList", brandInfoList);
+        
+        
+    }
+    public void includeNewArticle(HttpServletRequest request) {
+    	// new_articles.ftl
+//      request.setAttribute("new_articles", articleManager.getArticleList());
+        request.setAttribute("newArticles", new ArrayList());    	
+    }
+    public void includePromotionInfo(HttpServletRequest request) {
+    	// promotion_info.ftl
+        request.setAttribute("promotionInfo", new ArrayList());
+    	
+    }
+    public void includeOrderQuery(HttpServletRequest request) {
+        // order_query.ftl
+        request.setAttribute("orderQuery", new HashMap<String, String>());    	
+    }
+    public void includeInvoiceQuery(HttpServletRequest request) {
+        // invoice_query.ftl
+    	// TODO invoice query
+    	//      request.setAttribute("invoiceList", new ArrayList());
+	
+    }
+    public void includeAuction(HttpServletRequest request) {
+        // auction.ftl
+    	//        	request.setAttribute("auctionList", new ArrayList());    	
+    }
+    public void includeGroupBuy(HttpServletRequest request) {
+        // group_buy.ftl
+//    	request.setAttribute("groupBuyGoods", new ArrayList());    	
+    }
+    public void includeTop10(HttpServletRequest request) {
+    	// top10.ftl
+    	
+        //top 10
+        //      List<OrderGoods> orderGoods = new ArrayList<OrderGoods>();
+        //      orderGoods = orderGoodsManager.getOrderGoodsList();
+        //      String[] goodId = new String[10];
+        //      int index = 0;
+        //      for (Iterator it = orderGoods.iterator(); it.hasNext();) {
+        //          OrderGoods orderGood = (OrderGoods)it.next();
+        //          goodId[index] = orderGood.getGoods().getId()+"";
+        //          index++;
+        //      }
+         
+
+        List<OrderGoods> topList = new ArrayList<OrderGoods>();
+//        topList = orderGoodsManager.getList("from OrderGoods t GROUP by t.goods ORDER by COUNT(t.goods) DESC limit 10");
+        request.setAttribute("topGoods", topList);    	
+    }
     protected void initParameters(HttpServletRequest request) {
-        initConfig(request);
-        initPager(request);
-        request.setAttribute("template_root", "front");
+        request.setAttribute("flashTheme", "flash");
+        // TODO shopNotice
+        request.setAttribute("shopNotice", "Shop's latest Notice!!");
         
-        request.setAttribute("now_time", new Date().toString());
-        // Navigator ............
-        
-        Navigator nav = new Navigator();
-        nav.addTop(new ComponentUrl("cart.action", getText("browse_cart"), true));
-        nav.addTop(new ComponentUrl("user.action", getText("user_center"), true));
-        nav.addTop(new ComponentUrl("pick_out.action", getText("pick_out_center"), true));
-        nav.addTop(new ComponentUrl("group_by.action", getText("buy_by_group"), true));
-        nav.addTop(new ComponentUrl("snatch.action", getText("snatch"), true));
-        nav.addTop(new ComponentUrl("tag_cloud.action", getText("tag_cloud"), true));
-        
-        
-
-//        nav.addMiddle(new ComponentUrl("home.action", getText("home_title"), true, true));
-        nav.addMiddle(new ComponentUrl("home.action", "TODOtitle", true, true));
-        List<Category> categoryList = defaultManager.getList(ModelNames.CATEGORY, null);
-        Iterator<Category> it = categoryList.iterator();
-        while (it.hasNext()) {
-            Category cat = it.next();
-            if (cat.isShowInNavigator())
-                nav.addMiddle(new ComponentUrl("category.action?id="+cat.getId(), cat.getName(), true, false));
-        }
-
-        request.setAttribute("navigator_list", nav);
-
-        // Search key words ..........
-        ArrayList searchKeywords = new ArrayList();
-        request.setAttribute("searchkeywords", searchKeywords);
-        request.setAttribute("search_keywords", "");
-//        
-//        List categorys = this.categoryManager.getCategoryList();
-        
-        request.setAttribute("category_list", categoryList);
-//        request.setAttribute("category_list", categorys);
-//        
-        request.setAttribute("copyright", "Copyright");
-        request.setAttribute("shop_address", "Shop Address");
-        request.setAttribute("shop_postcode", "Postcode:1000000");
-        request.setAttribute("copryright", "Copyright");
+    }
+    
+    public static class TestData {
+    	String name;
+    	public void setName(String name) {
+    		this.name = name;
+    	}
+    	public String get(String key) {
+    		return name;
+    	}
+    	public String getMyName() {
+    		return "xxx";
+    	}
+    	
     }
 
+    @Override
+    public String execute() throws Exception {
+        if (log.isDebugEnabled()) {
+            log.debug("entering 'home' method...");
+        }
+        debug("in execute");
+        
+        super.execute();
+        
+        ActionContext ctx = ActionContext.getContext();        
+        HttpServletRequest request = (HttpServletRequest)ctx.get(ServletActionContext.HTTP_REQUEST);        
+        HttpServletResponse response = (HttpServletResponse)ctx.get(ServletActionContext.HTTP_RESPONSE); 
+        
+        // test only
+        // map
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("key1", "xxx");
+        String vkey="key1";
+        request.setAttribute("vkey", vkey);
+        request.setAttribute("mymap", map);
+
+        TestData td = new TestData();
+        td.setName("abc");
+        request.setAttribute("testData", td);
+        
+        initPager(request);
+        initParameters(request);
+        
+        includeUrHere(request);
+        includeCategoryTree(request);
+        includeBestSoldGoods(request);
+        includeHotSoldGoods(request);
+        includeNewlyAddedGoods(request);
+        includeBrands(request);
+        includeTop10(request);
+        includeNewArticle(request);
+        includeOrderQuery(request);
+        includeInvoiceQuery(request);
+        includeAuction(request);
+        includeGroupBuy(request);
+        
+//        //Cart Info.....
+//        cartInfoShow(request);
+        
+        return  Action.SUCCESS;
+    }
     private Session getSession(HttpServletRequest request) {
 //        String sid = request.getSession(true).getId();
 //        Session sess = sessionManager.getSession(sid);
@@ -162,82 +228,53 @@ public class HomeAction extends ActionSupport {
          request.setAttribute("price", price);
     }
 
-    @Override
-    public String execute() throws Exception {
-        if (log.isDebugEnabled()) {
-            log.debug("entering 'home' method...");
-        }
-        
-        
-        ActionContext ctx = ActionContext.getContext();        
-        HttpServletRequest request = (HttpServletRequest)ctx.get(ServletActionContext.HTTP_REQUEST);        
-        HttpServletResponse response = (HttpServletResponse)ctx.get(ServletActionContext.HTTP_RESPONSE); 
-        
-        initParameters(request);
-        // Page info ............
-        request.setAttribute("page_title", "ISHOP Home");
-        request.setAttribute("feed_url", "feed.action");
-        
-        //Shop Notice...
-        request.setAttribute("shop_notice", "Hot!! Hot!!");
-        //Cart Info.....
-        cartInfoShow(request);
-        
-        User user = new User();
-        user.setName("Guest");
-        
-        request.getSession().setAttribute("user_info", user);
-        
-        List<Category> categories = (List<Category>)defaultManager.getList(ModelNames.CATEGORY, null);
-        categories.size();
-        request.setAttribute("categories", categories);
-        
-//        request.setAttribute("bestSold", goodsManager.getBestSoldGoodsList());
-//        request.setAttribute("hotSold", goodsManager.getHotSoldGoodsList());
-//        request.setAttribute("newGoods", goodsManager.getNewGoodsList());
-        
-        
-        List<Brand> brands = (List<Brand>)defaultManager.getList(ModelNames.BRAND, null);
-        
-        Criteria criteria = new Criteria();
-        Condition cond = new Condition();
-        cond.setField(IGoods.BRANDID);
-        cond.setOperator(Condition.EQUALS);
-        List<BrandInfo> brandInfoList = new ArrayList<BrandInfo>();
-        for (Brand brand:brands) {
-            cond.setValue(brand.getId());
-            criteria.addCondition(cond);
-            brandInfoList.add(new BrandInfo(brand, defaultManager.getCount(ModelNames.GOODS, criteria)));
-            criteria.removeAllCondition();
-        }        
-         request.setAttribute("brandinfoList", brandInfoList);
-        
-//        List<Brand> brandInfoList = (List<Brand>)defaultManager.getList(ModelNames.BRAND, null);
-//        brandInfoList.size();
-//        request.setAttribute("brandinfoList", brandInfoList);
-
-        //top 10
-        //      List<OrderGoods> orderGoods = new ArrayList<OrderGoods>();
-        //      orderGoods = orderGoodsManager.getOrderGoodsList();
-        //      String[] goodId = new String[10];
-        //      int index = 0;
-        //      for (Iterator it = orderGoods.iterator(); it.hasNext();) {
-        //          OrderGoods orderGood = (OrderGoods)it.next();
-        //          goodId[index] = orderGood.getGoods().getId()+"";
-        //          index++;
-        //      }
-         
-
-        List<OrderGoods> topList = new ArrayList<OrderGoods>();
-//        topList = orderGoodsManager.getList("from OrderGoods t GROUP by t.goods ORDER by COUNT(t.goods) DESC limit 10");
-        request.setAttribute("topList", topList);
-        
-        // new article
-        
-//        request.setAttribute("new_articles", articleManager.getArticleList());
-        request.setAttribute("new_articles", new ArrayList());
-        return  Action.SUCCESS;
+    private List filterGoods(List<Goods> list) {
+    	// logic moved to Goods class
+    	return WrapperUtil.wrap(list, GoodsWrapper.class);
+    	
+//        for(Goods goods:list) {
+//        	goods.setUrl("goods.action?id="+goods.getId());
+//        	goods.setThumb("/admin/dynaImageService.do?fileId="+goods.getImageFileId());
+//        	goods.setShortStyleName(goods.getName().length()>10?goods.getName().substring(0, 10)+"...":goods.getName());
+//        }
     }
+
+
+    private List<Goods> getBestSoldGoods() {
+        Criteria c1 = new Criteria();
+        Condition cond1 = new Condition();
+        cond1.setField(IGoods.BESTSOLD);
+        cond1.setOperator(Condition.EQUALS);
+        cond1.setValue("true");
+        c1.addCondition(cond1);
+        List<Goods> list = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1);
+        return filterGoods(list);
+         
+    }
+    private List<Goods> getHostSoldGoods() {
+        Criteria c1 = new Criteria();
+        Condition cond1 = new Condition();
+        cond1.setField(IGoods.HOTSOLD);
+        cond1.setOperator(Condition.EQUALS);
+        cond1.setValue("true");
+        c1.addCondition(cond1);
+        
+        List<Goods> list = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1);
+        return filterGoods(list);
+
+    }
+    private List<Goods> getNewlyAddedGoods() {
+        Criteria c1 = new Criteria();
+        Condition cond1 = new Condition();
+        cond1.setField(IGoods.NEWADDED);
+        cond1.setOperator(Condition.EQUALS);
+        cond1.setValue("true");
+        c1.addCondition(cond1);
+        List<Goods> list = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1);
+        return filterGoods(list);
+
+    }
+
 
     protected void getHistory() throws Exception {
 //        List<Goods> goods = goodsManager.getList("from Goods t where t.onSale=true and t.aloneSale=true and t.delete=false");
@@ -454,13 +491,6 @@ public class HomeAction extends ActionSupport {
         return Action.SUCCESS;
     }
 
-	public IDefaultManager getDefaultManager() {
-		return defaultManager;
-	}
-
-	public void setDefaultManager(IDefaultManager defaultManager) {
-		this.defaultManager = defaultManager;
-	}
 
 
 }

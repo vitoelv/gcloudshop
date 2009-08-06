@@ -1,14 +1,16 @@
 package com.jcommerce.core.util;
 
+import java.lang.reflect.Constructor;
 import java.util.List;
 
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.Order;
+import com.jcommerce.core.model.ModelObject;
 
 public class JDOQLHelper {
 	
-    public static String getJdoql(String className, Criteria criteria, List<String> paras) {
+    public static String getJdoql(String className, Criteria criteria, List<Object> paras) {
         try {
 			StringBuffer jdoql = new StringBuffer("select from "+ className+" "); 
   
@@ -33,7 +35,7 @@ public class JDOQLHelper {
     	
     }
     
-    public static String getWhereClause(String className, Criteria criteria, List<String> paras) {
+    public static String getWhereClause(String className, Criteria criteria, List<Object> paras) {
         StringBuffer hql = new StringBuffer();
         StringBuffer paraDeclares = new StringBuffer();
 //         = new ArrayList<String>(); 
@@ -80,7 +82,7 @@ public class JDOQLHelper {
 //
 //    }
     
-    public static void addCondtion(StringBuffer hql, StringBuffer paraDeclars, List<String> paras, Condition cond, String className) {
+    public static void addCondtion(StringBuffer hql, StringBuffer paraDeclars, List<Object> paras, Condition cond, String className) {
     	String name = cond.getField();
     	String value = cond.getValue();
     	String paraName = name+"Param";
@@ -108,7 +110,19 @@ public class JDOQLHelper {
             hql.append(paraName);
             
             paraDeclars.append(" ").append(fieldType.getName()).append(" ").append(paraName);
-            paras.add(value);
+            if(ModelObject.class.isAssignableFrom(fieldType)) {
+            	paras.add(value);
+            } else {
+            try {
+            	Constructor<String> c = fieldType.getConstructor(String.class);
+            	paras.add(c.newInstance(value));
+            } catch (Exception ex) {
+            	// should not happen for simple type...
+            	ex.printStackTrace();
+            	// if happens, need handle case by case
+            	paras.add(value);
+            }
+            }
         
     	} catch(RuntimeException e) {
     		throw e;

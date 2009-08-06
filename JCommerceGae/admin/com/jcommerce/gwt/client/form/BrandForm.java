@@ -31,7 +31,7 @@ public class BrandForm extends BeanObject implements IBrand{
     
 	public static TextField<String> getNameField(String fieldTitle) {
 		TextField<String> nameField = new TextField<String>();
-		nameField.setName(NAME);
+		nameField.setName(BRAND_NAME);
 		nameField.setMaxLength(10);
 		nameField.setAutoValidate(true);
 		nameField.setAllowBlank(false);
@@ -50,7 +50,7 @@ public class BrandForm extends BeanObject implements IBrand{
 	}
 	public static FileUploadField getLogoField(String fieldTitle) {
 		FileUploadField nameField = new FileUploadField();
-		nameField.setName(LOGO);
+		nameField.setName(BRAND_LOGO);
 //		nameField.setMaxLength(10);
 		nameField.setAutoValidate(true);
 //		nameField.addAllowedTypes(new String[]{".jpg", ".gif"});
@@ -59,7 +59,7 @@ public class BrandForm extends BeanObject implements IBrand{
 	
 	public static TextArea getDescField(String fieldTitle) {
 		TextArea agField = new TextArea();
-		agField.setName(DESC);
+		agField.setName(BRAND_DESC);
 		agField.setMaxLength(2000);
 		agField.setAutoValidate(true);
 		agField.setAllowBlank(true);

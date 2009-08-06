@@ -5,7 +5,7 @@
 package com.jcommerce.gwt.client.model;
 
 public interface IGoods {
-    public static final String NAME = "name";
+    public static final String NAME = "goodsName";
     public static final String ID = "id";
     public static final String MAINCATEGORYID = "mainCategoryId";
     public static final String CATEGORYIDS = "categoryIds";
@@ -19,13 +19,13 @@ public interface IGoods {
 //    public static final String BRAND = "brand";
     
     
-    public static final String SN = "SN";
-    public static final String NAMESTYLE = "nameStyle";
+    public static final String GOODS_SN = "goodsSn";
+    public static final String GOODS_NAMESTYLE = "goodsNameStyle";
     public static final String CLICKCOUNT = "clickCount";
 
     public static final String PROVIDERNAME = "providerName";
-    public static final String NUMBER = "number";
-    public static final String WEIGHT = "weight";
+    public static final String GOODS_NUMBER = "goodsNumber";
+    public static final String GOODS_WEIGHT = "goodsWeight";
     public static final String MARKETPRICE = "marketPrice";
     public static final String SHOPPRICE = "shopPrice";
     public static final String PROMOTEPRICE = "promotePrice";
@@ -34,7 +34,7 @@ public interface IGoods {
     public static final String WARNNUMBER = "warnNumber";
     public static final String KEYWORDS = "keywords";
     public static final String BRIEF = "brief";
-    public static final String DESCRIPTION = "description";
+    public static final String GOODS_DESC = "goodsDesc";
     public static final String THUMB = "thumb";
     public static final String THUMBFILEID = "thumbFileId";
     public static final String IMAGE = "image";

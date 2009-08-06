@@ -9,5 +9,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/App Engine SDK Impl pkg"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/mylib"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
+	<classpathentry kind="lib" path="D:/resource/jakarta-oro-2.0.8/jakarta-oro-2.0.8.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

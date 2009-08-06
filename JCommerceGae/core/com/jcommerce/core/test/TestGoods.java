@@ -17,7 +17,7 @@ public class TestGoods extends BaseDAOTestCase {
 		IDefaultManager manager = getDefaultManager();
 		try {
 			Goods goods = new Goods();
-			goods.setName("abc");
+			goods.setGoodsName("abc");
 			String[] catIds = new String[] {"xxx", "yyy"};
 			
 			goods.getCategoryIds().addAll(Arrays.asList(catIds));

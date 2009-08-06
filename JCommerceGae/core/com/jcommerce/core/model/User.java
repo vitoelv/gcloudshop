@@ -32,8 +32,12 @@ public class User extends ModelObject {
     @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
     private String keyName;
     
+    @Persistent
     private String name;
+    
+    @Persistent
     private String password;
+    
     private String email;
     private String question;
     private String answer;
