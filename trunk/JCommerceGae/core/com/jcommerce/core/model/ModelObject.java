@@ -19,7 +19,7 @@ import org.apache.commons.beanutils.PropertyUtils;
  * and hashCode methods.
  *
  */
-public abstract class ModelObject implements Serializable {
+public abstract class ModelObject implements Serializable, URLConstants {
 	
 
     

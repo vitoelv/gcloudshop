@@ -1,12 +1,15 @@
 package com.jcommerce.web.component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class Navigator {
     List top;
     List middle;
+    Map<String, Object> config = new HashMap<String, Object>();
     
     public Navigator() {
         top = new ArrayList();
@@ -33,4 +36,12 @@ public class Navigator {
     public void setMiddle(List middle) {
         this.middle = middle;
     }
+	public Map<String, Object> getConfig() {
+		return config;
+	}
+	public void setConfig(Map<String, Object> config) {
+		this.config = config;
+	}
+
+
 }

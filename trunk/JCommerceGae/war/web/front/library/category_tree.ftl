@@ -3,9 +3,9 @@
   <div id="category_tree">
     <#list categories as cat>
      <dl>
-     <dt><a href="category.action?id=${cat.id}">${cat.name}</a></dt>
+     <dt><a href="${cat.url}">${cat.name?html}</a></dt>
      <#list cat.children as child>
-     <dd><a href="category.action$id={child.id}">${child.name}</a></dd>
+     <dd><a href="${child.url}">${child.name?html}</a></dd>
      </#list>
      </dl>
     </#list> 

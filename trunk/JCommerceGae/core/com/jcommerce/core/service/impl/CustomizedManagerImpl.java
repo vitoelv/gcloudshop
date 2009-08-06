@@ -89,6 +89,12 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     	try {
     		String goodskn = UUIDHexGenerator.newUUID();
     		to.setKeyName(goodskn);
+    		// TODO need overcome the checkbox issue
+    		// just for test with Web Home page. 
+    		to.setBestSold(true);
+    		to.setNeewAdded(true);
+    		to.setHotSold(true);
+    		
     		
     		Set<Gallery> galleries = to.getGalleries();
     		
@@ -112,6 +118,8 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 			if(galleries.size()>0) {
 				Gallery gallery = (Gallery)galleries.iterator().next();
 				to.setImageFileId(gallery.getImageFileId());
+				// TODO temporary
+				to.setThumbFileId(gallery.getImageFileId());
 			}
 			
 			Set<GoodsAttribute> gts = to.getAttributes();
@@ -124,7 +132,8 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 			
 			String res = txattach(to);
 			
-			// TODO verify 
+			
+			// verify,  debug only 
 			for(Gallery gallery:galleries) {
 				System.out.println("galleryId: "+gallery.getId());
 			}
@@ -166,6 +175,9 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     		
     		MyPropertyUtil.copySimpleProperties(po, to);
     		// TODO image/thumb
+    		
+    		
+
     		
     		
     		Set<Gallery> galleries = to.getGalleries();

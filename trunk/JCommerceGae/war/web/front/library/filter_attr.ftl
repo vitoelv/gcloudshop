@@ -1,13 +1,13 @@
-<#if filter_attr_list??>
+<#if  filterAttrList??  >
 <div class="box">
  <div class="box_1">
-  <h3><span>${filter_attr_name}</span></h3>
+  <h3><span>${filterAttrName}</span></h3>
   <div class="boxCenterList RelaArticle">
-    <#list filter_attr_list as attr>
-    <#if attr.selected>
-    <a href="${attr.url}">${attr.value}<#if attr.goodsNum??>(${attr.goodsNum})</#if></a><br />
+    <#list filterAttrList as attr>
+    <#if  attr.selected??  >
+    <a href="${attr.url}">${attr.attrValue}<#if  attr.goodsNum??  >(${attr.goodsNum})</#if></a><br />
     <#else>
-    <a href="${attr.url}">${attr.value}<#if attr.goodsNum??>(${attr.goodsNum})</#if></a><br />
+    <a href="${attr.url}">${attr.attrValue}<#if  attr.goodsNum??  >(${attr.goodsNum})</#if></a><br />
     </#if>
     </#list>
   </div>

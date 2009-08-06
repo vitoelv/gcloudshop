@@ -144,9 +144,9 @@ public class BrandListPanel extends ContentWidget {
         List<ColumnConfig> columns = new ArrayList<ColumnConfig>();
         //CheckBoxSelectionModel<BeanObject> sm = new CheckBoxSelectionModel<BeanObject>();
         //columns.add(sm.getColumn());        
-        columns.add(new ColumnConfig(IBrand.NAME, "品牌名称", 80));
+        columns.add(new ColumnConfig(IBrand.BRAND_NAME, "品牌名称", 80));
         columns.add(new ColumnConfig(IBrand.SITE, "品牌网址", 150));
-        columns.add(new ColumnConfig(IBrand.DESC, "品牌描述", 230));
+        columns.add(new ColumnConfig(IBrand.BRAND_DESC, "品牌描述", 230));
         columns.add(new ColumnConfig(IBrand.ORDER, "排序", 50));
         columns.add(new CheckColumnConfig(IBrand.SHOW, "是否显示", 80));
         ColumnConfig actcol = new ColumnConfig("Action", "操作", 140);

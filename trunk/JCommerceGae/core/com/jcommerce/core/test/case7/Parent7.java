@@ -1,14 +1,13 @@
 package com.jcommerce.core.test.case7;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+
+import com.google.appengine.api.datastore.Blob;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Parent7 {
@@ -23,6 +22,9 @@ public class Parent7 {
     
     @Persistent
 	private String name;
+    
+    @Persistent
+    private Blob content;
    
     @Persistent
 	private String child7Id;
@@ -80,6 +82,14 @@ public class Parent7 {
 
 	public void setChild7Id(String child7Id) {
 		this.child7Id = child7Id;
+	}
+
+	public Blob getContent() {
+		return content;
+	}
+
+	public void setContent(Blob content) {
+		this.content = content;
 	}
 
 

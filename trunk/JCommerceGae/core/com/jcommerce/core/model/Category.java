@@ -4,6 +4,9 @@
 
 package com.jcommerce.core.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -17,6 +20,10 @@ public class Category extends ModelObject {
     public ModelObject getParent() {
     	return null;
     }
+    
+    private String url;
+    private Set<Category> children = new HashSet<Category>();
+    
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
@@ -241,4 +248,20 @@ public class Category extends ModelObject {
     public String getKeyName() {
     	return keyName;
     }
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public Set<Category> getChildren() {
+		return children;
+	}
+
+	public void setChildren(Set<Category> children) {
+		this.children = children;
+	}
 }

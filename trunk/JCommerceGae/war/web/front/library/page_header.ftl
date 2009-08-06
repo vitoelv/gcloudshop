@@ -1,41 +1,42 @@
 <script type="text/javascript">
-var process_request = "<@s.text name="process_request"/>";
+var process_request = "${lang.processRequest}";
 </script>
 <div class="block clearfix">
- <div class="f_l"><a href="index.action" name="top"><img src="${template_root}/images/logo.gif" /></a></div>
+ <div class="f_l"><a href="../index.action" name="top"><img src="../images/logo.gif" /></a></div>
  <div class="f_r log">
    <ul>
    <li class="userInfo">
-<script type="text/javascript" src="js/transport.js"></script>
+   <script type="text/javascript" src="js/transport.js"></script>
 <script type="text/javascript" src="js/utils.js"></script>
-   <font id="ECS_MEMBERZONE">
-<#include "member_info.ftl">
-   </font>
+
+   <font id="ECS_MEMBERZONE"><#include "member_info.ftl"> </font>
    </li>
-   <#if navigator_list.top??>
+	 <#if  navigatorList.top??  >
    <li id="topNav" class="clearfix">
-    <#list navigator_list.top as nav>
-            <a href="${nav.url}" <#if nav.opennew> target="_blank" </#if>>${nav.name}</a>
-            <#if nav_has_next>
+    <#list navigatorList.top as nav>
+            <a href="${nav.url}" <#if  nav.opennew  ==  1  > target="_blank" </#if>>${nav.name}</a>
+            <#if  nav_has_next??  >
              |
             </#if>
     </#list>
     <div class="topNavR"></div>
    </li>
-   </#if>
+	 </#if>
    </ul>
  </div>
 </div>
 <div  class="blank"></div>
 <div id="mainNav" class="clearfix">
-  <#list navigator_list.middle as nav>
-  <a href="${nav.url}" <#if nav.opennew>target="_blank" </#if> <#if nav.active> class="cur"</#if>>${nav.name}<span></span></a>
-  </#list>
+  <a href="../index.action"<#if  navigatorList.config.index  ==  1  > class="cur"</#if>>${lang.home}<span></span></a>
+  <#list navigatorList.middle as nav>
+  <a href="${nav.url}" <#if  nav.opennew  ==  1  >target="_blank" </#if> <#if  nav.active  ==  1  > class="cur"</#if>>${nav.name}<span></span></a>
+ </#list>
 </div>
 <!--search start-->
 <div id="search"  class="clearfix">
   <div class="keys f_l">
    <script type="text/javascript">
+    {literal}
     <!--
     function checkSearchForm()
     {
@@ -46,13 +47,14 @@ var process_request = "<@s.text name="process_request"/>";
         else
         {
             alert("请输入搜索关键词！");
-            return false;
+						return false;
         }
     }
     -->
+    
     </script>
-   <#if searchkeywords??>
-   <@s.text name="hot_search"/> ：
+    <#if  searchkeywords??  >
+   ${lang.hotSearch} ：
    <#list searchkeywords as val>
    <a href="search.action?keywords=${val}">${val}</a>
    </#list>
@@ -60,14 +62,12 @@ var process_request = "<@s.text name="process_request"/>";
   </div>
   <form id="searchForm" name="searchForm" method="get" action="search.action" onSubmit="return checkSearchForm()" class="f_r"  style="_position:relative; top:5px;">
    <select name="category" id="category" class="B_input">
-      <option value="0"><@s.text name="all_category"/></option>
-      <#list category_list as category>
-      <option value="${category.id}">${category.name}</option>
-      </#list>
+      <option value="0">${lang.allCategory}</option>
+      ${categoryList}
     </select>
-   <input name="keywords" type="text" id="keyword" value="${search_keywords}" class="B_input" style="width:110px;"/>
+   <input name="keywords" type="text" id="keyword" value="${searchKeywords}" class="B_input" style="width:110px;"/>
    <input name="imageField" type="submit" value="" class="go" style="cursor:pointer;" />
-   <a href="search.action?act=advanced_search"><@s.text name="advanced_search"/></a>
+   <a href="search.action?act=advanced_search">${lang.advancedSearch}</a>
    </form>
 </div>
 <!--search end-->

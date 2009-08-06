@@ -3,8 +3,8 @@
   <div class="top10Tit"></div>
   <div class="top10List">
    <ul>
-    <#list topList as goods>
-    <li><img src="../images/top_{$smarty.foreach.top_goods.iteration}.gif" /> <a href="goods.action?id=${goods.id}" title="${goods.goodsName}">${goods.goodsName}</a></li>
+    <#list topGoods as goods>
+    <li><img src="../images/top_${smarty.foreach.topGoods.iteration}.gif" /> <a href="${goods.url}" title="${goods.name?html}">${goods.shortName}</a></li>
     </#list>
    </ul>
   </div>

@@ -1,60 +1,46 @@
 <!--翻页 start-->
-<form name="selectPageForm" action="{$smarty.server.PHP_SELF}" method="get">
-<!-- {if $pager.styleid eq 0 } -->
+<form name="selectPageForm" action="${smarty.server.PHP_SELF}" method="get">
+<#if  pager.styleid  ==  0  >
 <div id="pager">
-  {$lang.pager_1}{$pager.record_count}{$lang.pager_2}{$lang.pager_3}{$pager.page_count}{$lang.pager_4} <span> <a href="{$pager.page_first}">{$lang.page_first}</a> <a href="{$pager.page_prev}">{$lang.page_prev}</a> <a href="{$pager.page_next}">{$lang.page_next}</a> <a href="{$pager.page_last}">{$lang.page_last}</a> </span>
-    <!--{foreach from=$pager.search key=key item=item}-->
-      {if $key eq 'keywords'}
-          <input type="hidden" name="{$key}" value="{$item|escape:decode_url}" />
-        {else}
-          <input type="hidden" name="{$key}" value="{$item}" />
-      {/if}
-    <!--{/foreach}-->
+  ${lang.pager_1}${pager.recordCount}${lang.pager_2}${lang.pager_3}${pager.pageCount}${lang.pager_4} <span> <a href="${pager.pageFirst}">${lang.pageFirst}</a> <a href="${pager.pagePrev}">${lang.pagePrev}</a> <a href="${pager.pageNext}">${lang.pageNext}</a> <a href="${pager.pageLast}">${lang.pageLast}</a> </span>
+    <#list  as >
+    <input type="hidden" name="${key}" value="${item}" />
+    </#list>
     <select name="page" id="page" onchange="selectPage(this)">
-    {html_options options=$pager.array selected=$pager.page}
+    TODO: htmlOptions CLAUSE
     </select>
 </div>
-<!--{else}-->
+<#else>
 
 <!--翻页 start-->
  <div id="pager" class="pagebar">
-  <span class="f_l f6" style="margin-right:10px;">{$lang.pager_1}<b>{$pager.record_count}</b> {$lang.pager_2}</span>
-  <!-- {if $pager.page_first} --><a href="{$pager.page_first}">{$lang.page_first} ...</a><!-- {/if} -->
-  <!-- {if $pager.page_prev} --><a class="prev" href="{$pager.page_prev}">{$lang.page_prev}</a><!-- {/if} -->
-  <!-- {if $pager.page_count neq 1} -->
-    <!--{foreach from=$pager.page_number key=key item=item}-->
-      <!-- {if $pager.page eq $key} -->
-      <span class="page_now">{$key}</span>
-      <!-- {else} -->
-      <a href="{$item}">[{$key}]</a>
-      <!-- {/if} -->
-    <!--{/foreach}-->
-  <!-- {/if} -->
+  <span class="f_l f6" style="margin-right:10px;">${lang.pager_1}<b>${pager.recordCount}</b> ${lang.pager_2}</span>
+  <#if  pager.pageFirst??  ><a href="${pager.pageFirst}">${lang.pageFirst} ...</a></#if>
+  <#if  pager.pagePrev??  ><a class="prev" href="${pager.pagePrev}">${lang.pagePrev}</a></#if>
+  <#if  pager.pageCount  !=  1  >
+    <#list  as >
+      <#if  pager.page  ==  key??  >
+      <span class="page_now">${key}</span>
+      <#else>
+      <a href="${item}">[${key}]</a>
+      </#if>
+    </#list>
+  </#if>
 
-  <!-- {if $pager.page_next} --><a class="next" href="{$pager.page_next}">{$lang.page_next}</a><!-- {/if} -->
-  <!-- {if $pager.page_last} --><a class="last" href="{$pager.page_last}">...{$lang.page_last}</a><!-- {/if} -->
-  <!-- {if $pager.page_kbd} -->
-    <!--{foreach from=$pager.search key=key item=item}-->
-      {if $key eq 'keywords'}
-          <input type="hidden" name="{$key}" value="{$item|escape:decode_url}" />
-        {else}
-          <input type="hidden" name="{$key}" value="{$item}" />
-      {/if}
-    <!--{/foreach}-->
+  <#if  pager.pageNext??  ><a class="next" href="${pager.pageNext}">${lang.pageNext}</a></#if>
+  <#if  pager.pageLast??  ><a class="last" href="${pager.pageLast}">...${lang.pageLast}</a></#if>
+  <#if  pager.pageKbd??  >
+    <#list  as >
+    <input type="hidden" name="${key}" value="${item}" />
+    </#list>
     <kbd style="float:left; margin-left:8px; position:relative; bottom:3px;"><input type="text" name="page" onkeydown="if(event.keyCode==13)selectPage(this)" size="3" class="B_blue" /></kbd>
-    <!-- {/if} -->
+    </#if>
 </div>
 <!--翻页 END-->
 
-<!-- {/if} -->
+</#if>
 </form>
 <script type="Text/Javascript" language="JavaScript">
 <!--
 {literal}
-function selectPage(sel)
-{
-  sel.form.submit();
-}
-{/literal}
-//-->
 </script>

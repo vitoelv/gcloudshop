@@ -2,13 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="Keywords" content="{$keywords}" />
-<meta name="Description" content="{$description}" />
-<title>{$page_title}</title>
+<meta name="Keywords" content="${keywords}" />
+<meta name="Description" content="${description}" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>${pageTitle}</title>
+<!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="icon" href="animated_favicon.gif" type="image/gif" />
-<link href="${template_root}/style.css" rel="stylesheet" type="text/css" />
+<link href="style.css" rel="stylesheet" type="text/css" />
+
 <script type="text/javascript" src="js/common.js"></script>
+
 <script type="text/javascript">
 function $(element) {
   return document.getElementById(element);
@@ -55,11 +59,10 @@ function reg(str){
 <#include "library/goods_fittings.ftl">
 <#include "library/goods_article.ftl">
 <#include "library/goods_attrlinked.ftl">
-
+<!-- TemplateEndEditable -->
 <!-- TemplateBeginEditable name="左边广告区域（宽200px）" -->
 <!-- TemplateEndEditable -->
     <!--AD end-->
-    
     <#include "library/history.ftl">
   </div>
   <!--left end-->
@@ -69,208 +72,172 @@ function reg(str){
    <div id="goodsInfo" class="clearfix">
      <!--商品图片和相册 start-->
      <div class="imgInfo">
-     <#if pictures??>
-     <a href="javascript:;" onclick="window.open('gallery.action?id=${goods.id}'); return false;">
-      <img src="${goods.image}" alt="${goods.name}"/>
+     <#if  pictures??  >
+     <a href="javascript:;" onclick="window.open('gallery.action?id=${goods.goodsId}'); return false;">
+      <img src="${goods.goodsImg}" alt="${goods.goodsName?html}"/>
      </a>
-         <#else>
-         <img src="${goods.image}" alt="${goods.name}"/>
-         </#if>
+		 <#else>
+		 <img src="${goods.goodsImg}" alt="${goods.goodsName?html}"/>
+		 </#if>
      <div class="blank5"></div>
      <!--相册 START-->
      <#include "library/goods_gallery.ftl">
      <!--相册 END-->
-         <div class="blank5"></div>
-         <!-- TemplateBeginEditable name="商品相册下广告（宽230px）" -->
+		 <div class="blank5"></div>
+		 <!-- TemplateBeginEditable name="商品相册下广告（宽230px）" -->
      <!-- TemplateEndEditable -->
      </div>
      <!--商品图片和相册 end-->
      <div class="textInfo">
-     <form action="javascript:addToCart(${goods.id})" method="post" name="ECS_FORMBUY" id="ECS_FORMBUY" >
-		 <div class="clearfix">
-      <p class="f_l">${goods.nameStyle}</p>
-      <p class="f_r">
-      <#if prev_good??>
-      <a href="goods.action?id=${prev_good.id}"><img alt="prev" src="${template_root}/images/up.gif" /></a>
-      </#if>
-      <#if next_good??>
-      <a href="goods.action?id=${next_good.id}"><img alt="next" src="${template_root}/images/down.gif" /></a>
-      </#if>
-      </p>
-			</div>
+     <form action="javascript:addToCart('${goods.goodsId}')" method="post" name="ECS_FORMBUY" id="ECS_FORMBUY" >
+      <p>${goods.goodsStyleName}</p>
       <ul>
-       <#if promotion??>
+       <#if  promotion??  >
       <li class="padd">
-      <#list promotion as item><!-- 优惠活动-->
-      <@s.text name="activity"/>
-      <#if item.type == "snatch">
-      <a href="snatch.action" title="<@s.text name="snatch"/>" style="font-weight:100; color:#006bcd; text-decoration:none;">[<@s.text name="snatch"/>]</a>
+      <#list promotion as item>
+      ${lang.activity}
+      <#if  item.type  ==  "snatch"  >
+      <a href="snatch.action" title="${lang.snatch}" style="font-weight:100; color:#006bcd; text-decoration:none;">[${lang.snatch}]</a>
+      <#elseif  item.type  ==  "groupBuy"  >
+      <a href="group_buy.action" title="${lang.groupBuy}" style="font-weight:100; color:#006bcd; text-decoration:none;">[${lang.groupBuy}]</a>
+      <#elseif  item.type  ==  "auction"  >
+      <a href="auction.action" title="${lang.auction}" style="font-weight:100; color:#006bcd; text-decoration:none;">[${lang.auction}]</a>
+      <#elseif  item.type  ==  "favourable"  >
+      <a href="activity.action" title="${lang.favourable}" style="font-weight:100; color:#006bcd; text-decoration:none;">[${lang.favourable}]</a>
       </#if>
-      <#if item.type == "group_buy">
-      <a href="group_buy.action" title="<@s.text name="group_buy"/>" style="font-weight:100; color:#006bcd; text-decoration:none;">[<@s.text name="group_buy"/>]</a>
-      </#if>
-      <#if item.type == "auction">
-      <a href="auction.action" title="<@s.text name="auction"/>" style="font-weight:100; color:#006bcd; text-decoration:none;">[<@s.text name="auction"/>]</a>
-      </#if>
-      <#if item.type == "favourable">
-      <a href="activity.action" title="<@s.text name="favourable"/>" style="font-weight:100; color:#006bcd; text-decoration:none;">[<@s.text name="favourable"/>]</a>
-      </#if>
-      <a href="${item.url}" title="<@s.text name="item.type"/> ${item.act_name}${item.time}" style="font-weight:100; color:#006bcd;"><@s.text name="act_name"/></a><br />
+      <a href="${item.url}" title="${lang.item.type} ${item.actName}${item.time}" style="font-weight:100; color:#006bcd;">${item.actName}</a><br />
       </#list>
       </li>
       </#if>
       <li class="clearfix">
        <dd>
-       
-       <#if cfg?? && cfg.show_goodssn??>
-       <strong><@s.text name="goods_sn"/></strong>${goods.sn}
+       <#if  cfg.showGoodssn??  >
+       <strong>${lang.goodsSn}</strong>${goods.goodsSn}
        </#if>
        </dd>
        <dd class="ddR">
-       <#if goods.number??><!-- and $cfg.show_goodsnumber} 商品库存-->
-        <#if goods.number == 0>
-          <strong><@s.text name="goods_number"/></strong>
-          <font color='red'><@s.text name="stock_up"/></font>
+       <#if  cfg.showGoodsnumber??  >
+        <#if  goods.goodsNumber  ==  0  >
+          <strong>${lang.goodsNumber}</strong>
+          <font color='red'>${lang.stockUp}</font>
         <#else>
-          <strong><@s.text name="goods_number"/></strong>
-          ${goods.number} {goods.measureUnit}
+          <strong>${lang.goodsNumber}</strong>
+          ${goods.goodsNumber} ${goods.measureUnit}
         </#if>
       </#if>
        </dd>
       </li>
       <li class="clearfix">
        <dd>
-       <#if goods.brand??><!-- and $cfg.show_brand} 显示商品品牌-->
-       <strong><@s.text name="goods_brand"/></strong><a href="${goods.brand.siteUrl}" >${goods.brand.name}</a>
+       <#if  goods.goodsBrand  !=  ""  &&  cfg.showBrand??  >
+       <strong>${lang.goodsBrand}</strong><a href="${goods.goodsBrandUrl}" >${goods.goodsBrand}</a>
        </#if>
        </dd>
        <dd class="ddR">
-       <!-- {if $cfg.show_goodsweight} 商品重量-->
-       <strong><@s.text name="goods_weight"/></strong>${goods.weight}
-       <!-- {/if} -->
+       <#if  cfg.showGoodsweight??  >
+       <strong>${lang.goodsWeight}</strong>${goods.goodsWeight}
+       </#if>
        </dd>
       </li>
       <li class="clearfix">
        <dd>
-       <!-- {if $cfg.show_addtime} 上架时间-->
-      <strong><@s.text name="add_time"/></strong>${goods.addTime}
-      <!-- {/if} -->
+       <#if  cfg.showAddtime??  >
+      <strong>${lang.addTime}</strong>${goods.addTime}
+      </#if>
        </dd>
        <dd class="ddR">
        <!--点击数-->
-       <strong><@s.text name="goods_click_count"/>：</strong>${goods.clickCount}
+       <strong>${lang.goodsClickCount}：</strong>${goods.clickCount}
        </dd>
       </li>
       <li class="clearfix">
        <dd class="ddL">
-       <!-- {if $cfg.show_marketprice} 市场价格-->
-       <strong><@s.text name="market_price"/></strong><font class="market">${goods.marketPrice}</font><br />
-       <!-- {/if} -->
-       <!--本店售价-->
-       <strong><@s.text name="shop_price"/></strong><font class="shop" id="ECS_SHOPPRICE">${goods.shopPrice}</font><br />
-       <#if rand_prices??>
-       <#list rank_prices as rank_price><!-- 会员等级对应的价格-->
-       <strong>${rank_price.name}：</strong><font class="shop" id="ECS_RANKPRICE_${rank_price.id}">${rank_price.price}</font><br />
-       </#list>
+       <#if  cfg.showMarketprice??  >
+       <strong>${lang.marketPrice}</strong><font class="market">${goods.marketPrice}</font><br />
        </#if>
+       <!--本店售价-->
+       <strong>${lang.shopPrice}</strong><font class="shop" id="ECS_SHOPPRICE">${goods.shopPriceFormated}</font><br />
+       <#list rankPrices as rankPrice>
+       <strong>${rankPrice.rankName}：</strong><font class="shop" id="ECS_RANKPRICE_${key}">${rankPrice.price}</font><br />
+       </#list>
        </dd>
        <dd style="width:48%; padding-left:7px;">
-       <strong><@s.text name="goods_rank"/></strong>
-      <img src="${template_root}/images/stars{$goods.commentRank}.gif" alt="comment rank {goods.commentRank}" />
+       <strong>${lang.goodsRank}</strong>
+      <img src="images/stars${goods.commentRank}.gif" alt="comment rank ${goods.commentRank}" />
        </dd>
       </li>
+      <#if  goods.isPromote??  &&  goods.gmtEndTime??  >
+      <script type="text/javascript" src="js/lefttime.js"></script>
 
-      <#if volume_price_list??>
-      <li class="padd">
-       <font class="f1"><@s.text name="volume_price"/>：</font><br />
-			 <table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#aad6ff">
-				<tr>
-					<td align="center" bgcolor="#FFFFFF"><strong><@s.text name="number_to"/></strong></td>
-					<td align="center" bgcolor="#FFFFFF"><strong>优惠价格</strong></td>
-				</tr>
-				<#list volume_price_list as price_list>
-				<tr>
-					<td align="center" bgcolor="#FFFFFF" class="shop">${price_list.number}</td>
-					<td align="center" bgcolor="#FFFFFF" class="shop">${price_list.price}</td>
-				</tr>
-				</#list>
-	     </table>
-      </li>
-      </#if>
-
-      <#if goods.promoted && goods.gmtEndTime><!-- 促销-->
-<script type="text/javascript" src="js/lefttime.js"></script>
       <li class="padd loop" style="margin-bottom:5px; border-bottom:1px dashed #ccc;">
-      <strong><@s.text name="promote_price"/></strong><font class="shop">${goods.promotePrice}</font><br />
-      <strong><@s.text name="residual_time"/></strong>
-      <font class="f4" id="leftTime"><@s.text name="please_waiting"/></font><br />
+      <strong>${lang.promotePrice}</strong><font class="shop">${goods.promotePrice}</font><br />
+      <strong>${lang.residualTime}</strong>
+      <font class="f4" id="leftTime">${lang.pleaseWaiting}</font><br />
       </li>
       </#if>
       <li class="clearfix">
        <dd>
-       <strong><@s.text name="amount"/>：</strong><font id="ECS_GOODS_AMOUNT" class="shop"></font>
+       <strong>${lang.amount}：</strong><font id="ECS_GOODS_AMOUNT" class="shop"></font>
        </dd>
        <dd class="ddR">
-       <#if goods.giveIntegral != 0><!-- 购买此商品赠送积分-->
-        <strong><@s.text name="goods_give_integral"/></strong><font class="f4">${goods.giveIntegral} ${pointsName}</font>
+       <#if  (goods.giveIntegral  >  0)  >
+        <strong>${lang.goodsGiveIntegral}</strong><font class="f4">${goods.giveIntegral} ${pointsName}</font>
         </#if>
        </dd>
       </li>
-      <#if goods.bonusType??><!-- 红包-->
+      <#if  goods.bonusMoney??  >
       <li class="padd loop" style="margin-bottom:5px; border-bottom:1px dashed #ccc;">
-      <strong><@s.text name="goods_bonus"/></strong><font class="shop">${goods.bonusType.money}</font><br />
+      <strong>${lang.goodsBonus}</strong><font class="shop">${goods.bonusMoney}</font><br />
       </li>
       </#if>
       <li class="clearfix">
        <dd>
-       <strong><@s.text name="number"/>：</strong>
+       <strong>${lang.number}：</strong>
         <input name="number" type="text" id="number" value="1" size="4" onblur="changePrice()" style="border:1px solid #ccc; "/>
        </dd>
        <dd class="ddR">
-       <#if 0 < goods.integral > <!-- 购买此商品可使用积分-->
-       <strong><@s.text name="goods_integral"/></strong><font class="f4">${goods.integral} ${pointsName}</font>
+       <#if  (goods.integral  >  0)  >
+       <strong>${lang.goodsIntegral}</strong><font class="f4">${goods.integral} ${pointsName}</font>
        </#if>
        </dd>
       </li>
-      <!-- {* 开始循环所有可选属性 *} -->
-      <#if specification??>
+      
       <#list specification as spec>
       <li class="padd loop">
       <strong>${spec.name}:</strong><br />
-        <!-- {* 判断属性是复选还是单选 *} -->
-                    <#if spec.attrType == 1>
-                      <#if cfg.goodsattrStyle == 1>
+        
+                    <#if  spec.attrType  ==  1  >
+                      <#if  cfg.goodsattrStyle  ==  1  >
                         <#list spec.values as value>
                         <label for="spec_value_${value.id}">
-                        <input type="radio" name="spec_${spec_key}" value="${value.id}" id="spec_value_${value.id}" <#if value_index == 0>checked</#if> onclick="changePrice()" />
-                        ${value.label} [<#if 0 < value.price><@s.text name="plus"/><#else><#if value.price < 0><@s.text name="minus"/></#if></#if> ${value.formatPrice}] </label><br />
+                        <input type="radio" name="spec_${specKey}" value="${value.id}" id="spec_value_${value.id}" <#if  key  ==  0  >checked</#if> onclick="changePrice()" />
+                        ${value.label} [<#if  value.price  >  0  >${lang.plus}<#elseif  value.price  <  0  >${lang.minus}</#if> ${value.formatPrice|abs}] </label><br />
                         </#list>
-                        <input type="hidden" name="spec_list" value="{$key}" />
+                        <input type="hidden" name="spec_list" value="${key}" />
                         <#else>
-                        <select name="spec_${spec_key}" onchange="changePrice()">
+                        <select name="spec_${specKey}" onchange="changePrice()">
                           <#list spec.values as value>
-                          <option label="${value.label}" value="${value.id}">${value.label} <#if 0 < value.price><@s.text name="plus"/><#else><#if value.price < 0><@s.text name="minus"/></#if></#if><#if value.price != 0>${value.formatPrice}</#if></option>
+                          <option label="${value.label}" value="${value.id}">${value.label} <#if  value.price  >  0  >${lang.plus}<#elseif  value.price  <  0  >${lang.minus}</#if><#if  value.price  !=  0  >${value.formatPrice}</#if></option>
                           </#list>
                         </select>
-                        <input type="hidden" name="spec_list" value="{$key}" />
+                        <input type="hidden" name="spec_list" value="${key}" />
                       </#if>
                     <#else>
                       <#list spec.values as value>
                       <label for="spec_value_${value.id}">
-                      <input type="checkbox" name="spec_${spec_key}" value="${value.id}" id="spec_value_${value.id}" onclick="changePrice()" />
-                      ${value.label} [<#if 0 < value.price><@s.text name="plus"/><#else><#if value.price < 0><@s.text name="minus"/></#if></#if> ${value.formatPrice}] </label><br />
+                      <input type="checkbox" name="spec_${specKey}" value="${value.id}" id="spec_value_${value.id}" onclick="changePrice()" />
+                      ${value.label} [<#if  value.price  >  0  >${lang.plus}<#elseif  value.price  <  0  >${lang.minus}</#if> ${value.formatPrice|abs}] </label><br />
                       </#list>
-                      <input type="hidden" name="spec_list" value="${value_index}" />
+                      <input type="hidden" name="spec_list" value="${key}" />
                     </#if>
       </li>
       </#list>
-      </#if>
-      <!-- {* 结束循环可选属性 *} -->
+      
       <li class="padd">
-      <a href="javascript:addToCart(${goods.id})"><img src="${template_root}/images/bnt_cat.gif" /></a>
-      <a href="javascript:collect(${goods.id})"><img src="${template_root}/images/bnt_colles.gif" /></a>
-      <#if affiliate?? && affiliate.on>
-      <a href="user.action?act=affiliate&goodsid=${goods.id}" style="position:relative;left:10px; bottom:15px;">将此商品推荐给朋友</a>
+      <a href="javascript:addToCart('${goods.goodsId}')"><img src="images/bnt_cat.gif" /></a>
+      <a href="javascript:collect(${goods.goodsId})"><img src="images/bnt_colles.gif" /></a>
+      <#if  affiliate.on??  >
+      <a href="user.action?act=affiliate&goodsid=${goods.goodsId}" style="position:relative;left:10px; bottom:15px;">将此商品推荐给朋友</a>
       </#if>
       </li>
       </ul>
@@ -284,61 +251,33 @@ function reg(str){
      <div class="box_1">
       <h3 style="padding:0 5px;">
         <div id="com_b" class="history clearfix">
-        <h2><@s.text name="goods_brief"/></h2>
-        <h2 class="h2bg"><@s.text name="goods_attr"/></h2>
-        <#if package_goods_list??>
-        <h2 class="h2bg" style="color:red;"><@s.text name="remark_package"/></h2>
-        </#if>
+        <h2>${lang.goodsBrief}</h2>
+        <h2 class="h2bg">${lang.goodsAttr}</h2>
         </div>
       </h3>
       <div id="com_v" class="boxCenterList RelaArticle"></div>
       <div id="com_h">
+
        <blockquote>
-        ${goods.description}
+        ${goods.goodsDesc}
        </blockquote>
 
+
      <blockquote>
-     <#if properties??>
       <table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#dddddd">
-        <#list properties as property_group>
+        <#list properties as propertyGroup>
         <tr>
-          <th colspan="2" bgcolor="#FFFFFF">${property_group_index}</th>
+          <th colspan="2" bgcolor="#FFFFFF">${key}</th>
         </tr>
-        <#list property_group as property>
+        <#list propertyGroup as property>
         <tr>
-          <td bgcolor="#FFFFFF" align="left" width="30%" class="f1">[${property.name}]</td>
-          <td bgcolor="#FFFFFF" align="left" width="70%">${property.value}</td>
+          <td bgcolor="#FFFFFF" align="left" width="30%" class="f1">[${property.name?html}]</td>
+          <td bgcolor="#FFFFFF" align="left" width="70%">${property.value?html}</td>
         </tr>
         </#list>
         </#list>
       </table>
-     </#if>
      </blockquote>
-
-     <#if package_goods_list??>
-     <blockquote>
-       <#list package_goods_list as package_goods>
-			  <strong>${package_goods.act_name}</strong><br />
-        <table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#dddddd">
-				<tr>
-					<td bgcolor="#FFFFFF">
-					<#list package_goods.goods_list as goods_list>
-					<a href="goods.action?id=${goods_list.id}" target="_blank"><font class="f1">${goods_list.name}</font></a> &nbsp;&nbsp;X ${goods_list.number}<br />
-					</#list>
-					</td>
-					<td bgcolor="#FFFFFF">
-					<strong><@s.text name="old_price"/></strong><font class="market">{$package_goods.subtotal}</font><br />
-          <strong><@s.text name="package_price"/></strong><font class="shop">{$package_goods.package_price}</font><br />
-          <strong><@s.text name="then_old_price"/></strong><font class="shop">{$package_goods.saving}</font><br />
-					</td>
-					<td bgcolor="#FFFFFF">
-					<a href="javascript:addPackageToCart(${package_goods.act_id})" style="background:transparent"><img src="${template_root}/images/bnt_buy_1.gif" alt="<@s.text name="add_to_cart"/>" /></a>
-					</td>
-				</tr>
-	    </table>
-       </#list>
-     </blockquote>
-     </#if>
 
       </div>
      </div>
@@ -349,7 +288,6 @@ function reg(str){
     //-->
     </script>
   <div class="blank"></div>
-  <!---------------------------------------------------------------->
   <!--商品描述，商品属性 END-->
   <!-- TemplateBeginEditable name="右边可编辑区域" -->
 <#include "library/goods_tags.ftl">
@@ -371,15 +309,15 @@ function reg(str){
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<#if img_links?? || txt_links??>
+<#if  imgLinks??  ||  txtLinks??  >
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
-    <#list img_links as link>
+    <#list imgLinks as link>
     <a href="${link.url}" target="_blank" title="${link.name}"><img src="${link.logo}" alt="${link.name}" border="0" /></a>
     </#list>
-    <#if txt_links??>
-    <#list txt_links as link>
+    <#if  txtLinks??  >
+    <#list txtLinks as link>
     [<a href="${link.url}" target="_blank" title="${link.name}">${link.name}</a>]
     </#list>
     </#if>
@@ -392,22 +330,20 @@ function reg(str){
 <#include "library/page_footer.ftl">
 </body>
 <script type="text/javascript">
-var goods_id = ${goods.id};
-var goodsattr_style = {$cfg.goodsattr_style|default:1};
-var gmt_end_time = {$promote_end_time};
-<#if goods_js??>
-<#list goods_js as item>
-var ${item_index} = "${item}";
+var goods_id = ${goodsId};
+var goodsattr_style = ${cfg.goodsattrStyle};
+var gmt_end_time = ${promoteEndTime};
+<#list lang.goodsJs as item>
+var ${key} = "${item}";
 </#list>
-</#if>
-var goodsId = ${goods.id};
-var now_time = ${now_time};
+var goodsId = ${goodsId};
+var now_time = ${nowTime};
 
-<!-- {literal} -->
+{literal}
 onload = function(){
   changePrice();
   fixpng();
-  try { onload_leftTime(); }
+  try {onloadLeftTime();}
   catch (e) {}
 }
 
@@ -439,6 +375,6 @@ function changePriceResponse(res)
       document.getElementById('ECS_GOODS_AMOUNT').innerHTML = res.result;
   }
 }
-<!-- {/literal} -->
+
 </script>
 </html>

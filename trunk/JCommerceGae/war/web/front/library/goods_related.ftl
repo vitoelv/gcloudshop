@@ -1,17 +1,17 @@
-<#if related_goods??>
+<#if  relatedGoods??  >
 <div class="box">
      <div class="box_1">
-      <h3><span><@s.text name="releate_goods"/></span></h3>
+      <h3><span>${lang.releateGoods}</span></h3>
       <div class="boxCenterList clearfix">
-      <#list related_goods as releated_goods_data>
+      <#list relatedGoods as releatedGoodsData>
         <ul class="clearfix">
-          <li class="goodsimg"><a href="goods.action?id=${releated_goods_data.id}"><img src="${releated_goods_data.thumb}" alt="${releated_goods_data.name}" class="B_blue" /></a></li>
+          <li class="goodsimg"><a href="${releatedGoodsData.url}"><img src="${releatedGoodsData.goodsThumb}" alt="${releatedGoodsData.goodsName}" class="B_blue" /></a></li>
           <li>
-        <a href="goods.action?id=${releated_goods_data.id}" title="${releated_goods_data.name}">${releated_goods_data.name}</a><br />
-        <#if releated_goods_data.promotePrice != 0>
-        <@s.text name="promote_price"/><font class="f1">${releated_goods_data.promotePrice}</font>
+        <a href="${releatedGoodsData.url}" title="${releatedGoodsData.goodsName}">${releatedGoodsData.shortName}</a><br />
+        <#if  releatedGoodsData.promotePrice  !=  0  >
+        ${lang.promotePrice}<font class="f1">${releatedGoodsData.formatedPromotePrice}</font>
         <#else>
-        <@s.text name="shop_price"/><font class="f1">${releated_goods_data.shopPrice}</font>
+        ${lang.shopPrice}<font class="f1">${releatedGoodsData.shopPrice}</font>
         </#if>
           </li>
         </ul>

@@ -173,8 +173,8 @@ public class TestBulkLoader extends BaseDAOTestCase {
 			
 			Brand b = new Brand();
 //			b.setId(getEncodedId(Brand.class, bkn1));
-			b.setName("微软");
-			b.setDescription("microsoft");			 
+			b.setBrandName("微软");
+			b.setBrandDesc("microsoft");			 
 //			b.setKeyName(bkn1);
 			manager.txadd(b);
 			bkn1 = b.getKeyName();
@@ -182,8 +182,8 @@ public class TestBulkLoader extends BaseDAOTestCase {
 			
 			b = new Brand();
 //			b.setId(getEncodedId(Brand.class, bkn2));
-			b.setName("诺基亚");
-			b.setDescription("nokia");			 
+			b.setBrandName("诺基亚");
+			b.setBrandDesc("nokia");			 
 //			b.setKeyName(bkn1);
 			manager.txadd(b);
 			bkn2 = b.getKeyName();
@@ -223,8 +223,8 @@ public class TestBulkLoader extends BaseDAOTestCase {
 			manager.txadd(a);
 			
 			Brand b = new Brand();
-			b.setName("微软");
-			b.setDescription("microsoft");			 
+			b.setBrandName("微软");
+			b.setBrandDesc("microsoft");			 
 			manager.txadd(b);
 			
 			Category c = new Category();

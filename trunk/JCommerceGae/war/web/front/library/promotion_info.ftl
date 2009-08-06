@@ -1,20 +1,20 @@
-<#if promotion_info??>
+<#if  promotionInfo??  >
 <!-- 促销信息 -->
 <div class="box">
  <div class="box_1">
-  <h3><span><@s.text name="promotion_info"/></span></h3>
+  <h3><span>${lang.promotionInfo}</span></h3>
   <div class="boxCenterList RelaArticle">
-    <#list promotion_info as item>
-    <#if item.type == "snatch">
-    <a href="snatch.action" ><@s.text name="snatch_promotion"/></a>
-    <#elseif item.action == "group_buy">
-    <a href="group_buy.action" ><@s.text name="group_promotion"/></a>
-    <#elseif item.type == "auction">
-    <a href="auction.action" ><@s.text name="auction_promotion"/></a>
-    <#elseif item.type == "favourable">
-    <a href="activity.action" ><@s.text name="favourable_promotion"/></a>
+    <#list promotionInfo as item>
+    <#if  item.type  ==  "snatch"  >
+    <a href="snatch.action" title="${lang.item.type}">${lang.snatchPromotion}</a>
+    <#elseif  item.type  ==  "groupBuy"  >
+    <a href="group_buy.action" title="${lang.item.type}">${lang.groupPromotion}</a>
+    <#elseif  item.type  ==  "auction"  >
+    <a href="auction.action" title="${lang.item.type}">${lang.auctionPromotion}</a>
+    <#elseif  item.type  ==  "favourable"  >
+    <a href="activity.action" title="${lang.item.type}">${lang.favourablePromotion}</a>
     </#if>
-    <a href="{$item.url}" style="background:none; padding-left:0px;">${item.act_name}</a><br />
+    <a href="${item.url}" title="${lang.item.type} ${item.actName}${item.time}" style="background:none; padding-left:0px;">${item.actName}</a><br />
     </#list>
   </div>
  </div>

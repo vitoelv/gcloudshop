@@ -34,7 +34,12 @@
 			<ref local="DAO"/>
 		</property>
 	</bean>
-    
+    <bean id="WebManagerImpl" class="com.jcommerce.core.service.impl.WebManagerImpl">
+		<property name="dao">
+			<ref local="DAO"/>
+		</property>
+	</bean>
+	
     <bean id="DefaultManager"
       class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
     <property name="transactionManager" ref="myTxManager"/>
@@ -60,6 +65,19 @@
       </props>
     </property>
   </bean>
-    
+  
+  <bean id="WebManager"
+      class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+    <property name="transactionManager" ref="myTxManager"/>
+    <property name="target" ref="WebManagerImpl"/>
+    <property name="transactionAttributes">
+      <props>
+        <!--prop key="get*">PROPAGATION_NEVER</prop>
+        < prop key="someOtherBusinessMethod">PROPAGATION_REQUIRES_NEW</prop -->
+        <prop key="tx*">PROPAGATION_REQUIRED</prop>
+        <prop key="*">PROPAGATION_NEVER</prop>
+      </props>
+    </property>
+  </bean>
     <!-- Add Managers here -->
 </beans>

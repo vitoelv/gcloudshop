@@ -13,7 +13,7 @@ GoodsType:_gt2|Attribute:_att4,耗电,0,0,,0,0,false,0
 
 
 ::com.jcommerce.core.model.Brand
-keyName,name,logo,description,siteUrl,show,sortOrder
+keyName,brandName,brandLogo,brandDesc,siteUrl,show,sortOrder
 Brand:_brand1,微软,,microsoft,,false,0
 Brand:_brand2,诺基亚,,nokia,,false,0
 

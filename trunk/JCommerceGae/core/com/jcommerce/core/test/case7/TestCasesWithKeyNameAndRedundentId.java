@@ -115,6 +115,8 @@ public class TestCasesWithKeyNameAndRedundentId extends BaseDAOTestCase {
 			clearDS();
 			// prepare
 			
+			StringBuffer buf = new StringBuffer();
+			
 			String pkn = "p1";
 			String ckn = "c1";
 			

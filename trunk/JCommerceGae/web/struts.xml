@@ -13,12 +13,20 @@
 			<result name="success" type="freemarker">/web/front/index.ftl</result>
 		</action>
 		
-		<action name="goods" method="goods" class="homeAction">
+		<action name="goods" method="execute" class="goodsAction">
 			<result name="success" type="freemarker">/web/front/goods.ftl</result>
 			<result name="error" type="redirectAction">home</result>
 		</action>
-
-		<action name="category" method="category" class="homeAction">
+		<action name="flow" method="execute" class="flowAction">
+			<result name="success" type="freemarker">/web/front/flow.ftl</result>
+			<result name="error" type="redirectAction">home</result>
+			<result name="addToCart" type="stream">
+     			<param name="contentType">application/json</param>
+     			<param name="inputName">jsonRes</param>
+   			</result>
+			
+		</action>
+		<action name="category" method="execute" class="categoryAction">
 			<result name="success" type="freemarker">/web/front/category.ftl</result>
 			<result name="error" type="redirectAction">home</result>
 		</action>

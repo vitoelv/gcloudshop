@@ -19,4 +19,6 @@ public interface CustomizedManager {
     
     public String addGoods(Goods to);
     public boolean updateGoods(Goods to);
+    
+
 }

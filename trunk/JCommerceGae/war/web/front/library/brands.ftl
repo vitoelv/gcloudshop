@@ -1,14 +1,13 @@
-<#if brandinfoList??>
-  <#list brandinfoList as brand>
-    <#if brand_index <= 11>
-      <#if brand.brand_logo??>
-        <a href="brand.action?${brand.brand.id}"><img src="data/brandlogo/${brand.brand.logo}" alt="${brand.brand.name} (${brand.num})" /></a>
+<#if  brandList??  >
+  <#list brandList as brand>
+      <#if  brand.brandLogo??  >
+        <a href="${brand.url}"><img src="data/brandlogo/${brand.brandLogo}" alt="${brand.brandName?html} (${brand.goodsNum})" /></a>
       <#else>
       <div style="clear:both;">
-        <a href="brand.action?id=${brand.brand.id}">${brand.brand.name} <#if brand.num??> (${brand.num})</#if></a>
+        <a href="${brand.url}">${brand.brandName?html} <#if  brand.goodsNum??  >(${brand.goodsNum})</#if></a>
       </div>
       </#if>
-    </#if>
+
   </#list>
-<div class="brandsMore"><a href="brand.action"><img src="${template_root}/images/moreBrands.gif" /></a></div>
+<div class="brandsMore"><a href="../brand.action"><img src="images/moreBrands.gif" /></a></div>
 </#if>

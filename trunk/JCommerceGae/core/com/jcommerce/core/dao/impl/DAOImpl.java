@@ -194,7 +194,7 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
                     Query query = null;
                     List result = null;
 					try {
-						List<String> paras = new ArrayList<String>();
+						List<Object> paras = new ArrayList<Object>();
 						String jdoql = JDOQLHelper.getJdoql(modelName, criteria, paras);
 						query = pm.newQuery(jdoql);
 
@@ -256,7 +256,7 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
                 public Object doInJdo(PersistenceManager pm) throws JDOException {
                     Query query;
 					try {
-						List<String> paras = new ArrayList<String>();
+						List<Object> paras = new ArrayList<Object>();
 						String jdoql = JDOQLHelper.getJdoql(modelName, criteria, paras);
 						query = pm.newQuery(jdoql);
 						query.setResult(" count(this)");

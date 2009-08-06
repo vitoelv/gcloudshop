@@ -1,13 +1,12 @@
-<#if hotGoods??>
-<#if cat_rec_sign??>
-<!-- {if $cat_rec_sign neq 1} -->
+<#if  hotGoods??  >
+<#if  catRecSign  !=  1  >
 <div class="box">
 <div class="box_2 centerPadd">
   <div class="itemTit Hot" id="itemHot">
-      <#if cat_rec[3]??>
-      <h2><a href="javascript:void(0)" onclick="change_tab_style('itemHot', 'h2', this);get_cat_recommend(3, 0);">{$lang.all_goods}</a></h2>
-      <#list cat_rec[3] as rec_data>
-      <h2 class="h2bg"><a href="javascript:void(0)" onclick="change_tab_style('itemHot', 'h2', this);get_cat_recommend(3, {$rec_data.cat_id})">{$rec_data.cat_name}</a></h2>
+      <#if  catRec[3]??  >
+      <h2><a href="javascript:void(0)" onclick="change_tab_style('itemHot', 'h2', this);get_cat_recommend(3, 0);">${lang.allGoods}</a></h2>
+      <#list catRec[3] as recData>
+      <h2 class="h2bg"><a href="javascript:void(0)" onclick="change_tab_style('itemHot', 'h2', this);get_cat_recommend(3, ${recData.catId})">${recData.catName}</a></h2>
       </#list>
       </#if>
   </div>
@@ -15,11 +14,11 @@
   </#if>
   <#list hotGoods as goods>
   <div class="goodsItem">
-         <span class="news"></span>
-           <a href="goods.action?id=${goods.id}"><img src="${goods.thumb}" alt="${goods.name}" class="goodsimg" /></a><br />
-           <p><a href="goods.action?id=${goods.id}" title="${goods.name}">${goods.nameStyle}</a></p>
+         <span class="hot"></span>
+           <a href="${goods.url}"><img src="${goods.thumb}" alt="${goods.name?html}" class="goodsimg" /></a><br />
+           <p><a href="${goods.url}" title="${goods.name?html}">${goods.shortStyleName}</a></p>
            <font class="f1">
-           <#if 0 < goods.promotePrice>
+           <#if  goods.promotePrice  !=  ""  >
           ${goods.promotePrice}
           <#else>
           ${goods.shopPrice}
@@ -27,9 +26,8 @@
            </font>
         </div>
   </#list>
-  <div class="more"><a href="search.action?intro=new"><img src="images/more.gif" /></a></div>
-  <#if cat_rec_sign??>
-  <!-- {if $cat_rec_sign neq 1} -->
+  <div class="more"><a href="../search.action?intro=hot"><img src="images/more.gif" /></a></div>
+  <#if  catRecSign  !=  1  >
   </div>
 </div>
 </div>
