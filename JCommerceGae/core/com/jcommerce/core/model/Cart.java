@@ -1,7 +1,3 @@
-/**
- * Author: Bob Chen
- */
-
 package com.jcommerce.core.model;
 
 import javax.jdo.annotations.Extension;
@@ -10,6 +6,7 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true")
 public class Cart extends ModelObject {
@@ -33,21 +30,49 @@ public class Cart extends ModelObject {
     @Persistent
     private String userId;
     
+    @Persistent
     private String sessionId;
+    
+    @Persistent
     private String goodsId;
+    
+    @Persistent
     private String goodsSN;
+    
+    @Persistent
     private String goodsName;
+    
+    @Persistent
     private Double marketPrice = 0.0;
+    
+    @Persistent
     private Double goodsPrice = 0.0;
+    
+    @Persistent
     private Integer goodsNumber = 0;
     // String goodsAttribute;
+    
+    @Persistent
     private Boolean isReal = false;
+    
+    @Persistent
     private String extensionCode;
+    
+    @Persistent
     private String parentId;
+    
+    @Persistent
     private Integer recType = 0;   // TYPE_xxx
+    
+    @Persistent
     private Boolean isGift = false;
+    
+    @Persistent
     private Boolean canHandsel = false;
+    
+    @Persistent
     private String goodsAttrId;
+    
 	public String getId() {
 		return id;
 	}

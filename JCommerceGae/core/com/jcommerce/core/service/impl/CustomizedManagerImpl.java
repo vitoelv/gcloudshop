@@ -18,8 +18,6 @@ import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.CustomizedManager;
-import com.jcommerce.core.test.case1.Address;
-import com.jcommerce.core.test.case1.Person;
 import com.jcommerce.core.util.MyPropertyUtil;
 import com.jcommerce.core.util.UUIDHexGenerator;
 import com.jcommerce.gwt.client.ModelNames;
@@ -232,23 +230,23 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     	
     }
     // for test case1 
-    public String addPerson(Person to, Address a) {
-    	try {
-    		populateIdWithPo(to);
-			String res = dao.add(to);
-			
-			a.setPerson(to);
-			dao.add(a);
-			
-			return res;
-    	}catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-    	
-    	
-    }
+//    public String addPerson(Person to, Address a) {
+//    	try {
+//    		populateIdWithPo(to);
+//			String res = dao.add(to);
+//			
+//			a.setPerson(to);
+//			dao.add(a);
+//			
+//			return res;
+//    	}catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			throw new RuntimeException(e);
+//		}
+//    	
+//    	
+//    }
 
 	public DAO getDao() {
 		return dao;

@@ -215,7 +215,7 @@ public class RegionPanel extends ContentWidget {
 		cond.setValue(parentId);
 		criteria.addCondition(cond);
 		cond = new Condition();
-		cond.setField(IRegion.TYPE);
+		cond.setField(IRegion.REGION_TYPE);
 		cond.setOperator(Condition.EQUALS);
 		cond.setValue(type);
 		criteria.addCondition(cond);
@@ -355,12 +355,12 @@ public class RegionPanel extends ContentWidget {
 			child_id.setValue(bean.getString(IRegion.ID));
 			
 			child_name = RegionForm.getEditNameField();
-			child_name.setValue(bean.getString(IRegion.NAME));
+			child_name.setValue(bean.getString(IRegion.REGION_NAME));
 			
 			child_oldName = RegionForm.getOldNameField();
 			
 			child_type = RegionForm.getTypeField();
-			child_type.setValue(bean.getString(IRegion.TYPE));
+			child_type.setValue(bean.getString(IRegion.REGION_TYPE));
 			
 			child_parentId = RegionForm.getParentIdField();
 			child_parentId.setValue(bean.getString(IRegion.PARENTID));
@@ -400,7 +400,7 @@ public class RegionPanel extends ContentWidget {
 			this.add(child_agencyId);
 			this.add(new LabelField(" | "));
 			
-			if(!bean.getString(IRegion.TYPE).equals(IRegion.TYPE_DISTRICT)){
+			if(!bean.getString(IRegion.REGION_TYPE).equals(IRegion.TYPE_DISTRICT)){
 				State newState = new State();
 				newState.setParentId(child_id.getValue());
 				newState.setType(getChildrenType(child_type.getValue()));
