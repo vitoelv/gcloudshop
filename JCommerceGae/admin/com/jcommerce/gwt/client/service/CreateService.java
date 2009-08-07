@@ -5,6 +5,7 @@
 package com.jcommerce.gwt.client.service;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.jcommerce.gwt.client.CustomizedServiceAsync;
 import com.jcommerce.gwt.client.IShopServiceAsync;
 import com.jcommerce.gwt.client.form.BeanObject;
 
@@ -32,6 +33,33 @@ public class CreateService extends RemoteService {
                 }
             }
         });        
+    }
+    
+    public void createOrder(BeanObject bean, final Listener listener){
+        if (bean == null) {
+            throw new RuntimeException("bean = null");
+        }
+        CustomizedServiceAsync service = getCustomizedService();
+        
+        service.newOrder(bean, new AsyncCallback<String>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+                System.out.println("update onFailure("+caught);
+                
+                if (listener != null) {
+                    listener.onFailure(caught);
+                }
+			}
+
+			@Override
+			public void onSuccess(String result) {
+                System.out.println("newOrder onSuccess( "+result);
+
+                if (listener != null) {
+                    listener.onSuccess(result);
+                }
+			}});
     }
     
     public static abstract class Listener {

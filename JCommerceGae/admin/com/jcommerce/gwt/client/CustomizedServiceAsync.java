@@ -13,5 +13,5 @@ public interface CustomizedServiceAsync {
     public void getGoodsTypeListWithAttrCount(String modelName, Criteria criteria, 
             List<String> wantedFields, PagingLoadConfig config, AsyncCallback<PagingLoadResult<BeanObject>> callback);
     
-
+    public void newOrder(BeanObject obj, AsyncCallback<String> callback);
 }
