@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.interceptor.ParameterAware;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -251,6 +252,28 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 	public void setWebManager(IWebManager webManager) {
 		this.webManager = webManager;
 	}
+	
+	
+	public Map<String, Object> getMyParameters() {
+//		return parameters;
+		Map parameters = ActionContext.getContext().getParameters();
+		return parameters;
+	}
+	
+	public String getMyParameter(String key) {
+		String res = null;
+		Map<String, Object> parameters = getMyParameters();
+		Object obj = parameters.get(key);
+		if(obj instanceof String[]) {
+			res = ((String[])obj)[0];
+		}
+		else if(obj instanceof String) {
+			res = (String)obj;
+		}
+		return res;
+	}
+
+
 	
 	// well, probably we need not this. 
 	// simply call method for each included library

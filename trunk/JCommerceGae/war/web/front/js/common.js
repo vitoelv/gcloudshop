@@ -11,7 +11,7 @@ function addToCart(goodsId, parentId)
   var number       = 1;
   var formBuy      = document.forms['ECS_FORMBUY'];
 
-	alert('addToCart');
+
 	
   // 检查是否有商品规格
   if (formBuy)
@@ -61,7 +61,7 @@ function getSelectedAttributes(formBuy)
  */
 function addToCartResponse(result)
 {
-	  	alert('here 1');
+
   if (result.error > 0)
   {
     // 如果需要缺货登记，跳转
@@ -87,7 +87,7 @@ function addToCartResponse(result)
   }
   else
   {
-  	alert('here');
+
     var cartInfo = document.getElementById('ECS_CARTINFO');
     var cart_url = 'flow.action?step=cart';
     if (cartInfo)
