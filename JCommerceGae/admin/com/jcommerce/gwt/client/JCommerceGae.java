@@ -32,10 +32,12 @@ import com.jcommerce.gwt.client.panels.CategoryPanel;
 import com.jcommerce.gwt.client.panels.GoodsListPanel;
 import com.jcommerce.gwt.client.panels.GoodsTypeListPanel;
 import com.jcommerce.gwt.client.panels.GoodsTypePanel;
+import com.jcommerce.gwt.client.panels.OrderListPanel;
 import com.jcommerce.gwt.client.panels.RegionPanel;
 import com.jcommerce.gwt.client.panels.ShopConfigPanel;
 import com.jcommerce.gwt.client.panels.Success;
 import com.jcommerce.gwt.client.panels.goods.GoodsPanel;
+import com.jcommerce.gwt.client.panels.order.OrderUserPanel;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.RemoteService;
 
@@ -196,6 +198,10 @@ public class JCommerceGae implements EntryPoint, ValueChangeHandler<String>, GWT
 		setupMainMenuOption(catGoods, new GoodsTypeListPanel.State(), Resources.images.catWidgets());
       	setupMainMenuOption(catGoods, new BrandListPanel.State(), Resources.images.catWidgets());
 		setupMainMenuOption(catGoods, new CategoryListPanel.State(), Resources.images.catWidgets());
+		
+		TreeItem catOrder = mainMenu.addItem(Resources.constants.categoryOrder());
+		setupMainMenuOption(catOrder, new OrderListPanel.State(), Resources.images.catWidgets());
+		setupMainMenuOption(catOrder, new OrderUserPanel.State(), Resources.images.catWidgets());
 		
 		TreeItem system = mainMenu.addItem(Resources.constants.categorySystem());
 		setupMainMenuOption(system, new ShopConfigPanel.State(), Resources.images.catWidgets());
@@ -445,6 +451,10 @@ public class JCommerceGae implements EntryPoint, ValueChangeHandler<String>, GWT
 				page = ShopConfigPanel.getInstance();
 			} else if (pageClassName.equals(RegionPanel.class.getName())) {
 				page = RegionPanel.getInstance();
+			} else if (pageClassName.equals(OrderUserPanel.class.getName())) {
+				page = OrderUserPanel.getInstance();
+			} else if (pageClassName.equals(OrderListPanel.class.getName())) {
+				page = OrderListPanel.getInstance();
 			}
 
 			if (page != null) {
