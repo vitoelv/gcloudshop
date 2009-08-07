@@ -1,0 +1,22 @@
+#summary One-sentence summary of this page.
+
+= Introduction = 
+
+Steps needed to join the community and start contribute 
+
+
+= Details =
+
+  所需软件： 
+  * Eclipse3.4 GAE bundle. refer to http://code.google.com/intl/zh-CN/appengine/docs/java/tools/eclipse.html 
+  * Eclipse3 SVN Client plugin: 例如 subclipse. refer to http://subclipse.tigris.org/servlets/ProjectProcess?pageID=p4wYuA 
+  * JDK1.5+： 配置环境变量JAVA_HOME和PATH 
+
+
+
+  配置开发环境过程： 
+  * Eclipse 的encoding设置为UTF-8 
+  * 注册code.google.com账户并告诉我（李咏），会将你加入项目 
+  * logon code.google.com, 读相关说明在 http://code.google.com/p/gcloudshop/source/checkout ， 在http://code.google.com/hosting/settings 找到你的 Generated Password. 
+  * 用SVN Client 连接URL https://gcloudshop.googlecode.com/svn/trunk/ 用户名为你的code.google.com账户，密码为刚才看到的Generated Password, check out 所有文件并建立java project。假设目标目录为 D:/Jcommerce, 则会下载到 D:/Jcommerce/JCommerceGAE 目录 
+待续 
