@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -23,7 +24,11 @@ import com.extjs.gxt.ui.client.data.PagingLoadResult;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.model.ModelObject;
+import com.jcommerce.core.model.Order;
 import com.jcommerce.core.service.CustomizedManager;
+import com.jcommerce.core.service.IDefaultManager;
+import com.jcommerce.core.util.CommonUtil;
+import com.jcommerce.core.util.MyPropertyUtil;
 import com.jcommerce.gwt.client.CustomizedService;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.service.Condition;
@@ -227,4 +232,28 @@ public class CustomizedServiceImpl extends RemoteServiceServlet implements Custo
 
           return new BasePagingLoadResult(list, pgc.getOffset(), total);   
     }
+    
+    
+	@Override
+	public String newOrder(BeanObject obj) {
+        System.out.println("newObject("+obj.getModelName());
+        IDefaultManager manager = (IDefaultManager)ctx.getBean("DefaultManager");
+        String res = null;
+        Date createDate = new Date();
+
+        try {
+        	ModelObject to = (ModelObject)Class.forName(obj.getModelName()).newInstance();
+            MyPropertyUtil.form2To(to, obj.getProperties());
+            ((Order)to).setOrderSn(CommonUtil.getOrderSN(createDate));
+            ((Order)to).setAddTime(createDate);
+        	res = manager.txadd(to);
+        	
+        } catch (Exception e) {
+        	e.printStackTrace();
+        	throw new RuntimeException(e);
+        }
+        
+        
+        return res;
+	}
 }

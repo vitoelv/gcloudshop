@@ -13,4 +13,5 @@ public interface CustomizedService extends RemoteService {
     public PagingLoadResult<BeanObject> getGoodsTypeListWithAttrCount(String modelName, 
             Criteria criteria, List<String> wantedFields, PagingLoadConfig config);
     
+    public String newOrder(BeanObject obj);
 }
