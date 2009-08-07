@@ -21,7 +21,7 @@ public interface IOrder {
     public static final String ID = "id";
     public static final String ORDERACTIONS = "orderActions";
     public static final String ORDERGOODS = "orderGoods";
-    public static final String SN = "sn";
+    public static final String SN = "orderSn";
     public static final String USER = "user";
     public static final String STATUS = "status";
     public static final String SHIPPINGSTATUS = "shippingStatus";

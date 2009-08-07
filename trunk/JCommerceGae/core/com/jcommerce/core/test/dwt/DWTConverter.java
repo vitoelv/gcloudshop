@@ -164,6 +164,7 @@ public class DWTConverter {
 		// or
 		// from: if !$gb_deposit
 		// to: <#if 
+		
 		StringBuffer buf = new StringBuffer();
 		if(elseif) {
 			buf.append("<#elseif ");
@@ -274,6 +275,7 @@ public class DWTConverter {
 					// handle like empty($var)
 					withLogical = token.startsWith("empty(");
 				} 
+				// TODO  {if $consignee.country eq $country.region_id} // consignee.lbi
 				if(!withLogical) {
 					temp = temp+"??";
 				}
@@ -303,6 +305,9 @@ public class DWTConverter {
 		// TODO  <!-- {foreach from=$spec.values item=value key=key} -->
 		// {foreach name=nav_top_list from=$navigator_list.top item=nav} --> // name is no use for freemarker..
 		// TODO <!-- {foreach from=$how_oos_list key=how_oos_id item=how_oos_name} -->
+		// expect sth like:  <#list consigneeList?keys as sn> <#assign consignee = consigneeList[sn]> 
+		
+		// TODO <!-- {foreach from=$province_list.$sn item=province} -->  // consignee.lbi
 		String res = "";
 		
 		String regex = ".*?from\\s*?=\\s*?\\$(\\S*?)\\s*?item\\s*?=\\s*?(\\S*?)(?:\\s*?key\\s*?=\\s*?(\\S*?)\\s*?)?(?:\\s*?name\\s*?=\\s*?([\"\\S\"]*?)\\s*?)?";

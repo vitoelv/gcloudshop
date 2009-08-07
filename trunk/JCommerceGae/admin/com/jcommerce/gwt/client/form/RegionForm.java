@@ -16,7 +16,7 @@ public class RegionForm  extends BeanObject implements IRegion{
 
 	public static TextField<String> getNameField(String fieldTitle){
 		TextField<String> nameField = new TextField<String>();
-		nameField.setName(NAME);
+		nameField.setName(REGION_NAME);
 		nameField.setMaxLength(30);
 		nameField.setAllowBlank(false);
 		TextField<String>.TextFieldMessages tfm = nameField.new TextFieldMessages();
@@ -28,7 +28,7 @@ public class RegionForm  extends BeanObject implements IRegion{
 	
 	public static HiddenField<String> getTypeField(){
 		HiddenField<String> typeField = new HiddenField<String>();
-		typeField.setName(TYPE);
+		typeField.setName(REGION_TYPE);
 		return typeField;
 	}
 	
@@ -48,7 +48,7 @@ public class RegionForm  extends BeanObject implements IRegion{
 	
 	public static TextField<String> getEditNameField(){
 		TextField<String> nameField = new TextField<String>();
-		nameField.setName(NAME);
+		nameField.setName(REGION_NAME);
 		nameField.setMaxLength(30);
 		return nameField;
 	}
@@ -61,7 +61,7 @@ public class RegionForm  extends BeanObject implements IRegion{
 
 	public static HiddenField<String> getHiddenNameField(){
 		HiddenField<String> nameField = new HiddenField<String>();
-		nameField.setName(NAME);
+		nameField.setName(REGION_NAME);
 		return nameField;
 	}
 }

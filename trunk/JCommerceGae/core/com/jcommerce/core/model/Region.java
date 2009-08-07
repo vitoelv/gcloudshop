@@ -30,10 +30,10 @@ public class Region extends ModelObject {
     private String keyName;
 
     @Persistent
-	private String name;
+	private String regionName;
     
     @Persistent
-	private String type;
+	private String regionType;
     
     @Persistent
     private String parentId;
@@ -57,21 +57,7 @@ public class Region extends ModelObject {
 		this.keyName = keyName;
 	}
 
-	public String getName() {
-		return name;
-	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
 
 	public String getParentId() {
 		return parentId;
@@ -93,6 +79,22 @@ public class Region extends ModelObject {
 	public ModelObject getParent() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public String getRegionName() {
+		return regionName;
+	}
+
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
+	}
+
+	public String getRegionType() {
+		return regionType;
+	}
+
+	public void setRegionType(String regionType) {
+		this.regionType = regionType;
 	}
 
 }

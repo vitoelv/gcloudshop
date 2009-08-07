@@ -5,6 +5,8 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.google.appengine.api.datastore.Text;
+
 public class Shipping extends ModelObject {
     @Override
     public ModelObject getParent() {
@@ -19,6 +21,27 @@ public class Shipping extends ModelObject {
     @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
     private String keyName;
 
+    @Persistent
+    private String shippingCode;
+    
+    @Persistent
+    private String shippingName;
+    
+    @Persistent
+    private String shippingDesc;
+    
+    @Persistent
+    private String insure;
+
+    @Persistent
+    private Boolean supportCod;
+    
+    @Persistent
+    private Boolean enabled;
+    
+    @Persistent
+    private Text shippingPrint;    
+    
 	public String getId() {
 		return id;
 	}
@@ -33,6 +56,62 @@ public class Shipping extends ModelObject {
 
 	public void setKeyName(String keyName) {
 		this.keyName = keyName;
+	}
+
+	public String getShippingCode() {
+		return shippingCode;
+	}
+
+	public void setShippingCode(String shippingCode) {
+		this.shippingCode = shippingCode;
+	}
+
+	public String getShippingName() {
+		return shippingName;
+	}
+
+	public void setShippingName(String shippingName) {
+		this.shippingName = shippingName;
+	}
+
+	public String getShippingDesc() {
+		return shippingDesc;
+	}
+
+	public void setShippingDesc(String shippingDesc) {
+		this.shippingDesc = shippingDesc;
+	}
+
+	public String getInsure() {
+		return insure;
+	}
+
+	public void setInsure(String insure) {
+		this.insure = insure;
+	}
+
+	public Boolean getSupportCod() {
+		return supportCod;
+	}
+
+	public void setSupportCod(Boolean supportCod) {
+		this.supportCod = supportCod;
+	}
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public Text getShippingPrint() {
+		return shippingPrint;
+	}
+
+	public void setShippingPrint(Text shippingPrint) {
+		this.shippingPrint = shippingPrint;
 	}
 
 }
