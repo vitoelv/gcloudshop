@@ -248,9 +248,10 @@
           
         </script>
         <!-- 如果有收货地址，循环显示用户的收获地址 -->
-        <#list consigneeList as consignee>
+        <!-- #list consigneeList?keys as sn> <!--#assign consignee = consigneeList[sn]--> 
+        <#list consigneeList as consignee> <#assign sn = consignee_index> 
         <form action="flow.action" method="post" name="theForm" id="theForm" onsubmit="return checkConsignee(this)">
-        <#include "Library/consignee.ftl">
+        <#include "library/consignee.ftl">
         </form>
         </#list>
         </#if>
@@ -278,13 +279,13 @@
             <tr>
               <td bgcolor="#ffffff">
               <a href="goods.action?id=${goods.goodsId}" target="_blank" class="f6">${goods.goodsName}</a>
-                <#if  goods.parentId  >  0  >
+                <#if  (goods.parentId  !=  "")  >
                 <span style="color:#FF0000">（${lang.accessories}）</span>
                 <#elseif  goods.isGift??  >
                 <span style="color:#FF0000">（${lang.largess}）</span>
                 </#if>
               </td>
-              <td bgcolor="#ffffff">${goods.goodsAttr|nl2br}</td>
+              <td bgcolor="#ffffff">${goods.goodsAttr}</td>
               <#if  showMarketprice??  >
               <td align="right" bgcolor="#ffffff">${goods.formatedMarketPrice}</td>
               </#if>
@@ -296,7 +297,7 @@
             <#if  !gbDeposit??  >
             <tr>
               <td bgcolor="#ffffff" colspan="7">
-              <#if  discount  >  0  >${yourDiscount}<br /></#if>
+              <#if  discount??  >${yourDiscount}<br /></#if>
               ${shoppingMoney}<#if  showMarketprice??  >，${marketPriceDesc}</#if>
               </td>
             </tr>
@@ -313,7 +314,7 @@
               <td bgcolor="#ffffff">${lang.emailAddress}:</td>
               <td bgcolor="#ffffff">${consignee.email}</td>
             </tr>
-            <#if  total.realGoodsCount  >  0  >
+            <#if  (total.realGoodsCount  >  0)  >
             <tr>
               <td bgcolor="#ffffff">${lang.detailedAddress}:</td>
               <td bgcolor="#ffffff">${consignee.address} </td>
@@ -327,7 +328,7 @@
               <td bgcolor="#ffffff">${lang.backupPhone}:</td>
               <td bgcolor="#ffffff">${consignee.mobile}</td>
             </tr>
-             <#if  total.realGoodsCount  >  0  >
+             <#if  (total.realGoodsCount  >  0)  >
             <tr>
               <td bgcolor="#ffffff">${lang.signBuilding}:</td>
               <td bgcolor="#ffffff">${consignee.signBuilding} </td>
@@ -352,7 +353,7 @@
             </tr>
             <#list shippingList as shipping>
             <tr>
-              <td bgcolor="#ffffff" valign="top"><input name="shipping" type="radio" value="${shipping.shippingId}" <#if  order.shippingId  ==  shipping.shippingId??  >checked="true"</#if> supportCod="${shipping.supportCod}" insure="${shipping.insure}" onclick="selectShipping(this)" />
+              <td bgcolor="#ffffff" valign="top"><input name="shipping" type="radio" value="1" <#if  order.shippingId  ==  shipping.shippingId  >checked="true"</#if> supportCod="${shipping.supportCod}" insure="${shipping.insure}" onclick="selectShipping(this)" />
               </td>
               <td bgcolor="#ffffff" valign="top"><strong>${shipping.shippingName}</strong></td>
               <td bgcolor="#ffffff" valign="top">${shipping.shippingDesc}</td>
@@ -384,7 +385,7 @@
             <#list paymentList as payment>
             <!-- 循环支付方式 -->
             <tr>
-              <td valign="top" bgcolor="#ffffff"><input type="radio" name="payment" value="${payment.payId}" <#if  order.payId  ==  payment.payId??  >checked</#if> isCod="${payment.isCod}" onclick="selectPayment(this)" <#if  codDisabled??  &&  payment.isCod??  ==  "1"  >disabled="true"</#if>/></td>
+              <td valign="top" bgcolor="#ffffff"><input type="radio" name="payment" value="${payment.payId}" <#if  order.payId  ==  payment.payId  >checked</#if> isCod="${payment.isCod?string("yes", "no")}" onclick="selectPayment(this)" <#if  codDisabled??  &&  payment.isCod  >disabled="true"</#if>/></td>
               <td valign="top" bgcolor="#ffffff"><strong>${payment.payName}</strong></td>
               <td valign="top" bgcolor="#ffffff">${payment.payDesc}</td>
               <td align="right" bgcolor="#ffffff" valign="top">${payment.formatPayFee}</td>
@@ -552,7 +553,7 @@
     <div class="blank"></div>
     <div class="flowBox">
     <h6><span>${lang.feeTotal}</span></h6>
-          <#include "Library/order_total.ftl">
+          <#include "library/order_total.ftl">
            <div align="center" style="margin:8px auto;">
             <input type="image" src="images/bnt_subOrder.gif" />
             <input type="hidden" name="step" value="done" />

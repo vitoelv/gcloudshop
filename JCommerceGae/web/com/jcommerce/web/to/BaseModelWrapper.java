@@ -24,17 +24,27 @@ public abstract class BaseModelWrapper extends BaseWrapper {
 			else {
 				try {
 					String temp = key.substring(0, 1).toUpperCase()+key.substring(1);;
-					Method method = getWrapped().getClass().getMethod("get"+temp, new Class[0]);
+					String methodName = "get"+temp;
+					Method method = null;
+					try {
+						method = this.getClass().getMethod(methodName, new Class[0]);
+					} catch (NoSuchMethodException e) {
+						method = getWrapped().getClass().getMethod(methodName, new Class[0]);
+					}
+					
 					res = method.invoke(getWrapped(), new Object[0]);
+					
 				} catch (Exception ex) {
 					debug("TODO: "+key);
 					res = null;
 				}
+				
+				if(res == null) {
+//					 we allow a null value
+					res = "isNull:"+key;
+				}
 			}
-			if(res == null) {
-//				 we allow a null value
-				res = "isNull:"+key;
-			}
+
 
 			return res;
 			

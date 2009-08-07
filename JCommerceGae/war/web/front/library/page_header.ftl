@@ -2,7 +2,7 @@
 var process_request = "${lang.processRequest}";
 </script>
 <div class="block clearfix">
- <div class="f_l"><a href="../index.action" name="top"><img src="../images/logo.gif" /></a></div>
+ <div class="f_l"><a href="home.action" name="top"><img src="../images/logo.gif" /></a></div>
  <div class="f_r log">
    <ul>
    <li class="userInfo">
@@ -27,7 +27,7 @@ var process_request = "${lang.processRequest}";
 </div>
 <div  class="blank"></div>
 <div id="mainNav" class="clearfix">
-  <a href="../index.action"<#if  navigatorList.config.index  ==  1  > class="cur"</#if>>${lang.home}<span></span></a>
+  <a href="home.action"<#if  navigatorList.config.index  ==  1  > class="cur"</#if>>${lang.home}<span></span></a>
   <#list navigatorList.middle as nav>
   <a href="${nav.url}" <#if  nav.opennew  ==  1  >target="_blank" </#if> <#if  nav.active  ==  1  > class="cur"</#if>>${nav.name}<span></span></a>
  </#list>
