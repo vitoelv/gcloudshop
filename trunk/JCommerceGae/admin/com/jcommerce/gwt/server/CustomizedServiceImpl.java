@@ -234,7 +234,7 @@ public class CustomizedServiceImpl extends RemoteServiceServlet implements Custo
     }
     
     
-	@Override
+
 	public String newOrder(BeanObject obj) {
         System.out.println("newObject("+obj.getModelName());
         IDefaultManager manager = (IDefaultManager)ctx.getBean("DefaultManager");
