@@ -43,7 +43,7 @@ public class CreateService extends RemoteService {
         
         service.newOrder(bean, new AsyncCallback<String>(){
 
-			@Override
+
 			public void onFailure(Throwable caught) {
                 System.out.println("update onFailure("+caught);
                 
@@ -52,7 +52,7 @@ public class CreateService extends RemoteService {
                 }
 			}
 
-			@Override
+
 			public void onSuccess(String result) {
                 System.out.println("newOrder onSuccess( "+result);
 
