@@ -48,6 +48,8 @@ public class FlowAction extends BaseAction {
     public static final String STEP_CONSIGNEE = "consignee";
     public static final String STEP_DONE = "done";
     
+    public static final String PARA_GOODS_ID = "goods_id";
+    
     
     private InputStream jsonRes;
 
@@ -63,7 +65,7 @@ public class FlowAction extends BaseAction {
 		String userId = (String)session.getAttribute(KEY_USER_ID);
 
 		JSONObject goods = getReqAsJSON(request, "goods");
-		String goodsId = goods.getString("goods_id");
+		Long goodsId = goods.getLong(PARA_GOODS_ID);
 		debug("in [addToCart]: goodsId="+goodsId);
 		
 		boolean suc = getWebManager().addToCart(
