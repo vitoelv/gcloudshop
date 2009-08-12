@@ -89,7 +89,7 @@ function reg(str){
      </div>
      <!--商品图片和相册 end-->
      <div class="textInfo">
-     <form action="javascript:addToCart('${goods.goodsId}')" method="post" name="ECS_FORMBUY" id="ECS_FORMBUY" >
+     <form action="javascript:addToCart(${goods.goodsId})" method="post" name="ECS_FORMBUY" id="ECS_FORMBUY" >
       <p>${goods.goodsStyleName}</p>
       <ul>
        <#if  promotion??  >
@@ -234,7 +234,7 @@ function reg(str){
       </#list>
       
       <li class="padd">
-      <a href="javascript:addToCart('${goods.goodsId}')"><img src="images/bnt_cat.gif" /></a>
+      <a href="javascript:addToCart(${goods.goodsId})"><img src="images/bnt_cat.gif" /></a>
       <a href="javascript:collect(${goods.goodsId})"><img src="images/bnt_colles.gif" /></a>
       <#if  affiliate.on??  >
       <a href="user.action?act=affiliate&goodsid=${goods.goodsId}" style="position:relative;left:10px; bottom:15px;">将此商品推荐给朋友</a>

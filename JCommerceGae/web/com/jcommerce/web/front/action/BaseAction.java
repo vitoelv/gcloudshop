@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts2.ServletActionContext;
-import org.apache.struts2.interceptor.ParameterAware;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -216,6 +215,9 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 		HttpServletRequest request = getRequest();
 //        HttpServletResponse response = (HttpServletResponse)ctx.get(ServletActionContext.HTTP_RESPONSE); 
         
+		Object obj = getSession().getAttribute("WW_TRANS_I18N_LOCALE");
+		debug("locale: "+obj);
+		
         setPageMeta(request);
         includePageFooter(request);
         getLangMap(request);

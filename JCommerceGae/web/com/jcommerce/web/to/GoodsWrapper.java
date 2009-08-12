@@ -25,7 +25,8 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
 	
     // for template
     public String getGoodsId() {
-    	return getGoods().getId();
+    	String longId = getGoods().getLongId().toString();
+    	return longId;
     }
     public String getGoodsImg() {
     	return SERVLET_IMAGE+getGoods().getImageFileId();
