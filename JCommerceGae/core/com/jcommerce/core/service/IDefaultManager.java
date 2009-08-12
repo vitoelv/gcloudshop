@@ -12,6 +12,8 @@ import com.jcommerce.core.model.ModelObject;
 public interface IDefaultManager {
 	
 	public ModelObject get (String modelName, String id);
+	public ModelObject get(String modelName, Long longId);
+	
 	public int getCount(String modelName, Criteria criteria);
 	public int getList (List res, String modelName, Criteria criteria, final int firstRow, final int maxRow);
 	public List getList (String modelName, Criteria criteria);

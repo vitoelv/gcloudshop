@@ -1,28 +1,19 @@
 package com.jcommerce.core.model;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.PersistenceAware;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
-import org.apache.commons.beanutils.PropertyUtils;
 
 
-/**
- * Base class for Model objects.  This is basically for the toString, equals
- * and hashCode methods.
- *
- */
+
 public abstract class ModelObject implements Serializable, URLConstants {
 	
 
-    
+	public Long getLongId() {
+		return null;
+	}
+
+	public void setLongId(Long longId) {
+	}
+	
     
 //    public String getModelName() {
 //        return getClass().getSimpleName();
@@ -47,4 +38,6 @@ public abstract class ModelObject implements Serializable, URLConstants {
     public abstract String getKeyName();
     
     public abstract ModelObject getParent();
+    
+
 }

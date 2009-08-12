@@ -34,7 +34,7 @@ public class Cart extends ModelObject {
     private String sessionId;
     
     @Persistent
-    private String goodsId;
+    private Long goodsId;
     
     @Persistent
     private String goodsSN;
@@ -92,12 +92,7 @@ public class Cart extends ModelObject {
 	public void setSessionId(String sessionId) {
 		this.sessionId = sessionId;
 	}
-	public String getGoodsId() {
-		return goodsId;
-	}
-	public void setGoodsId(String goodsId) {
-		this.goodsId = goodsId;
-	}
+
 	public String getGoodsSN() {
 		return goodsSN;
 	}
@@ -176,6 +171,12 @@ public class Cart extends ModelObject {
 	}
 	public void setGoodsAttrId(String goodsAttrId) {
 		this.goodsAttrId = goodsAttrId;
+	}
+	public Long getGoodsId() {
+		return goodsId;
+	}
+	public void setGoodsId(Long goodsId) {
+		this.goodsId = goodsId;
 	}
 
 

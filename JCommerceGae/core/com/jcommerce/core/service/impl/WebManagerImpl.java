@@ -9,7 +9,7 @@ import com.jcommerce.core.service.IWebManager;
 
 public class WebManagerImpl extends DefaultManagerImpl implements IWebManager {
 
-	public boolean addToCart(String goodsId, int num, List spec, String sessionId, String userId, String parentId) {
+	public boolean addToCart(Long goodsId, int num, List spec, String sessionId, String userId, String parentId) {
 		
     	try {
     		boolean res = true;

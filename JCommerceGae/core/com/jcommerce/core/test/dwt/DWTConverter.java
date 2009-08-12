@@ -1,7 +1,9 @@
 package com.jcommerce.core.test.dwt;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.regex.Matcher;
@@ -119,7 +121,70 @@ public class DWTConverter {
 			}
 		}, source, dotall);
 	}
-	
+	public List<String> findLangKeys(String in) {
+		List<String> res = new ArrayList<String>();
+		String regex = "\\$\\{\\s*?lang\\.([^(:?\\s|\\})]+)\\s*?\\}";
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher (in); 
+		while (m.find ()) {
+			String g = m.group(1);
+			res.add(g);
+		}		
+		return res;
+	}
+	public Map<String, Object>findLangVals(String in, Map<String, Object> res) {
+		String k1 = null, k2=null,v=null;
+//		 = new HashMap<String, Object>();
+		try {
+		// String regex = "\\$_LANG\\['([^(\\s|')]+)'\\]\\s*?=\\s*?'([^']+)';";
+		String regex = "\\$_LANG\\['([^(?:\\s|')]+)'\\](?:\\['?([^(?:\\s|')]+)'?\\])*?\\s*?=\\s*?'([^']+)';";
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher (in); 
+		int gc = m.groupCount();
+		System.out.println("gc="+gc);
+
+		while (m.find ()) {
+			k1 = replacePhpVars(m.group(1));
+			k2 = m.group(2);
+			v = m.group(3);
+			
+			if(k2==null) {
+				res.put(k1, v);
+			}
+			else {
+//				int k2number = Integer.MIN_VALUE;
+//				try {
+//					k2number = Integer.valueOf(k2);
+//				} catch (Exception e) {
+//				}
+//				if(k2number==Integer.MIN_VALUE) {
+					k2 = replacePhpVars(k2);
+					Map<String,String> val = (Map)res.get(k1);
+					if(val==null) {
+						val = new HashMap<String, String>();
+						res.put(k1, val);
+					}
+					val.put(k2, v);					
+//				}
+//				else {
+//					List<String> val = (List)res.get(k1);
+//					if(val==null) {
+//						val = new ArrayList<String>();
+//						res.put(k1, val);
+//					}
+//					val.add(k2number, v);
+//				}
+
+			}
+		}		
+		
+		return res;
+		} catch (Exception ex) {
+			System.out.println("k1="+k1+",k2="+k2+",v="+v);
+			ex.printStackTrace();
+			throw new RuntimeException(ex);
+		}
+	}
 	public String regexReplaceLibrary(String in) {
 		String regex = "<!--\\s#BeginLibraryItem\\s\"/(.*?)\"\\s-->.*?<!--\\s#EndLibraryItem\\s-->";
 		String res = preg_replace(regex, new RegexReplaceCallback() {
@@ -464,13 +529,8 @@ public class DWTConverter {
 		res = res.replace("$", "\\$");
 		
 		
-		// replace PHP style variables to Java style
-		regex = "_([a-z])";
-		res2 = preg_replace(regex, new RegexReplaceCallback() {
-			public String execute(String... groups) {
-				return groups[0].toUpperCase();
-			}
-		}, res, false);
+
+		res2 = replacePhpVars(res);
 		
 		
 		res2 = res2.replace("|escape:html", "?html");
@@ -517,6 +577,18 @@ public class DWTConverter {
 		}
 		debug("in [replaceVars]: res="+res+", res2="+res2+", res3="+res3);
 		return res3;
+	}
+
+	private String replacePhpVars(String res) {
+		// replace PHP style variables to Java style
+		String res2;
+		String regex = "_([a-z])";
+		res2 = preg_replace(regex, new RegexReplaceCallback() {
+			public String execute(String... groups) {
+				return groups[0].toUpperCase();
+			}
+		}, res, false);
+		return res2;
 	}
 	public String explode(String s) {
 		String[] strs = StringUtils.split(s);
