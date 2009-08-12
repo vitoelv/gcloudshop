@@ -16,7 +16,7 @@ public interface DAO {
     public List getList(String modelName, Criteria criteria, int firstRow, int maxRow);
     public String add(ModelObject to);
     public String attach (ModelObject to);
-    
+    public boolean update (ModelObject to);
 //    public String add(String modelName, ModelObject data, String parentId, String parentType);
     public boolean delete (String modelName, String id);
     public boolean delete (ModelObject obj);
@@ -26,8 +26,8 @@ public interface DAO {
     public void deleteAll(Collection<ModelObject> objs);
     
 	public ModelObject get (String modelName, String id);
-    
-	public boolean update (ModelObject to);
+	public ModelObject get(final String modelName, final Long longId);
+	
 	
 //    public Class getModelClass();
 }

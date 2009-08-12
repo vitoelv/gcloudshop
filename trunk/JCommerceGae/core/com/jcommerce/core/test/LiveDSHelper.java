@@ -1,13 +1,13 @@
 package com.jcommerce.core.test;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.List;
 
 import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.Category;
+import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.util.DataStoreUtils;
@@ -77,6 +77,29 @@ public class LiveDSHelper extends BaseDAOTestCase {
 		System.out.println("end of testExportDS...");
 	}
 	
-	
+	public void testQueryGoods() {
+		System.out.println("start of testQueryGoods...");
+		try {
+			IDefaultManager manager = getDefaultManager();
+
+			List<Goods> list = (List<Goods>)manager.getList(Goods.class.getName(), null);
+			for(Goods goods:list) {
+				System.out.println("name="+goods.getGoodsName()+", longid="+goods.getLongId());
+				
+				
+				
+			}
+			
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+		}
+		System.out.println("end of testQueryGoods...");
+		
+		
+	}
 
 }

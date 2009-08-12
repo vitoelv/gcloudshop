@@ -83,6 +83,10 @@ public class DefaultManagerImpl implements IDefaultManager {
 		return obj;
 	}
 	
+	public ModelObject get(String modelName, Long longId) {
+		ModelObject obj = getDao().get(modelName, longId);
+		return obj;
+	}
 	
 
 

@@ -5,22 +5,110 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import junit.framework.TestCase;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 
 public class TestDWTConverter extends TestCase {
+
+//	Set<String> langKeys = new HashSet<String>();
+	Map<String, Object> values = new HashMap<String, Object>();
+	String ENC = "UTF-8";
 	
 	public void testConvert() {
+
 		String sBaseDir = "D:/JCommerce/ECShop_V2.6.1_UTF8_build1208/upload/themes/default";
 		String sDestDir = "D:/JCommerce/ECShop_V2.6.1_UTF8_build1208/upload/themes/freemarker";
 		
-		testConvertDir(sBaseDir, sDestDir);
 		
+		testConvertDir(sBaseDir, sDestDir);
+
+		
+//		List<String> list = new ArrayList<String>();
+//		list.addAll(langKeys);
+//		Collections.sort(list);
+//		for(String langKey:list) {
+//			buf.append(langKey).append(" = ").append(langKey).append("\r\n");
+//		}
+//		try {
+//			IOUtils.write(buf.toString(), new FileOutputStream(new File(sDestPropertyDir, langFn)), "UTF-8");
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+	}
+	
+	public void testPrepareResource() {
+		String langFn = "lang_zh.properties";
+		// this is only web resource
+		String sPhpResourceDir = "D:/JCommerce/ECShop_V2.6.1_UTF8_build1208/upload/languages/zh_cn";
+		String sDestPropertyDir = "D:/JCommerce/ECShop_V2.6.1_UTF8_build1208/upload/themes";
+
+
+		// select lang values from php
+		testExtractResource(sPhpResourceDir);
+		
+		List<String> keyList = new ArrayList<String>();
+		keyList.addAll(values.keySet());
+		Collections.sort(keyList);
+		
+		StringBuffer buf = new StringBuffer();
+		for (String key : keyList) {
+			Object obj = values.get(key);
+			if(obj instanceof Map) {
+				Map<String, String> map = (Map<String, String>)obj;
+				for(String k1:map.keySet()) {
+					buf.append(key).append("[").append(k1).append("]").append(" = ").append(map.get(k1)).append("\r\n");
+				}
+			}
+			else if(obj instanceof List) {
+				List<String> list = (List<String>)obj;
+				for(int i=0;i<list.size();i++) {
+					buf.append(key).append("[").append(i).append("]").append(" = ").append(list.get(i)).append("\r\n");
+				}
+			}
+			else {
+				buf.append(key).append(" = ").append(obj).append("\r\n");
+			}
+		}
+		try {
+			// this is not allowed in GAE
+//			IOUtils.write(buf.toString(), new FileOutputStream(new File(
+//					sDestPropertyDir, langFn)), "UTF-8");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	}
+	public void testExtractResource(String sPhpConstDir) {
+		try {
+			File fBaseDir = new File(sPhpConstDir);
+			File[] files = fBaseDir.listFiles();
+			for(File file: files) {
+				String fileName = file.getName();
+				if(file.isDirectory()) {
+					// TODO now we do not process sub-folders
+					continue;
+				}
+				System.out.println("processing file: "+fileName);
+				String source = IOUtils.toString(new FileInputStream(file), ENC);
+				
+				new DWTConverter().findLangVals(source, values);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void testConvertDir(String sBaseDir, String sDestDir) {
@@ -30,7 +118,7 @@ public class TestDWTConverter extends TestCase {
 				destDir.mkdir();
 			}
 			
-			String ENC = "UTF-8";
+
 			
 			File fBaseDir = new File(sBaseDir);
 			File[] files = fBaseDir.listFiles();
@@ -53,7 +141,10 @@ public class TestDWTConverter extends TestCase {
 					String source = IOUtils.toString(new FileInputStream(file), ENC);
 					String out = new DWTConverter().convert(source, fileName);
 					
-					// NOTE this is not allowed in GAE environment
+					// select lang keys from converted ftl
+//					langKeys.addAll(new DWTConverter().findLangKeys(out));
+					
+					// this is not allowed in GAE
 //					IOUtils.write(out, new FileOutputStream(new File(sDestDir, destFileName)), ENC);
 				}
 				else {
@@ -69,142 +160,4 @@ public class TestDWTConverter extends TestCase {
 			e.printStackTrace();
 		}		
 	}
-	
-	public void testCompileIfTag() {
-		try {
-//			String tag = "$item.type eq \"snatch\"";
-			
-//			String tag = "$img_links  or $txt_links "; 
-			
-			String tag = "$item.type eq \"group_buy\"";
-			String res  = new DWTConverter().compileIfTag(tag, true);
-			System.out.println("res: "+res);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			
-		}
-		System.out.println("end of testCompileIfTag");
-
-		
-	}
-	public void testConvertFragment() {
-		try {
-			
-			String tag = "<a href=\"{$nav.url}\" <!-- {if $nav.opennew eq 1} --> target=\"_blank\" <!-- {/if} -->>{$nav.name}</a>";
-			DWTConverter dwtConverter = new DWTConverter();
-			String res  = dwtConverter.convert(tag, "abc.ftl");
-			System.out.println("res="+res);
-		}catch (Exception ex) {
-			ex.printStackTrace();
-			
-		}
-		System.out.println("end of testConvertFragment");
-		
-	}
-	public void testCompileForEachStart() {
-		try {
-			String tag = " from =$spec.values item=value key=key ";
-//			String tag = "from=$group_buy_goods item=goods";
-			String res  = new DWTConverter().compileForEachStart(tag);
-//			System.out.println("res: "+res);
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			
-		}
-		System.out.println("end of testCompileForEachStart");
-		
-	}
-	
-	public void testRegexSelect() {
-		try {
-//			String tag = "if !$gb_deposit";
-//			String tag = "$lang.far_ext[$favourable.act_range]";
-			
-//			String tag = "* ECSHOP 提醒您：根据用户id来调用member_info.lbi显示不同的界面  *";
-//			String tag = "insert name='member_info'";
-			
-//			String tag = "if !$smarty.foreach.nav_top_list.last";
-			
-//			String tag = "<a href=\"{$nav.url}\" <!-- {if $nav.opennew eq 1} --> \r\n target=\"_blank\" <!-- {/if} -->>{$nav.name}</a>";
-//			String tag = "{$nav.url}  <!-- {if $nav.opennew eq 1} --> ";
-//			String tag = "{if empty($order_query)}";
-//			String tag = "{insert name='vote'}";
-			String tag = "{foreach from=$promotion_goods item=goods name=\"promotion_foreach\"}";
-//			String tag = "{foreach name=nav_top_list from=$navigator_list.top item=nav}";
-			DWTConverter dwtConverter = new DWTConverter();
-			dwtConverter.foreachStack.push("abc");
-			String res  = dwtConverter.regexSelect(tag);
-			System.out.println("res="+res);
-			
-		}catch (Exception ex) {
-			ex.printStackTrace();
-			
-		}
-		System.out.println("end of testRegexSelect");
-	}
-	
-	public void testSelect() {
-		try {
-//			String tag = "if !$gb_deposit";
-//			String tag = "$lang.far_ext[$favourable.act_range]";
-			
-//			String tag = "* ECSHOP 提醒您：根据用户id来调用member_info.lbi显示不同的界面  *";
-//			String tag = "insert name='member_info'";
-			
-//			String tag = "if !$smarty.foreach.nav_top_list.last";
-			
-			String tag = "<a href=\"{$nav.url}\" <!-- {if $nav.opennew eq 1} --> target=\"_blank\" <!-- {/if} -->>{$nav.name}</a>";
-			DWTConverter dwtConverter = new DWTConverter();
-			dwtConverter.foreachStack.push("abc");
-			String res  = dwtConverter.select(tag);
-			
-		}catch (Exception ex) {
-			ex.printStackTrace();
-			
-		}
-		System.out.println("end of testSelect");
-	}
-	
-	public void testReplaceVars() {
-		try {
-//			String tag = "$keywords";
-//			String tag = "$lang.far_ext[$favourable.act_range]";
-			// expect ${lang.far_ext[favourable.act_range]}
-			
-			String tag = "$img_links  or $txt_links";
-			
-			
-			
-			String res  = new DWTConverter().replaceVars(tag);
-			System.out.println("res: "+res);
-		}catch (Exception ex) {
-			ex.printStackTrace();
-			
-		}
-		System.out.println("end of testReplaceVars");
-	}
-	
-	public void testGetPara() {
-		try {
-//			String tag = "$keywords";
-//			String tag = "$lang.far_ext[$favourable.act_range]";
-			// expect ${lang.far_ext[favourable.act_range]}
-			
-						
-			String tag = "name='member_info'";
-			
-			String s = StringUtils.replaceChars(tag, "'\" ", "");
-			System.out.println("s="+s);
-			
-			Map<String, String> res  = new DWTConverter().getPara(tag);
-			System.out.println("res: "+res);
-			
-		}catch (Exception ex) {
-			ex.printStackTrace();
-			
-		}
-		System.out.println("end of testGetPara");
-	}
-	
-	
 }

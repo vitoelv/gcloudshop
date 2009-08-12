@@ -4,9 +4,6 @@
 
 package com.jcommerce.core.dao.impl;
 
-import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -18,7 +15,6 @@ import javax.jdo.JDOObjectNotFoundException;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -32,10 +28,12 @@ import com.jcommerce.core.dao.DAO;
 import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.model.ModelObject;
+import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.util.JDOQLHelper;
 import com.jcommerce.core.util.MyPropertyUtil;
 import com.jcommerce.core.util.UUIDHexGenerator;
+import com.jcommerce.core.util.UUIDLongGenerator;
 
 public class DAOImpl extends JdoDaoSupport implements DAO {
     protected Log log = LogFactory.getLog(getClass());
@@ -56,6 +54,7 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
     		if(StringUtils.isEmpty(to.getId())) {
     			// if id is not set, use keyname, otherwise use ID directly, same as attach
     			to.setKeyName(UUIDHexGenerator.newUUID());
+    			to.setLongId(UUIDLongGenerator.newUUID());
     		}
     		
 			getJdoTemplate().makePersistent(to);
@@ -185,6 +184,62 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
 		} finally {
 		}
 	}
+	
+    public ModelObject get(final String modelName, final Long longId) {
+    	if(longId == null) {
+    		throw new RuntimeException ("longId is null!! modelName="+modelName);
+    	}
+    	
+        Query query = null;
+        try {        	
+        	JdoTemplate jdoTemplate =getJdoTemplate();
+        	ModelObject res = (ModelObject)jdoTemplate.execute(new JdoCallback() {
+                public Object doInJdo(PersistenceManager pm) throws JDOException {
+                    Query query = null;
+                    ModelObject result = null;
+					try {
+						Criteria criteria = new Criteria();
+						Condition cond = new Condition();
+						cond.setField("longId");
+						cond.setOperator(Condition.EQUALS);
+						cond.setValue(longId.toString());
+						criteria.addCondition(cond);
+						
+						List<Object> paras = new ArrayList<Object>();
+						String jdoql = JDOQLHelper.getJdoql(modelName, criteria, paras);
+						query = pm.newQuery(jdoql);
+
+						List list = (List)query.executeWithArray(paras.toArray());
+						if(list.size()>1) {
+							throw new RuntimeException("found duplicate records with same longId: "+longId+", modelName="+modelName);
+						}
+						if(list.size()==1) {
+							result = (ModelObject)list.get(0);
+						}
+						// 	do some further stuff with the result list
+						return result;
+					} catch (JDOException e) {
+						throw e;
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						throw new RuntimeException(e);
+					}
+                }
+            });
+
+            return res;
+        
+        } catch (Exception ex) {
+        	ex.printStackTrace();
+        	throw new RuntimeException(ex);
+        } finally {
+        	if(query!=null) {
+        		query.closeAll();
+        	}
+//        	pm.close();
+        }
+    }
     public List getList(final String modelName, final Criteria criteria, final int firstRow, final int maxRow) {
         Query query = null;
         try {        	

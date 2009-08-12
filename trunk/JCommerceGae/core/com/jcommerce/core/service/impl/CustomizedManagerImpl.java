@@ -20,6 +20,7 @@ import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.CustomizedManager;
 import com.jcommerce.core.util.MyPropertyUtil;
 import com.jcommerce.core.util.UUIDHexGenerator;
+import com.jcommerce.core.util.UUIDLongGenerator;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.AttributeForm;
 import com.jcommerce.gwt.client.model.IGallery;
@@ -92,7 +93,7 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     		to.setBestSold(true);
     		to.setNeewAdded(true);
     		to.setHotSold(true);
-    		
+    		to.setLongId(UUIDLongGenerator.newUUID());
     		
     		Set<Gallery> galleries = to.getGalleries();
     		
@@ -110,6 +111,8 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 				file.setKeyName(fkn);
 //				file.setId(fid);
 				gallery.setImageFileId(fid);
+				gallery.setLongId(UUIDLongGenerator.newUUID());
+				
 			}
 			
 			// TODO temporary. to ensure image not empty
@@ -126,6 +129,7 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 				String gid = KeyFactory.keyToString(new KeyFactory.Builder("Goods",goodskn).addChild("GoodsAttribute", gkn).getKey());
 				gt.setKeyName(gkn);
 //				gt.setId(gid);
+				gt.setLongId(UUIDLongGenerator.newUUID());
 			}			
 			
 			String res = txattach(to);
@@ -181,6 +185,7 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     		Set<Gallery> galleries = to.getGalleries();
 			for(Gallery gallery:galleries) {
 				if(StringUtils.isNotEmpty(gallery.getId())) {
+					// existing gallery
 					for(Gallery gpo : po.getGalleries()) {
 						if(gpo.getId().equals(gallery.getId())) {
 							gpo.setDescription(gallery.getDescription());
@@ -190,6 +195,7 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 //					dao.update(gallery);
 //					gallery.setImageFileId(gallery.getImageFile().getId());
 				} else {
+					// new gallery
 					String gkn = UUIDHexGenerator.newUUID();
 					gallery.setKeyName(gkn);
 					DSFile file = gallery.getImageFile();
@@ -197,6 +203,7 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 					file.setKeyName(fkn);
 					String fid = KeyFactory.keyToString(new KeyFactory.Builder("Goods",goodskn).addChild("Gallery", gkn).addChild("DSFile", fkn).getKey());
 					gallery.setImageFileId(fid);
+					gallery.setLongId(UUIDLongGenerator.newUUID());
 					po.getGalleries().add(gallery);
 				}
 			}
@@ -214,7 +221,9 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 			for(GoodsAttribute gt:gts) {
 				String gkn = UUIDHexGenerator.newUUID();
 				gt.setKeyName(gkn);
+				gt.setLongId(UUIDLongGenerator.newUUID());
 				po.getAttributes().add(gt);
+				
 			}
 			
 			

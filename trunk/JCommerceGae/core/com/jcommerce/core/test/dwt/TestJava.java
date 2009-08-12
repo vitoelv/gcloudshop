@@ -1,9 +1,16 @@
 package com.jcommerce.core.test.dwt;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+
 import junit.framework.TestCase;
+
+import com.jcommerce.web.to.Lang;
 
 public class TestJava extends TestCase {
 	public void testConvert() {
@@ -192,6 +199,211 @@ public class TestJava extends TestCase {
 		String in = "     <a href=\"javascript:;\" onclick=\"window.open('gallery.php?id=${goods.goodsId}'); return false;\">";
 		String res = new DWTConverter().regexReplacePHP(in);
 		System.out.println("res: "+res);
+	}
+	
+	public void testFindLang() {
+//		String in = "xxxx ${ lang.abc} \r\n yyy ${lang.xyz} \r\n zzzz";
+		String in = "${payment.payName}(${lang.payFee}:${payment.formatPayFee})";
+		List<String> res = new DWTConverter().findLangKeys(in);
+		for(String s:res) {
+			System.out.println("s: "+s);
+		}
 		
+	}
+	
+	public void testExtractResource() {
+
+		String in1 = "$_LANG['city_district'] = '城市/地区';";
+		String in2 = "$_LANG['flow_js']['consignee_not_null'] = '收货人姓名不能为空！';";
+		String in3 = "$_LANG['far_ext'][0] = '全部商品';";
+//		String in = "$_LANG['far_ext'][FAR_ALL] = '全部商品';";
+		
+		String in = in1+"\r\n"+in2+"\r\n"+in3; 
+		
+
+		
+		
+		Map<String, Object> res = new HashMap<String, Object>();
+		new DWTConverter().findLangVals(in, res);
+		for(String k:res.keySet()) {
+			Object v = res.get(k);
+			if(v instanceof Map) {
+				Map<String, String> val = (Map)v;
+				for(String k2:val.keySet()) {
+					System.out.println("k="+k+", k2="+k2+", v="+val.get(k2));	
+				}
+			} else if(v instanceof List){
+				List<String> val = (List)v;
+				for(int i=0;i<val.size();i++) {
+					System.out.println("k="+k+", index="+i+", v="+val.get(i));	
+				}			
+			} else {
+				System.out.println("k="+k+", v="+v);				
+			}
+		}
+		
+	}
+	
+	public void test888() {
+		String regex = "([^\\[]*)(?:\\[([^\\]]+)\\])?";
+		Pattern p = Pattern.compile(regex);
+
+			String k1=null, k2=null;
+			String key = "pager_4";
+//			String key = "passportJs[emailInvalid]";
+			String val = "abc";
+			Matcher m = p.matcher(key);
+			if(m.find()) {
+				k1 = m.group(1);
+				k2 = m.group(2);
+			}
+			System.out.println("k1="+k1+", k2="+k2);
+					
+	}
+	public void testLang() {
+		Lang lang = Lang.getInstance();
+		
+		System.out.println(lang.get("actTime"));
+		
+		System.out.println(((Map)lang.get("bookingJs")).get("bookingAmountError"));
+		
+		
+	}
+	
+	
+	public void testCompileIfTag() {
+		try {
+//			String tag = "$item.type eq \"snatch\"";
+			
+//			String tag = "$img_links  or $txt_links "; 
+			
+			String tag = "$item.type eq \"group_buy\"";
+			String res  = new DWTConverter().compileIfTag(tag, true);
+			System.out.println("res: "+res);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			
+		}
+		System.out.println("end of testCompileIfTag");
+
+		
+	}
+	public void testConvertFragment() {
+		try {
+			
+			String tag = "<a href=\"{$nav.url}\" <!-- {if $nav.opennew eq 1} --> target=\"_blank\" <!-- {/if} -->>{$nav.name}</a>";
+			DWTConverter dwtConverter = new DWTConverter();
+			String res  = dwtConverter.convert(tag, "abc.ftl");
+			System.out.println("res="+res);
+		}catch (Exception ex) {
+			ex.printStackTrace();
+			
+		}
+		System.out.println("end of testConvertFragment");
+		
+	}
+	public void testCompileForEachStart() {
+		try {
+			String tag = " from =$spec.values item=value key=key ";
+//			String tag = "from=$group_buy_goods item=goods";
+			String res  = new DWTConverter().compileForEachStart(tag);
+//			System.out.println("res: "+res);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			
+		}
+		System.out.println("end of testCompileForEachStart");
+		
+	}
+	
+	public void testRegexSelect() {
+		try {
+//			String tag = "if !$gb_deposit";
+//			String tag = "$lang.far_ext[$favourable.act_range]";
+			
+//			String tag = "* ECSHOP 提醒您：根据用户id来调用member_info.lbi显示不同的界面  *";
+//			String tag = "insert name='member_info'";
+			
+//			String tag = "if !$smarty.foreach.nav_top_list.last";
+			
+//			String tag = "<a href=\"{$nav.url}\" <!-- {if $nav.opennew eq 1} --> \r\n target=\"_blank\" <!-- {/if} -->>{$nav.name}</a>";
+//			String tag = "{$nav.url}  <!-- {if $nav.opennew eq 1} --> ";
+//			String tag = "{if empty($order_query)}";
+//			String tag = "{insert name='vote'}";
+			String tag = "{foreach from=$promotion_goods item=goods name=\"promotion_foreach\"}";
+//			String tag = "{foreach name=nav_top_list from=$navigator_list.top item=nav}";
+			DWTConverter dwtConverter = new DWTConverter();
+			dwtConverter.foreachStack.push("abc");
+			String res  = dwtConverter.regexSelect(tag);
+			System.out.println("res="+res);
+			
+		}catch (Exception ex) {
+			ex.printStackTrace();
+			
+		}
+		System.out.println("end of testRegexSelect");
+	}
+	
+	public void testSelect() {
+		try {
+//			String tag = "if !$gb_deposit";
+//			String tag = "$lang.far_ext[$favourable.act_range]";
+			
+//			String tag = "* ECSHOP 提醒您：根据用户id来调用member_info.lbi显示不同的界面  *";
+//			String tag = "insert name='member_info'";
+			
+//			String tag = "if !$smarty.foreach.nav_top_list.last";
+			
+			String tag = "<a href=\"{$nav.url}\" <!-- {if $nav.opennew eq 1} --> target=\"_blank\" <!-- {/if} -->>{$nav.name}</a>";
+			DWTConverter dwtConverter = new DWTConverter();
+			dwtConverter.foreachStack.push("abc");
+			String res  = dwtConverter.select(tag);
+			
+		}catch (Exception ex) {
+			ex.printStackTrace();
+			
+		}
+		System.out.println("end of testSelect");
+	}
+	
+	public void testReplaceVars() {
+		try {
+//			String tag = "$keywords";
+//			String tag = "$lang.far_ext[$favourable.act_range]";
+			// expect ${lang.far_ext[favourable.act_range]}
+			
+			String tag = "$img_links  or $txt_links";
+			
+			
+			
+			String res  = new DWTConverter().replaceVars(tag);
+			System.out.println("res: "+res);
+		}catch (Exception ex) {
+			ex.printStackTrace();
+			
+		}
+		System.out.println("end of testReplaceVars");
+	}
+	
+	public void testGetPara() {
+		try {
+//			String tag = "$keywords";
+//			String tag = "$lang.far_ext[$favourable.act_range]";
+			// expect ${lang.far_ext[favourable.act_range]}
+			
+						
+			String tag = "name='member_info'";
+			
+			String s = StringUtils.replaceChars(tag, "'\" ", "");
+			System.out.println("s="+s);
+			
+			Map<String, String> res  = new DWTConverter().getPara(tag);
+			System.out.println("res: "+res);
+			
+		}catch (Exception ex) {
+			ex.printStackTrace();
+			
+		}
+		System.out.println("end of testGetPara");
 	}
 }

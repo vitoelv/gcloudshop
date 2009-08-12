@@ -28,7 +28,9 @@ public class Goods extends ModelObject {
     
 //    private String url;
 //    private String shortStyleName;
-    
+	@Persistent
+	protected Long longId;
+	
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
@@ -189,6 +191,7 @@ public class Goods extends ModelObject {
     
     
 
+    
 
     
 
@@ -586,6 +589,18 @@ public class Goods extends ModelObject {
 	public void setGiveIntegral(Integer giveIntegral) {
 		this.giveIntegral = giveIntegral;
 	}
+
+	@Override
+	public Long getLongId() {
+		return longId;
+	}
+
+	@Override
+	public void setLongId(Long longId) {
+		this.longId = longId;
+	}
+
+
 
 
 
