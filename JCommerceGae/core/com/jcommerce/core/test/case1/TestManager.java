@@ -174,7 +174,7 @@ public class TestManager extends BaseDAOTestCase {
 			Address a = new Address();
 			a.setLoc("zzz");
 						
-			String pid = cm.addPerson(p, a);
+			String pid = null;//cm.addPerson(p, a);
 
 			System.out.println("pid="+pid+", p="+p);
 
