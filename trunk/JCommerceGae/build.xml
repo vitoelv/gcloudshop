@@ -1,0 +1,19 @@
+<project name="Guestbook" default="datanucleusenhance">
+  <import file="ant-macros.xml" />
+  <target name="datanucleusenhance" depends=""
+      description="Performs JDO enhancement on compiled data classes.">
+    <!--enhance_war war="war" /-->
+    <enhance failonerror="true" >
+        <classpath>
+          <pathelement path="${appengine.tools.classpath}"/>
+          <pathelement path="war/WEB-INF/classes"/>
+          <fileset dir="war/WEB-INF/lib" includes="*.jar"/>
+        </classpath>
+        <fileset dir="war/WEB-INF/classes">
+	        <include name="com/jcommerce/core/model/*.class"/>
+        </fileset>
+    </enhance>    
+  </target>
+
+
+</project>
