@@ -1,4 +1,4 @@
-#hints of development for starter
+#hints of development for starter.
 
 = Introduction =
 
