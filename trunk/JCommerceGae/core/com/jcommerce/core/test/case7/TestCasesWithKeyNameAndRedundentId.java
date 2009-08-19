@@ -39,13 +39,13 @@ public class TestCasesWithKeyNameAndRedundentId extends BaseDAOTestCase {
 			
 			pm.currentTransaction().commit();
 			
-			String pid1 = p1.getId();
+			String pid1 = p1.getPkId();
 
 			System.out.println(", pid1="+pid1);
 									
 			// verify 
 			p1 = pm.getObjectById(Parent7.class, pkn);
-			System.out.println("pid="+p1.getId()+", pname="+p1.getName());
+			System.out.println("pid="+p1.getPkId()+", pname="+p1.getName());
 	
 			
 			System.out.println("end of testAdd");
@@ -82,19 +82,19 @@ public class TestCasesWithKeyNameAndRedundentId extends BaseDAOTestCase {
 			p1 = pm.makePersistent(p1);
 			pm.currentTransaction().commit();
 			
-			String pid1 = p1.getId();
+			String pid1 = p1.getPkId();
 
 			System.out.println(", pid1="+pid1);
 									
 			// verify 
 			p1 = pm.getObjectById(Parent7.class, pkn);
-			System.out.println("pid="+p1.getId()+", pname="+p1.getName()+", ckn="+p1.getChild7KN());
+			System.out.println("pid="+p1.getPkId()+", pname="+p1.getName()+", ckn="+p1.getChild7KN());
 			c = p1.getChild7();
-			System.out.println("cid="+c.getId()+", cname="+c.getName());
+			System.out.println("cid="+c.getPkId()+", cname="+c.getName());
 
 			// Exception: org.datanucleus.exceptions.NucleusObjectNotFoundException: Could not retrieve entity of kind Child7 with key Child7(c1)
 			c = pm.getObjectById(Child7.class, ckn);
-			System.out.println("cid="+c.getId()+", cname="+c.getName());
+			System.out.println("cid="+c.getPkId()+", cname="+c.getName());
 			System.out.println("end of testAdd2");
 			
 		}catch (Exception e) {
@@ -137,25 +137,25 @@ public class TestCasesWithKeyNameAndRedundentId extends BaseDAOTestCase {
 			p1 = pm.makePersistent(p1);
 			pm.currentTransaction().commit();
 			
-			String pid1 = p1.getId();
+			String pid1 = p1.getPkId();
 			System.out.println("cid="+cid+", pid1="+pid1);
-			assertTrue(cid.equals(c.getId()));
+			assertTrue(cid.equals(c.getPkId()));
 									
 			// verify 
 			p1 = pm.getObjectById(Parent7.class, pkn);
-			System.out.println("pid="+p1.getId()+", pname="+p1.getName()+", ckn="+p1.getChild7KN());
+			System.out.println("pid="+p1.getPkId()+", pname="+p1.getName()+", ckn="+p1.getChild7KN());
 			c = p1.getChild7();
-			System.out.println("cid="+c.getId()+", cname="+c.getName());
+			System.out.println("cid="+c.getPkId()+", cname="+c.getName());
 			
 			p1 = c.getParent();
-			System.out.println("pid="+p1.getId()+", pname="+p1.getName()+", ckn="+p1.getChild7KN());
+			System.out.println("pid="+p1.getPkId()+", pname="+p1.getName()+", ckn="+p1.getChild7KN());
 
 			c = pm.getObjectById(Child7.class, cid);
-			System.out.println("cid="+c.getId()+", cname="+c.getName());
+			System.out.println("cid="+c.getPkId()+", cname="+c.getName());
 			
 			// Exception: org.datanucleus.exceptions.NucleusObjectNotFoundException: Could not retrieve entity of kind Child7 with key Child7(c1)
 //			c = pm.getObjectById(Child7.class, ckn);
-//			System.out.println("cid="+c.getId()+", cname="+c.getName());
+//			System.out.println("cid="+c.getPkId()+", cname="+c.getName());
 //			System.out.println("end of testAdd3");
 			
 		}catch (Exception e) {

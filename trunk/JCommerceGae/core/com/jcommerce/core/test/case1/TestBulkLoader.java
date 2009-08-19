@@ -78,9 +78,9 @@ public class TestBulkLoader extends BaseDAOTestCase {
 
 			pm.makePersistent(a);
 			pm.currentTransaction().commit();
-			pid = p.getId();
-			aid = a.getId();
-			System.out.println("pid: "+p.getId()+", aid: "+a.getId());
+			pid = p.getPkId();
+			aid = a.getPkId();
+			System.out.println("pid: "+p.getPkId()+", aid: "+a.getPkId());
 			
 			pkn = KeyFactory.stringToKey(pid).getName();
 			akn = KeyFactory.stringToKey(aid).getName();
@@ -119,33 +119,39 @@ public class TestBulkLoader extends BaseDAOTestCase {
 			
 
 			p = new Person();
-			p.setId(pid);
+			p.setPkId(pid);
 			p.setName("xxx");
 			manager.txattach(p);
 			
 			a = new Address();
-			a.setId(aid);
+			a.setPkId(aid);
 			a.setLoc("x11");
 			manager.txattach(a);
 			
-			System.out.println("pid="+p.getId());
-			System.out.println("aid="+a.getId());
+			System.out.println("pid="+p.getPkId());
+			System.out.println("aid="+a.getPkId());
 			System.out.println(", akn="+a.getKeyName());
 			
 			// verify
 			// ID recovered
-			assertTrue(pid.equals(p.getId()) && aid.equals(a.getId()));
+			assertTrue(pid.equals(p.getPkId()) && aid.equals(a.getPkId()));
 			
 			pm.currentTransaction().begin();
 			Person p2 = pm.getObjectById(Person.class,pid);
 			System.out.println("pkn="+p2.getKeyName());
-			Set addresses = p2.getAddresses();
+			Set<Address> addresses = p2.getAddresses();
 			int size = addresses.size();
+			String newakn = (size>0) ? (addresses.iterator().next().getKeyName()) : null;
 			System.out.println("size="+size);
+			System.out.println("newakn=" + newakn);
 			pm.currentTransaction().commit();
+			
+			// keyName recovered
+			assertTrue(pkn.equals(p2.getKeyName()) && akn.equals(newakn));
 			
 			// relation recovered
 			assertTrue(1==size);
+			
 			System.out.println("end of testLoadAndUnload");
 			
 		}catch (Exception e) {
@@ -214,11 +220,11 @@ public class TestBulkLoader extends BaseDAOTestCase {
 			IDefaultManager manager = getDefaultManager();
 			
 			GoodsType g = new GoodsType();
-			g.setName("手机");
+			g.setCatName("手机");
 			manager.txadd(g);
 			
 			Attribute a = new Attribute();
-			a.setName("颜色");
+			a.setAttrName("颜色");
 			a.setGoodsType(g);
 			manager.txadd(a);
 			
@@ -228,10 +234,10 @@ public class TestBulkLoader extends BaseDAOTestCase {
 			manager.txadd(b);
 			
 			Category c = new Category();
-			c.setName("手机通讯");
+			c.setCatName("手机通讯");
 			c.setMeasureUnit("台");
-			c.setShow(true);
-			c.setShowInNavigator(true);
+			c.setIsShow(true);
+			c.setShowInNav(1l);
 			manager.txadd(c);
 			
 			ByteArrayOutputStream out = new ByteArrayOutputStream(); 
@@ -263,31 +269,31 @@ public class TestBulkLoader extends BaseDAOTestCase {
 			IDefaultManager manager = getDefaultManager();
 			
 			GoodsType b = new GoodsType();
-			b.setName("手机");
+			b.setCatName("手机");
 			manager.txadd(b);
 			
 			Attribute a = new Attribute();
-			a.setName("颜色");
+			a.setAttrName("颜色");
 			a.setGoodsType(b);
 			manager.txadd(a);
 			
 			a = new Attribute();
-			a.setName("大小");
+			a.setAttrName("大小");
 			a.setGoodsType(b);
 			manager.txadd(a);
 			
 			
 			b = new GoodsType();
-			b.setName("电脑");			 
+			b.setCatName("电脑");			 
 			manager.txadd(b);
 			
 			a = new Attribute();
-			a.setName("功能");
+			a.setAttrName("功能");
 			a.setGoodsType(b);
 			manager.txadd(a);
 
 			a = new Attribute();
-			a.setName("耗电");
+			a.setAttrName("耗电");
 			a.setGoodsType(b);
 			manager.txadd(a);
 			
@@ -348,7 +354,7 @@ public class TestBulkLoader extends BaseDAOTestCase {
 					assertTrue(4==size);
 					for(Attribute att:atts) {
 						GoodsType gt = att.getGoodsType();
-						System.out.println("att="+att.getName()+", gt="+gt.getName());
+						System.out.println("att="+att.getAttrName()+", gt="+gt.getCatName());
 					}
 	}
     
@@ -364,10 +370,10 @@ public class TestBulkLoader extends BaseDAOTestCase {
 			Attribute gt = (Attribute)it.next();
 			buf.append(gt.getClass().getName()).append(",");
 			buf.append(gt.getKeyName()).append(",");
-			buf.append(gt.getName()).append(",");
-			buf.append(gt.getGroup()).append(",");
-			buf.append(gt.getIndex()).append(",");
-			buf.append(gt.getInputType()).append(",");
+			buf.append(gt.getAttrName()).append(",");
+			buf.append(gt.getAttrGroup()).append(",");
+			buf.append(gt.getAttrIndex()).append(",");
+			buf.append(gt.getAttrInputType()).append(",");
 			buf.append(gt.getSortOrder()).append(",");
 			
 		}
@@ -388,11 +394,11 @@ public class TestBulkLoader extends BaseDAOTestCase {
 //    		List brandList = new ArrayList();
 //    		manager.getList(brandList, Brand.class.getName(), null, 0, 10);
 //    		assertTrue(brandList.size()>=2);
-//    		String bid1 = ((Brand)brandList.get(0)).getId();
-//    		String bid2 = ((Brand)brandList.get(1)).getId();
+//    		String bid1 = ((Brand)brandList.get(0)).getPkId();
+//    		String bid2 = ((Brand)brandList.get(1)).getPkId();
     		
     		Goods g1 = new Goods();
-    		g1.setAddTime(new Date());
+    		g1.setAddTime(new Date().getTime());
 //    		g1.setBrandId(bid1);
     		g1.getCategoryIds().add("123");
     		g1.getCategoryIds().add("456");
@@ -400,7 +406,7 @@ public class TestBulkLoader extends BaseDAOTestCase {
     		System.out.println("gid1: "+gid1);
     		
     		Goods g2 = new Goods();
-    		g2.setAddTime(new Date());
+    		g2.setAddTime(new Date().getTime());
 //    		g2.setBrandId(bid2);
     		g2.getCategoryIds().add("123sss");
     		g2.getCategoryIds().add("456xxx");
@@ -413,7 +419,7 @@ public class TestBulkLoader extends BaseDAOTestCase {
     		
     		for(Iterator it = res.iterator();it.hasNext();) {
     			ModelObject mo = (ModelObject)it.next();
-    			manager.txdelete(Goods.class.getName(), mo.getId());
+    			manager.txdelete(Goods.class.getName(), mo.getPkId());
     		}
     		
     		

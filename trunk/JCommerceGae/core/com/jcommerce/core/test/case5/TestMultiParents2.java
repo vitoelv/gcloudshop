@@ -48,7 +48,7 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			Query query = pm.newQuery(Parent51.class);
 			List<Parent51> parents = (List<Parent51>)query.execute();
 			for(Parent51 parent:parents) {
-				System.out.println("id:"+parent.getId()+", name: "+parent.getName());
+				System.out.println("id:"+parent.getPkId()+", name: "+parent.getName());
 			}
 			System.out.println("size="+parents.size());
 			System.out.println("end of testQuery");
@@ -90,10 +90,10 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			p1 = pm.makePersistent(p1);
 			pm.currentTransaction().commit();
 			
-			String pid = p1.getId();
-			String cid1 = c1.getId();
-			String cid2 = c2.getId();
-			System.out.println("pid: "+p1.getId()+", cid1: "+c1.getId()+", cid2: "+cid2);
+			String pid = p1.getPkId();
+			String cid1 = c1.getPkId();
+			String cid2 = c2.getPkId();
+			System.out.println("pid: "+p1.getPkId()+", cid1: "+c1.getPkId()+", cid2: "+cid2);
 			assertTrue(true);
 
 			// verify add
@@ -165,9 +165,9 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			p1 = pm.makePersistent(p1);
 			pm.currentTransaction().commit();
 			
-			String pid = p1.getId();
-			String aid = a.getId();
-			System.out.println("pid: "+p1.getId()+", aid: "+a.getId());
+			String pid = p1.getPkId();
+			String aid = a.getPkId();
+			System.out.println("pid: "+p1.getPkId()+", aid: "+a.getPkId());
 			assertTrue(true);
 			
 			// cascade delete
@@ -213,9 +213,9 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			p1 = pm.makePersistent(p1);
 			pm.currentTransaction().commit();
 
-			String pid = p1.getId();
-			String aid = a.getId();
-			System.out.println("pid: "+p1.getId()+", aid: "+a.getId());
+			String pid = p1.getPkId();
+			String aid = a.getPkId();
+			System.out.println("pid: "+p1.getPkId()+", aid: "+a.getPkId());
 			assertTrue(true);
 			
 			// delete
@@ -225,7 +225,7 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			// verify delete
 			try {
 				a = pm.getObjectById(Child5.class, aid);
-				System.out.println("id: "+a.getId()+", name: "+a.getName());
+				System.out.println("id: "+a.getPkId()+", name: "+a.getName());
 				assertTrue(false);
 			} catch (JDOObjectNotFoundException e) {
 				System.out.println("a: "+aid+" cannot find");
@@ -264,9 +264,9 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			p1 = pm.makePersistent(p1);
 			pm.currentTransaction().commit();
 			
-			String pid = p1.getId();
-			String aid = a.getId();
-			System.out.println("pid: "+p1.getId()+", aid: "+a.getId());
+			String pid = p1.getPkId();
+			String aid = a.getPkId();
+			System.out.println("pid: "+p1.getPkId()+", aid: "+a.getPkId());
 			assertTrue(true);
 
 
@@ -298,9 +298,9 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			p2 = pm.makePersistent(p2);
 			pm.currentTransaction().commit();
 			
-			String pid2 = p2.getId();
-			String aid2 = a2.getId();
-			System.out.println("pid2: "+p2.getId()+", aid2: "+a2.getId());
+			String pid2 = p2.getPkId();
+			String aid2 = a2.getPkId();
+			System.out.println("pid2: "+p2.getPkId()+", aid2: "+a2.getPkId());
 			assertTrue(true);
 
 //			// cascade delete
@@ -373,9 +373,9 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			p1 = pm.makePersistent(p1);
 			pm.currentTransaction().commit();
 			
-			String pid = p1.getId();
-			String aid = a.getId();
-			System.out.println("pid: "+p1.getId()+", aid: "+a.getId());
+			String pid = p1.getPkId();
+			String aid = a.getPkId();
+			System.out.println("pid: "+p1.getPkId()+", aid: "+a.getPkId());
 			assertTrue(true);
 
 			// verify add
@@ -384,13 +384,13 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			int size = set.size();
 			System.out.println("child size: "+size);
 			a = set.iterator().next();
-			System.out.println("1) child id: "+a.getId()+", name: "+a.getName());
+			System.out.println("1) child id: "+a.getPkId()+", name: "+a.getName());
 			
 			
 			// delete
 			pm.currentTransaction().begin();
 			a = (Child5)pm.getObjectById(Child5.class, aid);
-			System.out.println("2) child id: "+a.getId()+", name: "+a.getName());
+			System.out.println("2) child id: "+a.getPkId()+", name: "+a.getName());
 			pm.deletePersistent(a);
 			// have to do this manually
 			// and this can be done within a txn, as they belongs to same Entity Group
@@ -402,7 +402,7 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			size = set.size();
 			System.out.println("child size: "+size);
 			a = set.iterator().next();
-			System.out.println("3) child id: "+a.getId()+", name: "+a.getName());
+			System.out.println("3) child id: "+a.getPkId()+", name: "+a.getName());
 			
 			
 			System.out.println("end of testDeleteChild");
@@ -440,19 +440,19 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			p1 = pm.makePersistent(p1);
 			pm.currentTransaction().commit();
 			
-			String pid = p1.getId();
-			String aid = a.getId();
-			System.out.println("pid: "+p1.getId()+", aid: "+a.getId());
+			String pid = p1.getPkId();
+			String aid = a.getPkId();
+			System.out.println("pid: "+p1.getPkId()+", aid: "+a.getPkId());
 			assertTrue(true);
 
 			p1 = (Parent51)pm.getObjectById(Parent51.class, pid);
 			a = p1.getChild51();
-			System.out.println("1) child id: "+a.getId()+", name: "+a.getName());
+			System.out.println("1) child id: "+a.getPkId()+", name: "+a.getName());
 			
 			
 			pm.currentTransaction().begin();
 			a = (Child51)pm.getObjectById(Child51.class, aid);
-			System.out.println("2) child id: "+a.getId()+", name: "+a.getName());
+			System.out.println("2) child id: "+a.getPkId()+", name: "+a.getName());
 			pm.deletePersistent(a);
 			// have to do this manually
 			// and this can be done within a txn, as they belongs to same Entity Group
@@ -461,7 +461,7 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			
 			p1 = (Parent51)pm.getObjectById(Parent51.class, pid);
 			a = p1.getChild51();
-			System.out.println("3) child id: "+a.getId()+", name: "+a.getName());
+			System.out.println("3) child id: "+a.getPkId()+", name: "+a.getName());
 			
 			System.out.println("end of testDeleteChild51");
 			
@@ -507,10 +507,10 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			p2.getChildren2().add(a);
 			pm.currentTransaction().commit();
 			
-			String pid1 = p1.getId();
-			String pid2 = p2.getId();			
-			String aid = a.getId();
-			System.out.println("pid: "+p1.getId()+", pid2: "+p2.getId()+", aid: "+a.getId());
+			String pid1 = p1.getPkId();
+			String pid2 = p2.getPkId();			
+			String aid = a.getPkId();
+			System.out.println("pid: "+p1.getPkId()+", pid2: "+p2.getPkId()+", aid: "+a.getPkId());
 			assertTrue(true);
 
 
@@ -548,15 +548,15 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			p1 = pm.makePersistent(p1);
 			pm.currentTransaction().commit();
 			
-			String pid = p1.getId();
-			String cid = c.getId();
+			String pid = p1.getPkId();
+			String cid = c.getPkId();
 			System.out.println("pid: "+pid+", cid: "+cid);
 			
 			// verify relation
 			p1 = pm.getObjectById(Parent51.class, pid);
 			c = p1.getChild51();
-			System.out.println("cid: "+c.getId()+", cname:"+c.getName());
-			assertTrue(cid.equals(c.getId()));
+			System.out.println("cid: "+c.getPkId()+", cname:"+c.getName());
+			assertTrue(cid.equals(c.getPkId()));
 
 			// replace
 			pm.currentTransaction().begin();
@@ -566,16 +566,16 @@ public class TestMultiParents2 extends BaseDAOTestCase {
 			p1 = pm.makePersistent(p1);
 			pm.currentTransaction().commit();
 			
-			String pid2 = p1.getId();
-			String cid2 = c2.getId();
+			String pid2 = p1.getPkId();
+			String cid2 = c2.getPkId();
 			System.out.println("pid2: "+pid2+", cid2: "+cid2);
 			assertTrue(pid.equals(pid2));
 			
 			// verify new relation
 			p1 = pm.getObjectById(Parent51.class, pid2);
 			c2 = p1.getChild51();
-			System.out.println("cid: "+c2.getId()+", cname:"+c2.getName());
-			assertTrue(cid2.equals(c2.getId()));
+			System.out.println("cid: "+c2.getPkId()+", cname:"+c2.getName());
+			assertTrue(cid2.equals(c2.getPkId()));
 			
 			// verify old auto-deleted
 			try {

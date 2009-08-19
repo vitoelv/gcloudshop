@@ -65,7 +65,7 @@ public class GoodsAction extends BaseAction {
         request.setAttribute("properties", new String[0]);
         request.setAttribute("specification", new String[0]);
         
-        request.setAttribute("goodsId", goods.getId());
+        request.setAttribute("goodsId", goods.getPkId());
         request.setAttribute("promoteEndTime", "TODO promoteEndTime");
         request.setAttribute("nowTime", "TODO nowTime");
         

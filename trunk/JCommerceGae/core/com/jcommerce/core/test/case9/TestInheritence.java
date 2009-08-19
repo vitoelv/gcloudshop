@@ -33,7 +33,7 @@ public class TestInheritence extends BaseDAOTestCase {
 			pm.close();
 			
 			pm = PMF.get().getPersistenceManager();
-			String pid = p.getId();
+			String pid = p.getPkId();
 			System.out.println("pid="+pid);
 			
 			Parent9 p2 = pm.getObjectById(Parent9.class, pid);

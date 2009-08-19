@@ -25,6 +25,7 @@ import com.jcommerce.core.model.Category;
 import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.service.IDefaultManager;
+import com.jcommerce.gwt.client.model.IModelObject;
 
 public class DataStoreUtils implements IConstants{
 	
@@ -250,7 +251,7 @@ public class DataStoreUtils implements IConstants{
     					String column = columns[i];
     					String value = values[i];
     					if("keyName".equals(column)) {
-    						obj.setId(getIdFromChainedKeyName(value));
+    						obj.setPkId(getIdFromChainedKeyName(value));
     					}
     					else {
     						BeanUtils.setProperty(obj, column, value);
@@ -310,10 +311,9 @@ public class DataStoreUtils implements IConstants{
             if("class".equals(fn)) {
             	continue;
             }
-            if("id".equals(fn)) {
-            	continue;
-            }
-            if("keyName".equals(fn)) {
+            if(IModelObject.PK_ID.equals(fn) 
+            		|| IModelObject.KEY_NAME.equals(fn) 
+            		|| IModelObject.LONG_ID.equals(fn)) {
             	continue;
             }
             if(ModelObject.class.isAssignableFrom(ft)) {
@@ -419,7 +419,7 @@ public class DataStoreUtils implements IConstants{
 //    		}
     		buf.append(SEP_PARENT_CHILD);
     	} 
-    	String keyName = KeyFactory.stringToKey(obj.getId()).getName();
+    	String keyName = KeyFactory.stringToKey(obj.getPkId()).getName();
     	buf.append(obj.getClass().getSimpleName()).append(SEP_CLS_KEYNAME).append(keyName);
 
     	return;

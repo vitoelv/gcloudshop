@@ -28,13 +28,13 @@ public class TestManager extends BaseDAOTestCase {
 			p.setName("xxx");
 			String pid = manager.txadd(p);
 			System.out.println("pid="+pid+", p="+p);
-			System.out.println("p.getId="+p.getId());
+			System.out.println("p.getId="+p.getPkId());
 			
 			Address a = new Address();
 			a.setLoc("zzz");
 //			a.setPerson(p);
 			
-			String pkn = KeyFactory.stringToKey(p.getId()).getName();
+			String pkn = KeyFactory.stringToKey(p.getPkId()).getName();
 			System.out.println("pkn="+pkn);
 			pkn = p.getKeyName();
 			System.out.println("pkn="+pkn);
@@ -43,7 +43,7 @@ public class TestManager extends BaseDAOTestCase {
 					);
 
 			System.out.println("buildaid="+buildaid);
-			a.setId(buildaid);
+			a.setPkId(buildaid);
 			
 			String aid = manager.txadd(a);
 			System.out.println("aid="+aid+", a="+a);
@@ -116,7 +116,7 @@ public class TestManager extends BaseDAOTestCase {
 			System.out.println("pid="+pid+", p="+p);
 
 			
-			String aid = a.getId();
+			String aid = a.getPkId();
 			System.out.println("aid="+aid+", a="+a);
 			
 //			a = new Address();
@@ -178,7 +178,7 @@ public class TestManager extends BaseDAOTestCase {
 
 			System.out.println("pid="+pid+", p="+p);
 
-			String aid = a.getId();
+			String aid = a.getPkId();
 			System.out.println("aid="+aid+", a="+a);
 			
 //			a = new Address();

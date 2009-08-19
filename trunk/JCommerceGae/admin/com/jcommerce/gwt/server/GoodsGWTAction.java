@@ -7,17 +7,17 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.appengine.api.datastore.Blob;
 import com.jcommerce.core.model.DSFile;
-import com.jcommerce.core.model.Gallery;
 import com.jcommerce.core.model.Goods;
-import com.jcommerce.core.model.GoodsAttribute;
+import com.jcommerce.core.model.GoodsAttr;
+import com.jcommerce.core.model.GoodsGallery;
 import com.jcommerce.core.service.CustomizedManager;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.util.MyPropertyUtil;
 import com.jcommerce.gwt.client.form.FileForm;
 import com.jcommerce.gwt.client.form.GoodsForm;
-import com.jcommerce.gwt.client.model.IGallery;
 import com.jcommerce.gwt.client.model.IGoods;
-import com.jcommerce.gwt.client.model.IGoodsAttribute;
+import com.jcommerce.gwt.client.model.IGoodsAttr;
+import com.jcommerce.gwt.client.model.IGoodsGallery;
 
 public class GoodsGWTAction extends BaseGWTHttpAction {
 	
@@ -49,10 +49,10 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
 		CustomizedManager cm = super.getCustomizedManager();
     	try {
     		
-    		Object bestSold = (Object)form.get(IGoods.BESTSOLD);
+    		Object bestSold = (Object)form.get(IGoods.IS_BEST);
     		System.out.println("bestSold: "+bestSold);
     		
-    		String id = (String)form.get(IGoods.ID);
+    		String id = (String)form.get(IGoods.PK_ID);
 
     		
     		Goods to = form2To(form);
@@ -70,18 +70,18 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
     	boolean res = false;
     	try {
     		
-    		String id = (String)form.get(IGoods.ID);
+    		String id = (String)form.get(IGoods.PK_ID);
     		System.out.println("id: ["+id+"]");
     		Goods goods = (Goods)manager.get(Goods.class.getName(), id);
     		DSFile imageFile = goods.getImageFile();
-    		String imageFileId = imageFile.getId();
+    		String imageFileId = imageFile.getPkId();
     		System.out.println("imageFileId: "+imageFileId);
 //    		manager.delete(DSFile.class.getName(), imageFileId);
     		
 //    		manager.delete(DSFile.class.getName(), thumbFileId);
     		
-    		Set<Gallery> galleries = goods.getGalleries();
-    		Gallery gallery = null;
+    		Set<GoodsGallery> galleries = goods.getGalleries();
+    		GoodsGallery gallery = null;
     		DSFile galleryFile = null;
     		if(galleries.size()>0) {
     			gallery = galleries.iterator().next();
@@ -95,8 +95,8 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
         	imageFile = (DSFile)manager.get(DSFile.class.getName(), imageFileId);
         	System.out.println("imageFile should be null: "+imageFile);
         	if(gallery!=null) {
-        		galleryFile = (DSFile)manager.get(DSFile.class.getName(), galleryFile.getId());
-        		gallery = (Gallery)manager.get(Gallery.class.getName(), gallery.getId());
+        		galleryFile = (DSFile)manager.get(DSFile.class.getName(), galleryFile.getPkId());
+        		gallery = (GoodsGallery)manager.get(GoodsGallery.class.getName(), gallery.getPkId());
         		System.out.println("gallery should be null: gallery");
         	}
         	
@@ -133,17 +133,17 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
 		to.setThumbFile(thumbFile);
 
 		
-		Set<Gallery> galleries = to.getGalleries();
+		Set<GoodsGallery> galleries = to.getGalleries();
 		Map<String, Map<String, Object>> nestedGalleryForms = (Map<String, Map<String, Object>>)form.get(IGoods.GALLERIES);
 		if(nestedGalleryForms!=null) {
 			for(Map<String, Object> attrs : nestedGalleryForms.values()) {
-				String gid = (String)attrs.get(IGallery.ID);
-				Gallery gallery = new Gallery();
-				gallery.setDescription((String)attrs.get(IGallery.DESCRIPTION));
+				String gid = (String)attrs.get(IGoodsGallery.PK_ID);
+				GoodsGallery gallery = new GoodsGallery();
+				gallery.setImgDesc((String)attrs.get(IGoodsGallery.IMG_DESC));
 				if(StringUtils.isEmpty(gid)) {
 					// new gallery
 					try {
-					fileForm = (FileForm)attrs.get(IGallery.IMAGE);
+					fileForm = (FileForm)attrs.get(IGoodsGallery.IMAGE);
 					DSFile file = getFile(fileForm);
 					if(StringUtils.isEmpty(file.getFileName())) {
 						// no file uploaded.
@@ -159,20 +159,20 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
 					}
 				} else {
 					// existing file
-					gallery.setId(gid);
+					gallery.setPkId(gid);
 					galleries.add(gallery);
 				}
 
 			}
 		}
 
-		Set<GoodsAttribute> goodsAttributes = to.getAttributes();
+		Set<GoodsAttr> goodsAttributes = to.getAttributes();
 		Map<String, Map<String, Object>> nestedGoodsAttributeForms = (Map<String, Map<String, Object>>)form.get(IGoods.ATTRIBUTES);
 		if(nestedGoodsAttributeForms!=null) {
 			for(Map<String, Object> attrs : nestedGoodsAttributeForms.values()) {
-				GoodsAttribute ga = new GoodsAttribute();
-				ga.setAttributeId((String)attrs.get(IGoodsAttribute.ATTRIBUTEID));
-				ga.setValue((String)attrs.get(IGoodsAttribute.VALUE));
+				GoodsAttr ga = new GoodsAttr();
+				ga.setAttrId((String)attrs.get(IGoodsAttr.ATTR_ID));
+				ga.setAttrValue((String)attrs.get(IGoodsAttr.ATTR_VALUE));
 				goodsAttributes.add(ga);
 			}
 		}

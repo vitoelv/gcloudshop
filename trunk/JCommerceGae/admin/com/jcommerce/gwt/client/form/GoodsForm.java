@@ -29,13 +29,13 @@ public class GoodsForm extends BeanObject implements IGoods {
 	}
 	public static HiddenField<String> getIdField() {
 		HiddenField<String> idField = new HiddenField<String>();
-		idField.setName(ID);
+		idField.setName(PK_ID);
 		return idField;
 	}
 	
 	public static TextField<String> getNameField(String fieldTitle) {
 		TextField<String> field = new TextField<String>();
-		field.setName(NAME);
+		field.setName(GOODS_NAME);
 		field.setMaxLength(10);
 		field.setAutoValidate(true);
 		field.setAllowBlank(false);
@@ -47,25 +47,25 @@ public class GoodsForm extends BeanObject implements IGoods {
 	
 	public static ComboBox<BeanObject> getBrandIdField() {
 		ComboBox<BeanObject> field = new ComboBox<BeanObject>();
-		field.setName(BRANDID);
+		field.setName(BRAND_ID);
 		field.setDisplayField(IBrand.BRAND_NAME);
-        field.setValueField(IBrand.ID);
+        field.setValueField(IBrand.PK_ID);
 		return field;
 	}
 	
 	public static ComboBox<BeanObject> getGoodsTypeIdField() {
 		ComboBox<BeanObject> field = new ComboBox<BeanObject>();
-		field.setName(GOODSTYPEID);
-		field.setDisplayField(IGoodsType.NAME);
-        field.setValueField(IGoodsType.ID);
+		field.setName(GOODS_TYPE_ID);
+		field.setDisplayField(IGoodsType.CAT_NAME);
+        field.setValueField(IGoodsType.PK_ID);
 		return field;
 	}
 	
 	public static ListField<BeanObject> getCategoryIdsField() {
 		ListField<BeanObject> field = new ListField<BeanObject>();
-		field.setName(CATEGORYIDS);
-        field.setDisplayField(ICategory.NAME);
-        field.setValueField(ICategory.ID);
+		field.setName(CATEGORY_IDS);
+        field.setDisplayField(ICategory.CAT_NAME);
+        field.setValueField(ICategory.PK_ID);
 		return field;
 	}
 	public static TextField<String> getSnField() {
@@ -98,19 +98,19 @@ public class GoodsForm extends BeanObject implements IGoods {
 	
 	public static CheckBox getHotSoldField() {
 		CheckBox field = new CheckBox();
-		field.setName(HOTSOLD);
+		field.setName(IS_HOT);
 		field.setAutoValidate(true);
 		return field;
 	}
 	public static CheckBox getNewAddedField() {
 		CheckBox field = new CheckBox();
-		field.setName(NEWADDED);
+		field.setName(IS_NEW);
 		field.setAutoValidate(true);
 		return field;
 	}
 	public static CheckBox getBestSoldField() {
 		CheckBox field = new CheckBox();
-		field.setName(BESTSOLD);
+		field.setName(IS_BEST);
 		field.setAutoValidate(true);
 		return field;
 	}

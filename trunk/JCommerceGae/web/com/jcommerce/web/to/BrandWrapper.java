@@ -20,10 +20,10 @@ public class BrandWrapper extends BaseModelWrapper implements URLConstants{
 	}
 	
     public String getBrandId() {
-    	return getBrand().getId();
+    	return getBrand().getPkId();
     }
 	public String getUrl() {
-    	return ACTION_GOODS+ getBrand().getId();    	
+    	return ACTION_GOODS+ getBrand().getPkId();    	
     }
 
 

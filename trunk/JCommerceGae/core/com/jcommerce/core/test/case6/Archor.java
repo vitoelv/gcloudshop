@@ -16,7 +16,7 @@ public class Archor {
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-	private String id;
+	private String pkId;
     
     @Persistent
 	private String name;
@@ -29,13 +29,7 @@ public class Archor {
 //    @Persistent(mappedBy="archor2")
     private Set<Parent62> parent62s = new HashSet<Parent62>();
 
-	public String getId() {
-		return id;
-	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;
@@ -59,6 +53,14 @@ public class Archor {
 
 	public void setParent62s(Set<Parent62> parent62s) {
 		this.parent62s = parent62s;
+	}
+
+	public String getPkId() {
+		return pkId;
+	}
+
+	public void setPkId(String pkId) {
+		this.pkId = pkId;
 	}
     
 }

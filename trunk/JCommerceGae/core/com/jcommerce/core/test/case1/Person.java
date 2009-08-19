@@ -26,7 +26,7 @@ public class Person extends ModelObject{
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-	private String id;
+	private String pkId;
 	
     @Persistent
     @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
@@ -42,12 +42,12 @@ public class Person extends ModelObject{
     @Persistent
     private Set<String> aliasList = new HashSet<String>();
     
-	public String getId() {
-		return id;
+	public String getPkId() {
+		return pkId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setPkId(String pkId) {
+		this.pkId = pkId;
 	}
 
 	public String getName() {

@@ -80,7 +80,7 @@ public class IShopServiceImpl extends RemoteServiceServlet implements IShopServi
 //        res.setCode(configMeta.getCode());
 //        res.setDescription(configMeta.getDescription());
 //        res.setEnabled(configMeta.isEnabled());
-//        res.setId(configMeta.getId());
+//        res.setId(configMeta.getPkId());
 //        res.setName(configMeta.getName());
 //        res.setOnline(configMeta.isOnline());
 //        res.setPayFee(configMeta.getPayFee());
@@ -291,7 +291,7 @@ public class IShopServiceImpl extends RemoteServiceServlet implements IShopServi
 				IDefaultManager manager = getDefaultManager();
 				ModelObject to = (ModelObject) Class.forName(props.getModelName()).newInstance();
 				MyPropertyUtil.form2To(to, props.getProperties());
-				to.setId(id);
+				to.setPkId(id);
 				boolean res = manager.txupdate(to);
 				return res;
 			} catch (Exception e) {
@@ -365,9 +365,9 @@ public class IShopServiceImpl extends RemoteServiceServlet implements IShopServi
 //				for (Iterator<GoodsType> it = goodsTypeUnit.iterator(); it.hasNext();) {
 //					GoodsType goodsType = it.next();
 //					maps.put(GoodsType.NAME, goodsType.getName());
-//					maps.put(GoodsType.ID, goodsType.getId());
+//					maps.put(GoodsType.ID, goodsType.getPkId());
 //					maps.put(GoodsType.ENABLED, goodsType.isEnabled());
-//					cond.setValue(goodsType.getId() + "");
+//					cond.setValue(goodsType.getPkId() + "");
 //					criteria.addCondition(cond);
 //					maps.put(GoodsType.ATTRCOUNT, attributeManager.getAttributeCount(criteria)+ "");
 //					criteria.removeAllCondition();
@@ -393,7 +393,7 @@ public class IShopServiceImpl extends RemoteServiceServlet implements IShopServi
 //        for (Iterator<Region> it = children.iterator(); it.hasNext();) {
 //        	Region child = it.next();
 //        	maps.put("name",child.getName());
-//        	maps.put("id",child.getId());        	
+//        	maps.put("id",child.getPkId());        	
 //            objs.add(new BeanObject("Region", maps));
 //        }
 //        return objs;  	

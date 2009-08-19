@@ -22,7 +22,7 @@ public class TestGoods extends BaseDAOTestCase {
 			Goods goods = new Goods();
 			goods.setKeyName("xxx");
 			goods.setGoodsName("abc");
-			goods.setGoodsNumber(123);
+			goods.setGoodsNumber(123l);
 			
 			String id = manager.txadd(goods);
 			Long ld1 = goods.getLongId();
@@ -36,7 +36,7 @@ public class TestGoods extends BaseDAOTestCase {
 			System.out.println("ld1="+ld1+", ld2="+ld2);
 			String name = goods.getGoodsName();
 			System.out.println("name="+name);
-			int gn = goods.getGoodsNumber();
+			long gn = goods.getGoodsNumber();
 			System.out.println("gn="+gn);
 			assertTrue(ld1.equals(ld2));
 			

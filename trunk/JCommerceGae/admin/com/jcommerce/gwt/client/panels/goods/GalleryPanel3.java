@@ -34,8 +34,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.GalleryForm;
-import com.jcommerce.gwt.client.model.IGallery;
 import com.jcommerce.gwt.client.model.IGoods;
+import com.jcommerce.gwt.client.model.IGoodsGallery;
 import com.jcommerce.gwt.client.service.ListService;
 
 public class GalleryPanel3 extends TabItem {
@@ -91,10 +91,10 @@ public class GalleryPanel3 extends TabItem {
 		
 		Button link = new Button("[-]");
 		HiddenField<String> idField = new HiddenField<String>();
-		idField.setName(buildElementName(GalleryForm.ID));
+		idField.setName(buildElementName(GalleryForm.PK_ID));
 		idField.setValue("xx");
 		TextField<String> descField = new TextField<String>();
-		descField.setName(buildElementName(GalleryForm.DESCRIPTION));
+		descField.setName(buildElementName(GalleryForm.IMG_DESC));
 		descField.setFieldLabel("descrition:");
 		
 		lc.add(link);
@@ -176,12 +176,12 @@ public class GalleryPanel3 extends TabItem {
 		
 		Text lbl1 = new Text("Name :");
 		final TextField<String> t1 = new TextField<String>();
-		t1.setName(buildElementName(IGallery.NAME));
+		t1.setName(buildElementName(IGoodsGallery.IMG_DESC));
 //		t1.setFieldLabel("Name :");
 		
 		Text lbl2 = new Text("File :");
 		final FileUploadField file = new FileUploadField();
-		file.setName(buildElementName(IGallery.IMAGE));
+		file.setName(buildElementName(IGoodsGallery.IMAGE));
 		
 		gp.addDynaField(t1);
 		gp.addDynaField(file);
@@ -250,7 +250,7 @@ public class GalleryPanel3 extends TabItem {
 //		this.repaint();
 		
 		if(goodsId!=null) {
-		new ListService().listBeans(ModelNames.GALLERY, IGallery.GOODS, goodsId, new ListService.Listener() {
+		new ListService().listBeans(ModelNames.GALLERY, IGoodsGallery.GOODS_ID, goodsId, new ListService.Listener() {
 			@Override
 			public void onSuccess(List<BeanObject> beans) {
 				for(BeanObject gallery:beans) {
@@ -266,10 +266,10 @@ public class GalleryPanel3 extends TabItem {
 	
 	private void addImage(BeanObject gallery) {
 		System.out.println("addImage: ");
-		String imageFileId = gallery.getString(IGallery.IMAGEFILEID);
-		String image = gallery.getString(IGallery.IMAGE);
-		String id = gallery.getString(IGallery.ID);
-		String description = gallery.getString(IGallery.DESCRIPTION);
+		String imageFileId = gallery.getString(IGoodsGallery.IMAGEFILEID);
+		String image = gallery.getString(IGoodsGallery.IMAGE);
+		String id = gallery.getString(IGoodsGallery.PK_ID);
+		String description = gallery.getString(IGoodsGallery.IMG_DESC);
 		
 		System.out.println("imageFileId: "+imageFileId);
 		System.out.println("image: "+image);
@@ -296,7 +296,7 @@ public class GalleryPanel3 extends TabItem {
 
 		
 		HiddenField<String> idField = new HiddenField<String>();
-		idField.setName(buildElementName(GalleryForm.ID));
+		idField.setName(buildElementName(GalleryForm.PK_ID));
 		idField.setValue(id);
 //		lc.add(idField);
 		
@@ -306,7 +306,7 @@ public class GalleryPanel3 extends TabItem {
 //		lc.add(imageFileIdField);
 		
 		TextField<String> descField = new TextField<String>();
-		descField.setName(buildElementName(GalleryForm.DESCRIPTION));
+		descField.setName(buildElementName(GalleryForm.IMG_DESC));
 		descField.setFieldLabel("descrition:");
 		descField.setMaxLength(20);
 		descField.setValue(description);
@@ -369,12 +369,12 @@ public class GalleryPanel3 extends TabItem {
 		}
 
 		HiddenField<String> id = new HiddenField<String>();
-		id.setName(buildElementName(GalleryForm.ID));
+		id.setName(buildElementName(GalleryForm.PK_ID));
 		id.setValue("");
 		lc.add(id);
 		
 		TextField<String> desc = new TextField<String>();
-		desc.setName(buildElementName(GalleryForm.DESCRIPTION));
+		desc.setName(buildElementName(GalleryForm.IMG_DESC));
 		desc.setFieldLabel("descrition:");
 		desc.setMaxLength(20);
 		

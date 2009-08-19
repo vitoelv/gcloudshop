@@ -49,9 +49,9 @@ public class TestBulkLoader2 extends BaseDAOTestCase {
 			Parent p1 = pm.makePersistent(p);
 //			
 			pm.currentTransaction().commit();
-			String pid = p1.getId();
-			String aid = a.getId();
-			System.out.println("pid: "+p1.getId()+", aid: "+a.getId());
+			String pid = p1.getPkId();
+			String aid = a.getPkId();
+			System.out.println("pid: "+p1.getPkId()+", aid: "+a.getPkId());
 			
 //			pkn = KeyFactory.stringToKey(pid).getName();
 //			akn = KeyFactory.stringToKey(aid).getName();
@@ -69,7 +69,7 @@ public class TestBulkLoader2 extends BaseDAOTestCase {
 //			Key key = new KeyFactory.Builder(Person.class.getSimpleName(), pkn).getKey();
 //			String newId = KeyFactory.keyToString(key);
 //			System.out.println("newId: "+newId);
-			p.setId(pid);
+			p.setPkId(pid);
 			p.setName("xxx");
 			p1 = pm.makePersistent(p);
 			
@@ -81,15 +81,15 @@ public class TestBulkLoader2 extends BaseDAOTestCase {
 				addChild(Child.class.getSimpleName(), akn).getKey();
 			newId = KeyFactory.keyToString(key); 
 			System.out.println("newId: "+newId);
-			a.setId(aid);
+			a.setPkId(aid);
 //			a.setKeyName(key.getName());
 			a.setName("x11");
 			a = pm.makePersistent(a);
 //			a.setKeyName(akn);
 			pm.currentTransaction().commit();
 			
-			System.out.println("pid="+p1.getId());
-			System.out.println("aid="+a.getId());
+			System.out.println("pid="+p1.getPkId());
+			System.out.println("aid="+a.getPkId());
 //			System.out.println(", akn="+a.getKeyName());
 			
 			pm.currentTransaction().begin();

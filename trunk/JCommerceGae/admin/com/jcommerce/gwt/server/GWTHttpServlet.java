@@ -240,11 +240,7 @@ public class GWTHttpServlet extends HttpServlet {
 				}
 			}
 			
-			Object o = form.get("id");
-			if(o!=null) {
-				String id = o.toString();
-				id = (String)o;
-			}
+
 			
 			Object[] ref = new Object[] { form };
 			m.invoke(gwtAction, ref);

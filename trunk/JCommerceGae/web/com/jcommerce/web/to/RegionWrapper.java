@@ -20,7 +20,7 @@ public class RegionWrapper extends BaseModelWrapper {
 	}
 	
 	public String getRegionId() {
-		return getRegion().getId();
+		return getRegion().getPkId();
 	}
 
 }

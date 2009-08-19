@@ -106,17 +106,17 @@ public class CategoryPanel extends ContentWidget {
         System.out.println("----------NewCategory");
         add(contentPanel);
        
-        contentPanel.createPanel(ICategory.NAME, "分类名称:", new TextBox());
+        contentPanel.createPanel(ICategory.CAT_NAME, "分类名称:", new TextBox());
 //        contentPanel.createPanel(ICategory.PARENT, "上级分类:", c_parent);   
-        contentPanel.createPanel(ICategory.PARENTID, "上级分类:", c_parent);        
-        contentPanel.createPanel(ICategory.MEASUREUNIT, "数量单位:", new TextBox());
-        contentPanel.createPanel(ICategory.SORTORDER, "排序:", new TextBox());
-        contentPanel.createPanel(ICategory.SHOW, "是否显示:", new CheckBox());
-        contentPanel.createPanel(ICategory.SHOWINNAVIGATOR, "是否显示在导航栏:", new CheckBox());
+        contentPanel.createPanel(ICategory.PARENT_ID, "上级分类:", c_parent);        
+        contentPanel.createPanel(ICategory.MEASURE_UNIT, "数量单位:", new TextBox());
+        contentPanel.createPanel(ICategory.SORT_ORDER, "排序:", new TextBox());
+        contentPanel.createPanel(ICategory.IS_SHOW, "是否显示:", new CheckBox());
+        contentPanel.createPanel(ICategory.SHOW_IN_NAV, "是否显示在导航栏:", new CheckBox());
         contentPanel.createPanel(ICategory.GRADE, "价格区间个数:", new TextBox());
         contentPanel.createPanel(ICategory.STYLE, "分类的样式表文件:", new TextBox());
         contentPanel.createPanel(ICategory.KEYWORDS, "关键字:", new TextBox());
-        contentPanel.createPanel(ICategory.DESC, "分类描述:", new TextArea());
+        contentPanel.createPanel(ICategory.CAT_DESC, "分类描述:", new TextArea());
         
         HorizontalPanel panel = new HorizontalPanel();
         panel.setSpacing(10);
@@ -156,7 +156,7 @@ public class CategoryPanel extends ContentWidget {
                             System.out.println("new onSuccess( "+id);                            
                             getCurState().setCatID(id);
                             System.out.println("1 b_list.addItem("+id);
-                            contentPanel.setValue(AttributeForm.ID, id);
+                            contentPanel.setValue(AttributeForm.PK_ID, id);
                             
                         	Success.State newState = new Success.State();
                         	newState.setMessage("添加商品分类成功");
@@ -189,7 +189,7 @@ public class CategoryPanel extends ContentWidget {
             	int i=1;
                 for (Iterator<BeanObject> it = beans.iterator(); it.hasNext();) {
                     BeanObject category = it.next();                    
-                    c_parent.insertItem(category.getString(ICategory.NAME), category.getString(ICategory.ID), i);
+                    c_parent.insertItem(category.getString(ICategory.CAT_NAME), category.getString(ICategory.PK_ID), i);
                     i++;
                 }      
                 

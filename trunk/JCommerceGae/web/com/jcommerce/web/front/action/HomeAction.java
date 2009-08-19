@@ -68,11 +68,11 @@ public class HomeAction extends BaseAction {
         
         Criteria criteria = new Criteria();
         Condition cond = new Condition();
-        cond.setField(IGoods.BRANDID);
+        cond.setField(IGoods.BRAND_ID);
         cond.setOperator(Condition.EQUALS);
         List<BrandWrapper> brandInfoList = new ArrayList<BrandWrapper>();
         for (Brand brand:brands) {
-            cond.setValue(brand.getId());
+            cond.setValue(brand.getPkId());
             criteria.addCondition(cond);
             Integer goodsNum = getDefaultManager().getCount(ModelNames.GOODS, criteria);
             BrandWrapper bw = new BrandWrapper(brand);
@@ -122,7 +122,7 @@ public class HomeAction extends BaseAction {
         //      int index = 0;
         //      for (Iterator it = orderGoods.iterator(); it.hasNext();) {
         //          OrderGoods orderGood = (OrderGoods)it.next();
-        //          goodId[index] = orderGood.getGoods().getId()+"";
+        //          goodId[index] = orderGood.getGoods().getPkId()+"";
         //          index++;
         //      }
          
@@ -199,7 +199,7 @@ public class HomeAction extends BaseAction {
         return  Action.SUCCESS;
     }
     private Session getSession(HttpServletRequest request) {
-//        String sid = request.getSession(true).getId();
+//        String sid = request.getSession(true).getPkId();
 //        Session sess = sessionManager.getSession(sid);
 //        if (sess == null) {
 //            sess = new Session();
@@ -237,7 +237,7 @@ public class HomeAction extends BaseAction {
     	return WrapperUtil.wrap(list, GoodsWrapper.class);
     	
 //        for(Goods goods:list) {
-//        	goods.setUrl("goods.action?id="+goods.getId());
+//        	goods.setUrl("goods.action?id="+goods.getPkId());
 //        	goods.setThumb("/admin/dynaImageService.do?fileId="+goods.getImageFileId());
 //        	goods.setShortStyleName(goods.getName().length()>10?goods.getName().substring(0, 10)+"...":goods.getName());
 //        }
@@ -247,7 +247,7 @@ public class HomeAction extends BaseAction {
     private List<Goods> getBestSoldGoods() {
         Criteria c1 = new Criteria();
         Condition cond1 = new Condition();
-        cond1.setField(IGoods.BESTSOLD);
+        cond1.setField(IGoods.IS_BEST);
         cond1.setOperator(Condition.EQUALS);
         cond1.setValue("true");
         c1.addCondition(cond1);
@@ -258,7 +258,7 @@ public class HomeAction extends BaseAction {
     private List<Goods> getHostSoldGoods() {
         Criteria c1 = new Criteria();
         Condition cond1 = new Condition();
-        cond1.setField(IGoods.HOTSOLD);
+        cond1.setField(IGoods.IS_HOT);
         cond1.setOperator(Condition.EQUALS);
         cond1.setValue("true");
         c1.addCondition(cond1);
@@ -270,7 +270,7 @@ public class HomeAction extends BaseAction {
     private List<Goods> getNewlyAddedGoods() {
         Criteria c1 = new Criteria();
         Condition cond1 = new Condition();
-        cond1.setField(IGoods.NEWADDED);
+        cond1.setField(IGoods.IS_NEW);
         cond1.setOperator(Condition.EQUALS);
         cond1.setValue("true");
         c1.addCondition(cond1);

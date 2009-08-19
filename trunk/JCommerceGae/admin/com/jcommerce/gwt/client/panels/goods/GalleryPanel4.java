@@ -6,37 +6,27 @@ import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
-import com.extjs.gxt.ui.client.util.Margins;
-import com.extjs.gxt.ui.client.util.Padding;
 import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.Text;
 import com.extjs.gxt.ui.client.widget.button.Button;
-import com.extjs.gxt.ui.client.widget.form.AdapterField;
 import com.extjs.gxt.ui.client.widget.form.FileUploadField;
 import com.extjs.gxt.ui.client.widget.form.HiddenField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
-import com.extjs.gxt.ui.client.widget.layout.CenterLayout;
-import com.extjs.gxt.ui.client.widget.layout.FormLayout;
-import com.extjs.gxt.ui.client.widget.layout.HBoxLayout;
 import com.extjs.gxt.ui.client.widget.layout.RowData;
 import com.extjs.gxt.ui.client.widget.layout.RowLayout;
 import com.extjs.gxt.ui.client.widget.layout.TableData;
 import com.extjs.gxt.ui.client.widget.layout.TableLayout;
 import com.extjs.gxt.ui.client.widget.layout.TableRowLayout;
-import com.extjs.gxt.ui.client.widget.layout.VBoxLayout;
-import com.extjs.gxt.ui.client.widget.layout.VBoxLayoutData;
-import com.extjs.gxt.ui.client.widget.layout.HBoxLayout.HBoxLayoutAlign;
-import com.extjs.gxt.ui.client.widget.layout.VBoxLayout.VBoxLayoutAlign;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Image;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.GalleryForm;
-import com.jcommerce.gwt.client.model.IGallery;
 import com.jcommerce.gwt.client.model.IGoods;
+import com.jcommerce.gwt.client.model.IGoodsGallery;
 import com.jcommerce.gwt.client.service.DeleteService;
 import com.jcommerce.gwt.client.service.ListService;
 
@@ -87,10 +77,10 @@ public class GalleryPanel4 extends TabItem {
 		
 		Button link = new Button("[-]");
 		HiddenField<String> idField = new HiddenField<String>();
-		idField.setName(buildElementName(GalleryForm.ID));
+		idField.setName(buildElementName(GalleryForm.PK_ID));
 		idField.setValue("xx");
 		TextField<String> descField = new TextField<String>();
-		descField.setName(buildElementName(GalleryForm.DESCRIPTION));
+		descField.setName(buildElementName(GalleryForm.IMG_DESC));
 		descField.setFieldLabel("descrition:");
 		
 		lc.add(link);
@@ -110,12 +100,12 @@ public class GalleryPanel4 extends TabItem {
 		
 		Text lbl1 = new Text("Image Description :");
 		final TextField<String> t1 = new TextField<String>();
-		t1.setName(buildElementName(IGallery.DESCRIPTION));
+		t1.setName(buildElementName(IGoodsGallery.IMG_DESC));
 //		t1.setFieldLabel("Name :");
 		
 		Text lbl2 = new Text("Image File :");
 		final FileUploadField file = new FileUploadField();
-		file.setName(buildElementName(IGallery.IMAGE));
+		file.setName(buildElementName(IGoodsGallery.IMAGE));
 		
 		gp.addDynaField(t1);
 		gp.addDynaField(file);
@@ -180,7 +170,7 @@ public class GalleryPanel4 extends TabItem {
 		addUploader(true);
 		
 		if(goodsId!=null) {
-		new ListService().listBeans(ModelNames.GALLERY, IGallery.GOODS, goodsId, new ListService.Listener() {
+		new ListService().listBeans(ModelNames.GALLERY, IGoodsGallery.GOODS, goodsId, new ListService.Listener() {
 			@Override
 			public void onSuccess(List<BeanObject> beans) {
 				for(BeanObject gallery:beans) {
@@ -197,10 +187,10 @@ public class GalleryPanel4 extends TabItem {
 	private void addImage(BeanObject gallery) {
 		System.out.println("addImage: ");
 		uploaderCount++;
-		String imageFileId = gallery.getString(IGallery.IMAGEFILEID);
-		String image = gallery.getString(IGallery.IMAGE);
-		final String id = gallery.getString(IGallery.ID);
-		String description = gallery.getString(IGallery.DESCRIPTION);
+		String imageFileId = gallery.getString(IGoodsGallery.IMAGEFILEID);
+		String image = gallery.getString(IGoodsGallery.IMAGE);
+		final String id = gallery.getString(IGoodsGallery.PK_ID);
+		String description = gallery.getString(IGoodsGallery.IMG_DESC);
 		
 		System.out.println("imageFileId: "+imageFileId);
 		System.out.println("image: "+image);
@@ -221,7 +211,7 @@ public class GalleryPanel4 extends TabItem {
 
 		
 		final HiddenField<String> idField = new HiddenField<String>();
-		idField.setName(buildElementName(GalleryForm.ID));
+		idField.setName(buildElementName(GalleryForm.PK_ID));
 		idField.setValue(id);
 		
 		final HiddenField<String> imageFileIdField = new HiddenField<String>();
@@ -229,7 +219,7 @@ public class GalleryPanel4 extends TabItem {
 		imageFileIdField.setValue(imageFileId);
 		
 		final TextField<String> descField = new TextField<String>();
-		descField.setName(buildElementName(GalleryForm.DESCRIPTION));
+		descField.setName(buildElementName(GalleryForm.IMG_DESC));
 		descField.setFieldLabel("descrition:");
 		descField.setMaxLength(20);
 		descField.setValue(description);

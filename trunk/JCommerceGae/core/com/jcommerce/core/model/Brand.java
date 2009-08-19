@@ -1,9 +1,7 @@
-/**
-* Author: Bob Chen
-*/
-
 package com.jcommerce.core.model;
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -11,63 +9,89 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import com.jcommerce.gwt.client.model.IAttribute;
-
-
-@PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true")
+/**  
+ * generated with my extension of middleGen 
+ * @author <a href="http://code.google.com/p/gcloudshop/">Leon</a>
+ */
+ 
+@PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true") 
 public class Brand extends ModelObject {
 
-    @Override
-    public ModelObject getParent() {
-    	return null;
-    }
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
+    private String pkId;
     
     @Persistent
     @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
     private String keyName;
     
     @Persistent
-    private String brandName;
+    private Long longId;
     
-    @Persistent
-    private String brandLogo;
-
-    // TODO leon combine logo and logoFileId to a DSFile instance, 
+    // relations
+        // TODO leon combine logo and logoFileId to a DSFile instance, 
     // in order to make DSFile a child of Brand, and thus can be put in a DS transaction
     @Persistent
     private String logoFileId;
     
 //    @Persistent
 //    private DSFile logo;
-//    
-//    @Persistent
-//    private String logoFileName;
-//    
-//    @Persistent
-//    private String logoFileId;
-    
-    @Persistent
-    private String brandDesc;
-    
-    @Persistent
-    private String siteUrl;
-    
-    @Persistent
-    private Boolean show = false;
-    
-    @Persistent
-    private Integer sortOrder = 0;
 
-	public String getId() {
-		return id;
+public String getLogoFileId() {
+	return logoFileId;
+}
+
+
+public void setLogoFileId(String logoFileId) {
+	this.logoFileId = logoFileId;
+}
+    
+    
+  // fields
+  @Persistent
+  private java.lang.String brandId; 
+
+  @Persistent
+  private java.lang.String brandName; 
+
+  @Persistent
+  private java.lang.String brandLogo; 
+
+  @Persistent
+  private java.lang.String brandDesc; 
+
+  @Persistent
+  private java.lang.String siteUrl; 
+
+  @Persistent
+  private java.lang.Long sortOrder=0l; 
+
+  @Persistent
+  private java.lang.Boolean isShow=false; 
+
+
+
+	public Brand() {
 	}
 
-	public void setId(String id) {
-		this.id = id;
+
+	@Override
+	public Long getLongId() {
+		return longId;
+	}
+
+	@Override
+	public void setLongId(Long longId) {
+		this.longId = longId;
+	}
+
+	public String getPkId() {
+		return pkId;
+	}
+
+	public void setPkId(String pkId) {
+		this.pkId = pkId;
 	}
 
 	public String getKeyName() {
@@ -78,64 +102,74 @@ public class Brand extends ModelObject {
 		this.keyName = keyName;
 	}
 
-	public String getBrandName() {
-		return brandName;
-	}
 
-	public void setBrandName(String brandName) {
-		this.brandName = brandName;
-	}
 
-	public String getBrandLogo() {
-		return brandLogo;
-	}
+  public java.lang.String getBrandId() {
+    return brandId;
+  }
 
-	public void setBrandLogo(String brandLogo) {
-		this.brandLogo = brandLogo;
-	}
+  public void setBrandId(java.lang.String newBrandId) {
+    brandId = newBrandId;
+  }
 
-	public String getLogoFileId() {
-		return logoFileId;
-	}
 
-	public void setLogoFileId(String logoFileId) {
-		this.logoFileId = logoFileId;
-	}
 
-	public String getBrandDesc() {
-		return brandDesc;
-	}
+  public java.lang.String getBrandName() {
+    return brandName;
+  }
 
-	public void setBrandDesc(String brandDesc) {
-		this.brandDesc = brandDesc;
-	}
+  public void setBrandName(java.lang.String newBrandName) {
+    brandName = newBrandName;
+  }
 
-	public String getSiteUrl() {
-		return siteUrl;
-	}
 
-	public void setSiteUrl(String siteUrl) {
-		this.siteUrl = siteUrl;
-	}
 
-	public Boolean getShow() {
-		return show;
-	}
+  public java.lang.String getBrandLogo() {
+    return brandLogo;
+  }
 
-	public void setShow(Boolean show) {
-		this.show = show;
-	}
+  public void setBrandLogo(java.lang.String newBrandLogo) {
+    brandLogo = newBrandLogo;
+  }
 
-	public Integer getSortOrder() {
-		return sortOrder;
-	}
 
-	public void setSortOrder(Integer sortOrder) {
-		this.sortOrder = sortOrder;
-	}
-    
 
-    
+  public java.lang.String getBrandDesc() {
+    return brandDesc;
+  }
 
+  public void setBrandDesc(java.lang.String newBrandDesc) {
+    brandDesc = newBrandDesc;
+  }
+
+
+
+  public java.lang.String getSiteUrl() {
+    return siteUrl;
+  }
+
+  public void setSiteUrl(java.lang.String newSiteUrl) {
+    siteUrl = newSiteUrl;
+  }
+
+
+
+  public java.lang.Long getSortOrder() {
+    return sortOrder;
+  }
+
+  public void setSortOrder(java.lang.Long newSortOrder) {
+    sortOrder = newSortOrder;
+  }
+
+
+
+  public java.lang.Boolean getIsShow() {
+    return isShow;
+  }
+
+  public void setIsShow(java.lang.Boolean newIsShow) {
+    isShow = newIsShow;
+  }
 
 }

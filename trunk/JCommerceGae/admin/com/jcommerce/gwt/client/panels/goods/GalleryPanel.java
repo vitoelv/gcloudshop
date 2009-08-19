@@ -1,7 +1,6 @@
 package com.jcommerce.gwt.client.panels.goods;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
-import com.extjs.gxt.ui.client.Style.LayoutRegion;
 import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
@@ -19,8 +18,6 @@ import com.extjs.gxt.ui.client.widget.form.FileUploadField;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.HiddenField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
-import com.extjs.gxt.ui.client.widget.layout.BorderLayout;
-import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.extjs.gxt.ui.client.widget.layout.CenterLayout;
 import com.extjs.gxt.ui.client.widget.layout.ColumnData;
 import com.extjs.gxt.ui.client.widget.layout.ColumnLayout;
@@ -40,8 +37,8 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Image;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.GalleryForm;
-import com.jcommerce.gwt.client.model.IGallery;
 import com.jcommerce.gwt.client.model.IGoods;
+import com.jcommerce.gwt.client.model.IGoodsGallery;
 
 public class GalleryPanel extends TabItem {
 	int uploaderCount = 0;
@@ -243,10 +240,7 @@ public class GalleryPanel extends TabItem {
 		LayoutContainer form = new LayoutContainer();
 		form.setLayout(new FormLayout());
 		HiddenField<String> hf = new HiddenField<String>();
-		hf.setName(IGallery.NAME);
-		form.add(hf);
-		hf = new HiddenField<String>();
-		hf.setName(IGallery.DESCRIPTION);
+		hf.setName(IGoodsGallery.IMG_DESC);
 		form.add(hf);
 
 		
@@ -282,10 +276,10 @@ public class GalleryPanel extends TabItem {
 	
 	private void addImage(BeanObject gallery) {
 		System.out.println("addImage: ");
-		String imageFileId = gallery.getString(IGallery.IMAGEFILEID);
-		String image = gallery.getString(IGallery.IMAGE);
-		String id = gallery.getString(IGallery.ID);
-		String description = gallery.getString(IGallery.DESCRIPTION);
+		String imageFileId = gallery.getString(IGoodsGallery.IMAGEFILEID);
+		String image = gallery.getString(IGoodsGallery.IMAGE);
+		String id = gallery.getString(IGoodsGallery.PK_ID);
+		String description = gallery.getString(IGoodsGallery.IMG_DESC);
 		
 		System.out.println("imageFileId: "+imageFileId);
 		System.out.println("image: "+image);
@@ -311,7 +305,7 @@ public class GalleryPanel extends TabItem {
 
 		
 		HiddenField<String> idField = new HiddenField<String>();
-		idField.setName(buildElementName(GalleryForm.ID));
+		idField.setName(buildElementName(GalleryForm.PK_ID));
 		idField.setValue(id);
 //		lc.add(idField);
 		
@@ -321,7 +315,7 @@ public class GalleryPanel extends TabItem {
 //		lc.add(imageFileIdField);
 		
 		TextField<String> descField = new TextField<String>();
-		descField.setName(buildElementName(GalleryForm.DESCRIPTION));
+		descField.setName(buildElementName(GalleryForm.IMG_DESC));
 		descField.setFieldLabel("descrition:");
 		descField.setMaxLength(20);
 		descField.setValue(description);
@@ -382,12 +376,12 @@ public class GalleryPanel extends TabItem {
 		}
 
 		HiddenField<String> id = new HiddenField<String>();
-		id.setName(buildElementName(GalleryForm.ID));
+		id.setName(buildElementName(GalleryForm.PK_ID));
 		id.setValue("");
 		lc.add(id);
 		
 		TextField<String> desc = new TextField<String>();
-		desc.setName(buildElementName(GalleryForm.DESCRIPTION));
+		desc.setName(buildElementName(GalleryForm.IMG_DESC));
 		desc.setFieldLabel("descrition:");
 		desc.setMaxLength(20);
 		

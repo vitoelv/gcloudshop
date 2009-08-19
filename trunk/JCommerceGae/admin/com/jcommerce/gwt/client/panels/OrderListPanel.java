@@ -19,7 +19,7 @@ import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.BeanObject;
-import com.jcommerce.gwt.client.model.IOrder;
+import com.jcommerce.gwt.client.model.IOrderInfo;
 import com.jcommerce.gwt.client.service.Criteria;
 import com.jcommerce.gwt.client.service.PagingListService;
 import com.jcommerce.gwt.client.widgets.ActionCellRenderer;
@@ -94,17 +94,17 @@ public class OrderListPanel  extends ContentWidget{
 		final CheckBoxSelectionModel<BeanObject> smRowSelection = new CheckBoxSelectionModel<BeanObject>();
 		columns.add(smRowSelection.getColumn());
 
-		ColumnConfig col = new ColumnConfig(IOrder.SN, "订单号", 100);
+		ColumnConfig col = new ColumnConfig(IOrderInfo.ORDER_SN, "订单号", 100);
 		columns.add(col);
-		col = new ColumnConfig(IOrder.ADDTIME, "下单时间", 100);
+		col = new ColumnConfig(IOrderInfo.ADD_TIME, "下单时间", 100);
 		columns.add(col);
-		col = new ColumnConfig(IOrder.CONSIGNEE, "收货人", 100);
+		col = new ColumnConfig(IOrderInfo.CONSIGNEE, "收货人", 100);
 		columns.add(col);
-		col = new ColumnConfig(IOrder.GOODSAMOUNT, "总金额", 100);
+		col = new ColumnConfig(IOrderInfo.GOODS_AMOUNT, "总金额", 100);
 		columns.add(col);
-		col = new ColumnConfig(IOrder.ORDERAMOUNT, "应付金额", 100);
+		col = new ColumnConfig(IOrderInfo.ORDER_AMOUNT, "应付金额", 100);
 		columns.add(col);
-		col = new ColumnConfig(IOrder.STATUS, "订单状态", 100);
+		col = new ColumnConfig(IOrderInfo.ORDER_STATUS, "订单状态", 100);
 		columns.add(col);
 		ColumnConfig actcol = new ColumnConfig("Action", "操作", 100);
 		columns.add(actcol);
@@ -120,12 +120,12 @@ public class OrderListPanel  extends ContentWidget{
 		ActionCellRenderer render = new ActionCellRenderer(grid);
 		ActionCellRenderer.ActionInfo act = new ActionCellRenderer.ActionInfo();
 		act.setImage(GWT.getModuleBaseURL()+"icon_edit.gif");
-		act.setAction("viewOrder($id)");
+		act.setAction("viewOrder($pkId)");
 		act.setTooltip("查看");
 		render.addAction(act);
 		act = new ActionCellRenderer.ActionInfo();		
 		act.setImage(GWT.getModuleBaseURL()+"icon_trash.gif");
-		act.setAction("deleteOrder($id)");
+		act.setAction("deleteOrder($pkId)");
 		act.setTooltip("删除");
 		render.addAction(act);
 
@@ -179,7 +179,7 @@ public class OrderListPanel  extends ContentWidget{
 	}
 	
 //	private void updateOrder(BeanObject order, UpdateService.Listener listener){
-//		new UpdateService().updateBean(order.getString(IOrder.ID), order,
+//		new UpdateService().updateBean(order.getString(IOrderInfo.ID), order,
 //				listener);
 //	}
 	

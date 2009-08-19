@@ -101,7 +101,7 @@ public class PaymentMetaManagerImpl implements IPaymentMetaManager{
             if(mapData.containsKey(code)) {
                 // 已在数据库中，使用数据库中的值
                 Payment payment = mapData.get(code);
-                maps.put(PaymentConfigMeta.ID, payment.getId());
+                maps.put(PaymentConfigMeta.ID, payment.getPkId());
                 maps.put(PaymentConfigMeta.NAME, payment.getName());
                 maps.put(PaymentConfigMeta.CODE, payment.getCode());
                 maps.put(PaymentConfigMeta.PAYFEE, payment.getFee());

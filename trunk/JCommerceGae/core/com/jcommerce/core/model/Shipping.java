@@ -1,53 +1,84 @@
 package com.jcommerce.core.model;
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import com.google.appengine.api.datastore.Text;
-
+/**  
+ * generated with my extension of middleGen 
+ * @author <a href="http://code.google.com/p/gcloudshop/">Leon</a>
+ */
+ 
+@PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true") 
 public class Shipping extends ModelObject {
-    @Override
-    public ModelObject getParent() {
-    	return null;
-    }
+
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
+    private String pkId;
     
     @Persistent
     @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
     private String keyName;
+    
+    @Persistent
+    private Long longId;
+    
+    // relations
+        
+    
+  // fields
+  @Persistent
+  private java.lang.String shippingId; 
 
-    @Persistent
-    private String shippingCode;
-    
-    @Persistent
-    private String shippingName;
-    
-    @Persistent
-    private String shippingDesc;
-    
-    @Persistent
-    private String insure;
+  @Persistent
+  private java.lang.String shippingCode; 
 
-    @Persistent
-    private Boolean supportCod;
-    
-    @Persistent
-    private Boolean enabled;
-    
-    @Persistent
-    private Text shippingPrint;    
-    
-	public String getId() {
-		return id;
+  @Persistent
+  private java.lang.String shippingName; 
+
+  @Persistent
+  private java.lang.String shippingDesc; 
+
+  @Persistent
+  private java.lang.String insure; 
+
+  @Persistent
+  private java.lang.Long supportCod=0l; 
+
+  @Persistent
+  private java.lang.Boolean enabled=false; 
+
+  @Persistent
+  private java.lang.String shippingPrint; 
+
+
+
+	public Shipping() {
 	}
 
-	public void setId(String id) {
-		this.id = id;
+
+	@Override
+	public Long getLongId() {
+		return longId;
+	}
+
+	@Override
+	public void setLongId(Long longId) {
+		this.longId = longId;
+	}
+
+	public String getPkId() {
+		return pkId;
+	}
+
+	public void setPkId(String pkId) {
+		this.pkId = pkId;
 	}
 
 	public String getKeyName() {
@@ -58,60 +89,84 @@ public class Shipping extends ModelObject {
 		this.keyName = keyName;
 	}
 
-	public String getShippingCode() {
-		return shippingCode;
-	}
 
-	public void setShippingCode(String shippingCode) {
-		this.shippingCode = shippingCode;
-	}
 
-	public String getShippingName() {
-		return shippingName;
-	}
+  public java.lang.String getShippingId() {
+    return shippingId;
+  }
 
-	public void setShippingName(String shippingName) {
-		this.shippingName = shippingName;
-	}
+  public void setShippingId(java.lang.String newShippingId) {
+    shippingId = newShippingId;
+  }
 
-	public String getShippingDesc() {
-		return shippingDesc;
-	}
 
-	public void setShippingDesc(String shippingDesc) {
-		this.shippingDesc = shippingDesc;
-	}
 
-	public String getInsure() {
-		return insure;
-	}
+  public java.lang.String getShippingCode() {
+    return shippingCode;
+  }
 
-	public void setInsure(String insure) {
-		this.insure = insure;
-	}
+  public void setShippingCode(java.lang.String newShippingCode) {
+    shippingCode = newShippingCode;
+  }
 
-	public Boolean getSupportCod() {
-		return supportCod;
-	}
 
-	public void setSupportCod(Boolean supportCod) {
-		this.supportCod = supportCod;
-	}
 
-	public Boolean getEnabled() {
-		return enabled;
-	}
+  public java.lang.String getShippingName() {
+    return shippingName;
+  }
 
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
+  public void setShippingName(java.lang.String newShippingName) {
+    shippingName = newShippingName;
+  }
 
-	public Text getShippingPrint() {
-		return shippingPrint;
-	}
 
-	public void setShippingPrint(Text shippingPrint) {
-		this.shippingPrint = shippingPrint;
-	}
+
+  public java.lang.String getShippingDesc() {
+    return shippingDesc;
+  }
+
+  public void setShippingDesc(java.lang.String newShippingDesc) {
+    shippingDesc = newShippingDesc;
+  }
+
+
+
+  public java.lang.String getInsure() {
+    return insure;
+  }
+
+  public void setInsure(java.lang.String newInsure) {
+    insure = newInsure;
+  }
+
+
+
+  public java.lang.Long getSupportCod() {
+    return supportCod;
+  }
+
+  public void setSupportCod(java.lang.Long newSupportCod) {
+    supportCod = newSupportCod;
+  }
+
+
+
+  public java.lang.Boolean getEnabled() {
+    return enabled;
+  }
+
+  public void setEnabled(java.lang.Boolean newEnabled) {
+    enabled = newEnabled;
+  }
+
+
+
+  public java.lang.String getShippingPrint() {
+    return shippingPrint;
+  }
+
+  public void setShippingPrint(java.lang.String newShippingPrint) {
+    shippingPrint = newShippingPrint;
+  }
 
 }

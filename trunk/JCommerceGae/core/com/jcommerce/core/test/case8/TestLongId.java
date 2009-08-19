@@ -38,9 +38,9 @@ public class TestLongId extends BaseDAOTestCase {
 			pm.makePersistent(p);
 			pm.currentTransaction().commit();
 			
-			String pid = p.getId();
+			String pid = p.getPkId();
 			Long pkid = p.getKeyId();
-			String cid = c1.getId();
+			String cid = c1.getPkId();
 			Long ckid = c1.getKeyId();
 			System.out.println("pid="+pid+", pkid="+pkid);
 			System.out.println("cid="+cid+", ckid="+ckid);
@@ -60,7 +60,7 @@ public class TestLongId extends BaseDAOTestCase {
 			p2.setName(pn);
 			String pid2 = KeyFactory.keyToString(
 					new KeyFactory.Builder(Parent8.class.getSimpleName(), pkid).getKey());
-			p2.setId(pid2);
+			p2.setPkId(pid2);
 			pm.makePersistent(p2);
 
 			
@@ -81,8 +81,8 @@ public class TestLongId extends BaseDAOTestCase {
 			System.out.println("cid2="+cid2+", ckid2="+ckid2);
 			assertTrue(pkid.equals(pkid2) && ckid.equals(ckid2));
 			
-			pid2 = p2.getId();
-			cid2 = c2.getId();
+			pid2 = p2.getPkId();
+			cid2 = c2.getPkId();
 			System.out.println("pid2="+pid2+", pkid2="+pkid2);
 			System.out.println("cid2="+cid2+", ckid2="+ckid2);
 			

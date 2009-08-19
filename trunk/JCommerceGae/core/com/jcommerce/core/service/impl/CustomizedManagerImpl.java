@@ -11,9 +11,9 @@ import com.jcommerce.core.dao.DAO;
 import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.DSFile;
-import com.jcommerce.core.model.Gallery;
 import com.jcommerce.core.model.Goods;
-import com.jcommerce.core.model.GoodsAttribute;
+import com.jcommerce.core.model.GoodsAttr;
+import com.jcommerce.core.model.GoodsGallery;
 import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
@@ -23,7 +23,7 @@ import com.jcommerce.core.util.UUIDHexGenerator;
 import com.jcommerce.core.util.UUIDLongGenerator;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.AttributeForm;
-import com.jcommerce.gwt.client.model.IGallery;
+import com.jcommerce.gwt.client.model.IGoodsGallery;
 
 public class CustomizedManagerImpl extends DefaultManagerImpl implements CustomizedManager {
 
@@ -41,10 +41,10 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
         
     		List<GoodsType> res = dao.getList(GoodsType.class.getName(), criteria, firstRow, maxRow);
     		for(GoodsType gt:res) {
-        		String gtid = gt.getId();
+        		String gtid = gt.getPkId();
     			Criteria c2 = new Criteria();
         		Condition cond = new Condition();
-        		cond.setField(AttributeForm.GOODSTYPE);
+        		cond.setField(AttributeForm.GOODS_TYPE);
         		cond.setOperator(Condition.EQUALS);
         		cond.setValue(gtid);
         		c2.addCondition(cond);
@@ -69,7 +69,7 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 			String res = dao.add(to);
 			
 //			DSFile logo = to.getLogo();
-//			String id = logo.getId();
+//			String id = logo.getPkId();
 //			System.out.println("id: "+id);
 
 			// NOTE: This does not work
@@ -90,15 +90,15 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     		to.setKeyName(goodskn);
     		// TODO need overcome the checkbox issue
     		// just for test with Web Home page. 
-    		to.setBestSold(true);
-    		to.setNeewAdded(true);
-    		to.setHotSold(true);
+    		to.setIsBest(true);
+    		to.setIsNew(true);
+    		to.setIsHot(true);
     		to.setLongId(UUIDLongGenerator.newUUID());
     		
-    		Set<Gallery> galleries = to.getGalleries();
+    		Set<GoodsGallery> galleries = to.getGalleries();
     		
     		
-			for(Gallery gallery:galleries) {
+			for(GoodsGallery gallery:galleries) {
 				String gkn = UUIDHexGenerator.newUUID();
 				gallery.setKeyName(gkn);
 //				String gid = KeyFactory.keyToString(new KeyFactory.Builder("Goods",goodskn).addChild("Gallery", gkn).getKey());
@@ -107,7 +107,7 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 				
 				DSFile file = gallery.getImageFile();
 				String fkn = UUIDHexGenerator.newUUID();
-				String fid = KeyFactory.keyToString(new KeyFactory.Builder("Goods",goodskn).addChild("Gallery", gkn).addChild("DSFile", fkn).getKey());
+				String fid = KeyFactory.keyToString(new KeyFactory.Builder("Goods",goodskn).addChild(GoodsGallery.class.getSimpleName(), gkn).addChild("DSFile", fkn).getKey());
 				file.setKeyName(fkn);
 //				file.setId(fid);
 				gallery.setImageFileId(fid);
@@ -117,16 +117,16 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 			
 			// TODO temporary. to ensure image not empty
 			if(galleries.size()>0) {
-				Gallery gallery = (Gallery)galleries.iterator().next();
+				GoodsGallery gallery = (GoodsGallery)galleries.iterator().next();
 				to.setImageFileId(gallery.getImageFileId());
 				// TODO temporary
 				to.setThumbFileId(gallery.getImageFileId());
 			}
 			
-			Set<GoodsAttribute> gts = to.getAttributes();
-			for(GoodsAttribute gt:gts) {
+			Set<GoodsAttr> gts = to.getAttributes();
+			for(GoodsAttr gt:gts) {
 				String gkn = UUIDHexGenerator.newUUID();
-				String gid = KeyFactory.keyToString(new KeyFactory.Builder("Goods",goodskn).addChild("GoodsAttribute", gkn).getKey());
+				String gid = KeyFactory.keyToString(new KeyFactory.Builder("Goods",goodskn).addChild(GoodsAttr.class.getSimpleName(), gkn).getKey());
 				gt.setKeyName(gkn);
 //				gt.setId(gid);
 				gt.setLongId(UUIDLongGenerator.newUUID());
@@ -136,19 +136,19 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 			
 			
 			// verify,  debug only 
-			for(Gallery gallery:galleries) {
-				System.out.println("galleryId: "+gallery.getId());
+			for(GoodsGallery gallery:galleries) {
+				System.out.println("galleryId: "+gallery.getPkId());
 			}
-			String goodsId = to.getId();
+			String goodsId = to.getPkId();
 			System.out.println("goodsId="+goodsId);
 			
 			Criteria criteria = new Criteria();
 			Condition cond = new Condition();
-			cond.setField(IGallery.GOODS);
+			cond.setField(IGoodsGallery.GOODS_ID);
 			cond.setOperator(Condition.EQUALS);
 			cond.setValue(goodsId);
 			criteria.addCondition(cond);
-			List<Gallery> t1 = new ArrayList<Gallery>();
+			List<GoodsGallery> t1 = new ArrayList<GoodsGallery>();
 			super.getList(t1, ModelNames.GALLERY, criteria, -1, -1);
 			System.out.println("size: "+t1.size());
 			
@@ -164,7 +164,7 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     }
     public boolean updateGoods(Goods to) {
     	try {
-    		String id = to.getId();
+    		String id = to.getPkId();
     		System.out.println("id: "+id);
     		Goods po = (Goods)get(Goods.class.getName(), id);
     		if(po==null) {
@@ -182,18 +182,18 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 
     		
     		
-    		Set<Gallery> galleries = to.getGalleries();
-			for(Gallery gallery:galleries) {
-				if(StringUtils.isNotEmpty(gallery.getId())) {
+    		Set<GoodsGallery> galleries = to.getGalleries();
+			for(GoodsGallery gallery:galleries) {
+				if(StringUtils.isNotEmpty(gallery.getPkId())) {
 					// existing gallery
-					for(Gallery gpo : po.getGalleries()) {
-						if(gpo.getId().equals(gallery.getId())) {
-							gpo.setDescription(gallery.getDescription());
+					for(GoodsGallery gpo : po.getGalleries()) {
+						if(gpo.getPkId().equals(gallery.getPkId())) {
+							gpo.setImgDesc(gallery.getImgDesc());
 							break;
 						}
 					}
 //					dao.update(gallery);
-//					gallery.setImageFileId(gallery.getImageFile().getId());
+//					gallery.setImageFileId(gallery.getImageFile().getPkId());
 				} else {
 					// new gallery
 					String gkn = UUIDHexGenerator.newUUID();
@@ -201,7 +201,7 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 					DSFile file = gallery.getImageFile();
 					String fkn = UUIDHexGenerator.newUUID();
 					file.setKeyName(fkn);
-					String fid = KeyFactory.keyToString(new KeyFactory.Builder("Goods",goodskn).addChild("Gallery", gkn).addChild("DSFile", fkn).getKey());
+					String fid = KeyFactory.keyToString(new KeyFactory.Builder("Goods",goodskn).addChild(GoodsGallery.class.getSimpleName(), gkn).addChild("DSFile", fkn).getKey());
 					gallery.setImageFileId(fid);
 					gallery.setLongId(UUIDLongGenerator.newUUID());
 					po.getGalleries().add(gallery);
@@ -211,14 +211,14 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 			System.out.println("2) size of po.gallery: "+po.getGalleries().size());
 			
 			if(galleries.size()>0 && StringUtils.isEmpty(po.getImageFileId())) {
-				Gallery gallery = (Gallery)galleries.iterator().next();
+				GoodsGallery gallery = (GoodsGallery)galleries.iterator().next();
 				po.setImageFileId(gallery.getImageFileId());
 			}
 			
 			// This will fail due to the #91 Issue
 			po.getAttributes().clear();
-			Set<GoodsAttribute> gts = to.getAttributes();
-			for(GoodsAttribute gt:gts) {
+			Set<GoodsAttr> gts = to.getAttributes();
+			for(GoodsAttr gt:gts) {
 				String gkn = UUIDHexGenerator.newUUID();
 				gt.setKeyName(gkn);
 				gt.setLongId(UUIDLongGenerator.newUUID());

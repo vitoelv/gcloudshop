@@ -1,5 +1,7 @@
 package com.jcommerce.core.model;
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -7,46 +9,67 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import com.jcommerce.core.model.ModelObject;
-
-@PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true")
+/**  
+ * generated with my extension of middleGen 
+ * @author <a href="http://code.google.com/p/gcloudshop/">Leon</a>
+ */
+ 
+@PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true") 
 public class Region extends ModelObject {
-	
-	public static final String TYPE_COUNTRY = "0";
-	public static final String TYPE_PROVINCE = "1";
-	public static final String TYPE_CITY = "2";
-	public static final String TYPE_DISTRICT = "3";
-	
-	public static final String DEFAULT_AGENCY_ID = "0";
-	public static final String COUNTRY_PARENT_ID = "0";
 
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
+    private String pkId;
     
     @Persistent
     @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
     private String keyName;
+    
+    @Persistent
+    private Long longId;
+    
+    // relations
+        
+    
+  // fields
+  @Persistent
+  private java.lang.String regionId; 
 
-    @Persistent
-	private String regionName;
-    
-    @Persistent
-	private String regionType;
-    
-    @Persistent
-    private String parentId;
-    
-    @Persistent
-	private String agencyId;
+  @Persistent
+  private java.lang.String parentId; 
 
-	public String getId() {
-		return id;
+  @Persistent
+  private java.lang.String regionName; 
+
+  @Persistent
+  private java.lang.Long regionType=0l; 
+
+  @Persistent
+  private java.lang.String agencyId; 
+
+
+
+	public Region() {
 	}
 
-	public void setId(String id) {
-		this.id = id;
+
+	@Override
+	public Long getLongId() {
+		return longId;
+	}
+
+	@Override
+	public void setLongId(Long longId) {
+		this.longId = longId;
+	}
+
+	public String getPkId() {
+		return pkId;
+	}
+
+	public void setPkId(String pkId) {
+		this.pkId = pkId;
 	}
 
 	public String getKeyName() {
@@ -59,42 +82,52 @@ public class Region extends ModelObject {
 
 
 
-	public String getParentId() {
-		return parentId;
-	}
+  public java.lang.String getRegionId() {
+    return regionId;
+  }
 
-	public void setParentId(String parentId) {
-		this.parentId = parentId;
-	}
+  public void setRegionId(java.lang.String newRegionId) {
+    regionId = newRegionId;
+  }
 
-	public String getAgencyId() {
-		return agencyId;
-	}
 
-	public void setAgencyId(String agencyId) {
-		this.agencyId = agencyId;
-	}
 
-	@Override
-	public ModelObject getParent() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  public java.lang.String getParentId() {
+    return parentId;
+  }
 
-	public String getRegionName() {
-		return regionName;
-	}
+  public void setParentId(java.lang.String newParentId) {
+    parentId = newParentId;
+  }
 
-	public void setRegionName(String regionName) {
-		this.regionName = regionName;
-	}
 
-	public String getRegionType() {
-		return regionType;
-	}
 
-	public void setRegionType(String regionType) {
-		this.regionType = regionType;
-	}
+  public java.lang.String getRegionName() {
+    return regionName;
+  }
+
+  public void setRegionName(java.lang.String newRegionName) {
+    regionName = newRegionName;
+  }
+
+
+
+  public java.lang.Long getRegionType() {
+    return regionType;
+  }
+
+  public void setRegionType(java.lang.Long newRegionType) {
+    regionType = newRegionType;
+  }
+
+
+
+  public java.lang.String getAgencyId() {
+    return agencyId;
+  }
+
+  public void setAgencyId(java.lang.String newAgencyId) {
+    agencyId = newAgencyId;
+  }
 
 }

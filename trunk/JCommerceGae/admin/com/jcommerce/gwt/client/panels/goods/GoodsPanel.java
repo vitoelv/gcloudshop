@@ -280,9 +280,9 @@ public class GoodsPanel extends BaseEntityEditPanel {
 //      contentPanelOther.createPanel(IGoods.WEIGHT, Resources.constants.Goods_weight(), new TextBox());
 //      contentPanelOther.createPanel(IGoods.NUMBER, Resources.constants.Goods_number(), new TextBox());
 //      contentPanelOther.createPanel(IGoods.WARNNUMBER, Resources.constants.Goods_warnNumber(), new TextBox());                
-//      contentPanelOther.createPanel(IGoods.HOTSOLD, Resources.constants.Goods_hotsold(), new CheckBox());
-//      contentPanelOther.createPanel(IGoods.NEWADDED, Resources.constants.Goods_newAdded(), new CheckBox());
-//      contentPanelOther.createPanel(IGoods.BESTSOLD, Resources.constants.Goods_bestSold(), new CheckBox());        
+//      contentPanelOther.createPanel(IGoods.IS_HOT, Resources.constants.Goods_hotsold(), new CheckBox());
+//      contentPanelOther.createPanel(IGoods.IS_NEW, Resources.constants.Goods_newAdded(), new CheckBox());
+//      contentPanelOther.createPanel(IGoods.IS_BEST, Resources.constants.Goods_bestSold(), new CheckBox());        
 //      contentPanelOther.createPanel(IGoods.BRIEF, Resources.constants.Goods_brief(), new TextArea());
 //      contentPanelOther.createPanel(IGoods.SELLERNOTE, Resources.constants.Goods_sellerNote(), new TextArea());
 		VBoxLayoutData vbld1 = new VBoxLayoutData(new Margins(0, 0, 5, 0)); 
@@ -349,6 +349,7 @@ public class GoodsPanel extends BaseEntityEditPanel {
         
         bestSoldField = GoodsForm.getBestSoldField();
         bestSoldField.setBoxLabel(Resources.constants.Goods_bestSold());
+        bestSoldField.setValueAttribute("xxxxxx");
         checkGroup.add(bestSoldField);
 //        contentPanelOther.add(bestSoldField, formData);
         
@@ -563,11 +564,11 @@ public class GoodsPanel extends BaseEntityEditPanel {
     	
     	if(getCurState().getIsEdit()) {
     		method = "update";
-    		idField.setValue(getCurState().getId());
+    		idField.setValue(getCurState().getPkId());
     		BeanObject bo = getEntity();
-    		String goodsTypeId = bo.getString(IGoods.GOODSTYPEID);
-    		contentPanelGallery.refresh(getCurState().getId());
-    		contentPanelAttrs.refresh(getCurState().getId(), goodsTypeId);
+    		String goodsTypeId = bo.getString(IGoods.GOODS_TYPE_ID);
+    		contentPanelGallery.refresh(getCurState().getPkId());
+    		contentPanelAttrs.refresh(getCurState().getPkId(), goodsTypeId);
     	}else {
     		method = "add";
     		idField.setValue(null);
@@ -653,7 +654,7 @@ public class GoodsPanel extends BaseEntityEditPanel {
 //                }               
 //                contentPanelGeneral.clearValues();
 //                if(getCurState().getIsEdit()) {
-//                	new ReadService().getBean(ModelNames.GOODS, getCurState().getId(),
+//                	new ReadService().getBean(ModelNames.GOODS, getCurState().getPkId(),
 //        				new ReadService.Listener() {
 //                		public void onSuccess(BeanObject bean) {
 //                			Map<String, Object> mapAttribute = bean.getProperties();

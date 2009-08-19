@@ -19,17 +19,19 @@ import com.jcommerce.core.model.ShopConfig;
 import com.jcommerce.core.model.User;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.service.IWebManager;
+import com.jcommerce.core.util.IConstants;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.web.component.ComponentUrl;
 import com.jcommerce.web.component.Navigator;
 import com.jcommerce.web.front.action.helper.Pager;
+import com.jcommerce.web.to.CategoryWrapper;
 import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.to.WrapperUtil;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
-public class BaseAction extends ActionSupport implements IPageConstants, IWebConstants{
+public class BaseAction extends ActionSupport implements IPageConstants, IWebConstants, IConstants{
 	private static Map<String, String> constants = new HashMap<String, String>();
 	
 	protected IWebManager webManager;
@@ -127,14 +129,10 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 	public void includeCategoryTree(HttpServletRequest request) {
         List<Category> categories = (List<Category>)getDefaultManager().getList(ModelNames.CATEGORY, null);
         categories.size();
-        filterCategories(categories);
-        request.setAttribute("categories", categories);		
+        List<CategoryWrapper> list = WrapperUtil.wrap(categories, CategoryWrapper.class); 
+        request.setAttribute("categories", list);		
 	}
-    private void filterCategories(List<Category> categories) {
-    	for(Category category:categories) {
-    		category.setUrl("category.action?id=");
-    	}
-    }
+
 	public void includeHistory(HttpServletRequest request) {
 		Lang lang = getLangMap(request);
 		lang.put("viewHistory", "查看历史");
@@ -162,8 +160,8 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
         Iterator<Category> it = categoryList.iterator();
         while (it.hasNext()) {
             Category cat = it.next();
-            if (cat.isShowInNavigator())
-                nav.addMiddle(new ComponentUrl("category.action?id="+cat.getId(), cat.getName(), 1, 0));
+            if (cat.getShowInNav() == DBTYPE_TRUE)
+                nav.addMiddle(new ComponentUrl("category.action?id="+cat.getPkId(), cat.getCatName(), 1, 0));
         }
 
         request.setAttribute("navigatorList", nav);	
@@ -179,7 +177,7 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
     	StringBuffer buf = new StringBuffer();
     	int i=1;
     	for(Category category:list) {
-    		buf.append("<option value=\"").append(i).append("\" >").append(category.getName()).append("</option>").append("\r\n");
+    		buf.append("<option value=\"").append(i).append("\" >").append(category.getCatName()).append("</option>").append("\r\n");
     		i++;
     	}
     	return buf.toString();
@@ -193,7 +191,7 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 	
 	public void setSessionUser(HttpServletRequest request) {
         User user = new User();
-        user.setName("Guest");
+        user.setUserName("Guest");
         request.getSession().setAttribute("user_info", user);
 	}
     protected void initPager(HttpServletRequest request) {

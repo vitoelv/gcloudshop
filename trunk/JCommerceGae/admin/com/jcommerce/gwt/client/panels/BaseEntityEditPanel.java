@@ -27,6 +27,7 @@ import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.Logger;
 import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.BeanObject;
+import com.jcommerce.gwt.client.model.IModelObject;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.CreateService;
 import com.jcommerce.gwt.client.service.ReadService;
@@ -37,7 +38,7 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 	
 	public abstract static class State extends PageState {
 		public static final String ISEDIT = "isedit";
-		public static final String ID = "id";
+		public static final String PK_ID = "pkId";
 		
 		public abstract String getPageClassName();
 		
@@ -47,11 +48,11 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 		public boolean getIsEdit() {
 			return Boolean.valueOf((String)getValue(ISEDIT)).booleanValue();
 		}
-		public void setId(String gtid) {
-			setValue(ID, gtid);
+		public void setPkId(String gtid) {
+			setValue(PK_ID, gtid);
 		}
-		public String getId() {
-			return (String)getValue(ID);
+		public String getPkId() {
+			return (String)getValue(PK_ID);
 		}
 	}
 	
@@ -126,7 +127,7 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
     	}
     	BeanObject form = new BeanObject(getEntityClassName(), props);
     	if (getCurState().getIsEdit()) {
-    		String id = getCurState().getId();
+    		String id = getCurState().getPkId();
           new UpdateService().updateBean(id, form, new UpdateService.Listener() {
           public synchronized void onSuccess(Boolean success) {
         	  gotoSuccessPanel();
@@ -136,7 +137,7 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
           new CreateService().createBean(form, new CreateService.Listener() {
           public synchronized void onSuccess(String id) {
         	  log("new onSuccess( "+id);                            
-              getCurState().setId(id);
+              getCurState().setPkId(id);
               gotoSuccessPanel();
           }
           });
@@ -156,7 +157,7 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
     		ex.printStackTrace();
     	}
         if(getCurState().getIsEdit()) {
-        	new ReadService().getBean(getEntityClassName(), getCurState().getId(),
+        	new ReadService().getBean(getEntityClassName(), getCurState().getPkId(),
 				new ReadService.Listener() {
         		public void onSuccess(BeanObject bean) {
         			obj = bean;
@@ -198,7 +199,7 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 				
 				ListStore<BeanObject> store = box.getStore();
 				List<BeanObject> selection = new ArrayList<BeanObject>();
-				BeanObject bo = store.findModel("id", value);
+				BeanObject bo = store.findModel(IModelObject.PK_ID, value);
 				selection.add(bo);
 				box.setSelection(selection);
 				
@@ -210,7 +211,7 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 				Collection<String> v = (Collection<String>)value;
 				List<BeanObject> selection = new ArrayList<BeanObject>();
 				for(String vv:v) {
-					BeanObject bo = store.findModel("id", vv);
+					BeanObject bo = store.findModel(IModelObject.PK_ID, vv);
 					if(bo!=null) {
 						selection.add(bo);
 					}

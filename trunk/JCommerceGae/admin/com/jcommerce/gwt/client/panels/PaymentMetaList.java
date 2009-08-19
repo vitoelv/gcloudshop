@@ -122,7 +122,7 @@ public class PaymentMetaList extends ContentWidget {
         System.out.println("editPayment, id: "+id);
         
         PaymentMetaPanel.State newState = new PaymentMetaPanel.State();
-        newState.setID(id);
+        newState.setPkId(id);
         newState.execute();
         
     }

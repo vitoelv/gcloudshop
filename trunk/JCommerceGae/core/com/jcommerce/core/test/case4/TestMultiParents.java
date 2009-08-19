@@ -54,9 +54,9 @@ public class TestMultiParents extends BaseDAOTestCase {
 			
 //			
 			pm.currentTransaction().commit();
-			String pid = p1.getId();
-			String aid = a.getId();
-			System.out.println("pid: "+p1.getId()+", aid: "+a.getId());
+			String pid = p1.getPkId();
+			String aid = a.getPkId();
+			System.out.println("pid: "+p1.getPkId()+", aid: "+a.getPkId());
 			
 
 			
@@ -91,9 +91,9 @@ public class TestMultiParents extends BaseDAOTestCase {
 			pm.currentTransaction().commit();
 
 
-			String pid = p1.getId();
-			String aid = a.getId();
-			System.out.println("pid: "+p1.getId()+", aid: "+a.getId());
+			String pid = p1.getPkId();
+			String aid = a.getPkId();
+			System.out.println("pid: "+p1.getPkId()+", aid: "+a.getPkId());
 			
 
 			

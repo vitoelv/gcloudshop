@@ -210,7 +210,7 @@ public class RegionPanel extends ContentWidget {
 		
 		Criteria criteria = new Criteria();
 		Condition cond = new Condition();
-		cond.setField(IRegion.PARENTID);
+		cond.setField(IRegion.PARENT_ID);
 		cond.setOperator(Condition.EQUALS);
 		cond.setValue(parentId);
 		criteria.addCondition(cond);
@@ -230,7 +230,7 @@ public class RegionPanel extends ContentWidget {
 						
 						current_Label.setText(getCurrentLabelTextByType(addType, addParentName));
 						current_name.setValue(addParentName);
-						current_type.setValue(IRegion.TYPE_WORLD);
+						current_type.setValue(IRegion.TYPE_WORLD.toString());
 						
 						refreshChildrenPanel(beans);
 					}
@@ -277,7 +277,7 @@ public class RegionPanel extends ContentWidget {
 	}
 	
 	private String getChildrenType(String currentType){
-		String childrenType = null;
+		Long childrenType = null;
 		if (currentType.equals(IRegion.TYPE_COUNTRY)){
 			childrenType = IRegion.TYPE_PROVINCE;
 		} else if (currentType.equals(IRegion.TYPE_PROVINCE)) {
@@ -286,7 +286,7 @@ public class RegionPanel extends ContentWidget {
 			childrenType = IRegion.TYPE_DISTRICT;
 		}
 		
-		return childrenType;
+		return childrenType.toString();
 	}
 	
 	public void refresh() {
@@ -329,7 +329,7 @@ public class RegionPanel extends ContentWidget {
 		public State(){
 			super();
 			setParentId(IRegion.COUNTRY_PARENT_ID);
-			setType(IRegion.TYPE_COUNTRY);
+			setType(IRegion.TYPE_COUNTRY.toString());
 		}
 	}
 	
@@ -352,7 +352,7 @@ public class RegionPanel extends ContentWidget {
 			this.setSpacing(10);
 			
 			child_id = RegionForm.getIdField();
-			child_id.setValue(bean.getString(IRegion.ID));
+			child_id.setValue(bean.getString(IRegion.PK_ID));
 			
 			child_name = RegionForm.getEditNameField();
 			child_name.setValue(bean.getString(IRegion.REGION_NAME));
@@ -363,10 +363,10 @@ public class RegionPanel extends ContentWidget {
 			child_type.setValue(bean.getString(IRegion.REGION_TYPE));
 			
 			child_parentId = RegionForm.getParentIdField();
-			child_parentId.setValue(bean.getString(IRegion.PARENTID));
+			child_parentId.setValue(bean.getString(IRegion.PARENT_ID));
 			
 			child_agencyId = RegionForm.getAgencyIdField();
-			child_agencyId.setValue(bean.getString(IRegion.AGENCYID));
+			child_agencyId.setValue(bean.getString(IRegion.AGENCY_ID));
 
 			child_name.addListener(Events.OnFocus, new Listener<ComponentEvent>(){
 					public void handleEvent(ComponentEvent be) {
@@ -452,7 +452,7 @@ public class RegionPanel extends ContentWidget {
 		private void onDelete(){
 			Criteria criteria = new Criteria();
 			Condition cond = new Condition();
-			cond.setField(IRegion.PARENTID);
+			cond.setField(IRegion.PARENT_ID);
 			cond.setOperator(Condition.EQUALS);
 			cond.setValue(child_id.getValue());
 			criteria.addCondition(cond);

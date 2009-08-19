@@ -1,14 +1,24 @@
 package com.jcommerce.gwt.client.model;
 
-public interface IOrderAction {
 
-	public static final String ID = "id";
-	public static final String ORDER = "order";
-	public static final String ACTIONUSER = "actionUser";
-	public static final String ORDERSTATUS = "orderStatus";
-	public static final String SHIPPINGSTATUS = "shippingStatus";
-	public static final String PAYSTATUS = "payStatus";
-	public static final String ACTIONNOTE = "actionNote";
-	public static final String LOGTIME = "logTime";
-	
+/**  
+ * generated with my extension of middleGen 
+ * @author <a href="http://code.google.com/p/gcloudshop/">Leon</a>
+ */
+ 
+public interface IOrderAction extends IModelObject {
+   
+   // relation
+      
+  // fields
+  public static final String ACTION_ID = "actionId"; 
+  public static final String ORDER_ID = "orderId"; 
+  public static final String ACTION_USER = "actionUser"; 
+  public static final String ORDER_STATUS = "orderStatus"; 
+  public static final String SHIPPING_STATUS = "shippingStatus"; 
+  public static final String PAY_STATUS = "payStatus"; 
+  public static final String ACTION_NOTE = "actionNote"; 
+  public static final String LOG_TIME = "logTime"; 
+
+
 }

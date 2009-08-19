@@ -15,7 +15,7 @@ import org.json.JSONObject;
 
 import com.jcommerce.core.model.Cart;
 import com.jcommerce.core.model.Constants;
-import com.jcommerce.core.model.Order;
+import com.jcommerce.core.model.OrderInfo;
 import com.jcommerce.core.model.Payment;
 import com.jcommerce.core.model.Region;
 import com.jcommerce.core.model.Shipping;
@@ -117,12 +117,12 @@ public class FlowAction extends BaseAction {
     	return consignee;
     }
     
-    private boolean checkConsigneeInfo(Consignee consignee, Integer flowType) {
+    private boolean checkConsigneeInfo(Consignee consignee, Long flowType) {
     	return consignee != null;
     }
     private List<RegionWrapper> getCountryList() {
     	Region r = new Region();
-    	r.setId("1");
+    	r.setPkId("1");
     	r.setRegionName("中国");
     	r.setRegionType(IRegion.TYPE_COUNTRY);
     	RegionWrapper rw = new RegionWrapper(r);
@@ -134,7 +134,7 @@ public class FlowAction extends BaseAction {
     	List<RegionWrapper> res = new ArrayList<RegionWrapper>();
     	Region r = new Region();
     	r.setParentId("1");
-    	r.setId("2");
+    	r.setPkId("2");
     	r.setRegionName("北京");
     	r.setRegionType(IRegion.TYPE_PROVINCE);
     	RegionWrapper rw = new RegionWrapper(r);
@@ -142,7 +142,7 @@ public class FlowAction extends BaseAction {
     	
     	r = new Region();
     	r.setParentId("1");
-    	r.setId("3");
+    	r.setPkId("3");
     	r.setRegionName("广东");
     	r.setRegionType(IRegion.TYPE_PROVINCE);
     	rw = new RegionWrapper(r);
@@ -154,7 +154,7 @@ public class FlowAction extends BaseAction {
     	List<RegionWrapper> res = new ArrayList<RegionWrapper>();
     	Region r = new Region();
     	r.setParentId("3");
-    	r.setId("4");
+    	r.setPkId("4");
     	r.setRegionName("广州");
     	r.setRegionType(IRegion.TYPE_CITY);
     	RegionWrapper rw = new RegionWrapper(r);
@@ -162,7 +162,7 @@ public class FlowAction extends BaseAction {
     	
     	r = new Region();
     	r.setParentId("3");
-    	r.setId("5");
+    	r.setPkId("5");
     	r.setRegionName("深圳");
     	r.setRegionType(IRegion.TYPE_CITY);
     	rw = new RegionWrapper(r);
@@ -232,7 +232,7 @@ public class FlowAction extends BaseAction {
     	HttpSession session = request.getSession();
     	String userId = (String)session.getAttribute(KEY_USER_ID);
     	
-    	Integer flowType = (Integer)session.getAttribute(KEY_FLOW_TYPE);
+    	Long flowType = (Long)session.getAttribute(KEY_FLOW_TYPE);
 //    	if(flowType==CART_GROUP_BUY_GOODS) 
     	
     	List<Cart> carts = cartGoods(flowType);
@@ -252,7 +252,7 @@ public class FlowAction extends BaseAction {
         /*
          * 取得订单信息
          */
-    	Order order = flowOrderInfo();
+    	OrderInfo order = flowOrderInfo();
     	OrderWrapper ow = new OrderWrapper(order);
     	getRequest().setAttribute("order", ow);
     	
@@ -288,7 +288,7 @@ public class FlowAction extends BaseAction {
     	request.setAttribute(KEY_STEP, STEP_CHECKOUT);
     	return SUCCESS;
     }
-    private List<Cart> cartGoods(Integer flowType) {
+    private List<Cart> cartGoods(Long flowType) {
     	Criteria cr = new Criteria();
     	Condition cond = new Condition();
     	cond.setField(ICart.SESSION_ID);
@@ -303,16 +303,16 @@ public class FlowAction extends BaseAction {
     	List<Cart> carts = (List<Cart>)getDefaultManager().getList(Cart.class.getName(), cr);
     	return carts;
     }
-    private Order flowOrderInfo(){
-    	Order order = (Order)getSession().getAttribute(KEY_FLOW_ORDER);
+    private OrderInfo flowOrderInfo(){
+    	OrderInfo order = (OrderInfo)getSession().getAttribute(KEY_FLOW_ORDER);
     	if(order == null) {
-    		order = new Order();
+    		order = new OrderInfo();
     		getSession().setAttribute(KEY_FLOW_ORDER, order);
     	}
 
     	return order;
     }
-    private Total orderFee(Order order, List<Cart> carts, Consignee consignee) {
+    private Total orderFee(OrderInfo order, List<Cart> carts, Consignee consignee) {
     	Total total = new Total();
     	for(Cart cart:carts) {
     		total.setRealGoodsCount(total.getRealGoodsCount()+1);
@@ -350,7 +350,7 @@ public class FlowAction extends BaseAction {
     private List<ShippingWrapper> availableShippingList() {
     	List<ShippingWrapper> list = new ArrayList<ShippingWrapper>();
     	Shipping s = new Shipping();
-    	s.setId("1");
+    	s.setPkId("1");
     	s.setShippingName("圆通速递");
     	s.setShippingDesc("上海圆通物流（速递）有限公司经过多年的网络快速发展，在中国速递行业中一直处于领先地位。为了能更好的发展国际快件市场，加快与国际市场的接轨，强化圆通的整体实力，圆通已在东南亚、欧美、中东、北美洲、非洲等许多城市运作国际快件业务");
     	s.setInsure("0");
@@ -370,7 +370,7 @@ public class FlowAction extends BaseAction {
     }
     private String stepDone(HttpServletRequest request) {
     	
-    	Integer flowType = (Integer)getSession().getAttribute(KEY_FLOW_TYPE);
+    	Long flowType = (Long)getSession().getAttribute(KEY_FLOW_TYPE);
     	if(flowType == null) {
     		flowType = Constants.CART_GENERAL_GOODS;
     	}
@@ -378,11 +378,11 @@ public class FlowAction extends BaseAction {
     	String userId = (String)getSession().getAttribute(KEY_USER_ID);
     	Consignee consignee = getConsignee(userId);
     	
-    	Order order = new Order();
+    	OrderInfo order = new OrderInfo();
 //    	order.setShipping(shipping)
 //    	order.setPayment(payment)
 //    	order.setUser(user)
-    	order.setAddTime(new Date());
+    	order.setAddTime(new Date().getTime());
     	order.setPayName("货到付款");
     	
     	
@@ -418,7 +418,7 @@ public class FlowAction extends BaseAction {
     private void unset(String key) {
     	getSession().removeAttribute(key);
     }
-    private void clearCart(Integer flowType) {
+    private void clearCart(Long flowType) {
     	
     }
     private void clearAllFiles() {
@@ -475,7 +475,7 @@ public class FlowAction extends BaseAction {
 	}
 	
 	public void setOrder(HttpServletRequest request) {
-		Order order = new Order();
+		OrderInfo order = new OrderInfo();
 		OrderWrapper ow = new OrderWrapper(order);
 		request.setAttribute("order", ow);
 	}

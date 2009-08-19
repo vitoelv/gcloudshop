@@ -25,7 +25,7 @@ public class BrandForm extends BeanObject implements IBrand{
     
 	public static HiddenField<String> getIdField() {
 		HiddenField<String> idField = new HiddenField<String>();
-		idField.setName(ID);
+		idField.setName(PK_ID);
 		return idField;
 	}
     
@@ -43,7 +43,7 @@ public class BrandForm extends BeanObject implements IBrand{
 	
 	public static TextField<String> getSiteField(String fieldTitle) {
 		TextField<String> nameField = new TextField<String>();
-		nameField.setName(SITE);
+		nameField.setName(SITE_URL);
 		nameField.setMaxLength(10);
 		nameField.setAutoValidate(true);
 		return nameField;
@@ -68,7 +68,7 @@ public class BrandForm extends BeanObject implements IBrand{
 	
 	public static TextField<String> getOrderField(String fieldTitle) {
 		TextField<String> nameField = new TextField<String>();
-		nameField.setName(ORDER);
+		nameField.setName(SORT_ORDER);
 		nameField.setMaxLength(10);
 		nameField.setAutoValidate(true);
 		return nameField;
@@ -76,7 +76,7 @@ public class BrandForm extends BeanObject implements IBrand{
 	
 	public static CheckBox getShowField(String fieldTitle) {
 		CheckBox nameField = new CheckBox();
-		nameField.setName(SHOW);
+		nameField.setName(IS_SHOW);
 		nameField.setAutoValidate(true);
 		return nameField;
 	}

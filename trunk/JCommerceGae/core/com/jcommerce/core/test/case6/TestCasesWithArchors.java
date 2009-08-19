@@ -45,9 +45,9 @@ public class TestCasesWithArchors extends BaseDAOTestCase {
 			
 			pm.currentTransaction().commit();
 
-			String aid = a.getId();
-			String pid1 = p1.getId();
-			String pid2 = p2.getId();
+			String aid = a.getPkId();
+			String pid1 = p1.getPkId();
+			String pid2 = p2.getPkId();
 			
 			System.out.println("aid: "+aid+", pid1="+pid1+", pid2="+pid2);
 			
@@ -86,7 +86,7 @@ public class TestCasesWithArchors extends BaseDAOTestCase {
 //			pm.makePersistent(c);
 //			
 //			pm.currentTransaction().commit();
-//			String cid = c.getId();
+//			String cid = c.getPkId();
 //			System.out.println("cid="+cid);
 //			
 //			

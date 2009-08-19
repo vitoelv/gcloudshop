@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
 import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedListener;
 import com.extjs.gxt.ui.client.store.ListStore;
@@ -28,9 +29,8 @@ import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.GoodsForm;
 import com.jcommerce.gwt.client.model.IAttribute;
 import com.jcommerce.gwt.client.model.IGoods;
-import com.jcommerce.gwt.client.model.IGoodsAttribute;
+import com.jcommerce.gwt.client.model.IGoodsAttr;
 import com.jcommerce.gwt.client.model.IGoodsType;
-import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.Condition;
 import com.jcommerce.gwt.client.service.Criteria;
 import com.jcommerce.gwt.client.service.ListService;
@@ -59,8 +59,8 @@ class GoodsAttributePanel  extends TabItem {
     	
         goodsTypeList = new ListStore<BeanObject>();
         fListTypes = GoodsForm.getGoodsTypeIdField();
-        fListTypes.setDisplayField(IGoodsType.NAME);
-        fListTypes.setValueField(IGoodsType.ID);
+        fListTypes.setDisplayField(IGoodsType.CAT_NAME);
+        fListTypes.setValueField(IGoodsType.PK_ID);
         
         fListTypes.setFieldLabel("GoodsType");
         fListTypes.setStore(goodsTypeList);
@@ -82,7 +82,7 @@ class GoodsAttributePanel  extends TabItem {
 				}
 				// TODO is there better way to only triggering this when user click it? 
 				// currently set the value to fListTypes with populateField() will also trigger this, which is not desired 
-				String goodsTypeId = bo.getString(IGoodsType.ID);
+				String goodsTypeId = bo.getString(IGoodsType.PK_ID);
 				updateType(goodsTypeId);
 				
 			}
@@ -124,12 +124,12 @@ class GoodsAttributePanel  extends TabItem {
     	});
     	
 
-    	if(newGtId==null) {
+    	if(newGtId == null || "".equals(newGtId.trim())) {
     		goodsAttributesReady = true;
     		return;
     	}
     	Criteria criteria = new Criteria();
-        criteria.addCondition(new Condition(IGoodsAttribute.GOODS, Condition.EQUALS, goodsId));
+        criteria.addCondition(new Condition(IGoodsAttr.GOODS, Condition.EQUALS, goodsId));
         new ListService().listBeans(ModelNames.GOODSATTRIBUTE, new ListService.Listener() {
             public void onSuccess(final List<BeanObject> beans) {
             	goodsAttributes = beans;
@@ -149,7 +149,7 @@ class GoodsAttributePanel  extends TabItem {
     	}
     	else {
             Criteria criteria = new Criteria();
-            criteria.addCondition(new Condition(IAttribute.GOODSTYPE, Condition.EQUALS, newGtId));
+            criteria.addCondition(new Condition(IAttribute.GOODS_TYPE, Condition.EQUALS, newGtId));
             new ListService().listBeans(ModelNames.ATTRIBUTE, criteria, new ListService.Listener() {
                 public void onSuccess(final List<BeanObject> attrs) {
                 	if(newGtId.equals(goodsTypeId)) {
@@ -194,8 +194,8 @@ class GoodsAttributePanel  extends TabItem {
     	Map<String, String> valueHolders = new HashMap<String, String>();
     	if(goodsAttributes!=null) {
     	for(BeanObject goodsAttribute: goodsAttributes) {
-            String id = goodsAttribute.getString(IGoodsAttribute.ATTRIBUTEID);
-            String value = goodsAttribute.getString(IGoodsAttribute.VALUE);
+            String id = goodsAttribute.getString(IGoodsAttr.ATTR_ID);
+            String value = goodsAttribute.getString(IGoodsAttr.ATTR_VALUE);
            	valueHolders.put(id, value);
     	}
     	}
@@ -204,26 +204,26 @@ class GoodsAttributePanel  extends TabItem {
     	if(attrs!=null) {
         for (BeanObject attr : attrs) {
         	attCount++;
-            String attributeId = attr.get(IAttribute.ID);
-            String name = attr.get(IAttribute.NAME);
+            String attributeId = attr.get(IAttribute.PK_ID);
+            String name = attr.get(IAttribute.ATTR_NAME);
             String value = valueHolders.get(attributeId);
             
     		HiddenField<String> hf = new HiddenField<String>();
-    		hf.setName(buildElementName(IGoodsAttribute.ATTRIBUTEID));
+    		hf.setName(buildElementName(IGoodsAttr.ATTR_ID));
             hf.setValue(attributeId);
             addField(hf);
             
-            int inputType = ((Number)attr.get(IAttribute.INPUTTYPE)).intValue();
-            String values = attr.getString(IAttribute.VALUES);
+            int inputType = ((Number)attr.get(IAttribute.ATTR_INPUT_TYPE)).intValue();
+            String values = attr.getString(IAttribute.ATTR_VALUES);
             if (inputType == IAttribute.INPUT_SINGLELINETEXT) {
             	TextField<String> field = new TextField<String>();
-            	field.setName(buildElementName(IGoodsAttribute.VALUE));
+            	field.setName(buildElementName(IGoodsAttr.ATTR_VALUE));
             	field.setFieldLabel(name);
             	field.setValue(value);
             	addField(field);
             } else if (inputType == IAttribute.INPUT_MULTIPLELINETEXT) {
             	TextArea field = new TextArea();
-            	field.setName(buildElementName(IGoodsAttribute.VALUE));
+            	field.setName(buildElementName(IGoodsAttr.ATTR_VALUE));
             	field.setFieldLabel(name);
             	field.setValue(value);
             	addField(field);
@@ -239,7 +239,7 @@ class GoodsAttributePanel  extends TabItem {
                 }
 
                 ComboBox<BeanObject> field = new ComboBox<BeanObject>();
-        		field.setName(buildElementName(IGoodsAttribute.VALUE));
+        		field.setName(buildElementName(IGoodsAttr.ATTR_VALUE));
         		field.setDisplayField("value");
                 field.setValueField("value");
                 field.setFieldLabel(name);
