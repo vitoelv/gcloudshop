@@ -43,7 +43,11 @@ public class HomeAction extends BaseAction {
     }
     
     public void setCatRecSign(HttpServletRequest request) {
-        request.setAttribute("catRecSign", 1);
+    	// refer to logic at index.php line 60
+        request.setAttribute("catRecSign", 0);
+        
+        // refer to logic at index.php line 121
+        request.setAttribute("catRec", new String[2]);
     }
     
     public void includeBestSoldGoods(HttpServletRequest request) {

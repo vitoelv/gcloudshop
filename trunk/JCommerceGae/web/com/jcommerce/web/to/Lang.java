@@ -75,7 +75,7 @@ public class Lang extends BaseWrapper {
 				}
 				map.put(k2, val);
 			}
-			System.out.println("k1="+k1+", k2="+k2+", val="+val);
+//			System.out.println("k1="+k1+", k2="+k2+", val="+val);
 		}
 		
 		// TODO have to handle those PHP array style properties... especially with negative index 
