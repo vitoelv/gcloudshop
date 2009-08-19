@@ -60,7 +60,7 @@
         var swf_width=484;
         var swf_height=200;
         </script>
-        <script type="text/javascript" src="data/flashdata/${flashTheme}/cycle_image.js"></script>
+        <script type="text/javascript" src="data/flashdata/default/cycle_image.js"></script>
        </div>
        <!--news-->
        <div id="mallNews" class="f_r">
