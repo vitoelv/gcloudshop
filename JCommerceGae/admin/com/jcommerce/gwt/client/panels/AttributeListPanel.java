@@ -169,12 +169,12 @@ public class AttributeListPanel extends ContentWidget {
 		
         
         List<String> wantedFields = new ArrayList<String>();
-        wantedFields.add(AttributeForm.ID);
-        wantedFields.add(AttributeForm.NAME);
-//        wantedFields.add(AttributeForm.GOODSTYPE_NAME);
-        wantedFields.add(AttributeForm.INPUTTYPE);
-        wantedFields.add(AttributeForm.VALUES);
-        wantedFields.add(AttributeForm.SORTORDER);
+        wantedFields.add(AttributeForm.PK_ID);
+        wantedFields.add(AttributeForm.ATTR_NAME);
+//        wantedFields.add(AttributeForm.GOODS_TYPE_NAME);
+        wantedFields.add(AttributeForm.ATTR_INPUT_TYPE);
+        wantedFields.add(AttributeForm.ATTR_VALUES);
+        wantedFields.add(AttributeForm.SORT_ORDER);
 		loader = new PagingListService().getLoader(
 				ModelNames.ATTRIBUTE, wantedFields);
 		
@@ -197,21 +197,21 @@ public class AttributeListPanel extends ContentWidget {
 		List<ColumnConfig> columns = new ArrayList<ColumnConfig>();
 		final CheckBoxSelectionModel<BeanObject> smRowSelection = new CheckBoxSelectionModel<BeanObject>();
 		columns.add(smRowSelection.getColumn());
-//		columns.add(new ColumnConfig(AttributeForm.ID, Resources.constants
+//		columns.add(new ColumnConfig(AttributeForm.PK_ID, Resources.constants
 //				.AttributeList_ID(), 50));
-		ColumnConfig col = new ColumnConfig(AttributeForm.NAME, Resources.constants
+		ColumnConfig col = new ColumnConfig(AttributeForm.ATTR_NAME, Resources.constants
 				.AttributeList_Name(), 100);
 		col.setEditor(new CellEditor(new TextField()));
 		columns.add(col);
 		columns.add(new ColumnConfig(AttributeForm.GOODSTYPE_NAME, Resources.constants
 				.AttributeList_GoodsType(), 80));
-//		columns.add(new ColumnConfig(AttributeForm.GOODSTYPE, Resources.constants
+//		columns.add(new ColumnConfig(AttributeForm.GOODS_TYPE, Resources.constants
 //				.AttributeList_GoodsType(), 80));
-		columns.add(new ColumnConfig(AttributeForm.INPUTTYPE, Resources.constants
+		columns.add(new ColumnConfig(AttributeForm.ATTR_INPUT_TYPE, Resources.constants
 				.AttributeList_InputType(), 80));
-		columns.add(new ColumnConfig(AttributeForm.VALUES, Resources.constants
+		columns.add(new ColumnConfig(AttributeForm.ATTR_VALUES, Resources.constants
 				.AttributeList_Values(), 80));
-		columns.add(new ColumnConfig(AttributeForm.SORTORDER, Resources.constants
+		columns.add(new ColumnConfig(AttributeForm.SORT_ORDER, Resources.constants
 				.AttributeList_SortOrder(), 50));
 		ColumnConfig actcol = new ColumnConfig("Action", Resources.constants
 				.action(), 100);
@@ -232,14 +232,14 @@ public class AttributeListPanel extends ContentWidget {
 		ActionCellRenderer render = new ActionCellRenderer(grid);
 		ActionCellRenderer.ActionInfo act = new ActionCellRenderer.ActionInfo();
 		act.setImage(GWT.getModuleBaseURL()+"icon_edit.gif");
-		act.setAction("editAttribute($id)");
+		act.setAction("editAttribute($pkId)");
 		
 		act.setTooltip(Resources.constants.edit());
 		
 		render.addAction(act);
 		act = new ActionCellRenderer.ActionInfo();		
 		act.setImage(GWT.getModuleBaseURL()+"icon_trash.gif");
-		act.setAction("deleteAttribute($id)");
+		act.setAction("deleteAttribute($pkId)");
 		act.setTooltip(Resources.constants.delete());
 		render.addAction(act);
 
@@ -313,9 +313,9 @@ public class AttributeListPanel extends ContentWidget {
 						for (Iterator<BeanObject> it = result.iterator(); it
 								.hasNext();) {
 							BeanObject goodsType = it.next();
-							listGoodsType.insertItem(goodsType.getString(IGoodsType.NAME),
-									goodsType.getString(IGoodsType.ID), i);
-							if(getCurState().getSelectedGoodsTypeID()!=null && getCurState().getSelectedGoodsTypeID().equals(goodsType.getString(IGoodsType.ID))) {
+							listGoodsType.insertItem(goodsType.getString(IGoodsType.CAT_NAME),
+									goodsType.getString(IGoodsType.PK_ID), i);
+							if(getCurState().getSelectedGoodsTypeID()!=null && getCurState().getSelectedGoodsTypeID().equals(goodsType.getString(IGoodsType.PK_ID))) {
 								listGoodsType.setSelectedIndex(i);
 							}
 							i++;
@@ -337,7 +337,7 @@ public class AttributeListPanel extends ContentWidget {
 		Criteria criteria = new Criteria(); 
 		if(!"all".equals(selectedGoodsTypeId)) {
 			Condition cond = new Condition();
-			cond.setField(AttributeForm.GOODSTYPE);
+			cond.setField(AttributeForm.GOODS_TYPE);
 			cond.setOperator(Condition.EQUALS);
 			cond.setValue(selectedGoodsTypeId);
 			criteria.addCondition(cond);			
@@ -359,7 +359,7 @@ public class AttributeListPanel extends ContentWidget {
 	private void deleteAttributesAndRefresh(List<BeanObject> selected) {
 		List<String> ids = new ArrayList<String>();
 		for(BeanObject bean:selected) {
-			ids.add(bean.getString(AttributeForm.ID));
+			ids.add(bean.getString(AttributeForm.PK_ID));
 		}
 		new DeleteService().deleteBeans(ModelNames.ATTRIBUTE, ids,
 				new DeleteService.BatchDeleteListener() {
@@ -374,20 +374,20 @@ public class AttributeListPanel extends ContentWidget {
 				});
 	}
 	private void updateAttribute(final BeanObject att) {
-		new UpdateService().updateBean(att.getString(AttributeForm.ID), att,
+		new UpdateService().updateBean(att.getString(AttributeForm.PK_ID), att,
 				new UpdateService.Listener() {
 					@Override
 					public void onFailure(Throwable caught) {
 						super.onFailure(caught);
-						Info.display("糟糕", "更新商品属性失败"+att.getString(AttributeForm.NAME));
+						Info.display("糟糕", "更新商品属性失败"+att.getString(AttributeForm.ATTR_NAME));
 					}
 
 					@Override
 					public void onSuccess(Boolean success) {
 						if(success) {
-							Info.display("恭喜", "更新商品属性成功"+att.getString(AttributeForm.NAME));
+							Info.display("恭喜", "更新商品属性成功"+att.getString(AttributeForm.ATTR_NAME));
 						} else {
-							Info.display("糟糕", "更新商品属性失败"+att.getString(AttributeForm.NAME));
+							Info.display("糟糕", "更新商品属性失败"+att.getString(AttributeForm.ATTR_NAME));
 						}
 					}
 			

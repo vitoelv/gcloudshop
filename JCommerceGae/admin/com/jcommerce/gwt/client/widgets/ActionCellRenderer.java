@@ -74,7 +74,7 @@ public class ActionCellRenderer implements GridCellRenderer<BeanObject> {
             sb.append("<a href=\"");
 
             String a = act.getAction();
-            // deleteGoods($id)
+            // deleteGoods($pkId)
             if (a != null && a.indexOf("$") >= 0) {
                 int i = a.indexOf("$");
                 int j = i + 1;

@@ -122,12 +122,12 @@ public class CategoryListPanel extends ContentWidget {
         List<ColumnConfig> columns = new ArrayList<ColumnConfig>();
         //CheckBoxSelectionModel<BeanObject> sm = new CheckBoxSelectionModel<BeanObject>();
         //columns.add(sm.getColumn());        
-        columns.add(new ColumnConfig(ICategory.NAME, "分类名称", 150));
-        columns.add(new ColumnConfig(ICategory.MEASUREUNIT, "数量单位", 80));
-        columns.add(new CheckColumnConfig(ICategory.SHOWINNAVIGATOR, "导航栏", 80));
-        columns.add(new CheckColumnConfig(ICategory.SHOW, "是否显示", 80));        
+        columns.add(new ColumnConfig(ICategory.CAT_NAME, "分类名称", 150));
+        columns.add(new ColumnConfig(ICategory.MEASURE_UNIT, "数量单位", 80));
+        columns.add(new CheckColumnConfig(ICategory.SHOW_IN_NAV, "导航栏", 80));
+        columns.add(new CheckColumnConfig(ICategory.IS_SHOW, "是否显示", 80));        
         columns.add(new ColumnConfig(ICategory.GRADE, "价格分级", 60));
-        columns.add(new ColumnConfig(ICategory.SORTORDER, "排序", 50));        
+        columns.add(new ColumnConfig(ICategory.SORT_ORDER, "排序", 50));        
         ColumnConfig actcol = new ColumnConfig("Action", "操作", 150);
         columns.add(actcol);
 
@@ -143,11 +143,11 @@ public class CategoryListPanel extends ContentWidget {
         ActionCellRenderer render = new ActionCellRenderer(grid);
         ActionCellRenderer.ActionInfo act = new ActionCellRenderer.ActionInfo();        
         act.setText("编辑 ");
-        act.setAction("changeCategory($id)");
+        act.setAction("changeCategory($pkId)");
         render.addAction(act);
         act = new ActionCellRenderer.ActionInfo();
         act.setText(" 删除");
-		act.setAction("deleteCategory($id)");
+		act.setAction("deleteCategory($pkId)");
 		act.setTooltip(Resources.constants.GoodsList_action_delete());
 		render.addAction(act);
         actcol.setRenderer(render);        

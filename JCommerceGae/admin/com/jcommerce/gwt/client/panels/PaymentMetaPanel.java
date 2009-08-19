@@ -38,10 +38,10 @@ public class PaymentMetaPanel extends ContentWidget {
         public String getPageClassName() {
             return PaymentMetaPanel.class.getName();
         }
-        public void setID(int id) {
+        public void setPkId(int id) {
             setValue(ID, String.valueOf(id));
         }
-        public int getID() {
+        public int getPkId() {
             return Integer.valueOf((String)getValue(ID));
         }
         
@@ -81,7 +81,7 @@ public class PaymentMetaPanel extends ContentWidget {
     public void refresh() {
         System.out.println("----- refresh PaymentMeta---");
         State state = getCurState();
-        int id = state.getID();
+        int id = state.getPkId();
         System.out.println("id: "+id);
         contentPanel.resetTable();
         
@@ -165,7 +165,7 @@ public class PaymentMetaPanel extends ContentWidget {
 //                
 //                isonline = new Hidden(PaymentConfigMetaForm.ISONLINE, String.valueOf(result.isOnline()));
 //                iscod = new Hidden(PaymentConfigMetaForm.ISCOD, String.valueOf(result.isCod()));
-//                idhidden = new Hidden(PaymentConfigMetaForm.ID, String.valueOf(result.getId()));
+//                idhidden = new Hidden(PaymentConfigMetaForm.ID, String.valueOf(result.getPkId()));
 //                code = new Hidden(PaymentConfigMetaForm.CODE, result.getCode());
 //                order = new Hidden(PaymentConfigMetaForm.ORDER, "0");
 //

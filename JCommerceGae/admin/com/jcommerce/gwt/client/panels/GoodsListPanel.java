@@ -159,9 +159,9 @@ public class GoodsListPanel extends ContentWidget {
 //    	wantedFields.add(IGoods.SN);
 //    	wantedFields.add(IGoods.SHOPPRICE);
 //    	wantedFields.add(IGoods.ONSALE);
-//    	wantedFields.add(IGoods.HOTSOLD);
-//    	wantedFields.add(IGoods.BESTSOLD);
-//    	wantedFields.add(IGoods.NEWADDED);
+//    	wantedFields.add(IGoods.IS_HOT);
+//    	wantedFields.add(IGoods.IS_BEST);
+//    	wantedFields.add(IGoods.IS_NEW);
 //    	wantedFields.add(IGoods.NUMBER);
 		
 		BasePagingLoader loader = new PagingListService().getLoader(ModelNames.GOODS, criteria);
@@ -185,29 +185,29 @@ public class GoodsListPanel extends ContentWidget {
 		columns.add(smRowSelection.getColumn());
 //		columns.add(new ColumnConfig(IGoods.ID, "ID", 50));
 		
-		ColumnConfig col = new ColumnConfig(IGoods.NAME, Resources.constants
+		ColumnConfig col = new ColumnConfig(IGoods.GOODS_NAME, Resources.constants
 				.Goods_name(), 100);
 		col.setEditor(new CellEditor(new TextField()));
 		columns.add(col);
 		col = new ColumnConfig(IGoods.GOODS_SN, Resources.constants.Goods_SN(), 100);
 		col.setEditor(new CellEditor(new TextField()));
 		columns.add(col);
-		col = new ColumnConfig(IGoods.SHOPPRICE, Resources.constants
+		col = new ColumnConfig(IGoods.SHOP_PRICE, Resources.constants
 				.Goods_shopPrice(), 80);
 		col.setAlignment(HorizontalAlignment.RIGHT);
 		col.setNumberFormat(NumberFormat.getCurrencyFormat());
 		col.setEditor(new CellEditor(new NumberField()));
 		columns.add(col);
-		CheckColumnConfig onsale = new CheckColumnConfig(IGoods.ONSALE,
+		CheckColumnConfig onsale = new CheckColumnConfig(IGoods.IS_ON_SALE,
 				Resources.constants.Goods_onSale(), 80);
 		columns.add(onsale);
-		CheckColumnConfig hotsold = new CheckColumnConfig(IGoods.HOTSOLD,
+		CheckColumnConfig hotsold = new CheckColumnConfig(IGoods.IS_HOT,
 				Resources.constants.Goods_hotsold(), 80);
 		columns.add(hotsold);
-		CheckColumnConfig bestsold = new CheckColumnConfig(IGoods.BESTSOLD,
+		CheckColumnConfig bestsold = new CheckColumnConfig(IGoods.IS_BEST,
 				Resources.constants.Goods_bestSold(), 80);
 		columns.add(bestsold);
-		CheckColumnConfig newadd = new CheckColumnConfig(IGoods.NEWADDED,
+		CheckColumnConfig newadd = new CheckColumnConfig(IGoods.IS_NEW,
 				Resources.constants.Goods_newAdded(), 80);
 		columns.add(newadd);
 		col = new ColumnConfig(IGoods.GOODS_NUMBER, Resources.constants
@@ -234,12 +234,12 @@ public class GoodsListPanel extends ContentWidget {
 		ActionCellRenderer render = new ActionCellRenderer(grid);
 		ActionCellRenderer.ActionInfo act = new ActionCellRenderer.ActionInfo();
 		act.setImage(GWT.getModuleBaseURL()+"icon_edit.gif");
-		act.setAction("editGoods($id)");
+		act.setAction("editGoods($pkId)");
 		act.setTooltip(Resources.constants.GoodsList_action_edit());
 		render.addAction(act);
 		act = new ActionCellRenderer.ActionInfo();		
 		act.setImage(GWT.getModuleBaseURL()+"icon_trash.gif");
-		act.setAction("deleteGoods($id)");
+		act.setAction("deleteGoods($pkId)");
 		act.setTooltip(Resources.constants.GoodsList_action_delete());
 		render.addAction(act);
 
@@ -338,7 +338,7 @@ public class GoodsListPanel extends ContentWidget {
 		if (lstBrand.getSelectedIndex() > 0) {
 			String brand = lstBrand.getValue(lstBrand.getSelectedIndex());
 			Condition cond = new Condition();
-			cond.setField(IGoods.BRANDID);
+			cond.setField(IGoods.BRAND_ID);
 			cond.setOperator(Condition.EQUALS);
 			cond.setValue(brand);
 			criteria.addCondition(cond);
@@ -346,7 +346,7 @@ public class GoodsListPanel extends ContentWidget {
 		if (lstCategory.getSelectedIndex() > 0) {
 			String cat = lstCategory.getValue(lstCategory.getSelectedIndex());
 			Condition cond = new Condition();
-			cond.setField(IGoods.CATEGORYIDS);
+			cond.setField(IGoods.CATEGORY_IDS);
 			cond.setOperator(Condition.CONTAINS);
 			cond.setValue(cat);
 			criteria.addCondition(cond);
@@ -354,19 +354,19 @@ public class GoodsListPanel extends ContentWidget {
 		String type = lstType.getValue(lstType.getSelectedIndex());
 		if ("new".equals(type)) {
 			Condition cond = new Condition();
-			cond.setField(IGoods.NEWADDED);
+			cond.setField(IGoods.IS_NEW);
 			cond.setOperator(Condition.EQUALS);
 			cond.setValue("true");
 			criteria.addCondition(cond);
 		} else if ("best".equals(type)) {
 			Condition cond = new Condition();
-			cond.setField(IGoods.BESTSOLD);
+			cond.setField(IGoods.IS_BEST);
 			cond.setOperator(Condition.EQUALS);
 			cond.setValue("true");
 			criteria.addCondition(cond);
 		} else if ("hot".equals(type)) {
 			Condition cond = new Condition();
-			cond.setField(IGoods.HOTSOLD);
+			cond.setField(IGoods.IS_HOT);
 			cond.setOperator(Condition.EQUALS);
 			cond.setValue("true");
 			criteria.addCondition(cond);
@@ -395,45 +395,45 @@ public class GoodsListPanel extends ContentWidget {
 			if ("delete".equals(action)) {
 				DeleteListener listener = new DeleteListener();
 				listeners.add(listener);
-				deleteGoods(item.getString(IGoods.ID), listener);
+				deleteGoods(item.getString(IGoods.PK_ID), listener);
 			} else if ("new".equals(action)) {
-				if (!Boolean.TRUE.equals(item.get(IGoods.NEWADDED))) {
-					item.set(IGoods.NEWADDED, Boolean.TRUE);
+				if (!Boolean.TRUE.equals(item.get(IGoods.IS_NEW))) {
+					item.set(IGoods.IS_NEW, Boolean.TRUE);
 					UpdateListener listener = new UpdateListener();
 					listeners.add(listener);
 					updateGoods(item, listener);
 				}
 			} else if ("notnew".equals(action)) {
-				if (!Boolean.FALSE.equals(item.get(IGoods.NEWADDED))) {
-					item.set(IGoods.NEWADDED, Boolean.FALSE);
+				if (!Boolean.FALSE.equals(item.get(IGoods.IS_NEW))) {
+					item.set(IGoods.IS_NEW, Boolean.FALSE);
 					UpdateListener listener = new UpdateListener();
 					listeners.add(listener);
 					updateGoods(item, listener);
 				}
 			} else if ("hot".equals(action)) {
-				if (!Boolean.TRUE.equals(item.get(IGoods.HOTSOLD))) {
-					item.set(IGoods.HOTSOLD, Boolean.TRUE);
+				if (!Boolean.TRUE.equals(item.get(IGoods.IS_HOT))) {
+					item.set(IGoods.IS_HOT, Boolean.TRUE);
 					UpdateListener listener = new UpdateListener();
 					listeners.add(listener);
 					updateGoods(item, listener);
 				}
 			} else if ("nothot".equals(action)) {
-				if (!Boolean.FALSE.equals(item.get(IGoods.HOTSOLD))) {
-					item.set(IGoods.HOTSOLD, Boolean.FALSE);
+				if (!Boolean.FALSE.equals(item.get(IGoods.IS_HOT))) {
+					item.set(IGoods.IS_HOT, Boolean.FALSE);
 					UpdateListener listener = new UpdateListener();
 					listeners.add(listener);
 					updateGoods(item, listener);
 				}
 			} else if ("best".equals(action)) {
-				if (!Boolean.TRUE.equals(item.get(IGoods.BESTSOLD))) {
-					item.set(IGoods.BESTSOLD, Boolean.TRUE);
+				if (!Boolean.TRUE.equals(item.get(IGoods.IS_BEST))) {
+					item.set(IGoods.IS_BEST, Boolean.TRUE);
 					UpdateListener listener = new UpdateListener();
 					listeners.add(listener);
 					updateGoods(item, listener);
 				}
 			} else if ("notbest".equals(action)) {
-				if (!Boolean.FALSE.equals(item.get(IGoods.BESTSOLD))) {
-					item.set(IGoods.BESTSOLD, Boolean.FALSE);
+				if (!Boolean.FALSE.equals(item.get(IGoods.IS_BEST))) {
+					item.set(IGoods.IS_BEST, Boolean.FALSE);
 					UpdateListener listener = new UpdateListener();
 					listeners.add(listener);
 					updateGoods(item, listener);
@@ -495,7 +495,7 @@ public class GoodsListPanel extends ContentWidget {
 		
 		GoodsPanel.State newState = new GoodsPanel.State();
 		newState.setIsEdit(true);
-		newState.setId(id);
+		newState.setPkId(id);
 		newState.execute();
 		
 //		new ReadService().getBean(ModelNames.GOODS, id,
@@ -507,7 +507,7 @@ public class GoodsListPanel extends ContentWidget {
 	}
 
 	private void updateGoods(BeanObject goods, UpdateService.Listener listener) {
-		new UpdateService().updateBean(goods.getString(IGoods.ID), goods,
+		new UpdateService().updateBean(goods.getString(IGoods.PK_ID), goods,
 				listener);
 	}
 
@@ -553,7 +553,7 @@ public class GoodsListPanel extends ContentWidget {
 								.hasNext();) {
 							BeanObject brand = it.next();
 							lstBrand.addItem(brand.getString(IBrand.BRAND_NAME),
-									brand.getString(IBrand.ID));
+									brand.getString(IBrand.PK_ID));
 						}
 					}
 				});
@@ -567,10 +567,10 @@ public class GoodsListPanel extends ContentWidget {
 						for (Iterator<BeanObject> it = result.iterator(); it
 								.hasNext();) {
 							BeanObject cat = it.next();
-							String name = cat.getString(ICategory.NAME);
-							String id = cat.getString(ICategory.ID);
+							String name = cat.getString(ICategory.CAT_NAME);
+							String id = cat.getString(ICategory.PK_ID);
 //							String _pid = cat.getString(ICategory.PARENT);
-							String _pid = cat.getString(ICategory.PARENTID);
+							String _pid = cat.getString(ICategory.PARENT_ID);
 							if (_pid == null) {
 								pids.clear();
 							} else if (!pids.contains(_pid)) {

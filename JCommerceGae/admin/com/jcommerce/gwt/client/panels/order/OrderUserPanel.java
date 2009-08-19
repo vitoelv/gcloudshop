@@ -3,27 +3,26 @@ package com.jcommerce.gwt.client.panels.order;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
+import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.store.ListStore;
+import com.extjs.gxt.ui.client.widget.HorizontalPanel;
+import com.extjs.gxt.ui.client.widget.VerticalPanel;
+import com.extjs.gxt.ui.client.widget.button.Button;
+import com.extjs.gxt.ui.client.widget.form.ComboBox;
+import com.extjs.gxt.ui.client.widget.form.Radio;
+import com.extjs.gxt.ui.client.widget.form.RadioGroup;
+import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.google.gwt.user.client.Element;
 import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.UserForm;
-import com.jcommerce.gwt.client.model.IOrder;
+import com.jcommerce.gwt.client.model.IOrderInfo;
 import com.jcommerce.gwt.client.panels.OrderListPanel;
 import com.jcommerce.gwt.client.service.CreateService;
-
-import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
-import com.extjs.gxt.ui.client.widget.button.Button;
-import com.extjs.gxt.ui.client.widget.form.Radio;   
-import com.extjs.gxt.ui.client.widget.form.RadioGroup; 
-import com.extjs.gxt.ui.client.widget.form.TextField;
-import com.extjs.gxt.ui.client.widget.VerticalPanel;   
-import com.extjs.gxt.ui.client.widget.HorizontalPanel;
-import com.extjs.gxt.ui.client.widget.form.ComboBox;
-import com.extjs.gxt.ui.client.event.ButtonEvent;
-import com.extjs.gxt.ui.client.event.SelectionListener;
-import com.extjs.gxt.ui.client.store.ListStore;
 
 public class OrderUserPanel extends ContentWidget{
 
@@ -159,10 +158,10 @@ public class OrderUserPanel extends ContentWidget{
 	
 	private void createNewOrder(){
 		Map<String, Object> props = new HashMap<String, Object>();
-		props.put(IOrder.ID, null);
-		props.put(IOrder.STATUS, IOrder.ORDER_INVALID);
-		props.put(IOrder.SHIPPINGSTATUS, IOrder.SHIPPING_UNSHIPPED);
-		props.put(IOrder.PAYSTATUS, IOrder.PAY_UNPAYED);
+		props.put(IOrderInfo.PK_ID, null);
+		props.put(IOrderInfo.ORDER_STATUS, IOrderInfo.ORDER_INVALID);
+		props.put(IOrderInfo.SHIPPING_STATUS, IOrderInfo.SHIPPING_UNSHIPPED);
+		props.put(IOrderInfo.PAY_STATUS, IOrderInfo.PAY_UNPAYED);
 		
 		
 		BeanObject form = new BeanObject(ModelNames.ORDER, props);

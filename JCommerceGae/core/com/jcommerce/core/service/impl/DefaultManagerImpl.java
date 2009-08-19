@@ -168,7 +168,7 @@ public class DefaultManagerImpl implements IDefaultManager {
 	        			// the form contains no info about associated object, just neglect
 	        			continue;
 	        		}
-    				String id = toPopulate.getId();
+    				String id = toPopulate.getPkId();
     				if(id==null) {
     					// TODO a new one
     				}

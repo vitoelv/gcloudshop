@@ -103,47 +103,47 @@ public class AttributePanel extends ContentWidget {
         System.out.println("----------Attribute");
         add(contentPanel);
         
-        contentPanel.createPanel(AttributeForm.NAME, "分类名称：", new TextBox());          
+        contentPanel.createPanel(AttributeForm.ATTR_NAME, "分类名称：", new TextBox());          
         lstGoodsType.addChangeHandler(new ChangeHandler() {
         	public void onChange(ChangeEvent event) {
         		getCurState().setSelectedGoodsTypeID(lstGoodsType.getValue(lstGoodsType.getSelectedIndex()));
         	}
             
         });
-        contentPanel.createPanel(AttributeForm.GOODSTYPE, "所属商品类型：", lstGoodsType);       
+        contentPanel.createPanel(AttributeForm.GOODS_TYPE, "所属商品类型：", lstGoodsType);       
         
 		List<ChoicePanel.Item> indexItems = new ArrayList<ChoicePanel.Item>();
 		indexItems.add(new ChoicePanel.Item("无需检索", "0"));
 		indexItems.add(new ChoicePanel.Item("关键字检索", "1"));		
 		indexItems.add(new ChoicePanel.Item("范围检索", "2"));
 		ChoicePanel showIndex = new ChoicePanel("0",indexItems); 
-        contentPanel.createPanel(AttributeForm.INDEX, "能否进行检索:", showIndex);
+        contentPanel.createPanel(AttributeForm.ATTR_INDEX, "能否进行检索:", showIndex);
         
 		List<ChoicePanel.Item> linkedItems = new ArrayList<ChoicePanel.Item>();
 		linkedItems.add(new ChoicePanel.Item("否", "0"));
 		linkedItems.add(new ChoicePanel.Item("是", "1"));		
 		ChoicePanel showLinked = new ChoicePanel("0",indexItems); 
-        contentPanel.createPanel(AttributeForm.LINKED, "相同属性值的商品是否关联？", showLinked);
+        contentPanel.createPanel(AttributeForm.IS_LINKED, "相同属性值的商品是否关联？", showLinked);
         
 		List<ChoicePanel.Item> typeItems = new ArrayList<ChoicePanel.Item>();
 		typeItems.add(new ChoicePanel.Item("唯一属性", "0"));
 		typeItems.add(new ChoicePanel.Item("可选属性", "1"));		
 		typeItems.add(new ChoicePanel.Item("必选属性", "2"));
 		ChoicePanel showType = new ChoicePanel("0",typeItems); 
-        contentPanel.createPanel(AttributeForm.TYPE, "属性是否可选：", showType);
+        contentPanel.createPanel(AttributeForm.ATTR_TYPE, "属性是否可选：", showType);
         
 		List<ChoicePanel.Item> inputTypeItems = new ArrayList<ChoicePanel.Item>();
 		inputTypeItems.add(new ChoicePanel.Item("手工录入", "0"));
 		inputTypeItems.add(new ChoicePanel.Item("从下拉的列表中选择（一行代表一个可选值）", "1"));		
 		inputTypeItems.add(new ChoicePanel.Item("多行文本框", "2"));
 		ChoicePanel showInputType = new ChoicePanel("0",inputTypeItems); 
-        contentPanel.createPanel(AttributeForm.INPUTTYPE, "该属性值的录入方式：", showInputType);
+        contentPanel.createPanel(AttributeForm.ATTR_INPUT_TYPE, "该属性值的录入方式：", showInputType);
         
         
         TextArea valuesArea = new TextArea();
         valuesArea.setHeight("180px");
         valuesArea.setWidth("100px");
-        contentPanel.createPanel(AttributeForm.VALUES, "可选值列表：", valuesArea);
+        contentPanel.createPanel(AttributeForm.ATTR_VALUES, "可选值列表：", valuesArea);
 
         Button btnNew = new Button();    
         Button btnCancel = new Button();    
@@ -166,7 +166,7 @@ public class AttributePanel extends ContentWidget {
                 	Window.alert(ex.getMessage());
                 	return;
                 }
-                System.out.println("selected goodsType: "+attribute.get(AttributeForm.GOODSTYPE));
+                System.out.println("selected goodsType: "+attribute.get(AttributeForm.GOODS_TYPE));
                 
                 if (getCurState().getIsEdit()) {
                     new UpdateService().updateBean(id, attribute, new UpdateService.Listener() {
@@ -190,7 +190,7 @@ public class AttributePanel extends ContentWidget {
                             getCurState().setAttrID(id);
                             System.out.println("1 b_list.addItem("+id);
 //                            attributes.put(id, attribute);
-                            contentPanel.setValue(AttributeForm.ID, id);                           
+                            contentPanel.setValue(AttributeForm.PK_ID, id);                           
                             
                         	Success.State newState = new Success.State();
                         	newState.setMessage("添加商品类型成功");
@@ -226,7 +226,7 @@ public class AttributePanel extends ContentWidget {
             	int i=1;
                 for (Iterator<BeanObject> it = beans.iterator(); it.hasNext();) {
                     BeanObject goodsType = it.next();                    
-                    lstGoodsType.insertItem(goodsType.getString(IGoodsType.NAME), goodsType.getString(IGoodsType.ID),i);
+                    lstGoodsType.insertItem(goodsType.getString(IGoodsType.CAT_NAME), goodsType.getString(IGoodsType.PK_ID),i);
                     
                     // if(!getCurState().getIsEdit()) {
                     // do the check no matter isedit or not
@@ -242,7 +242,7 @@ public class AttributePanel extends ContentWidget {
                 	new ReadService().getBean(ModelNames.ATTRIBUTE, getCurState().getAttrID(),
         				new ReadService.Listener() {
                 		public void onSuccess(BeanObject bean) {
-                			String goodsType = bean.getString(IAttribute.GOODSTYPE);
+                			String goodsType = bean.getString(IAttribute.GOODS_TYPE);
                 			System.out.println("goodsType: "+goodsType);
                 			Map<String, Object> mapAttribute = bean.getProperties();
                 			contentPanel.updateValues(mapAttribute);

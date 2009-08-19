@@ -134,7 +134,7 @@ public class ShopConfigPanel extends BaseEntityEditPanel {
 		keywordsField.setValue(bean.getString(IShopConfig.KEYWORDS));
 		addressField.setValue(bean.getString(IShopConfig.ADDRESS));
 		
-		getCurState().setId(bean.getString(IShopConfig.ID));
+		getCurState().setPkId(bean.getString(IShopConfig.ID));
 		getCurState().setIsEdit(true);
 	}
 	

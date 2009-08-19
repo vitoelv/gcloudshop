@@ -34,6 +34,7 @@ import com.jcommerce.core.util.JDOQLHelper;
 import com.jcommerce.core.util.MyPropertyUtil;
 import com.jcommerce.core.util.UUIDHexGenerator;
 import com.jcommerce.core.util.UUIDLongGenerator;
+import com.jcommerce.gwt.client.model.IModelObject;
 
 public class DAOImpl extends JdoDaoSupport implements DAO {
     protected Log log = LogFactory.getLog(getClass());
@@ -47,18 +48,18 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
     	String id = null;
     	try {
     		// TODO leon temporary solution for case that id is blank in form
-    		if(StringUtils.isEmpty(to.getId())) {
-    			to.setId(null);
+    		if(StringUtils.isEmpty(to.getPkId())) {
+    			to.setPkId(null);
     		}
 
-    		if(StringUtils.isEmpty(to.getId())) {
+    		if(StringUtils.isEmpty(to.getPkId())) {
     			// if id is not set, use keyname, otherwise use ID directly, same as attach
     			to.setKeyName(UUIDHexGenerator.newUUID());
     			to.setLongId(UUIDLongGenerator.newUUID());
     		}
     		
 			getJdoTemplate().makePersistent(to);
-			id = to.getId();
+			id = to.getPkId();
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -73,11 +74,11 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
     	String id = null;
     	try {
     		// TODO leon temporary solution for case that id is blank in form
-    		if(StringUtils.isEmpty(to.getId())) {
-    			to.setId(null);
+    		if(StringUtils.isEmpty(to.getPkId())) {
+    			to.setPkId(null);
     		}
 			getJdoTemplate().makePersistent(to);
-			id = to.getId();
+			id = to.getPkId();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -90,9 +91,9 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
 		try {
 			JdoTemplate jdoTemplate =getJdoTemplate();
 			String modelName = to.getClass().getName(); 
-			ModelObject po = (ModelObject)jdoTemplate.getObjectById(to.getClass(), to.getId());
+			ModelObject po = (ModelObject)jdoTemplate.getObjectById(to.getClass(), to.getPkId());
 			if(po==null) {
-				throw new RuntimeException("update: not existed. modelName="+modelName+", id="+to.getId());
+				throw new RuntimeException("update: not existed. modelName="+modelName+", id="+to.getPkId());
 			}
 			MyPropertyUtil.copySimpleProperties(po, to);
 //			jdoTemplate.makePersistent(to);
@@ -121,7 +122,7 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
     		if(obj!=null) {
     			jdoTemplate.deletePersistent(obj);
     		}
-//			res = String.valueOf(obj.getId());
+//			res = String.valueOf(obj.getPkId());
 			return true;
     	} catch (JDOObjectNotFoundException e) {
     		return true;
@@ -144,7 +145,7 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
     		JdoTemplate jdoTemplate =getJdoTemplate();
     		jdoTemplate.deletePersistent(obj);
 			
-//			res = String.valueOf(obj.getId());
+//			res = String.valueOf(obj.getPkId());
 			return true;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -200,7 +201,7 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
 					try {
 						Criteria criteria = new Criteria();
 						Condition cond = new Condition();
-						cond.setField("longId");
+						cond.setField(IModelObject.LONG_ID);
 						cond.setOperator(Condition.EQUALS);
 						cond.setValue(longId.toString());
 						criteria.addCondition(cond);
@@ -273,7 +274,7 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
         	Iterator it = res.iterator();
         	if(it.hasNext()) {
         		ModelObject mo = (ModelObject)it.next();
-        		System.out.println("id: "+mo.getId());
+        		System.out.println("id: "+mo.getPkId());
         	}
 //            System.out.println("res.size: "+res.size());
             return res;

@@ -36,7 +36,7 @@ public class Test3 extends BaseDataStoreTestCase {
 			Parent3 p1 = pm.makePersistent(p);
 			
 			pm.currentTransaction().commit();
-			System.out.println("id="+p1.getId());
+			System.out.println("id="+p1.getPkId());
 			
 			pm.currentTransaction().begin();
 			Child3 c = new Child3();
@@ -46,7 +46,7 @@ public class Test3 extends BaseDataStoreTestCase {
 			Child3 c1 = pm.makePersistent(c);
 			
 			pm.currentTransaction().commit();
-			System.out.println("id="+c1.getId());
+			System.out.println("id="+c1.getPkId());
 			
 
 			// query
@@ -54,7 +54,7 @@ public class Test3 extends BaseDataStoreTestCase {
 			List<Parent3> parent3s = (List<Parent3>)query.execute();
 			System.out.println("size="+parent3s.size());
 			for(Parent3 parent3:parent3s) {
-				System.out.println("id:"+parent3.getId()+", name: "+parent3.getName());
+				System.out.println("id:"+parent3.getPkId()+", name: "+parent3.getName());
 				Set<Child3> set = parent3.getChild3s();
 				System.out.println("child size: "+set.size());
 				assertTrue(1==set.size());
@@ -98,7 +98,7 @@ public class Test3 extends BaseDataStoreTestCase {
 			Parent3 p1 = pm.makePersistent(p);
 			
 			pm.currentTransaction().commit();
-			System.out.println("id="+p1.getId());
+			System.out.println("id="+p1.getPkId());
 			
 			pm.currentTransaction().begin();
 			Child3 c = new Child3();
@@ -108,7 +108,7 @@ public class Test3 extends BaseDataStoreTestCase {
 			Child3 c1 = pm.makePersistent(c);
 			
 			pm.currentTransaction().commit();
-			System.out.println("id="+c1.getId());
+			System.out.println("id="+c1.getPkId());
 			
 
 			// query
@@ -116,7 +116,7 @@ public class Test3 extends BaseDataStoreTestCase {
 			List<Parent3> parent3s = (List<Parent3>)query.execute();
 			System.out.println("size="+parent3s.size());
 			for(Parent3 parent3:parent3s) {
-				System.out.println("id:"+parent3.getId()+", name: "+parent3.getName());
+				System.out.println("id:"+parent3.getPkId()+", name: "+parent3.getName());
 				Set<Child3> set = parent3.getChild3s();
 				System.out.println("child size: "+set.size());
 				assertTrue(1==set.size());
@@ -149,7 +149,7 @@ public class Test3 extends BaseDataStoreTestCase {
 	    @PrimaryKey
 	    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-		private String id;
+		private String pkId;
 		
 	    @Persistent
 	    @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
@@ -161,12 +161,12 @@ public class Test3 extends BaseDataStoreTestCase {
 	    @Persistent
 	    private String name;
 
-		public String getId() {
-			return id;
+		public String getPkId() {
+			return pkId;
 		}
 
-		public void setId(String id) {
-			this.id = id;
+		public void setPkId(String pkId) {
+			this.pkId = pkId;
 		}
 
 		public String getKeyName() {
@@ -200,7 +200,7 @@ public class Test3 extends BaseDataStoreTestCase {
 	    @PrimaryKey
 	    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-		private String id;
+		private String pkId;
 		
 	    @Persistent
 	    @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
@@ -212,12 +212,12 @@ public class Test3 extends BaseDataStoreTestCase {
 	    @Persistent(mappedBy="parent3")
 	    private Set<Child3> child3s = new HashSet<Child3>();
 	    
-		public String getId() {
-			return id;
+		public String getPkId() {
+			return pkId;
 		}
 
-		public void setId(String id) {
-			this.id = id;
+		public void setPkId(String pkId) {
+			this.pkId = pkId;
 		}
 
 		public String getKeyName() {

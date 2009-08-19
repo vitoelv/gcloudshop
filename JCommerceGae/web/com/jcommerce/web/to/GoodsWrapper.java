@@ -24,15 +24,14 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
 	
 	
     // for template
-    public String getGoodsId() {
-    	String longId = getGoods().getLongId().toString();
-    	return longId;
+    public Long getGoodsId() {
+    	return getGoods().getLongId();
     }
     public String getGoodsImg() {
     	return SERVLET_IMAGE+getGoods().getImageFileId();
     }
     public String getUrl() {
-    	return ACTION_GOODS+getGoods().getId();    	
+    	return ACTION_GOODS+getGoods().getPkId();    	
     }
     public String getShortStyleName() {
     	return getGoods().getGoodsName().length()>10? getGoods().getGoodsName().substring(0, 10)+"...":getGoods().getGoodsName();

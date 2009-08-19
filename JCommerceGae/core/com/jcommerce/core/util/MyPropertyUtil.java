@@ -18,6 +18,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.jcommerce.core.model.ModelObject;
+import com.jcommerce.gwt.client.model.IModelObject;
 
 
 
@@ -47,7 +48,7 @@ public class MyPropertyUtil {
 	        		// OpenPersistenceManagerInViewFilter and lazy-loading works here
 	        		ModelObject assoc = (ModelObject)PropertyUtils.getProperty(obj, name);
 	        		if(assoc!=null) {
-	        			res.put(name, assoc.getId());
+	        			res.put(name, assoc.getPkId());
 	        		}
 	        	}
 	        	else if(Set.class.isAssignableFrom(type)) {
@@ -140,7 +141,7 @@ public class MyPropertyUtil {
 			if("class".equals(name)) {
 				continue;
 			}
-			if("id".equals(name) || "keyName".equals(name)) {
+			if(IModelObject.PK_ID.equals(name) || IModelObject.KEY_NAME.equals(name) || IModelObject.LONG_ID.equals(name)) {
 				// TODO hardcoded.  for update, never change Id field
 				continue;
 			}
@@ -202,7 +203,7 @@ public class MyPropertyUtil {
                     // the value is ID
                 	debug("form2To-- type="+type);
                 	ModelObject mo = (ModelObject)type.newInstance();
-                	mo.setId((String)value);
+                	mo.setPkId((String)value);
 //                    ModelObject mo = getModelObject(bean, (String)value);
                     _props.put(fn, mo);
                 } else if (value instanceof Map) {

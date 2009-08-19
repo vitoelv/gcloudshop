@@ -20,6 +20,6 @@ public class ShippingWrapper extends BaseModelWrapper {
 	}
     // for template
     public String getShippingId() {
-    	return getShipping().getId();
+    	return getShipping().getPkId();
     }
 }

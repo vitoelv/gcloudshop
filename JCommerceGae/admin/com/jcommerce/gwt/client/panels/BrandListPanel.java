@@ -145,10 +145,10 @@ public class BrandListPanel extends ContentWidget {
         //CheckBoxSelectionModel<BeanObject> sm = new CheckBoxSelectionModel<BeanObject>();
         //columns.add(sm.getColumn());        
         columns.add(new ColumnConfig(IBrand.BRAND_NAME, "品牌名称", 80));
-        columns.add(new ColumnConfig(IBrand.SITE, "品牌网址", 150));
+        columns.add(new ColumnConfig(IBrand.SITE_URL, "品牌网址", 150));
         columns.add(new ColumnConfig(IBrand.BRAND_DESC, "品牌描述", 230));
-        columns.add(new ColumnConfig(IBrand.ORDER, "排序", 50));
-        columns.add(new CheckColumnConfig(IBrand.SHOW, "是否显示", 80));
+        columns.add(new ColumnConfig(IBrand.SORT_ORDER, "排序", 50));
+        columns.add(new CheckColumnConfig(IBrand.IS_SHOW, "是否显示", 80));
         ColumnConfig actcol = new ColumnConfig("Action", "操作", 140);
         columns.add(actcol);
 
@@ -166,12 +166,12 @@ public class BrandListPanel extends ContentWidget {
         ActionCellRenderer render = new ActionCellRenderer(grid);
         ActionCellRenderer.ActionInfo act = new ActionCellRenderer.ActionInfo();        
         act.setText("编辑 ");
-        act.setAction("changeBrand($id)");
+        act.setAction("changeBrand($pkId)");
         act.setTooltip(Resources.constants.edit());
         render.addAction(act);
         act = new ActionCellRenderer.ActionInfo();
         act.setText(" 删除");
-		act.setAction("deleteBrand($id)");
+		act.setAction("deleteBrand($pkId)");
 		act.setTooltip(Resources.constants.delete());
 		render.addAction(act);
         actcol.setRenderer(render);        
@@ -220,7 +220,7 @@ public class BrandListPanel extends ContentWidget {
     private void modifyBrandAndRefrsh(final String id) {    
 		BrandPanel.State newState = new BrandPanel.State();
 		newState.setIsEdit(true);
-		newState.setId(id);
+		newState.setPkId(id);
 		newState.execute();
     }
     
@@ -228,7 +228,7 @@ public class BrandListPanel extends ContentWidget {
     	GWTHttpDynaForm form = new GWTHttpDynaForm();
     	form.setAction("com.jcommerce.gwt.server.BrandGWTAction");
     	form.setMethod("delete");
-    	form.addParam(IBrand.ID, id);
+    	form.addParam(IBrand.PK_ID, id);
     	form.SetListener(new GWTHttpDynaForm.Listener() {
 			@Override
 			public void onFailure(Throwable caught) {

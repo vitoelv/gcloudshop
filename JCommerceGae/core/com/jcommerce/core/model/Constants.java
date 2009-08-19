@@ -43,10 +43,10 @@ public class Constants {
     public static final int ERR_NEED_SELECT_ATTR=      6; //需要用户选择属性
 
     /* 购物车商品类型 */
-    public static final int CART_GENERAL_GOODS=        0; // 普通商品
-    public static final int CART_GROUP_BUY_GOODS=      1; // 团购商品
-    public static final int CART_AUCTION_GOODS=        2; // 拍卖商品
-    public static final int CART_SNATCH_GOODS=         3; // 夺宝奇兵
+    public static final Long CART_GENERAL_GOODS=       0l; // 普通商品
+    public static final Long CART_GROUP_BUY_GOODS=      1l; // 团购商品
+    public static final Long CART_AUCTION_GOODS=        2l; // 拍卖商品
+    public static final Long CART_SNATCH_GOODS=         3l; // 夺宝奇兵
 
     /* 订单状态 */
     public static final int ORDER_UNCONFIRMED=            0; // 未确认

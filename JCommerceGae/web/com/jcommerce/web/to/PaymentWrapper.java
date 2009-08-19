@@ -21,7 +21,7 @@ public class PaymentWrapper extends BaseModelWrapper {
 	}
 	
     // for template
-    public String getPaymentId() {
-    	return getPayment().getId();
+    public String getPayId() {
+    	return getPayment().getPkId();
     }
 }

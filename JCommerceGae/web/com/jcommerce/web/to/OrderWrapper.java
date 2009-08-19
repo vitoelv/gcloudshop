@@ -1,26 +1,26 @@
 package com.jcommerce.web.to;
 
 import com.jcommerce.core.model.ModelObject;
-import com.jcommerce.core.model.Order;
+import com.jcommerce.core.model.OrderInfo;
 
 public class OrderWrapper extends BaseModelWrapper {
 
-	Order order;
+	OrderInfo order;
 	@Override
 	protected Object getWrapped() {
 		return getOrder();
 	}
 	public OrderWrapper(ModelObject order) {
 		super();
-		this.order = (Order)order;
+		this.order = (OrderInfo)order;
 	}
 	
-	public Order getOrder() {
+	public OrderInfo getOrder() {
 		return order;
 	}
 	
     // for template
     public String getOrderId() {
-    	return getOrder().getId();
+    	return getOrder().getPkId();
     }
 }

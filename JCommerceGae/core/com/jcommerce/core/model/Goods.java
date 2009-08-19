@@ -1,10 +1,5 @@
-/**
-* Author: Bob Chen
-*/
-
 package com.jcommerce.core.model;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,339 +10,243 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
+/**  
+ * generated with my extension of middleGen 
+ * @author <a href="http://code.google.com/p/gcloudshop/">Leon</a>
+ */
+ 
+@PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true") 
 public class Goods extends ModelObject {
-	
-    @Override
-    public ModelObject getParent() {
-    	return null;
-    }
-	
-    
 
-    
-//    private String url;
-//    private String shortStyleName;
-	@Persistent
-	protected Long longId;
-	
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
+    private String pkId;
     
     @Persistent
     @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
     private String keyName;
     
     @Persistent
+    private Long longId;
+    
+    // relations
+        @Persistent(mappedBy="goods")
+    private Set<GoodsGallery> galleries = new HashSet<GoodsGallery>();
+    @Persistent
     private Set<String>categoryIds = new HashSet<String>();
-    
-//    private Set<Category> categories = new HashSet<Category>();
-    
     @Persistent
     private String mainCategoryId;
-    
-//    private Category mainCategory;
-    
-    @Persistent(mappedBy="goods")
-    private Set<Gallery> galleries = new HashSet<Gallery>();
-    
-//    private Set<Article> articles;
-    
     @Persistent
     private String goodsTypeId;
-    
     // uni-direction owned
     @Persistent
-    private Set<GoodsAttribute> attributes = new HashSet<GoodsAttribute>();
-    
-    @Persistent
-    private String brandId;
-    
-//    private Brand brand;
-    
-//    private GoodsType type;   // GoodsType table list all the types available
-    
-    @Persistent
-    private String goodsSn;
-    
-    @Persistent
-    private String goodsName;
-    
-    @Persistent
-    private String goodsNameStyle;
-    
-    @Persistent
-    private Integer clickCount = 0;
-    
-
-    
-    @Persistent
-    private String providerName;
-    
-    @Persistent
-    private Integer goodsNumber = 0;
-    
-    @Persistent
-    private Double goodsWeight = 0.0;
-    
-    @Persistent
-    private Double marketPrice = 0.0;
-    
-    @Persistent
-    private Double shopPrice = 0.0;
-    
-    @Persistent
-    private Double promotePrice = 0.0;
-    
-    @Persistent
-    private Date promoteStart;
-    
-    @Persistent
-    private Date promoteEnd;
-    
-    @Persistent
-    private Integer warnNumber = 0;
-    
-    @Persistent
-    private String keywords;
-    
-    @Persistent
-    private String brief;
-    
-    @Persistent
-    private String goodsDesc;
-    
-    @Persistent
-    private String thumb;
-    
-    @Persistent
-    private String thumbFileId;
-    
-    @Persistent
-    private DSFile thumbFile;
-    
-    @Persistent
-    private String image;
-    
+    private Set<GoodsAttr> attributes = new HashSet<GoodsAttr>();
+	@Persistent
+	private String image;
     @Persistent
     private String imageFileId;
-    
     @Persistent
     private DSFile imageFile;
-    
+	@Persistent
+	private String thumb;
     @Persistent
-    private String originalImage;
-    
+    private String thumbFileId;
     @Persistent
-    private Boolean realGoods = false;
-    
-    @Persistent
-    private String extensionCode;
-    
-    @Persistent
-    private Boolean onSale = false;
-    
-    @Persistent
-    private Boolean aloneSale = false;
-    
-    @Persistent
-    private Integer integral = 0;
-    
-    @Persistent
-    private Date addTime;
-    
-    @Persistent
-    private Integer sortOrder = 0;  // sortOrder value is used in SQL ORDER BY
-    
-    @Persistent
-    private Boolean deleted = false;
-    
-    @Persistent
-    private Boolean bestSold = false;
-    
-    @Persistent
-    private Boolean neewAdded = false;
-    
-    @Persistent
-    private Boolean hotSold = false;
-    
-    @Persistent
-    private Boolean promoted = false;
-    
-    
-//    private BonusType bonusType;
-    @Persistent
-    private Date lastUpdate;
-    
-
-    
-    @Persistent
-    private String sellerNote;
-    
-    @Persistent
-    private Integer giveIntegral = 0;
-    
-    
-
-    
-
-    
-
-    
-
-    
-
-    public String getProviderName() {
-        return providerName;
-    }
-
-    public void setProviderName(String providerName) {
-        this.providerName = providerName;
-    }
-
-
-    
-
- 
-    
-
-    
-    public Date getPromoteStart() {
-        return promoteStart;
-    }
-    
-    public void setPromoteStart(Date promoteStart) {
-        this.promoteStart = promoteStart;
-    }
-    
-    public Date getPromoteEnd() {
-        return promoteEnd;
-    }
-    
-    public void setPromoteEnd(Date promoteEnd) {
-        this.promoteEnd = promoteEnd;
-    }
-    
-
-    
-    public String getKeywords() {
-        return keywords;
-    }
-    
-    public void setKeywords(String keywords) {
-        this.keywords = keywords;
-    }
-    
-    public String getBrief() {
-        return brief;
-    }
-    
-    public void setBrief(String brief) {
-        this.brief = brief;
-    }
-    
-
-    
-    public String getThumb() {
-        return thumb;
-    }
-    
-    public void setThumb(String thumb) {
-        this.thumb = thumb;
-    }
-    
-    public String getImage() {
-        return image;
-    }
-    
-    public void setImage(String image) {
-        this.image = image;
-    }
-    
-    public String getOriginalImage() {
-        return originalImage;
-    }
-    
-    public void setOriginalImage(String originalImage) {
-        this.originalImage = originalImage;
-    }
-
-
-    public String getExtensionCode() {
-        return extensionCode;
-    }
-    
-    public void setExtensionCode(String extensionCode) {
-        this.extensionCode = extensionCode;
-    }
-    
-
-    
-    public Date getAddTime() {
-        return addTime;
-    }
-    
-    public void setAddTime(Date addTime) {
-        this.addTime = addTime;
-    }
-    
-
-    
-
-    
-
-    
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
-    
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
-    
-
-
-    public String getSellerNote() {
-        return sellerNote;
-    }
-    
-    public void setSellerNote(String sellerNote) {
-        this.sellerNote = sellerNote;
-    }
-    
-
-	public Set<String> getCategoryIds() {
-		return categoryIds;
+    private DSFile thumbFile;
+	
+	
+	
+    public Set<GoodsAttr> getAttributes() {
+		return attributes;
 	}
 
-	public void setCategoryIds(Set<String> categoryIds) {
-		this.categoryIds = categoryIds;
+	public void setAttributes(Set<GoodsAttr> attributes) {
+		this.attributes = attributes;
+	}
+    
+public Set<GoodsGallery> getGalleries() {
+	return galleries;
+}
+
+
+public void setGalleries(Set<GoodsGallery> galleries) {
+	this.galleries = galleries;
+}
+
+
+public Set<String> getCategoryIds() {
+	return categoryIds;
+}
+
+
+public void setCategoryIds(Set<String> categoryIds) {
+	this.categoryIds = categoryIds;
+}
+
+
+public String getMainCategoryId() {
+	return mainCategoryId;
+}
+
+
+public void setMainCategoryId(String mainCategoryId) {
+	this.mainCategoryId = mainCategoryId;
+}
+
+
+public String getGoodsTypeId() {
+	return goodsTypeId;
+}
+
+
+public void setGoodsTypeId(String goodsTypeId) {
+	this.goodsTypeId = goodsTypeId;
+}    
+    
+  // fields
+  @Persistent
+  private java.lang.String goodsId; 
+
+  @Persistent
+  private java.lang.String catId; 
+
+  @Persistent
+  private java.lang.String goodsSn; 
+
+  @Persistent
+  private java.lang.String goodsName; 
+
+  @Persistent
+  private java.lang.String goodsNameStyle; 
+
+  @Persistent
+  private java.lang.Long clickCount=0l; 
+
+  @Persistent
+  private java.lang.String brandId; 
+
+  @Persistent
+  private java.lang.String providerName; 
+
+  @Persistent
+  private java.lang.Long goodsNumber=0l; 
+
+  @Persistent
+  private java.lang.Double goodsWeight=0.0; 
+
+  @Persistent
+  private java.lang.Double marketPrice=0.0; 
+
+  @Persistent
+  private java.lang.Double shopPrice=0.0; 
+
+  @Persistent
+  private java.lang.Double promotePrice=0.0; 
+
+  @Persistent
+  private java.lang.Long promoteStartDate=0l; 
+
+  @Persistent
+  private java.lang.Long promoteEndDate=0l; 
+
+  @Persistent
+  private java.lang.Long warnNumber=0l; 
+
+  @Persistent
+  private java.lang.String keywords; 
+
+  @Persistent
+  private java.lang.String goodsBrief; 
+
+  @Persistent
+  private java.lang.String goodsDesc; 
+
+  @Persistent
+  private java.lang.String goodsThumb; 
+
+  @Persistent
+  private java.lang.String goodsImg; 
+
+  @Persistent
+  private java.lang.String originalImg; 
+
+  @Persistent
+  private java.lang.Boolean isReal=false; 
+
+  @Persistent
+  private java.lang.String extensionCode; 
+
+  @Persistent
+  private java.lang.Boolean isOnSale=false; 
+
+  @Persistent
+  private java.lang.Boolean isAloneSale=false; 
+
+  @Persistent
+  private java.lang.Long integral=0l; 
+
+  @Persistent
+  private java.lang.Long addTime=0l; 
+
+  @Persistent
+  private java.lang.Long sortOrder=0l; 
+
+  @Persistent
+  private java.lang.Boolean isDelete=false; 
+
+  @Persistent
+  private java.lang.Boolean isBest=false; 
+
+  @Persistent
+  private java.lang.Boolean isNew=false; 
+
+  @Persistent
+  private java.lang.Boolean isHot=false; 
+
+  @Persistent
+  private java.lang.Boolean isPromote=false; 
+
+  @Persistent
+  private java.lang.String bonusTypeId; 
+
+  @Persistent
+  private java.lang.Long lastUpdate=0l; 
+
+  @Persistent
+  private java.lang.Long goodsType=0l; 
+
+  @Persistent
+  private java.lang.String sellerNote; 
+
+  @Persistent
+  private java.lang.Long giveIntegral=0l; 
+
+  @Persistent
+  private java.lang.Long rankIntegral=0l; 
+
+
+
+	public Goods() {
 	}
 
-	public String getMainCategoryId() {
-		return mainCategoryId;
+
+	@Override
+	public Long getLongId() {
+		return longId;
 	}
 
-	public void setMainCategoryId(String mainCategoryId) {
-		this.mainCategoryId = mainCategoryId;
+	@Override
+	public void setLongId(Long longId) {
+		this.longId = longId;
 	}
 
-	public String getBrandId() {
-		return brandId;
+	public String getPkId() {
+		return pkId;
 	}
 
-	public void setBrandId(String brandId) {
-		this.brandId = brandId;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
+	public void setPkId(String pkId) {
+		this.pkId = pkId;
 	}
 
 	public String getKeyName() {
@@ -358,132 +257,420 @@ public class Goods extends ModelObject {
 		this.keyName = keyName;
 	}
 
-	public Set<Gallery> getGalleries() {
-		return galleries;
+
+
+  public java.lang.String getGoodsId() {
+    return goodsId;
+  }
+
+  public void setGoodsId(java.lang.String newGoodsId) {
+    goodsId = newGoodsId;
+  }
+
+
+
+  public java.lang.String getCatId() {
+    return catId;
+  }
+
+  public void setCatId(java.lang.String newCatId) {
+    catId = newCatId;
+  }
+
+
+
+  public java.lang.String getGoodsSn() {
+    return goodsSn;
+  }
+
+  public void setGoodsSn(java.lang.String newGoodsSn) {
+    goodsSn = newGoodsSn;
+  }
+
+
+
+  public java.lang.String getGoodsName() {
+    return goodsName;
+  }
+
+  public void setGoodsName(java.lang.String newGoodsName) {
+    goodsName = newGoodsName;
+  }
+
+
+
+  public java.lang.String getGoodsNameStyle() {
+    return goodsNameStyle;
+  }
+
+  public void setGoodsNameStyle(java.lang.String newGoodsNameStyle) {
+    goodsNameStyle = newGoodsNameStyle;
+  }
+
+
+
+  public java.lang.Long getClickCount() {
+    return clickCount;
+  }
+
+  public void setClickCount(java.lang.Long newClickCount) {
+    clickCount = newClickCount;
+  }
+
+
+
+  public java.lang.String getBrandId() {
+    return brandId;
+  }
+
+  public void setBrandId(java.lang.String newBrandId) {
+    brandId = newBrandId;
+  }
+
+
+
+  public java.lang.String getProviderName() {
+    return providerName;
+  }
+
+  public void setProviderName(java.lang.String newProviderName) {
+    providerName = newProviderName;
+  }
+
+
+
+  public java.lang.Long getGoodsNumber() {
+    return goodsNumber;
+  }
+
+  public void setGoodsNumber(java.lang.Long newGoodsNumber) {
+    goodsNumber = newGoodsNumber;
+  }
+
+
+
+  public java.lang.Double getGoodsWeight() {
+    return goodsWeight;
+  }
+
+  public void setGoodsWeight(java.lang.Double newGoodsWeight) {
+    goodsWeight = newGoodsWeight;
+  }
+
+
+
+  public java.lang.Double getMarketPrice() {
+    return marketPrice;
+  }
+
+  public void setMarketPrice(java.lang.Double newMarketPrice) {
+    marketPrice = newMarketPrice;
+  }
+
+
+
+  public java.lang.Double getShopPrice() {
+    return shopPrice;
+  }
+
+  public void setShopPrice(java.lang.Double newShopPrice) {
+    shopPrice = newShopPrice;
+  }
+
+
+
+  public java.lang.Double getPromotePrice() {
+    return promotePrice;
+  }
+
+  public void setPromotePrice(java.lang.Double newPromotePrice) {
+    promotePrice = newPromotePrice;
+  }
+
+
+
+  public java.lang.Long getPromoteStartDate() {
+    return promoteStartDate;
+  }
+
+  public void setPromoteStartDate(java.lang.Long newPromoteStartDate) {
+    promoteStartDate = newPromoteStartDate;
+  }
+
+
+
+  public java.lang.Long getPromoteEndDate() {
+    return promoteEndDate;
+  }
+
+  public void setPromoteEndDate(java.lang.Long newPromoteEndDate) {
+    promoteEndDate = newPromoteEndDate;
+  }
+
+
+
+  public java.lang.Long getWarnNumber() {
+    return warnNumber;
+  }
+
+  public void setWarnNumber(java.lang.Long newWarnNumber) {
+    warnNumber = newWarnNumber;
+  }
+
+
+
+  public java.lang.String getKeywords() {
+    return keywords;
+  }
+
+  public void setKeywords(java.lang.String newKeywords) {
+    keywords = newKeywords;
+  }
+
+
+
+  public java.lang.String getGoodsBrief() {
+    return goodsBrief;
+  }
+
+  public void setGoodsBrief(java.lang.String newGoodsBrief) {
+    goodsBrief = newGoodsBrief;
+  }
+
+
+
+  public java.lang.String getGoodsDesc() {
+    return goodsDesc;
+  }
+
+  public void setGoodsDesc(java.lang.String newGoodsDesc) {
+    goodsDesc = newGoodsDesc;
+  }
+
+
+
+  public java.lang.String getGoodsThumb() {
+    return goodsThumb;
+  }
+
+  public void setGoodsThumb(java.lang.String newGoodsThumb) {
+    goodsThumb = newGoodsThumb;
+  }
+
+
+
+  public java.lang.String getGoodsImg() {
+    return goodsImg;
+  }
+
+  public void setGoodsImg(java.lang.String newGoodsImg) {
+    goodsImg = newGoodsImg;
+  }
+
+
+
+  public java.lang.String getOriginalImg() {
+    return originalImg;
+  }
+
+  public void setOriginalImg(java.lang.String newOriginalImg) {
+    originalImg = newOriginalImg;
+  }
+
+
+
+  public java.lang.Boolean getIsReal() {
+    return isReal;
+  }
+
+  public void setIsReal(java.lang.Boolean newIsReal) {
+    isReal = newIsReal;
+  }
+
+
+
+  public java.lang.String getExtensionCode() {
+    return extensionCode;
+  }
+
+  public void setExtensionCode(java.lang.String newExtensionCode) {
+    extensionCode = newExtensionCode;
+  }
+
+
+
+  public java.lang.Boolean getIsOnSale() {
+    return isOnSale;
+  }
+
+  public void setIsOnSale(java.lang.Boolean newIsOnSale) {
+    isOnSale = newIsOnSale;
+  }
+
+
+
+  public java.lang.Boolean getIsAloneSale() {
+    return isAloneSale;
+  }
+
+  public void setIsAloneSale(java.lang.Boolean newIsAloneSale) {
+    isAloneSale = newIsAloneSale;
+  }
+
+
+
+  public java.lang.Long getIntegral() {
+    return integral;
+  }
+
+  public void setIntegral(java.lang.Long newIntegral) {
+    integral = newIntegral;
+  }
+
+
+
+  public java.lang.Long getAddTime() {
+    return addTime;
+  }
+
+  public void setAddTime(java.lang.Long newAddTime) {
+    addTime = newAddTime;
+  }
+
+
+
+  public java.lang.Long getSortOrder() {
+    return sortOrder;
+  }
+
+  public void setSortOrder(java.lang.Long newSortOrder) {
+    sortOrder = newSortOrder;
+  }
+
+
+
+  public java.lang.Boolean getIsDelete() {
+    return isDelete;
+  }
+
+  public void setIsDelete(java.lang.Boolean newIsDelete) {
+    isDelete = newIsDelete;
+  }
+
+
+
+  public java.lang.Boolean getIsBest() {
+    return isBest;
+  }
+
+  public void setIsBest(java.lang.Boolean newIsBest) {
+    isBest = newIsBest;
+  }
+
+
+
+  public java.lang.Boolean getIsNew() {
+    return isNew;
+  }
+
+  public void setIsNew(java.lang.Boolean newIsNew) {
+    isNew = newIsNew;
+  }
+
+
+
+  public java.lang.Boolean getIsHot() {
+    return isHot;
+  }
+
+  public void setIsHot(java.lang.Boolean newIsHot) {
+    isHot = newIsHot;
+  }
+
+
+
+  public java.lang.Boolean getIsPromote() {
+    return isPromote;
+  }
+
+  public void setIsPromote(java.lang.Boolean newIsPromote) {
+    isPromote = newIsPromote;
+  }
+
+
+
+  public java.lang.String getBonusTypeId() {
+    return bonusTypeId;
+  }
+
+  public void setBonusTypeId(java.lang.String newBonusTypeId) {
+    bonusTypeId = newBonusTypeId;
+  }
+
+
+
+  public java.lang.Long getLastUpdate() {
+    return lastUpdate;
+  }
+
+  public void setLastUpdate(java.lang.Long newLastUpdate) {
+    lastUpdate = newLastUpdate;
+  }
+
+
+
+  public java.lang.Long getGoodsType() {
+    return goodsType;
+  }
+
+  public void setGoodsType(java.lang.Long newGoodsType) {
+    goodsType = newGoodsType;
+  }
+
+
+
+  public java.lang.String getSellerNote() {
+    return sellerNote;
+  }
+
+  public void setSellerNote(java.lang.String newSellerNote) {
+    sellerNote = newSellerNote;
+  }
+
+
+
+  public java.lang.Long getGiveIntegral() {
+    return giveIntegral;
+  }
+
+  public void setGiveIntegral(java.lang.Long newGiveIntegral) {
+    giveIntegral = newGiveIntegral;
+  }
+
+
+
+  public java.lang.Long getRankIntegral() {
+    return rankIntegral;
+  }
+
+  public void setRankIntegral(java.lang.Long newRankIntegral) {
+    rankIntegral = newRankIntegral;
+  }
+
+	public String getImage() {
+		return image;
 	}
 
-	public void setGalleries(Set<Gallery> galleries) {
-		this.galleries = galleries;
+	public void setImage(String image) {
+		this.image = image;
 	}
 
-	public String getGoodsTypeId() {
-		return goodsTypeId;
+	public String getThumb() {
+		return thumb;
 	}
 
-	public void setGoodsTypeId(String goodsTypeId) {
-		this.goodsTypeId = goodsTypeId;
-	}
-
-	public Set<GoodsAttribute> getAttributes() {
-		return attributes;
-	}
-
-	public void setAttributes(Set<GoodsAttribute> attributes) {
-		this.attributes = attributes;
-	}
-
-	public String getGoodsSn() {
-		return goodsSn;
-	}
-
-	public void setGoodsSn(String goodsSn) {
-		this.goodsSn = goodsSn;
-	}
-
-	public String getGoodsName() {
-		return goodsName;
-	}
-
-	public void setGoodsName(String goodsName) {
-		this.goodsName = goodsName;
-	}
-
-	public String getGoodsNameStyle() {
-		return goodsNameStyle;
-	}
-
-	public void setGoodsNameStyle(String goodsNameStyle) {
-		this.goodsNameStyle = goodsNameStyle;
-	}
-
-	public Integer getClickCount() {
-		return clickCount;
-	}
-
-	public void setClickCount(Integer clickCount) {
-		this.clickCount = clickCount;
-	}
-
-	public Integer getGoodsNumber() {
-		return goodsNumber;
-	}
-
-	public void setGoodsNumber(Integer goodsNumber) {
-		this.goodsNumber = goodsNumber;
-	}
-
-	public Double getGoodsWeight() {
-		return goodsWeight;
-	}
-
-	public void setGoodsWeight(Double goodsWeight) {
-		this.goodsWeight = goodsWeight;
-	}
-
-	public Double getMarketPrice() {
-		return marketPrice;
-	}
-
-	public void setMarketPrice(Double marketPrice) {
-		this.marketPrice = marketPrice;
-	}
-
-	public Double getShopPrice() {
-		return shopPrice;
-	}
-
-	public void setShopPrice(Double shopPrice) {
-		this.shopPrice = shopPrice;
-	}
-
-	public Double getPromotePrice() {
-		return promotePrice;
-	}
-
-	public void setPromotePrice(Double promotePrice) {
-		this.promotePrice = promotePrice;
-	}
-
-	public Integer getWarnNumber() {
-		return warnNumber;
-	}
-
-	public void setWarnNumber(Integer warnNumber) {
-		this.warnNumber = warnNumber;
-	}
-
-	public String getGoodsDesc() {
-		return goodsDesc;
-	}
-
-	public void setGoodsDesc(String goodsDesc) {
-		this.goodsDesc = goodsDesc;
-	}
-
-	public String getThumbFileId() {
-		return thumbFileId;
-	}
-
-	public void setThumbFileId(String thumbFileId) {
-		this.thumbFileId = thumbFileId;
-	}
-
-	public DSFile getThumbFile() {
-		return thumbFile;
-	}
-
-	public void setThumbFile(DSFile thumbFile) {
-		this.thumbFile = thumbFile;
+	public void setThumb(String thumb) {
+		this.thumb = thumb;
 	}
 
 	public String getImageFileId() {
@@ -502,140 +689,20 @@ public class Goods extends ModelObject {
 		this.imageFile = imageFile;
 	}
 
-	public Boolean getRealGoods() {
-		return realGoods;
+	public String getThumbFileId() {
+		return thumbFileId;
 	}
 
-	public void setRealGoods(Boolean realGoods) {
-		this.realGoods = realGoods;
+	public void setThumbFileId(String thumbFileId) {
+		this.thumbFileId = thumbFileId;
 	}
 
-	public Boolean getOnSale() {
-		return onSale;
+	public DSFile getThumbFile() {
+		return thumbFile;
 	}
 
-	public void setOnSale(Boolean onSale) {
-		this.onSale = onSale;
+	public void setThumbFile(DSFile thumbFile) {
+		this.thumbFile = thumbFile;
 	}
-
-	public Boolean getAloneSale() {
-		return aloneSale;
-	}
-
-	public void setAloneSale(Boolean aloneSale) {
-		this.aloneSale = aloneSale;
-	}
-
-	public Integer getIntegral() {
-		return integral;
-	}
-
-	public void setIntegral(Integer integral) {
-		this.integral = integral;
-	}
-
-	public Integer getSortOrder() {
-		return sortOrder;
-	}
-
-	public void setSortOrder(Integer sortOrder) {
-		this.sortOrder = sortOrder;
-	}
-
-	public Boolean getDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(Boolean deleted) {
-		this.deleted = deleted;
-	}
-
-	public Boolean getBestSold() {
-		return bestSold;
-	}
-
-	public void setBestSold(Boolean bestSold) {
-		this.bestSold = bestSold;
-	}
-
-	public Boolean getNeewAdded() {
-		return neewAdded;
-	}
-
-	public void setNeewAdded(Boolean neewAdded) {
-		this.neewAdded = neewAdded;
-	}
-
-	public Boolean getHotSold() {
-		return hotSold;
-	}
-
-	public void setHotSold(Boolean hotSold) {
-		this.hotSold = hotSold;
-	}
-
-	public Boolean getPromoted() {
-		return promoted;
-	}
-
-	public void setPromoted(Boolean promoted) {
-		this.promoted = promoted;
-	}
-
-	public Integer getGiveIntegral() {
-		return giveIntegral;
-	}
-
-	public void setGiveIntegral(Integer giveIntegral) {
-		this.giveIntegral = giveIntegral;
-	}
-
-	@Override
-	public Long getLongId() {
-		return longId;
-	}
-
-	@Override
-	public void setLongId(Long longId) {
-		this.longId = longId;
-	}
-
-
-
-
-
-
-//    public BonusType getBonusType() {
-//        return bonusType;
-//    }
-//
-//    public void setBonusType(BonusType bonusType) {
-//        this.bonusType = bonusType;
-//    }
-//
-//    public Set<Gallery> getGalleries() {
-//        return galleries;
-//    }
-//
-//    public void setGalleries(Set<Gallery> galleries) {
-//        this.galleries = galleries;
-//    }
-//
-//    public Set<Article> getArticles() {
-//        return articles;
-//    }
-//
-//    public void setArticles(Set<Article> articles) {
-//        this.articles = articles;
-//    }
-//
-//    public Set<GoodsAttribute> getAttributes() {
-//        return attributes;
-//    }
-//
-//    public void setAttributes(Set<GoodsAttribute> attributes) {
-//        this.attributes = attributes;
-//    }
-
 
 }

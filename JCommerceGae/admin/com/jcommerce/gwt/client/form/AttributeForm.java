@@ -27,12 +27,12 @@ public class AttributeForm extends BeanObject implements IAttribute{
     public void validate() throws ValidationException{
     	StringBuffer errorBuf = new StringBuffer();
     	
-    	String goodsType = getString(GOODSTYPE);
+    	String goodsType = getString(GOODS_TYPE);
     	if(goodsType == null || goodsType.trim().length() == 0) {
     		errorBuf.append("必须选择所属商品类型").append("\r\n");
     		
     	}
-    	String name = getString(NAME);
+    	String name = getString(ATTR_NAME);
     	if(name==null || name.trim().length()==0) {
     		errorBuf.append("属性名称不能为空").append("\r\n");
     	}

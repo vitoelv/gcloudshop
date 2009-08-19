@@ -1,12 +1,7 @@
-/**
-* Author: Bob Chen
-*/
-
 package com.jcommerce.core.model;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -14,254 +9,229 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
+/**  
+ * generated with my extension of middleGen 
+ * @author <a href="http://code.google.com/p/gcloudshop/">Leon</a>
+ */
+ 
+@PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true") 
 public class Category extends ModelObject {
-    @Override
-    public ModelObject getParent() {
-    	return null;
-    }
-    
-    private String url;
-    private Set<Category> children = new HashSet<Category>();
-    
+
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
+    private String pkId;
     
     @Persistent
     @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
     private String keyName;
     
     @Persistent
-    private String parentId;
+    private Long longId;
     
-//    private Category parent;
-//    
-//    private Set<Category> children = new HashSet<Category>();
-//    
-//    private Set<Goods> goodsList = new HashSet<Goods>();
+    // relations
+        
     
-    @Persistent
-    private String name;
-    
-    @Persistent
-    private String keywords;
-    
-    @Persistent
-    private String description;
-    
-    @Persistent
-    private int sortOrder;
-    
-    @Persistent
-    private String templateFile;
-    
-    @Persistent
-    private String measureUnit;
-    /**
-     * 是否显示在导航栏
-     */
-    @Persistent
-    private boolean showInNavigator;
-    
-    @Persistent
-    private String style;
-    
-    @Persistent
-    private boolean show;
-    /**
-     * 价格区间个数
-     */
-    
-    @Persistent
-    private int grade;
-    
-//    @Persistent
-//    private Attribute filterAttribute;
-    
+  // fields
+  @Persistent
+  private java.lang.String catId; 
 
-    public String getParentId() {
-		return parentId;
+  @Persistent
+  private java.lang.String catName; 
+
+  @Persistent
+  private java.lang.String keywords; 
+
+  @Persistent
+  private java.lang.String catDesc; 
+
+  @Persistent
+  private java.lang.String parentId; 
+
+  @Persistent
+  private java.lang.Long sortOrder=0l; 
+
+  @Persistent
+  private java.lang.String templateFile; 
+
+  @Persistent
+  private java.lang.String measureUnit; 
+
+  @Persistent
+  private java.lang.Long showInNav=0l; 
+
+  @Persistent
+  private java.lang.String style; 
+
+  @Persistent
+  private java.lang.Boolean isShow=false; 
+
+  @Persistent
+  private java.lang.Long grade=0l; 
+
+  @Persistent
+  private java.lang.Long filterAttr=0l; 
+
+
+
+	public Category() {
 	}
 
-	public void setParentId(String parentId) {
-		this.parentId = parentId;
+
+	@Override
+	public Long getLongId() {
+		return longId;
 	}
 
-//	public Category getParent() {
-//        return parent;
-//    }
-//    
-//    public void setParent(Category parent) {
-//        if (getParent() != null) {
-//            getParent().removeChild(this);
-//        }
-//        this.parent = parent;
-//        if (this.parent != null) {
-//            this.parent.addChild(this);
-//        }
-//    }
-//    
-//    public Set<Category> getChildren() {
-//        return children;
-//    }
-//
-//    public void setChildren(Set<Category> children) {
-//        if (children == null) {
-//            this.children.clear();
-//        } else {
-//            this.children = children;
-//        }
-//    }
-//
-//    public void addChild(Category child) {
-//        children.add(child);
-//        child.parent = this;
-//    }
-//    
-//    public void removeChild(Category child) {
-//        children.remove(child);
-//        child.parent = null;
-//    }
-//    
-//    public Set<Goods> getGoodsList() {
-//        return goodsList;
-//    }
-//
-//    public void setGoodsList(Set<Goods> goodsList) {
-//        this.goodsList = goodsList;
-//    }
-//
-//    public void addGoods(Goods goods) {
-//        if (!goodsList.contains(goods)) {
-//            this.goodsList.add(goods);
-//            goods.addCategory(this);
-//        }
-//    }
-//
-//    public void removeGoods(Goods goods) {
-//        if (goodsList.contains(goods)) {
-//            this.goodsList.remove(goods);
-//            goods.removeCategory(this);
-//        }
-//    }
-
-    public String getName() {
-        return name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    public String getKeywords() {
-        return keywords;
-    }
-    
-    public void setKeywords(String keywords) {
-        this.keywords = keywords;
-    }
-    
-    public String getDescription() {
-        return description;
-    }
-    
-    public void setDescription(String description) {
-        this.description = description;
-    }
-            
-    public int getSortOrder() {
-		return sortOrder;
+	@Override
+	public void setLongId(Long longId) {
+		this.longId = longId;
 	}
 
-	public void setSortOrder(int sortOrder) {
-		this.sortOrder = sortOrder;
+	public String getPkId() {
+		return pkId;
 	}
 
-	public String getTemplateFile() {
-        return templateFile;
-    }
-    
-    public void setTemplateFile(String templateFile) {
-        this.templateFile = templateFile;
-    }
-    
-    public String getMeasureUnit() {
-        return measureUnit;
-    }
-    
-    public void setMeasureUnit(String measureUnit) {
-        this.measureUnit = measureUnit;
-    }
-    
-    public boolean isShowInNavigator() {
-        return showInNavigator;
-    }
-    
-    public void setShowInNavigator(boolean showInNavigator) {
-        this.showInNavigator = showInNavigator;
-    }
-    
-    public String getStyle() {
-        return style;
-    }
-    
-    public void setStyle(String style) {
-        this.style = style;
-    }
-    
-    public boolean isShow() {
-        return show;
-    }
-    
-    public void setShow(boolean show) {
-        this.show = show;
-    }
-    
-    public int getGrade() {
-        return grade;
-    }
-    
-    public void setGrade(int grade) {
-        this.grade = grade;
-    }
-
-//    public Attribute getFilterAttribute() {
-//        return filterAttribute;
-//    }
-//
-//    public void setFilterAttribute(Attribute filterAttribute) {
-//        this.filterAttribute = filterAttribute;
-//    }
-    
-	public void setId(String id) {
-		this.id = id;
-	}
-    public String getId() {
-    	return id;
-    }
-    
-	public void setKeyName(String kn) {
-		this.keyName = kn;
-	}
-    public String getKeyName() {
-    	return keyName;
-    }
-
-	public String getUrl() {
-		return url;
+	public void setPkId(String pkId) {
+		this.pkId = pkId;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public String getKeyName() {
+		return keyName;
 	}
 
-	public Set<Category> getChildren() {
-		return children;
+	public void setKeyName(String keyName) {
+		this.keyName = keyName;
 	}
 
-	public void setChildren(Set<Category> children) {
-		this.children = children;
-	}
+
+
+  public java.lang.String getCatId() {
+    return catId;
+  }
+
+  public void setCatId(java.lang.String newCatId) {
+    catId = newCatId;
+  }
+
+
+
+  public java.lang.String getCatName() {
+    return catName;
+  }
+
+  public void setCatName(java.lang.String newCatName) {
+    catName = newCatName;
+  }
+
+
+
+  public java.lang.String getKeywords() {
+    return keywords;
+  }
+
+  public void setKeywords(java.lang.String newKeywords) {
+    keywords = newKeywords;
+  }
+
+
+
+  public java.lang.String getCatDesc() {
+    return catDesc;
+  }
+
+  public void setCatDesc(java.lang.String newCatDesc) {
+    catDesc = newCatDesc;
+  }
+
+
+
+  public java.lang.String getParentId() {
+    return parentId;
+  }
+
+  public void setParentId(java.lang.String newParentId) {
+    parentId = newParentId;
+  }
+
+
+
+  public java.lang.Long getSortOrder() {
+    return sortOrder;
+  }
+
+  public void setSortOrder(java.lang.Long newSortOrder) {
+    sortOrder = newSortOrder;
+  }
+
+
+
+  public java.lang.String getTemplateFile() {
+    return templateFile;
+  }
+
+  public void setTemplateFile(java.lang.String newTemplateFile) {
+    templateFile = newTemplateFile;
+  }
+
+
+
+  public java.lang.String getMeasureUnit() {
+    return measureUnit;
+  }
+
+  public void setMeasureUnit(java.lang.String newMeasureUnit) {
+    measureUnit = newMeasureUnit;
+  }
+
+
+
+  public java.lang.Long getShowInNav() {
+    return showInNav;
+  }
+
+  public void setShowInNav(java.lang.Long newShowInNav) {
+    showInNav = newShowInNav;
+  }
+
+
+
+  public java.lang.String getStyle() {
+    return style;
+  }
+
+  public void setStyle(java.lang.String newStyle) {
+    style = newStyle;
+  }
+
+
+
+  public java.lang.Boolean getIsShow() {
+    return isShow;
+  }
+
+  public void setIsShow(java.lang.Boolean newIsShow) {
+    isShow = newIsShow;
+  }
+
+
+
+  public java.lang.Long getGrade() {
+    return grade;
+  }
+
+  public void setGrade(java.lang.Long newGrade) {
+    grade = newGrade;
+  }
+
+
+
+  public java.lang.Long getFilterAttr() {
+    return filterAttr;
+  }
+
+  public void setFilterAttr(java.lang.Long newFilterAttr) {
+    filterAttr = newFilterAttr;
+  }
+
 }

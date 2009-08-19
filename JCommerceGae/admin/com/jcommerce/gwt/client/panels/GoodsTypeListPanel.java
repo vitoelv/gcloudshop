@@ -115,7 +115,7 @@ public class GoodsTypeListPanel extends ContentWidget {
 		
 		GoodsTypePanel.State newState = new GoodsTypePanel.State();
 		newState.setIsEdit(true);
-		newState.setId(id);
+		newState.setPkId(id);
 		newState.execute();
 	}
 	private void deleteGoodsType(final String id) {
@@ -180,9 +180,9 @@ public class GoodsTypeListPanel extends ContentWidget {
     	System.out.println("---onRender GoodsTypeList---");
         
     	final List<String> wantedFields = new ArrayList<String>();
-    	wantedFields.add(GoodsTypeForm.ID);
-    	wantedFields.add(GoodsTypeForm.NAME);
-    	wantedFields.add(GoodsTypeForm.ATTRIBUTEGROUP);
+    	wantedFields.add(GoodsTypeForm.PK_ID);
+    	wantedFields.add(GoodsTypeForm.CAT_NAME);
+    	wantedFields.add(GoodsTypeForm.ATTR_GROUP);
     	wantedFields.add(GoodsTypeForm.ATTRCOUNT);
     	wantedFields.add(GoodsTypeForm.ENABLED);
     	
@@ -211,11 +211,11 @@ public class GoodsTypeListPanel extends ContentWidget {
         
         List<ColumnConfig> columns = new ArrayList<ColumnConfig>();
 //        columns.add(new ColumnConfig(IGoodsType.NAME, "商品类型名称", 150));
-		ColumnConfig col = new ColumnConfig(GoodsTypeForm.NAME, "商品类型名称", 150);
+		ColumnConfig col = new ColumnConfig(GoodsTypeForm.CAT_NAME, "商品类型名称", 150);
 		col.setEditor(new CellEditor(GoodsTypeForm.getNameField(Resources.constants.GoodsTypeList_ColumnName())));
 		columns.add(col);
 		
-        columns.add(new ColumnConfig(GoodsTypeForm.ATTRIBUTEGROUP, "属性分组", 120));
+        columns.add(new ColumnConfig(GoodsTypeForm.ATTR_GROUP, "属性分组", 120));
         columns.add(new ColumnConfig(GoodsTypeForm.ATTRCOUNT, "属性数", 80));
         CheckColumnConfig ccc1 = new CheckColumnConfig(GoodsTypeForm.ENABLED, "状态", 80);
         ccc1.setFixed(false);
@@ -237,16 +237,16 @@ public class GoodsTypeListPanel extends ContentWidget {
         ActionCellRenderer.ActionInfo act = null;
         act = new ActionCellRenderer.ActionInfo();        
         act.setText("属性列表 ");
-        act.setAction("getAttrList($id)");
+        act.setAction("getAttrList($pkId)");
         render.addAction(act);
         
         act = new ActionCellRenderer.ActionInfo();
         act.setText("编辑 ");
-        act.setAction("editGoodsType($id)");
+        act.setAction("editGoodsType($pkId)");
         render.addAction(act);
         act = new ActionCellRenderer.ActionInfo();
         act.setText(" 删除");
-		act.setAction("deleteGoodsType($id)");
+		act.setAction("deleteGoodsType($pkId)");
 		act.setTooltip(Resources.constants.delete());
 		render.addAction(act);
         
@@ -300,7 +300,7 @@ public class GoodsTypeListPanel extends ContentWidget {
     }
     
 	private void update(BeanObject goodsType, UpdateService.Listener listener) {
-		new UpdateService().updateBean(goodsType.getString(IGoodsType.ID), goodsType,
+		new UpdateService().updateBean(goodsType.getString(IGoodsType.PK_ID), goodsType,
 				listener);
 	}
 	

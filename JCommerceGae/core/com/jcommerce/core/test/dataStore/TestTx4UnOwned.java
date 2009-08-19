@@ -37,15 +37,15 @@ public class TestTx4UnOwned extends BaseDataStoreTestCase {
 			p.setName("xxx");
 			
 			Parent p1 = pm.makePersistent(p);
-			System.out.println("id="+p1.getId());
+			System.out.println("id="+p1.getPkId());
 			
 			Child c = new Child();
 			c.setName("xxx");
-			c.setParentId(p.getId());
+			c.setParentId(p.getPkId());
 			Child c1 = pm.makePersistent(c);
 			
 			pm.currentTransaction().commit();
-			System.out.println("id="+c1.getId());
+			System.out.println("id="+c1.getPkId());
 			
 
 			// query
@@ -53,7 +53,7 @@ public class TestTx4UnOwned extends BaseDataStoreTestCase {
 //			List<Parent3> parent3s = (List<Parent3>)query.execute();
 //			System.out.println("size="+parent3s.size());
 //			for(Parent3 parent3:parent3s) {
-//				System.out.println("id:"+parent3.getId()+", name: "+parent3.getName());
+//				System.out.println("id:"+parent3.getPkId()+", name: "+parent3.getName());
 //				Set<Child3> set = parent3.getChild3s();
 //				System.out.println("child size: "+set.size());
 //				assertTrue(1==set.size());
@@ -88,17 +88,17 @@ public class TestTx4UnOwned extends BaseDataStoreTestCase {
 			p.setName("xxx");
 			
 			Parent p1 = pm.makePersistent(p);
-			System.out.println("id="+p1.getId());
+			System.out.println("id="+p1.getPkId());
 			pm.currentTransaction().commit();
 			pm.currentTransaction().begin();
 			
 			Child c = new Child();
 			c.setName("xxx");
-			c.setParentId(p.getId());
+			c.setParentId(p.getPkId());
 			Child c1 = pm.makePersistent(c);
 			
 			pm.currentTransaction().commit();
-			System.out.println("id="+c1.getId());
+			System.out.println("id="+c1.getPkId());
 			
 
 			pm.currentTransaction().begin();
@@ -111,7 +111,7 @@ public class TestTx4UnOwned extends BaseDataStoreTestCase {
 //			List<Parent3> parent3s = (List<Parent3>)query.execute();
 //			System.out.println("size="+parent3s.size());
 //			for(Parent3 parent3:parent3s) {
-//				System.out.println("id:"+parent3.getId()+", name: "+parent3.getName());
+//				System.out.println("id:"+parent3.getPkId()+", name: "+parent3.getName());
 //				Set<Child3> set = parent3.getChild3s();
 //				System.out.println("child size: "+set.size());
 //				assertTrue(1==set.size());

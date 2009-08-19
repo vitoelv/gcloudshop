@@ -16,8 +16,8 @@ import com.jcommerce.core.dao.impl.PMF;
 import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.DSFile;
-import com.jcommerce.core.model.Gallery;
 import com.jcommerce.core.model.Goods;
+import com.jcommerce.core.model.GoodsGallery;
 import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.service.Condition;
@@ -50,21 +50,21 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		
     		IDefaultManager manager = getDefaultManager();
     		Map<String, Object> props1 = new HashMap<String, Object>();
-    		props1.put(GoodsTypeForm.NAME, "abcde");
+    		props1.put(GoodsTypeForm.CAT_NAME, "abcde");
     		
         	ModelObject to1 = (ModelObject)GoodsType.class.newInstance();
             MyPropertyUtil.form2To(to1,props1);
     		
     		String gtid = manager.txadd(to1);
-    		System.out.println("gt.getId(): "+gtid);
+    		System.out.println("gt.getPkId(): "+gtid);
     		
 
     		
     		
     		
     		Map<String, Object> props2 = new HashMap<String, Object>();
-    		props2.put(AttributeForm.GOODSTYPE, gtid);
-    		props2.put(AttributeForm.NAME, "yyy");
+    		props2.put(AttributeForm.GOODS_TYPE, gtid);
+    		props2.put(AttributeForm.ATTR_NAME, "yyy");
     		
         	ModelObject to2 = (ModelObject)Attribute.class.newInstance();
             MyPropertyUtil.form2To(to2, props2);
@@ -96,17 +96,17 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		
     		IDefaultManager manager = getDefaultManager();
     		Map<String, Object> props1 = new HashMap<String, Object>();
-    		props1.put(GoodsTypeForm.NAME, "abcde");
+    		props1.put(GoodsTypeForm.CAT_NAME, "abcde");
     		
         	ModelObject to1 = (ModelObject)GoodsType.class.newInstance();
             MyPropertyUtil.form2To(to1,props1);
     		
     		String gtid = manager.txadd(to1);
-    		System.out.println("gt.getId(): "+gtid);
+    		System.out.println("gt.getPkId(): "+gtid);
     		
     		Map<String, Object> props2 = new HashMap<String, Object>();
-    		props2.put(AttributeForm.GOODSTYPE, gtid);
-    		props2.put(AttributeForm.NAME, "yyy");
+    		props2.put(AttributeForm.GOODS_TYPE, gtid);
+    		props2.put(AttributeForm.ATTR_NAME, "yyy");
     		
         	ModelObject to2 = (ModelObject)Attribute.class.newInstance();
             MyPropertyUtil.form2To(to2, props2);
@@ -118,13 +118,13 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		// work 1
     		Criteria criteria = new Criteria();
     		Condition cond = new Condition();
-    		cond.setField(AttributeForm.GOODSTYPE);
+    		cond.setField(AttributeForm.GOODS_TYPE);
     		cond.setOperator(Condition.EQUALS);
     		cond.setValue(gtid);
     		criteria.addCondition(cond);
     		
     		cond = new Condition();
-    		cond.setField(AttributeForm.NAME);
+    		cond.setField(AttributeForm.ATTR_NAME);
     		cond.setOperator(Condition.EQUALS);
     		cond.setValue("yyy");
     		criteria.addCondition(cond);
@@ -153,7 +153,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		System.out.println("Test case 3....  gt: "+gt);
     		
     		// validat
-    		assertTrue(gt!=null && "abcde".equals(gt.getName()));
+    		assertTrue(gt!=null && "abcde".equals(gt.getCatName()));
     		
     	} catch (Exception ex) {
     		ex.printStackTrace();
@@ -170,26 +170,26 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		// prepare
     		IDefaultManager manager = getDefaultManager();
     		Map<String, Object> props1 = new HashMap<String, Object>();
-    		props1.put(GoodsTypeForm.NAME, "abcde");
+    		props1.put(GoodsTypeForm.CAT_NAME, "abcde");
     		
         	ModelObject to1 = (ModelObject)GoodsType.class.newInstance();
             MyPropertyUtil.form2To(to1,props1);
     		
     		String gtid = manager.txadd(to1);
-    		System.out.println("gt.getId(): "+gtid);
+    		System.out.println("gt.getPkId(): "+gtid);
     		
     		
     		Map<String, Object> props2 = new HashMap<String, Object>();
-    		props2.put(AttributeForm.GOODSTYPE, gtid);
-    		props2.put(AttributeForm.NAME, "yyy");
+    		props2.put(AttributeForm.GOODS_TYPE, gtid);
+    		props2.put(AttributeForm.ATTR_NAME, "yyy");
         	ModelObject to2 = (ModelObject)Attribute.class.newInstance();
             MyPropertyUtil.form2To(to2, props2);
     		String id = manager.txadd(to2);
     		System.out.println("id: "+id);
     		
     		Map<String, Object> props3 = new HashMap<String, Object>();
-    		props3.put(AttributeForm.GOODSTYPE, gtid);
-    		props3.put(AttributeForm.NAME, "yyy");
+    		props3.put(AttributeForm.GOODS_TYPE, gtid);
+    		props3.put(AttributeForm.ATTR_NAME, "yyy");
     		
         	ModelObject to3 = (ModelObject)Attribute.class.newInstance();
             MyPropertyUtil.form2To(to3, props3);
@@ -234,13 +234,13 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		// prepare
     		IDefaultManager manager = getDefaultManager();
     		GoodsType gt1 = new GoodsType();
-    		gt1.setName("xxx");
+    		gt1.setCatName("xxx");
     		String gtid = manager.txadd(gt1);
-    		System.out.println("gt.getId(): "+gtid);
+    		System.out.println("gt.getPkId(): "+gtid);
     		
     		Map<String, Object> props2 = new HashMap<String, Object>();
-    		props2.put(AttributeForm.GOODSTYPE, gtid);
-    		props2.put(AttributeForm.NAME, "yyy");
+    		props2.put(AttributeForm.GOODS_TYPE, gtid);
+    		props2.put(AttributeForm.ATTR_NAME, "yyy");
         	ModelObject to2 = (ModelObject)Attribute.class.newInstance();
             MyPropertyUtil.form2To(to2, props2);
     		String id = manager.txadd(to2);
@@ -249,19 +249,19 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		
     		// work
     		Map<String, Object> props3 = new HashMap<String, Object>();
-    		props3.put(AttributeForm.GOODSTYPE, gtid);
-    		props3.put(AttributeForm.NAME, "zzz");
+    		props3.put(AttributeForm.GOODS_TYPE, gtid);
+    		props3.put(AttributeForm.ATTR_NAME, "zzz");
     		
         	ModelObject to3 = (ModelObject)Attribute.class.newInstance();
             MyPropertyUtil.form2To( to3, props3);
-            to3.setId(id);
+            to3.setPkId(id);
             
             manager.txupdate(to3);
     		
             
             // verify
             Attribute att = (Attribute)manager.get(Attribute.class.getName(), id);
-            String name = att.getName();
+            String name = att.getAttrName();
             System.out.println("name: "+name);
     		
     	} catch (Exception ex) {
@@ -335,13 +335,13 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		// prepare
     		IDefaultManager manager = getDefaultManager();
     		GoodsType to1 = new GoodsType();
-    		to1.setName("xxx");
+    		to1.setCatName("xxx");
     		String gtid = manager.txadd(to1);
     		System.out.println("id: "+gtid);
     		
     		Map<String, Object> props2 = new HashMap<String, Object>();
-    		props2.put(AttributeForm.GOODSTYPE, gtid);
-    		props2.put(AttributeForm.NAME, "yyy");
+    		props2.put(AttributeForm.GOODS_TYPE, gtid);
+    		props2.put(AttributeForm.ATTR_NAME, "yyy");
         	ModelObject to2 = (ModelObject)Attribute.class.newInstance();
             MyPropertyUtil.form2To(to2, props2);
     		String id = manager.txadd(to2);
@@ -351,8 +351,8 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		// work
     		
     		Map<String, Object> props1 = new HashMap<String, Object>();
-    		props1.put(GoodsTypeForm.NAME, "yyy");
-    		props1.put(GoodsTypeForm.ID, gtid);
+    		props1.put(GoodsTypeForm.CAT_NAME, "yyy");
+    		props1.put(GoodsTypeForm.PK_ID, gtid);
     		
         	ModelObject to3 = (ModelObject)GoodsType.class.newInstance();
             MyPropertyUtil.form2To(to3, props1);
@@ -362,7 +362,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		System.out.println("after update");
 
     		GoodsType gt2 = (GoodsType)manager.get(GoodsType.class.getName(), gtid);
-    		String res = gt2.getName();
+    		String res = gt2.getCatName();
     		System.out.println("res: "+res);
     		
     		Set set = gt2.getAttributes();
@@ -382,13 +382,13 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		// prepare
     		IDefaultManager manager = getDefaultManager();
     		GoodsType to1 = new GoodsType();
-    		to1.setName("xxx");
+    		to1.setCatName("xxx");
     		String gtid = manager.txadd(to1);
     		System.out.println("id: "+gtid);
     		
     		Map<String, Object> props2 = new HashMap<String, Object>();
-    		props2.put(AttributeForm.GOODSTYPE, gtid);
-    		props2.put(AttributeForm.NAME, "yyy");
+    		props2.put(AttributeForm.GOODS_TYPE, gtid);
+    		props2.put(AttributeForm.ATTR_NAME, "yyy");
         	ModelObject to2 = (ModelObject)Attribute.class.newInstance();
             MyPropertyUtil.form2To(to2, props2);
     		String id = manager.txadd(to2);
@@ -402,7 +402,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		// validate
     		Criteria criteria = new Criteria();
     		Condition cond = new Condition();
-    		cond.setField(AttributeForm.GOODSTYPE);
+    		cond.setField(AttributeForm.GOODS_TYPE);
     		cond.setOperator(Condition.EQUALS);
     		cond.setValue(gtid);
     		criteria.addCondition(cond);
@@ -433,7 +433,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
     		
     		// work
     		Brand b2 = new Brand();
-    		b2.setId(bid);
+    		b2.setPkId(bid);
     		b2.setBrandName("yyy");
     		manager.txupdate(b2);
 
@@ -459,11 +459,11 @@ public class TestManagerImpl extends BaseDAOTestCase {
 		try {
     	clearDS();
     	Goods goods = new Goods();
-    	goods.setBestSold(true);
-    	goods.setHotSold(false);
+    	goods.setIsBest(true);
+    	goods.setIsHot(false);
     	goods.setGoodsName("mygoods");
-    	Gallery g = new Gallery();
-    	g.setDescription("abc");
+    	GoodsGallery g = new GoodsGallery();
+    	g.setImgDesc("abc");
     	DSFile f = new DSFile();
     	f.setContent(new Blob("xxx".getBytes()));
     	f.setFileName("myfile.txt");
@@ -477,7 +477,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
     	
         Criteria c1 = new Criteria();
         Condition cond1 = new Condition();
-        cond1.setField(IGoods.BESTSOLD);
+        cond1.setField(IGoods.IS_BEST);
         cond1.setOperator(Condition.EQUALS);
         cond1.setValue("true");
     	c1.addCondition(cond1);
@@ -493,7 +493,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
     	
 //        Criteria c1 = new Criteria();
 //        Condition cond1 = new Condition();
-//        cond1.setField(IGoods.HOTSOLD);
+//        cond1.setField(IGoods.IS_HOT);
 //        cond1.setOperator(Condition.EQUALS);
 //        cond1.setValue("true");
 //        c1.addCondition(cond1);

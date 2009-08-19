@@ -15,7 +15,7 @@ public class Parent52 {
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-	private String id;
+	private String pkId;
     
     @Persistent
 	private String name;
@@ -23,13 +23,7 @@ public class Parent52 {
     @Persistent
     private Set<Child5> children2 = new HashSet<Child5>();
 
-	public String getId() {
-		return id;
-	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;
@@ -45,6 +39,14 @@ public class Parent52 {
 
 	public void setChildren2(Set<Child5> children2) {
 		this.children2 = children2;
+	}
+
+	public String getPkId() {
+		return pkId;
+	}
+
+	public void setPkId(String pkId) {
+		this.pkId = pkId;
 	}
 
 

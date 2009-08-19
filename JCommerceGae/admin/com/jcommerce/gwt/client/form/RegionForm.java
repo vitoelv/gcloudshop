@@ -10,7 +10,7 @@ public class RegionForm  extends BeanObject implements IRegion{
 	
 	public static HiddenField<String> getIdField(){
 		HiddenField<String> idField = new HiddenField<String>();
-		idField.setName(ID);
+		idField.setName(PK_ID);
 		return idField;
 	}
 
@@ -34,13 +34,13 @@ public class RegionForm  extends BeanObject implements IRegion{
 	
 	public static HiddenField<String> getParentIdField(){
 		HiddenField<String> parentIdField = new HiddenField<String>();
-		parentIdField.setName(PARENTID);
+		parentIdField.setName(PARENT_ID);
 		return parentIdField;
 	}
 	
 	public static HiddenField<String> getAgencyIdField(){
 		HiddenField<String> agencyIdField = new HiddenField<String>();
-		agencyIdField.setName(AGENCYID);
+		agencyIdField.setName(AGENCY_ID);
 		return agencyIdField;
 	}
 	

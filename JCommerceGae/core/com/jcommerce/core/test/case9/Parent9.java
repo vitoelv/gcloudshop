@@ -17,7 +17,7 @@ public class Parent9 extends BaseModel{
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
+    private String pkId;
 
     @Persistent
     @Extension(vendorName="datanucleus", key="gae.pk-id", value="true")
@@ -30,12 +30,12 @@ public class Parent9 extends BaseModel{
     @Persistent(mappedBy="parent")
     private Set<Child9> children = new HashSet<Child9>();
 
-	public String getId() {
-		return id;
+	public String getPkId() {
+		return pkId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setPkId(String pkId) {
+		this.pkId = pkId;
 	}
 
 	public Long getKeyId() {

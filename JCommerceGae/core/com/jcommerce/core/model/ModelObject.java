@@ -31,13 +31,15 @@ public abstract class ModelObject implements Serializable, URLConstants {
 //        return HashCodeBuilder.reflectionHashCode(this);
 //    }
     
-	public abstract void setId(String id);
-    public abstract String getId();
+	public abstract void setPkId(String pkId);
+    public abstract String getPkId();
     
 	public abstract void setKeyName(String kn);
     public abstract String getKeyName();
     
-    public abstract ModelObject getParent();
+    public ModelObject getParent(){
+    	return null;
+    }
     
 
 }

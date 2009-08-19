@@ -25,7 +25,7 @@ public class TestMiscDS extends BaseDAOTestCase {
 		manager.getList(res, Brand.class.getName(), null, -1, -1);
 		
 		for(Brand brand:res) {
-			String id = brand.getId();
+			String id = brand.getPkId();
 			System.out.println("id="+id);
 			Brand b = (Brand)manager.get(Brand.class.getName(), id);
 			System.out.println("brand: "+b);

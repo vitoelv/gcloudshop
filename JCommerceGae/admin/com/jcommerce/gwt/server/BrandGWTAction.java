@@ -60,7 +60,7 @@ public class BrandGWTAction extends BaseGWTHttpAction {
     		}
     		System.out.println("newLogoFileId: "+newLogoFileId);
     		
-    		String id = (String)form.get(IBrand.ID);
+    		String id = (String)form.get(IBrand.PK_ID);
     		System.out.println("id: "+id);
     		Brand brand = (Brand)manager.get(Brand.class.getName(), id);
     		String oldLogoFileId = brand.getLogoFileId();
@@ -85,7 +85,7 @@ public class BrandGWTAction extends BaseGWTHttpAction {
     	boolean res = false;
     	try {
     		
-    		String id = (String)form.get(IBrand.ID);
+    		String id = (String)form.get(IBrand.PK_ID);
     		System.out.println("id: ["+id+"]");
     		Brand brand = (Brand)manager.get(Brand.class.getName(), id);
     		String oldLogoFileId = brand.getLogoFileId();
@@ -114,7 +114,7 @@ public class BrandGWTAction extends BaseGWTHttpAction {
 //		}
 
 //		
-//		props.put(IBrand.LOGOFILEID, file.getId());
+//		props.put(IBrand.LOGOFILEID, file.getPkId());
 		
 		BrandForm bean = new BrandForm(Brand.class.getName(), form);
 		MyPropertyUtil.form2To(to, bean.getProperties());

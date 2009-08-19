@@ -32,7 +32,7 @@ public class TestJDO extends BaseDAOTestCase {
 			Person p1 = pm.makePersistent(p);
 			
 			pm.currentTransaction().commit();
-			System.out.println("id="+p1.getId());
+			System.out.println("id="+p1.getPkId());
 		}catch (Exception e) {
 			e.printStackTrace();
 			assertTrue(false);
@@ -53,7 +53,7 @@ public class TestJDO extends BaseDAOTestCase {
 			p.getAliasList().add("123");
 			p.getAliasList().add("456");
 			Person p1 = pm.makePersistent(p);
-			System.out.println("id="+p1.getId());
+			System.out.println("id="+p1.getPkId());
 			
 			pm.currentTransaction().commit();
 			pm.currentTransaction().begin();
@@ -64,7 +64,7 @@ public class TestJDO extends BaseDAOTestCase {
 			p.getAliasList().add("123yyy");
 			p.getAliasList().add("456yyy");
 			p1 = pm.makePersistent(p);
-			System.out.println("id="+p1.getId());
+			System.out.println("id="+p1.getPkId());
 			pm.currentTransaction().commit();
 			
 			
@@ -73,7 +73,7 @@ public class TestJDO extends BaseDAOTestCase {
 			Query query = pm.newQuery(Person.class);
 			List<Person> persons = (List<Person>)query.execute();
 			for(Person person:persons) {
-				System.out.println("id:"+person.getId()+", name: "+person.getName());
+				System.out.println("id:"+person.getPkId()+", name: "+person.getName());
 			}
 //			pm.currentTransaction().commit();
 			System.out.println("size="+persons.size());
@@ -82,7 +82,7 @@ public class TestJDO extends BaseDAOTestCase {
 			query = pm.newQuery("select from com.jcommerce.core.test.case1.Person");
 			persons = (List<Person>)query.execute();
 			for(Person person:persons) {
-				System.out.println("id:"+person.getId()+", name: "+person.getName());
+				System.out.println("id:"+person.getPkId()+", name: "+person.getName());
 			}
 //			pm.currentTransaction().commit();
 			System.out.println("size="+persons.size());
@@ -120,7 +120,7 @@ public class TestJDO extends BaseDAOTestCase {
 			p.setName("xxx");
 			
 			pm.makePersistent(p);
-			String pid = p.getId();
+			String pid = p.getPkId();
 			
 			pm.currentTransaction().commit();
 			System.out.println("pid="+pid);
@@ -143,7 +143,7 @@ public class TestJDO extends BaseDAOTestCase {
 			Set addresses = p1.getAddresses();
 			System.out.println("size :"+addresses.size());
 			Address a1 = (Address)addresses.iterator().next();
-			String aid = a1.getId();
+			String aid = a1.getPkId();
 			System.out.println("aid: "+aid);
 			pm.currentTransaction().commit();
 			
@@ -173,7 +173,7 @@ public class TestJDO extends BaseDAOTestCase {
 			p.setName("xxx");
 			
 			pm.makePersistent(p);
-			String pid = p.getId();
+			String pid = p.getPkId();
 			
 			pm.currentTransaction().commit();
 			System.out.println("pid="+pid+", p="+p);
@@ -195,7 +195,7 @@ public class TestJDO extends BaseDAOTestCase {
 			Set addresses = p1.getAddresses();
 			System.out.println("size :"+addresses.size());
 			Address a1 = (Address)addresses.iterator().next();
-			String aid = a1.getId();
+			String aid = a1.getPkId();
 			System.out.println("aid: "+aid);
 			pm.currentTransaction().commit();
 			
@@ -226,7 +226,7 @@ public class TestJDO extends BaseDAOTestCase {
 			Person p = new Person();
 			p.setName("xxx");
 			pm.makePersistent(p);
-			String pid = p.getId();
+			String pid = p.getPkId();
 			pm.currentTransaction().commit();
 			System.out.println("pid="+pid+", p="+p);
 
@@ -275,7 +275,7 @@ public class TestJDO extends BaseDAOTestCase {
 //			Category p = new Category();
 //			p.setName("yyy");
 //			pm.makePersistent(p);
-//			String pid = p.getId();
+//			String pid = p.getPkId();
 //			System.out.println("pid="+pid);
 //			pm.currentTransaction().commit();
 //
@@ -288,7 +288,7 @@ public class TestJDO extends BaseDAOTestCase {
 ////			c.setParent(p);
 //
 //			pm.makePersistent(p);
-//			String cid = c.getId();
+//			String cid = c.getPkId();
 //			System.out.println("cid="+cid);	
 //			
 //			pm.currentTransaction().commit();
@@ -321,7 +321,7 @@ public class TestJDO extends BaseDAOTestCase {
 //			Category c = new Category();
 //			c.setName("xxx");
 //			pm.makePersistent(c);
-//			String cid = c.getId();
+//			String cid = c.getPkId();
 //			System.out.println("cid="+cid);			
 //			pm.currentTransaction().commit();
 //			
@@ -331,7 +331,7 @@ public class TestJDO extends BaseDAOTestCase {
 //			p.setName("yyy");
 //			p.getChildren().add(c);
 //			pm.makePersistent(p);
-//			String pid = p.getId();
+//			String pid = p.getPkId();
 //			System.out.println("pid="+pid);
 //			pm.currentTransaction().commit();
 //

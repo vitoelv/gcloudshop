@@ -11,6 +11,7 @@
         </classpath>
         <fileset dir="war/WEB-INF/classes">
 	        <include name="com/jcommerce/core/model/*.class"/>
+	        <include name="com/jcommerce/core/test/*.class"/>
         </fileset>
     </enhance>    
   </target>

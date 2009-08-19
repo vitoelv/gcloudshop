@@ -1,5 +1,7 @@
 package com.jcommerce.core.model;
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -7,57 +9,82 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import com.google.appengine.api.datastore.Text;
-
-@PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true")
+/**  
+ * generated with my extension of middleGen 
+ * @author <a href="http://code.google.com/p/gcloudshop/">Leon</a>
+ */
+ 
+@PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true") 
 public class Payment extends ModelObject {
 
-    @Override
-    public ModelObject getParent() {
-    	return null;
-    }
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
+    private String pkId;
     
     @Persistent
     @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
     private String keyName;
+    
+    @Persistent
+    private Long longId;
+    
+    // relations
+        
+    
+  // fields
+  @Persistent
+  private java.lang.String payId; 
 
-    @Persistent
-    private String payCode;
-    
-    @Persistent
-    private String payName;
-    
-    @Persistent
-    private String payFee;
-    
-    @Persistent
-    private String payDesc;
-    
-    @Persistent
-    private Text payConfig;
-    
-    @Persistent
-    private Integer payOrder = 0;
-    
-    @Persistent
-    private Boolean enabled = true;
-    
-    @Persistent
-    private Boolean isOnline = true;
-    
-    @Persistent
-    private Boolean isCod = true;
-    
-	public String getId() {
-		return id;
+  @Persistent
+  private java.lang.String payCode; 
+
+  @Persistent
+  private java.lang.String payName; 
+
+  @Persistent
+  private java.lang.String payFee; 
+
+  @Persistent
+  private java.lang.String payDesc; 
+
+  @Persistent
+  private java.lang.Long payOrder=0l; 
+
+  @Persistent
+  private java.lang.String payConfig; 
+
+  @Persistent
+  private java.lang.Boolean enabled=false; 
+
+  @Persistent
+  private java.lang.Boolean isCod=false; 
+
+  @Persistent
+  private java.lang.Boolean isOnline=false; 
+
+
+
+	public Payment() {
 	}
 
-	public void setId(String id) {
-		this.id = id;
+
+	@Override
+	public Long getLongId() {
+		return longId;
+	}
+
+	@Override
+	public void setLongId(Long longId) {
+		this.longId = longId;
+	}
+
+	public String getPkId() {
+		return pkId;
+	}
+
+	public void setPkId(String pkId) {
+		this.pkId = pkId;
 	}
 
 	public String getKeyName() {
@@ -68,77 +95,104 @@ public class Payment extends ModelObject {
 		this.keyName = keyName;
 	}
 
-	public String getPayCode() {
-		return payCode;
-	}
 
-	public void setPayCode(String payCode) {
-		this.payCode = payCode;
-	}
 
-	public String getPayName() {
-		return payName;
-	}
+  public java.lang.String getPayId() {
+    return payId;
+  }
 
-	public void setPayName(String payName) {
-		this.payName = payName;
-	}
+  public void setPayId(java.lang.String newPayId) {
+    payId = newPayId;
+  }
 
-	public String getPayFee() {
-		return payFee;
-	}
 
-	public void setPayFee(String payFee) {
-		this.payFee = payFee;
-	}
 
-	public String getPayDesc() {
-		return payDesc;
-	}
+  public java.lang.String getPayCode() {
+    return payCode;
+  }
 
-	public void setPayDesc(String payDesc) {
-		this.payDesc = payDesc;
-	}
+  public void setPayCode(java.lang.String newPayCode) {
+    payCode = newPayCode;
+  }
 
-	public Text getPayConfig() {
-		return payConfig;
-	}
 
-	public void setPayConfig(Text payConfig) {
-		this.payConfig = payConfig;
-	}
 
-	public Integer getPayOrder() {
-		return payOrder;
-	}
+  public java.lang.String getPayName() {
+    return payName;
+  }
 
-	public void setPayOrder(Integer payOrder) {
-		this.payOrder = payOrder;
-	}
+  public void setPayName(java.lang.String newPayName) {
+    payName = newPayName;
+  }
 
-	public Boolean getEnabled() {
-		return enabled;
-	}
 
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
 
-	public Boolean getIsOnline() {
-		return isOnline;
-	}
+  public java.lang.String getPayFee() {
+    return payFee;
+  }
 
-	public void setIsOnline(Boolean isOnline) {
-		this.isOnline = isOnline;
-	}
+  public void setPayFee(java.lang.String newPayFee) {
+    payFee = newPayFee;
+  }
 
-	public Boolean getIsCod() {
-		return isCod;
-	}
 
-	public void setIsCod(Boolean isCod) {
-		this.isCod = isCod;
-	}
 
+  public java.lang.String getPayDesc() {
+    return payDesc;
+  }
+
+  public void setPayDesc(java.lang.String newPayDesc) {
+    payDesc = newPayDesc;
+  }
+
+
+
+  public java.lang.Long getPayOrder() {
+    return payOrder;
+  }
+
+  public void setPayOrder(java.lang.Long newPayOrder) {
+    payOrder = newPayOrder;
+  }
+
+
+
+  public java.lang.String getPayConfig() {
+    return payConfig;
+  }
+
+  public void setPayConfig(java.lang.String newPayConfig) {
+    payConfig = newPayConfig;
+  }
+
+
+
+  public java.lang.Boolean getEnabled() {
+    return enabled;
+  }
+
+  public void setEnabled(java.lang.Boolean newEnabled) {
+    enabled = newEnabled;
+  }
+
+
+
+  public java.lang.Boolean getIsCod() {
+    return isCod;
+  }
+
+  public void setIsCod(java.lang.Boolean newIsCod) {
+    isCod = newIsCod;
+  }
+
+
+
+  public java.lang.Boolean getIsOnline() {
+    return isOnline;
+  }
+
+  public void setIsOnline(java.lang.Boolean newIsOnline) {
+    isOnline = newIsOnline;
+  }
 
 }

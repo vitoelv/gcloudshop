@@ -1,9 +1,7 @@
-/**
- * Author: Bob Chen
- */
-
 package com.jcommerce.core.model;
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -11,127 +9,98 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true")
+/**  
+ * generated with my extension of middleGen 
+ * @author <a href="http://code.google.com/p/gcloudshop/">Leon</a>
+ */
+ 
+@PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true") 
 public class UserAddress extends ModelObject {
-    @Override
-    public ModelObject getParent() {
-    	return null;
-    }
+
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
+    private String pkId;
     
     @Persistent
     @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
     private String keyName;
     
-	private User user;
-	private String name;
-	private String consignee;
-	private String email;
-	
     @Persistent
-	private String regionId;
-//	private Region region;
-	
-	
-	private String address;
-	private String zip;
-	private String phone;
-	private String mobile;
-    /**
-     * 标志建筑
-     */
-	private String signBuilding;
-    /**
-     * 最佳送货时间
-     */
-	private String bestTime;
+    private Long longId;
+    
+    // relations
+        
+    
+  // fields
+  @Persistent
+  private java.lang.String addressId; 
+
+  @Persistent
+  private java.lang.String addressName; 
+
+  @Persistent
+  private java.lang.String userId; 
+
+  @Persistent
+  private java.lang.String consignee; 
+
+  @Persistent
+  private java.lang.String email; 
+
+  @Persistent
+  private java.lang.Long country=0l; 
+
+  @Persistent
+  private java.lang.Long province=0l; 
+
+  @Persistent
+  private java.lang.Long city=0l; 
+
+  @Persistent
+  private java.lang.Long district=0l; 
+
+  @Persistent
+  private java.lang.String address; 
+
+  @Persistent
+  private java.lang.String zipcode; 
+
+  @Persistent
+  private java.lang.String tel; 
+
+  @Persistent
+  private java.lang.String mobile; 
+
+  @Persistent
+  private java.lang.String signBuilding; 
+
+  @Persistent
+  private java.lang.String bestTime; 
 
 
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getConsignee() {
-        return consignee;
-    }
-
-    public void setConsignee(String consignee) {
-        this.consignee = consignee;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public UserAddress() {
+	}
 
 
+	@Override
+	public Long getLongId() {
+		return longId;
+	}
 
-    public String getAddress() {
-        return address;
-    }
+	@Override
+	public void setLongId(Long longId) {
+		this.longId = longId;
+	}
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
+	public String getPkId() {
+		return pkId;
+	}
 
-    public String getZip() {
-        return zip;
-    }
-
-    public void setZip(String zip) {
-        this.zip = zip;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public String getSignBuilding() {
-        return signBuilding;
-    }
-
-    public void setSignBuilding(String signBuilding) {
-        this.signBuilding = signBuilding;
-    }
-
-    public String getBestTime() {
-        return bestTime;
-    }
-
-    public void setBestTime(String bestTime) {
-        this.bestTime = bestTime;
-    }
+	public void setPkId(String pkId) {
+		this.pkId = pkId;
+	}
 
 	public String getKeyName() {
 		return keyName;
@@ -141,20 +110,154 @@ public class UserAddress extends ModelObject {
 		this.keyName = keyName;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
 
-	public String getId() {
-		return id;
-	}
 
-	public String getRegionId() {
-		return regionId;
-	}
+  public java.lang.String getAddressId() {
+    return addressId;
+  }
 
-	public void setRegionId(String regionId) {
-		this.regionId = regionId;
-	}
+  public void setAddressId(java.lang.String newAddressId) {
+    addressId = newAddressId;
+  }
+
+
+
+  public java.lang.String getAddressName() {
+    return addressName;
+  }
+
+  public void setAddressName(java.lang.String newAddressName) {
+    addressName = newAddressName;
+  }
+
+
+
+  public java.lang.String getUserId() {
+    return userId;
+  }
+
+  public void setUserId(java.lang.String newUserId) {
+    userId = newUserId;
+  }
+
+
+
+  public java.lang.String getConsignee() {
+    return consignee;
+  }
+
+  public void setConsignee(java.lang.String newConsignee) {
+    consignee = newConsignee;
+  }
+
+
+
+  public java.lang.String getEmail() {
+    return email;
+  }
+
+  public void setEmail(java.lang.String newEmail) {
+    email = newEmail;
+  }
+
+
+
+  public java.lang.Long getCountry() {
+    return country;
+  }
+
+  public void setCountry(java.lang.Long newCountry) {
+    country = newCountry;
+  }
+
+
+
+  public java.lang.Long getProvince() {
+    return province;
+  }
+
+  public void setProvince(java.lang.Long newProvince) {
+    province = newProvince;
+  }
+
+
+
+  public java.lang.Long getCity() {
+    return city;
+  }
+
+  public void setCity(java.lang.Long newCity) {
+    city = newCity;
+  }
+
+
+
+  public java.lang.Long getDistrict() {
+    return district;
+  }
+
+  public void setDistrict(java.lang.Long newDistrict) {
+    district = newDistrict;
+  }
+
+
+
+  public java.lang.String getAddress() {
+    return address;
+  }
+
+  public void setAddress(java.lang.String newAddress) {
+    address = newAddress;
+  }
+
+
+
+  public java.lang.String getZipcode() {
+    return zipcode;
+  }
+
+  public void setZipcode(java.lang.String newZipcode) {
+    zipcode = newZipcode;
+  }
+
+
+
+  public java.lang.String getTel() {
+    return tel;
+  }
+
+  public void setTel(java.lang.String newTel) {
+    tel = newTel;
+  }
+
+
+
+  public java.lang.String getMobile() {
+    return mobile;
+  }
+
+  public void setMobile(java.lang.String newMobile) {
+    mobile = newMobile;
+  }
+
+
+
+  public java.lang.String getSignBuilding() {
+    return signBuilding;
+  }
+
+  public void setSignBuilding(java.lang.String newSignBuilding) {
+    signBuilding = newSignBuilding;
+  }
+
+
+
+  public java.lang.String getBestTime() {
+    return bestTime;
+  }
+
+  public void setBestTime(java.lang.String newBestTime) {
+    bestTime = newBestTime;
+  }
 
 }

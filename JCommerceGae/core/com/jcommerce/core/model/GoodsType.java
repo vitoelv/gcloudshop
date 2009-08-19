@@ -1,7 +1,3 @@
-/**
- * Author: Bob Chen
- */
-
 package com.jcommerce.core.model;
 
 import java.util.HashSet;
@@ -15,94 +11,33 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
+/**  
+ * generated with my extension of middleGen 
+ * @author <a href="http://code.google.com/p/gcloudshop/">Leon</a>
+ */
+ 
+@PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true") 
 public class GoodsType extends ModelObject {
-//	public static final String ID = "id";
-//	public static final String NAME = "name";
-//	public static final String ENABLED = "enabled";
-//	public static final String ATTRIBUTEGROUP = "attributeGroup";
-//	public static final String ATTRCOUNT = "attrcount";
 
-    @Override
-    public ModelObject getParent() {
-    	return null;
-    }
-	
-	public GoodsType() {
-		
-	}
-	
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String id;
+    private String pkId;
     
     @Persistent
     @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
     private String keyName;
     
     @Persistent
-	private String name;
+    private Long longId;
     
-    @Persistent
-	private boolean enabled;
-	
+    // relations
     @Persistent(mappedBy="goodsType")
 	private Set<Attribute> attributes = new HashSet<Attribute>();
     
     @NotPersistent
 	private long attrcount;
-	
-    @Persistent
-	private String attributeGroup;
-
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public String getAttributeGroup() {
-        return attributeGroup;
-    }
-
-    public void setAttributeGroup(String attributeGroup) {
-        this.attributeGroup = attributeGroup;
-    }
-
-    public String[] getAttributeGroups() {
-        if (attributeGroup == null) {
-            return new String[0];
-        }
-        
-        return attributeGroup.split(",");
-    }
-
-    public void setAttributeGroups(String[] groups) {
-        StringBuffer sb = new StringBuffer();
-        if (groups != null) {
-            for (int i = 0; i < groups.length; i++) {
-                if (i > 0) {
-                    sb.append(",");
-                }
-                sb.append(groups[i]);
-            }
-        }
-        setAttributeGroup(sb.toString());
-    }
-
+    
 	public Set<Attribute> getAttributes() {
 		return attributes;
 	}
@@ -111,6 +46,94 @@ public class GoodsType extends ModelObject {
 		this.attributes = attributes;
 	}
 
+
+    
+    
+  // fields
+  @Persistent
+  private java.lang.String catId; 
+
+  @Persistent
+  private java.lang.String catName; 
+
+  @Persistent
+  private java.lang.Boolean enabled=false; 
+
+  @Persistent
+  private java.lang.String attrGroup; 
+
+
+
+	public GoodsType() {
+	}
+
+
+	@Override
+	public Long getLongId() {
+		return longId;
+	}
+
+	@Override
+	public void setLongId(Long longId) {
+		this.longId = longId;
+	}
+
+	public String getPkId() {
+		return pkId;
+	}
+
+	public void setPkId(String pkId) {
+		this.pkId = pkId;
+	}
+
+	public String getKeyName() {
+		return keyName;
+	}
+
+	public void setKeyName(String keyName) {
+		this.keyName = keyName;
+	}
+
+
+
+  public java.lang.String getCatId() {
+    return catId;
+  }
+
+  public void setCatId(java.lang.String newCatId) {
+    catId = newCatId;
+  }
+
+
+
+  public java.lang.String getCatName() {
+    return catName;
+  }
+
+  public void setCatName(java.lang.String newCatName) {
+    catName = newCatName;
+  }
+
+
+
+  public java.lang.Boolean getEnabled() {
+    return enabled;
+  }
+
+  public void setEnabled(java.lang.Boolean newEnabled) {
+    enabled = newEnabled;
+  }
+
+
+
+  public java.lang.String getAttrGroup() {
+    return attrGroup;
+  }
+
+  public void setAttrGroup(java.lang.String newAttrGroup) {
+    attrGroup = newAttrGroup;
+  }
+
 	public long getAttrcount() {
 		return attrcount;
 	}
@@ -118,19 +141,5 @@ public class GoodsType extends ModelObject {
 	public void setAttrcount(long attrcount) {
 		this.attrcount = attrcount;
 	}
-	
-	public void setId(String id) {
-		this.id = id;
-	}
-    public String getId() {
-    	return id;
-    }
-    
-	public void setKeyName(String kn) {
-		this.keyName = kn;
-	}
-    public String getKeyName() {
-    	return keyName;
-    }
-	
+
 }

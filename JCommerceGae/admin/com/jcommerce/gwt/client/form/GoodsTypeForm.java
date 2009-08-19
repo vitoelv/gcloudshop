@@ -27,7 +27,7 @@ public class GoodsTypeForm extends BeanObject implements IGoodsType {
 	
 	public static TextField<String> getNameField(String fieldTitle) {
 		TextField<String> nameField = new TextField<String>();
-		nameField.setName(NAME);
+		nameField.setName(CAT_NAME);
 		nameField.setMaxLength(10);
 		nameField.setAutoValidate(true);
 		nameField.setAllowBlank(false);
@@ -39,7 +39,7 @@ public class GoodsTypeForm extends BeanObject implements IGoodsType {
 	
 	public static TextArea getAttributeGroupField(String fieldTitle) {
 		TextArea agField = new TextArea();
-		agField.setName(ATTRIBUTEGROUP);
+		agField.setName(ATTR_GROUP);
 		agField.setMaxLength(2000);
 		agField.setAutoValidate(true);
 		agField.setAllowBlank(true);
@@ -50,7 +50,7 @@ public class GoodsTypeForm extends BeanObject implements IGoodsType {
     	System.out.println("----validate GoodsTypeForm");
     	StringBuffer errorBuf = new StringBuffer();
     	
-    	String name = getString(NAME);
+    	String name = getString(CAT_NAME);
     	System.out.println("name: "+name+", size: "+(name==null? -1:name.length()));
     	
     	if(name == null || name.trim().length() == 0) {

@@ -176,7 +176,7 @@ _input_charset=utf-8
         buf.append("&logistics_type=").append("EXPRESS");
         buf.append("&notify_url=").append(url);
         buf.append("&return_url=").append(url);
-        // 合作伙伴交易号（确保在合作伙伴系统中唯一）， order.getPayLog().getId()
+        // 合作伙伴交易号（确保在合作伙伴系统中唯一）， order.getPayLog().getPkId()
         buf.append("&out_trade_no=").append(
                 order.getSN() + "_" + (new Date().getTime()));
         buf.append("&partner=").append(values.get(PARTNER));

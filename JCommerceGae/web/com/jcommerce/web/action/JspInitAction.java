@@ -372,9 +372,9 @@ public class JspInitAction extends DispatchAction {
 		List<BrandInfo> brandInfoList = new ArrayList<BrandInfo>();
 		for (Iterator it = brands.iterator(); it.hasNext();) {
 			Brand brand = (Brand) it.next();
-			cond.setValue(brand.getId() + "");
+			cond.setValue(brand.getPkId() + "");
 			criteria.addCondition(cond);
-			brandInfoList.add(new BrandInfo(brandManager.getBrand(brand.getId()
+			brandInfoList.add(new BrandInfo(brandManager.getBrand(brand.getPkId()
 					+ ""), goodsManager.getGoodsCount(criteria)));
 			criteria.removeAllCondition();
 		}		 
@@ -387,7 +387,7 @@ public class JspInitAction extends DispatchAction {
 		//		int index = 0;
 		//		for (Iterator it = orderGoods.iterator(); it.hasNext();) {
 		//			OrderGoods orderGood = (OrderGoods)it.next();
-		//			goodId[index] = orderGood.getGoods().getId()+"";
+		//			goodId[index] = orderGood.getGoods().getPkId()+"";
 		//			index++;
 		//		}
 		//销量前十
@@ -840,7 +840,7 @@ public class JspInitAction extends DispatchAction {
 		double total = 0;// Initialization
 		for (Iterator it = carts.iterator(); it.hasNext();) {
 			Cart cart = (Cart) it.next();
-			total += goodsManager.getGoods(cart.getGoods().getId() + "")
+			total += goodsManager.getGoods(cart.getGoods().getPkId() + "")
 					.getShopPrice();// Statistics of the total amount
 		}
 		order.setGoodsAmount(total);
@@ -880,7 +880,7 @@ public class JspInitAction extends DispatchAction {
 		request.setAttribute("total", total);
 		request.setAttribute("orderSN", dateString + saveID);
 		cartManager.removeCarts(session);
-        String paymentURL = paymentMetaManager.getCode(order.getId(), Integer.valueOf(payment));
+        String paymentURL = paymentMetaManager.getCode(order.getPkId(), Integer.valueOf(payment));
         request.setAttribute("paymentURL", paymentURL);
 		return mapping.findForward("cart_success");
 	}
@@ -1070,7 +1070,7 @@ public class JspInitAction extends DispatchAction {
 	 * @return
 	 */
 	private Session getSession(HttpServletRequest request) {
-		String sid = request.getSession(true).getId();
+		String sid = request.getSession(true).getPkId();
 		Session sess = sessionManager.getSession(sid);
 		if (sess == null) {
 			sess = new Session();

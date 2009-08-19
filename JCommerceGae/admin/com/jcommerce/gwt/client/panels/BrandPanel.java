@@ -153,7 +153,7 @@ public class BrandPanel extends BaseEntityEditPanel {
     	
     	if(getCurState().getIsEdit()) {
     		method = "update";
-    		idField.setValue(getCurState().getId());
+    		idField.setValue(getCurState().getPkId());
     	}else {
     		method = "add";
     		idField.setValue(null);

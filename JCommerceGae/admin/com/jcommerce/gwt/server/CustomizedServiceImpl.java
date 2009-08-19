@@ -24,7 +24,7 @@ import com.extjs.gxt.ui.client.data.PagingLoadResult;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.model.ModelObject;
-import com.jcommerce.core.model.Order;
+import com.jcommerce.core.model.OrderInfo;
 import com.jcommerce.core.service.CustomizedManager;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.util.CommonUtil;
@@ -244,8 +244,8 @@ public class CustomizedServiceImpl extends RemoteServiceServlet implements Custo
         try {
         	ModelObject to = (ModelObject)Class.forName(obj.getModelName()).newInstance();
             MyPropertyUtil.form2To(to, obj.getProperties());
-            ((Order)to).setOrderSn(CommonUtil.getOrderSN(createDate));
-            ((Order)to).setAddTime(createDate);
+            ((OrderInfo)to).setOrderSn(CommonUtil.getOrderSN(createDate));
+            ((OrderInfo)to).setAddTime(createDate.getTime());
         	res = manager.txadd(to);
         	
         } catch (Exception e) {
