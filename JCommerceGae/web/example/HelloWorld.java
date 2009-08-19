@@ -27,6 +27,7 @@ package example;
 public class HelloWorld extends ExampleSupport {
 
     public String execute() throws Exception {
+    	
         setMessage(getText(MESSAGE));
         return SUCCESS;
     }
