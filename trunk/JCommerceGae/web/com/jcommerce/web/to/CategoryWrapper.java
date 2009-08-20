@@ -21,6 +21,6 @@ public class CategoryWrapper extends BaseModelWrapper {
 	}
 	
 	public String getUrl() {
-		return "category.action?id=";
+		return "category.action?id="+category.getPkId();
 	}
 }
