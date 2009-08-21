@@ -1,6 +1,8 @@
 package com.jcommerce.gwt.client;
 
+import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.button.Button;
+import com.extjs.gxt.ui.client.widget.layout.TableData;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.Window;
@@ -9,7 +11,6 @@ import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -22,7 +23,6 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.TreeListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
-import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
 
 
 
@@ -84,7 +84,7 @@ public class Application extends Composite implements WindowResizeListener {
   /**
    * The main wrapper around the content and content title.
    */
-  private Grid contentLayout;
+  private VerticalPanel contentLayout;
   
   /**
    * The main wrapper around the content and content title.
@@ -134,7 +134,9 @@ public class Application extends Composite implements WindowResizeListener {
    */
   public Application() {
     // Setup the main layout widget
-    FlowPanel layout = new FlowPanel();
+//    FlowPanel layout = new FlowPanel();
+	 
+	VerticalPanel layout = new VerticalPanel();
     initWidget(layout);
 
     // Setup the top panel with the title and links
@@ -144,6 +146,7 @@ public class Application extends Composite implements WindowResizeListener {
     // Add the main menu
     bottomPanel = new HorizontalPanel();
     bottomPanel.setWidth("100%");
+
     bottomPanel.setSpacing(0);
     bottomPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
     layout.add(bottomPanel);
@@ -151,9 +154,9 @@ public class Application extends Composite implements WindowResizeListener {
     bottomPanel.add(mainMenu);
 
     // Setup the content layout
-    contentLayout = new Grid(2, 1);
-    contentLayout.setCellPadding(0);
-    contentLayout.setCellSpacing(0);
+    contentLayout = new VerticalPanel();
+//    contentLayout.setCellPadding(0);
+//    contentLayout.setCellSpacing(0);
     contentTitleLayout = new Grid(1, 2);
     contentTitleLayout.getCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT);
     contentTitleLayout.setCellPadding(0);
@@ -171,8 +174,8 @@ public class Application extends Composite implements WindowResizeListener {
           HasHorizontalAlignment.ALIGN_RIGHT);
       contentDecorator.getElement().setAttribute("align", "RIGHT");
     }
-    CellFormatter formatter = contentLayout.getCellFormatter();
-    formatter.setStyleName(0, 0, DEFAULT_STYLE_NAME + "-content-title");
+//    CellFormatter formatter = contentLayout.getCellFormatter();
+//    formatter.setStyleName(0, 0, DEFAULT_STYLE_NAME + "-content-title");
 
 //    setContentTitle();
 
@@ -186,10 +189,14 @@ public class Application extends Composite implements WindowResizeListener {
     contentTitleLayout.setWidget(0,1, contentTitleRightWrapper);
     
 //    contentLayout.setWidth("100%");
-    contentLayout.setWidget(0, 0, contentTitleLayout);
-    contentLayout.setWidget(1, 0, contentWrapper);
+//    contentLayout.setWidget(0, 0, contentTitleLayout);
+//    contentLayout.setWidget(1, 0, contentWrapper);
+    TableData fd = new TableData();
+    fd.setWidth("100%");
+    contentLayout.add(contentTitleLayout, fd);
+    contentLayout.add(contentWrapper, fd);
     
-    formatter.setStyleName(1, 0, DEFAULT_STYLE_NAME + "-content-wrapper");
+//    formatter.setStyleName(1, 0, DEFAULT_STYLE_NAME + "-content-wrapper");
     setContent(null);
   }
 
@@ -216,7 +223,7 @@ public class Application extends Composite implements WindowResizeListener {
    * @return the content title widget
    */
   public Widget getContentTitle() {
-    return contentLayout.getWidget(0, 0);
+    return contentTitleLayout;
   }
 
   /**

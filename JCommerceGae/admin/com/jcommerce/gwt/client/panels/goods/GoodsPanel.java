@@ -20,25 +20,35 @@ import java.util.List;
 import java.util.Set;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
+import com.extjs.gxt.ui.client.event.BaseEvent;
+import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.Events;
+import com.extjs.gxt.ui.client.event.FieldEvent;
 import com.extjs.gxt.ui.client.event.FormEvent;
 import com.extjs.gxt.ui.client.event.Listener;
+import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.util.Padding;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.TabPanel;
+import com.extjs.gxt.ui.client.widget.button.Button;
+import com.extjs.gxt.ui.client.widget.form.AdapterField;
 import com.extjs.gxt.ui.client.widget.form.CheckBox;
 import com.extjs.gxt.ui.client.widget.form.CheckBoxGroup;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
+import com.extjs.gxt.ui.client.widget.form.DateField;
 import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.FileUploadField;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.HiddenField;
-import com.extjs.gxt.ui.client.widget.form.ListField;
-import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
+import com.extjs.gxt.ui.client.widget.form.LabelField;
+import com.extjs.gxt.ui.client.widget.form.ListField;
+import com.extjs.gxt.ui.client.widget.form.MultiField;
+import com.extjs.gxt.ui.client.widget.form.NumberField;
+import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
@@ -50,16 +60,19 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BeanObject;
+import com.jcommerce.gwt.client.form.BrandForm;
 import com.jcommerce.gwt.client.form.GWTHttpDynaForm;
 import com.jcommerce.gwt.client.form.GoodsForm;
+import com.jcommerce.gwt.client.model.IBrand;
 import com.jcommerce.gwt.client.model.IGoods;
 import com.jcommerce.gwt.client.panels.BaseEntityEditPanel;
 import com.jcommerce.gwt.client.panels.GoodsListPanel;
 import com.jcommerce.gwt.client.panels.Success;
 import com.jcommerce.gwt.client.resources.Resources;
+import com.jcommerce.gwt.client.service.CreateService;
 import com.jcommerce.gwt.client.service.ListService;
 
-public class GoodsPanel extends BaseEntityEditPanel {
+public class GoodsPanel extends BaseEntityEditPanel implements Listener{
     
     public static interface Constants {
         String NewGoods_title();
@@ -75,25 +88,32 @@ public class GoodsPanel extends BaseEntityEditPanel {
         String NewGoods_tabArticle();
         
     }
-    
-//	private ColumnPanel contentPanelGeneral = new ColumnPanel();
-//    private ColumnPanel contentPanelOther = new ColumnPanel();
-//    private GoodsAttributePanel attrPanel = new GoodsAttributePanel();
-//    private GalleryPanel galleryPanel = new GalleryPanel();
-	 
+    	 
     ListStore<BeanObject> brandList;
     ComboBox<BeanObject> fListBrand;
     
     ListStore<BeanObject> catgoryList;
     ListField<BeanObject> fListCategory;
     
+    
+    AdapterField fBrandNameAd;
+    AdapterField bOkNewBrandAd;
+    AdapterField bHideNewBrandAd;
+    
+    NumberField nfShopPrice;
+    NumberField nfMarketPrice;
+    
+    CheckBox cbIsPromote;
+    NumberField nfPromotePrice;
+    DateField dfPromoteStartDate;
+    DateField dfPromoteEndDate;
+    
     HiddenField<String> idField;
-    CheckBox bestSoldField;
     GalleryPanel4 contentPanelGallery;
     GoodsAttributePanel contentPanelAttrs;
     
     
-    // leon to integrate with history-based page navigation mechnism. 
+    // leon to integrate with history-based page navigation mechanism. 
     // State should contain all info needed to render this page.
     // This is a minimum skeleton, more fields may be added, see leontest.Attribute
 	public static class State extends BaseEntityEditPanel.State {
@@ -150,8 +170,91 @@ public class GoodsPanel extends BaseEntityEditPanel {
         else
         	return "编辑商品信息";
     }
-
     
+    public void onNewBrandClicked() {
+    	fBrandNameAd.setVisible(true);
+        bOkNewBrandAd.setVisible(true);
+        bHideNewBrandAd.setVisible(true);
+    }
+    public void onHideNewBrandClicked() {
+    	fBrandNameAd.setVisible(false);
+        bOkNewBrandAd.setVisible(false);
+        bHideNewBrandAd.setVisible(false);
+    }
+    
+    public void onOkNewBrandClicked() {
+    	TextField<String> tf = (TextField<String>)fBrandNameAd.getWidget();
+    	String name = tf.getValue();
+    	System.out.println("name="+name);
+    	if(!tf.validate()) {
+    		return;
+    	}
+
+    	
+    	final BeanObject brand = new BeanObject(ModelNames.BRAND);
+    	brand.set(IBrand.BRAND_NAME, name);
+    	new CreateService().createBean(brand, new CreateService.Listener() {
+			@Override
+			public void onFailure(Throwable caught) {
+				super.onFailure(caught);
+			}
+
+			@Override
+			public void onSuccess(String id) {
+				brand.set(IBrand.PK_ID, id);
+				brandList.add(brand);
+			}
+    	} 
+    	);	
+
+    }
+    
+    public void onCalShopPriceClicked() {
+    	Number marketPrice = nfMarketPrice.getValue();
+    	Number shopPrice = nfShopPrice.getValue();
+    	
+        NumberField nfPromotePrice;
+        DateField dfPromoteStartDate;
+        DateField dfPromoteEndDate;
+    	if(marketPrice!=null) {
+    		nfShopPrice.setValue(marketPrice.doubleValue()*0.8);
+    	}
+    	else if(shopPrice!=null) {
+    		nfMarketPrice.setValue(shopPrice.doubleValue()/0.8);
+    	}
+    	
+    	
+    }
+    public void onIsPromoteClicked() {
+    	boolean isChecked = cbIsPromote.getValue();
+    	if(isChecked) {
+    		nfPromotePrice.setEnabled(true);
+    		dfPromoteStartDate.setEnabled(true);
+    		dfPromoteEndDate.setEnabled(true);
+    	}
+    	else {
+    		nfPromotePrice.setEnabled(false);
+    		dfPromoteStartDate.setEnabled(false);
+    		dfPromoteEndDate.setEnabled(false);
+    	}
+    	
+    	
+    }
+	public void handleEvent(BaseEvent be) {
+		if(be instanceof FieldEvent) {
+			FieldEvent fe = (FieldEvent)be;
+			if( fe.getField() == cbIsPromote) {
+				Boolean b1 = (Boolean)fe.getValue();
+				Boolean b2 = (Boolean)fe.getOldValue();
+				boolean isChecked = cbIsPromote.getValue();
+				System.out.println("b1="+b1+", b2="+b2+", isChecked="+isChecked);
+				onIsPromoteClicked();
+			}
+		}
+		
+	}
+	
+	
     @Override
     public void setupPanelLayout() {
         FormData formData = new FormData("90%");
@@ -175,29 +278,82 @@ public class GoodsPanel extends BaseEntityEditPanel {
         idField = GoodsForm.getIdField();
         contentPanelGeneral.add(idField, formData);
         
-        TextField<String> field = GoodsForm.getNameField(Resources.constants.Goods_name());
-        field.setMaxLength(20);
-        field.setFieldLabel(Resources.constants.Goods_name());
+        TextField<String> fText = GoodsForm.getNameField(Resources.constants.Goods_name());
+        fText.setMaxLength(20);
+        fText.setFieldLabel(Resources.constants.Goods_name());
 
         
-        contentPanelGeneral.add(field, formData);
+        contentPanelGeneral.add(fText, formData);
         
-        field = GoodsForm.getSnField();
-        field.setMaxLength(20);
-        field.setFieldLabel(Resources.constants.Goods_SN());
-        contentPanelGeneral.add(field, formData);
+        fText = GoodsForm.getSnField();
+        fText.setMaxLength(20);
+        fText.setFieldLabel(Resources.constants.Goods_SN());
+        fText.setToolTip("如果您不输入商品货号，系统将自动生成一个唯一的货号。");
+        
+        contentPanelGeneral.add(fText, formData);
         
         brandList = new ListStore<BeanObject>();
         fListBrand = GoodsForm.getBrandIdField();
-        fListBrand.setFieldLabel(Resources.constants.Goods_brand());
+        fListBrand.setHideLabel(true);
         fListBrand.setStore(brandList);
 
+        MultiField mfBrand = new MultiField();
+        mfBrand.setFieldLabel(Resources.constants.Goods_brand());
+        
         fListBrand.setEmptyText("Select a Brand...");   
         fListBrand.setWidth(150);   
         fListBrand.setTypeAhead(true);   
-        fListBrand.setTriggerAction(TriggerAction.ALL);   
-        contentPanelGeneral.add(fListBrand);
+        fListBrand.setTriggerAction(TriggerAction.ALL);  
         
+        mfBrand.add(fListBrand);
+        
+        Button button = new Button("添加品牌");
+        AdapterField af = new AdapterField(button);
+        af.setHideLabel(true);
+        mfBrand.add(af);
+        button.addSelectionListener(      		
+        	new SelectionListener<ButtonEvent>() {
+        		public void componentSelected(ButtonEvent sender) {
+        			onNewBrandClicked();
+        		}
+        	});
+        
+        TextField<String> fBrandName = BrandForm.getNameField("品牌名称");
+        fBrandName.setMessageTarget("tooltip");
+        fBrandName.setHideLabel(true);
+        fBrandNameAd = new AdapterField(fBrandName);
+        fBrandNameAd.setVisible(false);
+        mfBrand.add(fBrandNameAd);
+        
+        Button bOkNewBrand = new Button("确定");
+        bOkNewBrandAd = new AdapterField(bOkNewBrand);
+        bOkNewBrandAd.setHideLabel(true);
+        bOkNewBrandAd.setVisible(false);
+        mfBrand.add(bOkNewBrandAd);
+        bOkNewBrand.addSelectionListener(      		
+            	new SelectionListener<ButtonEvent>() {
+            		public void componentSelected(ButtonEvent sender) {
+            			onOkNewBrandClicked();
+            		}
+            	});
+        
+        
+        Button bHideNewBrand = new Button("<<");
+        bHideNewBrandAd = new AdapterField(bHideNewBrand);
+        bHideNewBrandAd.setHideLabel(true);
+        bHideNewBrandAd.setVisible(false);
+        mfBrand.add(bHideNewBrandAd);
+//        
+        bHideNewBrand.addSelectionListener(      		
+            	new SelectionListener<ButtonEvent>() {
+            		public void componentSelected(ButtonEvent sender) {
+            			onHideNewBrandClicked();
+            		}
+            	});
+        
+        contentPanelGeneral.add(mfBrand);
+        
+
         
         fListCategory = GoodsForm.getCategoryIdsField();
         fListCategory.setFieldLabel(Resources.constants.Goods_category());
@@ -206,6 +362,78 @@ public class GoodsPanel extends BaseEntityEditPanel {
         fListCategory.setEmptyText("Select one or more Categories...");   
         fListCategory.setWidth(150);   
         contentPanelGeneral.add(fListCategory);
+        
+        
+        MultiField mfShopPrice = new MultiField();
+        mfShopPrice.setFieldLabel("ShopPrice");
+        
+        nfShopPrice = GoodsForm.getShopPriceField();
+        nfShopPrice.setHideLabel(true);
+        mfShopPrice.add(nfShopPrice);
+        
+        Button bCalShopPrice = new Button("根据市场价计算");
+        AdapterField bCalShopPriceAd = new AdapterField(bCalShopPrice);
+        bCalShopPriceAd.setHideLabel(true);
+        mfShopPrice.add(bCalShopPriceAd);
+        bCalShopPrice.addSelectionListener(      		
+            	new SelectionListener<ButtonEvent>() {
+            		public void componentSelected(ButtonEvent sender) {
+            			onCalShopPriceClicked();
+            		}
+            	});
+        
+        contentPanelGeneral.add(mfShopPrice);
+        
+        nfMarketPrice = GoodsForm.getMarketPriceField();
+        nfMarketPrice.setFieldLabel("MarketPrice");
+        contentPanelGeneral.add(nfMarketPrice); 
+        
+        NumberField fNum = GoodsForm.getGiveIntegralField();
+        fNum.setFieldLabel("？赠送消费积分数");
+        fNum.setToolTip("购买该商品时赠送消费积分数,-1表示按商品价格赠送");
+        contentPanelGeneral.add(fNum); 
+        
+        fNum = GoodsForm.getRankIntegralField();
+        fNum.setFieldLabel("？赠送等级积分数");
+        fNum.setToolTip("购买该商品时赠送等级积分数,-1表示按商品价格赠送");
+        contentPanelGeneral.add(fNum); 
+        
+        fNum = GoodsForm.getRankIntegralField();
+        fNum.setFieldLabel("？积分购买额度");
+        fNum.setToolTip("购买该商品时最多可以使用多少钱的积分");
+        contentPanelGeneral.add(fNum); 
+        
+        MultiField mfPromote = new MultiField();
+        mfPromote.setFieldLabel("促销");
+        
+        cbIsPromote = GoodsForm.getIsPromoteField();
+        cbIsPromote.setHideLabel(true);
+        cbIsPromote.setValueAttribute("true");
+        mfPromote.add(cbIsPromote);
+        
+        nfPromotePrice = GoodsForm.getPromotePriceField();
+        nfPromotePrice.setFieldLabel("促销价格");
+        nfPromotePrice.setEnabled(false);
+        mfPromote.add(nfPromotePrice);
+        contentPanelGeneral.add(mfPromote); 
+        
+        
+        MultiField mfPromote2 = new MultiField();
+        mfPromote2.setFieldLabel("促销日期");
+        
+        dfPromoteStartDate = GoodsForm.getPromoteStartDateField();
+        dfPromoteStartDate.setHideLabel(true);
+        dfPromoteStartDate.setEnabled(false);
+        mfPromote2.add(dfPromoteStartDate);
+        
+        mfPromote2.add(new LabelField(" - "));
+        
+        dfPromoteEndDate = GoodsForm.getPromoteEndDateField();
+        dfPromoteEndDate.setHideLabel(true);
+        dfPromoteEndDate.setEnabled(false);
+        mfPromote2.add(dfPromoteEndDate);
+        
+        contentPanelGeneral.add(mfPromote2); 
         
 //        field = GoodsForm.getImageField();
 //        field.setFieldLabel(Resources.constants.Goods_image());
@@ -289,20 +517,20 @@ public class GoodsPanel extends BaseEntityEditPanel {
 		VBoxLayoutData vbld2 = new VBoxLayoutData(new Margins(0));
 		LayoutContainer lc1 = new LayoutContainer();
 		lc1.setLayout(new FormLayout());
-        field = GoodsForm.getNumberField(Resources.constants.Goods_number());
-        field.setMaxLength(10);
-        field.setFieldLabel(Resources.constants.Goods_number());
+        fText = GoodsForm.getNumberField(Resources.constants.Goods_number());
+        fText.setMaxLength(10);
+        fText.setFieldLabel(Resources.constants.Goods_number());
 //        contentPanelOther.add(field, formData);
-        lc1.add(field, formData);
+        lc1.add(fText, formData);
         contentPanelOther.add(lc1, vbld1);
         
         lc1 = new LayoutContainer();
 		lc1.setLayout(new FormLayout());
-        field = GoodsForm.getWeightField(Resources.constants.Goods_weight());
-        field.setMaxLength(10);
-        field.setFieldLabel(Resources.constants.Goods_weight());
+        fText = GoodsForm.getWeightField(Resources.constants.Goods_weight());
+        fText.setMaxLength(10);
+        fText.setFieldLabel(Resources.constants.Goods_weight());
 //        contentPanelOther.add(field, formData);
-        lc1.add(field, formData);
+        lc1.add(fText, formData);
         contentPanelOther.add(lc1, vbld1);
         
 //        lc1 = new LayoutContainer();
@@ -338,25 +566,19 @@ public class GoodsPanel extends BaseEntityEditPanel {
         CheckBox box = GoodsForm.getHotSoldField();
         box.setBoxLabel(Resources.constants.Goods_hotsold());
         checkGroup.add(box);
-        
-//        contentPanelOther.add(box, formData);
 
         box = GoodsForm.getNewAddedField();
         box.setBoxLabel(Resources.constants.Goods_newAdded());
         checkGroup.add(box);
-//        contentPanelOther.add(box, formData);
         
-        
-        bestSoldField = GoodsForm.getBestSoldField();
-        bestSoldField.setBoxLabel(Resources.constants.Goods_bestSold());
-        bestSoldField.setValueAttribute("xxxxxx");
-        checkGroup.add(bestSoldField);
-//        contentPanelOther.add(bestSoldField, formData);
+        box = GoodsForm.getBestSoldField();
+        box.setBoxLabel(Resources.constants.Goods_bestSold());
+        checkGroup.add(box);
         
         lc2.add(checkGroup, new FormData("90%"));
 		contentPanelOther.add(lc2, vbld2);
 		contentPanelOther.layout();
-//        contentPanelOther.add(lc1, formData);
+
         tabs.add(contentPanelOther);
         
         
@@ -592,9 +814,9 @@ public class GoodsPanel extends BaseEntityEditPanel {
         	ex.printStackTrace();
         }
     	
-    	System.out.println("before Submit(): bestSoldField="+bestSoldField+", action="+formPanel.getAction());
-    	Boolean value = bestSoldField.getValue();
-    	System.out.println("bestSoldField value: "+value);
+//    	System.out.println("before Submit(): bestSoldField="+bestSoldField+", action="+formPanel.getAction());
+//    	Boolean value = bestSoldField.getValue();
+//    	System.out.println("bestSoldField value: "+value);
     	
     	// before Submit
     	Set<Field<?>> clonedFields = new HashSet<Field<?>>();	
@@ -637,6 +859,7 @@ public class GoodsPanel extends BaseEntityEditPanel {
     	dynaFields.remove(field);
     }
     Set<Field<?>> dynaFields = new HashSet<Field<?>>();
+
     
     
     
