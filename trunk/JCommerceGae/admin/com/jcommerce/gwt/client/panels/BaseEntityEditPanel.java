@@ -8,17 +8,18 @@ import java.util.Map;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
-import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.CheckBox;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
+import com.extjs.gxt.ui.client.widget.form.DateField;
 import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.HiddenField;
 import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
 import com.extjs.gxt.ui.client.widget.form.ListField;
+import com.extjs.gxt.ui.client.widget.form.NumberField;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.google.gwt.user.client.Element;
@@ -176,8 +177,9 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
     public void log(String s) {
     	
     	StringBuffer buf = new StringBuffer();
-    	Logger.getClientLogger().log(
-    			buf.append("[").append(this.getClass().getName()).append("]:").append(s).toString());
+    	buf.append("[").append(this.getClass().getName()).append("]:").append(s);
+    	Logger.getClientLogger().log(buf.toString());
+    	System.out.println(buf.toString());
     }
     public BeanObject getEntity() {
     	return obj;
@@ -225,6 +227,13 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 				((CheckBox)field).setValue((Boolean)value);
 			} else if (field instanceof HiddenField) {
 				((HiddenField)field).setValue(value);
+			} else if(field instanceof NumberField) {
+				((NumberField)field).setOriginalValue((Number)value);
+				((NumberField)field).setValue((Number)value);
+			} else if(field instanceof DateField) {
+				log("TODO: convert date format??");
+//				((NumberField)field).setOriginalValue((Number)value);
+//				((NumberField)field).setValue((Number)value);
 			}
 	}
 	
