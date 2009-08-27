@@ -1,10 +1,19 @@
 package com.jcommerce.gwt.client;
 
+import com.extjs.gxt.ui.client.widget.ContentPanel;
+import com.extjs.gxt.ui.client.widget.TabItem;
+import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.button.Button;
+import com.extjs.gxt.ui.client.widget.form.FormPanel;
+import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.layout.FormData;
+import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.extjs.gxt.ui.client.widget.layout.TableData;
+import com.extjs.gxt.ui.client.widget.layout.TableLayout;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.LocaleInfo;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.WindowResizeListener;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
@@ -23,6 +32,7 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.TreeListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
+import com.jcommerce.gwt.client.resources.Resources;
 
 
 
@@ -95,6 +105,7 @@ public class Application extends Composite implements WindowResizeListener {
    * The wrapper around the content.
    */
   private SimplePanel contentWrapper;
+    
   /**
    * The wrapper around the content title.
    */
@@ -192,9 +203,16 @@ public class Application extends Composite implements WindowResizeListener {
 //    contentLayout.setWidget(0, 0, contentTitleLayout);
 //    contentLayout.setWidget(1, 0, contentWrapper);
     TableData fd = new TableData();
-    fd.setWidth("100%");
+    fd.setWidth("800px");
     contentLayout.add(contentTitleLayout, fd);
     contentLayout.add(contentWrapper, fd);
+    
+
+
+    
+    
+//    contentLc = new VerticalPanel();
+//    contentLayout.add(contentLc, fd);
     
 //    formatter.setStyleName(1, 0, DEFAULT_STYLE_NAME + "-content-wrapper");
     setContent(null);
@@ -233,6 +251,16 @@ public class Application extends Composite implements WindowResizeListener {
     return mainMenu;
   }
 
+  
+  public static class MyTabPanel extends TabPanel {
+	  @Override
+	  protected void onRender(Element target, int index) {
+		  super.onRender(target, index);
+		  getLayoutTarget().setStyleAttribute("Width", "100%");
+		  
+		  System.out.println("this: "+this.toString());
+	  }
+  }
   /**
    * @return the {@link Widget} used as the title
    */
@@ -251,7 +279,8 @@ public class Application extends Composite implements WindowResizeListener {
     windowWidth = width;
     onWindowResizedImpl(width);
   }
-
+  TabPanel tabs = new MyTabPanel();
+  FormPanel formPanel = new FormPanel();
   /**
    * Set the {@link Widget} to display in the content area.
    * 
@@ -263,6 +292,61 @@ public class Application extends Composite implements WindowResizeListener {
     } else {
       contentWrapper.setWidget(content);
     }
+
+	  
+//	  ContentPanel contentPanel = new ContentPanel();
+//	  contentPanel.setHeaderVisible(false);
+//	  contentPanel.setLayout(new TableLayout(1));
+//	  
+//	  TabItem tab1 = new TabItem();
+//	  tab1.setText("tab1");
+//	  tab1.setLayout(new FormLayout());
+//	  tabs.add(tab1);
+////	  tabs.setWidth("auto");
+////	  tabs.setTabMargin(800);
+////	  tabs.setWidth(800);
+////	  tabs.setAutoWidth(true);
+////	  VerticalPanel tabs = new VerticalPanel();
+//	  
+//	  for(int i=0;i<20;i++) {
+//		  TextField<String> tf = new TextField<String>();
+//		  tf.setFieldLabel("field "+i);
+//		  if(i==4) {
+//			  tf.setWidth(400);
+//			  FormData fd1 = new FormData();
+//			  fd1.setWidth(400);
+//			  tab1.add(tf, fd1);
+//		  }
+//		  else if(i==6) {
+//			  tf.setWidth(600);
+//			  FormData fd1 = new FormData();
+//			  fd1.setWidth(600);
+//			  tab1.add(tf, fd1);			  
+//		  }
+//		  else {
+//			  tab1.add(tf);
+//		  }
+////		  formPanel.add(tf);
+////		  tabs.add(tf);
+//	  }
+//
+//	  tabs.setBodyBorder(false);
+////	  formPanel.add(tabs, new FormData("100%"));
+//	  formPanel.add(tabs);
+//
+//	  TableData td1 = new TableData();
+//	  td1.setWidth("100%");
+//	  contentPanel.add(formPanel, td1);
+//	  Button btnNew = new Button();  
+//	  btnNew.setText(Resources.constants.ok());        
+//	  formPanel.addButton(btnNew);
+//	  
+//	  System.out.println("TabPanel: "+tabs.toString());
+//	  
+//	  contentWrapper.setWidget(contentPanel);
+//	  
+//	  System.out.println("formPanel: "+formPanel+"</formPanel>");
+//	  System.out.println("bottomPanel: "+bottomPanel.toString()+"</bottomPanel>");
   }
 
   /**

@@ -2,7 +2,7 @@ package com.jcommerce.web.to;
 
 import com.jcommerce.core.model.Cart;
 import com.jcommerce.core.model.ModelObject;
-import com.jcommerce.web.util.FormatUtils;
+import com.jcommerce.web.util.WebFormatUtils;
 
 public class CartWrapper extends BaseModelWrapper {
 
@@ -21,9 +21,9 @@ public class CartWrapper extends BaseModelWrapper {
 	}
 	
 	public String getFormatedGoodsPrice() {
-		return FormatUtils.priceFormat(getCart().getGoodsPrice());
+		return WebFormatUtils.priceFormat(getCart().getGoodsPrice());
 	}
 	public String getFormatedSubtotal() {
-		return FormatUtils.priceFormat(getCart().getGoodsPrice() * getCart().getGoodsNumber());
+		return WebFormatUtils.priceFormat(getCart().getGoodsPrice() * getCart().getGoodsNumber());
 	}
 }

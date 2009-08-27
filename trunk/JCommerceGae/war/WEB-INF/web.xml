@@ -112,6 +112,11 @@
     </servlet-mapping>
     
     <servlet-mapping>
+        <servlet-name>dynaImageService</servlet-name>
+        <url-pattern>/web/front/data/brandlogo/dynaImageService.do</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
         <servlet-name>customized</servlet-name>
         <url-pattern>/admin/customizedService.do</url-pattern>
     </servlet-mapping>

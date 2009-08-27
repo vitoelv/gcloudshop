@@ -186,13 +186,7 @@ public class Category extends ModelObject {
 
 
 
-  public java.lang.Long getShowInNav() {
-    return showInNav;
-  }
 
-  public void setShowInNav(java.lang.Long newShowInNav) {
-    showInNav = newShowInNav;
-  }
 
 
 
@@ -233,5 +227,16 @@ public class Category extends ModelObject {
   public void setFilterAttr(java.lang.Long newFilterAttr) {
     filterAttr = newFilterAttr;
   }
+
+
+	public java.lang.Long getShowInNav() {
+		return showInNav;
+	}
+
+	public void setShowInNav(java.lang.Long showInNav) {
+		this.showInNav = showInNav;
+	}
+
+
 
 }

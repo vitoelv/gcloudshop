@@ -22,30 +22,23 @@ public class ShopConfigWrapper extends BaseModelWrapper {
 		return shopConfig;
 	}
 	
-	public Boolean getShowGoodsnumber() {
-		// a sample to wrap it
-//		if(getSC().getShowGoodsnumber() == true) {
-//			return Boolean.TRUE;
-//		}else {
-//			return null;
-//		}
-		return null;
-	}
-	
-	public Boolean getShowGoodssn() {
-		return null;
-	}
-	public Boolean getShowGoodsweight() {
-		return null;
-	}
-	public Boolean getShowBrand() {
-		return null;
-	}
-	public Boolean getShowAddtime() {
-		return null;
-	}
-	
-	public Boolean getShowMarketprice() {
-		return null;
-	}
+//	public Boolean getShowGoodsnumber() {
+//		return null;
+//	}
+//	public Boolean getShowGoodssn() {
+//		return null;
+//	}
+//	public Boolean getShowGoodsweight() {
+//		return null;
+//	}
+//	public Boolean getShowBrand() {
+//		return null;
+//	}
+//	public Boolean getShowAddtime() {
+//		return null;
+//	}
+//	
+//	public Boolean getShowMarketprice() {
+//		return null;
+//	}
 }

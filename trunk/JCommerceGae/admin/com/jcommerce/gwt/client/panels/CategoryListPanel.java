@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.data.BasePagingLoader;
+import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
@@ -36,6 +37,7 @@ import com.extjs.gxt.ui.client.widget.toolbar.PagingToolBar;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ListBox;
+import com.jcommerce.core.util.IConstants;
 import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
@@ -124,7 +126,16 @@ public class CategoryListPanel extends ContentWidget {
         //columns.add(sm.getColumn());        
         columns.add(new ColumnConfig(ICategory.CAT_NAME, "分类名称", 150));
         columns.add(new ColumnConfig(ICategory.MEASURE_UNIT, "数量单位", 80));
-        columns.add(new CheckColumnConfig(ICategory.SHOW_IN_NAV, "导航栏", 80));
+        columns.add(new CheckColumnConfig(ICategory.SHOW_IN_NAV, "导航栏", 80) {
+        	// TODO: wrap the code for Long type column into a baseclass
+        	  protected String getCheckState(ModelData model, String property, int rowIndex,
+        		      int colIndex) {
+        		    Long v = model.get(property);
+        		    // see IConstants.DBTYPE_TRUE
+        		    String on = (v != null && v==1) ? "-on" : "";
+        		    return on;
+        		  }
+        });
         columns.add(new CheckColumnConfig(ICategory.IS_SHOW, "是否显示", 80));        
         columns.add(new ColumnConfig(ICategory.GRADE, "价格分级", 60));
         columns.add(new ColumnConfig(ICategory.SORT_ORDER, "排序", 50));        
@@ -161,7 +172,7 @@ public class CategoryListPanel extends ContentWidget {
         panel.setHeading("Paging Grid");
         panel.setLayout(new FitLayout());
         panel.add(grid);
-        panel.setSize(750, 350);
+        panel.setSize(800, 350);
         panel.setBottomComponent(toolBar);
         
         panel.setButtonAlign(HorizontalAlignment.CENTER);
@@ -189,7 +200,7 @@ public class CategoryListPanel extends ContentWidget {
     private void modifyCategoryAndRefrsh(final String id) {    	
 		CategoryPanel.State newState = new CategoryPanel.State();
 		newState.setIsEdit(true);
-		newState.setCatID(id);
+		newState.setPkId(id);
 //		newState.setSelectedParentID(getCurState().getSelectedGoodsTypeID());
 		newState.execute();
 		

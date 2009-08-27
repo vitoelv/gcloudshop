@@ -25,10 +25,14 @@ import com.jcommerce.web.component.ComponentUrl;
 import com.jcommerce.web.component.Navigator;
 import com.jcommerce.web.front.action.helper.Pager;
 import com.jcommerce.web.to.CategoryWrapper;
+import com.jcommerce.web.to.HelpCat;
 import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.to.WrapperUtil;
+import com.jcommerce.web.to.HelpCat.HelpItem;
 import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class BaseAction extends ActionSupport implements IPageConstants, IWebConstants, IConstants{
@@ -49,7 +53,17 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 	
 	public ShopConfigWrapper getShopConfigWrapper() {
 		ShopConfig sc =  new ShopConfig();
-		return (ShopConfigWrapper)WrapperUtil.wrap(sc, ShopConfigWrapper.class);
+		ShopConfigWrapper scw = (ShopConfigWrapper)WrapperUtil.wrap(sc, ShopConfigWrapper.class);
+		scw.put("showGoodssn", "true");
+		scw.put("showGoodsnumber", "true");
+		scw.put("showBrand", "true");
+		scw.put("showGoodsweight", "true");
+		scw.put("showAddtime", "true");
+		scw.put("showMarketprice", "true");
+		scw.put("showGoodsnumber", "true");
+		scw.put("showGoodsnumber", "true");
+		scw.put("showGoodsnumber", "true");
+		return scw;
 	}
 	
 	public JSONObject getReqAsJSON(HttpServletRequest request, String paraName) {
@@ -139,7 +153,48 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 	}
 	public void includeComments(HttpServletRequest request) {
 	}
+
 	public void includeHelp(HttpServletRequest request) {
+		List<HelpCat> helps = new ArrayList<HelpCat>();
+		List<HelpItem> item = new ArrayList<HelpItem>();
+		item.add(new HelpItem("article.php?id=7", "订购方式", "订购方式"));
+		item.add(new HelpItem("article.php?id=7", "购物流程", "购物流程"));
+		item.add(new HelpItem("article.php?id=7", "售后流程", "售后流程"));
+		helps.add(new HelpCat("新手上路", item));
+		
+		item = new ArrayList<HelpItem>();
+		item.add(new HelpItem("article.php?id=7", "如何分辨水货手机", "如何分辨水货手机"));
+		item.add(new HelpItem("article.php?id=7", "如何享受全国联保", "如何享受全国联保"));
+		item.add(new HelpItem("article.php?id=7", "如何分辨原装电池", "如何分辨原装电池"));
+		helps.add(new HelpCat("手机常识", item));
+		
+		item = new ArrayList<HelpItem>();
+		item.add(new HelpItem("article.php?id=7", "支付方式说明", "支付方式说明"));
+		item.add(new HelpItem("article.php?id=7", "配送支付智能查询", "配送支付智能查询"));
+		item.add(new HelpItem("article.php?id=7", "货到付款区域", "货到付款区域"));
+		helps.add(new HelpCat("配送与支付", item));
+		
+		item = new ArrayList<HelpItem>();
+		item.add(new HelpItem("article.php?id=7", "产品质量保证", "产品质量保证"));
+		item.add(new HelpItem("article.php?id=7", "售后服务保证", "售后服务保证"));
+		item.add(new HelpItem("article.php?id=7", "退换货原则", "退换货原则"));
+		helps.add(new HelpCat("服务保证", item));
+		
+		item = new ArrayList<HelpItem>();
+		item.add(new HelpItem("article.php?id=7", "投诉与建议", "投诉与建议"));
+		item.add(new HelpItem("article.php?id=7", "选机咨询", "选机咨询"));
+		item.add(new HelpItem("article.php?id=7", "网站故障报告", "网站故障报告"));
+		helps.add(new HelpCat("联系我们", item));
+		
+		item = new ArrayList<HelpItem>();
+		item.add(new HelpItem("article.php?id=7", "我的订单", "我的订单"));
+		item.add(new HelpItem("article.php?id=7", "我的收藏", "我的收藏"));
+		item.add(new HelpItem("article.php?id=7", "资金管理", "资金管理"));
+		helps.add(new HelpCat("会员中心", item));
+		
+		request.setAttribute("helps", helps);
+		
+		
 	}
 	public void includePageHeader(HttpServletRequest request) {
         // Navigator ............
@@ -151,6 +206,16 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
         nav.addTop(new ComponentUrl("group_by.action", getText("buy_by_group"), 1));
         nav.addTop(new ComponentUrl("snatch.action", getText("snatch"), 1));
         nav.addTop(new ComponentUrl("tag_cloud.action", getText("tag_cloud"), 1));
+        
+        nav.addBottom(new ComponentUrl("article.action?id=1", getText("免责条款"), 1));
+        nav.addBottom(new ComponentUrl("article.action?id=2", getText("隐私保护"), 1));
+        nav.addBottom(new ComponentUrl("article.action?id=3", getText("咨询热点"), 1));
+        nav.addBottom(new ComponentUrl("article.action?id=4", getText("联系我们"), 1));
+        nav.addBottom(new ComponentUrl("article.action?id=5", getText("公司简介"), 1));
+        nav.addBottom(new ComponentUrl("wholesale.action", getText("批发方案"), 1));
+        nav.addBottom(new ComponentUrl("myship.action", getText("配送方式"), 1));
+        
+        
         
         nav.getConfig().put("index", 1);
 
@@ -217,6 +282,7 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 		debug("locale: "+obj);
 		
         setPageMeta(request);
+        includeHelp(request);
         includePageFooter(request);
         getLangMap(request);
         includePageHeader(request);

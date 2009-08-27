@@ -141,15 +141,18 @@ public class GoodsForm extends BeanObject implements IGoods {
 		field.setName(THUMB);
 		return field;
 	}
-	public static TextField<String> getWeightField(String fieldTitle) {
-		TextField<String> field = new TextField<String>();
+	public static NumberField getWeightField(String fieldTitle) {
+		NumberField field = new NumberField();
 		field.setName(GOODS_WEIGHT);
+		field.setAllowNegative(false);
 		return field;
 	}
 	
-	public static TextField<String> getNumberField(String fieldTitle) {
-		TextField<String> field = new TextField<String>();
+	public static NumberField getNumberField(String fieldTitle) {
+		NumberField field = new NumberField();
 		field.setName(GOODS_NUMBER);
+		field.setAllowNegative(false);
+		field.setAllowDecimals(false);
 		return field;
 	}
 	
@@ -170,6 +173,14 @@ public class GoodsForm extends BeanObject implements IGoods {
 	public static CheckBox getBestSoldField() {
 		CheckBox field = new CheckBox();
 		field.setName(IS_BEST);
+		field.setValueAttribute("true");
+		field.setAutoValidate(true);
+		return field;
+	}
+	
+	public static CheckBox getIsOnSaleField() {
+		CheckBox field = new CheckBox();
+		field.setName(IS_ON_SALE);
 		field.setValueAttribute("true");
 		field.setAutoValidate(true);
 		return field;

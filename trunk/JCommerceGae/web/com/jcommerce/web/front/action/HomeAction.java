@@ -77,6 +77,7 @@ public class HomeAction extends BaseAction {
             Integer goodsNum = getDefaultManager().getCount(ModelNames.GOODS, criteria);
             BrandWrapper bw = new BrandWrapper(brand);
             bw.put("goodsNum", goodsNum);
+            bw.put("brandLogo", "dynaImageService.do?fileId="+brand.getLogoFileId());
             brandInfoList.add(bw);
             criteria.removeAllCondition();
         }        

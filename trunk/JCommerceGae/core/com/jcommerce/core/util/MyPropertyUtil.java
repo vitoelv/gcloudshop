@@ -196,7 +196,8 @@ public class MyPropertyUtil {
             	_props.put(fn, value);
             	continue;
             }
-
+            
+            
             if (ModelObject.class.isAssignableFrom(type)) {
                 String bean = type.getSimpleName();
                 if (value instanceof String) {

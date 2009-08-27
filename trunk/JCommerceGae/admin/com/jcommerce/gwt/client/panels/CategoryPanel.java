@@ -1,70 +1,43 @@
 package com.jcommerce.gwt.client.panels;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import com.extjs.gxt.ui.client.widget.Info;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.TextBox;
-import com.jcommerce.gwt.client.ContentWidget;
-import com.jcommerce.gwt.client.JCommerceGae;
+import com.extjs.gxt.ui.client.store.ListStore;
+import com.extjs.gxt.ui.client.widget.form.ComboBox;
+import com.extjs.gxt.ui.client.widget.form.NumberField;
+import com.extjs.gxt.ui.client.widget.form.Radio;
+import com.extjs.gxt.ui.client.widget.form.RadioGroup;
+import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.jcommerce.gwt.client.ModelNames;
-import com.jcommerce.gwt.client.PageState;
-import com.jcommerce.gwt.client.ValidationException;
-import com.jcommerce.gwt.client.form.AttributeForm;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.CategoryForm;
 import com.jcommerce.gwt.client.model.ICategory;
-import com.jcommerce.gwt.client.service.CreateService;
 import com.jcommerce.gwt.client.service.ListService;
-import com.jcommerce.gwt.client.service.ReadService;
-import com.jcommerce.gwt.client.service.UpdateService;
-import com.jcommerce.gwt.client.widgets.ColumnPanel;
+import com.jcommerce.gwt.client.widgets.MyRadioGroup;
 
 /**
  * Example file.
  */
-public class CategoryPanel extends ContentWidget {    	
-	private ListBox c_parent = new ListBox();
-    private Button btnNew = new Button();    
-    private Button btnCancel = new Button();    
-    private ColumnPanel contentPanel = new ColumnPanel();
-    
-    private Map<String, BeanObject> categorys = new HashMap<String, BeanObject>();
-
-    private boolean editting = false;
-//    private BeanObject category = null;
-    
-	public static class State extends PageState {
-		public static final String ISEDIT = "isedit";
-		public static final String CAT_ID = "catid";
+public class CategoryPanel extends BaseEntityEditPanel {    
+	
+	@Override
+	public String getEntityClassName() {
+		return ModelNames.CATEGORY; 
+	}
+	
+	ListStore<BeanObject> categoryList;
+	ComboBox<BeanObject> fParentId;
+	RadioGroup mfIsShow;
+	RadioGroup mfShowInNav;
+	
+	public static class State extends BaseEntityEditPanel.State {
 		public static final String SELECTED_PARENT_ID = "parentId";
 		
 		public String getPageClassName() {
 			return CategoryPanel.class.getName();
 		}
-		
-		public void setIsEdit(boolean isEdit){
-			setValue(ISEDIT, String.valueOf(isEdit));
-		}
-		public boolean getIsEdit() {
-			return Boolean.valueOf((String)getValue(ISEDIT)).booleanValue();
-		}
-		public void setCatID(String catid) {
-			setValue(CAT_ID, catid);
-		}
-		public String getCatID() {
-			return (String)getValue(CAT_ID);
+		public String getMenuDisplayName() {
+			return "New Category";
 		}
 	}
 	private State curState = new State();
@@ -93,7 +66,7 @@ public class CategoryPanel extends ContentWidget {
     }
 
     public String getName() {
-    	if (!editting)
+    	if(!getCurState().getIsEdit())
 			return "添加分类";
 		else
 			return "编辑分类";    	
@@ -101,122 +74,115 @@ public class CategoryPanel extends ContentWidget {
     
 
     
-    protected void onRender(Element parent, int index) {
-        super.onRender(parent, index);
-        System.out.println("----------NewCategory");
-        add(contentPanel);
-       
-        contentPanel.createPanel(ICategory.CAT_NAME, "分类名称:", new TextBox());
-//        contentPanel.createPanel(ICategory.PARENT, "上级分类:", c_parent);   
-        contentPanel.createPanel(ICategory.PARENT_ID, "上级分类:", c_parent);        
-        contentPanel.createPanel(ICategory.MEASURE_UNIT, "数量单位:", new TextBox());
-        contentPanel.createPanel(ICategory.SORT_ORDER, "排序:", new TextBox());
-        contentPanel.createPanel(ICategory.IS_SHOW, "是否显示:", new CheckBox());
-        contentPanel.createPanel(ICategory.SHOW_IN_NAV, "是否显示在导航栏:", new CheckBox());
-        contentPanel.createPanel(ICategory.GRADE, "价格区间个数:", new TextBox());
-        contentPanel.createPanel(ICategory.STYLE, "分类的样式表文件:", new TextBox());
-        contentPanel.createPanel(ICategory.KEYWORDS, "关键字:", new TextBox());
-        contentPanel.createPanel(ICategory.CAT_DESC, "分类描述:", new TextArea());
-        
-        HorizontalPanel panel = new HorizontalPanel();
-        panel.setSpacing(10);
-        btnNew.setText("确定");        
-        btnCancel.setText("重置");
-        panel.add(btnNew);        
-        panel.add(btnCancel);
-        contentPanel.createPanel(null, null, panel);      
-        
-        btnNew.addClickHandler(new ClickHandler() {
+    @Override
+    public void setupPanelLayout() {
+        System.out.println("----------CategoryPanel");
 
-            public void onClick(ClickEvent event) {
-            	String id = getCurState().getCatID();
-                CategoryForm category = new CategoryForm(ModelNames.CATEGORY, contentPanel.getValues());
-                try {
-                	category.validate();
-                } catch (ValidationException ex){
-                	// TODO leon need a common validation handling 
-                	Window.alert(ex.getMessage());
-                	return;
-                }
-            	if(getCurState().getIsEdit()) {
-            		new UpdateService().updateBean(id, category, new UpdateService.Listener() {
-                        public synchronized void onSuccess(Boolean success) {
-                        	Success.State newState = new Success.State();
-                        	newState.setMessage("编辑商品分类成功");
-                        	
-                        	CategoryListPanel.State choice1 = new CategoryListPanel.State();
-                        	newState.addChoice(CategoryListPanel.getInstance().getName(), choice1.getFullHistoryToken());
-                        	
-                        	newState.execute();
-                        }
-                    });
-            	} else {
-                    new CreateService().createBean(category, new CreateService.Listener() {
-                        public synchronized void onSuccess(String id) {
-                            System.out.println("new onSuccess( "+id);                            
-                            getCurState().setCatID(id);
-                            System.out.println("1 b_list.addItem("+id);
-                            contentPanel.setValue(AttributeForm.PK_ID, id);
-                            
-                        	Success.State newState = new Success.State();
-                        	newState.setMessage("添加商品分类成功");
-                        	
-                        	CategoryListPanel.State choice1 = new CategoryListPanel.State();
-                        	newState.addChoice(CategoryListPanel.getInstance().getName(), choice1.getFullHistoryToken());
-                        	
-                        	newState.execute();
-                            
-                        }
-                    });
-            	}
-            }
-        });
+        TextField<String> fText = CategoryForm.getNameField("分类名称：");
+        fText.setFieldLabel("分类名称");
+        formPanel.add(fText, sfd());
+        
+        categoryList = new ListStore<BeanObject>();
+        fParentId = CategoryForm.getParentIdField();
+        fParentId.setFieldLabel("上级分类");
+        fParentId.setStore(categoryList);
+        fParentId.setEmptyText("顶级分类");
+        formPanel.add(fParentId, sfd());
+        
+        fText = CategoryForm.getMeasureUnitField();
+        fText.setFieldLabel("数量单位");
+        formPanel.add(fText, sfd());
+        
+        NumberField fNum = CategoryForm.getSortOrderField();
+        fNum.setFieldLabel("排序");
+        formPanel.add(fNum, tfd());
 
-        btnCancel.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                contentPanel.clearValues();
-            }            
-        });        
+        mfIsShow = new MyRadioGroup();
+		formPanel.add(mfIsShow, sfd());
+		mfIsShow.setFieldLabel("是否显示");
+		mfIsShow.setName(ICategory.IS_SHOW);
+
+		mfIsShow.setSelectionRequired(true);
+		Radio yes = new Radio();
+		yes.setName(ICategory.IS_SHOW);
+		yes.setValueAttribute("true");
+		yes.setBoxLabel("是");
+		mfIsShow.add(yes);
+		
+		Radio no = new Radio();
+		no.setName(ICategory.IS_SHOW);
+		no.setValueAttribute("false");
+		no.setBoxLabel("否");
+		mfIsShow.add(no);
+        
+		
+
+		
+		mfShowInNav = new MyRadioGroup();
+		mfShowInNav.setFieldLabel("是否显示在导航栏");
+		mfShowInNav.setName(ICategory.SHOW_IN_NAV);
+		mfShowInNav.setSelectionRequired(true);
+		yes = new Radio();
+		yes.setName(ICategory.SHOW_IN_NAV);
+		yes.setValueAttribute("1");
+		yes.setBoxLabel("是");
+		mfShowInNav.add(yes);
+		
+		no = new Radio();
+		no.setName(ICategory.SHOW_IN_NAV);
+		no.setValueAttribute("0");
+		no.setBoxLabel("否");
+		mfShowInNav.add(no);
+        
+		formPanel.add(mfShowInNav, sfd());
+		
+        fText = CategoryForm.getGradeField();
+        fText.setFieldLabel("？价格区间个数");
+        fText.setToolTip("该选项表示该分类下商品最低价与最高价之间的划分的等级个数，填0表示不做分级，最多不能超过10个。");
+        formPanel.add(fText, tfd());
+        
+        fText = CategoryForm.getStyleField();
+        fText.setFieldLabel("？分类的样式表文件");
+        fText.setToolTip("您可以为每一个商品分类指定一个样式表文件。例如文件存放在 themes 目录下则输入：themes/style.css");
+        formPanel.add(fText, tfd());
+
     }   
     
-    public void refresh() {
-    	c_parent.clear();
-//    	c_parent.addItem("",null);
-        
-        new ListService().listBeans(ModelNames.CATEGORY, new ListService.Listener() {            
-            public synchronized void onSuccess(List<BeanObject> beans) {
-            	c_parent.insertItem("请选择。。。", null, 0);
-            	int i=1;
-                for (Iterator<BeanObject> it = beans.iterator(); it.hasNext();) {
-                    BeanObject category = it.next();                    
-                    c_parent.insertItem(category.getString(ICategory.CAT_NAME), category.getString(ICategory.PK_ID), i);
-                    i++;
-                }      
-                
-                contentPanel.clearValues();
-                if(getCurState().getIsEdit()) {
-                	new ReadService().getBean(ModelNames.CATEGORY, getCurState().getCatID(),
-        				new ReadService.Listener() {
-                		public void onSuccess(BeanObject bean) {
-                			Map<String, Object> mapAttribute = bean.getProperties();
-                			// TODO leon
-                			// this will not correctly set the selected value for lstGoodsType, 
-                			// as the last async query for listGoodsType has not finished
-                			contentPanel.updateValues(mapAttribute);
-                		}
-                	});
-                }
-            }
-        });
+//    @Override
+//    public void beforeSubmit() {
+//
+//    	mfIsShow.setName(ICategory.IS_SHOW);
+//    	mfShowInNav.setName(ICategory.SHOW_IN_NAV);
+//    }
+    
+    
+    @Override
+    public void postSuperRefresh() {
+    	
+		new ListService().listBeans(ModelNames.CATEGORY, new ListService.Listener() {
+			@Override
+			public void onSuccess(List<BeanObject> beans) {
+		    	categoryList.removeAll();
+				categoryList.add(beans);
+				populateField(fParentId);
+			}
+		});
+		
 
-//        if (this.category!=null&&this.category.getString(ICategory.ID) != null) {
-//            categorys.put(this.category.getString(ICategory.ID), this.category);
-//            Map<String, Object> mapCategory = category.getProperties();
-//            contentPanel.updateValues(mapCategory);
-//        }
-//        else{
-//        	contentPanel.clearValues();
-//            editting = false;
-//            }
     }
+    
+	@Override
+	public void gotoSuccessPanel() {
+    	Success.State newState = new Success.State();
+    	if(!getCurState().getIsEdit()) {
+    		newState.setMessage("添加商品分类成功");
+    	} else {
+    		newState.setMessage("修改商品分类成功");
+    	}
+    	
+    	CategoryListPanel.State choice1 = new CategoryListPanel.State();
+    	newState.addChoice(CategoryListPanel.getInstance().getName(), choice1.getFullHistoryToken());
+    	
+    	newState.execute();
+	}
 }

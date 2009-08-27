@@ -55,7 +55,7 @@ class GoodsAttributePanel  extends TabItem {
 
     private void init() {
     	
-    	setLayout(new FormLayout());
+    	setLayout(goodsPanel.getFormLayout());
     	
         goodsTypeList = new ListStore<BeanObject>();
         fListTypes = GoodsForm.getGoodsTypeIdField();
@@ -69,7 +69,7 @@ class GoodsAttributePanel  extends TabItem {
         fListTypes.setWidth(150);   
         fListTypes.setTypeAhead(true);   
         fListTypes.setTriggerAction(TriggerAction.ALL);   
-        add(fListTypes);
+        add(fListTypes, goodsPanel.sfd());
         
         
         fListTypes.addSelectionChangedListener(new SelectionChangedListener<BeanObject>() {        	
