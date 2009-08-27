@@ -3,6 +3,8 @@ package com.jcommerce.gwt.server;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.google.appengine.api.datastore.Blob;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.DSFile;
@@ -66,7 +68,9 @@ public class BrandGWTAction extends BaseGWTHttpAction {
     		String oldLogoFileId = brand.getLogoFileId();
     		System.out.println("oldLogoFileId: "+oldLogoFileId);
     		
-    		manager.txdelete(DSFile.class.getName(), oldLogoFileId);
+    		if(StringUtils.isNotEmpty(oldLogoFileId)) {
+    			manager.txdelete(DSFile.class.getName(), oldLogoFileId);
+    		}
 
     		Brand to = form2To(form);
     		to.setLogoFileId(newLogoFileId);
@@ -90,8 +94,9 @@ public class BrandGWTAction extends BaseGWTHttpAction {
     		Brand brand = (Brand)manager.get(Brand.class.getName(), id);
     		String oldLogoFileId = brand.getLogoFileId();
     		System.out.println("oldLogoFileId: "+oldLogoFileId);
-    		
-    		manager.txdelete(DSFile.class.getName(), oldLogoFileId);
+    		if(StringUtils.isNotEmpty(oldLogoFileId)) {
+    			manager.txdelete(DSFile.class.getName(), oldLogoFileId);
+    		}
         	res = manager.txdelete(Brand.class.getName(), id);
     		
     	} catch (Exception ex) {

@@ -17,9 +17,8 @@ keyName,brandName,brandLogo,brandDesc,siteUrl,isShow,sortOrder
 Brand:_brand1,微软,,microsoft,,false,0
 Brand:_brand2,诺基亚,,nokia,,false,0
 
-<!--
+
 ::com.jcommerce.core.model.Category
 keyName,parentId,catName,keywords,catDesc,sortOrder,templateFile,measureUnit,showInNav,style,isShow,grade
-Category:_cat1,,手机通讯,,,0,,台,true,,true,0
-Category:_cat2,,电脑,,,0,,台,true,,true,0
--->
+Category:_cat1,,手机通讯,,,0,,台,1,,true,0
+Category:_cat2,,电脑,,,0,,台,1,,true,0

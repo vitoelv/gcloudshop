@@ -161,7 +161,8 @@ public class DefaultManagerImpl implements IDefaultManager {
 	        for(PropertyDescriptor pd:srcDescriptors) {
 	        	String name = pd.getName();
 	        	Class type = pd.getPropertyType();
-	        	debug("name="+name+", type="+type);
+	        	Object val = PropertyUtils.getProperty(to, name);
+	        	debug("name="+name+", type="+type+", val="+val);
 	        	if ( ModelObject.class.isAssignableFrom(type)) {
 	        		ModelObject toPopulate = (ModelObject)PropertyUtils.getProperty(to, name);
 	        		if(toPopulate == null) {

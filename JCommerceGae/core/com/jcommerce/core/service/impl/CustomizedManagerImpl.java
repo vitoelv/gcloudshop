@@ -90,9 +90,9 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     		to.setKeyName(goodskn);
     		// TODO need overcome the checkbox issue
     		// just for test with Web Home page. 
-    		to.setIsBest(true);
-    		to.setIsNew(true);
-    		to.setIsHot(true);
+//    		to.setIsBest(true);
+//    		to.setIsNew(true);
+//    		to.setIsHot(true);
     		to.setLongId(UUIDLongGenerator.newUUID());
     		
     		Set<GoodsGallery> galleries = to.getGalleries();

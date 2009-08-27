@@ -45,7 +45,6 @@ public class GoodsAction extends BaseAction {
         includeGoodsTags(request);
         includeBoughtGoods(request);
         includeComments(request);
-        includeHelp(request);
         
         // goods logic
         

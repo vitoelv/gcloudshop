@@ -5,6 +5,7 @@ import org.apache.commons.lang.StringUtils;
 import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.model.URLConstants;
+import com.jcommerce.web.util.WebFormatUtils;
 
 public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
 	
@@ -27,6 +28,9 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
     public Long getGoodsId() {
     	return getGoods().getLongId();
     }
+    public String getName() {
+    	return getGoods().getGoodsName();
+    }
     public String getGoodsImg() {
     	return SERVLET_IMAGE+getGoods().getImageFileId();
     }
@@ -37,7 +41,7 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
     	return getGoods().getGoodsName().length()>10? getGoods().getGoodsName().substring(0, 10)+"...":getGoods().getGoodsName();
     }
     public String getGoodsStyleName() {
-    	return StringUtils.defaultIfEmpty(getGoods().getGoodsNameStyle(), "goodsStyleName");
+    	return StringUtils.defaultIfEmpty(getGoods().getGoodsNameStyle(), getGoods().getGoodsName());
     }
     public String getMeasureUnit() {
     	return "TODO measureUnit";
@@ -48,8 +52,8 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
     public String getGoodsBrand() {
     	return "TODO brandName: ";
     }
-    public String getShopPriceFormatted() {
-    	return ""+getGoods().getShopPrice();
+    public String getShopPriceFormated() {
+    	return WebFormatUtils.priceFormat(getGoods().getShopPrice());
     }
     
     public String getCommentRank() {
@@ -65,7 +69,7 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
     }
     
     public String getPromotePrice() {
-    	return String.valueOf(getGoods().getPromotePrice());
+    	return WebFormatUtils.priceFormat(getGoods().getPromotePrice());
     }
     
 //    public String getGoodsNumber() {

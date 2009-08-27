@@ -31,7 +31,7 @@ import com.jcommerce.web.to.RegionWrapper;
 import com.jcommerce.web.to.ShippingWrapper;
 import com.jcommerce.web.to.Total;
 import com.jcommerce.web.to.WrapperUtil;
-import com.jcommerce.web.util.FormatUtils;
+import com.jcommerce.web.util.WebFormatUtils;
 import com.opensymphony.xwork2.ActionContext;
 
 public class FlowAction extends BaseAction {
@@ -319,8 +319,8 @@ public class FlowAction extends BaseAction {
     		total.setGoodsPrice(total.getGoodsPrice() + cart.getGoodsPrice());
     		total.setMarketPrice(total.getMarketPrice() + cart.getMarketPrice());
     	}
-    	total.setFormatedGoodsPrice(FormatUtils.priceFormat(total.getGoodsPrice()));
-    	total.setFormatedMarketPrice(FormatUtils.priceFormat(total.getMarketPrice()));
+    	total.setFormatedGoodsPrice(WebFormatUtils.priceFormat(total.getGoodsPrice()));
+    	total.setFormatedMarketPrice(WebFormatUtils.priceFormat(total.getMarketPrice()));
     	return total;
     }
     private List<PaymentWrapper> availablePaymentList() {
@@ -438,7 +438,6 @@ public class FlowAction extends BaseAction {
 	        
 	        includeUrHere(request);
 			includeOrderTotal(request);
-			includeHelp(request);
 			
 			String step = request.getParameter(KEY_STEP);
 			debug("step: "+step);

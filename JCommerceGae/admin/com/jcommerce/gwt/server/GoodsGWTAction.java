@@ -18,6 +18,7 @@ import com.jcommerce.gwt.client.form.GoodsForm;
 import com.jcommerce.gwt.client.model.IGoods;
 import com.jcommerce.gwt.client.model.IGoodsAttr;
 import com.jcommerce.gwt.client.model.IGoodsGallery;
+import com.jcommerce.gwt.server.util.ServerFormatUtil;
 
 public class GoodsGWTAction extends BaseGWTHttpAction {
 	
@@ -128,6 +129,15 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
 		GoodsForm bean = new GoodsForm(Goods.class.getName(), form);
 		MyPropertyUtil.form2To(to, bean.getProperties());
 		
+		
+		String sDateStart = (String)form.get(IGoods.PROMOTE_START_DATE);
+		String sDateEnd = (String)form.get(IGoods.PROMOTE_END_DATE);
+		// will cause error: GWT.create() is only usable in client code!
+//		to.setPromoteStartDate(DateTimeFormat.getShortDateFormat().parse(sDateStart).getTime());
+//		to.setPromoteEndDate(DateTimeFormat.getShortDateFormat().parse(sDateEnd).getTime());
+		
+		to.setPromoteStartDate(ServerFormatUtil.parseShortDate(sDateStart).getTime());
+		to.setPromoteEndDate(ServerFormatUtil.parseShortDate(sDateEnd).getTime());
 		
 		to.setImageFile(imageFile);
 		to.setThumbFile(thumbFile);

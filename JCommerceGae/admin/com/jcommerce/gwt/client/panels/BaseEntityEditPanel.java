@@ -2,6 +2,7 @@ package com.jcommerce.gwt.client.panels;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.CheckBox;
+import com.extjs.gxt.ui.client.widget.form.CheckBoxGroup;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.extjs.gxt.ui.client.widget.form.DateField;
 import com.extjs.gxt.ui.client.widget.form.Field;
@@ -19,10 +21,14 @@ import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.HiddenField;
 import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
 import com.extjs.gxt.ui.client.widget.form.ListField;
+import com.extjs.gxt.ui.client.widget.form.MultiField;
 import com.extjs.gxt.ui.client.widget.form.NumberField;
+import com.extjs.gxt.ui.client.widget.form.Radio;
+import com.extjs.gxt.ui.client.widget.form.RadioGroup;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
-import com.google.gwt.user.client.Element;
+import com.extjs.gxt.ui.client.widget.layout.FormData;
+import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.google.gwt.user.client.Window;
 import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.Logger;
@@ -64,17 +70,24 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 	
     Button btnNew = new Button();    
     Button btnReset = new Button();    
-    protected void onRender(Element parent, int index) {
-    	super.onRender(parent, index);
+    
+    
+//    protected void onRender(Element parent, int index) {
+//    super.onRender(parent, index);
+    protected void afterRender() {
+    	super.afterRender();
         System.out.println("----------GoodsType");
 //        add(formPanel);
         super.add(formPanel);
-//        super.add
+//        formPanel.setBodyBorder(false);
+        formPanel.setWidth(800);
         
+        FormLayout fl = new FormLayout();
+        fl.setLabelWidth(150);
+        fl.setLabelPad(50);
+        formPanel.setLayout(fl);
         setupPanelLayout();
-        
-//      HorizontalPanel panel = new HorizontalPanel();
-//      panel.setSpacing(10);
+
       btnNew.setText(Resources.constants.ok());        
       btnReset.setText(Resources.constants.reset());
 //      panel.add(btnNew);         
@@ -95,7 +108,21 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
       		}
       	);
     }
-    
+    // get the setting for long field
+	public FormData lfd() {
+		FormData fd = new FormData(500, -1);
+		return fd;
+	}
+    // get the setting for short field
+	public FormData sfd() {
+		FormData fd = new FormData(300, -1);
+		return fd;
+	}
+    // get the setting for tiny field
+	public FormData tfd() {
+		FormData fd = new FormData(100, -1);
+		return fd;
+	}
 	protected SelectionListener<ButtonEvent> selectionListener = new SelectionListener<ButtonEvent>() {
 	    public void componentSelected(ButtonEvent sender) {
 	    	log("on Submit: formPanel="+formPanel);
@@ -110,6 +137,7 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 	    		gotoSuccessPanel();
 	    		return;
 	    	}
+	    	beforeSubmit();
 	    	submit();
 	    	} catch (Exception e) {
 	    		e.printStackTrace();
@@ -117,14 +145,25 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 	    }
 	};
 	
+	protected void beforeSubmit() {
+		// do nothing
+	}
 	protected void submit() {
 		// default implementation is thru GWT-RPC
     	List<Field<?>> fields = formPanel.getFields();
     	
     	Map<String, Object> props = new HashMap<String, Object>();
     	for(Field field:fields) {
-    		log("name: "+field.getName()+", value: ("+field.getValue()+")");
-    		props.put(field.getName(), field.getValue());
+    		String name = field.getName();
+    		Object value = field.getValue();
+    		if(field instanceof RadioGroup) {
+    			Radio selected = (Radio)value;
+    			name = selected.getName();
+
+    			value = selected.getValueAttribute();
+    		}
+    		log("name: "+field.getName()+", value: ("+value+")");
+    		props.put(name, value);
     	}
     	BeanObject form = new BeanObject(getEntityClassName(), props);
     	if (getCurState().getIsEdit()) {
@@ -190,8 +229,28 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 		Map<String, Object> mapAttribute = obj.getProperties();
 			String name = field.getName();
 			Object value = mapAttribute.get(name);        				
-			log("name:"+name+", value:"+(value==null?"null":value.toString()+", valueclass: "+value.getClass().getName()));
+			log("[populateField]: name:"+name+", value:"+(value==null?"null":value.toString()+", valueclass: "+value.getClass().getName()));
 
+			if(field instanceof CheckBoxGroup) {
+				List<Field<?>> boxes = (List<Field<?>>)((CheckBoxGroup)field).getAll();
+				for(Field b:boxes) {
+					CheckBox box = (CheckBox)b;
+					populateField(box);
+				}
+				return;
+			}
+			if(field instanceof RadioGroup) {
+				// go on
+			}
+			else if(field instanceof MultiField) {
+				List<Field<?>> subFields = ((MultiField)field).getAll();
+				for(Field subField:subFields) {
+					populateField(subField);
+				}
+				return;
+			}
+			
+			
 			if(value==null) {
 				return;
 			}
@@ -220,21 +279,51 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 				}
 				lf.setSelection(selection);
 				
+			} else if(field instanceof DateField) {
+				log("TODO: convert date format?? using gxt-DateTimePropertyEditor");
+				DateField df = ((DateField)field);
+				if(value instanceof Long) {
+					df.setValue(new Date((Long)value));
+				}
+				else if(value instanceof Date){
+					df.setValue((Date)value);
+				}				
 			} else if(field instanceof TextField || field instanceof TextArea || field instanceof HtmlEditor) {
 				field.setOriginalValue(value);
 				field.setValue(value);
 			} else if (field instanceof CheckBox) {
 				((CheckBox)field).setValue((Boolean)value);
+
 			} else if (field instanceof HiddenField) {
 				((HiddenField)field).setValue(value);
 			} else if(field instanceof NumberField) {
 				((NumberField)field).setOriginalValue((Number)value);
 				((NumberField)field).setValue((Number)value);
-			} else if(field instanceof DateField) {
-				log("TODO: convert date format??");
-//				((NumberField)field).setOriginalValue((Number)value);
-//				((NumberField)field).setValue((Number)value);
+
+			} else if(field instanceof RadioGroup) {
+				RadioGroup rg = (RadioGroup)field;
+				List<Field<?>> radios = (List<Field<?>>)rg.getAll();
+				for(Field<?> r:radios) {
+					Radio radio = (Radio)r;
+					if(value.toString().equals(radio.getValueAttribute())) {
+						radio.setRawValue("true");						
+					}
+					else {
+						radio.setRawValue("false");
+					}
+				}
+				
 			}
+			else if(field instanceof CheckBox) {
+				CheckBox box = (CheckBox)field;
+				if(value.toString().equals(box.getValueAttribute())) {
+					box.setRawValue("true");
+				}
+				else {
+					box.setRawValue("false");
+				}
+			}
+
 	}
 	
 	public void populateFields() {

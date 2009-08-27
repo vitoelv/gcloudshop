@@ -193,7 +193,10 @@ public class JCommerceGae implements EntryPoint, ValueChangeHandler<String>, GWT
         Tree mainMenu = app.getMainMenu();      
         
         TreeItem catGoods = mainMenu.addItem(Resources.constants.categoryGoods());
+        setupMainMenuOption(catGoods, new CategoryPanel.State(), Resources.images.catWidgets());
 		setupMainMenuOption(catGoods, new GoodsPanel.State(), Resources.images.catWidgets());      
+		
+        setupMainMenuOption(catGoods, new BrandPanel.State(), Resources.images.catWidgets());
 		setupMainMenuOption(catGoods, new GoodsListPanel.State(), Resources.images.catWidgets());
 		setupMainMenuOption(catGoods, new GoodsTypeListPanel.State(), Resources.images.catWidgets());
       	setupMainMenuOption(catGoods, new BrandListPanel.State(), Resources.images.catWidgets());
@@ -470,54 +473,10 @@ public class JCommerceGae implements EntryPoint, ValueChangeHandler<String>, GWT
 		return page;
 	}
 	
-    //显示新建品牌页
-//    public void displayNewBrand(){ 
-//    	BrandPanel brandPanel = (BrandPanel)getPage(BrandPanel.class.getName());
-//    	brandPanel.setBrand(null);
-//    	displayContentWidget(brandPanel);
-//    }
-    
-    //显示修改品牌页
-//    public void displayModifyBrand(BeanObject brand){    	
-//    	BrandPanel brandPanel = (BrandPanel)getPage(BrandPanel.class.getName());
-//    	brandPanel.setBrand(brand);
-//    	displayContentWidget(brandPanel);    	
-//    }
-    //显示品牌列表主页
-//    public void displayBrandInfo(){    	
-//    	BrandListPanel brandListPanel = (BrandListPanel)getPage(BrandListPanel.class.getName());
-//    	displayContentWidget(brandListPanel);
-//    	brandListPanel.refresh();
-//    }
-    
     //显示商品列表主页        
     public void displayGoodsList(){    	
     	GoodsListPanel goodsListPanel = (GoodsListPanel)getPage(GoodsListPanel.class.getName());
     	displayContentWidget(goodsListPanel);
     }
-    // 显示新建货物或修改货物页
-//    public void displayGoodsPanel(BeanObject goods) {
-//    	NewGoods newGoods = (NewGoods)getPage(NewGoods.class.getName());
-//    	newGoods.setGoods(goods);
-//        displayContentWidget(newGoods);
-//    }
-    
-    //显示修改商品分类页
-//    public void displayModifyCategory(BeanObject category){    	
-//    	NewCategory newCategory = (NewCategory)getPage(NewCategory.class.getName());
-//    	newCategory.setCategory(category);
-//    	displayContentWidget(newCategory);    	
-//    }
-    //显示商品分类列表主页
-//    public void displayCategoryInfo(){    	
-//    	CategoryListPanel categoryListPanel = (CategoryListPanel)getPage(CategoryListPanel.class.getName());
-//    	displayContentWidget(categoryListPanel);
-//    	categoryListPanel.refresh();
-//    }
-    //显示新建商品分类页
-//    public void displayNewCategory(){
-//    	NewCategory newCategory = (NewCategory)getPage(NewCategory.class.getName());
-//    	newCategory.setCategory(null);
-//    	displayContentWidget(newCategory);
-//    }
+
 }

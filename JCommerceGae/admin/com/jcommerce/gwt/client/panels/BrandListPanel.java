@@ -185,8 +185,8 @@ public class BrandListPanel extends ContentWidget {
         panel.setHeading("Paging Grid");
         panel.setLayout(new FitLayout());
         panel.add(grid);
-//        panel.setSize(750, 350);
-        panel.setSize("100%", "350px");
+        panel.setSize(800, 350);
+//        panel.setSize("100%", "350px");
         panel.setBottomComponent(toolBar);     
         
         panel.setButtonAlign(HorizontalAlignment.CENTER);

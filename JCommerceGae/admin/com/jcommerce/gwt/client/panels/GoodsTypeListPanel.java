@@ -263,7 +263,7 @@ public class GoodsTypeListPanel extends ContentWidget {
         panel.setHeading("Paging Grid");
         panel.setLayout(new FitLayout());
         panel.add(grid);
-        panel.setSize(750, 350);
+        panel.setSize(800, 350);
         panel.setBottomComponent(toolBar);
         panel.setButtonAlign(HorizontalAlignment.CENTER);
         

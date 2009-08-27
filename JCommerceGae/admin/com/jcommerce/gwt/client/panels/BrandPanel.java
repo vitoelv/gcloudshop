@@ -13,6 +13,7 @@ import com.google.gwt.user.client.Window;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BrandForm;
 import com.jcommerce.gwt.client.form.GWTHttpDynaForm;
+import com.jcommerce.gwt.client.resources.Resources;
 
 /**
  * Example file.
@@ -39,10 +40,13 @@ public class BrandPanel extends BaseEntityEditPanel {
     }
     
 	public static class State extends BaseEntityEditPanel.State {
-		public static final String SELECTED_PARENT_ID = "parentId";
 		@Override
 		public String getPageClassName() {
 			return BrandPanel.class.getName();
+		}
+		
+		public String getMenuDisplayName() {
+			return "New Brand";
 		}
 	}
 	
@@ -82,29 +86,31 @@ public class BrandPanel extends BaseEntityEditPanel {
     	
         TextField<String> nameField = BrandForm.getNameField("品牌名称：");
         nameField.setFieldLabel("品牌名称");
-        formPanel.add(nameField);
+        formPanel.add(nameField, sfd());
         
         TextField<String> siteField = BrandForm.getSiteField("品牌网址：");
         siteField.setFieldLabel("品牌网址");
-        formPanel.add(siteField);
+        formPanel.add(siteField, lfd());
         
         FileUploadField logoField = BrandForm.getLogoField("品牌LOGO：");
         logoField.setFieldLabel("品牌LOGO");
-        formPanel.add(logoField);
+        formPanel.add(logoField, sfd());
         
         TextArea descField = BrandForm.getDescField("品牌描述：");
         descField.setHeight("180px");
         descField.setWidth("100px");        
         descField.setFieldLabel("品牌描述");
-        formPanel.add(descField);
+        formPanel.add(descField, lfd());
         
         TextField<String> orderField = BrandForm.getOrderField("排序：");
         orderField.setFieldLabel("排序");
-        formPanel.add(orderField);
+        formPanel.add(orderField, sfd());
         
         CheckBox showField = BrandForm.getShowField("排序：");
         showField.setFieldLabel("排序");
-        formPanel.add(showField);
+        formPanel.add(showField, sfd());
+        
+
         
 //        formPanel.createPanel(IBrand.NAME, "品牌名称:", new TextBox());
 //        formPanel.createPanel(IBrand.SITE, "品牌网址:", new TextBox());
