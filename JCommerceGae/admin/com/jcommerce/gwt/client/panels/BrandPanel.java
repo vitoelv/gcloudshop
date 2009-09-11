@@ -1,8 +1,11 @@
 package com.jcommerce.gwt.client.panels;
 
+import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.FormEvent;
 import com.extjs.gxt.ui.client.event.Listener;
+import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.CheckBox;
 import com.extjs.gxt.ui.client.widget.form.FileUploadField;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
@@ -25,7 +28,21 @@ public class BrandPanel extends BaseEntityEditPanel {
 	public String getEntityClassName() {
 		return ModelNames.BRAND; 
 	}
-	
+    @Override
+    public Button getShortCutButton() {
+//    	return btnAdd;
+      Button buttonAddClone = new Button("品牌列表");
+      buttonAddClone.addSelectionListener(new SelectionListener<ButtonEvent>() {
+          public void componentSelected(ButtonEvent ce) {
+          	onButtonListClicked();
+          }
+      });
+      return buttonAddClone;
+    }
+    public void onButtonListClicked() {
+		BrandListPanel.State newState = new BrandListPanel.State();
+		newState.execute();
+    }
     /**
      * Initialize this example.
      */
@@ -106,8 +123,8 @@ public class BrandPanel extends BaseEntityEditPanel {
         orderField.setFieldLabel("排序");
         formPanel.add(orderField, sfd());
         
-        CheckBox showField = BrandForm.getShowField("排序：");
-        showField.setFieldLabel("排序");
+        CheckBox showField = BrandForm.getShowField("是否显示：");
+        showField.setFieldLabel("是否显示");
         formPanel.add(showField, sfd());
         
 

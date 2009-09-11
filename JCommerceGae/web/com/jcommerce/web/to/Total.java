@@ -1,5 +1,7 @@
 package com.jcommerce.web.to;
 
+import com.jcommerce.web.util.WebFormatUtils;
+
 public class Total extends BaseWrapper{
 
 	Double discount = 0.0;
@@ -30,20 +32,18 @@ public class Total extends BaseWrapper{
 	String bonusFormated = "0.0";
 	
 	Double amount = 0.0;
-	String amountFormated= "0.0";
+//	String amountFormated= "0.0";
 	
 	Integer realGoodsCount = 0;
 	Double goodsPrice = 0.0;
-	String goodsPriceFormated = "0.0";
+//	String goodsPriceFormated = "0.0";
 	Double marketPrice = 0.0;
-	String marketPriceFormated = "0.0";
+//	String marketPriceFormated = "0.0";
 	Double saving = 0.0;
 	String savingFormated = "0.0";
 	Double saveRate = 0.0;
 	
 	String willGetBonus = "0.0";
-	String formatedGoodsPrice = "0.0";
-	String formatedMarketPrice = "0.0";
 	String formatedSaving = "0.0";
 	
 	
@@ -146,13 +146,11 @@ public class Total extends BaseWrapper{
 
 
 	public String getAmountFormated() {
-		return amountFormated;
+		return WebFormatUtils.priceFormat(amount);
 	}
 
 
-	public void setAmountFormated(String amountFormated) {
-		this.amountFormated = amountFormated;
-	}
+
 
 
 	public Integer getRealGoodsCount() {
@@ -286,14 +284,8 @@ public class Total extends BaseWrapper{
 
 
 	public String getGoodsPriceFormated() {
-		return goodsPriceFormated;
+		return WebFormatUtils.priceFormat(goodsPrice);
 	}
-
-
-	public void setGoodsPriceFormated(String goodsPriceFormated) {
-		this.goodsPriceFormated = goodsPriceFormated;
-	}
-
 
 	public Double getMarketPrice() {
 		return marketPrice;
@@ -306,13 +298,10 @@ public class Total extends BaseWrapper{
 
 
 	public String getMarketPriceFormated() {
-		return marketPriceFormated;
+		return WebFormatUtils.priceFormat(marketPrice);
 	}
 
 
-	public void setMarketPriceFormated(String marketPriceFormated) {
-		this.marketPriceFormated = marketPriceFormated;
-	}
 
 
 	public Double getSaving() {
@@ -360,24 +349,7 @@ public class Total extends BaseWrapper{
 	}
 
 
-	public String getFormatedGoodsPrice() {
-		return formatedGoodsPrice;
-	}
 
-
-	public void setFormatedGoodsPrice(String formatedGoodsPrice) {
-		this.formatedGoodsPrice = formatedGoodsPrice;
-	}
-
-
-	public String getFormatedMarketPrice() {
-		return formatedMarketPrice;
-	}
-
-
-	public void setFormatedMarketPrice(String formatedMarketPrice) {
-		this.formatedMarketPrice = formatedMarketPrice;
-	}
 
 
 	public String getFormatedSaving() {

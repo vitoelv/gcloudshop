@@ -23,6 +23,14 @@
 			<ref bean="DefaultManager"/>
 		</property>
 	</bean>
+	
+	<bean name="brandAction" scope="prototype"
+        class="com.jcommerce.web.front.action.BrandAction">
+		<property name="defaultManager">
+			<ref bean="DefaultManager"/>
+		</property>
+	</bean>
+		
 	<bean name="flowAction" scope="prototype"
         class="com.jcommerce.web.front.action.FlowAction">
 		<property name="defaultManager">

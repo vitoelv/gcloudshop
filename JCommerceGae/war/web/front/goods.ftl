@@ -339,7 +339,6 @@ var ${key} = "${item}";
 var goodsId = ${goodsId};
 var now_time = ${nowTime};
 
-{literal}
 onload = function(){
   changePrice();
   fixpng();

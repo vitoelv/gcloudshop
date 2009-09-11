@@ -30,6 +30,10 @@
 			<result name="success" type="freemarker">/web/front/category.ftl</result>
 			<result name="error" type="redirectAction">home</result>
 		</action>
+		<action name="brand" method="execute" class="brandAction">
+			<result name="success" type="freemarker">/web/front/brand.ftl</result>
+			<result name="error" type="redirectAction">home</result>
+		</action>
 	</package>
 </struts>
 

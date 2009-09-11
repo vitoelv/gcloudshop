@@ -1,14 +1,13 @@
 package com.jcommerce.gwt.client;
 
-import com.extjs.gxt.ui.client.widget.ContentPanel;
-import com.extjs.gxt.ui.client.widget.TabItem;
+import com.extjs.gxt.ui.client.Style;
+import com.extjs.gxt.ui.client.Style.VerticalAlignment;
+import com.extjs.gxt.ui.client.widget.HorizontalPanel;
+import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
-import com.extjs.gxt.ui.client.widget.form.TextField;
-import com.extjs.gxt.ui.client.widget.layout.FormData;
-import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.extjs.gxt.ui.client.widget.layout.TableData;
 import com.extjs.gxt.ui.client.widget.layout.TableLayout;
 import com.google.gwt.core.client.GWT;
@@ -18,13 +17,10 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.WindowResizeListener;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeImages;
@@ -32,7 +28,6 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.TreeListener;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
-import com.jcommerce.gwt.client.resources.Resources;
 
 
 
@@ -89,7 +84,7 @@ public class Application extends Composite implements WindowResizeListener {
   /**
    * The decorator around the content.
    */
-  private DecoratorPanel contentDecorator;
+//  private DecoratorPanel contentDecorator;
 
   /**
    * The main wrapper around the content and content title.
@@ -99,7 +94,7 @@ public class Application extends Composite implements WindowResizeListener {
   /**
    * The main wrapper around the content and content title.
    */
-  private Grid contentTitleLayout;
+  private LayoutContainer contentTitleLayout;
 
   /**
    * The wrapper around the content.
@@ -156,35 +151,40 @@ public class Application extends Composite implements WindowResizeListener {
 
     // Add the main menu
     bottomPanel = new HorizontalPanel();
-    bottomPanel.setWidth("100%");
+    bottomPanel.setWidth(800);
 
     bottomPanel.setSpacing(0);
-    bottomPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
+    bottomPanel.setVerticalAlign(VerticalAlignment.TOP);
     layout.add(bottomPanel);
     createMainMenu();
     bottomPanel.add(mainMenu);
 
     // Setup the content layout
     contentLayout = new VerticalPanel();
+    contentLayout.setWidth(800);
 //    contentLayout.setCellPadding(0);
 //    contentLayout.setCellSpacing(0);
-    contentTitleLayout = new Grid(1, 2);
-    contentTitleLayout.getCellFormatter().setHorizontalAlignment(0, 1, HasHorizontalAlignment.ALIGN_RIGHT);
-    contentTitleLayout.setCellPadding(0);
-    contentTitleLayout.setCellSpacing(0);
-    contentDecorator = new DecoratorPanel();
-    contentDecorator.setWidget(contentLayout);
-    contentDecorator.addStyleName(DEFAULT_STYLE_NAME + "-content-decorator");
-    bottomPanel.add(contentDecorator);
-    if (LocaleInfo.getCurrentLocale().isRTL()) {
-      bottomPanel.setCellHorizontalAlignment(contentDecorator,
-          HasHorizontalAlignment.ALIGN_LEFT);
-      contentDecorator.getElement().setAttribute("align", "LEFT");
-    } else {
-      bottomPanel.setCellHorizontalAlignment(contentDecorator,
-          HasHorizontalAlignment.ALIGN_RIGHT);
-      contentDecorator.getElement().setAttribute("align", "RIGHT");
-    }
+    contentTitleLayout = new LayoutContainer();
+    contentTitleLayout.setWidth(800);
+    contentTitleLayout.setLayout(new TableLayout(2));
+//    contentTitleLayout.setSpacing(0);
+//    contentTitleLayout.setCellPadding(0);
+//    contentTitleLayout.setCellSpacing(0);
+    
+    bottomPanel.add(contentLayout);
+//    contentDecorator = new DecoratorPanel();
+//    contentDecorator.setWidget(contentLayout);
+//    contentDecorator.addStyleName(DEFAULT_STYLE_NAME + "-content-decorator");
+//    bottomPanel.add(contentDecorator);
+//    if (LocaleInfo.getCurrentLocale().isRTL()) {
+//      bottomPanel.setCellHorizontalAlignment(contentDecorator,
+//          HasHorizontalAlignment.ALIGN_LEFT);
+//      contentDecorator.getElement().setAttribute("align", "LEFT");
+//    } else {
+//      bottomPanel.setCellHorizontalAlignment(contentDecorator,
+//          HasHorizontalAlignment.ALIGN_RIGHT);
+//      contentDecorator.getElement().setAttribute("align", "RIGHT");
+//    }
 //    CellFormatter formatter = contentLayout.getCellFormatter();
 //    formatter.setStyleName(0, 0, DEFAULT_STYLE_NAME + "-content-title");
 
@@ -196,8 +196,8 @@ public class Application extends Composite implements WindowResizeListener {
     contentTitleRightWrapper = new SimplePanel();
     
 //    contentTitleLayout.setWidth("100%");
-    contentTitleLayout.setWidget(0,0, contentTitleLeftWrapper);
-    contentTitleLayout.setWidget(0,1, contentTitleRightWrapper);
+    contentTitleLayout.add(contentTitleLeftWrapper, new TableData(Style.HorizontalAlignment.LEFT, Style.VerticalAlignment.MIDDLE));
+    contentTitleLayout.add(contentTitleRightWrapper, new TableData(Style.HorizontalAlignment.RIGHT, Style.VerticalAlignment.MIDDLE));
     
 //    contentLayout.setWidth("100%");
 //    contentLayout.setWidget(0, 0, contentTitleLayout);
@@ -224,7 +224,7 @@ public class Application extends Composite implements WindowResizeListener {
    * @param link the widget to add to the mainLinks
    */
   public void addLink(Widget link) {
-    if (linksPanel.getWidgetCount() > 0) {
+    if (linksPanel.getItemCount() > 0) {
       linksPanel.add(new HTML("&nbsp;|&nbsp;"));
     }
     linksPanel.add(link);
@@ -364,11 +364,11 @@ public class Application extends Composite implements WindowResizeListener {
    */
   public void setContentTitleRight(Button button) {
 	  if(button==null) {
-//		  contentTitleRightWrapper.setWidget(new HTML("TODO: override getShortCutButton"));
-		  contentTitleLayout.setWidget(0,1, new HTML("&nbsp;&nbsp;TODO: override getShortCutButton"));
+		  contentTitleRightWrapper.setWidget(new HTML("TODO: override getShortCutButton"));
+//		  contentTitleLayout.setWidget(0,1, new HTML("&nbsp;&nbsp;TODO: override getShortCutButton"));
 	  }else {
-		  contentTitleLayout.setWidget(0,1, button);
-//		  contentTitleRightWrapper.setWidget(button);
+//		  contentTitleLayout.setWidget(0,1, button);
+		  contentTitleRightWrapper.setWidget(button);
 	  }
   }
   
@@ -423,10 +423,10 @@ public class Application extends Composite implements WindowResizeListener {
     int menuWidth = mainMenu.getOffsetWidth();
     int contentWidth = width - menuWidth - 30;
     int contentWidthInner = contentWidth - 10;
-    bottomPanel.setCellWidth(mainMenu, menuWidth + "px");
-    bottomPanel.setCellWidth(contentDecorator, contentWidth + "px");
-    contentTitleLayout.setWidth(contentWidth + "px");
-    contentLayout.setWidth(contentWidth + "px");
+//    bottomPanel.setCellWidth(mainMenu, menuWidth + "px");
+//    bottomPanel.setCellWidth(contentDecorator, contentWidth + "px");
+//    contentTitleLayout.setWidth(contentWidth + "px");
+//    contentLayout.setWidth(contentWidth + "px");
     
     System.out.println("resizing to "+width+", contentWidth="+contentWidth);
 //    contentLayout.getCellFormatter().setWidth(0, 0, contentWidthInner + "px");
@@ -500,5 +500,11 @@ public class Application extends Composite implements WindowResizeListener {
         HasVerticalAlignment.ALIGN_TOP);
     topPanel.getRowFormatter().setVerticalAlign(1,
         HasVerticalAlignment.ALIGN_TOP);
+  }
+  
+  public String toString() {
+	  StringBuffer buf = new StringBuffer();
+	  buf.append("bottomPanel: "+bottomPanel+"<end>");
+	  return buf.toString();
   }
 }

@@ -273,12 +273,15 @@ public class TestJava extends TestCase {
 	
 	public void testCompileIfTag() {
 		try {
-//			String tag = "$item.type eq \"snatch\"";
+			String tag = "$item.type ";
 			
 //			String tag = "$img_links  or $txt_links "; 
 			
-			String tag = "$item.type eq \"group_buy\"";
-			String res  = new DWTConverter().compileIfTag(tag, true);
+//			String tag = "$item.type eq \"group_buy\"";
+			
+//			String tag = "$pager.page eq $key";
+			
+			String res  = new DWTConverter().compileIfTag(tag, false);
 			System.out.println("res: "+res);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -304,8 +307,13 @@ public class TestJava extends TestCase {
 	}
 	public void testCompileForEachStart() {
 		try {
-			String tag = " from =$spec.values item=value key=key ";
+//			String tag = " from =$spec.values item=value key=key ";
 //			String tag = "from=$group_buy_goods item=goods";
+			
+			String tag = "from=$pager.search key= key item = item";
+			
+//			String tag = "from=$pager.search item=item key=key";
+			
 			String res  = new DWTConverter().compileForEachStart(tag);
 //			System.out.println("res: "+res);
 		} catch (Exception ex) {
@@ -326,12 +334,30 @@ public class TestJava extends TestCase {
 			
 //			String tag = "if !$smarty.foreach.nav_top_list.last";
 			
+			// page_footer.ftl
 //			String tag = "<a href=\"{$nav.url}\" <!-- {if $nav.opennew eq 1} --> \r\n target=\"_blank\" <!-- {/if} -->>{$nav.name}</a>";
-//			String tag = "{$nav.url}  <!-- {if $nav.opennew eq 1} --> ";
+			
+			String tag = "{$nav.url}  <!-- {if $nav.opennew eq 1} --> ";
 //			String tag = "{if empty($order_query)}";
 //			String tag = "{insert name='vote'}";
-			String tag = "{foreach from=$promotion_goods item=goods name=\"promotion_foreach\"}";
+//			String tag = "{foreach from=$promotion_goods item=goods name=\"promotion_foreach\"}";
 //			String tag = "{foreach name=nav_top_list from=$navigator_list.top item=nav}";
+			
+//			String LINEND = "\r\n";
+//			String tag = 
+//			"<script type=\"Text/Javascript\" language=\"JavaScript\">  "+ LINEND+
+//			"<!--  "+LINEND+
+//			"{literal} "+LINEND+
+//			"function selectPage(sel) "+LINEND+
+//			"{ "+LINEND+
+//			"  sel.form.submit();"+LINEND+
+//			" }"+LINEND+
+//			" {/literal}"+LINEND+
+//			" //-->"+LINEND+
+//			" </script>";
+			
+
+			
 			DWTConverter dwtConverter = new DWTConverter();
 			dwtConverter.foreachStack.push("abc");
 			String res  = dwtConverter.regexSelect(tag);
@@ -347,6 +373,9 @@ public class TestJava extends TestCase {
 	public void testSelect() {
 		try {
 //			String tag = "if !$gb_deposit";
+//			String tag = "$gb_deposit";
+			String tag = "$lang.pager_1";
+					
 //			String tag = "$lang.far_ext[$favourable.act_range]";
 			
 //			String tag = "* ECSHOP 提醒您：根据用户id来调用member_info.lbi显示不同的界面  *";
@@ -354,11 +383,23 @@ public class TestJava extends TestCase {
 			
 //			String tag = "if !$smarty.foreach.nav_top_list.last";
 			
-			String tag = "<a href=\"{$nav.url}\" <!-- {if $nav.opennew eq 1} --> target=\"_blank\" <!-- {/if} -->>{$nav.name}</a>";
+//			String tag = "<a href=\"{$nav.url}\" <!-- {if $nav.opennew eq 1} --> target=\"_blank\" <!-- {/if} -->>{$nav.name}</a>";
+			
+//			String tag = "html_options options=$pager.array selected=$pager.page";
+			// expect:
+			/*
+			 * <#list pager.array?keys as key>
+			 * <#assign val = pager.array.get(key)>  
+			 * <option value="${key}" <#if pager.page == key>selected</#if> >${val}</option>
+			 * </#list>
+			 * 
+			 */
+			
+			
 			DWTConverter dwtConverter = new DWTConverter();
 			dwtConverter.foreachStack.push("abc");
 			String res  = dwtConverter.select(tag);
-			
+			System.out.println("res: "+res);
 		}catch (Exception ex) {
 			ex.printStackTrace();
 			

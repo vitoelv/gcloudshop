@@ -135,9 +135,12 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
 		// will cause error: GWT.create() is only usable in client code!
 //		to.setPromoteStartDate(DateTimeFormat.getShortDateFormat().parse(sDateStart).getTime());
 //		to.setPromoteEndDate(DateTimeFormat.getShortDateFormat().parse(sDateEnd).getTime());
-		
-		to.setPromoteStartDate(ServerFormatUtil.parseShortDate(sDateStart).getTime());
-		to.setPromoteEndDate(ServerFormatUtil.parseShortDate(sDateEnd).getTime());
+		if(StringUtils.isNotBlank(sDateStart)) {
+			to.setPromoteStartDate(ServerFormatUtil.parseShortDate(sDateStart).getTime());
+		}
+		if(StringUtils.isNotBlank(sDateEnd)) {
+			to.setPromoteEndDate(ServerFormatUtil.parseShortDate(sDateEnd).getTime());
+		}
 		
 		to.setImageFile(imageFile);
 		to.setThumbFile(thumbFile);

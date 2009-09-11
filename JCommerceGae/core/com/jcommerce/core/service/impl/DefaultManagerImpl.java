@@ -106,6 +106,12 @@ public class DefaultManagerImpl implements IDefaultManager {
         return getDao().getList(modelName, criteria, -1, -1);
 
     }
+    public List getList(String modelName, Criteria criteria, int firstRow, int maxRow) {
+        debug("[getList]: modelName="+modelName+", firstRow: "+firstRow+", maxRow: "+maxRow);
+        
+        return getDao().getList(modelName, criteria, firstRow, maxRow);
+
+    }
     public int getList(List res, String modelName, Criteria criteria, int firstRow, int maxRow) {
     	int totalLength = 0;
         debug("[getList]: modelName="+modelName+", firstRow: "+firstRow+", maxRow: "+maxRow);

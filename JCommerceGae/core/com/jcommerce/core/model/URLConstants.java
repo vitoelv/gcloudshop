@@ -6,5 +6,6 @@ public interface URLConstants {
 	
 	public static final String SERVLET_IMAGE = "/admin/dynaImageService.do?fileId=";
 	public static final String ACTION_GOODS = "goods.action?id=";
+	public static final String ACTION_BRAND = "brand.action?id=";
 	
 }

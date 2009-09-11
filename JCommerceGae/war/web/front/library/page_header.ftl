@@ -36,7 +36,6 @@ var process_request = "${lang.processRequest}";
 <div id="search"  class="clearfix">
   <div class="keys f_l">
    <script type="text/javascript">
-    {literal}
     <!--
     function checkSearchForm()
     {

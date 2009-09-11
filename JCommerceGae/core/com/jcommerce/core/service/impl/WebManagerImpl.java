@@ -24,7 +24,7 @@ public class WebManagerImpl extends DefaultManagerImpl implements IWebManager {
     		cart.setGoodsSn(goods.getGoodsSn());
     		cart.setRecType(Constants.CART_GENERAL_GOODS);
     		cart.setGoodsNumber(num);
-    		cart.setGoodsPrice(20.50);
+    		cart.setGoodsPrice(goods.getShopPrice());
     		cart.setGoodsName(goods.getGoodsName());
     		String cartId = super.txadd(cart);
     		

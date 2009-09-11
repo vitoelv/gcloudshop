@@ -29,31 +29,31 @@ public class OrderInfo extends ModelObject {
     @Persistent
     private Long longId;
     
-    // relations
-        @Persistent
-    private Set<OrderAction> orderActions = new HashSet<OrderAction>();
-    
-    @Persistent
-    private Set<OrderGoods> orderGoods = new HashSet<OrderGoods>();
-    
-public Set<OrderAction> getOrderActions() {
-	return orderActions;
-}
-
-
-public void setOrderActions(Set<OrderAction> orderActions) {
-	this.orderActions = orderActions;
-}
-
-
-public Set<OrderGoods> getOrderGoods() {
-	return orderGoods;
-}
-
-
-public void setOrderGoods(Set<OrderGoods> orderGoods) {
-	this.orderGoods = orderGoods;
-}    
+//    // relations
+//        @Persistent
+//    private Set<OrderAction> orderActions = new HashSet<OrderAction>();
+//    
+//    @Persistent
+//    private Set<OrderGoods> orderGoods = new HashSet<OrderGoods>();
+//    
+//public Set<OrderAction> getOrderActions() {
+//	return orderActions;
+//}
+//
+//
+//public void setOrderActions(Set<OrderAction> orderActions) {
+//	this.orderActions = orderActions;
+//}
+//
+//
+//public Set<OrderGoods> getOrderGoods() {
+//	return orderGoods;
+//}
+//
+//
+//public void setOrderGoods(Set<OrderGoods> orderGoods) {
+//	this.orderGoods = orderGoods;
+//}    
     
   // fields
   @Persistent

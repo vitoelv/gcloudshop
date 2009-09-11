@@ -41,7 +41,7 @@ public abstract class BaseModelWrapper extends BaseWrapper {
 				
 				if(res == null) {
 //					 we allow a null value
-					res = "isNull:"+key;
+					res = "TODO:(blank)"+key;
 				}
 			}
 
