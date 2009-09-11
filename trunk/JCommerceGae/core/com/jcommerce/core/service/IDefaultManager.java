@@ -17,6 +17,7 @@ public interface IDefaultManager {
 	public int getCount(String modelName, Criteria criteria);
 	public int getList (List res, String modelName, Criteria criteria, final int firstRow, final int maxRow);
 	public List getList (String modelName, Criteria criteria);
+	public List getList (String modelName, Criteria criteria, final int firstRow, final int maxRow);
 	public void getListOfChild(List res, String modelName, String fieldName, String parentId);
 	
 	public String txadd (ModelObject to);

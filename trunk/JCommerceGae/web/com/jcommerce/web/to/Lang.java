@@ -81,6 +81,14 @@ public class Lang extends BaseWrapper {
 		// TODO have to handle those PHP array style properties... especially with negative index 
         values.put("goodsJs", new String[0]);
         values.put("flowJs", new String[0]);
+        
+        // TODO needed by goodsList.ftl
+        values.put("compareJs", new String[0]);
+        Map<String, String> display = new HashMap<String, String>();
+        display.put("list", "list");
+        display.put("grid", "grid");
+        display.put("text", "text");
+        values.put("display", display);
 	}
 	
 

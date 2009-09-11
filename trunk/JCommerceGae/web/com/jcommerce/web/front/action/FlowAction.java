@@ -29,6 +29,7 @@ import com.jcommerce.web.to.OrderWrapper;
 import com.jcommerce.web.to.PaymentWrapper;
 import com.jcommerce.web.to.RegionWrapper;
 import com.jcommerce.web.to.ShippingWrapper;
+import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.to.Total;
 import com.jcommerce.web.to.WrapperUtil;
 import com.jcommerce.web.util.WebFormatUtils;
@@ -179,34 +180,21 @@ public class FlowAction extends BaseAction {
     		getSession().setAttribute(KEY_DIRECT_SHOPPING, 1);
     	}
     	
-		
+    	includeConsignee(request);
 		
 		
     	List<Consignee> consigneeList = new ArrayList<Consignee>();
     	Consignee consignee = (Consignee)getSession().getAttribute(KEY_FLOW_CONSIGNEE);
     	if(consignee == null) {
     		consignee = new Consignee();
-    		consignee.put("country", getShopConfigWrapper().get(CFG_KEY_SHOP_COUNTRY));
+    		consignee.put("country", ShopConfigWrapper.getDefaultConfig().get(CFG_KEY_SHOP_COUNTRY));
     	}
 		consigneeList.add(consignee);
 		
     	request.setAttribute("consigneeList", consigneeList);
     	
 
-    	request.setAttribute("countryList", getCountryList());
-    	
-    	List<List<RegionWrapper>> provinceList = new ArrayList<List<RegionWrapper>>();
-    	provinceList.add(getProvinceList());
-    	request.setAttribute("provinceList", provinceList);
-    	
-    	List<List<RegionWrapper>> cityList = new ArrayList<List<RegionWrapper>>();
-    	cityList.add(getCityList());
-    	request.setAttribute("cityList", cityList);
-    	List<List<RegionWrapper>> districtList = new ArrayList<List<RegionWrapper>>();
-    	districtList.add(new ArrayList<RegionWrapper>());
-    	request.setAttribute("districtList", districtList);
-    	request.setAttribute("realGoodsCount", 1);
-    	request.setAttribute("nameOfRegion", new String[]{"请选择国家", "请选择省", "请选择市", "请选择区"});
+
     	
     	request.setAttribute(KEY_STEP, STEP_CONSIGNEE);
     	
@@ -225,6 +213,24 @@ public class FlowAction extends BaseAction {
     		return stepCheckout(request);
     	}
     }
+
+	private void includeConsignee(HttpServletRequest request) {
+		request.setAttribute("countryList", getCountryList());
+    	
+    	List<List<RegionWrapper>> provinceList = new ArrayList<List<RegionWrapper>>();
+    	provinceList.add(getProvinceList());
+    	request.setAttribute("provinceList", provinceList);
+    	
+    	List<List<RegionWrapper>> cityList = new ArrayList<List<RegionWrapper>>();
+    	cityList.add(getCityList());
+    	request.setAttribute("cityList", cityList);
+    	List<List<RegionWrapper>> districtList = new ArrayList<List<RegionWrapper>>();
+    	districtList.add(new ArrayList<RegionWrapper>());
+    	request.setAttribute("districtList", districtList);
+    	request.setAttribute("realGoodsCount", 1);
+    	request.setAttribute("nameOfRegion", new String[]{"国家", "省", "市", "区"});
+	}
+	
     private String stepCheckout(HttpServletRequest request) {
         /*------------------------------------------------------ */
         //-- 订单确认
@@ -247,7 +253,7 @@ public class FlowAction extends BaseAction {
     	request.setAttribute("goodsList", WrapperUtil.wrap(carts, CartWrapper.class));
     	
     	request.setAttribute("allowEditCart", 0);
-    	request.setAttribute("config", getShopConfigWrapper());
+    	request.setAttribute("config", ShopConfigWrapper.getDefaultConfig());
     	
         /*
          * 取得订单信息
@@ -266,7 +272,7 @@ public class FlowAction extends BaseAction {
     	debug("in [flowcheckout]: realGoodsCount="+total.getRealGoodsCount());
     	
     	request.setAttribute("total", total);
-    	request.setAttribute("shoppingMoney", total.getFormatedGoodsPrice());
+    	request.setAttribute("shoppingMoney", total.getGoodsPriceFormated());
     	request.setAttribute("marketPriceDesc", "market Price: xxx, total saving: yyy, saving rate: zzz");
     	
     	List<ShippingWrapper> shippingList = availableShippingList();
@@ -312,15 +318,16 @@ public class FlowAction extends BaseAction {
 
     	return order;
     }
+    
     private Total orderFee(OrderInfo order, List<Cart> carts, Consignee consignee) {
+    	// refer to lib_order.php order_fee()
     	Total total = new Total();
     	for(Cart cart:carts) {
     		total.setRealGoodsCount(total.getRealGoodsCount()+1);
-    		total.setGoodsPrice(total.getGoodsPrice() + cart.getGoodsPrice());
-    		total.setMarketPrice(total.getMarketPrice() + cart.getMarketPrice());
+    		total.setGoodsPrice(total.getGoodsPrice() + cart.getGoodsPrice()*cart.getGoodsNumber());
+    		total.setMarketPrice(total.getMarketPrice() + cart.getMarketPrice()*cart.getGoodsNumber());
     	}
-    	total.setFormatedGoodsPrice(WebFormatUtils.priceFormat(total.getGoodsPrice()));
-    	total.setFormatedMarketPrice(WebFormatUtils.priceFormat(total.getMarketPrice()));
+    	total.setAmount(total.getGoodsPrice());
     	return total;
     }
     private List<PaymentWrapper> availablePaymentList() {
@@ -436,8 +443,8 @@ public class FlowAction extends BaseAction {
 			ActionContext ctx = ActionContext.getContext();        
 	        HttpServletRequest request = (HttpServletRequest)ctx.get(ServletActionContext.HTTP_REQUEST);      
 	        
-	        includeUrHere(request);
-			includeOrderTotal(request);
+
+//			includeOrderTotal(request);
 			
 			String step = request.getParameter(KEY_STEP);
 			debug("step: "+step);
@@ -468,9 +475,9 @@ public class FlowAction extends BaseAction {
 	
 	public void includeOrderTotal(HttpServletRequest request) {
 		// TODO
-		Total total = new Total();
-		total.setAmountFormated("20.00元");
-		request.setAttribute("total", total);
+//		Total total = new Total();
+//		total.setAmountFormated("20.00元");
+//		request.setAttribute("total", total);
 	}
 	
 	public void setOrder(HttpServletRequest request) {

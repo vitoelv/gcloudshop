@@ -23,7 +23,7 @@ public class BrandWrapper extends BaseModelWrapper implements URLConstants{
     	return getBrand().getPkId();
     }
 	public String getUrl() {
-    	return ACTION_GOODS+ getBrand().getPkId();    	
+    	return ACTION_BRAND+ getBrand().getPkId();    	
     }
 
 

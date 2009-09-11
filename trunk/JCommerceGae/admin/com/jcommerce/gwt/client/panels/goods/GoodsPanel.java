@@ -26,6 +26,7 @@ import com.extjs.gxt.ui.client.event.FormEvent;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
+import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.TabPanel;
 import com.extjs.gxt.ui.client.widget.button.Button;
@@ -47,7 +48,6 @@ import com.extjs.gxt.ui.client.widget.form.NumberField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BeanObject;
@@ -116,8 +116,6 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
 		public String getMenuDisplayName() {
 			return Resources.constants.NewGoods_title();
 		}
-
-		
 	}
 	private State curState = new State();
 	public State getCurState() {
@@ -147,7 +145,21 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
     	
     	newState.execute();
     }
-    
+    @Override
+    public Button getShortCutButton() {
+//    	return btnAdd;
+      Button buttonAddClone = new Button("商品列表");
+      buttonAddClone.addSelectionListener(new SelectionListener<ButtonEvent>() {
+          public void componentSelected(ButtonEvent ce) {
+          	onButtonListClicked();
+          }
+      });
+      return buttonAddClone;
+    }
+    public void onButtonListClicked() {
+		GoodsListPanel.State newState = new GoodsListPanel.State();
+		newState.execute();
+    }
     @Override
     public String getEntityClassName() {
     	return ModelNames.GOODS;
@@ -189,12 +201,14 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
 			@Override
 			public void onFailure(Throwable caught) {
 				super.onFailure(caught);
+				Info.display("Ooops", "Adding new brand failed. cause: "+caught.getMessage());
 			}
 
 			@Override
 			public void onSuccess(String id) {
 				brand.set(IBrand.PK_ID, id);
 				brandList.add(brand);
+				Info.display("Great", "New brand added");
 			}
     	} 
     	);	

@@ -179,11 +179,8 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     		// TODO image/thumb
     		
     		
-
-    		
-    		
-    		Set<GoodsGallery> galleries = to.getGalleries();
-			for(GoodsGallery gallery:galleries) {
+    		Set<GoodsGallery> toGalleries = to.getGalleries();
+			for(GoodsGallery gallery:toGalleries) {
 				if(StringUtils.isNotEmpty(gallery.getPkId())) {
 					// existing gallery
 					for(GoodsGallery gpo : po.getGalleries()) {
@@ -210,12 +207,16 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 			
 			System.out.println("2) size of po.gallery: "+po.getGalleries().size());
 			
-			if(galleries.size()>0 && StringUtils.isEmpty(po.getImageFileId())) {
-				GoodsGallery gallery = (GoodsGallery)galleries.iterator().next();
+
+			Set<GoodsGallery> galleries = po.getGalleries();
+			if(galleries.size()>0) {
+				GoodsGallery gallery = (GoodsGallery)(galleries.iterator().next());
 				po.setImageFileId(gallery.getImageFileId());
+			} else {
+				po.setImageFileId(null);
 			}
+				
 			
-			// This will fail due to the #91 Issue
 			po.getAttributes().clear();
 			Set<GoodsAttr> gts = to.getAttributes();
 			for(GoodsAttr gt:gts) {
@@ -223,7 +224,6 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 				gt.setKeyName(gkn);
 				gt.setLongId(UUIDLongGenerator.newUUID());
 				po.getAttributes().add(gt);
-				
 			}
 			
 			

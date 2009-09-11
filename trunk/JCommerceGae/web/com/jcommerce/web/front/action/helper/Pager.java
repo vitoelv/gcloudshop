@@ -1,5 +1,9 @@
 package com.jcommerce.web.front.action.helper;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+
 public class Pager {
     private int page;
     private int size;
@@ -8,7 +12,11 @@ public class Pager {
     private int recordCount;
     private int pageCount;
     private String display;
-    private int styleId;
+    private int styleid;
+    
+    private Map<Integer, Integer> array = new TreeMap<Integer, Integer>();
+    
+    private Map<String, Object> search = new HashMap<String, Object>();
     
     private String pageFirst;
     private String pagePrev;
@@ -61,12 +69,7 @@ public class Pager {
     public void setDisplay(String display) {
         this.display = display;
     }
-    public int getStyleId() {
-        return styleId;
-    }
-    public void setStyleId(int styleId) {
-        this.styleId = styleId;
-    }
+
     public String getPageFirst() {
         return pageFirst;
     }
@@ -97,4 +100,23 @@ public class Pager {
     public String[] getOrders() {
         return new String[] {"order_DESC", "order_ASC"};
     }
+	public int getStyleid() {
+		return styleid;
+	}
+	public void setStyleid(int styleid) {
+		this.styleid = styleid;
+	}
+	public Map<String, Object> getSearch() {
+		return search;
+	}
+	public void setSearch(Map<String, Object> search) {
+		this.search = search;
+	}
+	public Map<Integer, Integer> getArray() {
+		return array;
+	}
+	public void setArray(Map<Integer, Integer> array) {
+		this.array = array;
+	}
+
 }

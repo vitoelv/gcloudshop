@@ -378,6 +378,7 @@ public class JCommerceGae implements EntryPoint, ValueChangeHandler<String>, GWT
             app.setContentTitleLeft(Resources.constants.mainTitle()+"-"+content.getName());
             app.setContentTitleRight(content.getShortCutButton());
             content.refresh();
+//            System.out.println("app: "+app);
         }        
     }
 	// ensure all instances be created and put in pageRegistry when first-time

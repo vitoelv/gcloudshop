@@ -1,0 +1,20 @@
+<!-- Indices written at Fri, 28 Aug 2009 02:07:26 UTC -->
+
+<datastore-indexes autoGenerate="true">
+
+    <!-- Used 46 times in query history -->
+    <datastore-index kind="DSFile" ancestor="true" source="auto"/>
+
+    <!-- Used 6 times in query history -->
+    <datastore-index kind="GoodsAttr" ancestor="true" source="auto"/>
+
+    <!-- Used 6 times in query history -->
+    <datastore-index kind="GoodsGallery" ancestor="true" source="auto"/>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="OrderAction" ancestor="true" source="auto"/>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="OrderGoods" ancestor="true" source="auto"/>
+
+</datastore-indexes>

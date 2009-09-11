@@ -42,26 +42,8 @@ public class HomeAction extends BaseAction {
 //    	return super.getText(s);
     }
     
-    public void setCatRecSign(HttpServletRequest request) {
-    	// refer to logic at index.php line 60
-        request.setAttribute("catRecSign", 0);
-        
-        // refer to logic at index.php line 121
-        request.setAttribute("catRec", new String[2]);
-    }
-    
-    public void includeBestSoldGoods(HttpServletRequest request) {
-    	setCatRecSign(request);
-        request.setAttribute("bestGoods", getBestSoldGoods());
-    }
-    public void includeHotSoldGoods(HttpServletRequest request) {
-    	setCatRecSign(request);
-        request.setAttribute("hotGoods", getHostSoldGoods());
-    }
-    public void includeNewlyAddedGoods(HttpServletRequest request) {
-    	setCatRecSign(request);
-        request.setAttribute("newGoods", getNewlyAddedGoods());
-    }
+
+
     public void includeBrands(HttpServletRequest request) {
     	// brands.ftl
         List<Brand> brands = (List<Brand>)getDefaultManager().getList(ModelNames.BRAND, null);
@@ -162,9 +144,7 @@ public class HomeAction extends BaseAction {
         
         super.execute();
         
-        ActionContext ctx = ActionContext.getContext();        
-        HttpServletRequest request = (HttpServletRequest)ctx.get(ServletActionContext.HTTP_REQUEST);        
-        HttpServletResponse response = (HttpServletResponse)ctx.get(ServletActionContext.HTTP_RESPONSE); 
+        HttpServletRequest request = getRequest();        
         
         // test only
         // map
@@ -178,14 +158,19 @@ public class HomeAction extends BaseAction {
         td.setName("abc");
         request.setAttribute("testData", td);
         
+        request.setAttribute("testUrl", "abc.action?aa=xx&bb=yy");
+        
+        Pager pager = new Pager();
+        pager.setPageLast("abc1.action?aa=xx&bb=yy&amp;cc=zz");
+        request.setAttribute("testpager", pager);
+        
         initPager(request);
         initParameters(request);
         
-        includeUrHere(request);
         includeCategoryTree(request);
-        includeBestSoldGoods(request);
-        includeHotSoldGoods(request);
-        includeNewlyAddedGoods(request);
+        includeRecommendBest(request);
+        includeRecommendHot(request);
+        includeRecommendNew(request);
         includeBrands(request);
         includeTop10(request);
         includeNewArticle(request);
@@ -232,54 +217,6 @@ public class HomeAction extends BaseAction {
          request.setAttribute("number", number);
          request.setAttribute("price", price);
     }
-
-    private List filterGoods(List<Goods> list) {
-    	// logic moved to Goods class
-    	return WrapperUtil.wrap(list, GoodsWrapper.class);
-    	
-//        for(Goods goods:list) {
-//        	goods.setUrl("goods.action?id="+goods.getPkId());
-//        	goods.setThumb("/admin/dynaImageService.do?fileId="+goods.getImageFileId());
-//        	goods.setShortStyleName(goods.getName().length()>10?goods.getName().substring(0, 10)+"...":goods.getName());
-//        }
-    }
-
-
-    private List<Goods> getBestSoldGoods() {
-        Criteria c1 = new Criteria();
-        Condition cond1 = new Condition();
-        cond1.setField(IGoods.IS_BEST);
-        cond1.setOperator(Condition.EQUALS);
-        cond1.setValue("true");
-        c1.addCondition(cond1);
-        List<Goods> list = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1);
-        return filterGoods(list);
-         
-    }
-    private List<Goods> getHostSoldGoods() {
-        Criteria c1 = new Criteria();
-        Condition cond1 = new Condition();
-        cond1.setField(IGoods.IS_HOT);
-        cond1.setOperator(Condition.EQUALS);
-        cond1.setValue("true");
-        c1.addCondition(cond1);
-        
-        List<Goods> list = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1);
-        return filterGoods(list);
-
-    }
-    private List<Goods> getNewlyAddedGoods() {
-        Criteria c1 = new Criteria();
-        Condition cond1 = new Condition();
-        cond1.setField(IGoods.IS_NEW);
-        cond1.setOperator(Condition.EQUALS);
-        cond1.setValue("true");
-        c1.addCondition(cond1);
-        List<Goods> list = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1);
-        return filterGoods(list);
-
-    }
-
 
     protected void getHistory() throws Exception {
 //        List<Goods> goods = goodsManager.getList("from Goods t where t.onSale=true and t.aloneSale=true and t.delete=false");

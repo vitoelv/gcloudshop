@@ -1,5 +1,6 @@
 package com.jcommerce.web.front.action;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,16 +9,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
 
+import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.web.to.GoodsWrapper;
 import com.jcommerce.web.to.Lang;
-import com.jcommerce.web.to.WrapperUtil;
+import com.jcommerce.web.to.ShopConfigWrapper;
 import com.opensymphony.xwork2.ActionContext;
 
 public class GoodsAction extends BaseAction {
-
+	
+	public static final String KEY_GOODS_ID = "goodsId";
+	public static final String KEY_PROMOTE_END_TIME = "promoteEndTime";
+	public static final String KEY_NOW_TIME = "nowTime";
+	
 	public void debug(String s) {
 		System.out.println(" in [GoodsAction]: "+s );
 	}
@@ -27,12 +33,9 @@ public class GoodsAction extends BaseAction {
 		try {
 		super.execute();
         
-		ActionContext ctx = ActionContext.getContext();        
-        HttpServletRequest request = (HttpServletRequest)ctx.get(ServletActionContext.HTTP_REQUEST);        
-        HttpServletResponse response = (HttpServletResponse)ctx.get(ServletActionContext.HTTP_RESPONSE); 
+        HttpServletRequest request = getRequest();        
 
         
-        includeUrHere(request);
         includeCart(request);
         includeCategoryTree(request);
         
@@ -45,7 +48,6 @@ public class GoodsAction extends BaseAction {
         includeGoodsTags(request);
         includeBoughtGoods(request);
         includeComments(request);
-        
         // goods logic
         
         String goodsId = request.getParameter("id");
@@ -53,25 +55,28 @@ public class GoodsAction extends BaseAction {
         
         IDefaultManager manager = getDefaultManager();
         Goods goods = (Goods)manager.get(ModelNames.GOODS, goodsId);
+        GoodsWrapper gw = new GoodsWrapper(goods);
+        request.setAttribute("goods", gw);
         
-        request.setAttribute("goods", WrapperUtil.wrap(goods, GoodsWrapper.class));
-        
-
-        
+        String brandId = goods.getBrandId();
+        Brand brand = (Brand)manager.get(ModelNames.BRAND, brandId);
+        gw.put(GoodsWrapper.GOODS_BRAND, brand.getBrandName());
         
         request.setAttribute("specification", new String[0]);
         request.setAttribute("rankPrices", new String[0]);
         request.setAttribute("properties", new String[0]);
         request.setAttribute("specification", new String[0]);
         
-        request.setAttribute("goodsId", goods.getPkId());
-        request.setAttribute("promoteEndTime", "TODO promoteEndTime");
-        request.setAttribute("nowTime", "TODO nowTime");
+        request.setAttribute(KEY_GOODS_ID, gw.getGoodsId());
+        request.setAttribute(KEY_PROMOTE_END_TIME, goods.getPromoteEndDate());
+        request.setAttribute(KEY_NOW_TIME, new Date().getTime());
         
         // TODO 
         Map<String, String> affiliate = new HashMap<String, String>();
         affiliate.put("on", "yes");
         request.setAttribute("affiliate", affiliate);
+        
+        request.setAttribute("pointsName", ShopConfigWrapper.getDefaultConfig().get("pointsName"));
         
         return SUCCESS;
         

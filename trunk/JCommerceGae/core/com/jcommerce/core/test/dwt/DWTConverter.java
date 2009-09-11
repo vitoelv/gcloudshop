@@ -38,12 +38,17 @@ public class DWTConverter {
 	
 	public String regexSelect(String source) {
 		// match with or without the html comments part
-		String regex = "(?:<!--.*?)?\\{([^\\}\\{\\n]*)\\}(?:[^<]*?-->)?";
+		// String tag = "<a href=\"{$nav.url}\" <!-- {if $nav.opennew eq 1} --> \r\n target=\"_blank\" <!-- {/if} -->>{$nav.name}</a>";
+//		String regex = "(?:<!--.*?)?\\{([^\\}\\{\\n]*)\\}(?:[^<]*?-->)?";
+//		String regex = "\\{([^\\}\\{\\n]*)\\}";
+		
+		String regex = "(?:<!--.*?)?\\{([^\\}\\{\\n]*)\\}(?:[^(?:<|\\r|\\n)]*?-->)?";
+		
 		String res = preg_replace(regex, new RegexReplaceCallback() {
 			public String execute(String... groups) {
 				return select(groups[0]);
 			}
-		}, source, false);
+		}, source, Pattern.MULTILINE);
 		
 		return res;
 		
@@ -84,16 +89,20 @@ public class DWTConverter {
 			res = regexReplaceLibrary(in);
 		}else if(".lbi".equals(fileType)) {
 			String regex = "<meta\\shttp-equiv=[\"|\\']Content-Type[\"|\\']\\scontent=[\"|\\']text\\/html;\\scharset=(?:.*?)[\"|\\']>\\r?\\n?";
-			res = preg_replace(regex, "", in, false);
+			res = preg_replace(regex, "", in);
 			
 		}
 		res = regexReplacePHP(res);
 		
 		return res;
 	}
-	public String preg_replace(String regex, RegexReplaceCallback callback, String source, boolean dotall) {
+	public String preg_replace(String regex, RegexReplaceCallback callback, String source) {
+		return preg_replace(regex, callback, source, -1);
+	}
+	public String preg_replace(String regex, RegexReplaceCallback callback, String source, int flag) {
 		
-		Pattern p = dotall? Pattern.compile (regex, Pattern.DOTALL): Pattern.compile (regex); 
+//		Pattern p = dotall? Pattern.compile (regex, Pattern.DOTALL): Pattern.compile (regex); 
+		Pattern p = flag!=-1? Pattern.compile (regex, flag): Pattern.compile (regex);
 		Matcher m = p.matcher (source);
 		int kk = m.groupCount();
 		StringBuffer sb = new StringBuffer (); 
@@ -114,12 +123,15 @@ public class DWTConverter {
 		m.appendTail (sb); 
 		return sb.toString();
 	}
-	public String preg_replace(String regex, final String replacement, String source, boolean dotall) {
+	public String preg_replace(String regex, final String replacement, String source) {
+		return preg_replace(regex, replacement, source, -1);
+	}
+	public String preg_replace(String regex, final String replacement, String source, int flag) {
 		return preg_replace(regex, new RegexReplaceCallback() {
 			public String execute(String... groups) {
 				return replacement;
 			}
-		}, source, dotall);
+		}, source, flag);
 	}
 	public List<String> findLangKeys(String in) {
 		List<String> res = new ArrayList<String>();
@@ -191,7 +203,7 @@ public class DWTConverter {
 			public String execute(String... groups) {
 				return replaceLibrary(groups[0]);
 			}
-		}, in, true);
+		}, in, Pattern.DOTALL);
 		return res;
 	}
 	public String regexReplacePHP(String in) {
@@ -330,15 +342,19 @@ public class DWTConverter {
 				temp = token.replace("$", "");
 				boolean withLogical = false;
 				if(i!=0) {
-					withLogical = "!".equals(convertedTokens[i-1]);
-				}else if(i!=size-1) {
+					withLogical = withLogical | "!".equals(convertedTokens[i-1]);
 					String regex = ">|>=|==|!=|<|<=";
-					withLogical = Pattern.compile(regex).matcher(convertedTokens[i+1]).matches();
-				} else {
+					withLogical = withLogical | Pattern.compile(regex).matcher(convertedTokens[i-1]).matches();
+				}
+				if(i!=size-1) {
+					String regex = ">|>=|==|!=|<|<=";
+					withLogical = withLogical | Pattern.compile(regex).matcher(convertedTokens[i+1]).matches();
+				}
+				{
 					// handle like !$var
-					withLogical = token.startsWith("!"); 
+					withLogical = withLogical | token.startsWith("!"); 
 					// handle like empty($var)
-					withLogical = token.startsWith("empty(");
+					withLogical = withLogical | token.startsWith("empty(");
 				} 
 				// TODO  {if $consignee.country eq $country.region_id} // consignee.lbi
 				if(!withLogical) {
@@ -373,7 +389,11 @@ public class DWTConverter {
 		// expect sth like:  <#list consigneeList?keys as sn> <#assign consignee = consigneeList[sn]> 
 		
 		// TODO <!-- {foreach from=$province_list.$sn item=province} -->  // consignee.lbi
+		
 		String res = "";
+		
+		/*
+//		String regex = ".*?from\\s*?=\\s*?\\$(\\S*?)\\s*?(?:(?:item\\s*?=\\s*?(\\S*?))(?:\\s*?key\\s*?=\\s*?(\\S*?)\\s*?)?|(?:\\s*?name\\s*?=\\s*?([\"\\S\"]*?)\\s*?)?)";
 		
 		String regex = ".*?from\\s*?=\\s*?\\$(\\S*?)\\s*?item\\s*?=\\s*?(\\S*?)(?:\\s*?key\\s*?=\\s*?(\\S*?)\\s*?)?(?:\\s*?name\\s*?=\\s*?([\"\\S\"]*?)\\s*?)?";
 //		String regex = "from\\s*?=\\s*?\\$(\\S*?)\\s*?item\\s*?=\\s*?(\\S*?)\\s*?";
@@ -393,9 +413,29 @@ public class DWTConverter {
 		}
 		else {
 			debug("in [compileForEachStart]: DO NOT MATCH!");
+			String regex2 = ".*?from\\s*?=\\s*?\\$(\\S*?)\\s*?item\\s*?=\\s*?(\\S*?)(?:\\s*?key\\s*?=\\s*?(\\S*?)\\s*?)?(?:\\s*?name\\s*?=\\s*?([\"\\S\"]*?)\\s*?)?";
+		}
+		*/
+		
+		// to make it simpler
+		// however getpara does not always work in case from = xxx
+		Map<String, String> paras = getPara(tag);
+		String listItem = StringUtils.replace(paras.get("from"), "$", "");
+		String valueItem = StringUtils.replace(paras.get("item"), "$", "");
+		String keyItem = StringUtils.replace(paras.get("key"), "$", "");
+		
+		
+		if(keyItem!=null) {
+			// it's iterating a map or hashtable
+			res = new StringBuffer("<#list ").append(listItem).append("?keys as ").append(keyItem)
+				.append("> <#assign ").append(valueItem).append(" = ").append(listItem).append(".get(").append(keyItem).append(")>")
+				.toString();	
+		}
+		else {
+			// just an list or array
+			res = new StringBuffer("<#list ").append(listItem).append(" as ").append(valueItem).append(">").toString();	
 		}
 		
-		res = new StringBuffer("<#list ").append(listItem).append(" as ").append(valueItem).append(">").toString();
 		debug("in [compileForEachStart]: res="+res+", key="+keyItem);
 		
 		foreachStack.push(valueItem);
@@ -430,6 +470,7 @@ public class DWTConverter {
 				foreachStack.pop();
 			} else if("literal".equals(tag)) {
 				res = "";
+			
 			} else {
 				// TODO 
 				res = "{"+tag+"}"; 
@@ -467,19 +508,25 @@ public class DWTConverter {
 				
 				res = compileInsert(m);
 			} else if("html_options".equals(tag_sel)) {
-				res = "TODO: html_options CLAUSE";
+
+				Map<String, String> m = getPara(tag.substring(13));
+				
+				res = htmlOptions(m);
 			}
 			else if("html_select_date".equals(tag_sel)) {
+				// TODO: html_select_date CLAUSE 
 				res = "TODO: html_select_date CLAUSE";
 			}
 			else if("html_radios".equals(tag_sel)) {
+				// TODO: html_radios CLAUSE
 				res = "TODO: html_radios CLAUSE";
 			}
 			else if("html_select_time".equals(tag_sel)) {
+				// TODO: html_select_time CLAUSE
 				res = "TODO: html_select_time CLAUSE";
-			}
-
-			else {
+			} else if("literal".equals(tag)) {
+				res = "";
+			} else {
                 res = "{" + tag + "}";
 			} 
 		}
@@ -509,6 +556,38 @@ public class DWTConverter {
 		}
 		return res;
 	}
+	public String htmlOptions(Map<String, String> paras) {
+		/* input: 
+		 * String tag = "html_options options=$pager.array selected=$pager.page";
+		 * 
+		 * expect:
+		 * <#list pager.array?keys as key>
+		 * <#assign val = pager.array.get(key)>  
+		 * <option value="${key}" <#if pager.page == key>selected</#if> >${val}</option>
+		 * </#list>
+		 * 
+		 */
+		// quotation.dwt options=$brand_list
+		
+		 StringBuffer res = new StringBuffer();
+		if (paras.get("options") != null) {
+			String mapName = paras.get("options").replace("$", "");
+			String selected = paras.get("selected")==null? "" : paras.get("selected").replace("$", "");
+			res.append("<#list ").append(mapName).append("?keys as key>").append("\r\n");
+			res.append("<#assign val = ").append(mapName).append(".get(key)>").append("\r\n");
+			res.append("<option value=\"${key}\" <#if ").append(selected).append(" == key>selected</#if> >${val}</option>").append("\r\n");
+			res.append("</#list>").append("\r\n");
+		} else if (paras.get("output") != null) {
+			// TODO　 htmlOptions with output
+			// flow.dwt: html_options values=$inv_content_list output=$inv_content_list selected=$order.inv_content
+			res.append("TODO htmlOptions with output");
+			
+		}
+		 return res.toString();
+		
+		
+	}
+
 	public String replaceVars(String tag) {
 
 		String res = "", res2="", res3="";
@@ -518,14 +597,15 @@ public class DWTConverter {
 		}
 		else {
 
-		String regex = "\\$(\\S+)\\s*?";
+		String regex = "\\$([a-zA-Z0-9_\\.]+)\\s*?";
+//		String regex = "\\$(\\S+)\\s*?";
 		// replace single $ with blank
 		// however keep ${
 		res = preg_replace(regex, new RegexReplaceCallback() {
 			public String execute(String... groups) {
 				return "\\${"+groups[0].replace("$", "")+"}";
 			}
-		}, tag, false);	
+		}, tag);	
 		res = res.replace("$", "\\$");
 		
 		
@@ -564,7 +644,7 @@ public class DWTConverter {
 					return "TODO: sth wrong here";
 				}
 			}
-		}, res2, false);
+		}, res2);
 		
 
 		regex = "empty\\s*?\\(\\s*?([^\\)]*?)\\)";
@@ -572,7 +652,7 @@ public class DWTConverter {
 			public String execute(String... groups) {
 				return "!"+groups[0]+"?has_content";
 			}
-		}, res3, false);
+		}, res3);
 		
 		}
 		debug("in [replaceVars]: res="+res+", res2="+res2+", res3="+res3);
@@ -587,29 +667,50 @@ public class DWTConverter {
 			public String execute(String... groups) {
 				return groups[0].toUpperCase();
 			}
-		}, res, false);
+		}, res);
 		return res2;
 	}
 	public String explode(String s) {
 		String[] strs = StringUtils.split(s);
 		return strs[0];
 	}
-	public Map<String, String> getPara(String s) {
-		debug("in [getPara]: s="+s);
+	public Map<String, String> getPara(String str) {
+		debug("in [getPara]: s="+str);
 		Map<String, String> m = new HashMap<String, String>();
 		// files='transport.js'
 		// files='common.js,index.js'
-		s =  s.trim();
-		int index = s.indexOf('=');
-		if(index>=0) {
-			String[] ss = StringUtils.split(StringUtils.replaceChars(s, "'\" ", ""), "=");
-			debug("in [getPara]: ss="+Arrays.toString(ss));
-			String key = ss[0];
-			m.put(key, ss[1]);	
-			
+		// options=$pager.array selected=$pager.page
+
+		String[] keyValues = StringUtils.split(strTrim(str));
+		for (String s : keyValues) {
+			s = s.trim();
+			int index = s.indexOf('=');
+			if (index >= 0) {
+				String[] ss = StringUtils.split(StringUtils.replaceChars(s,
+						"'\" ", ""), "=");
+				debug("in [getPara]: ss=" + Arrays.toString(ss));
+				String key = ss[0];
+				m.put(key, ss[1]);
+
+			}
 		}
 		return m;
 	}
+
+	public String strTrim(String s) {
+		String before = s;
+		/* 处理'a=b c=d k = f '类字符串，返回数组 */
+		while((s.indexOf("= "))>=0) {
+			s = s.replace("= ", "=");
+		}
+		while((s.indexOf(" ="))>=0) {
+			s = s.replace(" =", "=");
+		}
+		s = s.trim();
+		debug("in [strTrim]: before="+before+", after="+s);
+		return s;
+	}
+
 	public String compileInsertScripts(Map<String, String> paras) {
 		StringBuffer buf = new StringBuffer();
 		String ss = paras.get("files");

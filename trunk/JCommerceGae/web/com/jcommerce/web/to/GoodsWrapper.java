@@ -9,6 +9,8 @@ import com.jcommerce.web.util.WebFormatUtils;
 
 public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
 	
+	public static final String GOODS_BRAND = "goodsBrand";
+	
 	Goods goods;
 	@Override
 	protected Object getWrapped() {
@@ -45,13 +47,12 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
     }
     public String getMeasureUnit() {
     	return "TODO measureUnit";
+    	
     }
     public String getGoodsBrandUrl() {
-    	return "TODO goodBrandUrl";
+    	return ACTION_BRAND+getGoods().getBrandId();  
     }
-    public String getGoodsBrand() {
-    	return "TODO brandName: ";
-    }
+
     public String getShopPriceFormated() {
     	return WebFormatUtils.priceFormat(getGoods().getShopPrice());
     }
@@ -65,6 +66,9 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
     }
     
     public String getThumb() {
+    	return SERVLET_IMAGE+getGoods().getImageFileId();
+    }
+    public String getGoodsThumb() {
     	return SERVLET_IMAGE+getGoods().getImageFileId();
     }
     

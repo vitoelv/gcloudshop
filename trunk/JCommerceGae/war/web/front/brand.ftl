@@ -57,7 +57,7 @@
           </div>
           </td>
           <td bgcolor="#ffffff">
-          ${brand.brandDesc|nl2br}<br />
+          ${brand.brandDesc}<br />
             <#if  brand.siteUrl??  >
             ${lang.officialSite} <a href="${brand.siteUrl}" target="_blank" class="f6">${brand.siteUrl}</a><br />
             </#if>

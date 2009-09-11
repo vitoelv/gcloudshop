@@ -15,16 +15,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.jcommerce.core.model.Category;
+import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.ShopConfig;
 import com.jcommerce.core.model.User;
+import com.jcommerce.core.service.Condition;
+import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.service.IWebManager;
 import com.jcommerce.core.util.IConstants;
 import com.jcommerce.gwt.client.ModelNames;
+import com.jcommerce.gwt.client.model.IGoods;
 import com.jcommerce.web.component.ComponentUrl;
 import com.jcommerce.web.component.Navigator;
 import com.jcommerce.web.front.action.helper.Pager;
 import com.jcommerce.web.to.CategoryWrapper;
+import com.jcommerce.web.to.GoodsWrapper;
 import com.jcommerce.web.to.HelpCat;
 import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.ShopConfigWrapper;
@@ -51,20 +56,7 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 //    	return super.getText(s);
     }
 	
-	public ShopConfigWrapper getShopConfigWrapper() {
-		ShopConfig sc =  new ShopConfig();
-		ShopConfigWrapper scw = (ShopConfigWrapper)WrapperUtil.wrap(sc, ShopConfigWrapper.class);
-		scw.put("showGoodssn", "true");
-		scw.put("showGoodsnumber", "true");
-		scw.put("showBrand", "true");
-		scw.put("showGoodsweight", "true");
-		scw.put("showAddtime", "true");
-		scw.put("showMarketprice", "true");
-		scw.put("showGoodsnumber", "true");
-		scw.put("showGoodsnumber", "true");
-		scw.put("showGoodsnumber", "true");
-		return scw;
-	}
+
 	
 	public JSONObject getReqAsJSON(HttpServletRequest request, String paraName) {
 		try {
@@ -153,7 +145,68 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 	}
 	public void includeComments(HttpServletRequest request) {
 	}
+    public void includeRecommendBest(HttpServletRequest request) {
+    	setCatRecSign(request);
+        request.setAttribute("bestGoods", getBestSoldGoods());
+    }
+    public void includeRecommendHot(HttpServletRequest request) {
+    	setCatRecSign(request);
+        request.setAttribute("hotGoods", getHostSoldGoods());
+    }
+    public void includeRecommendNew(HttpServletRequest request) {
+    	setCatRecSign(request);
+        request.setAttribute("newGoods", getNewlyAddedGoods());
+    }
+    public void setCatRecSign(HttpServletRequest request) {
+    	// refer to logic at index.php line 60
+        request.setAttribute("catRecSign", 0);
+        // refer to logic at index.php line 121
+        request.setAttribute("catRec", new String[2]);
+    }
+    private List<Goods> getBestSoldGoods() {
+        Criteria c1 = new Criteria();
+        Condition cond1 = new Condition();
+        cond1.setField(IGoods.IS_BEST);
+        cond1.setOperator(Condition.EQUALS);
+        cond1.setValue("true");
+        c1.addCondition(cond1);
+        List<Goods> list = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1);
+        return filterGoods(list);
+         
+    }
+    private List<Goods> getHostSoldGoods() {
+        Criteria c1 = new Criteria();
+        Condition cond1 = new Condition();
+        cond1.setField(IGoods.IS_HOT);
+        cond1.setOperator(Condition.EQUALS);
+        cond1.setValue("true");
+        c1.addCondition(cond1);
+        
+        List<Goods> list = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1);
+        return filterGoods(list);
 
+    }
+    private List<Goods> getNewlyAddedGoods() {
+        Criteria c1 = new Criteria();
+        Condition cond1 = new Condition();
+        cond1.setField(IGoods.IS_NEW);
+        cond1.setOperator(Condition.EQUALS);
+        cond1.setValue("true");
+        c1.addCondition(cond1);
+        List<Goods> list = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1);
+        return filterGoods(list);
+
+    }
+    private List filterGoods(List<Goods> list) {
+    	return WrapperUtil.wrap(list, GoodsWrapper.class);
+    }
+    
+	public void includeFilterAttr() {
+		// TODO includeFilterAttr
+	}
+	public void includePriceGrade() {
+		// TODO includePriceGrade
+	}
 	public void includeHelp(HttpServletRequest request) {
 		List<HelpCat> helps = new ArrayList<HelpCat>();
 		List<HelpItem> item = new ArrayList<HelpItem>();
@@ -220,7 +273,7 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
         nav.getConfig().put("index", 1);
 
 //        nav.addMiddle(new ComponentUrl("home.action", getText("home_title"), true, true));
-        nav.addMiddle(new ComponentUrl("home.action", "TODOtitle", 1, 1));
+//        nav.addMiddle(new ComponentUrl("home.action", "TODOtitle", 1, 1));
         List<Category> categoryList = defaultManager.getList(ModelNames.CATEGORY, null);
         Iterator<Category> it = categoryList.iterator();
         while (it.hasNext()) {
@@ -283,13 +336,14 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 		
         setPageMeta(request);
         includeHelp(request);
+        includeUrHere(request);
         includePageFooter(request);
         getLangMap(request);
         includePageHeader(request);
         setSessionUser(request);
         
         // just empty
-        ShopConfigWrapper shopConfig = getShopConfigWrapper();
+        ShopConfigWrapper shopConfig = ShopConfigWrapper.getDefaultConfig();
         request.setAttribute("cfg", shopConfig);
         
 //        setShowMarketplace(request);

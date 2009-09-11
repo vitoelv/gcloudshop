@@ -2,7 +2,10 @@ package com.jcommerce.gwt.client.panels;
 
 import java.util.List;
 
+import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
+import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.extjs.gxt.ui.client.widget.form.NumberField;
 import com.extjs.gxt.ui.client.widget.form.Radio;
@@ -24,7 +27,21 @@ public class CategoryPanel extends BaseEntityEditPanel {
 	public String getEntityClassName() {
 		return ModelNames.CATEGORY; 
 	}
-	
+    @Override
+    public Button getShortCutButton() {
+//    	return btnAdd;
+      Button buttonAddClone = new Button("分类列表");
+      buttonAddClone.addSelectionListener(new SelectionListener<ButtonEvent>() {
+          public void componentSelected(ButtonEvent ce) {
+          	onButtonListClicked();
+          }
+      });
+      return buttonAddClone;
+    }
+    public void onButtonListClicked() {
+		CategoryListPanel.State newState = new CategoryListPanel.State();
+		newState.execute();
+    }
 	ListStore<BeanObject> categoryList;
 	ComboBox<BeanObject> fParentId;
 	RadioGroup mfIsShow;
