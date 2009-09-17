@@ -8,15 +8,16 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.jcommerce.core.model.Category;
 import com.jcommerce.core.model.Goods;
-import com.jcommerce.core.model.ShopConfig;
 import com.jcommerce.core.model.User;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
@@ -36,8 +37,6 @@ import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.to.WrapperUtil;
 import com.jcommerce.web.to.HelpCat.HelpItem;
 import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class BaseAction extends ActionSupport implements IPageConstants, IWebConstants, IConstants{
@@ -133,12 +132,22 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 		// cart.ftl
 	}
 	public void includeCategoryTree(HttpServletRequest request) {
-        List<Category> categories = (List<Category>)getDefaultManager().getList(ModelNames.CATEGORY, null);
-        categories.size();
-        List<CategoryWrapper> list = WrapperUtil.wrap(categories, CategoryWrapper.class); 
+
+        List<CategoryWrapper> list = LibGoods.getCategoriesTree(null, getDefaultManager());
         request.setAttribute("categories", list);		
 	}
 
+	public void includeMemberInfo() {
+		String userId = (String)getSession().getAttribute(KEY_USER_ID);
+		if(userId != null) {
+			getRequest().setAttribute("userInfo", LibMain.getUserInfo(userId, getDefaultManager()));
+			
+		}
+		else {
+			
+		}
+		
+	}
 	public void includeHistory(HttpServletRequest request) {
 		Lang lang = getLangMap(request);
 		lang.put("viewHistory", "查看历史");
@@ -250,9 +259,11 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 		
 	}
 	public void includePageHeader(HttpServletRequest request) {
-        // Navigator ............
         
-        Navigator nav = new Navigator();
+		includeMemberInfo();
+		// Navigator ............
+
+		Navigator nav = new Navigator();
         nav.addTop(new ComponentUrl("cart.action", getText("browse_cart"), 1));
         nav.addTop(new ComponentUrl("user.action", getText("user_center"), 1));
         nav.addTop(new ComponentUrl("pick_out.action", getText("pick_out_center"), 1));
@@ -322,6 +333,11 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
         HttpServletRequest request = (HttpServletRequest)ctx.get(ServletActionContext.HTTP_REQUEST);        
         return request;
     }
+    public HttpServletResponse getResponse() {
+        ActionContext ctx = ActionContext.getContext();        
+        HttpServletResponse response = (HttpServletResponse)ctx.get(ServletActionContext.HTTP_RESPONSE);        
+        return response;
+    }
     public HttpSession getSession() {
     	return getRequest().getSession();
     }
@@ -331,6 +347,17 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 		HttpServletRequest request = getRequest();
 //        HttpServletResponse response = (HttpServletResponse)ctx.get(ServletActionContext.HTTP_RESPONSE); 
         
+		String queryString = request.getQueryString();
+		String requestURL = request.getRequestURI();
+		
+		String reqStr = StringUtils.isBlank(queryString) ? requestURL : requestURL+"?"+queryString;
+
+		debug("currentQueryString=["+reqStr+"]");
+		debug("lastQueryString=["+getSession().getAttribute("currentQueryString")+"]");
+		getSession().setAttribute("lastQueryString", getSession().getAttribute("currentQueryString"));
+		getSession().setAttribute("currentQueryString", reqStr);
+
+		
 		Object obj = getSession().getAttribute("WW_TRANS_I18N_LOCALE");
 		debug("locale: "+obj);
 		

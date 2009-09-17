@@ -74,7 +74,7 @@ public class OrderListPanel  extends ContentWidget{
 	protected void onRender(Element parent, int index) {
 		super.onRender(parent, index);
 		
-		BasePagingLoader loader = new PagingListService().getLoader(ModelNames.ORDER, criteria);
+		BasePagingLoader loader = new PagingListService().getLoader(ModelNames.ORDERINFO, criteria);
 		loader.load(0, 10);
 		final ListStore<BeanObject> store = new ListStore<BeanObject>(loader);
 //		store.addStoreListener(new StoreListener<BeanObject>() {

@@ -250,7 +250,7 @@ public class GalleryPanel3 extends TabItem {
 //		this.repaint();
 		
 		if(goodsId!=null) {
-		new ListService().listBeans(ModelNames.GALLERY, IGoodsGallery.GOODS_ID, goodsId, new ListService.Listener() {
+		new ListService().listBeans(ModelNames.GOODSGALLERY, IGoodsGallery.GOODS_ID, goodsId, new ListService.Listener() {
 			@Override
 			public void onSuccess(List<BeanObject> beans) {
 				for(BeanObject gallery:beans) {

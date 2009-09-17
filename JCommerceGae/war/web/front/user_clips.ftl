@@ -5,7 +5,7 @@
 <meta name="Keywords" content="${keywords}" />
 <meta name="Description" content="${description}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>${pageTitle}</title>
+<title>${pageTitle}-${action}</title>
 <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="icon" href="animated_favicon.gif" type="image/gif" />
@@ -62,7 +62,7 @@
           <h5><span>${lang.yourAccount}</span></h5>
           <div class="blank"></div>
           ${lang.yourSurplus}:<a href="user.action?act=account_log" style="color:#006bd0;">${info.surplus}</a><br />
-          <#if  info.creditLine  >  0  >
+          <#if  (info.creditLine  >  0)  >
           ${lang.creditLine}:${info.formatedCreditLine}<br />
           </#if>
           ${lang.yourBonus}:<a href="user.action?act=bonus" style="color:#006bd0;">${info.bonus}</a><br />
@@ -414,7 +414,8 @@
       <td bgcolor="#ffffff">${lang.levelPoint}</td>
       <td bgcolor="#ffffff">${lang.levelMoney}</td>
     </tr>
-    <#list  as >
+    <#list affdb.keys as level>
+    <#assign val=affdb.get(level)>
     <tr align="center">
       <td bgcolor="#ffffff">${level}</td>
       <td bgcolor="#ffffff">${val.num}</td>
@@ -445,7 +446,7 @@
       <td bgcolor="#ffffff">${val.orderSn}</td>
       <td bgcolor="#ffffff">${val.money}</td>
       <td bgcolor="#ffffff">${val.point}</td>
-      <td bgcolor="#ffffff"><#if  val.separateType  ==  1  ||  val.separateType??  ===  0  >${lang.affiliateType.val.separateType}<#else>${lang.affiliateType.affiliateType}</#if></td>
+      <td bgcolor="#ffffff"><#if  val.separateType  ==  1  ||  val.separateType  ==  0  >${lang.affiliateType.val.separateType}<#else>${lang.affiliateType.affiliateType}</#if></td>
       <td bgcolor="#ffffff">${lang.affiliateStats[val.isSeparate]}</td>
     </tr>
     
@@ -575,7 +576,8 @@ copyToClipboard = function(txt)
 <#include "library/page_footer.ftl">
 </body>
 <script type="text/javascript">
-<#list lang.clipsJs as item>
+<#list lang.clipsJs?keys as key>
+<#assign item = lang.clipsJs.get(key)>
 var ${key} = "${item}";
 </#list>
 </script>

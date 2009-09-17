@@ -33,6 +33,9 @@ public class ShopConfigWrapper extends BaseModelWrapper {
 		scw.put("goodsattrStyle", 1);
 		scw.put("pageSize", "2");
 		scw.put("pointsName", "积分");
+		
+		scw.put("shopRegClosed", 0);
+		scw.put("pageStyle", 0);
 		return scw;
 		
 	}

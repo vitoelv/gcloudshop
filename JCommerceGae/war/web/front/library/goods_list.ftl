@@ -66,7 +66,7 @@
     </li>
     <li class="action">
     <a href="javascript:collect(${goods.goodsId});" class="abg f6">${lang.favourableGoods}</a>
-    <a href="javascript:addToCart(${goods.goodsId})"><img src="../images/bnt_buy_1.gif"></a>
+    <a href="javascript:addToCart(${goods.goodsId})"><img src="images/bnt_buy_1.gif"></a>
     </li>
     </ul>
     </#list>
@@ -151,7 +151,9 @@ window.onload = function()
   Compare.init();
   fixpng();
 }
-<#list lang.compareJs as item>
+
+<#list lang.compareJs?keys as key>
+<#assign item = lang.compareJs.get(key)>
 <#if  key  !=  'buttonCompare'  >
 var ${key} = "${item}";
 <#else>

@@ -5,6 +5,12 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Pager {
+	
+	
+	private String url;
+	private int start;
+
+	
     private int page;
     private int size;
     private String sort;
@@ -117,6 +123,18 @@ public class Pager {
 	}
 	public void setArray(Map<Integer, Integer> array) {
 		this.array = array;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	public int getStart() {
+		return start;
+	}
+	public void setStart(int start) {
+		this.start = start;
 	}
 
 }

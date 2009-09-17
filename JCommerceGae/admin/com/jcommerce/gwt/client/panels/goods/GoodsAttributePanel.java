@@ -130,7 +130,7 @@ class GoodsAttributePanel  extends TabItem {
     	}
     	Criteria criteria = new Criteria();
         criteria.addCondition(new Condition(IGoodsAttr.GOODS, Condition.EQUALS, goodsId));
-        new ListService().listBeans(ModelNames.GOODSATTRIBUTE, new ListService.Listener() {
+        new ListService().listBeans(ModelNames.GOODSATTR, new ListService.Listener() {
             public void onSuccess(final List<BeanObject> beans) {
             	goodsAttributes = beans;
             	goodsAttributesReady = true;

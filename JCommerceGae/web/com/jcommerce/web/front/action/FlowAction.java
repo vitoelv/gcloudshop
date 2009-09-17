@@ -25,7 +25,7 @@ import com.jcommerce.gwt.client.model.ICart;
 import com.jcommerce.gwt.client.model.IRegion;
 import com.jcommerce.web.to.CartWrapper;
 import com.jcommerce.web.to.Consignee;
-import com.jcommerce.web.to.OrderWrapper;
+import com.jcommerce.web.to.OrderInfoWrapper;
 import com.jcommerce.web.to.PaymentWrapper;
 import com.jcommerce.web.to.RegionWrapper;
 import com.jcommerce.web.to.ShippingWrapper;
@@ -40,7 +40,7 @@ public class FlowAction extends BaseAction {
 		System.out.println(" in [FlowAction]: "+s );
 	}
 	
-	public static final String PAGE_ADD_TO_CART = "addToCart";
+	public static final String RES_ADD_TO_CART = "addToCart";
 	
 	public static final String KEY_STEP = "step";
 	public static final String STEP_ADD_TO_CART = "add_to_cart";
@@ -80,7 +80,7 @@ public class FlowAction extends BaseAction {
 		String out = res.toString();
 		debug("in [addToCart]: out="+out);
 		jsonRes = new StringBufferInputStream(out);	
-    	return PAGE_ADD_TO_CART;
+    	return RES_ADD_TO_CART;
     }
     
     private String stepCart(HttpServletRequest request) {
@@ -105,7 +105,7 @@ public class FlowAction extends BaseAction {
 		String out = json.toString();
 		debug("in [addToCart]: out="+out);
 		jsonRes = new StringBufferInputStream(out);	
-    	return PAGE_ADD_TO_CART;
+    	return RES_ADD_TO_CART;
     	}
     }
     private Consignee getConsignee(String userId) {
@@ -259,7 +259,7 @@ public class FlowAction extends BaseAction {
          * 取得订单信息
          */
     	OrderInfo order = flowOrderInfo();
-    	OrderWrapper ow = new OrderWrapper(order);
+    	OrderInfoWrapper ow = new OrderInfoWrapper(order);
     	getRequest().setAttribute("order", ow);
     	
 
@@ -333,6 +333,7 @@ public class FlowAction extends BaseAction {
     private List<PaymentWrapper> availablePaymentList() {
     	List<PaymentWrapper> list = new ArrayList<PaymentWrapper>();
     	Payment payment = new Payment();
+    	payment.setPkId("abc");
     	payment.setPayFee("1.00");
     	payment.setPayDesc("开通城市：北京货到付款区域：五环内");
     	payment.setPayName("货到付款");
@@ -343,6 +344,7 @@ public class FlowAction extends BaseAction {
     	
     	
     	payment = new Payment();
+    	payment.setPkId("xyz");
     	payment.setPayFee("1.00");
     	payment.setPayDesc("银行名称收款人信息：全称 ××× ；帐号或地址 ××× ；开户行 ×××。注意事项：办理电汇时，请在电汇单“汇款用途”一栏处注明您的订单号。");
     	payment.setPayName("银行汇款/转帐");
@@ -409,7 +411,7 @@ public class FlowAction extends BaseAction {
         /* 清除缓存，否则买了商品，但是前台页面读取缓存，商品数量不减少 */
         clearAllFiles();
     	
-        request.setAttribute("order", WrapperUtil.wrap(order, OrderWrapper.class));
+        request.setAttribute("order", WrapperUtil.wrap(order, OrderInfoWrapper.class));
         request.setAttribute("total", total);
         request.setAttribute("goodsList", WrapperUtil.wrap(carts, CartWrapper.class));
         request.setAttribute("orderSubmitBack", "您可以返回首页或去用户中心");
@@ -482,7 +484,7 @@ public class FlowAction extends BaseAction {
 	
 	public void setOrder(HttpServletRequest request) {
 		OrderInfo order = new OrderInfo();
-		OrderWrapper ow = new OrderWrapper(order);
+		OrderInfoWrapper ow = new OrderInfoWrapper(order);
 		request.setAttribute("order", ow);
 	}
 	public void setShipping(HttpServletRequest request) {

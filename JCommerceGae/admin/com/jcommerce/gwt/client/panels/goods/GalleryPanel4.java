@@ -170,7 +170,7 @@ public class GalleryPanel4 extends TabItem {
 		addUploader(true);
 		
 		if(goodsId!=null) {
-		new ListService().listBeans(ModelNames.GALLERY, IGoodsGallery.GOODS, goodsId, new ListService.Listener() {
+		new ListService().listBeans(ModelNames.GOODSGALLERY, IGoodsGallery.GOODS, goodsId, new ListService.Listener() {
 			@Override
 			public void onSuccess(List<BeanObject> beans) {
 				for(BeanObject gallery:beans) {
@@ -233,7 +233,7 @@ public class GalleryPanel4 extends TabItem {
 			public void componentSelected(ButtonEvent ce) {
 				System.out.println("- button clicked");
 				// TODO remove the gallery 
-				new DeleteService().deleteBean(ModelNames.GALLERY, id, new DeleteService.Listener() {
+				new DeleteService().deleteBean(ModelNames.GOODSGALLERY, id, new DeleteService.Listener() {
 					@Override
 					public void onSuccess(Boolean success) {
 						lc1.remove(lc);

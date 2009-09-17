@@ -273,13 +273,19 @@ public class TestJava extends TestCase {
 	
 	public void testCompileIfTag() {
 		try {
-			String tag = "$item.type ";
+//			String tag = "$item.type ";
 			
 //			String tag = "$img_links  or $txt_links "; 
 			
 //			String tag = "$item.type eq \"group_buy\"";
 			
 //			String tag = "$pager.page eq $key";
+			
+//			String tag = "$profile.sex==1";
+//			String tag = "$profile.sex == 1";
+			
+			// from user_transaction.dwt
+			String tag = "$action eq order_detail";
 			
 			String res  = new DWTConverter().compileIfTag(tag, false);
 			System.out.println("res: "+res);
@@ -310,9 +316,10 @@ public class TestJava extends TestCase {
 //			String tag = " from =$spec.values item=value key=key ";
 //			String tag = "from=$group_buy_goods item=goods";
 			
-			String tag = "from=$pager.search key= key item = item";
+//			String tag = "from=$pager.search key= key item = item";
 			
 //			String tag = "from=$pager.search item=item key=key";
+			String tag = "from=$city_list.$sn item=city";
 			
 			String res  = new DWTConverter().compileForEachStart(tag);
 //			System.out.println("res: "+res);
