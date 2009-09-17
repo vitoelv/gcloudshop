@@ -149,7 +149,7 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 			cond.setValue(goodsId);
 			criteria.addCondition(cond);
 			List<GoodsGallery> t1 = new ArrayList<GoodsGallery>();
-			super.getList(t1, ModelNames.GALLERY, criteria, -1, -1);
+			super.getList(t1, ModelNames.GOODSGALLERY, criteria, -1, -1);
 			System.out.println("size: "+t1.size());
 			
 			

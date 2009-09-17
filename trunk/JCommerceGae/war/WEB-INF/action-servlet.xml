@@ -30,7 +30,12 @@
 			<ref bean="DefaultManager"/>
 		</property>
 	</bean>
-		
+	<bean name="categoryAction" scope="prototype"
+        class="com.jcommerce.web.front.action.CategoryAction">
+		<property name="defaultManager">
+			<ref bean="DefaultManager"/>
+		</property>
+	</bean>		
 	<bean name="flowAction" scope="prototype"
         class="com.jcommerce.web.front.action.FlowAction">
 		<property name="defaultManager">
@@ -39,6 +44,18 @@
 		<property name="webManager">
 			<ref bean="WebManager"/>
 		</property>
-		
 	</bean>
+	
+	<bean name="userAction" scope="prototype"
+        class="com.jcommerce.web.front.action.UserAction">
+		<property name="defaultManager">
+			<ref bean="DefaultManager"/>
+		</property>
+	</bean>	
+	<bean name="messageAction" scope="prototype"
+        class="com.jcommerce.web.front.action.MessageAction">
+		<property name="defaultManager">
+			<ref bean="DefaultManager"/>
+		</property>
+	</bean>			
 </beans>

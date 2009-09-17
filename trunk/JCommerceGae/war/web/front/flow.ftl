@@ -234,11 +234,12 @@
 
         <script type="text/javascript">
           region.isAdmin = false;
-          <#list lang.flowJs as item>
-          var ${key} = "${item}";
-          </#list>
 
-          {literal}
+<#list lang.flowJs?keys as key>
+<#assign item = lang.flowJs.get(key)>
+var ${key} = "${item}";
+</#list>
+
           onload = function() {
             if (!document.all)
             {

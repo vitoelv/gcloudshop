@@ -164,7 +164,7 @@ public class OrderUserPanel extends ContentWidget{
 		props.put(IOrderInfo.PAY_STATUS, IOrderInfo.PAY_UNPAYED);
 		
 		
-		BeanObject form = new BeanObject(ModelNames.ORDER, props);
+		BeanObject form = new BeanObject(ModelNames.ORDERINFO, props);
 		new CreateService().createOrder(form, new CreateService.Listener(){
 
 			@Override

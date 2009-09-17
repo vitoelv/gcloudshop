@@ -1,8 +1,9 @@
 package com.jcommerce.web.to;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
+
+import com.jcommerce.core.model.ModelObject;
+import com.jcommerce.gwt.client.model.IModelObject;
 
 public abstract class BaseModelWrapper extends BaseWrapper {
 	
@@ -11,7 +12,14 @@ public abstract class BaseModelWrapper extends BaseWrapper {
 	}
 	protected abstract Object getWrapped();
 	
-
+	public String getPkId() {
+		return ((ModelObject)getWrapped()).getPkId();
+	}
+	
+	public String getPkId2() {
+		// this works. but the method names should not be same as getPkId()
+		return (String)get(IModelObject.PK_ID);
+	}
 	
 	@Override
 	public Object get(String key) {

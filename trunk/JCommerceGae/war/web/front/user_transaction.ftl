@@ -47,9 +47,11 @@
          <script type="text/javascript" src="js/utils.js"></script>
 
         <script type="text/javascript">
-          <#list lang.profileJs as item>
-            var ${key} = "${item}";
-          </#list>
+        <#list lang.profileJs?keys as key>
+				<#assign item = lang.profileJs.get(key)>
+					var ${key} = "${item}";
+				</#list>
+
         </script>
       <h5><span>${lang.profile}</span></h5>
       <div class="blank"></div>
@@ -61,11 +63,11 @@
                 </tr>
                 <tr>
                   <td width="28%" align="right" bgcolor="#FFFFFF">${lang.sex}： </td>
-                  <td width="72%" align="left" bgcolor="#FFFFFF"><input type="radio" name="sex" value="0" <#if  profile.sex==0??  >checked="checked"</#if> />
+                  <td width="72%" align="left" bgcolor="#FFFFFF"><input type="radio" name="sex" value="0" <#if  profile.sex==0  >checked="checked"</#if> />
                     ${lang.secrecy}&nbsp;&nbsp;
-                    <input type="radio" name="sex" value="1" <#if  profile.sex==1??  >checked="checked"</#if> />
+                    <input type="radio" name="sex" value="1" <#if  profile.sex==1  >checked="checked"</#if> />
                     ${lang.male}&nbsp;&nbsp;
-                    <input type="radio" name="sex" value="2" <#if  profile.sex==2??  >checked="checked"</#if> />
+                    <input type="radio" name="sex" value="2" <#if  profile.sex==2  >checked="checked"</#if> />
                   ${lang.female}&nbsp;&nbsp; </td>
                 </tr>
                 <tr>
@@ -147,7 +149,7 @@
         <#if  bonus??  >
         <#list bonus as item>
         <tr>
-          <td align="center" bgcolor="#FFFFFF">${item.bonusSn|default:N/A}</td>
+          <td align="center" bgcolor="#FFFFFF">${item.bonusSn}</td>
           <td align="center" bgcolor="#FFFFFF">${item.typeName}</td>
           <td align="center" bgcolor="#FFFFFF">${item.typeMoney}</td>
           <td align="center" bgcolor="#FFFFFF">${item.minGoodsAmount}</td>
@@ -267,7 +269,7 @@
       </#if>
     <!--#包裹状态查询界面 end-->
      <!-- ==========订单详情页面,包括：订单状态，商品列表，费用总计，收货人信息，支付方式，其它信息========== -->
-      <#if  action  ==  orderDetail  >
+      <#if  action  ==  'orderDetail'  >
         <h5><span>${lang.orderStatus}</span></h5>
         <div class="blank"></div>
          <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
@@ -592,11 +594,13 @@
       </#if>
     <!--#订单详情页 end-->
     <!--#会员余额 start-->
-      <#if  action  ==  "accountRaply"  ||  action??  ==  "accountLog"  ||  action??  ==  "accountDeposit"  ||  action??  ==  "accountDetail"  >
+      <#if  action  ==  "accountRaply"  ||  action  ==  "accountLog"  ||  action  ==  "accountDeposit"  ||  action  ==  "accountDetail"  >
         <script type="text/javascript">
-          <#list lang.accountJs as item>
-            var ${key} = "${item}";
-          </#list>
+
+<#list lang.accountJs?keys as key>
+<#assign item = lang.accountJs.get(key)>
+var ${key} = "${item}";
+</#list>          
         </script>
         <h5><span>${lang.userBalance}</span></h5>
         <div class="blank"></div>
@@ -785,19 +789,19 @@
                     </select>
                     <select name="province" id="selProvinces_${sn}" onchange="region.changed(this, 2, 'selCities_${sn}')">
                       <option value="0">${lang.pleaseSelect}${nameOfRegion[1]}</option>
-                      <#list provinceList.${sn} as province>
+                      <#list provinceList.sn as province>
                       <option value="${province.regionId}" <#if  consignee.province  ==  province.regionId??  >selected</#if>>${province.regionName}</option>
                       </#list>
                     </select>
                     <select name="city" id="selCities_${sn}" onchange="region.changed(this, 3, 'selDistricts_${sn}')">
                       <option value="0">${lang.pleaseSelect}${nameOfRegion[2]}</option>
-                      <#list cityList.${sn} as city>
+                      <#list cityList.sn as city>
                       <option value="${city.regionId}" <#if  consignee.city  ==  city.regionId??  >selected</#if>>${city.regionName}</option>
                       </#list>
                     </select>
                     <select name="district" id="selDistricts_${sn}" <#if  !districtList.sn??  >style="display:none"</#if>>
                       <option value="0">${lang.pleaseSelect}${nameOfRegion[3]}</option>
-                      <#list districtList.${sn} as district>
+                      <#list districtList.sn as district>
                       <option value="${district.regionId}" <#if  consignee.district  ==  district.regionId??  >selected</#if>>${district.regionName}</option>
                       </#list>
                     </select>
@@ -858,9 +862,9 @@
 			    <tr>
 					<th width="120" bgcolor="#FFFFFF" align="right" valign="top">${lang.curPoints}:</th>
 					<td bgcolor="#FFFFFF">
-					<label for="pay_points">${lang.exchangePoints.1}:</label><input type="text" size="15" id="pay_points" name="pay_points" value="${shopPoints.payPoints}" style="border:0;border-bottom:1px solid #DADADA;" readonly="readonly" /><br />
+					<label for="pay_points">${lang.exchangePoints[1]}:</label><input type="text" size="15" id="pay_points" name="pay_points" value="${shopPoints.payPoints}" style="border:0;border-bottom:1px solid #DADADA;" readonly="readonly" /><br />
 					<div class="blank"></div>
-					<label for="rank_points">${lang.exchangePoints.0}:</label><input type="text" size="15" id="rank_points" name="rank_points" value="${shopPoints.rankPoints}" style="border:0;border-bottom:1px solid #DADADA;" readonly="readonly" />
+					<label for="rank_points">${lang.exchangePoints[0]}:</label><input type="text" size="15" id="rank_points" name="rank_points" value="${shopPoints.rankPoints}" style="border:0;border-bottom:1px solid #DADADA;" readonly="readonly" />
 					</td>
 					</tr>
           <tr><td bgcolor="#FFFFFF">&nbsp;</td>
@@ -1055,8 +1059,9 @@
 <#include "library/page_footer.ftl">
 </body>
 <script type="text/javascript">
-<#list lang.clipsJs as item>
+<#list lang.clipsJs?keys as key> <#assign item = lang.clipsJs.get(key)>
 var ${key} = "${item}";
 </#list>
+
 </script>
 </html>

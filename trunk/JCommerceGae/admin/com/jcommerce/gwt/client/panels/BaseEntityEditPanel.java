@@ -125,7 +125,7 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 	}
 	protected SelectionListener<ButtonEvent> selectionListener = new SelectionListener<ButtonEvent>() {
 	    public void componentSelected(ButtonEvent sender) {
-	    	log("on Submit: formPanel="+formPanel);
+//	    	log("on Submit: formPanel="+formPanel);
 	    	try {
 	    	if(!formPanel.isValid()) {
 	    		Window.alert("Please check input before submit!!!");
@@ -161,6 +161,11 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
     			name = selected.getName();
 
     			value = selected.getValueAttribute();
+    		}
+    		if(field instanceof ComboBox) {
+    			ComboBox box = (ComboBox)field;
+    			String key = box.getValueField();
+    			value = ((BeanObject)value).get(key);
     		}
     		log("name: "+field.getName()+", value: ("+value+")");
     		props.put(name, value);

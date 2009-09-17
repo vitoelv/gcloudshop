@@ -5,7 +5,7 @@
 <meta name="Keywords" content="${keywords}" />
 <meta name="Description" content="${description}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>${pageTitle}</title>
+<title>${pageTitle}-${action}</title>
 <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="icon" href="animated_favicon.gif" type="image/gif" />
@@ -207,9 +207,10 @@
     <script type="text/javascript" src="js/utils.js"></script>
 
     <script type="text/javascript">
-    <#list lang.passwordJs as item>
-      var ${key} = "${item}";
-    </#list>
+		<#list lang.passwordJs?keys as key>
+		<#assign item = lang.passwordJs.get(key)>
+		var ${key} = "${item}";
+		</#list> 
     </script>
 <div class="usBox">
   <div class="usBox_2 clearfix">
@@ -243,9 +244,10 @@
 
 <#if  action  ==  'resetPassword'  >
     <script type="text/javascript">
-    <#list lang.passwordJs as item>
-      var ${key} = "${item}";
-    </#list>
+		<#list lang.passwordJs?keys as key>
+		<#assign item = lang.passwordJs.get(key)>
+		var ${key} = "${item}";
+		</#list>    
     </script>
 <div class="usBox">
   <div class="usBox_2 clearfix">
@@ -280,7 +282,8 @@
 </body>
 <script type="text/javascript">
 var process_request = "${lang.processRequest}";
-<#list lang.passportJs as item>
+<#list lang.passportJs?keys as key>
+<#assign item = lang.passportJs.get(key)>
 var ${key} = "${item}";
 </#list>
 var username_exist = "${lang.usernameExist}";

@@ -8,6 +8,10 @@
     <constant name="struts.devMode" value="true" />
     <include file="example.xml"/>
 	<package name="shop" namespace="/web" extends="struts-default">
+	   	<global-results>
+      		<!-- result name="message" type="redirectAction">message</result-->
+      		<result name="message" type="freemarker">/web/front/message.ftl</result>
+   		</global-results>
 	
 		<action name="home" method="execute" class="homeAction">
 			<result name="success" type="freemarker">/web/front/index.ftl</result>
@@ -34,6 +38,21 @@
 			<result name="success" type="freemarker">/web/front/brand.ftl</result>
 			<result name="error" type="redirectAction">home</result>
 		</action>
+		
+		<action name="user" method="execute" class="userAction">
+			<result name="user_clips" type="freemarker">/web/front/user_clips.ftl</result>
+			<result name="user_passport" type="freemarker">/web/front/user_passport.ftl</result>
+			<result name="user_transaction" type="freemarker">/web/front/user_transaction.ftl</result>
+			<result name="is_registered" type="stream">
+     			<param name="contentType">html/text</param>
+     			<param name="inputName">isRegistered</param>
+   			</result>
+			<result name="error" type="redirectAction">home</result>
+		</action>
+		<action name="message" method="execute" class="messageAction">
+			<result name="success" type="freemarker">/web/front/message.ftl</result>
+			<result name="error" type="redirectAction">home</result>
+		</action>		
 	</package>
 </struts>
 

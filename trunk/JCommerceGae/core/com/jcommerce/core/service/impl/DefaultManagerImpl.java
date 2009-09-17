@@ -5,6 +5,7 @@
 package com.jcommerce.core.service.impl;
 
 import java.beans.PropertyDescriptor;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -103,13 +104,18 @@ public class DefaultManagerImpl implements IDefaultManager {
     public List getList(String modelName, Criteria criteria) {
         debug("[getList]: modelName="+modelName);
         
-        return getDao().getList(modelName, criteria, -1, -1);
+        List res = new ArrayList();
+        res.addAll(getDao().getList(modelName, criteria, -1, -1));
+        
+        return res; 
 
     }
     public List getList(String modelName, Criteria criteria, int firstRow, int maxRow) {
         debug("[getList]: modelName="+modelName+", firstRow: "+firstRow+", maxRow: "+maxRow);
+        List res = new ArrayList();
+        res.addAll(getDao().getList(modelName, criteria, firstRow, maxRow));
         
-        return getDao().getList(modelName, criteria, firstRow, maxRow);
+        return res;
 
     }
     public int getList(List res, String modelName, Criteria criteria, int firstRow, int maxRow) {
