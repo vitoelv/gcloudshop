@@ -7,7 +7,7 @@ package com.jcommerce.gwt.client.service;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.jcommerce.gwt.client.IShopServiceAsync;
+import com.jcommerce.gwt.client.IDefaultServiceAsync;
 import com.jcommerce.gwt.client.form.BeanObject;
 
 public class ReadService extends RemoteService {
@@ -20,7 +20,7 @@ public class ReadService extends RemoteService {
             throw new RuntimeException("id = null");
         }
         
-        final IShopServiceAsync service = getService();
+        final IDefaultServiceAsync service = getDefaultService();
         service.getBean(model, id, new AsyncCallback<BeanObject>() {
             public synchronized void onSuccess(BeanObject result) {
                 if (listener != null) {
@@ -53,7 +53,7 @@ public class ReadService extends RemoteService {
             }
         }
         
-        final IShopServiceAsync service = getService();
+        final IDefaultServiceAsync service = getDefaultService();
         service.getBeans(model, ids, new AsyncCallback<List<BeanObject>>() {
             public synchronized void onSuccess(List<BeanObject> result) {
                 if (listener != null) {

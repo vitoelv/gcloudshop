@@ -2,6 +2,8 @@ package com.jcommerce.core.model;
 
 import java.io.Serializable;
 
+import com.jcommerce.gwt.client.util.URLConstants;
+
 
 
 public abstract class ModelObject implements Serializable, URLConstants {

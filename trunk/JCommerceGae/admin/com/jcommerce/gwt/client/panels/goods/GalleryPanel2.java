@@ -27,6 +27,7 @@ import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.GalleryForm;
 import com.jcommerce.gwt.client.model.IGoods;
 import com.jcommerce.gwt.client.model.IGoodsGallery;
+import com.jcommerce.gwt.client.util.URLConstants;
 
 public class GalleryPanel2 extends TabItem {
 	int uploaderCount = 0;
@@ -218,7 +219,7 @@ public class GalleryPanel2 extends TabItem {
 		
 		
 		Image im = new Image();
-		im.setUrl(GWT.getModuleBaseURL()+"dynaImageService.do?fileId="+imageFileId);
+		im.setUrl(URLConstants.SERVLET_IMAGE+imageFileId);
 
 		
 		HiddenField<String> idField = new HiddenField<String>();

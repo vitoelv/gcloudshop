@@ -5,7 +5,7 @@
 package com.jcommerce.gwt.client.service;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.jcommerce.gwt.client.IShopServiceAsync;
+import com.jcommerce.gwt.client.IDefaultServiceAsync;
 import com.jcommerce.gwt.client.form.BeanObject;
 
 public class UpdateService extends RemoteService {
@@ -18,7 +18,7 @@ public class UpdateService extends RemoteService {
             throw new RuntimeException("bean = null");
         }
         
-        final IShopServiceAsync service = getService();
+        final IDefaultServiceAsync service = getDefaultService();
         service.updateObject(id, bean, new AsyncCallback<Boolean>() {
             public synchronized void onSuccess(Boolean success) {
                 System.out.println("update onSuccess( "+success);

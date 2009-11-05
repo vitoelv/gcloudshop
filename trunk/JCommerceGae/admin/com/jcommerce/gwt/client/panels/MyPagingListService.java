@@ -11,7 +11,7 @@ import com.extjs.gxt.ui.client.data.ListLoadConfig;
 import com.extjs.gxt.ui.client.data.ListLoadResult;
 import com.extjs.gxt.ui.client.data.RpcProxy;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.jcommerce.gwt.client.IShopServiceAsync;
+import com.jcommerce.gwt.client.ISpecialServiceAsync;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.service.Criteria;
@@ -25,20 +25,15 @@ public class MyPagingListService extends RemoteService {
             throw new RuntimeException("model = null");
         }
         
-        final IShopServiceAsync service = getService();
+        /**
+         * This class is just an attempt to use DataReader to convert data.
+         * It works well, however, we decide not to adopt this way in our application.
+         */
+        final ISpecialServiceAsync service = getSpecialService();
         MyProxy<ListLoadResult> proxy = new MyProxy<ListLoadResult>() {
-        	
-//            public void load(ListLoadConfig loadConfig, AsyncCallback<ListLoadResult> callback) {
-////                service.getMyPaymentMetaList(loadConfig, callback);
-//            }
-
-			@Override
-			protected void load(Object loadConfig,
-					AsyncCallback<ListLoadResult> callback) {
-				// TODO Auto-generated method stub
-				
-			}
-            
+            public void load(Object loadConfig, AsyncCallback<ListLoadResult> callback) {
+                service.getMyPaymentMetaList((ListLoadConfig)loadConfig, callback);
+            }
         };
         
         // convert from ListLoadResult<Map<String, Object>> to ListLoadResult<BeanObject>
@@ -73,7 +68,7 @@ public class MyPagingListService extends RemoteService {
 //            throw new RuntimeException("model = null");
 //        }
 //        
-//        final IShopServiceAsync service = getService();
+//        final IDefaultServiceAsync service = getService();
 //        MyProxy proxy = new MyProxy() {
 //            public void load(Object loadConfig, AsyncCallback callback) {
 //                service.getPagingList(model, criteria, (PagingLoadConfig) loadConfig, callback);

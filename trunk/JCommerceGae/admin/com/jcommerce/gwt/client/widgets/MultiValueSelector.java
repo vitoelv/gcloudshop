@@ -22,10 +22,10 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.jcommerce.gwt.client.Utils;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.service.ListService;
 import com.jcommerce.gwt.client.service.ReadService;
+import com.jcommerce.gwt.client.util.GWTUtils;
 
 public class MultiValueSelector extends Composite {
     private ListBox list = new ListBox(); 
@@ -177,12 +177,12 @@ public class MultiValueSelector extends Composite {
             public void onClick(Widget sender) {
                 dialogBox.hide();
 
-                String id = Utils.getSelectedValue(listAll);
+                String id = GWTUtils.getSelectedValue(listAll);
                 if (!ids.contains(id)) {
                     ids.add(id);
-                    list.addItem(Utils.getSelectedText(listAll));
+                    list.addItem(GWTUtils.getSelectedText(listAll));
                 } else {
-                    Utils.showErrorDialog("Duplicate value not allowed!");
+                    GWTUtils.showErrorDialog("Duplicate value not allowed!");
                 }
             }
         });

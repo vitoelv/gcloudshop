@@ -47,6 +47,7 @@ public class JDOQLHelper {
             List<Condition> conds = criteria.getConditions();
             for (Condition cond : conds) {
                 if (!first) {
+                	// TODO support OR among conditions (maybe subquery)
                     hql.append(" && ");
                     paraDeclares.append( " , ");
                 }

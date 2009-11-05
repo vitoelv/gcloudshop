@@ -37,7 +37,6 @@ import com.extjs.gxt.ui.client.widget.toolbar.PagingToolBar;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ListBox;
-import com.jcommerce.core.util.IConstants;
 import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
@@ -47,14 +46,13 @@ import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.DeleteService;
 import com.jcommerce.gwt.client.service.PagingListService;
 import com.jcommerce.gwt.client.widgets.ActionCellRenderer;
-import com.jcommerce.gwt.client.widgets.ColumnPanel;
 
 /**
  * Example file.
  */
 public class CategoryListPanel extends ContentWidget {    
 	
-	ColumnPanel contentPanel = new ColumnPanel();
+//	ColumnPanel contentPanel = new ColumnPanel();
     ListBox b_list = new ListBox();    
     Button btnAdd = new Button("添加分类");
     ListBox lstAction = new ListBox();
@@ -72,7 +70,7 @@ public class CategoryListPanel extends ContentWidget {
     private static CategoryListPanel instance;
     private CategoryListPanel() {
         System.out.println("----------CategoryInfo");
-        add(contentPanel);        
+//        add(contentPanel);        
         initJS(this);   
     }
     // leon to integrate with history-based page navigation mechnism. 
@@ -204,7 +202,7 @@ public class CategoryListPanel extends ContentWidget {
 //		newState.setSelectedParentID(getCurState().getSelectedGoodsTypeID());
 		newState.execute();
 		
-//        final IShopServiceAsync service = getService();
+//        final IDefaultServiceAsync service = getService();
 //        service.getBean(ModelNames.CATEGORY, id, new AsyncCallback<BeanObject>() {
 //            public synchronized void onSuccess(BeanObject result) {
 //            	JCommerceGae.getInstance().displayModifyCategory(result);                               

@@ -2,9 +2,11 @@ package com.jcommerce.core.service;
 
 import java.util.List;
 
+import com.jcommerce.core.model.AreaRegion;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.GoodsType;
+import com.jcommerce.core.model.ShippingArea;
 
 public interface CustomizedManager {
     
@@ -16,6 +18,10 @@ public interface CustomizedManager {
     
     public String addGoods(Goods to);
     public boolean updateGoods(Goods to);
+    
+    public void getShippingAreaWithRegionName(List<ShippingArea> resultSet, String shippingId);
+    
+    public void getAreaRegionListWithName(List<AreaRegion> resultSet, String shippingAreaId);
     
 
 }

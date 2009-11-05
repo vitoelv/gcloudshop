@@ -1,17 +1,26 @@
 package com.jcommerce.gwt.client;
 
-import com.extjs.gxt.ui.client.Style.Orientation;
+import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.widget.Component;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
-import com.extjs.gxt.ui.client.widget.Layout;
-import com.extjs.gxt.ui.client.widget.LayoutContainer;
+import com.extjs.gxt.ui.client.widget.Html;
 import com.extjs.gxt.ui.client.widget.button.Button;
-import com.extjs.gxt.ui.client.widget.layout.RowLayout;
 import com.extjs.gxt.ui.client.widget.layout.TableData;
 import com.extjs.gxt.ui.client.widget.layout.TableLayout;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Widget;
+import com.jcommerce.gwt.client.util.GWTUtils;
 
 public abstract class ContentWidget extends ContentPanel {
+	
+    public void log(String s) {
+    	
+    	StringBuffer buf = new StringBuffer();
+    	buf.append("[").append(this.getClass().getName()).append("]:").append(s);
+    	Logger.getClientLogger().log(buf.toString());
+    	System.out.println(buf.toString());
+    }
+	
     public ContentWidget() {    	
         super();        
         init();
@@ -44,8 +53,10 @@ public abstract class ContentWidget extends ContentPanel {
 //    	this.setLayout(new TableLayout(1));
 //    	TableData td = new TableData();
 //    	td.setWidth("100%");
-        
-        setLayout(new TableLayout(1));
+    	TableLayout tl = new TableLayout(1);
+        tl.setCellSpacing(20);
+        setLayout(tl);
+
 //        this.setBodyBorder(false);
         
         // Add the name
@@ -61,6 +72,9 @@ public abstract class ContentWidget extends ContentPanel {
 //        table.setCellSpacing(6);
         
 //        contentPanel.add(table);
+        
+
+        
     }
     
     /**
@@ -88,10 +102,34 @@ public abstract class ContentWidget extends ContentPanel {
 //        return contentPanel;
 //    }
     
-    protected IShopServiceAsync getService() {
-        return Utils.getService();
-    }
-    
+
     protected abstract PageState getCurState();
+
+	@Override
+	protected void onRender(Element parent, int pos) {
+		// TODO Auto-generated method stub
+		super.onRender(parent, pos);
+        ContentPanel title = new ContentPanel();
+        TableLayout tl = new TableLayout(2);
+        title.setLayout(tl);
+        title.setHeaderVisible(false);
+        tl.setCellPadding(10);
+//        title.setSpacing(10);
+        Html html = new Html("<B>管理中心</B> - "+this.getName());
+        TableData td = new TableData();
+        td.setHorizontalAlign(Style.HorizontalAlignment.LEFT);
+        td.setWidth("50%");
+        title.add(html, td);
+        
+        td = new TableData();
+        td.setHorizontalAlign(Style.HorizontalAlignment.RIGHT);
+        td.setWidth("50%");
+        if(getShortCutButton()!=null) {
+        	title.add(this.getShortCutButton(), td);
+        } else {
+        	title.add(new Html("TODO: override getShortCutButton"), td);
+        }
+        add(title);
+	}
     
 }

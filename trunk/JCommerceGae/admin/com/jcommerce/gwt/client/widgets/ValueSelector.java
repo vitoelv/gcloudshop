@@ -18,11 +18,11 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.jcommerce.gwt.client.IShopServiceAsync;
-import com.jcommerce.gwt.client.Utils;
+import com.jcommerce.gwt.client.IDefaultServiceAsync;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.service.ListService;
 import com.jcommerce.gwt.client.service.ReadService;
+import com.jcommerce.gwt.client.util.GWTUtils;
 
 public class ValueSelector extends Composite {
     private TextBox text = new TextBox();
@@ -124,8 +124,8 @@ public class ValueSelector extends Composite {
         // Add a close button at the bottom of the dialog
         Button btnOK = new Button("OK", new ClickListener() {
             public void onClick(Widget sender) {
-                id = Utils.getSelectedValue(listAll);
-                text.setText(Utils.getSelectedText(listAll));
+                id = GWTUtils.getSelectedValue(listAll);
+                text.setText(GWTUtils.getSelectedText(listAll));
                 dialogBox.hide();
             }
         });

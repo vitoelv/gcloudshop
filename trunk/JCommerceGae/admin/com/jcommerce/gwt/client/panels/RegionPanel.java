@@ -95,7 +95,7 @@ public class RegionPanel extends ContentWidget {
 		buildCurrentRegionLabel();
 		buildChildrenPanel();
 		
-		getDatafromDb(getCurState().getParentId(), getCurState().getType(), getCurState().getParentName());
+//		getDatafromDb(getCurState().getParentId(), getCurState().getType(), getCurState().getParentName());
 
 	}
 	
@@ -126,7 +126,8 @@ public class RegionPanel extends ContentWidget {
 									//bean.set(add_id.getName(), id);
 									
 									add_name.setValue(null);
-									getDatafromDb(getCurState().getParentId(), getCurState().getType(), getCurState().getParentName());
+//									getDatafromDb(getCurState().getParentId(), getCurState().getType(), getCurState().getParentName());
+									refresh();
 									//childrenRegionPanel.add(new RegionChildPanel(bean));
 								}
 							}
@@ -250,13 +251,13 @@ public class RegionPanel extends ContentWidget {
 	
 	private String getAddLabelTextByType(String type){
 		String rtn = null;
-		if(type.equals(IRegion.TYPE_COUNTRY)){
+		if(type.equals(IRegion.TYPE_COUNTRY.toString())){
 			rtn = Resources.constants.Region_addFirstRegion();
-		} else if(type.equals(IRegion.TYPE_PROVINCE)){
+		} else if(type.equals(IRegion.TYPE_PROVINCE.toString())){
 			rtn = Resources.constants.Region_addSecondRegion();
-		} else if(type.equals(IRegion.TYPE_CITY)){
+		} else if(type.equals(IRegion.TYPE_CITY.toString())){
 			rtn = Resources.constants.Region_addThirdRegion();
-		} else if(type.equals(IRegion.TYPE_DISTRICT)){
+		} else if(type.equals(IRegion.TYPE_DISTRICT.toString())){
 			rtn = Resources.constants.Region_addFourthRegion();
 		}
 		return rtn;
@@ -264,13 +265,13 @@ public class RegionPanel extends ContentWidget {
 	
 	private String getCurrentLabelTextByType(String type, String parentName){
 		String rtn = null;
-		if(type.equals(IRegion.TYPE_COUNTRY)){
+		if(type.equals(IRegion.TYPE_COUNTRY.toString())){
 			rtn = Resources.constants.Region_firstRegion();
-		} else if(type.equals(IRegion.TYPE_PROVINCE)){
+		} else if(type.equals(IRegion.TYPE_PROVINCE.toString())){
 			rtn = "[ " + parentName + " ]" + Resources.constants.Region_secondRegion();
-		} else if(type.equals(IRegion.TYPE_CITY)){
+		} else if(type.equals(IRegion.TYPE_CITY.toString())){
 			rtn = "[ " + parentName + " ]" + Resources.constants.Region_thirdRegion();
-		} else if(type.equals(IRegion.TYPE_DISTRICT)){
+		} else if(type.equals(IRegion.TYPE_DISTRICT.toString())){
 			rtn = "[ " + parentName + " ]" + Resources.constants.Region_fourthRegion();
 		}
 		return rtn;
@@ -278,11 +279,11 @@ public class RegionPanel extends ContentWidget {
 	
 	private String getChildrenType(String currentType){
 		Long childrenType = null;
-		if (currentType.equals(IRegion.TYPE_COUNTRY)){
+		if (currentType.equals(IRegion.TYPE_COUNTRY.toString())){
 			childrenType = IRegion.TYPE_PROVINCE;
-		} else if (currentType.equals(IRegion.TYPE_PROVINCE)) {
+		} else if (currentType.equals(IRegion.TYPE_PROVINCE.toString())) {
 			childrenType = IRegion.TYPE_CITY;
-		} else if (currentType.equals(IRegion.TYPE_CITY)) {
+		} else if (currentType.equals(IRegion.TYPE_CITY.toString())) {
 			childrenType = IRegion.TYPE_DISTRICT;
 		}
 		
@@ -328,7 +329,8 @@ public class RegionPanel extends ContentWidget {
 		
 		public State(){
 			super();
-			setParentId(IRegion.COUNTRY_PARENT_ID);
+//			setParentId(IRegion.COUNTRY_PARENT_ID);
+			setParentId(null);
 			setType(IRegion.TYPE_COUNTRY.toString());
 		}
 	}

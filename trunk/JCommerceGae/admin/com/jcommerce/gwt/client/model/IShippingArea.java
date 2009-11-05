@@ -9,7 +9,9 @@ package com.jcommerce.gwt.client.model;
 public interface IShippingArea extends IModelObject {
    
    // relation
-      
+	public static final String SHIPPING = "shipping";    
+	public static final String AREA_REGIONS = "areaRegions";
+	public static final String REGION_NAMES = "regionNames";
   // fields
   public static final String SHIPPING_AREA_ID = "shippingAreaId"; 
   public static final String SHIPPING_AREA_NAME = "shippingAreaName"; 

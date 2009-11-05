@@ -10,7 +10,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ListBox;
-import com.jcommerce.gwt.client.Utils;
+import com.jcommerce.gwt.client.util.GWTUtils;
 
 public class DateWidget extends Composite {
     private ListBox year = new ListBox();
@@ -25,7 +25,7 @@ public class DateWidget extends Composite {
         for (int y = thisyear - 10 ; y < thisyear + 10 ; y++) {
             year.addItem(""+y);
         }
-        Utils.setSelectedText(year, ""+thisyear);
+        GWTUtils.setSelectedText(year, ""+thisyear);
         
         for (int m = 1 ; m <= 12 ; m++) {
             month.addItem(""+m);
@@ -47,12 +47,12 @@ public class DateWidget extends Composite {
     }
     
     public Date getValue() {
-        Date d = format.parse(Utils.getSelectedText(year)+"-"+Utils.getSelectedText(month)+"-"+Utils.getSelectedText(day));
+        Date d = format.parse(GWTUtils.getSelectedText(year)+"-"+GWTUtils.getSelectedText(month)+"-"+GWTUtils.getSelectedText(day));
         return d;
     }
     
     public void setValue(Date d) {
-        Utils.setSelectedText(year, ""+(d.getYear() + 1900));
+        GWTUtils.setSelectedText(year, ""+(d.getYear() + 1900));
         month.setSelectedIndex(d.getMonth());
         day.setSelectedIndex(d.getDay() - 1);
     }

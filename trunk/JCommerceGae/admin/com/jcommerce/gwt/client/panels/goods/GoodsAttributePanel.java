@@ -213,21 +213,21 @@ class GoodsAttributePanel  extends TabItem {
             hf.setValue(attributeId);
             addField(hf);
             
-            int inputType = ((Number)attr.get(IAttribute.ATTR_INPUT_TYPE)).intValue();
+            long inputType = ((Number)attr.get(IAttribute.ATTR_INPUT_TYPE)).longValue();
             String values = attr.getString(IAttribute.ATTR_VALUES);
-            if (inputType == IAttribute.INPUT_SINGLELINETEXT) {
+            if (inputType == IAttribute.INPUTTYPE_SINGLELINETEXT) {
             	TextField<String> field = new TextField<String>();
             	field.setName(buildElementName(IGoodsAttr.ATTR_VALUE));
             	field.setFieldLabel(name);
             	field.setValue(value);
             	addField(field);
-            } else if (inputType == IAttribute.INPUT_MULTIPLELINETEXT) {
+            } else if (inputType == IAttribute.INPUTTYPE_MULTIPLELINETEXT) {
             	TextArea field = new TextArea();
             	field.setName(buildElementName(IGoodsAttr.ATTR_VALUE));
             	field.setFieldLabel(name);
             	field.setValue(value);
             	addField(field);
-            } else if (inputType == IAttribute.INPUT_CHOICE) {
+            } else if (inputType == IAttribute.INPUTTYPE_CHOICE) {
             	ListStore<BeanObject> store = new ListStore<BeanObject>();
                 if (values != null) {
                     String[] vs = values.split("\n");

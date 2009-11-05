@@ -7,39 +7,45 @@ package com.jcommerce.gwt.client.service;
 import com.extjs.gxt.ui.client.Registry;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
-import com.jcommerce.gwt.client.CustomizedService;
-import com.jcommerce.gwt.client.CustomizedServiceAsync;
-import com.jcommerce.gwt.client.IShopService;
-import com.jcommerce.gwt.client.IShopServiceAsync;
+import com.jcommerce.gwt.client.ISpecialService;
+import com.jcommerce.gwt.client.ISpecialServiceAsync;
+import com.jcommerce.gwt.client.IDefaultService;
+import com.jcommerce.gwt.client.IDefaultServiceAsync;
 
 public class RemoteService {
-    public final static String CRUDSERVICE = "CURDservice";
-    public final static String CUSTOMIZEDSERVICE = "Customizedservice";
+    public final static String DEFAULTSERVICE = "DefaultService";
+    public final static String SPECIALSERVICE = "SpecialService";
     
     public static void init() {
-        IShopServiceAsync service = (IShopServiceAsync) GWT.create(IShopService.class);
-        String moduleRelativeURL = "/admin/ishopService.do";
+        IDefaultServiceAsync service = (IDefaultServiceAsync) GWT.create(IDefaultService.class);
+        String moduleRelativeURL = "/admin/defaultService.do";
         ((ServiceDefTarget)service).setServiceEntryPoint(moduleRelativeURL);
-        Registry.register(CRUDSERVICE, service); 
+        Registry.register(DEFAULTSERVICE, service); 
 
-        CustomizedServiceAsync customizedService = (CustomizedServiceAsync) GWT.create(CustomizedService.class);
+        ISpecialServiceAsync specialService = (ISpecialServiceAsync) GWT.create(ISpecialService.class);
 //        moduleRelativeURL = GWT.getModuleBaseURL() + "customizedService.do";
-        moduleRelativeURL = "/admin/customizedService.do";
-        ((ServiceDefTarget)customizedService).setServiceEntryPoint(moduleRelativeURL);
-        Registry.register(CUSTOMIZEDSERVICE, customizedService); 
+        moduleRelativeURL = "/admin/specialService.do";
+        ((ServiceDefTarget)specialService).setServiceEntryPoint(moduleRelativeURL);
+        Registry.register(SPECIALSERVICE, specialService); 
     }
     
-    protected IShopServiceAsync getService() {
-        return (IShopServiceAsync)Registry.get(CRUDSERVICE);
-    }
-    
-    public static CustomizedServiceAsync getCustomizedService() {
-        CustomizedServiceAsync service = (CustomizedServiceAsync)Registry.get(CUSTOMIZEDSERVICE);
+    public static IDefaultServiceAsync getDefaultService() {
+    	IDefaultServiceAsync service = (IDefaultServiceAsync)Registry.get(DEFAULTSERVICE);
         if(service==null) {
             init();
-            service = (CustomizedServiceAsync)Registry.get(CUSTOMIZEDSERVICE);
+            service = (IDefaultServiceAsync)Registry.get(DEFAULTSERVICE);
         }
         return service;
+        
+    }
+    
+    public static ISpecialServiceAsync getSpecialService() {
+        ISpecialServiceAsync specialService = (ISpecialServiceAsync)Registry.get(SPECIALSERVICE);
+        if(specialService==null) {
+            init();
+            specialService = (ISpecialServiceAsync)Registry.get(SPECIALSERVICE);
+        }
+        return specialService;
         
     }
 }

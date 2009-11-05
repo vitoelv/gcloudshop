@@ -25,7 +25,7 @@ import com.extjs.gxt.ui.client.widget.toolbar.PagingToolBar;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.jcommerce.gwt.client.ContentWidget;
-import com.jcommerce.gwt.client.CustomizedServiceAsync;
+import com.jcommerce.gwt.client.ISpecialServiceAsync;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.BeanObject;
@@ -36,7 +36,6 @@ import com.jcommerce.gwt.client.service.DeleteService;
 import com.jcommerce.gwt.client.service.RemoteService;
 import com.jcommerce.gwt.client.service.UpdateService;
 import com.jcommerce.gwt.client.widgets.ActionCellRenderer;
-import com.jcommerce.gwt.client.widgets.ColumnPanel;
 
 public class GoodsTypeListPanel extends ContentWidget {
 	public static interface Constants {
@@ -44,7 +43,6 @@ public class GoodsTypeListPanel extends ContentWidget {
 		String GoodsTypeList_ColumnName();
 
 	}
-	
 	public static class State extends PageState {
 		public String getPageClassName() {
 			return GoodsTypeListPanel.class.getName();
@@ -61,17 +59,15 @@ public class GoodsTypeListPanel extends ContentWidget {
 		this.curState = curState;
 	}
 	
-	
-//	BasePagingLoader loader = null;
 	int pageSize = 5;
 
-	ColumnPanel contentPanel = new ColumnPanel();
+
+	
 	PagingToolBar toolBar; 
 	private static GoodsTypeListPanel instance;
 	private GoodsTypeListPanel() {
 		super();
 		System.out.println("----------GoodsTypeList");
-		add(contentPanel);
 		initJS(this);
 	}
 	public static GoodsTypeListPanel getInstance(){
@@ -156,7 +152,7 @@ public class GoodsTypeListPanel extends ContentWidget {
 //		cond.setValue(id);
 //		criteria.addCondition(cond);
 //		
-//        final IShopServiceAsync service = getService();
+//        final IDefaultServiceAsync service = getService();
 //        service.getList(ModelNames.ATTRIBUTE, criteria, new AsyncCallback<List<BeanObject>>() {
 //            public synchronized void onSuccess(List<BeanObject> result) {
 //               
@@ -187,7 +183,7 @@ public class GoodsTypeListPanel extends ContentWidget {
     	wantedFields.add(GoodsTypeForm.ENABLED);
     	
 //    	loader = new PagingListService().getLoader(ModelNames.GOODSTYPE, wantedFields);
-        final CustomizedServiceAsync service = RemoteService.getCustomizedService();
+        final ISpecialServiceAsync service = RemoteService.getSpecialService();
         RpcProxy proxy = new RpcProxy() {
             public void load(Object loadConfig, AsyncCallback callback) {
                 service.getGoodsTypeListWithAttrCount(ModelNames.GOODSTYPE, null, wantedFields, (PagingLoadConfig)loadConfig, callback);

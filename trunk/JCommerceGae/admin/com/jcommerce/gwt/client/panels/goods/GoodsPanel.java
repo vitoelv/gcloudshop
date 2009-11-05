@@ -24,6 +24,8 @@ import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.FieldEvent;
 import com.extjs.gxt.ui.client.event.FormEvent;
 import com.extjs.gxt.ui.client.event.Listener;
+import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
+import com.extjs.gxt.ui.client.event.SelectionChangedListener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.Info;
@@ -499,6 +501,15 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
         fListCategory.setStore(categoryList);
         fListCategory.setEmptyText("Select one or more Categories...");   
         fListCategory.setWidth(150);   
+        fListCategory.addSelectionChangedListener(new SelectionChangedListener<BeanObject>() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent<BeanObject> se) {
+				Info.display("ah-oh", "CLICKED");
+				
+			}
+        	
+        });
         contentPanelGeneral.add(fListCategory);
         
         
@@ -636,8 +647,8 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
     protected void submit() {
     	
         try {
-        	// mannually render it.
-        	// HTMLEditor has some initilizing work to do in render
+        	// Manually render it.
+        	// HTMLEditor has some initializing work to do in render
         	// submit without clicking into detail tab
 //        	area.render(contentPanelDetail.getElement(), -1);
         } catch (Exception ex) {

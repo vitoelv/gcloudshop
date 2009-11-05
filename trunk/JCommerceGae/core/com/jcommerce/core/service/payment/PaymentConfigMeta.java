@@ -1,52 +1,40 @@
-package com.jcommerce.core.payment;
+package com.jcommerce.core.service.payment;
 
 import java.io.Serializable;
 import java.util.Map;
 
-public class PaymentConfigMeta implements Serializable{
+import com.jcommerce.core.model.Payment;
+
+public class PaymentConfigMeta extends Payment implements Serializable{
     //extends BaseModelData 
     // constant must follow the same as com.jcommerce.gwt.client.panels.leontest.PaymentConfigMeta !!!!!
-    public static final String ID = "id";
-    public static final String CODE = "code";
-    public static final String NAME = "name";
-    public static final String PAYFEE = "pay_fee";
-    public static final String ISCOD = "is_cod";
-    public static final String ISONLINE = "is_online";
-    public static final String ISENABLED = "is_enabled";
-    public static final String DESC = "desc";
-    public static final String ORDER = "pay_order";
-    public static final String INSTALL = "install";
-    public static final String FIELDMETAS = "fieldMetas";
-    public static final String FIELDVALUES = "fieldValues";
+//    public static final String ID = "id";
+//    public static final String CODE = "code";
+//    public static final String NAME = "name";
+//    public static final String PAYFEE = "pay_fee";
+//    public static final String ISCOD = "is_cod";
+//    public static final String ISONLINE = "is_online";
+//    public static final String ISENABLED = "is_enabled";
+//    public static final String DESC = "desc";
+//    public static final String ORDER = "pay_order";
+//    public static final String INSTALL = "install";
+//    public static final String FIELDMETAS = "fieldMetas";
+//    public static final String FIELDVALUES = "fieldValues";
     
-    private int id;
-    private String name;
-    private String code;
-    private String description;
-    private String payFee;
-    private boolean isCod;
-    private boolean isOnline;
-    private boolean isEnabled;
+//    private int id;
+//    private String name;
+//    private String code;
+//    private String description;
+//    private String payFee;
+//    private boolean isCod;
+//    private boolean isOnline;
+//    private boolean isEnabled;
     private Map<String, PaymentConfigFieldMeta> fieldMetas;
     private Map<String, String> fieldValues;
     
 
 
-    public String getCode() {
-        return code;
-    }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public Map<String, PaymentConfigFieldMeta> getFieldMetas() {
         return fieldMetas;
@@ -63,54 +51,68 @@ public class PaymentConfigMeta implements Serializable{
     public void setFieldValues(Map<String, String> fieldValues) {
         this.fieldValues = fieldValues;
     }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public boolean isCod() {
-        return isCod;
-    }
-
-    public void setCod(boolean isCod) {
-        this.isCod = isCod;
-    }
-
-    public boolean isEnabled() {
-        return isEnabled;
-    }
-
-    public void setEnabled(boolean isEnabled) {
-        this.isEnabled = isEnabled;
-    }
-
-    public boolean isOnline() {
-        return isOnline;
-    }
-
-    public void setOnline(boolean isOnline) {
-        this.isOnline = isOnline;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPayFee() {
-        return payFee;
-    }
-
-    public void setPayFee(String payFee) {
-        this.payFee = payFee;
-    }
+//  public String getCode() {
+//  return code;
+//}
+//
+//public void setCode(String code) {
+//  this.code = code;
+//}
+//
+//public String getDescription() {
+//  return description;
+//}
+//
+//public void setDescription(String description) {
+//  this.description = description;
+//}
+//    public int getId() {
+//        return id;
+//    }
+//
+//    public void setId(int id) {
+//        this.id = id;
+//    }
+//
+//    public boolean isCod() {
+//        return isCod;
+//    }
+//
+//    public void setCod(boolean isCod) {
+//        this.isCod = isCod;
+//    }
+//
+//    public boolean isEnabled() {
+//        return isEnabled;
+//    }
+//
+//    public void setEnabled(boolean isEnabled) {
+//        this.isEnabled = isEnabled;
+//    }
+//
+//    public boolean isOnline() {
+//        return isOnline;
+//    }
+//
+//    public void setOnline(boolean isOnline) {
+//        this.isOnline = isOnline;
+//    }
+//
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
+//
+//    public String getPayFee() {
+//        return payFee;
+//    }
+//
+//    public void setPayFee(String payFee) {
+//        this.payFee = payFee;
+//    }
 
     public PaymentConfigMeta() {
         
@@ -118,14 +120,14 @@ public class PaymentConfigMeta implements Serializable{
     
     public String toString() {
         StringBuffer buf = new StringBuffer();
-        buf.append("id: "+getId()).append("\n");
-        buf.append("name: "+getName()).append("\n");
-        buf.append("code: "+getCode()).append("\n");
-        buf.append("description: "+getDescription()).append("\n");
+        buf.append("id: "+getPkId()).append("\n");
+        buf.append("name: "+getPayName()).append("\n");
+        buf.append("code: "+getPayCode()).append("\n");
+        buf.append("description: "+getPayDesc()).append("\n");
         buf.append("payFee: "+getPayFee()).append("\n");
-        buf.append("isCod: "+isCod()).append("\n");
-        buf.append("isOnline: "+isOnline()).append("\n");
-        buf.append("isEnabled: "+isEnabled()).append("\n");
+        buf.append("isCod: "+getIsCod()).append("\n");
+        buf.append("isOnline: "+getIsOnline()).append("\n");
+        buf.append("isEnabled: "+getEnabled()).append("\n");
         
         buf.append("fieldValues: \n");
         if(getFieldValues()==null) {

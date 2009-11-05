@@ -1,60 +1,31 @@
 package com.jcommerce.gwt.client.panels;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
-import com.jcommerce.gwt.client.ContentWidget;
+import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
+import com.extjs.gxt.ui.client.event.SelectionChangedListener;
+import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.store.ListStore;
+import com.extjs.gxt.ui.client.widget.button.Button;
+import com.extjs.gxt.ui.client.widget.form.ComboBox;
+import com.extjs.gxt.ui.client.widget.form.TextArea;
+import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.jcommerce.gwt.client.ModelNames;
-import com.jcommerce.gwt.client.PageState;
-import com.jcommerce.gwt.client.ValidationException;
 import com.jcommerce.gwt.client.form.AttributeForm;
 import com.jcommerce.gwt.client.form.BeanObject;
+import com.jcommerce.gwt.client.form.SimpleOptionData;
 import com.jcommerce.gwt.client.model.IAttribute;
 import com.jcommerce.gwt.client.model.IGoodsType;
-import com.jcommerce.gwt.client.service.CreateService;
 import com.jcommerce.gwt.client.service.ListService;
-import com.jcommerce.gwt.client.service.ReadService;
-import com.jcommerce.gwt.client.service.UpdateService;
-import com.jcommerce.gwt.client.widgets.ChoicePanel;
-import com.jcommerce.gwt.client.widgets.ColumnPanel;
+import com.jcommerce.gwt.client.widgets.SimpleStaticComboBox;
 
-public class AttributePanel extends ContentWidget {
+public class AttributePanel extends BaseEntityEditPanel {
 
-	public static class State extends PageState {
-		public static final String ISEDIT = "isedit";
-		public static final String ATTR_ID = "attrid";
+	public static class State extends BaseEntityEditPanel.State {
 		public static final String SELECTED_GOODSTYPE_ID = "sgtid";
-		
 		public String getPageClassName() {
 			return AttributePanel.class.getName();
-		}
-		
-		public void setIsEdit(boolean isEdit){
-			setValue(ISEDIT, String.valueOf(isEdit));
-		}
-		public boolean getIsEdit() {
-			return Boolean.valueOf((String)getValue(ISEDIT)).booleanValue();
-		}
-		public void setAttrID(String attrid) {
-			setValue(ATTR_ID, attrid);
-		}
-		public String getAttrID() {
-			return (String)getValue(ATTR_ID);
 		}
 		public void setSelectedGoodsTypeID(String sgtid) {
 			setValue(SELECTED_GOODSTYPE_ID, sgtid);
@@ -74,192 +45,138 @@ public class AttributePanel extends ContentWidget {
 		
 	}
 	private State curState = new State();
-	
-//	String selectedGoodsTypeId;
-	private ColumnPanel contentPanel = new ColumnPanel();
-//	private BeanObject attribute = null;
-//	private boolean editting = false;
-	
-//	private Map<String, BeanObject> attributes = new HashMap<String, BeanObject>();
-	private ListBox lstGoodsType = new ListBox();
-	
-//    public void setAttribute(BeanObject attribute) {
-//        this.attribute = attribute;
-//        editting = attribute != null;
-//    }
+	private ComboBox<BeanObject> fListGoodsType;
+	private ListStore<BeanObject> goodsTypeList;
     
 	@Override
 	public String getDescription() {
 		return "cwBasicTextDescription";
+	}
+	@Override
+	protected String getEntityClassName() {
+		return ModelNames.ATTRIBUTE;
 	}
 
 	@Override
 	public String getName() {
 		return "商品属性";
 	}
-
-    protected void onRender(Element parent, int index) {
-    	super.onRender(parent, index);
-        System.out.println("----------Attribute");
-        add(contentPanel);
+    @Override
+    public Button getShortCutButton() {
+      Button sButton = new Button("商品属性");
+      sButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
+          public void componentSelected(ButtonEvent ce) {
+          	onShortCutButtonClicked();
+          }
+      });
+      return sButton;
+    }
+    public void onShortCutButtonClicked() {
+		AttributeListPanel.State newState = new AttributeListPanel.State();
+//		newState.setSelectedGoodsTypeID(sgtid)
+		newState.execute();
+    }
+	@Override
+	protected void setupPanelLayout(){
+        System.out.println("----------setupPanelLayout: Attribute");
+        TextField<String> fText = new TextField<String>();
+        fText.setFieldLabel("属性名称");
+        fText.setName(AttributeForm.ATTR_NAME);
+        formPanel.add(fText);
         
-        contentPanel.createPanel(AttributeForm.ATTR_NAME, "分类名称：", new TextBox());          
-        lstGoodsType.addChangeHandler(new ChangeHandler() {
-        	public void onChange(ChangeEvent event) {
-        		getCurState().setSelectedGoodsTypeID(lstGoodsType.getValue(lstGoodsType.getSelectedIndex()));
-        	}
-            
+        fListGoodsType = new ComboBox<BeanObject>();
+        fListGoodsType.setName(AttributeForm.GOODS_TYPE);
+        fListGoodsType.setFieldLabel("所属商品类型");
+        fListGoodsType.setDisplayField(IGoodsType.CAT_NAME);
+        fListGoodsType.setValueField(IGoodsType.PK_ID);
+        fListGoodsType.addSelectionChangedListener(new SelectionChangedListener<BeanObject>(){
+			@Override
+			public void selectionChanged(SelectionChangedEvent<BeanObject> se) {
+				// to remember which goodsType it belongs to, and use it when redirecting after successfully saved
+				BeanObject selected = se.getSelectedItem();
+				if(selected!=null) {
+					getCurState().setSelectedGoodsTypeID((String)selected.get(IGoodsType.PK_ID));
+				}
+			}        	
         });
-        contentPanel.createPanel(AttributeForm.GOODS_TYPE, "所属商品类型：", lstGoodsType);       
-        
-		List<ChoicePanel.Item> indexItems = new ArrayList<ChoicePanel.Item>();
-		indexItems.add(new ChoicePanel.Item("无需检索", "0"));
-		indexItems.add(new ChoicePanel.Item("关键字检索", "1"));		
-		indexItems.add(new ChoicePanel.Item("范围检索", "2"));
-		ChoicePanel showIndex = new ChoicePanel("0",indexItems); 
-        contentPanel.createPanel(AttributeForm.ATTR_INDEX, "能否进行检索:", showIndex);
-        
-		List<ChoicePanel.Item> linkedItems = new ArrayList<ChoicePanel.Item>();
-		linkedItems.add(new ChoicePanel.Item("否", "0"));
-		linkedItems.add(new ChoicePanel.Item("是", "1"));		
-		ChoicePanel showLinked = new ChoicePanel("0",indexItems); 
-        contentPanel.createPanel(AttributeForm.IS_LINKED, "相同属性值的商品是否关联？", showLinked);
-        
-		List<ChoicePanel.Item> typeItems = new ArrayList<ChoicePanel.Item>();
-		typeItems.add(new ChoicePanel.Item("唯一属性", "0"));
-		typeItems.add(new ChoicePanel.Item("可选属性", "1"));		
-		typeItems.add(new ChoicePanel.Item("必选属性", "2"));
-		ChoicePanel showType = new ChoicePanel("0",typeItems); 
-        contentPanel.createPanel(AttributeForm.ATTR_TYPE, "属性是否可选：", showType);
-        
-		List<ChoicePanel.Item> inputTypeItems = new ArrayList<ChoicePanel.Item>();
-		inputTypeItems.add(new ChoicePanel.Item("手工录入", "0"));
-		inputTypeItems.add(new ChoicePanel.Item("从下拉的列表中选择（一行代表一个可选值）", "1"));		
-		inputTypeItems.add(new ChoicePanel.Item("多行文本框", "2"));
-		ChoicePanel showInputType = new ChoicePanel("0",inputTypeItems); 
-        contentPanel.createPanel(AttributeForm.ATTR_INPUT_TYPE, "该属性值的录入方式：", showInputType);
+        goodsTypeList = new ListStore<BeanObject>();
+        fListGoodsType.setStore(goodsTypeList);
+        fListGoodsType.setEmptyText("请选择。。。");
+        formPanel.add(fListGoodsType);
         
         
+		ListStore<BeanObject> indexItems = new ListStore<BeanObject>();
+		indexItems.add(new SimpleOptionData("无需检索", IAttribute.INDEX_NEEDNOT));
+		indexItems.add(new SimpleOptionData("关键字检索", IAttribute.INDEX_KEYWORD));		
+		indexItems.add(new SimpleOptionData("范围检索", IAttribute.INDEX_RANGE));
+		SimpleStaticComboBox<BeanObject> fIndex = new SimpleStaticComboBox<BeanObject>();
+		fIndex.setName(AttributeForm.ATTR_INDEX);
+		fIndex.setFieldLabel("能否进行检索");
+		fIndex.setStore(indexItems);
+		formPanel.add(fIndex); 
+        
+        
+		ListStore<BeanObject> linkedItems = new ListStore<BeanObject>();
+		linkedItems.add(new SimpleOptionData("否", IAttribute.ISLINKED_FALSE));
+		linkedItems.add(new SimpleOptionData("是", IAttribute.ISLINKED_TRUE));		
+		SimpleStaticComboBox<BeanObject> fLinked = new SimpleStaticComboBox<BeanObject>();
+		fLinked.setName(AttributeForm.IS_LINKED);
+		fLinked.setFieldLabel("相同属性值的商品是否关联");
+		fLinked.setStore(linkedItems);
+		formPanel.add(fLinked);
+        
+		ListStore<BeanObject> typeItems = new ListStore<BeanObject>();
+		typeItems.add(new SimpleOptionData("唯一属性", IAttribute.TYPE_ONLY));
+		typeItems.add(new SimpleOptionData("单选属性", IAttribute.TYPE_SINGLE));		
+		typeItems.add(new SimpleOptionData("复选属性", IAttribute.TYPE_MULTIPLE));
+		SimpleStaticComboBox<BeanObject> fType = new SimpleStaticComboBox<BeanObject>();
+		fType.setName(AttributeForm.ATTR_TYPE);
+		fType.setFieldLabel("属性是否可选");
+		fType.setStore(typeItems);
+		formPanel.add(fType);
+
+		ListStore<BeanObject> inputTypeItems = new ListStore<BeanObject>();
+		inputTypeItems.add(new SimpleOptionData("手工录入", IAttribute.INPUTTYPE_SINGLELINETEXT));
+		inputTypeItems.add(new SimpleOptionData("从下拉的列表中选择（一行代表一个可选值）", IAttribute.INPUTTYPE_CHOICE));		
+		inputTypeItems.add(new SimpleOptionData("多行文本框", IAttribute.INPUTTYPE_MULTIPLELINETEXT));
+		SimpleStaticComboBox<BeanObject> fShowInputType = new SimpleStaticComboBox<BeanObject>();
+		fShowInputType.setName(AttributeForm.ATTR_INPUT_TYPE);
+		fShowInputType.setFieldLabel("该属性值的录入方式");
+		fShowInputType.setStore(inputTypeItems);
+		formPanel.add(fShowInputType);
+
         TextArea valuesArea = new TextArea();
         valuesArea.setHeight("180px");
         valuesArea.setWidth("100px");
-        contentPanel.createPanel(AttributeForm.ATTR_VALUES, "可选值列表：", valuesArea);
-
-        Button btnNew = new Button();    
-        Button btnCancel = new Button();    
-        HorizontalPanel panel = new HorizontalPanel();
-        panel.setSpacing(10);
-        btnNew.setText("确定");        
-        btnCancel.setText("重置");
-        panel.add(btnNew);        
-        panel.add(btnCancel);
-        contentPanel.createPanel(null, null, panel);      
-        
-        btnNew.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                String id = getCurState().getAttrID();
-                AttributeForm attribute = new AttributeForm(ModelNames.ATTRIBUTE, contentPanel.getValues());
-                try {
-                	attribute.validate();
-                } catch (ValidationException ex){
-                	// TODO leon need a common validation handling 
-                	Window.alert(ex.getMessage());
-                	return;
-                }
-                System.out.println("selected goodsType: "+attribute.get(AttributeForm.GOODS_TYPE));
-                
-                if (getCurState().getIsEdit()) {
-                    new UpdateService().updateBean(id, attribute, new UpdateService.Listener() {
-                        public synchronized void onSuccess(Boolean success) {
-                        	
-                        	Success.State newState = new Success.State();
-                        	newState.setMessage("编辑商品类型成功");
-                        	
-                        	AttributeListPanel.State choice1 = new AttributeListPanel.State();
-                        	choice1.setSelectedGoodsTypeID(getCurState().getSelectedGoodsTypeID());
-                        	newState.addChoice(AttributeListPanel.getInstance().getName(), choice1.getFullHistoryToken());
-                        	
-                        	newState.execute();
-                        }
-                    });
-                    
-                } else {
-                    new CreateService().createBean(attribute, new CreateService.Listener() {
-                        public synchronized void onSuccess(String id) {
-                            System.out.println("new onSuccess( "+id);                            
-                            getCurState().setAttrID(id);
-                            System.out.println("1 b_list.addItem("+id);
-//                            attributes.put(id, attribute);
-                            contentPanel.setValue(AttributeForm.PK_ID, id);                           
-                            
-                        	Success.State newState = new Success.State();
-                        	newState.setMessage("添加商品类型成功");
-                        	
-                        	AttributeListPanel.State choice1 = new AttributeListPanel.State();
-                        	choice1.setSelectedGoodsTypeID(getCurState().getSelectedGoodsTypeID());
-                        	newState.addChoice(AttributeListPanel.getInstance().getName(), choice1.getFullHistoryToken());
-                        	
-                        	newState.execute();
-                            
-                        }
-                    });
-                }
-            }
-        });
-
-        btnCancel.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                contentPanel.clearValues();
-            }            
-        });       
-        
-//        refresh();
+        valuesArea.setName(AttributeForm.ATTR_VALUES);
+        valuesArea.setFieldLabel("可选值列表");
+        formPanel.add(valuesArea);
     }
-    
-    public void refresh() {
+	@Override
+	public void gotoSuccessPanel() {
+		Success.State newState = new Success.State();
+		if(getCurState().getIsEdit()) {
+			newState.setMessage("编辑商品类型成功");
+		}else {
+			newState.setMessage("添加商品类型成功");
+		}
     	
-    	lstGoodsType.clear();
-        
+    	AttributeListPanel.State choice1 = new AttributeListPanel.State();
+    	choice1.setSelectedGoodsTypeID(getCurState().getSelectedGoodsTypeID());
+    	newState.addChoice(AttributeListPanel.getInstance().getName(), choice1.getFullHistoryToken());
+    	
+    	newState.execute();
+	}
+	
+	@Override
+	protected void postSuperRefresh() {
         new ListService().listBeans(ModelNames.GOODSTYPE, new ListService.Listener() {            
             public synchronized void onSuccess(List<BeanObject> beans) {
-            	lstGoodsType.insertItem("请选择。。。", null, 0);
-            	int i=1;
-                for (Iterator<BeanObject> it = beans.iterator(); it.hasNext();) {
-                    BeanObject goodsType = it.next();                    
-                    lstGoodsType.insertItem(goodsType.getString(IGoodsType.CAT_NAME), goodsType.getString(IGoodsType.PK_ID),i);
-                    
-                    // if(!getCurState().getIsEdit()) {
-                    // do the check no matter isedit or not
-//                    if(getCurState().getSelectedGoodsTypeID()!=null && 
-//                    	getCurState().getSelectedGoodsTypeID().equals(goodsType.getString(IGoodsType.ID))) {
-//                    	lstGoodsType.setSelectedIndex(i);
-//                    }
-                    i++;
-
-                }               
-                contentPanel.clearValues();
-                if(getCurState().getIsEdit()) {
-                	new ReadService().getBean(ModelNames.ATTRIBUTE, getCurState().getAttrID(),
-        				new ReadService.Listener() {
-                		public void onSuccess(BeanObject bean) {
-                			String goodsType = bean.getString(IAttribute.GOODS_TYPE);
-                			System.out.println("goodsType: "+goodsType);
-                			Map<String, Object> mapAttribute = bean.getProperties();
-                			contentPanel.updateValues(mapAttribute);
-                		}
-                	});
-                }
+    	    	goodsTypeList.removeAll();
+    	    	goodsTypeList.add(beans);
+    			populateField(fListGoodsType);
             }
         });
-    	
-        
-        
-
-    	
-
-        
-
-
     }
 
 	public State getCurState() {
@@ -269,9 +186,8 @@ public class AttributePanel extends ContentWidget {
 	public void setCurState(State curState) {
 		this.curState = curState;
 	}
+
     
-//	public void setSelectedGoodsTypeId(String selectedGoodsTypeId) {
-//		this.selectedGoodsTypeId = selectedGoodsTypeId;
-//	}
+
 
 }

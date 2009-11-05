@@ -6,8 +6,8 @@ import java.util.Map;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.test.BaseDAOTestCase;
 import com.jcommerce.gwt.client.model.ICategory;
-import com.jcommerce.web.front.action.LibCommon;
 import com.jcommerce.web.to.CategoryWrapper;
+import com.jcommerce.web.util.LibCommon;
 
 public class TestLibCommon extends BaseDAOTestCase {
 	@Override

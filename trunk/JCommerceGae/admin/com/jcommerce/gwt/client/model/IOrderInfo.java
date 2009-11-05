@@ -9,20 +9,20 @@ package com.jcommerce.gwt.client.model;
 public interface IOrderInfo extends IModelObject {
    
    // relation
-    public static final int ORDER_UNCONFIRMED = 0; // 未确认
-    public static final int ORDER_CONFIRMED = 1; // 已确认
-    public static final int ORDER_CANCELED = 2; // 已取消
-    public static final int ORDER_INVALID = 3; // 无效
-    public static final int ORDER_RETURNED = 4; // 退货
+    public static final int OS_UNCONFIRMED = 0; // 未确认
+    public static final int OS_CONFIRMED = 1; // 已确认
+    public static final int OS_CANCELED = 2; // 已取消
+    public static final int OS_INVALID = 3; // 无效
+    public static final int OS_RETURNED = 4; // 退货
+    
+    public static final int SS_UNSHIPPED = 0; // 未发货
+    public static final int SS_SHIPPED = 1; // 已发货
+    public static final int SS_RECEIVED = 2; // 已收货
+    public static final int SS_PREPARING = 3; // 备货中
 
-    public static final int SHIPPING_UNSHIPPED = 0; // 未发货
-    public static final int SHIPPING_SHIPPED = 1; // 已发货
-    public static final int SHIPPING_RECEIVED = 2; // 已收货
-    public static final int SHIPPING_PREPARING = 3; // 备货中
-
-    public static final int PAY_UNPAYED = 0; // 未付款
-    public static final int PAY_PAYING = 1; // 付款中
-    public static final int PAY_PAYED = 2; // 已付款      
+    public static final int PS_UNPAYED = 0; // 未付款
+    public static final int PS_PAYING = 1; // 付款中
+    public static final int PS_PAYED = 2; // 已付款      
   // fields
   public static final String ORDER_ID = "orderId"; 
   public static final String ORDER_SN = "orderSn"; 

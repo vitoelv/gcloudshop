@@ -5,8 +5,8 @@
 package com.jcommerce.gwt.client.service;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.jcommerce.gwt.client.CustomizedServiceAsync;
-import com.jcommerce.gwt.client.IShopServiceAsync;
+import com.jcommerce.gwt.client.ISpecialServiceAsync;
+import com.jcommerce.gwt.client.IDefaultServiceAsync;
 import com.jcommerce.gwt.client.form.BeanObject;
 
 public class CreateService extends RemoteService {
@@ -15,7 +15,7 @@ public class CreateService extends RemoteService {
             throw new RuntimeException("bean = null");
         }
         
-        IShopServiceAsync service = getService();
+        IDefaultServiceAsync service = getDefaultService();
         service.newObject(bean, new AsyncCallback<String>() {
             public synchronized void onSuccess(String id) {
                 System.out.println("newObject onSuccess( "+id);
@@ -39,7 +39,7 @@ public class CreateService extends RemoteService {
         if (bean == null) {
             throw new RuntimeException("bean = null");
         }
-        CustomizedServiceAsync service = getCustomizedService();
+        ISpecialServiceAsync service = getSpecialService();
         
         service.newOrder(bean, new AsyncCallback<String>(){
 

@@ -12,7 +12,7 @@ import com.extjs.gxt.ui.client.widget.grid.GridCellRenderer;
 import com.extjs.gxt.ui.client.widget.grid.GridView;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.jcommerce.gwt.client.IShopServiceAsync;
+import com.jcommerce.gwt.client.IDefaultServiceAsync;
 import com.jcommerce.gwt.client.form.BeanObject;
 
 public class BeanCellRenderer implements GridCellRenderer<BeanObject> {
@@ -30,7 +30,7 @@ public class BeanCellRenderer implements GridCellRenderer<BeanObject> {
 	public Object render(BeanObject model, String property, ColumnData config,
 			final int rowIndex, final int colIndex, ListStore<BeanObject> store,
 			Grid<BeanObject> grid) {
-        final IShopServiceAsync service = (IShopServiceAsync)Registry.get("service");
+        final IDefaultServiceAsync service = (IDefaultServiceAsync)Registry.get("service");
         
         String id = (String) model.get(property);
         service.getBean(modelName, id, new AsyncCallback<BeanObject>() {

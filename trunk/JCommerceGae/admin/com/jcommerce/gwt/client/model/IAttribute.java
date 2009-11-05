@@ -10,15 +10,23 @@ public interface IAttribute extends IModelObject {
    
    // merge
    public static final String GOODS_TYPE = "goodsType";   
-       public static final int TYPE_NEEDNOTSELECT = 0; 
-    public static final int TYPE_NEEDSELECT = 1; 
+   public static final Long TYPE_ONLY = 0l; 
+   public static final Long TYPE_SINGLE = 1l; 
+   public static final Long TYPE_MULTIPLE = 2l;
 
-    public static final int INPUT_SINGLELINETEXT = 0;
-    public static final int INPUT_MULTIPLELINETEXT = 2;
-    public static final int INPUT_CHOICE = 1;
+   public static final Long INDEX_NEEDNOT = 0l; 
+   public static final Long INDEX_KEYWORD = 1l; 
+   public static final Long INDEX_RANGE = 2l;
+   
+   public static final Long INPUTTYPE_SINGLELINETEXT = 0l;
+   public static final Long INPUTTYPE_CHOICE = 1l;
+   public static final Long INPUTTYPE_MULTIPLELINETEXT = 2l;
+   
+   public static final Boolean ISLINKED_TRUE = true;
+   public static final Boolean ISLINKED_FALSE = false;
     
-    	public static final String GOODSTYPE_NAME = "goodsType_name";
-    
+   public static final String GOODSTYPE_NAME = "goodsType_name";
+   
   // fields
   public static final String ATTR_ID = "attrId"; 
   public static final String CAT_ID = "catId"; 

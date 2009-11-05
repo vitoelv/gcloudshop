@@ -49,16 +49,16 @@ public class UserAddress extends ModelObject {
   private java.lang.String email; 
 
   @Persistent
-  private java.lang.Long country=0l; 
+  private java.lang.String country; 
 
   @Persistent
-  private java.lang.Long province=0l; 
+  private java.lang.String province; 
 
   @Persistent
-  private java.lang.Long city=0l; 
+  private java.lang.String city; 
 
   @Persistent
-  private java.lang.Long district=0l; 
+  private java.lang.String district; 
 
   @Persistent
   private java.lang.String address; 
@@ -162,43 +162,7 @@ public class UserAddress extends ModelObject {
 
 
 
-  public java.lang.Long getCountry() {
-    return country;
-  }
 
-  public void setCountry(java.lang.Long newCountry) {
-    country = newCountry;
-  }
-
-
-
-  public java.lang.Long getProvince() {
-    return province;
-  }
-
-  public void setProvince(java.lang.Long newProvince) {
-    province = newProvince;
-  }
-
-
-
-  public java.lang.Long getCity() {
-    return city;
-  }
-
-  public void setCity(java.lang.Long newCity) {
-    city = newCity;
-  }
-
-
-
-  public java.lang.Long getDistrict() {
-    return district;
-  }
-
-  public void setDistrict(java.lang.Long newDistrict) {
-    district = newDistrict;
-  }
 
 
 
@@ -259,5 +223,45 @@ public class UserAddress extends ModelObject {
   public void setBestTime(java.lang.String newBestTime) {
     bestTime = newBestTime;
   }
+
+
+public java.lang.String getCountry() {
+	return country;
+}
+
+
+public void setCountry(java.lang.String country) {
+	this.country = country;
+}
+
+
+public java.lang.String getProvince() {
+	return province;
+}
+
+
+public void setProvince(java.lang.String province) {
+	this.province = province;
+}
+
+
+public java.lang.String getCity() {
+	return city;
+}
+
+
+public void setCity(java.lang.String city) {
+	this.city = city;
+}
+
+
+public java.lang.String getDistrict() {
+	return district;
+}
+
+
+public void setDistrict(java.lang.String district) {
+	this.district = district;
+}
 
 }

@@ -159,9 +159,9 @@ public class OrderUserPanel extends ContentWidget{
 	private void createNewOrder(){
 		Map<String, Object> props = new HashMap<String, Object>();
 		props.put(IOrderInfo.PK_ID, null);
-		props.put(IOrderInfo.ORDER_STATUS, IOrderInfo.ORDER_INVALID);
-		props.put(IOrderInfo.SHIPPING_STATUS, IOrderInfo.SHIPPING_UNSHIPPED);
-		props.put(IOrderInfo.PAY_STATUS, IOrderInfo.PAY_UNPAYED);
+		props.put(IOrderInfo.ORDER_STATUS, IOrderInfo.OS_INVALID);
+		props.put(IOrderInfo.SHIPPING_STATUS, IOrderInfo.SS_UNSHIPPED);
+		props.put(IOrderInfo.PAY_STATUS, IOrderInfo.PS_UNPAYED);
 		
 		
 		BeanObject form = new BeanObject(ModelNames.ORDERINFO, props);

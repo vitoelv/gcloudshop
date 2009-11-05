@@ -7,8 +7,8 @@ import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.test.BaseDAOTestCase;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.ICategory;
-import com.jcommerce.web.front.action.LibGoods;
 import com.jcommerce.web.to.CategoryWrapper;
+import com.jcommerce.web.util.LibGoods;
 
 public class TestLibGoods extends BaseDAOTestCase {
 	@Override

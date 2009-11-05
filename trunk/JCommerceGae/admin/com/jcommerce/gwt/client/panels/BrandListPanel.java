@@ -34,13 +34,6 @@ import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 import com.extjs.gxt.ui.client.widget.grid.Grid;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.toolbar.PagingToolBar;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
-import com.google.gwt.http.client.Response;
-import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ListBox;
@@ -53,14 +46,13 @@ import com.jcommerce.gwt.client.model.IBrand;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.PagingListService;
 import com.jcommerce.gwt.client.widgets.ActionCellRenderer;
-import com.jcommerce.gwt.client.widgets.ColumnPanel;
 
 /**
  * Example file.
  */
 public class BrandListPanel extends ContentWidget {    
 	
-	ColumnPanel contentPanel = new ColumnPanel();
+//	ColumnPanel contentPanel = new ColumnPanel();
     ListBox b_list = new ListBox();    
     Button btnAdd = new Button("添加品牌");
     ListBox lstAction = new ListBox();
@@ -119,7 +111,7 @@ public class BrandListPanel extends ContentWidget {
      */
     private BrandListPanel() {
         System.out.println("----------BrandListPanel");
-        add(contentPanel);        
+//        add(contentPanel);        
         initJS(this);         
     }
     
