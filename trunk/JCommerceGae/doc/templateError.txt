@@ -4,3 +4,16 @@
 ----------
 ==> if goods.integral [on line 199, column 8 in web/front/goods.ftl]
 ----------
+
+// cart.goodsId is string, however it requires long
+==> if goods.goodsId  >  0 [on line 51, column 8 in web/front/flow.ftl]
+
+ <#if  (goods.isGift  >  0)  >  [on line 63, column 8 in web/front/flow.ftl]
+ 
+ <#if  goods.goodsId >0  &&  goods.isGift==0  &&  goods.parentId==0  >  [on line 78, column 8 in web/front/flow.ftl]
+ 
+ 
+ <#if  smarty.session.userId  >  0  > [on line 87, column 8 in web/front/flow.ftl]
+ 
+ user_transaction.ftl line324
+ "returnToCart(${order.orderId})
