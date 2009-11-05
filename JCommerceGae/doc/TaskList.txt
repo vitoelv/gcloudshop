@@ -1,0 +1,12 @@
+
+扩展condition/DAOImpl，实现OR或subquery或In
+- 因经常需要根据ID取Name，有时还是循环一组对象取关联对象的Name或其他值，
+- 因此如能够根据一组ID通过一个query取到所有关联对象，则可大幅减少对DS的调用，减少对google quota的占用
+- 这时是一个In操作，如能通过OR条件模拟也可以
+- 否则，只好一次性取所有关联对象在内存中大循环，以避免多次查询
+
+
+
+如何在开发环境下的后台输出中屏蔽warning信息，如
+Nov 2, 2009 4:00:33 AM com.opensymphony.xwork2.util.logging.commons.CommonsLogger warn
+WARNING: Could not find property [navigatorList]
