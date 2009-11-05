@@ -23,6 +23,8 @@ import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.service.IWebManager;
+import com.jcommerce.core.service.payment.IPaymentMetaManager;
+import com.jcommerce.core.service.shipping.IShippingMetaManager;
 import com.jcommerce.core.util.IConstants;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IGoods;
@@ -36,12 +38,18 @@ import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.to.WrapperUtil;
 import com.jcommerce.web.to.HelpCat.HelpItem;
+import com.jcommerce.web.util.LibGoods;
+import com.jcommerce.web.util.LibInsert;
+import com.jcommerce.web.util.LibMain;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
+
 
 public class BaseAction extends ActionSupport implements IPageConstants, IWebConstants, IConstants{
 	private static Map<String, String> constants = new HashMap<String, String>();
 	
+	protected IShippingMetaManager shippingMetaManager;
+	protected IPaymentMetaManager paymentMetaManager;
 	protected IWebManager webManager;
 	protected IDefaultManager defaultManager;
 	
@@ -210,6 +218,12 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
     	return WrapperUtil.wrap(list, GoodsWrapper.class);
     }
     
+    public void includeComment (Long type, String id) {
+    	LibInsert.insertComments(type, id, getDefaultManager(), getRequest());
+    }
+    
+    
+    
 	public void includeFilterAttr() {
 		// TODO includeFilterAttr
 	}
@@ -374,13 +388,32 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
         request.setAttribute("cfg", shopConfig);
         
 //        setShowMarketplace(request);
-
+        assignSmartyGlobal();
         
 		return null;
 	}
 	
 
+	public void assignSmartyGlobal() {
+		HttpServletRequest request = getRequest();
+        Map<String, Object> smarty = new HashMap<String, Object>();
+
+        Map<String, String> server = new HashMap<String, String>();
+        server.put("PHP_SELF", getSelfURL());        
+        smarty.put("server", server);
+        
+        Map<String, Object> session = new HashMap<String, Object>();
+        session.put("userName", getSession().getAttribute(KEY_USER_NAME));
+        String email = (String)getSession().getAttribute(KEY_USER_EMAIL);
+        session.put("email",  email==null? "" : email);
+        smarty.put("session", session);
+
+        request.setAttribute("smarty", smarty);
+	}
 	
+	protected String getSelfURL() {
+		return "";
+	}
 	
 	public String getConstants(String key) {
 		return constants.get(key);
@@ -418,6 +451,18 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 			res = (String)obj;
 		}
 		return res;
+	}
+	public IPaymentMetaManager getPaymentMetaManager() {
+		return paymentMetaManager;
+	}
+	public void setPaymentMetaManager(IPaymentMetaManager paymentMetaManager) {
+		this.paymentMetaManager = paymentMetaManager;
+	}
+	public IShippingMetaManager getShippingMetaManager() {
+		return shippingMetaManager;
+	}
+	public void setShippingMetaManager(IShippingMetaManager shippingMetaManager) {
+		this.shippingMetaManager = shippingMetaManager;
 	}
 
 

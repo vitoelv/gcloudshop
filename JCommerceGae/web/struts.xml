@@ -38,7 +38,18 @@
 			<result name="success" type="freemarker">/web/front/brand.ftl</result>
 			<result name="error" type="redirectAction">home</result>
 		</action>
-		
+		<action name="region" method="execute" class="regionAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/json</param>
+     			<param name="inputName">jsonRes</param>
+   			</result>
+		</action>
+		<action name="comment" method="execute" class="commentAction">
+			<result name="success" type="stream">
+				<param name="contentType">application/json</param>
+     			<param name="inputName">jsonRes</param>
+   			</result>
+		</action>		
 		<action name="user" method="execute" class="userAction">
 			<result name="user_clips" type="freemarker">/web/front/user_clips.ftl</result>
 			<result name="user_passport" type="freemarker">/web/front/user_passport.ftl</result>

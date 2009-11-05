@@ -40,7 +40,8 @@ public class Total extends BaseWrapper{
 	Double marketPrice = 0.0;
 //	String marketPriceFormated = "0.0";
 	Double saving = 0.0;
-	String savingFormated = "0.0";
+//	String savingFormated = "0.0";
+	
 	Double saveRate = 0.0;
 	
 	String willGetBonus = "0.0";
@@ -315,13 +316,9 @@ public class Total extends BaseWrapper{
 
 
 	public String getSavingFormated() {
-		return savingFormated;
+		return WebFormatUtils.priceFormat(saving);
 	}
 
-
-	public void setSavingFormated(String savingFormated) {
-		this.savingFormated = savingFormated;
-	}
 
 
 	public Double getSaveRate() {
@@ -333,7 +330,11 @@ public class Total extends BaseWrapper{
 		this.saveRate = saveRate;
 	}
 
-
+	public String getSaveRateFormated() {
+		return saveRate+"%";
+	}
+	
+	
 	public void setIntegral(Integer integral) {
 		this.integral = integral;
 	}

@@ -73,14 +73,14 @@
  
 
     <servlet>
-        <servlet-name>ishop</servlet-name>
-        <servlet-class>com.jcommerce.gwt.server.IShopServiceImpl</servlet-class>
+        <servlet-name>defaultService</servlet-name>
+        <servlet-class>com.jcommerce.gwt.server.DefaultServiceImpl</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet>
-        <servlet-name>customized</servlet-name>
-        <servlet-class>com.jcommerce.gwt.server.CustomizedServiceImpl</servlet-class>
+        <servlet-name>specialService</servlet-name>
+        <servlet-class>com.jcommerce.gwt.server.SpecialServiceImpl</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     
@@ -103,8 +103,8 @@
     
 
     <servlet-mapping>
-        <servlet-name>ishop</servlet-name>
-        <url-pattern>/admin/ishopService.do</url-pattern>
+        <servlet-name>defaultService</servlet-name>
+        <url-pattern>/admin/defaultService.do</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>dynaImageService</servlet-name>
@@ -117,8 +117,8 @@
     </servlet-mapping>
     
     <servlet-mapping>
-        <servlet-name>customized</servlet-name>
-        <url-pattern>/admin/customizedService.do</url-pattern>
+        <servlet-name>specialService</servlet-name>
+        <url-pattern>/admin/specialService.do</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>gwtGttpService</servlet-name>

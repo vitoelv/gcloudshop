@@ -10,6 +10,31 @@ public class BaseWrapper {
 	}
 	protected Map<String, Object> values = new HashMap<String, Object>();
 	
+	public String getString(String key) {
+		Object v = get(key);
+		String res = v==null? null : v.toString();
+		return res;
+	}
+	public int getInt(String key) {
+		Object v = get(key);
+		int res = Integer.MIN_VALUE;
+		if(v==null) {
+		}
+		else if(v instanceof String) {
+			try {
+				res = Integer.valueOf((String)v);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		else if(v instanceof Number) {
+			res = ((Number)v).intValue();
+		}
+		return res;
+			
+	}
+	
+	
 	public Object get(String key) {
 
 		Object res = null;
@@ -38,4 +63,6 @@ public class BaseWrapper {
 	public void put(String key, Object value) {
 		values.put(key, value);
 	}
+	
+	
 }

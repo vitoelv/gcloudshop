@@ -13,17 +13,24 @@ import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.ICategory;
+import com.jcommerce.gwt.client.util.URLConstants;
 import com.jcommerce.web.to.CategoryWrapper;
 import com.jcommerce.web.to.GoodsWrapper;
 import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.to.WrapperUtil;
+import com.jcommerce.web.util.LibCommon;
+import com.jcommerce.web.util.LibGoods;
+import com.jcommerce.web.util.LibMain;
 
 public class CategoryAction extends BaseAction {
 	
 	public void debug(String s) {
 		System.out.println(" in [CategoryAction]: "+s );
 	}
-	
+	@Override
+	protected String getSelfURL() {
+		return URLConstants.ACTION_CATEGORY;
+	}
 	@Override
 	public String execute() throws Exception {
 		try {

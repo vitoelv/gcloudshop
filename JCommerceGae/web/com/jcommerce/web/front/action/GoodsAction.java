@@ -5,18 +5,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts2.ServletActionContext;
 
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
+import com.jcommerce.gwt.client.model.IComment;
 import com.jcommerce.web.to.GoodsWrapper;
 import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.ShopConfigWrapper;
-import com.opensymphony.xwork2.ActionContext;
+import com.jcommerce.web.util.LibGoods;
+import com.jcommerce.web.util.WebUtils;
+import com.jcommerce.web.util.LibGoods.GoodsPropertiesResult;
 
 public class GoodsAction extends BaseAction {
 	
@@ -52,9 +52,15 @@ public class GoodsAction extends BaseAction {
         
         String goodsId = request.getParameter("id");
         debug("in [execute]: goodsId="+goodsId);
+        Long goodsIdLong = WebUtils.tryGetLongId(goodsId);
+        
         
         IDefaultManager manager = getDefaultManager();
-        Goods goods = (Goods)manager.get(ModelNames.GOODS, goodsId);
+        Goods goods = goodsIdLong == null? (Goods)manager.get(ModelNames.GOODS, goodsId) : 
+        	(Goods)manager.get(ModelNames.GOODS, goodsIdLong);
+        // make it always be pkId instead of LongId string
+        goodsId = goods.getPkId();
+        
         GoodsWrapper gw = new GoodsWrapper(goods);
         request.setAttribute("goods", gw);
         
@@ -62,10 +68,16 @@ public class GoodsAction extends BaseAction {
         Brand brand = (Brand)manager.get(ModelNames.BRAND, brandId);
         gw.put(GoodsWrapper.GOODS_BRAND, brand.getBrandName());
         
-        request.setAttribute("specification", new String[0]);
+        
         request.setAttribute("rankPrices", new String[0]);
-        request.setAttribute("properties", new String[0]);
-        request.setAttribute("specification", new String[0]);
+        
+        
+        
+        GoodsPropertiesResult result = LibGoods.getGoodsProperties(goodsId, manager); // 获得商品的规格和属性
+        request.setAttribute("properties", result.getPro());
+        request.setAttribute("specification", result.getSpe());
+        
+        includeComment(IComment.TYPE_GOODS, goodsId);
         
         request.setAttribute(KEY_GOODS_ID, gw.getGoodsId());
         request.setAttribute(KEY_PROMOTE_END_TIME, goods.getPromoteEndDate());

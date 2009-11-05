@@ -44,6 +44,12 @@
 		<property name="webManager">
 			<ref bean="WebManager"/>
 		</property>
+		<property name="paymentMetaManager">
+			<ref bean="PaymentMetaManager"/>
+		</property>	
+		<property name="shippingMetaManager">
+			<ref bean="ShippingMetaManager"/>
+		</property>				
 	</bean>
 	
 	<bean name="userAction" scope="prototype"
@@ -57,5 +63,17 @@
 		<property name="defaultManager">
 			<ref bean="DefaultManager"/>
 		</property>
-	</bean>			
+	</bean>	
+	<bean name="regionAction" scope="prototype"
+        class="com.jcommerce.web.front.action.RegionAction">
+		<property name="defaultManager">
+			<ref bean="DefaultManager"/>
+		</property>
+	</bean>	
+	<bean name="commentAction" scope="prototype"
+        class="com.jcommerce.web.front.action.CommentAction">
+		<property name="defaultManager">
+			<ref bean="DefaultManager"/>
+		</property>
+	</bean>					
 </beans>

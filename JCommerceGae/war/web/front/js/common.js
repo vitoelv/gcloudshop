@@ -87,7 +87,6 @@ function addToCartResponse(result)
   }
   else
   {
-
     var cartInfo = document.getElementById('ECS_CARTINFO');
     var cart_url = 'flow.action?step=cart';
     if (cartInfo)

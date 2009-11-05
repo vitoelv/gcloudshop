@@ -202,7 +202,8 @@ function reg(str){
        </dd>
       </li>
       
-      <#list specification as spec>
+      <#list specification?keys as specKey>
+      <#assign spec = specification.get(specKey)>
       <li class="padd loop">
       <strong>${spec.name}:</strong><br />
         
@@ -265,7 +266,8 @@ function reg(str){
 
      <blockquote>
       <table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#dddddd">
-        <#list properties as propertyGroup>
+        <#list properties?keys as key>
+        <#assign propertyGroup = properties.get(key)>
         <tr>
           <th colspan="2" bgcolor="#FFFFFF">${key}</th>
         </tr>
@@ -292,7 +294,7 @@ function reg(str){
   <!-- TemplateBeginEditable name="右边可编辑区域" -->
 <#include "library/goods_tags.ftl">
 <#include "library/bought_goods.ftl">
-<#include "library/comments.ftl">
+<#include "library/comments_list.ftl">
 <!-- TemplateEndEditable -->
   </div>
   <!--right end-->
@@ -333,7 +335,7 @@ function reg(str){
 var goods_id = ${goodsId};
 var goodsattr_style = ${cfg.goodsattrStyle};
 var gmt_end_time = ${promoteEndTime};
-<#list lang.goodsJs as item>
+<#list lang.goodsJs?keys as key> <#assign item = lang.goodsJs.get(key)>
 var ${key} = "${item}";
 </#list>
 var goodsId = ${goodsId};

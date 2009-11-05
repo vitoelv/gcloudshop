@@ -2,6 +2,7 @@ package com.jcommerce.web.front.action;
 
 import java.io.InputStream;
 import java.io.StringBufferInputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -12,21 +13,39 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 
 import com.jcommerce.core.model.User;
+import com.jcommerce.core.model.UserAddress;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IOrderInfo;
+import com.jcommerce.gwt.client.model.IRegion;
 import com.jcommerce.gwt.client.model.IUser;
+import com.jcommerce.gwt.client.util.URLConstants;
 import com.jcommerce.web.front.action.helper.Pager;
 import com.jcommerce.web.to.Affiliate;
 import com.jcommerce.web.to.Lang;
+import com.jcommerce.web.to.OrderGoodsWrapper;
+import com.jcommerce.web.to.OrderInfoWrapper;
+import com.jcommerce.web.to.RegionWrapper;
 import com.jcommerce.web.to.ShopConfigWrapper;
+import com.jcommerce.web.to.UserAddressWrapper;
 import com.jcommerce.web.to.UserWrapper;
+import com.jcommerce.web.util.ConstantsMappingUtils;
+import com.jcommerce.web.util.LibCommon;
+import com.jcommerce.web.util.LibMain;
+import com.jcommerce.web.util.LibOrder;
+import com.jcommerce.web.util.LibTransaction;
+import com.jcommerce.web.util.WebFormatUtils;
 
 
 public class UserAction extends BaseAction {
 	public void debug(String s) {
 		System.out.println(" in [UserAction]: "+s );
+	}
+	
+	@Override
+	protected String getSelfURL() {
+		return URLConstants.ACTION_USER;
 	}
 	
 	public static final String RES_USER_PASSPORT = "user_passport";
@@ -129,7 +148,7 @@ public class UserAction extends BaseAction {
 				request.setAttribute("backAct", backAct);
 				return RES_USER_PASSPORT;
 			}
-			else if("act_login".equals(action)) {
+			else if("act_login".equals(action) || "actLogin".equals(action)) {
 				backAct = request.getParameter("back_act");
 				if(backAct!=null) {
 					backAct = backAct.trim();
@@ -154,7 +173,7 @@ public class UserAction extends BaseAction {
 				}
 
 			}
-			else if("act_register".equals(action)) {
+			else if("act_register".equals(action) || "actRegister".equals(action)) {
 				String error = register(getUsername(), getPassword(), getEmail(), other);
 				if(error == null) {
 					return LibMain.showMessage(Lang.getInstance().getString("registerSuccess"), Lang.getInstance().getString("profileLnk"), 
@@ -164,7 +183,7 @@ public class UserAction extends BaseAction {
 							"user.action?act=register", "info", true, request);
 				}
 			}
-			else if("is_registered".equals(action)) {
+			else if("is_registered".equals(action) || "isRegistered".equals(action)) {
 				if(checkUser(getUsername(), null)) {
 					isRegistered = new StringBufferInputStream("false");
 				}else {
@@ -179,7 +198,7 @@ public class UserAction extends BaseAction {
 				return RES_USER_TRANSACTION;
 				
 			} 
-			else if("order_list".equals(action)){
+			else if("order_list".equals(action) || "orderList".equals(action)){
 				String sPage = (String)request.getParameter("page");
 				int page = (sPage!=null && Integer.valueOf(sPage)>0) ? Integer.valueOf(sPage) : 1;
 				Criteria criteria = new Criteria();
@@ -198,6 +217,140 @@ public class UserAction extends BaseAction {
 				includeUserMenu();
 				return RES_USER_TRANSACTION;
 			}
+			/* 收货地址列表界面*/
+			else if("address_list".equals(action) || "addressList".equals(action)) {
+				includeUserMenu();
+				String shopCountry = (String)ShopConfigWrapper.getDefaultConfig().get(ShopConfigWrapper.CFG_KEY_SHOP_COUNTRY);
+				
+				/* 取得国家列表、商店所在国家、商店所在国家的省列表 */
+				request.setAttribute("countryList", LibCommon.getRegion(IRegion.TYPE_COUNTRY, null,getDefaultManager()));
+				request.setAttribute("shopProvinceList", LibCommon.getRegion(
+						IRegion.TYPE_PROVINCE, 
+						shopCountry, 
+						getDefaultManager()));
+				
+				/* 获得用户所有的收货人信息 */
+				List<UserAddressWrapper> consigneeList = LibTransaction.getConsigneeList(userId, getDefaultManager());
+				
+
+				if(consigneeList.size()<1 && getSession().getAttribute(KEY_USER_ID)!=null) {
+					// we allow only one address
+					/* 如果用户收货人信息的总数小于1 则增加一个新的收货人信息 */
+					UserAddressWrapper holder = new UserAddressWrapper(new UserAddress());
+//					holder.getUserAddress().setCountry(newCountry);
+					String email = (String)getSession().getAttribute(KEY_USER_EMAIL);
+					if(email == null) {
+						email = "";
+					}
+					holder.getUserAddress().setEmail(email);
+					holder.getUserAddress().setCountry(shopCountry);
+					consigneeList.add(holder);
+				}
+				
+				UserAddressWrapper uaw = consigneeList.get(0);
+				request.setAttribute("consigneeList", consigneeList);
+				
+				 //取得国家列表，如果有收货人列表，取得省市区列表
+		    	List<List<RegionWrapper>> provinceList = new ArrayList<List<RegionWrapper>>();
+		    	provinceList.add(LibCommon.getRegion(IRegion.TYPE_PROVINCE,uaw.getUserAddress().getCountry(), getDefaultManager()));
+		    	request.setAttribute("provinceList", provinceList);
+		    	
+		    	List<List<RegionWrapper>> cityList = new ArrayList<List<RegionWrapper>>();
+		    	cityList.add(LibCommon.getRegion(IRegion.TYPE_CITY, uaw.getUserAddress().getProvince(), getDefaultManager()));
+		    	request.setAttribute("cityList", cityList);
+		    	List<List<RegionWrapper>> districtList = new ArrayList<List<RegionWrapper>>();
+		    	districtList.add(LibCommon.getRegion(IRegion.TYPE_DISTRICT,uaw.getUserAddress().getCity(), getDefaultManager()));
+		    	request.setAttribute("districtList", districtList);
+				
+		    	
+		    	
+		    	//赋值于模板
+		    	request.setAttribute("realGoodsCount", 1);
+		    	request.setAttribute("shopCountry", shopCountry);
+		    	request.setAttribute("shopProvince", LibCommon.getRegion(IRegion.TYPE_PROVINCE, shopCountry, getDefaultManager()));
+		    	request.setAttribute("address", "TODO address");
+		    	request.setAttribute("currencyFormat", "TODO currency_format");
+		    	request.setAttribute("integralScale", "TODO integral_scale");
+		    	request.setAttribute("nameOfRegion", new String[]{"国家", "省", "市", "区"});
+				return RES_USER_TRANSACTION;
+			}
+			else if("act_edit_address".equals(action)) {
+				UserAddress ua = new UserAddress();
+				ua.setUserId(userId);
+				String addressId = request.getParameter("address_id");
+				boolean isNew = true;
+				if(StringUtils.isNotEmpty(addressId)) {
+					ua.setPkId(addressId);
+					isNew = false;
+				}
+				ua.setCountry(request.getParameter("country"));
+				ua.setProvince(request.getParameter("province"));
+				ua.setCity(request.getParameter("city"));
+				ua.setDistrict(request.getParameter("district"));
+				ua.setAddress(request.getParameter("address"));
+				ua.setConsignee(request.getParameter("consignee"));
+				ua.setEmail(request.getParameter("email"));
+				ua.setTel(request.getParameter("tel"));
+				ua.setMobile(request.getParameter("mobile"));
+				ua.setBestTime(request.getParameter("best_time"));
+				ua.setSignBuilding(request.getParameter("sign_building"));
+				ua.setZipcode(request.getParameter("zipcode"));
+				
+				try {
+					if (isNew) {
+						getDefaultManager().txadd(ua);
+					} else {
+						getDefaultManager().txupdate(ua);
+					}
+					return LibMain.showMessage(
+									Lang.getInstance().getString("editAddressSuccess"), 
+									Lang.getInstance().getString("addressListLnk"),
+									"user.action?act=address_list", null, null,
+									request);
+				} catch (Exception e) {
+					e.printStackTrace();
+					return null;
+				}
+				
+				
+				
+			}
+			else if("order_detail".equals(action) || "orderDetail".equals(action)) {
+				
+				includeUserMenu();
+				String orderId = request.getParameter("order_id");
+			    /* 订单详情 */
+				OrderInfoWrapper ow = getOrderDetail(orderId, userId);
+				if(ow==null) {
+					
+				}
+				/* 是否显示添加到购物车 */
+				if(!"group_buy".equals(ow.getOrderInfo().getExtensionCode())){ 
+					request.setAttribute("allowToCart", 1);
+				}
+				
+				/* 订单商品 */
+				List<OrderGoodsWrapper> goodsList = LibOrder.orderGoods(orderId, getDefaultManager());
+				for(OrderGoodsWrapper goods : goodsList) {
+					goods.put("marketPrice", WebFormatUtils.priceFormat(goods.getOrderGoods().getMarketPrice()));
+					goods.put("goodsPrice", WebFormatUtils.priceFormat(goods.getOrderGoods().getGoodsPrice()));
+					goods.put("subtotal", WebFormatUtils.priceFormat(
+							goods.getOrderGoods().getGoodsPrice() * goods.getOrderGoods().getGoodsNumber()));
+				}
+				
+				/* 订单 支付 配送 状态语言项 */
+				String str = ConstantsMappingUtils.getOrderStatus(ow.getOrderInfo().getOrderStatus());
+				ow.put("orderStatus", ((Map)Lang.getInstance().get("os")).get(str));
+				str = ConstantsMappingUtils.getPayStatus(ow.getOrderInfo().getPayStatus());
+				ow.put("payStatus", ((Map)Lang.getInstance().get("ps")).get(str));
+				str = ConstantsMappingUtils.getShippingStatus(ow.getOrderInfo().getShippingStatus());
+				ow.put("shippingStatus", ((Map)Lang.getInstance().get("ss")).get(str));
+				
+				request.setAttribute("order", ow);
+				request.setAttribute("goodsList", goodsList);
+				return RES_USER_TRANSACTION;
+				
+			}
 			else if("logout".equals(action)) {
 				logout();
 				return LibMain.showMessage(Lang.getInstance().getString("logout"), Lang.getInstance().getString("backHomeLnk"), 
@@ -214,7 +367,63 @@ public class UserAction extends BaseAction {
 			throw new RuntimeException(ex);
 		}
 	}
-	
+	/**
+	 *  获取指订单的详情
+	 *
+	 * @access  public
+	 * @param   int         $order_id       订单ID
+	 * @param   int         $user_id        用户ID
+	 *
+	 * @return   arr        $order          订单所有信息的数组
+	 */
+	public OrderInfoWrapper getOrderDetail(String orderId, String userId) {
+		OrderInfoWrapper ow = LibOrder.orderInfo(orderId, null, getDefaultManager());
+		if(ow==null) {
+			
+		}
+		
+		//检查订单是否属于该用户
+		if(userId!=null && !userId.equals(ow.getOrderInfo().getUserId())) {
+			
+		}
+		// TODO /* 对发货号处理 */
+		 
+		/* 只有未确认才允许用户修改订单地址 */
+		if(ow.getOrderInfo().getOrderStatus() == IOrderInfo.OS_UNCONFIRMED) {
+			ow.put("allowUpdateAddress", 1);
+		}else {
+			ow.put("allowUpdateAddress", 0);
+		}
+		
+		// TODO /* 获取订单中实体商品数量 */
+		ow.put("existRealGoods", true);
+		
+		/* 如果是未付款状态，生成支付按钮 */
+		if(ow.getOrderInfo().getPayStatus() == IOrderInfo.PS_UNPAYED && 
+				( ow.getOrderInfo().getOrderStatus() == IOrderInfo.OS_UNCONFIRMED || 
+					ow.getOrderInfo().getOrderStatus() == IOrderInfo.OS_CONFIRMED) ) {
+			
+	        /*
+	         * 在线支付按钮
+	         */
+	        // TODO 支付方式信息
+			
+			//无效支付方式
+			// if ($payment_info === false)
+			ow.put("payOnline", "");
+			
+		}
+		else {
+			ow.put("payOnline", "");
+		}
+				
+		return ow;
+		
+		
+		
+		
+		
+	}
 	public void includeUserMenu() {
 		Affiliate a = new Affiliate();
 		a.setOn(0);
@@ -369,7 +578,7 @@ public class UserAction extends BaseAction {
 		// this is a tricky hacking
 		// in freemarker the action variable points to the Action class
 		
-		return action;
+		return WebFormatUtils.phpVarFromat(action);
 	}
 
 

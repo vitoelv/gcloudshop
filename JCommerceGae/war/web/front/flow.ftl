@@ -5,7 +5,7 @@
 <meta name="Keywords" content="${keywords}" />
 <meta name="Description" content="${description}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>${pageTitle}</title>
+<title>${pageTitle}-${step}</title>
 <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="icon" href="animated_favicon.gif" type="image/gif" />
@@ -48,7 +48,7 @@
             <#list goodsList as goods>
             <tr>
               <td bgcolor="#ffffff" align="center">
-                <#if  goods.goodsId  >  0  >
+                <#if  goods.goodsId?? >
                 <#if  showGoodsThumb  ==  1  >
                   <a href="goods.action?id=${goods.goodsId}" target="_blank" class="f6">${goods.goodsName}</a>
                 <#elseif  showGoodsThumb  ==  2  >
@@ -57,10 +57,10 @@
                   <a href="goods.action?id=${goods.goodsId}" target="_blank"><img src="${goods.goodsThumb}" border="0" title="${goods.goodsName?html}" /></a><br />
                   <a href="goods.action?id=${goods.goodsId}" target="_blank" class="f6">${goods.goodsName}</a>
                 </#if>
-                <#if  goods.parentId  >  0  >
+                <#if  goods.parentId??  >
                 <span style="color:#FF0000">（${lang.accessories}）</span>
                 </#if>
-                <#if  goods.isGift  >  0  >
+                <#if  goods.isGift  >
                 <span style="color:#FF0000">（${lang.largess}）</span>
                 </#if>
               <#else>
@@ -75,7 +75,7 @@
               </#if>
               <td align="right" bgcolor="#ffffff">${goods.goodsPrice}</td>
               <td align="right" bgcolor="#ffffff">
-                <#if  goods.goodsId  >  0  &&  goods.isGift??  ==  0  &&  goods.parentId??  ==  0  >
+                <#if  goods.goodsId??  &&  !goods.isGift  &&  !goods.parentId??  >
                 <input type="text" name="goods_number[${goods.recId}]" id="goods_number_${goods.recId}" value="${goods.goodsNumber}" size="4" class="inputBg" style="text-align:center " />
                 <#else>
                 ${goods.goodsNumber}
@@ -84,7 +84,7 @@
               <td align="right" bgcolor="#ffffff">${goods.subtotal}</td>
               <td align="center" bgcolor="#ffffff">
                 <a href="javascript:if (confirm('${lang.dropGoodsConfirm}')) location.href='flow.action?step=drop_goods&amp;id=${goods.recId}'; " class="f6">${lang.drop}</a>
-                <#if  smarty.session.userId  >  0  >
+                <#if  userId?? >
                 <a href="javascript:if (confirm('${lang.dropGoodsConfirm}')) location.href='flow.action?step=drop_to_collect&amp;id=${goods.recId}'; " class="f6">${lang.dropToCollect}</a>
                 </#if>            </td>
             </tr>
@@ -93,7 +93,7 @@
           <table width="99%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
             <tr>
               <td bgcolor="#ffffff">
-              <#if  discount  >  0  >${yourDiscount}<br /></#if>
+              <#if  (discount  >  0)  >${yourDiscount}<br /></#if>
               ${shoppingMoney}<#if  showMarketprice??  >，${marketPriceDesc}</#if>
               </td>
               <td align="right" bgcolor="#ffffff">
@@ -110,7 +110,7 @@
             <td bgcolor="#ffffff" align="right"><a href="flow.action?step=checkout"><img src="images/checkout.gif" alt="checkout" /></a></td>
           </tr>
         </table>
-       <#if  smarty.session.userId  >  0  >
+       <#if  userId??  >
        <script type="text/javascript" src="js/transport.js"></script>
 
        <script type="text/javascript" charset="utf-8">
@@ -360,7 +360,7 @@ var ${key} = "${item}";
               <td bgcolor="#ffffff" valign="top">${shipping.shippingDesc}</td>
               <td bgcolor="#ffffff" align="right" valign="top">${shipping.formatShippingFee}</td>
               <td bgcolor="#ffffff" align="right" valign="top">${shipping.freeMoney}</td>
-              <td bgcolor="#ffffff" align="right" valign="top"><#if  shipping.insure  !=  0  >${shipping.insureFormated}<#else>${lang.notSupportInsure}</#if></td>
+              <td bgcolor="#ffffff" align="right" valign="top"><#if  shipping.insure  !=  "0"  >${shipping.insureFormated}<#else>${lang.notSupportInsure}</#if></td>
             </tr>
             </#list>
             <tr>
