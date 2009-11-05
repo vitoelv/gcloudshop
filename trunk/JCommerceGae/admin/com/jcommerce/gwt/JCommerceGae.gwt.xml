@@ -27,9 +27,9 @@
     
       <!-- Specify the application specific style sheet.              -->
       <stylesheet src='iShop.css' />
-  <servlet path="/ishopService.do" class="com.jcommerce.gwt.server.IShopServiceImpl" />		
+  <servlet path="/defaultService.do" class="com.jcommerce.gwt.server.DefaultServiceImpl" />		
   
-  <servlet path="/customizedService.do" class="com.jcommerce.gwt.server.CustomizedServiceImpl" />
+  <servlet path="/specialService.do" class="com.jcommerce.gwt.server.SpecialServiceImpl" />
   <servlet path="/gwtHttpService.do" class="com.jcommerce.gwt.server.GWTHttpServlet" />
   <servlet path="/dynaImageService.do" class="example.DynaImageServlet" />
   
