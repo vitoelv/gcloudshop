@@ -30,7 +30,8 @@ public class Shipping extends ModelObject {
     private Long longId;
     
     // relations
-        
+    @Persistent(mappedBy="shipping")
+    private Set<ShippingArea> shippingAreas = new HashSet<ShippingArea>();        
     
   // fields
   @Persistent
@@ -49,7 +50,7 @@ public class Shipping extends ModelObject {
   private java.lang.String insure; 
 
   @Persistent
-  private java.lang.Long supportCod=0l; 
+  private java.lang.Boolean supportCod=false; 
 
   @Persistent
   private java.lang.Boolean enabled=false; 
@@ -141,13 +142,7 @@ public class Shipping extends ModelObject {
 
 
 
-  public java.lang.Long getSupportCod() {
-    return supportCod;
-  }
 
-  public void setSupportCod(java.lang.Long newSupportCod) {
-    supportCod = newSupportCod;
-  }
 
 
 
@@ -167,6 +162,26 @@ public class Shipping extends ModelObject {
 
   public void setShippingPrint(java.lang.String newShippingPrint) {
     shippingPrint = newShippingPrint;
+  }
+
+
+  public java.lang.Boolean getSupportCod() {
+	return supportCod;
+  }
+
+
+  public void setSupportCod(java.lang.Boolean supportCod) {
+	this.supportCod = supportCod;
+  }
+
+
+  public Set<ShippingArea> getShippingAreas() {
+	return shippingAreas;
+  }
+
+
+  public void setShippingAreas(Set<ShippingArea> shippingAreas) {
+	this.shippingAreas = shippingAreas;
   }
 
 }

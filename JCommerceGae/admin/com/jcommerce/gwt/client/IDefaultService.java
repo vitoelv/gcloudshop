@@ -5,18 +5,14 @@
 package com.jcommerce.gwt.client;
 
 import java.util.List;
-import java.util.Map;
 
-import com.extjs.gxt.ui.client.data.ListLoadConfig;
-import com.extjs.gxt.ui.client.data.ListLoadResult;
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
 import com.extjs.gxt.ui.client.data.PagingLoadResult;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.jcommerce.gwt.client.form.BeanObject;
-import com.jcommerce.gwt.client.panels.PaymentConfigMetaForm;
 import com.jcommerce.gwt.client.service.Criteria;
 
-public interface IShopService extends RemoteService {
+public interface IDefaultService extends RemoteService {
     public BeanObject getBean(String bean, String id);
     
     public List<BeanObject> getBeans(String bean, String[] ids);

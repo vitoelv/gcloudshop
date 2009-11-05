@@ -30,7 +30,8 @@ public class Cart extends ModelObject {
     private Long longId;
     
     // relations
-        
+    @Persistent 
+    private java.lang.Double goodsWeight = 0.0;
     
   // fields
   @Persistent
@@ -60,6 +61,7 @@ public class Cart extends ModelObject {
   @Persistent
   private java.lang.Long goodsNumber=0l; 
 
+  
   @Persistent
   private java.lang.String goodsAttr; 
 
@@ -284,6 +286,16 @@ public class Cart extends ModelObject {
 
   public void setGoodsAttrId(java.lang.String newGoodsAttrId) {
     goodsAttrId = newGoodsAttrId;
+  }
+
+
+  public java.lang.Double getGoodsWeight() {
+	return goodsWeight;
+  }
+
+
+  public void setGoodsWeight(java.lang.Double goodsWeight) {
+	this.goodsWeight = goodsWeight;
   }
 
 }

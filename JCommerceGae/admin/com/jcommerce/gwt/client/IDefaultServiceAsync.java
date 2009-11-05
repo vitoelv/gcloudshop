@@ -5,18 +5,14 @@
 package com.jcommerce.gwt.client;
 
 import java.util.List;
-import java.util.Map;
 
-import com.extjs.gxt.ui.client.data.ListLoadConfig;
-import com.extjs.gxt.ui.client.data.ListLoadResult;
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
 import com.extjs.gxt.ui.client.data.PagingLoadResult;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.jcommerce.gwt.client.form.BeanObject;
-import com.jcommerce.gwt.client.panels.PaymentConfigMetaForm;
 import com.jcommerce.gwt.client.service.Criteria;
 
-public interface IShopServiceAsync {
+public interface IDefaultServiceAsync {
     public void updateObject(String id, BeanObject args, AsyncCallback<Boolean> callback);
 
     public void newObject(BeanObject args, AsyncCallback<String> callback);

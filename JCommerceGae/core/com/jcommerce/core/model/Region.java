@@ -30,7 +30,9 @@ public class Region extends ModelObject {
     private Long longId;
     
     // relations
-        
+  
+    
+    
     
   // fields
   @Persistent

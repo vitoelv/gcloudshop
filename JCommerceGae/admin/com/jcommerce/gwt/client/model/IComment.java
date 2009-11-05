@@ -9,7 +9,11 @@ package com.jcommerce.gwt.client.model;
 public interface IComment extends IModelObject {
    
    // relation
-      
+   public static final Long TYPE_ARTICLE = 1l;
+   public static final Long TYPE_GOODS = 0l;
+	
+   public static final Long STATUS_ACTIVE = 1l;
+   public static final Long STATUS_INACTIVE = 0l;
   // fields
   public static final String COMMENT_ID = "commentId"; 
   public static final String COMMENT_TYPE = "commentType"; 

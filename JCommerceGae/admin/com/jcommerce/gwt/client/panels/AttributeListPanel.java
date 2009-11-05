@@ -44,9 +44,8 @@ import com.jcommerce.gwt.client.service.DeleteService;
 import com.jcommerce.gwt.client.service.ListService;
 import com.jcommerce.gwt.client.service.PagingListService;
 import com.jcommerce.gwt.client.service.UpdateService;
-import com.jcommerce.gwt.client.service.PagingListService.MyProxy;
+import com.jcommerce.gwt.client.util.MyRpcProxy;
 import com.jcommerce.gwt.client.widgets.ActionCellRenderer;
-import com.jcommerce.gwt.client.widgets.ColumnPanel;
 
 public class AttributeListPanel extends ContentWidget {
 	public static interface Constants {
@@ -83,8 +82,21 @@ public class AttributeListPanel extends ContentWidget {
 	private State curState = new State();
 	
 	
-	ColumnPanel contentPanel = new ColumnPanel();
-//	String selectedGoodsTypeId;
+    @Override
+    public Button getShortCutButton() {
+      Button sButton = new Button("添加属性");
+      sButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
+          public void componentSelected(ButtonEvent ce) {
+          	onShortCutButtonClicked();
+          }
+      });
+      return sButton;
+    }
+    public void onShortCutButtonClicked() {
+		AttributePanel.State newState = new AttributePanel.State();
+		newState.setIsEdit(false);
+		newState.execute();
+    }
 	
 	PagingToolBar toolBar;
 	BasePagingLoader loader = null;
@@ -102,7 +114,7 @@ public class AttributeListPanel extends ContentWidget {
 	}
 	
 	private AttributeListPanel() {
-		add(contentPanel);
+//		add(contentPanel);
 		initJS(this);
 	}
 	private native void initJS(AttributeListPanel me) /*-{
@@ -335,14 +347,14 @@ public class AttributeListPanel extends ContentWidget {
 		String selectedGoodsTypeId = getCurState().getSelectedGoodsTypeID();
 		System.out.println("selectedGoodsTypeId= "+ selectedGoodsTypeId);
 		Criteria criteria = new Criteria(); 
-		if(!"all".equals(selectedGoodsTypeId)) {
+		if(!"all".equals(selectedGoodsTypeId) && (selectedGoodsTypeId!=null && !"".equals(selectedGoodsTypeId))) {
 			Condition cond = new Condition();
 			cond.setField(AttributeForm.GOODS_TYPE);
 			cond.setOperator(Condition.EQUALS);
 			cond.setValue(selectedGoodsTypeId);
 			criteria.addCondition(cond);			
 		}
-		MyProxy proxy = (MyProxy)loader.getProxy();
+		MyRpcProxy proxy = (MyRpcProxy)loader.getProxy();
 		proxy.setCriteria(criteria);
 //		loader.load(0, pageSize);
 		toolBar.refresh();
@@ -396,7 +408,7 @@ public class AttributeListPanel extends ContentWidget {
 	private void editAttribute(String id) {
 		AttributePanel.State newState = new AttributePanel.State();
 		newState.setIsEdit(true);
-		newState.setAttrID(id);
+		newState.setPkId(id);
 		newState.setSelectedGoodsTypeID(getCurState().getSelectedGoodsTypeID());
 		newState.execute();
 		

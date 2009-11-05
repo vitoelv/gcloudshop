@@ -1,4 +1,4 @@
-package com.jcommerce.core.payment;
+package com.jcommerce.core.service.payment;
 
 import java.io.Serializable;
 import java.util.Map;

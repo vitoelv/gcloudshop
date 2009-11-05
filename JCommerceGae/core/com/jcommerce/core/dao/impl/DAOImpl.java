@@ -241,6 +241,10 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
 //        	pm.close();
         }
     }
+    
+    public List getList(final String modelName, final Criteria criteria) {
+    	return getList(modelName, criteria, -1, -1);
+    }
     public List getList(final String modelName, final Criteria criteria, final int firstRow, final int maxRow) {
         Query query = null;
         try {        	

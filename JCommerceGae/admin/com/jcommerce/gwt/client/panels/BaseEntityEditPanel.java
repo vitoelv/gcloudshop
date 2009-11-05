@@ -3,7 +3,6 @@ package com.jcommerce.gwt.client.panels;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,11 +33,14 @@ import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.Logger;
 import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.BeanObject;
+import com.jcommerce.gwt.client.form.SimpleOptionData;
 import com.jcommerce.gwt.client.model.IModelObject;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.CreateService;
 import com.jcommerce.gwt.client.service.ReadService;
 import com.jcommerce.gwt.client.service.UpdateService;
+import com.jcommerce.gwt.client.util.FormUtils;
+import com.jcommerce.gwt.client.widgets.SimpleStaticComboBox;
 
 
 public abstract class BaseEntityEditPanel extends ContentWidget  {
@@ -74,6 +76,8 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
     
 //    protected void onRender(Element parent, int index) {
 //    super.onRender(parent, index);
+    
+    @Override
     protected void afterRender() {
     	super.afterRender();
         System.out.println("----------GoodsType");
@@ -150,26 +154,8 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 	}
 	protected void submit() {
 		// default implementation is thru GWT-RPC
-    	List<Field<?>> fields = formPanel.getFields();
-    	
-    	Map<String, Object> props = new HashMap<String, Object>();
-    	for(Field field:fields) {
-    		String name = field.getName();
-    		Object value = field.getValue();
-    		if(field instanceof RadioGroup) {
-    			Radio selected = (Radio)value;
-    			name = selected.getName();
-
-    			value = selected.getValueAttribute();
-    		}
-    		if(field instanceof ComboBox) {
-    			ComboBox box = (ComboBox)field;
-    			String key = box.getValueField();
-    			value = ((BeanObject)value).get(key);
-    		}
-    		log("name: "+field.getName()+", value: ("+value+")");
-    		props.put(name, value);
-    	}
+		Map<String, Object> props = FormUtils.getPropsFromForm(formPanel);
+		
     	BeanObject form = new BeanObject(getEntityClassName(), props);
     	if (getCurState().getIsEdit()) {
     		String id = getCurState().getPkId();
@@ -202,7 +188,17 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
     		ex.printStackTrace();
     	}
         if(getCurState().getIsEdit()) {
-        	new ReadService().getBean(getEntityClassName(), getCurState().getPkId(),
+        	retrieveEntity();
+        } else {
+        	obj = new BeanObject();
+        	postSuperRefresh();
+        }
+
+    }
+    
+    // get called when refresh(), if isEdit
+    protected void retrieveEntity() {
+    	new ReadService().getBean(getEntityClassName(), getCurState().getPkId(),
 				new ReadService.Listener() {
         		public void onSuccess(BeanObject bean) {
         			obj = bean;
@@ -212,12 +208,9 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
         			postSuperRefresh();
         		}
         	});
-        } else {
-        	obj = new BeanObject();
-        	postSuperRefresh();
-        }
-
     }
+    
+    
     public void log(String s) {
     	
     	StringBuffer buf = new StringBuffer();
@@ -260,14 +253,30 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 				return;
 			}
 			
-			if(field instanceof ComboBox) {
+			if(field instanceof SimpleStaticComboBox) {
+				SimpleStaticComboBox<BeanObject> box = (SimpleStaticComboBox<BeanObject>)field;
+				ListStore<BeanObject> store = box.getStore();
+				List<BeanObject> selection = new ArrayList<BeanObject>();
+				BeanObject bo = store.findModel(SimpleOptionData.VALUE, value);
+				if(bo!=null) {
+					selection.add(bo);
+				}
+				box.setSelection(selection);
+			}
+			else if(field instanceof ComboBox) {
 				ComboBox<BeanObject> box = (ComboBox<BeanObject>)field;
 				
 				ListStore<BeanObject> store = box.getStore();
 				List<BeanObject> selection = new ArrayList<BeanObject>();
-				BeanObject bo = store.findModel(IModelObject.PK_ID, value);
-				selection.add(bo);
-				box.setSelection(selection);
+
+				// store may not have been initialized with dyna data yet. skip it
+				if(store.getCount()>0) {
+					BeanObject bo = store.findModel(IModelObject.PK_ID, value);
+					if(bo!=null) {
+						selection.add(bo);
+					}
+					box.setSelection(selection);
+				}
 				
 				
 			} else if(field instanceof ListField){
@@ -276,13 +285,15 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 				
 				Collection<String> v = (Collection<String>)value;
 				List<BeanObject> selection = new ArrayList<BeanObject>();
-				for(String vv:v) {
-					BeanObject bo = store.findModel(IModelObject.PK_ID, vv);
-					if(bo!=null) {
-						selection.add(bo);
+				if(store.getCount()>0) {
+					for(String vv:v) {
+						BeanObject bo = store.findModel(IModelObject.PK_ID, vv);
+						if(bo!=null) {
+							selection.add(bo);
+						}
 					}
+					lf.setSelection(selection);
 				}
-				lf.setSelection(selection);
 				
 			} else if(field instanceof DateField) {
 				log("TODO: convert date format?? using gxt-DateTimePropertyEditor");
@@ -337,5 +348,5 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 			populateField(field);
 		}
 	}
-    private BeanObject obj;
+    protected BeanObject obj;
 }

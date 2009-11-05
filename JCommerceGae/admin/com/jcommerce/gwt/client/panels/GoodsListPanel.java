@@ -49,7 +49,6 @@ import com.jcommerce.gwt.client.service.PagingListService;
 import com.jcommerce.gwt.client.service.UpdateService;
 import com.jcommerce.gwt.client.service.WaitService;
 import com.jcommerce.gwt.client.widgets.ActionCellRenderer;
-import com.jcommerce.gwt.client.widgets.ColumnPanel;
 
 public class GoodsListPanel extends ContentWidget {
 	public static interface Constants {
@@ -122,11 +121,11 @@ public class GoodsListPanel extends ContentWidget {
 	}
 	private static GoodsListPanel instance;
 	private GoodsListPanel() {
-		add(contentPanel);
+//		add(contentPanel);
 		initJS(this);
 	}
 	
-	ColumnPanel contentPanel = new ColumnPanel();
+//	ColumnPanel contentPanel = new ColumnPanel();
 	ListBox b_list = new ListBox();
 	ListBox lstCategory = new ListBox();
 	ListBox lstBrand = new ListBox();

@@ -2,8 +2,9 @@
 * Author: Bob Chen
 */
 
-package com.jcommerce.gwt.client;
+package com.jcommerce.gwt.client.util;
 
+import com.extjs.gxt.ui.client.Registry;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
@@ -14,8 +15,11 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.jcommerce.gwt.client.IDefaultService;
+import com.jcommerce.gwt.client.IDefaultServiceAsync;
+import com.jcommerce.gwt.client.service.RemoteService;
 
-public class Utils {
+public class GWTUtils {
     public static String getSelectedValue(ListBox list) {
         int i = list.getSelectedIndex();
         if (i < 0) {
@@ -59,13 +63,7 @@ public class Utils {
         }
     }
     
-    public static IShopServiceAsync getService() {
-        IShopServiceAsync service = (IShopServiceAsync) GWT.create(IShopService.class);
-        String moduleRelativeURL = GWT.getModuleBaseURL() + "ishopService";
-        ((ServiceDefTarget)service).setServiceEntryPoint(moduleRelativeURL);
-        return service;
-    }
-    
+
     public static void showErrorDialog(String err) {
         DialogBox dlg = createDialogBox("ERROR", err);
         dlg.show();

@@ -1,7 +1,5 @@
 package com.jcommerce.core.model;
 
-import java.util.HashSet;
-import java.util.Set;
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -40,7 +38,7 @@ public class Comment extends ModelObject {
   private java.lang.Long commentType=0l; 
 
   @Persistent
-  private java.lang.Long idValue=0l; 
+  private java.lang.String idValue; 
 
   @Persistent
   private java.lang.String email; 
@@ -123,13 +121,7 @@ public class Comment extends ModelObject {
 
 
 
-  public java.lang.Long getIdValue() {
-    return idValue;
-  }
 
-  public void setIdValue(java.lang.Long newIdValue) {
-    idValue = newIdValue;
-  }
 
 
 
@@ -220,5 +212,15 @@ public class Comment extends ModelObject {
   public void setUserId(java.lang.String newUserId) {
     userId = newUserId;
   }
+
+
+public java.lang.String getIdValue() {
+	return idValue;
+}
+
+
+public void setIdValue(java.lang.String idValue) {
+	this.idValue = idValue;
+}
 
 }

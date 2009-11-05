@@ -7,7 +7,7 @@ package com.jcommerce.gwt.client.service;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.jcommerce.gwt.client.IShopServiceAsync;
+import com.jcommerce.gwt.client.IDefaultServiceAsync;
 
 public class DeleteService extends RemoteService {
     public void deleteBeans(String model, List<String> ids, final BatchDeleteListener listener) {
@@ -19,7 +19,7 @@ public class DeleteService extends RemoteService {
             throw new RuntimeException("ids = null");
         }
         
-        final IShopServiceAsync service = getService();
+        final IDefaultServiceAsync service = getDefaultService();
         service.deleteObjects(model, ids, new AsyncCallback<Integer>() {
             public synchronized void onSuccess(Integer successCount) {
                 if (listener != null) {
@@ -45,7 +45,7 @@ public class DeleteService extends RemoteService {
             throw new RuntimeException("id = null");
         }
         
-        final IShopServiceAsync service = getService();
+        final IDefaultServiceAsync service = getDefaultService();
         service.deleteObject(model, id, new AsyncCallback<Boolean>() {
             public synchronized void onSuccess(Boolean success) {
                 if (listener != null) {

@@ -17,7 +17,7 @@ public interface IRegion extends IModelObject {
 	public static final Long TYPE_DISTRICT = 3l;
 	
 	public static final String DEFAULT_AGENCY_ID = "0";
-	public static final String COUNTRY_PARENT_ID = "0";   
+	public static final String COUNTRY_PARENT_ID = "";   
       
   // fields
   public static final String REGION_ID = "regionId"; 

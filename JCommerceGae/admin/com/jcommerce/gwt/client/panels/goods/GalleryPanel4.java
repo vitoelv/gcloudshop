@@ -29,6 +29,7 @@ import com.jcommerce.gwt.client.model.IGoods;
 import com.jcommerce.gwt.client.model.IGoodsGallery;
 import com.jcommerce.gwt.client.service.DeleteService;
 import com.jcommerce.gwt.client.service.ListService;
+import com.jcommerce.gwt.client.util.URLConstants;
 
 public class GalleryPanel4 extends TabItem {
 	int uploaderCount = 0;
@@ -73,7 +74,7 @@ public class GalleryPanel4 extends TabItem {
 		
 		Image image = new Image();
 //		image.setUrl("http://www.google.cn/intl/zh-CN/images/logo_cn.gif");
-		image.setUrl(GWT.getModuleBaseURL()+"dynaImageService.do?fileId=agpnY2xvdWRzaG9wciULEgZEU0ZpbGUiGV8yMjgxYTZiYjAxMjI4MWE2YmM0YTAwMDMM");
+		image.setUrl(URLConstants.SERVLET_IMAGE+"agpnY2xvdWRzaG9wciULEgZEU0ZpbGUiGV8yMjgxYTZiYjAxMjI4MWE2YmM0YTAwMDMM");
 		
 		Button link = new Button("[-]");
 		HiddenField<String> idField = new HiddenField<String>();
@@ -207,7 +208,7 @@ public class GalleryPanel4 extends TabItem {
 		lc.setLayout(layout);
 		
 		Image im = new Image();
-		im.setUrl(GWT.getModuleBaseURL()+"dynaImageService.do?fileId="+imageFileId);
+		im.setUrl(URLConstants.SERVLET_IMAGE+imageFileId);
 
 		
 		final HiddenField<String> idField = new HiddenField<String>();

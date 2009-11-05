@@ -2,9 +2,11 @@ package com.jcommerce.core.model;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
@@ -30,7 +32,13 @@ public class ShippingArea extends ModelObject {
     private Long longId;
     
     // relations
-        
+    @Persistent(mappedBy="shippingArea")
+    private Set<AreaRegion> areaRegions = new HashSet<AreaRegion>();
+	@Persistent
+	private Shipping shipping;
+    @NotPersistent
+	private String regionNames;
+    
     
   // fields
   @Persistent
@@ -115,6 +123,36 @@ public class ShippingArea extends ModelObject {
 
   public void setConfigure(java.lang.String newConfigure) {
     configure = newConfigure;
+  }
+
+
+  public Set<AreaRegion> getAreaRegions() {
+	return areaRegions;
+  }
+
+
+  public void setAreaRegions(Set<AreaRegion> areaRegions) {
+	this.areaRegions = areaRegions;
+  }
+
+
+  public String getRegionNames() {
+	return regionNames;
+  }
+
+
+  public void setRegionNames(String regionNames) {
+	this.regionNames = regionNames;
+  }
+
+
+  public Shipping getShipping() {
+	return shipping;
+  }
+
+
+  public void setShipping(Shipping shipping) {
+	this.shipping = shipping;
   }
 
 }

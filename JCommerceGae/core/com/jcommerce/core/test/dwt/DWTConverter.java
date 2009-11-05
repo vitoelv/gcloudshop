@@ -433,7 +433,11 @@ public class DWTConverter {
 		}
 		else {
 			// just an list or array
-			res = new StringBuffer("<#list ").append(listItem).append(" as ").append(valueItem).append(">").toString();	
+			res = new StringBuffer("<#list ").append(listItem).append(" as ").append(valueItem).append(">")
+				.append(" <#assign sn = ").append(valueItem).append("_index >")
+				.toString();
+			
+			
 		}
 		
 		debug("in [compileForEachStart]: res="+res+", key="+keyItem);
@@ -596,7 +600,7 @@ public class DWTConverter {
 			res3=tag;
 		}
 		else {
-
+			
 		String regex = "\\$([a-zA-Z0-9_\\.]+)\\s*?";
 //		String regex = "\\$(\\S+)\\s*?";
 		// replace single $ with blank
@@ -607,11 +611,9 @@ public class DWTConverter {
 			}
 		}, tag);	
 		res = res.replace("$", "\\$");
-		
-		
 
-		res2 = replacePhpVars(res);
-		
+		res = replacePhpVars(res);
+		debug("in [replaceVars] after[replacePhpVars]: res = "+res);
 		
 		res2 = res2.replace("|escape:html", "?html");
 		// TODO escape URL
@@ -659,13 +661,15 @@ public class DWTConverter {
 		return res3;
 	}
 
-	private String replacePhpVars(String res) {
+	public String replacePhpVars(String res) {
 		// replace PHP style variables to Java style
 		String res2;
 		String regex = "_([a-z])";
+//		String regex = "(\\s^[\\s|_|\"]*)_([a-z])";
 		res2 = preg_replace(regex, new RegexReplaceCallback() {
 			public String execute(String... groups) {
 				return groups[0].toUpperCase();
+//				return groups[0]+groups[1].toUpperCase();
 			}
 		}, res);
 		return res2;

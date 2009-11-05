@@ -8,9 +8,12 @@ import java.util.List;
 
 import com.extjs.gxt.ui.client.data.BasePagingLoader;
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
+import com.extjs.gxt.ui.client.data.PagingLoadResult;
 import com.extjs.gxt.ui.client.data.RpcProxy;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.jcommerce.gwt.client.IShopServiceAsync;
+import com.jcommerce.gwt.client.IDefaultServiceAsync;
+import com.jcommerce.gwt.client.form.BeanObject;
+import com.jcommerce.gwt.client.util.MyRpcProxy;
 
 public class PagingListService extends RemoteService {
 	
@@ -19,7 +22,7 @@ public class PagingListService extends RemoteService {
 //            throw new RuntimeException("model = null");
 //        }
 //        
-//        final IShopServiceAsync service = getService();
+//        final IDefaultServiceAsync service = getService();
 //        MyProxy proxy = new MyProxy() {
 //            public void load(Object loadConfig, AsyncCallback callback) {
 //                service.getPagingList(model, criteria, wantedFields, (PagingLoadConfig) loadConfig, callback);
@@ -34,21 +37,21 @@ public class PagingListService extends RemoteService {
     	return getLoader(model, null, wantedFields);
     }
     
-    public BasePagingLoader getLoader(final String model,  final Criteria criteria, final List<String> wantedFields) {
+    public BasePagingLoader<PagingLoadResult<BeanObject>> getLoader(final String model,  final Criteria criteria, final List<String> wantedFields) {
         if (model == null) {
             throw new RuntimeException("model = null");
         }
         
-        final IShopServiceAsync service = getService();
-        MyProxy proxy = new MyProxy() {
-            public void load(Object loadConfig, AsyncCallback callback) {
+        final IDefaultServiceAsync service = getDefaultService();
+        MyRpcProxy<PagingLoadResult<BeanObject>> proxy = new MyRpcProxy<PagingLoadResult<BeanObject>>() {
+            public void load(Object loadConfig, AsyncCallback<PagingLoadResult<BeanObject>> callback) {
                 service.getPagingList(model, criteria, wantedFields, (PagingLoadConfig) loadConfig, callback);
             }
         };
         proxy.setCriteria(criteria);
         
         // loader
-        BasePagingLoader loader = new BasePagingLoader(proxy);
+        BasePagingLoader<PagingLoadResult<BeanObject>> loader = new BasePagingLoader<PagingLoadResult<BeanObject>>(proxy);
         loader.setRemoteSort(true);
 
         return loader;
@@ -59,7 +62,7 @@ public class PagingListService extends RemoteService {
 //            throw new RuntimeException("model = null");
 //        }
 //        
-//        final IShopServiceAsync service = getService();
+//        final IDefaultServiceAsync service = getService();
 //        MyProxy proxy = new MyProxy() {
 //            public void load(Object loadConfig, AsyncCallback callback) {
 //                service.getPagingList(model, criteria, (PagingLoadConfig) loadConfig, callback);
@@ -79,7 +82,7 @@ public class PagingListService extends RemoteService {
 //            throw new RuntimeException("model = null");
 //        }
 //        
-//        final IShopServiceAsync service = getService();
+//        final IDefaultServiceAsync service = getService();
 //        MyProxy proxy = new MyProxy() {
 //            public void load(Object loadConfig, AsyncCallback callback) {
 //                service.getPagingList(model, criteria, (PagingLoadConfig) loadConfig, callback);
@@ -95,11 +98,6 @@ public class PagingListService extends RemoteService {
     	return getLoader(model, criteria, null);
     }
     
-    public abstract class MyProxy extends RpcProxy {
-    	Criteria criteria = null;
-    	public void setCriteria(Criteria criteria) {
-    		this.criteria = criteria;
-    	}
-    }
+
     
 }

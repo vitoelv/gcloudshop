@@ -1,10 +1,9 @@
 package com.jcommerce.core.model;
 
-import java.util.HashSet;
-import java.util.Set;
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
@@ -30,7 +29,15 @@ public class AreaRegion extends ModelObject {
     private Long longId;
     
     // relations
-        
+    @Persistent
+    private ShippingArea shippingArea;
+    @NotPersistent
+    private String regionName;
+    
+    @Override
+    public ModelObject getParent(){
+    	return shippingArea;
+    }        
     
   // fields
   @Persistent
@@ -89,6 +96,26 @@ public class AreaRegion extends ModelObject {
 
   public void setRegionId(java.lang.String newRegionId) {
     regionId = newRegionId;
+  }
+
+
+  public ShippingArea getShippingArea() {
+	return shippingArea;
+  }
+
+
+  public void setShippingArea(ShippingArea shippingArea) {
+	this.shippingArea = shippingArea;
+  }
+
+
+  public String getRegionName() {
+	return regionName;
+  }
+
+
+  public void setRegionName(String regionName) {
+	this.regionName = regionName;
   }
 
 }

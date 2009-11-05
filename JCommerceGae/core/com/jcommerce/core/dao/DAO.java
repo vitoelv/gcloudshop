@@ -14,6 +14,7 @@ import com.jcommerce.core.service.Criteria;
  */
 public interface DAO {
     public List getList(String modelName, Criteria criteria, int firstRow, int maxRow);
+    public List getList(String modelName, Criteria criteria);
     public String add(ModelObject to);
     public String attach (ModelObject to);
     public boolean update (ModelObject to);

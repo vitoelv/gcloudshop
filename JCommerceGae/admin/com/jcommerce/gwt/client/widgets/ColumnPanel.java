@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBoxBase;
 import com.google.gwt.user.client.ui.Widget;
-import com.jcommerce.gwt.client.Utils;
+import com.jcommerce.gwt.client.util.GWTUtils;
 
 public class ColumnPanel extends LayoutContainer {
     private Map<String, Widget> widgets;
@@ -111,7 +111,7 @@ public class ColumnPanel extends LayoutContainer {
         } else if (widget instanceof TextBoxBase) {
             return ((TextBoxBase)widget).getText();
         } else if (widget instanceof ListBox) {
-            return Utils.getSelectedValue((ListBox)widget);
+            return GWTUtils.getSelectedValue((ListBox)widget);
         } else if (widget instanceof CheckBox) {
             return ((CheckBox)widget).isChecked();
         } else if (widget instanceof DateWidget) {
@@ -141,7 +141,7 @@ public class ColumnPanel extends LayoutContainer {
         if (widget instanceof TextBoxBase) {
             ((TextBoxBase)widget).setText(value == null ? "" : value+"");
         } else if (widget instanceof ListBox) {
-            Utils.setSelectedValue((ListBox)widget, value+"");
+            GWTUtils.setSelectedValue((ListBox)widget, value+"");
         } else if (widget instanceof CheckBox) {
             ((CheckBox)widget).setChecked(value == null ? Boolean.FALSE : (Boolean)value);
         } else if (widget instanceof DateWidget) {

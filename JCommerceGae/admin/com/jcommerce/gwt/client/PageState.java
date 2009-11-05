@@ -48,6 +48,9 @@ public abstract class PageState implements Command{
 //		uriBuf.append(getPageName());
 		for(String key : map.keySet()) {
 			Object value = map.get(key);
+			if(value==null) {
+				continue;
+			}
 			uriBuf.append(AND).append(encode(key)).append(EQUAL);
 			if(value instanceof List) {
 				List<String> valueList = (List<String>)value;
@@ -67,7 +70,7 @@ public abstract class PageState implements Command{
 	
 	public String encode (String s){
 		try {
-			String res = s;
+			String res = s==null? "":s;
 			
 			res = res.replace(EQUAL, EQUALCODE);
 			res = res.replace(AND, ANDCODE);
@@ -94,7 +97,7 @@ public abstract class PageState implements Command{
 	
 	public String decode(String s){
 		try {
-			String res = s;
+			String res = s==null?"":s;
 			
 			res = URL.decode(res); 
 			
@@ -136,24 +139,33 @@ public abstract class PageState implements Command{
 			// debug
 			Logger.getClientLogger().log("s: "+s);
 			String[] pair = s.split(EQUAL);
+			String sKey = "";
+			String sVal = "";
 			if(pair.length==2) {
-				String key = decode(pair[0]);
-				if(pair[1].indexOf(LEFT)>=0) {
-					//p2={opq,xyz}
-					String vv = pair[1].substring(pair[1].indexOf(LEFT)+1, pair[1].lastIndexOf(RIGHT));
-					Logger.getClientLogger().log("vv: "+vv);
-					String[] values = vv.split(",");	
-					List<String> valueList = new ArrayList<String>();
-					for(String value:values) {
-						valueList.add(decode(value));
-					}
-					map.put(key, valueList);
-				}
-				else {
-					String value = decode(pair[1]);
-					map.put(key, value);
-				}
+				sKey = pair[0];
+				sVal = pair[1];
+			}else if(pair.length == 1) {
+				sKey = pair[0];
+			}else {
+				continue;
 			}
+
+			String key = decode(sKey);
+			if (sVal.indexOf(LEFT) >= 0) {
+				// p2={opq,xyz}
+				String vv = sVal.substring(sVal.indexOf(LEFT) + 1, sVal.lastIndexOf(RIGHT));
+				Logger.getClientLogger().log("vv: " + vv);
+				String[] values = vv.split(",");
+				List<String> valueList = new ArrayList<String>();
+				for (String value : values) {
+					valueList.add(decode(value));
+				}
+				map.put(key, valueList);
+			} else {
+				String value = decode(sVal);
+				map.put(key, value);
+			}
+
 		}
 	}
 	
@@ -186,7 +198,7 @@ public abstract class PageState implements Command{
 //		
 //		List<String> p2 = new ArrayList<String>();
 //		p2.add("张三");
-//		p2.add("�?�四");
+//		p2.add("�?�四");
 //		
 //		ps.setValue("p2", p2);
 //		
@@ -205,7 +217,7 @@ public abstract class PageState implements Command{
 		
 		
     	State newState = new State();
-    	newState.setMessage("添加商�?类型�?功-=&");
+    	newState.setMessage("添加商�?类型�?功-=&");
     	
     	State choice1 = new State();
     	choice1.setValue("p1", "id1");

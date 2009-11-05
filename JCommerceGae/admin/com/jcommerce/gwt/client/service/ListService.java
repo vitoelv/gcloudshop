@@ -7,40 +7,37 @@ package com.jcommerce.gwt.client.service;
 import java.util.List;
 
 import com.extjs.gxt.ui.client.data.BaseListLoader;
-import com.extjs.gxt.ui.client.data.RpcProxy;
+import com.extjs.gxt.ui.client.data.ListLoadResult;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.jcommerce.gwt.client.IShopServiceAsync;
+import com.jcommerce.gwt.client.IDefaultServiceAsync;
 import com.jcommerce.gwt.client.form.BeanObject;
+import com.jcommerce.gwt.client.util.MyListLoader;
+import com.jcommerce.gwt.client.util.MyRpcProxy;
 
 public class ListService extends RemoteService {
     public void listBeans(String model, final Listener listener) {
        listBeans(model, null, listener);
     }
-    public abstract class MyProxy extends RpcProxy {
-    	Criteria criteria = null;
-    	public void setCriteria(Criteria criteria) {
-    		this.criteria = criteria;
-    	}
-    }
+ 
     
     public BaseListLoader getLoader(final String model) {
     	return getLoader(model, null,null);
     }
-    public BaseListLoader getLoader(final String model,  final Criteria criteria, final List<String> wantedFields) {
+    public MyListLoader<ListLoadResult<BeanObject>> getLoader(final String model,  final Criteria criteria, final List<String> wantedFields) {
         if (model == null) {
             throw new RuntimeException("model = null");
         }
         
-        final IShopServiceAsync service = getService();
-        MyProxy proxy = new MyProxy() {
-            public void load(Object loadConfig, AsyncCallback callback) {
-                service.getList(model, criteria, wantedFields, callback);
+        final IDefaultServiceAsync service = getDefaultService();
+        MyRpcProxy<List<BeanObject>> proxy = new MyRpcProxy<List<BeanObject>>() {
+            public void load(Object loadConfig, AsyncCallback<List<BeanObject>> callback) {
+                service.getList(model, getCriteria(), wantedFields, callback);
             }
         };
         proxy.setCriteria(criteria);
         
         // loader
-        BaseListLoader loader = new BaseListLoader(proxy);
+        MyListLoader loader = new MyListLoader(proxy);
 //        loader.setRemoteSort(true);
 
         return loader;
@@ -51,7 +48,7 @@ public class ListService extends RemoteService {
             throw new RuntimeException("model = null");
         }
         
-        final IShopServiceAsync service = getService();
+        final IDefaultServiceAsync service = getDefaultService();
         service.getList(model, criteria, new AsyncCallback<List<BeanObject>>() {
             public synchronized void onSuccess(List<BeanObject> result) {
                 if (listener != null) {

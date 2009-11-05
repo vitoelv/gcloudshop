@@ -381,7 +381,7 @@ public class TestJava extends TestCase {
 		try {
 //			String tag = "if !$gb_deposit";
 //			String tag = "$gb_deposit";
-			String tag = "$lang.pager_1";
+//			String tag = "$lang.pager_1";
 					
 //			String tag = "$lang.far_ext[$favourable.act_range]";
 			
@@ -402,6 +402,11 @@ public class TestJava extends TestCase {
 			 * 
 			 */
 			
+			// TODO this is tricky.  consider rewrite compileIf, 
+			// 1) parsing each token accurately, with or without space
+			// 2) replace PHPVar with JavaVar only for those token contains "$" 
+			
+			String tag = "if $action_xxx.abc[xby] eq \"account_deposit\"";
 			
 			DWTConverter dwtConverter = new DWTConverter();
 			dwtConverter.foreachStack.push("abc");

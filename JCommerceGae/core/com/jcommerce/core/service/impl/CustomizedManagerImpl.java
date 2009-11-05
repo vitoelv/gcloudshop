@@ -8,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.appengine.api.datastore.KeyFactory;
 import com.jcommerce.core.dao.DAO;
+import com.jcommerce.core.model.AreaRegion;
 import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.DSFile;
@@ -15,6 +16,8 @@ import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.GoodsAttr;
 import com.jcommerce.core.model.GoodsGallery;
 import com.jcommerce.core.model.GoodsType;
+import com.jcommerce.core.model.Region;
+import com.jcommerce.core.model.ShippingArea;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.CustomizedManager;
@@ -23,7 +26,9 @@ import com.jcommerce.core.util.UUIDHexGenerator;
 import com.jcommerce.core.util.UUIDLongGenerator;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.AttributeForm;
+import com.jcommerce.gwt.client.model.IAreaRegion;
 import com.jcommerce.gwt.client.model.IGoodsGallery;
+import com.jcommerce.gwt.client.model.IShippingArea;
 
 public class CustomizedManagerImpl extends DefaultManagerImpl implements CustomizedManager {
 
@@ -62,7 +67,40 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     	}
     }
 
-    
+    public void getShippingAreaWithRegionName(List<ShippingArea> resultSet, String shippingId) {
+    	try {
+    		System.out.println("CustomizedManagerImpl.getShippingAreaWithRegionName()");
+    		Criteria criteria = new Criteria();
+    		criteria.addCondition(new Condition(IShippingArea.SHIPPING, Condition.EQUALS, shippingId));
+    		List<ShippingArea> list = dao.getList(ShippingArea.class.getName(), criteria);
+    		for(ShippingArea sa:list) {
+        		String saId = sa.getPkId();
+    			Criteria c2 = new Criteria();
+        		Condition cond = new Condition();
+        		cond.setField(IAreaRegion.SHIPPING_AREA);
+        		cond.setOperator(Condition.EQUALS);
+        		cond.setValue(saId);
+        		c2.addCondition(cond);
+        		
+    			List<AreaRegion> ars = dao.getList(AreaRegion.class.getName(), c2);
+    			StringBuffer buf = new StringBuffer();
+    			for(AreaRegion ar : ars) {
+    				String rid = ar.getRegionId();
+    				Region region = (Region)dao.get(Region.class.getName(), rid);
+    				String rname = region==null? "": region.getRegionName();
+    				if(buf.length()>0) {
+    					buf.append(", ");
+    				}
+    				buf.append(rname);
+    			}
+    			sa.setRegionNames(buf.toString());
+    		}
+    		resultSet.addAll(list);
+    	} catch (Exception ex) {
+    		ex.printStackTrace();
+    		throw new RuntimeException(ex);
+    	}
+    }
     public String addBrand(Brand to) {
     	try {
     		populateIdWithPo(to);
@@ -238,6 +276,27 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     	
     	
     }
+    
+    public void getAreaRegionListWithName(List<AreaRegion> resultSet, String shippingAreaId){
+    	try {
+    		Criteria c = new Criteria();
+    		c.addCondition(new Condition(IAreaRegion.SHIPPING_AREA, Condition.EQUALS, shippingAreaId));
+    		List<AreaRegion> ars = super.getList(ModelNames.AREAREGION, c);
+    		for(AreaRegion ar : ars) {
+    			String regionId = ar.getRegionId();
+    			Region region = (Region)super.get(ModelNames.REGION, regionId);
+    			ar.setRegionName(region.getRegionName());
+    			resultSet.add(ar);
+    		}
+    	}catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+    }
+
+    
+    
     // for test case1 
 //    public String addPerson(Person to, Address a) {
 //    	try {

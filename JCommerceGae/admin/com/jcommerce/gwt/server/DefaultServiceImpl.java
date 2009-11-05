@@ -21,13 +21,13 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.util.MyPropertyUtil;
-import com.jcommerce.gwt.client.IShopService;
+import com.jcommerce.gwt.client.IDefaultService;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.resources.IShopConstants;
 import com.jcommerce.gwt.client.service.Condition;
 import com.jcommerce.gwt.client.service.Criteria;
 
-public class IShopServiceImpl extends RemoteServiceServlet implements IShopService {
+public class DefaultServiceImpl extends RemoteServiceServlet implements IDefaultService {
 
 //    private PagingListAction pagingAction;
 //    private RegionManager regionManager;
@@ -36,7 +36,7 @@ public class IShopServiceImpl extends RemoteServiceServlet implements IShopServi
     
 //    private IPaymentMetaManager paymentMetaManager; 
    
-	public IShopServiceImpl() {
+	public DefaultServiceImpl() {
     }
 	
 	WebApplicationContext springContext = null;

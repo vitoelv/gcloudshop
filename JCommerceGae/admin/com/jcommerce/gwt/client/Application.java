@@ -94,7 +94,7 @@ public class Application extends Composite implements WindowResizeListener {
   /**
    * The main wrapper around the content and content title.
    */
-  private LayoutContainer contentTitleLayout;
+//  private LayoutContainer contentTitleLayout;
 
   /**
    * The wrapper around the content.
@@ -162,14 +162,10 @@ public class Application extends Composite implements WindowResizeListener {
     // Setup the content layout
     contentLayout = new VerticalPanel();
     contentLayout.setWidth(800);
-//    contentLayout.setCellPadding(0);
-//    contentLayout.setCellSpacing(0);
-    contentTitleLayout = new LayoutContainer();
-    contentTitleLayout.setWidth(800);
-    contentTitleLayout.setLayout(new TableLayout(2));
-//    contentTitleLayout.setSpacing(0);
-//    contentTitleLayout.setCellPadding(0);
-//    contentTitleLayout.setCellSpacing(0);
+
+//    contentTitleLayout = new LayoutContainer();
+//    contentTitleLayout.setWidth(800);
+//    contentTitleLayout.setLayout(new TableLayout(2));
     
     bottomPanel.add(contentLayout);
 //    contentDecorator = new DecoratorPanel();
@@ -195,16 +191,13 @@ public class Application extends Composite implements WindowResizeListener {
     contentTitleLeftWrapper = new HTML("ISHOP管理中心");
     contentTitleRightWrapper = new SimplePanel();
     
-//    contentTitleLayout.setWidth("100%");
-    contentTitleLayout.add(contentTitleLeftWrapper, new TableData(Style.HorizontalAlignment.LEFT, Style.VerticalAlignment.MIDDLE));
-    contentTitleLayout.add(contentTitleRightWrapper, new TableData(Style.HorizontalAlignment.RIGHT, Style.VerticalAlignment.MIDDLE));
+//    contentTitleLayout.add(contentTitleLeftWrapper, new TableData(Style.HorizontalAlignment.LEFT, Style.VerticalAlignment.MIDDLE));
+//    contentTitleLayout.add(contentTitleRightWrapper, new TableData(Style.HorizontalAlignment.RIGHT, Style.VerticalAlignment.MIDDLE));
     
-//    contentLayout.setWidth("100%");
-//    contentLayout.setWidget(0, 0, contentTitleLayout);
-//    contentLayout.setWidget(1, 0, contentWrapper);
+
     TableData fd = new TableData();
     fd.setWidth("800px");
-    contentLayout.add(contentTitleLayout, fd);
+//    contentLayout.add(contentTitleLayout, fd);
     contentLayout.add(contentWrapper, fd);
     
 
@@ -240,9 +233,9 @@ public class Application extends Composite implements WindowResizeListener {
   /**
    * @return the content title widget
    */
-  public Widget getContentTitle() {
-    return contentTitleLayout;
-  }
+//  public Widget getContentTitle() {
+//    return contentTitleLayout;
+//  }
 
   /**
    * @return the main menu.
@@ -279,8 +272,8 @@ public class Application extends Composite implements WindowResizeListener {
     windowWidth = width;
     onWindowResizedImpl(width);
   }
-  TabPanel tabs = new MyTabPanel();
-  FormPanel formPanel = new FormPanel();
+//  TabPanel tabs = new MyTabPanel();
+//  FormPanel formPanel = new FormPanel();
   /**
    * Set the {@link Widget} to display in the content area.
    * 
