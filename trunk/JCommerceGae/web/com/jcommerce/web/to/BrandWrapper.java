@@ -2,7 +2,7 @@ package com.jcommerce.web.to;
 
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.ModelObject;
-import com.jcommerce.core.model.URLConstants;
+import com.jcommerce.gwt.client.util.URLConstants;
 
 public class BrandWrapper extends BaseModelWrapper implements URLConstants{
 	Brand brand;

@@ -24,5 +24,5 @@ public interface IWebConstants {
 	public static final String APP_BRAND = "brand";
 	public static final String APP_CATEGORY = "category";
 	
-	public static final String CFG_KEY_SHOP_COUNTRY = "shop_country";
+
 }

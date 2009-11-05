@@ -79,5 +79,24 @@
       </props>
     </property>
   </bean>
+  
+   <bean id="PaymentMetaManager" class="com.jcommerce.core.service.payment.impl.PaymentMetaManagerImpl">
+     <property name="pluginFolder">
+     	<value>D:\Program Files\apache-tomcat-5.5.27\webapps\jcommerce\WEB-INF\modules\payment</value>
+     </property>
+	 <property name="dao">
+		<ref local="DAO"/>
+	 </property>
+   </bean>
+  
+  
+   <bean id="ShippingMetaManager" class="com.jcommerce.core.service.shipping.impl.ShippingMetaManagerImpl">
+     <property name="pluginFolder">
+     	<value>D:\Program Files\apache-tomcat-5.5.27\webapps\jcommerce\WEB-INF\modules\payment</value>
+     </property>
+	 <property name="dao">
+		<ref local="DAO"/>
+	 </property>
+   </bean>
     <!-- Add Managers here -->
 </beans>

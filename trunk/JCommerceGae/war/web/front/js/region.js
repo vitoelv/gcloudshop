@@ -58,7 +58,7 @@ region.loadDistricts = function(city, selName)
 region.changed = function(obj, type, selName)
 {
   var parent = obj.options[obj.selectedIndex].value;
-
+  //alert(selName+'==='+parent);
   region.loadRegions(parent, type, selName);
 }
 

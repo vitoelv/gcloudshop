@@ -80,7 +80,7 @@ public class Lang extends BaseWrapper {
 			k1 = m.group(1);
 			k2 = m.group(2);
 		}
-		System.out.println("key="+key+", val="+val+", k1="+k1+", k2="+k2+", val="+val);
+//		System.out.println("key="+key+", val="+val+", k1="+k1+", k2="+k2+", val="+val);
 		if(k2==null) {
 			values.put(k1, val);
 		} else {

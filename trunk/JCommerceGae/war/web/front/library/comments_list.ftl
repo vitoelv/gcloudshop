@@ -8,7 +8,7 @@
        <#list comments as comment>
         <li class="word">
         <font class="f2"><#if  comment.username??  >${comment.username?html}<#else>${lang.anonymous}</#if></font> <font class="f3">( ${comment.addTime} )</font><br />
-        <img src="../images/stars${comment.rank}.gif" alt="${comment.commentRank}" />
+        <img src="images/stars${comment.rank}.gif" alt="${comment.commentRank}" />
         <p>${comment.content}</p>
 				<#if  comment.reContent??  >
         <p><font class="f1">${lang.adminUsername}</font>${comment.reContent}</p>
@@ -25,7 +25,7 @@
         <#if  pager.styleid  ==  0  >
         <div id="pager">
           ${lang.pager_1}${pager.recordCount}${lang.pager_2}${lang.pager_3}${pager.pageCount}${lang.pager_4} <span> <a href="${pager.pageFirst}">${lang.pageFirst}</a> <a href="${pager.pagePrev}">${lang.pagePrev}</a> <a href="${pager.pageNext}">${lang.pageNext}</a> <a href="${pager.pageLast}">${lang.pageLast}</a> </span>
-            <#list  as >
+						<#list pager.search?keys as key> <#assign item = pager.search.get(key)>
             <input type="hidden" name="${key}" value="${item}" />
             </#list>
         </div>
@@ -36,7 +36,7 @@
           <span class="f_l f6" style="margin-right:10px;">${lang.total} <b>${pager.recordCount}</b> ${lang.userCommentNum}</span>
           <#if  pager.pageFirst??  ><a href="${pager.pageFirst}">1 ...</a></#if>
           <#if  pager.pagePrev??  ><a class="prev" href="${pager.pagePrev}">${lang.pagePrev}</a></#if>
-          <#list  as >
+          <#list pager.pageNumber?keys as key> <#assign item = pager.pageNumber.get(key)>
                 <#if  pager.page  ==  key??  >
                 <span class="page_now">${key}</span>
                 <#else>
@@ -47,7 +47,7 @@
           <#if  pager.pageNext??  ><a class="next" href="${pager.pageNext}">${lang.pageNext}</a></#if>
           <#if  pager.pageLast??  ><a class="last" href="${pager.pageLast}">...${pager.pageCount}</a></#if>
           <#if  pager.pageKbd??  >
-            <#list  as >
+            <#list pager.search?keys as key> <#assign item = pager.search.get(key)>
             <input type="hidden" name="${key}" value="${item}" />
             </#list>
             <kbd style="float:left; margin-left:8px; position:relative; bottom:3px;"><input type="text" name="page" onkeydown="if(event.keyCode==13)selectPage(this)" size="3" class="B_blue" /></kbd>
@@ -59,7 +59,13 @@
         </form>
         <script type="Text/Javascript" language="JavaScript">
         <!--
-        {literal}
+        
+        function selectPage(sel)
+        {
+          sel.form.submit();
+        }
+        
+        //-->
         </script>
       </div>
       <!--翻页 END-->
@@ -70,7 +76,7 @@
        <table width="710" border="0" cellspacing="5" cellpadding="0">
         <tr>
           <td width="64" align="right">${lang.username}：</td>
-          <td width="631"<#if  !enabledCaptcha??  ></#if>><#if  smarty.session.userName??  >${smarty.session.userName}<#else>${lang.anonymous}</#if></td>
+          <td width="631"<#if  !enabledCaptcha  ></#if>><#if  smarty.session.userName??  >${smarty.session.userName}<#else>${lang.anonymous}</#if></td>
         </tr>
         <tr>
           <td align="right">E-mail：</td>
@@ -81,11 +87,11 @@
         <tr>
           <td align="right">${lang.commentRank}：</td>
           <td>
-          <input name="comment_rank" type="radio" value="1" id="comment_rank1" /> <img src="../images/stars1.gif" />
-          <input name="comment_rank" type="radio" value="2" id="comment_rank2" /> <img src="../images/stars2.gif" />
-          <input name="comment_rank" type="radio" value="3" id="comment_rank3" /> <img src="../images/stars3.gif" />
-          <input name="comment_rank" type="radio" value="4" id="comment_rank4" /> <img src="../images/stars4.gif" />
-          <input name="comment_rank" type="radio" value="5" checked="checked" id="comment_rank5" /> <img src="../images/stars5.gif" />
+          <input name="comment_rank" type="radio" value="1" id="comment_rank1" /> <img src="images/stars1.gif" />
+          <input name="comment_rank" type="radio" value="2" id="comment_rank2" /> <img src="images/stars2.gif" />
+          <input name="comment_rank" type="radio" value="3" id="comment_rank3" /> <img src="images/stars3.gif" />
+          <input name="comment_rank" type="radio" value="4" id="comment_rank4" /> <img src="images/stars4.gif" />
+          <input name="comment_rank" type="radio" value="5" checked="checked" id="comment_rank5" /> <img src="images/stars5.gif" />
           </td>
         </tr>
         <tr>
@@ -98,13 +104,13 @@
         </tr>
         <tr>
           <td colspan="2">
-          <#if  enabledCaptcha??  >
+          <#if  enabledCaptcha  >
           <div style="padding-left:15px; text-align:left; float:left;">
           ${lang.commentCaptcha}：<input type="text" name="captcha"  class="inputBorder" style="width:50px; margin-left:5px;"/>
           <img src="captcha.action?${rand}" alt="captcha" onClick="this.src='captcha.action?'+Math.random()" class="captcha">
           </div>
           </#if>
-          <input name="" type="submit"  value="" class="f_r" style="border:none; background:url(../images/commentsBnt.gif); width:75px; height:21px; margin-right:8px;">
+          <input name="" type="submit"  value="" class="f_r" style="border:none; background:url(images/commentsBnt.gif); width:75px; height:21px; margin-right:8px;">
           </td>
         </tr>
       </table>
@@ -118,10 +124,10 @@
   <!--用户评论 END-->
 <script type="text/javascript">
 //<![CDATA[
-<#list lang.cmtLang as item>
+<#list lang.cmtLang?keys as key> <#assign item = lang.cmtLang.get(key)>
 var ${key} = "${item}";
 </#list>
-{literal}
+
 /**
  * 提交评论信息
 */
@@ -148,7 +154,7 @@ function submitComment(frm)
 
 //  if (cmt.username.length == 0)
 //  {
-//     alert(cmt_empty_username);
+//     alert(cmtEmptyUsername);
 //     return false;
 //  }
 
@@ -156,27 +162,28 @@ function submitComment(frm)
   {
      if (!(Utils.isEmail(cmt.email)))
      {
-        alert(cmt_error_email);
+        alert(cmtErrorEmail);
         return false;
       }
    }
    else
    {
-        alert(cmt_empty_email);
+        alert(cmtEmptyEmail);
         return false;
    }
 
    if (cmt.content.length == 0)
    {
-      alert(cmt_empty_content);
+      alert(cmtEmptyContent);
       return false;
    }
 
    if (cmt.enabled_captcha > 0 && cmt.captcha.length == 0 )
    {
-      alert(captcha_not_null);
+      alert(captchaNotNull);
       return false;
    }
+
 
    Ajax.call('comment.action', 'cmt=' + cmt.toJSONString(), commentResponse, 'POST', 'JSON');
    return false;

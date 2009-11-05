@@ -14,6 +14,8 @@ public class PaymentWrapper extends BaseModelWrapper {
 	public PaymentWrapper(ModelObject payment) {
 		super();
 		this.payment = (Payment)payment;
+		
+		put("formatPayFee", "<span id=\"ECS_CODFEE\">"+ getPayment().getPayFee()  + "</span>");
 	}
 	
 	public Payment getPayment() {

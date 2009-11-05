@@ -4,7 +4,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.ModelObject;
-import com.jcommerce.core.model.URLConstants;
+import com.jcommerce.gwt.client.util.URLConstants;
 import com.jcommerce.web.util.WebFormatUtils;
 
 public class GoodsWrapper extends BaseModelWrapper implements URLConstants{

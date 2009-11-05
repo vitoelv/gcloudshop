@@ -40,7 +40,7 @@ import com.jcommerce.core.model.Payment;
 import com.jcommerce.core.model.Session;
 import com.jcommerce.core.model.Shipping;
 import com.jcommerce.core.model.User;
-import com.jcommerce.core.payment.IPaymentMetaManager;
+import com.jcommerce.core.service.payment.IPaymentMetaManager;
 import com.jcommerce.core.service.ArticleManager;
 import com.jcommerce.core.service.BrandManager;
 import com.jcommerce.core.service.CartManager;

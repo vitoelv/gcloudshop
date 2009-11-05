@@ -20,6 +20,7 @@ import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IGoods;
+import com.jcommerce.gwt.client.util.URLConstants;
 import com.jcommerce.web.front.action.helper.Pager;
 import com.jcommerce.web.to.BrandWrapper;
 import com.jcommerce.web.to.GoodsWrapper;
@@ -59,7 +60,7 @@ public class HomeAction extends BaseAction {
             Integer goodsNum = getDefaultManager().getCount(ModelNames.GOODS, criteria);
             BrandWrapper bw = new BrandWrapper(brand);
             bw.put("goodsNum", goodsNum);
-            bw.put("brandLogo", "dynaImageService.do?fileId="+brand.getLogoFileId());
+            bw.put("brandLogo", URLConstants.SERVLET_BRANDLOGO+brand.getLogoFileId());
             brandInfoList.add(bw);
             criteria.removeAllCondition();
         }        

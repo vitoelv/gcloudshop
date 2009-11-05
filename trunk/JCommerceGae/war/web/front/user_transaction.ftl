@@ -5,7 +5,7 @@
 <meta name="Keywords" content="${keywords}" />
 <meta name="Description" content="${description}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>${pageTitle}</title>
+<title>${pageTitle}-${action}</title>
 <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="icon" href="animated_favicon.gif" type="image/gif" />
@@ -206,7 +206,7 @@
        <h5><span>${lang.mergeOrder}</span></h5>
        <div class="blank"></div>
         <script type="text/javascript">
-        <#list lang.mergeOrderJs as item>
+        <#list lang.mergeOrderJs?keys as key> <#assign item = lang.mergeOrderJs.get(key)>
           var ${key} = "${item}";
         </#list>
         </script>
@@ -284,7 +284,7 @@
         </tr>
         <tr>
           <td align="right" bgcolor="#ffffff">${lang.detailPayStatus}：</td>
-          <td align="left" bgcolor="#ffffff">${order.payStatus}&nbsp;&nbsp;&nbsp;&nbsp;<#if  order.orderAmount  >  0  >${order.payOnline}</#if>${order.payTime}</td>
+          <td align="left" bgcolor="#ffffff">${order.payStatus}&nbsp;&nbsp;&nbsp;&nbsp;<#if  (order.orderAmount  >  0)  >${order.payOnline}</#if>${order.payTime}</td>
         </tr>
         <tr>
           <td align="right" bgcolor="#ffffff">${lang.detailShippingStatus}：</td>
@@ -321,7 +321,7 @@
         <div class="blank"></div>
         <h5><span>${lang.goodsList}</span>
         <#if  allowToCart??  >
-        <a href="javascript:;" onclick="returnToCart(${order.orderId})" class="f6">${lang.returnToCart}</a>
+        <a href="javascript:;" onclick="returnToCart('${order.orderId}')" class="f6">${lang.returnToCart}</a>
         </#if>
         </h5>
         <div class="blank"></div>
@@ -329,7 +329,7 @@
           <tr>
             <th width="23%" align="center" bgcolor="#ffffff">${lang.goodsName}</th>
             <th width="29%" align="center" bgcolor="#ffffff">${lang.goodsAttr}</th>
-            ${lang.marketPrice}</th>-->
+            <!--<th>${lang.marketPrice}</th>-->
             <th width="26%" align="center" bgcolor="#ffffff">${lang.goodsPrice}<#if  order.extensionCode  ==  "groupBuy"  >${lang.gbDeposit}</#if></th>
             <th width="9%" align="center" bgcolor="#ffffff">${lang.number}</th>
             <th width="20%" align="center" bgcolor="#ffffff">${lang.subtotal}</th>
@@ -337,13 +337,13 @@
           <#list goodsList as goods>
           <tr>
             <td bgcolor="#ffffff"><a href="goods.action?id=${goods.goodsId}" target="_blank" class="f6">${goods.goodsName}</a>
-              <#if  goods.parentId  >  0  >
+              <#if  goods.parentId??  >
               <span style="color:#FF0000">（${lang.accessories}）</span>
-              <#elseif  goods.isGift??  >
+              <#elseif  goods.isGift  >
               <span style="color:#FF0000">（${lang.largess}）</span>
               </#if></td>
-            <td align="left" bgcolor="#ffffff">${goods.goodsAttr|nl2br}</td>
-            ${goods.marketPrice}</td>-->
+            <td align="left" bgcolor="#ffffff">${goods.goodsAttr}</td>
+            <!--<td align="right">${goods.marketPrice}</td>-->
             <td align="right" bgcolor="#ffffff">${goods.goodsPrice}</td>
             <td align="center" bgcolor="#ffffff">${goods.goodsNumber}</td>
             <td align="right" bgcolor="#ffffff">${goods.subtotal}</td>
@@ -362,40 +362,40 @@
           <tr>
             <td align="right" bgcolor="#ffffff">
                 ${lang.goodsAllPrice}<#if  order.extensionCode  ==  "groupBuy"  >${lang.gbDeposit}</#if>: ${order.formatedGoodsAmount}
-              <#if  order.discount  >  0  >
+              <#if  (order.discount  >  0)  >
               - ${lang.discount}: ${order.formatedDiscount}
               </#if>
-              <#if  order.tax  >  0  >
+              <#if  (order.tax  >  0)  >
               + ${lang.tax}: ${order.formatedTax}
               </#if>
-              <#if  order.shippingFee  >  0  >
+              <#if  (order.shippingFee  >  0)  >
               + ${lang.shippingFee}: ${order.formatedShippingFee}
               </#if>
-              <#if  order.insureFee  >  0  >
+              <#if  (order.insureFee  >  0)  >
               + ${lang.insureFee}: ${order.formatedInsureFee}
               </#if>
-              <#if  order.payFee  >  0  >
+              <#if  (order.payFee  >  0)  >
               + ${lang.payFee}: ${order.formatedPayFee}
               </#if>
-              <#if  order.packFee  >  0  >
+              <#if  (order.packFee  >  0)  >
               + ${lang.packFee}: ${order.formatedPackFee}
               </#if>
-              <#if  order.cardFee  >  0  >
+              <#if  (order.cardFee  >  0)  >
               + ${lang.cardFee}: ${order.formatedCardFee}
               </#if>        </td>
           </tr>
           <tr>
             <td align="right" bgcolor="#ffffff">
-              <#if  order.moneyPaid  >  0  >
+              <#if  (order.moneyPaid  >  0)  >
               - ${lang.orderMoneyPaid}: ${order.formatedMoneyPaid}
               </#if>
-              <#if  order.surplus  >  0  >
+              <#if  (order.surplus  >  0)  >
               - ${lang.useSurplus}: ${order.formatedSurplus}
               </#if>
-              <#if  order.integralMoney  >  0  >
+              <#if  (order.integralMoney  >  0)  >
               - ${lang.useIntegral}: ${order.formatedIntegralMoney}
               </#if>
-              <#if  order.bonus  >  0  >
+              <#if  (order.bonus  >  0)  >
               - ${lang.useBonus}: ${order.formatedBonus}
               </#if>        </td>
           </tr>
@@ -419,7 +419,7 @@
          <div class="blank"></div>
         <h5><span>${lang.consigneeInfo}</span></h5>
         <div class="blank"></div>
-         <#if  order.allowUpdateAddress  >  0  >
+         <#if  (order.allowUpdateAddress  >  0)  >
           <form action="user.action" method="post" name="formAddress" id="formAddress">
            <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
               <tr>
@@ -531,7 +531,7 @@
         <h5><span>${lang.otherInfo}</span></h5>
         <div class="blank"></div>
         <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
-          <#if  order.shippingId  >  0  >
+          <#if  order.shippingId??  >
           <tr>
             <td width="15%" align="right" bgcolor="#ffffff">${lang.shipping}：</td>
             <td colspan="3" width="85%" align="left" bgcolor="#ffffff">${order.shippingName}</td>
@@ -542,7 +542,7 @@
             <td width="15%" align="right" bgcolor="#ffffff">${lang.payment}：</td>
             <td colspan="3" align="left" bgcolor="#ffffff">${order.payName}</td>
           </tr>
-          <#if  order.insureFee  >  0  >
+          <#if  (order.insureFee  >  0)  >
           </#if>
           <#if  order.packName??  >
           <tr>
@@ -562,15 +562,15 @@
             <td colspan="3" align="left" bgcolor="#ffffff">${order.cardMessage}</td>
           </tr>
           </#if>
-          <#if  order.surplus  >  0  >
+          <#if  (order.surplus  >  0)  >
           </#if>
-          <#if  order.integral  >  0  >
+          <#if  (order.integral  >  0)  >
           <tr>
             <td width="15%" align="right" bgcolor="#ffffff">${lang.useIntegral}：</td>
             <td colspan="3" align="left" bgcolor="#ffffff">${order.integral}</td>
           </tr>
           </#if>
-          <#if  order.bonus  >  0  >
+          <#if  (order.bonus  >  0)  >
           </#if>
           <#if  order.invPayee??  &&  order.invContent??  >
           <tr>
@@ -764,7 +764,7 @@ var ${key} = "${item}";
 
             <script type="text/javascript">
               region.isAdmin = false;
-              <#list lang.flowJs as item>
+              <#list lang.flowJs?keys as key> <#assign item = lang.flowJs.get(key)>
               var ${key} = "${item}";
               </#list>
               {literal}
@@ -777,6 +777,7 @@ var ${key} = "${item}";
               
             </script>
             <#list consigneeList as consignee>
+            <#assign sn = consignee_index >
             <form action="user.action" method="post" name="theForm" onsubmit="return checkConsignee(this)">
               <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
                 <tr>
@@ -784,24 +785,24 @@ var ${key} = "${item}";
                   <td colspan="3" align="left" bgcolor="#ffffff"><select name="country" id="selCountries_${sn}" onchange="region.changed(this, 1, 'selProvinces_${sn}')">
                       <option value="0">${lang.pleaseSelect}${nameOfRegion[0]}</option>
                       <#list countryList as country>
-                      <option value="${country.regionId}" <#if  consignee.country  ==  country.regionId??  >selected</#if>>${country.regionName}</option>
+                      <option value="${country.regionId}" <#if  consignee.country  ==  country.regionId  >selected</#if>>${country.regionName}</option>
                       </#list>
                     </select>
                     <select name="province" id="selProvinces_${sn}" onchange="region.changed(this, 2, 'selCities_${sn}')">
                       <option value="0">${lang.pleaseSelect}${nameOfRegion[1]}</option>
-                      <#list provinceList.sn as province>
-                      <option value="${province.regionId}" <#if  consignee.province  ==  province.regionId??  >selected</#if>>${province.regionName}</option>
+                      <#list provinceList[sn] as province>
+                      <option value="${province.regionId}" <#if  consignee.province  ==  province.regionId  >selected</#if>>${province.regionName}</option>
                       </#list>
                     </select>
                     <select name="city" id="selCities_${sn}" onchange="region.changed(this, 3, 'selDistricts_${sn}')">
                       <option value="0">${lang.pleaseSelect}${nameOfRegion[2]}</option>
-                      <#list cityList.sn as city>
-                      <option value="${city.regionId}" <#if  consignee.city  ==  city.regionId??  >selected</#if>>${city.regionName}</option>
+                      <#list cityList[sn] as city>
+                      <option value="${city.regionId}" <#if  consignee.city  ==  city.regionId >selected</#if>>${city.regionName}</option>
                       </#list>
                     </select>
                     <select name="district" id="selDistricts_${sn}" <#if  !districtList.sn??  >style="display:none"</#if>>
                       <option value="0">${lang.pleaseSelect}${nameOfRegion[3]}</option>
-                      <#list districtList.sn as district>
+                      <#list districtList[sn] as district>
                       <option value="${district.regionId}" <#if  consignee.district  ==  district.regionId??  >selected</#if>>${district.regionName}</option>
                       </#list>
                     </select>

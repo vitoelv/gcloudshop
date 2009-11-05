@@ -22,5 +22,12 @@ public class RegionWrapper extends BaseModelWrapper {
 	public String getRegionId() {
 		return getRegion().getPkId();
 	}
+	
+//	public String getRegion_id() {
+//		return getRegion().getPkId();
+//	}
+//	public String getRegion_name() {
+//		return getRegion().getRegionName();
+//	}
 
 }

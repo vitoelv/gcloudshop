@@ -10,24 +10,28 @@ import javax.servlet.http.HttpServletRequest;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.Category;
 import com.jcommerce.core.model.Goods;
-import com.jcommerce.core.model.URLConstants;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IGoods;
+import com.jcommerce.gwt.client.util.URLConstants;
 import com.jcommerce.web.front.action.helper.Pager;
 import com.jcommerce.web.to.BrandWrapper;
 import com.jcommerce.web.to.GoodsWrapper;
 import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.to.WrapperUtil;
+import com.jcommerce.web.util.LibMain;
 
 public class BrandAction extends BaseAction {
 	public void debug(String s) {
 		System.out.println(" in [BrandAction]: "+s );
 	}
 	
-
+	@Override
+	protected String getSelfURL() {
+		return URLConstants.ACTION_BRAND;
+	}
 	
 	public void includeGoodsList() {
 		HttpServletRequest request = getRequest();
@@ -140,4 +144,8 @@ public class BrandAction extends BaseAction {
 			throw new RuntimeException(ex);
 		}
 	}
+
+
+
+
 }
