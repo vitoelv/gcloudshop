@@ -18,5 +18,11 @@ Steps needed to join the community and start contribute
   * Eclipse 的encoding设置为UTF-8 
   * 注册code.google.com账户并告诉我（李咏），会将你加入项目 
   * logon code.google.com, 读相关说明在 http://code.google.com/p/gcloudshop/source/checkout ， 在http://code.google.com/hosting/settings 找到你的 Generated Password. 
-  * 用SVN Client 连接URL https://gcloudshop.googlecode.com/svn/trunk/ 用户名为你的code.google.com账户，密码为刚才看到的Generated Password, check out 所有文件并建立java project。假设目标目录为 D:/Jcommerce, 则会下载到 D:/Jcommerce/JCommerceGAE 目录 
-待续 
+  * 用SVN Client 连接URL https://gcloudshop.googlecode.com/svn/trunk/ 用户名为你的code.google.com账户，密码为刚才看到的Generated Password, check out 所有文件并建立java project。假设目标目录（建议使用这个目标目录，为统一开发环境）为 D:/Jcommerce, 则会下载到 D:/Jcommerce/JCommerceGAE 目录（不要使用默认的建立一个新project选项，见下）
+
+  * 在Eclipse中导入existing project 从目录D:/Jcommerce/JCommerceGAE下
+  * 在Eclipse User Library界面中导入 /JCommerceGAE/import2Eclipse.userlibraries （如未使用推荐目录，则导入前可能需要用文本编辑器编辑这个文件）
+  * 编译本project，并运行（选择 run as WebApplication，并选择index.html作为首页）
+  * 如果运行时出现datanucleus enhancer问题，则可能需要clean并rebuild整个project即可解决
+
+
