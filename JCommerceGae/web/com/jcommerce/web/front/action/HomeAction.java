@@ -20,6 +20,7 @@ import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IGoods;
+import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.gwt.client.util.URLConstants;
 import com.jcommerce.web.front.action.helper.Pager;
 import com.jcommerce.web.to.BrandWrapper;
@@ -118,7 +119,7 @@ public class HomeAction extends BaseAction {
     protected void initParameters(HttpServletRequest request) {
         request.setAttribute("flashTheme", "flash");
         // TODO shopNotice
-        request.setAttribute("shopNotice", "Shop's latest Notice!!");
+        request.setAttribute("shopNotice", getCachedShopConfig().getString(IShopConfigMeta.CFG_KEY_SHOP_NOTICE));
         
     }
     
@@ -168,6 +169,7 @@ public class HomeAction extends BaseAction {
         initPager(request);
         initParameters(request);
         
+        includeCart();
         includeCategoryTree(request);
         includeRecommendBest(request);
         includeRecommendHot(request);

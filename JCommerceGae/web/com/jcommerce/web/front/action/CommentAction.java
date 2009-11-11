@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import com.jcommerce.core.model.Comment;
 import com.jcommerce.gwt.client.model.IComment;
+import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.ShopConfigWrapper;
 
@@ -86,7 +87,7 @@ public class CommentAction extends BaseAction {
 	}
     
 	private int getCommentCheckConfig() {
-		int needCheck = ShopConfigWrapper.getDefaultConfig().getInt(ShopConfigWrapper.CFG_KEY_COMMENT_CHECK);
+		int needCheck = getCachedShopConfig().getInt(IShopConfigMeta.CFG_KEY_COMMENT_CHECK);
 		if(Integer.MIN_VALUE==needCheck) {
 			needCheck = 0; // default we need check
 		}

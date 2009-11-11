@@ -1,12 +1,21 @@
 package com.jcommerce.web.util;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import com.google.gwt.user.client.Random;
+import com.jcommerce.core.model.Cart;
+import com.jcommerce.core.model.Constants;
+import com.jcommerce.core.service.Condition;
+import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
+import com.jcommerce.gwt.client.ModelNames;
+import com.jcommerce.gwt.client.model.ICart;
 import com.jcommerce.web.front.action.IWebConstants;
+import com.jcommerce.web.to.Lang;
+import com.jcommerce.web.to.ShopConfigWrapper;
 
 public class LibInsert {
 	/**
@@ -15,7 +24,7 @@ public class LibInsert {
 	 * @access  public
 	 * @return  string
 	 */
-	public static void insertComments(Long type, String id, IDefaultManager manager, HttpServletRequest request) {
+	public static void insertComments(Long type, String id, IDefaultManager manager, HttpServletRequest request, ShopConfigWrapper scw) {
 		/* 验证码相关设置 */
 //		ShopConfigWrapper.getDefaultConfig().get("captcha")
 		
@@ -31,11 +40,38 @@ public class LibInsert {
 		request.setAttribute("email", request.getSession().getAttribute(IWebConstants.KEY_USER_EMAIL));
 		request.setAttribute("commentType", type);
 		request.setAttribute("id", id);
-		Map<String, Object> cmt = LibMain.assignComment(id, type, 1, manager);
+		Map<String, Object> cmt = LibMain.assignComment(id, type, 1, manager, scw);
 		request.setAttribute("comments", cmt.get("comments"));
 		request.setAttribute("pager", cmt.get("pager"));
 		
 		return;
+	}
+	
+	/**
+	 * 调用购物车信息
+	 *
+	 * @access  public
+	 * @return  string
+	 */
+	public static String insertCartInfo(IDefaultManager manager, HttpServletRequest request) {
+		String res = "";
+		long number = 0;
+		double amount = 0;
+		Criteria c = new Criteria();
+		c.addCondition(new Condition(ICart.SESSION_ID, Condition.EQUALS, request.getSession().getId()));
+		c.addCondition(new Condition(ICart.REC_TYPE, Condition.EQUALS, Constants.CART_GENERAL_GOODS.toString()));
+		List<Cart> carts = manager.getList(ModelNames.CART, c);
+		for(Cart cart : carts) {
+			number += cart.getGoodsNumber();
+			amount += cart.getGoodsNumber()*cart.getGoodsPrice();
+		}
+		
+		res = new PrintfFormat(Lang.getInstance().getString("cartInfo")).sprintf(new Object[]{number, WebFormatUtils.priceFormat(amount)});
+		res = new StringBuffer("<a href=\"flow.php\" title=\"")
+								.append(Lang.getInstance().getString("viewCart"))
+								.append("\">").append(res).append("</a>").toString();
+		return res;
+		
 		
 	}
 }

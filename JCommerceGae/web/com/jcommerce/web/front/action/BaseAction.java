@@ -23,11 +23,13 @@ import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.service.IWebManager;
+import com.jcommerce.core.service.config.IShopConfigManager;
 import com.jcommerce.core.service.payment.IPaymentMetaManager;
 import com.jcommerce.core.service.shipping.IShippingMetaManager;
 import com.jcommerce.core.util.IConstants;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IGoods;
+import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.web.component.ComponentUrl;
 import com.jcommerce.web.component.Navigator;
 import com.jcommerce.web.front.action.helper.Pager;
@@ -46,12 +48,13 @@ import com.opensymphony.xwork2.ActionSupport;
 
 
 public class BaseAction extends ActionSupport implements IPageConstants, IWebConstants, IConstants{
-	private static Map<String, String> constants = new HashMap<String, String>();
+//	private static Map<String, String> constants = new HashMap<String, String>();
 	
-	protected IShippingMetaManager shippingMetaManager;
-	protected IPaymentMetaManager paymentMetaManager;
-	protected IWebManager webManager;
-	protected IDefaultManager defaultManager;
+	private IShippingMetaManager shippingMetaManager;
+	private IPaymentMetaManager paymentMetaManager;
+	private IWebManager webManager;
+	private IDefaultManager defaultManager;
+	private IShopConfigManager shopConfigManager;
 	
 	public void debug(String s) {
 		System.out.println(" in [BaseAction]: "+s );
@@ -80,29 +83,26 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 		}		
 	}
 	
-	static {
-		constants.put(KEY_KEYWORDS, "gCloudShop演示站");
-		constants.put(KEY_DESCRIPTION, "gCloudShop演示站");
-		constants.put(KEY_PAGE_TITLE, "gCloudShop演示站 - Powered by gCloudShop");
-		// TODO
-		constants.put("keywords", "gCloudShop演示站");
-		constants.put("keywords", "gCloudShop演示站");
-		constants.put("keywords", "gCloudShop演示站");
-		constants.put("keywords", "gCloudShop演示站");
-		constants.put("keywords", "gCloudShop演示站");
-		constants.put("keywords", "gCloudShop演示站");
-		constants.put("keywords", "gCloudShop演示站");
-		constants.put("keywords", "gCloudShop演示站");
-		constants.put("keywords", "gCloudShop演示站");
-		
-		
-		
-	}
+//	static {
+//		constants.put(KEY_KEYWORDS, "gCloudShop演示站");
+//		constants.put(KEY_DESCRIPTION, "gCloudShop演示站");
+//		constants.put(KEY_PAGE_TITLE, "gCloudShop演示站 - Powered by gCloudShop");
+//		// TODO
+//		constants.put("keywords", "gCloudShop演示站");
+//		constants.put("keywords", "gCloudShop演示站");
+//		constants.put("keywords", "gCloudShop演示站");
+//		constants.put("keywords", "gCloudShop演示站");
+//		constants.put("keywords", "gCloudShop演示站");
+//		constants.put("keywords", "gCloudShop演示站");
+//		constants.put("keywords", "gCloudShop演示站");
+//		constants.put("keywords", "gCloudShop演示站");
+//		constants.put("keywords", "gCloudShop演示站");
+//	}
 	
 	public void setPageMeta(HttpServletRequest request) {
-        request.setAttribute(KEY_KEYWORDS, getConstants(KEY_KEYWORDS));
-        request.setAttribute(KEY_DESCRIPTION, getConstants(KEY_DESCRIPTION));
-        request.setAttribute(KEY_PAGE_TITLE, getConstants(KEY_PAGE_TITLE));
+        request.setAttribute(KEY_KEYWORDS, getCachedShopConfig().getString(IShopConfigMeta.CFG_KEY_SHOP_KEYWORDS));
+        request.setAttribute(KEY_DESCRIPTION, getCachedShopConfig().getString(IShopConfigMeta.CFG_KEY_SHOP_DESC));
+        request.setAttribute(KEY_PAGE_TITLE, getCachedShopConfig().getString(IShopConfigMeta.CFG_KEY_SHOP_TITLE)+" Powered by gCloudShop");
 	}
 	
 	public void includePageFooter(HttpServletRequest request) {
@@ -136,8 +136,10 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 		// ur_here.ftl
         request.setAttribute("urHere", "urHere");		
 	}
-	public void includeCart(HttpServletRequest request) {
-		// cart.ftl
+	public void includeCart() {
+		String res = LibInsert.insertCartInfo(getDefaultManager(), getRequest());
+		// TODO need convert insert clause to a variable during transform to .ftl
+		getRequest().setAttribute("insert_cart_info", res);
 	}
 	public void includeCategoryTree(HttpServletRequest request) {
 
@@ -219,7 +221,7 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
     }
     
     public void includeComment (Long type, String id) {
-    	LibInsert.insertComments(type, id, getDefaultManager(), getRequest());
+    	LibInsert.insertComments(type, id, getDefaultManager(), getRequest(), getCachedShopConfig());
     }
     
     
@@ -384,7 +386,7 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
         setSessionUser(request);
         
         // just empty
-        ShopConfigWrapper shopConfig = ShopConfigWrapper.getDefaultConfig();
+        ShopConfigWrapper shopConfig = getCachedShopConfig();
         request.setAttribute("cfg", shopConfig);
         
 //        setShowMarketplace(request);
@@ -415,10 +417,14 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 		return "";
 	}
 	
-	public String getConstants(String key) {
-		return constants.get(key);
+//	public String getConstants(String key) {
+//		return constants.get(key);
+//	}
+	
+	public ShopConfigWrapper getCachedShopConfig() {
+		return getShopConfigManager().getCachedShopConfig();
 	}
-
+	
 	public IDefaultManager getDefaultManager() {
 		return defaultManager;
 	}
@@ -463,6 +469,12 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 	}
 	public void setShippingMetaManager(IShippingMetaManager shippingMetaManager) {
 		this.shippingMetaManager = shippingMetaManager;
+	}
+	public IShopConfigManager getShopConfigManager() {
+		return shopConfigManager;
+	}
+	public void setShopConfigManager(IShopConfigManager shopConfigManager) {
+		this.shopConfigManager = shopConfigManager;
 	}
 
 

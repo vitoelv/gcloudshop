@@ -35,7 +35,7 @@ import com.jcommerce.gwt.client.panels.GoodsTypePanel;
 import com.jcommerce.gwt.client.panels.OrderListPanel;
 import com.jcommerce.gwt.client.panels.RegionListPanel;
 import com.jcommerce.gwt.client.panels.RegionPanel;
-import com.jcommerce.gwt.client.panels.ShopConfigPanel;
+
 import com.jcommerce.gwt.client.panels.Success;
 import com.jcommerce.gwt.client.panels.goods.GoodsPanel;
 import com.jcommerce.gwt.client.panels.order.OrderUserPanel;
@@ -45,6 +45,7 @@ import com.jcommerce.gwt.client.panels.system.ShippingAreaListPanel;
 import com.jcommerce.gwt.client.panels.system.ShippingAreaPanel;
 import com.jcommerce.gwt.client.panels.system.ShippingMetaListPanel;
 import com.jcommerce.gwt.client.panels.system.ShippingTemplatePanel;
+import com.jcommerce.gwt.client.panels.system.ShopConfigPanel;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.RemoteService;
 
@@ -200,7 +201,8 @@ public class JCommerceGae implements EntryPoint, ValueChangeHandler<String>, GWT
         Tree mainMenu = app.getMainMenu();      
         
         TreeItem catGoods = mainMenu.addItem(Resources.constants.categoryGoods());
-        setupMainMenuOption(catGoods, new RegionListPanel.State(), Resources.images.catWidgets());
+        
+
         setupMainMenuOption(catGoods, new CategoryPanel.State(), Resources.images.catWidgets());
 		setupMainMenuOption(catGoods, new GoodsPanel.State(), Resources.images.catWidgets());      
 		
@@ -216,10 +218,12 @@ public class JCommerceGae implements EntryPoint, ValueChangeHandler<String>, GWT
 		
 		TreeItem system = mainMenu.addItem(Resources.constants.categorySystem());
 		setupMainMenuOption(system, new ShopConfigPanel.State(), Resources.images.catWidgets());
-		setupMainMenuOption(system, new RegionPanel.State(), Resources.images.catWidgets());
+//		setupMainMenuOption(system, new RegionPanel.State(), Resources.images.catWidgets());
 		setupMainMenuOption(system, new PaymentMetaListPanel.State(),Resources.images.catWidgets()); 
 		setupMainMenuOption(system, new ShippingMetaListPanel.State(),Resources.images.catWidgets());   
+        setupMainMenuOption(system, new RegionListPanel.State(), Resources.images.catWidgets());
 		
+        
 //		setupMainMenuOption(catGoods, new UserComments.State(), Resources.images.catWidgets());		
 //
 //		setupMainMenuOption(catGoods,new GoodsTypeInfo.State(),Resources.images.catWidgets());
@@ -463,8 +467,7 @@ public class JCommerceGae implements EntryPoint, ValueChangeHandler<String>, GWT
 				page = Success.getInstance();
 //			} else if (pageClassName.equals(UserComments.class.getName())) {
 //				page = new UserComments();
-			} else if (pageClassName.equals(ShopConfigPanel.class.getName())) {
-				page = ShopConfigPanel.getInstance();
+
 			} else if (pageClassName.equals(RegionPanel.class.getName())) {
 				page = RegionPanel.getInstance();
 			} else if (pageClassName.equals(OrderUserPanel.class.getName())) {
@@ -483,7 +486,9 @@ public class JCommerceGae implements EntryPoint, ValueChangeHandler<String>, GWT
 			else if(pageClassName.equals(ShippingAreaPanel.class.getName())){
 				page = ShippingAreaPanel.getInstance();
 			}
-			
+			else if(pageClassName.equals(ShopConfigPanel.class.getName())){
+				page = ShopConfigPanel.getInstance();
+			}
 			if (page != null) {
 				pageRegistry.put(pageClassName, page);
 			} else {

@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
@@ -31,8 +33,11 @@ import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.model.OrderInfo;
 import com.jcommerce.core.model.ShippingArea;
+import com.jcommerce.core.model.ShopConfig;
 import com.jcommerce.core.service.CustomizedManager;
 import com.jcommerce.core.service.IDefaultManager;
+import com.jcommerce.core.service.config.IShopConfigManager;
+import com.jcommerce.core.service.config.ShopConfigMeta;
 import com.jcommerce.core.service.payment.IPaymentMetaManager;
 import com.jcommerce.core.service.payment.PaymentConfigFieldMeta;
 import com.jcommerce.core.service.payment.PaymentConfigMeta;
@@ -46,6 +51,7 @@ import com.jcommerce.gwt.client.ISpecialService;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.model.IShippingArea;
+import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.gwt.client.panels.system.PaymentConfigFieldMetaForm;
 import com.jcommerce.gwt.client.panels.system.PaymentConfigMetaForm;
 import com.jcommerce.gwt.client.panels.system.ShippingAreaFieldMetaForm;
@@ -63,11 +69,24 @@ public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecial
 //        ApplicationContext ctx = new ClassPathXmlApplicationContext(paths);
 
     }
-    public CustomizedManager getCustomizedManager() {
+    private IDefaultManager getDefaultManager() {
+    	IDefaultManager manager = (IDefaultManager)ctx.getBean("DefaultManager");
+    	return manager;
+    }
+    private CustomizedManager getCustomizedManager() {
     	CustomizedManager manager = (CustomizedManager)ctx.getBean("CustomizedManager");
     	return manager;
     }
-    
+    private IShopConfigManager getShopConfigManager() {
+    	IShopConfigManager manager = (IShopConfigManager)ctx.getBean("ShopConfigManager");
+    	return manager;
+    }
+	private IPaymentMetaManager getPaymentMetaManager() {
+		return (IPaymentMetaManager)ctx.getBean("PaymentMetaManager");
+	}
+	private IShippingMetaManager getShippingMetaManager() {
+		return (IShippingMetaManager)ctx.getBean("ShippingMetaManager");
+	}
 	@Override
 	public void init() {
     	ctx = WebApplicationContextUtils.getWebApplicationContext(getServletContext());		
@@ -327,9 +346,7 @@ public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecial
         
         return res;
 	}
-	private IPaymentMetaManager getPaymentMetaManager() {
-		return (IPaymentMetaManager)ctx.getBean("PaymentMetaManager");
-	}
+
     public Boolean savePayment(Map<String, Object> props) {
         try {
         	getPaymentMetaManager().savePaymentConfig(props);
@@ -358,10 +375,7 @@ public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecial
         }
 
     }
-    
-	private IShippingMetaManager getShippingMetaManager() {
-		return (IShippingMetaManager)ctx.getBean("ShippingMetaManager");
-	}
+
     public ListLoadResult<ShippingConfigMetaForm> getCombinedShippingMetaList(ListLoadConfig config) {
         List<ShippingConfigMeta> metas = getShippingMetaManager().getCombinedShippingMetaList();
         
@@ -512,4 +526,59 @@ public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecial
     		throw new RuntimeException();    
     	}
     }
+    
+    public SortedMap<Integer, List<BeanObject>> getCombinedShopConfigMetaMap() {
+    	try {
+    	SortedMap<Integer, List<BeanObject>> resMap = new TreeMap<Integer, List<BeanObject>>();
+    	SortedMap<Integer, List<ShopConfigMeta>> map = getShopConfigManager().getCombinedShopConfigMetaMap();
+    	for(Integer i : map.keySet()) {
+    		List<BeanObject> resList = resMap.get(i);
+    		if(resList==null) {
+    			resList = new ArrayList<BeanObject>();
+    			resMap.put(i, resList);
+    		}
+    		List<ShopConfigMeta> list = map.get(i);
+    		for(ShopConfigMeta scm : list) {
+    			BeanObject res = new BeanObject();
+    			res.set(IShopConfigMeta.CODE, scm.getCode());
+    			res.set(IShopConfigMeta.STORE_RANGE, scm.getStoreRange());
+    			res.set(IShopConfigMeta.LABEL, scm.getLabel());
+    			res.set(IShopConfigMeta.GROUP, scm.getGroup());
+    			res.set(IShopConfigMeta.TYPE, scm.getType());
+    			res.set(IShopConfigMeta.PK_ID, scm.getPkId());
+    			res.set(IShopConfigMeta.VALUE, scm.getValue());
+    			resList.add(res);
+    		}
+    		
+    	}
+    	return resMap;
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		throw new RuntimeException();    
+    	}
+    }
+    
+    public Boolean saveShopConfig(Map<String, BeanObject> formData) {
+		try {
+			// for tx we could move it to a manager method
+			List<ShopConfig> tos = new ArrayList<ShopConfig>();
+			for (BeanObject bo : formData.values()) {
+				String pkId = bo.getString(IShopConfigMeta.PK_ID);
+				String code = bo.getString(IShopConfigMeta.CODE);
+				String value = bo.getString(IShopConfigMeta.VALUE);
+				ShopConfig to = new ShopConfig();
+				to.setPkId(pkId);
+				to.setCode(code);
+				to.setValue(value);
+				tos.add(to);
+			}
+			
+			getShopConfigManager().saveShopConfig(tos);
+			
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+	}
 }

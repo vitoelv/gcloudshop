@@ -2,14 +2,13 @@ package com.jcommerce.gwt.client;
 
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 
 import com.extjs.gxt.ui.client.data.ListLoadConfig;
 import com.extjs.gxt.ui.client.data.ListLoadResult;
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
 import com.extjs.gxt.ui.client.data.PagingLoadResult;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
-import com.jcommerce.core.model.AreaRegion;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.panels.system.PaymentConfigMetaForm;
 import com.jcommerce.gwt.client.panels.system.ShippingAreaMetaForm;
@@ -42,5 +41,8 @@ public interface ISpecialService extends RemoteService {
     
     public ListLoadResult<BeanObject> getShippingAreaWithRegionNames(String shippingId, ListLoadConfig pgc);
     public Boolean saveShippingArea(BeanObject shippingArea);
+    
+    public SortedMap<Integer, List<BeanObject>> getCombinedShopConfigMetaMap();
+    public Boolean saveShopConfig(Map<String, BeanObject> formData);
     
 }

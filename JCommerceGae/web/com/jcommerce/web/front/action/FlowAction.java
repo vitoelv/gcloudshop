@@ -34,6 +34,7 @@ import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.ICart;
 import com.jcommerce.gwt.client.model.IRegion;
 import com.jcommerce.gwt.client.model.IUserAddress;
+import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.web.to.CartWrapper;
 import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.OrderInfoWrapper;
@@ -86,7 +87,7 @@ public class FlowAction extends BaseAction {
 		debug("in [addToCart]: goodsId="+goodsId);
 		
 		/* 如果是一步购物，先清空购物车 */
-		if((Integer)ShopConfigWrapper.getDefaultConfig().get("oneStepBuy")==1) {
+		if((Integer)getCachedShopConfig().get("oneStepBuy")==1) {
 			// TODO clearCart
 			//clearCart();
 		}
@@ -98,7 +99,7 @@ public class FlowAction extends BaseAction {
 		JSONObject res = new JSONObject();;
 		res.put("error", 0);
 		res.put("content", "<B>cart info</B>");
-		res.put("one_step_buy", (Integer)ShopConfigWrapper.getDefaultConfig().get("oneStepBuy"));
+		res.put("one_step_buy", (Integer)getCachedShopConfig().get("oneStepBuy"));
 		// 购物车确定提示:  直接进入购物车 refer to common.js addToCartResponse
 		res.put("confirm_type", "3");
 
@@ -119,12 +120,12 @@ public class FlowAction extends BaseAction {
 
 		session.setAttribute(KEY_FLOW_TYPE, Constants.CART_GENERAL_GOODS);
 		/* 如果是一步购物，跳到结算中心 */
-		if ((Integer) ShopConfigWrapper.getDefaultConfig().get("oneStepBuy") == 1) {
+		if ((Integer) getCachedShopConfig().get("oneStepBuy") == 1) {
 			return stepCheckout(request);
 		} else {
 			
 			/* 取得商品列表，计算合计 */
-			Map<String, Object> cartGoods = LibOrder.getCartGoods(getSession().getId(), getDefaultManager());
+			Map<String, Object> cartGoods = LibOrder.getCartGoods(getSession().getId(), getDefaultManager(), getCachedShopConfig());
 			request.setAttribute("goodsList", cartGoods.get("goodsList"));
 			Total total = (Total)cartGoods.get("total");
 			request.setAttribute("total", total);
@@ -140,10 +141,10 @@ public class FlowAction extends BaseAction {
 			request.setAttribute("discount", 0);
 			
 			 /* 增加是否在购物车里显示商品图 */
-			request.setAttribute("showGoodsThumb", ShopConfigWrapper.getDefaultConfig().get("showGoodsInCart"));		   
+			request.setAttribute("showGoodsThumb", getCachedShopConfig().get("showGoodsInCart"));		   
 		    /* 增加是否在购物车里显示商品属性 */
 			// do not show goodsattr
-			request.setAttribute("showGoodsAttribute", ShopConfigWrapper.getDefaultConfig().get("showGoodsAttribute"));
+			request.setAttribute("showGoodsAttribute", getCachedShopConfig().get("showGoodsAttribute"));
 			
 			request.setAttribute(KEY_STEP, STEP_CART);
 			
@@ -189,7 +190,7 @@ public class FlowAction extends BaseAction {
     	if(consignee == null) {
     		consignee = new UserAddressWrapper(new UserAddress());
 //    		consignee.put("country", ShopConfigWrapper.getDefaultConfig().get(ShopConfigWrapper.CFG_KEY_SHOP_COUNTRY));
-    		consignee.getUserAddress().setCountry((String)ShopConfigWrapper.getDefaultConfig().get(ShopConfigWrapper.CFG_KEY_SHOP_COUNTRY));
+    		consignee.getUserAddress().setCountry((String)getCachedShopConfig().get(IShopConfigMeta.CFG_KEY_SHOP_COUNTRY));
     	}
 		consigneeList.add(consignee);
 		
@@ -256,7 +257,7 @@ public class FlowAction extends BaseAction {
     	request.setAttribute("goodsList", WrapperUtil.wrap(carts, CartWrapper.class));
     	
     	request.setAttribute("allowEditCart", 0);
-    	request.setAttribute("config", ShopConfigWrapper.getDefaultConfig());
+    	request.setAttribute("config", getCachedShopConfig());
     	
         /*
          * 取得订单信息
@@ -570,7 +571,7 @@ public class FlowAction extends BaseAction {
 			String step = request.getParameter(KEY_STEP);
 			debug("step: "+step);
 			
-			request.setAttribute("showMarketprice", ShopConfigWrapper.getDefaultConfig().get("showMarketprice"));
+			request.setAttribute("showMarketprice", getCachedShopConfig().get("showMarketprice"));
 			
 			
 			if(STEP_ADD_TO_CART.equals(step)) {

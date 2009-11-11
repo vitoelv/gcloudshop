@@ -160,9 +160,12 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
     	if (getCurState().getIsEdit()) {
     		String id = getCurState().getPkId();
           new UpdateService().updateBean(id, form, new UpdateService.Listener() {
-          public synchronized void onSuccess(Boolean success) {
-        	  gotoSuccessPanel();
-          }
+        	  public synchronized void onSuccess(Boolean success) {
+        		  gotoSuccessPanel();
+        	  }
+        	  public void onFailure(Throwable caught) {
+        		  // TODO a point to define common behavior
+        	  }
           });
     	}else {
           new CreateService().createBean(form, new CreateService.Listener() {
@@ -222,12 +225,15 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
     	return obj;
     }
 
-    
 	public void populateField(Field field) {
 		Map<String, Object> mapAttribute = obj.getProperties();
-			String name = field.getName();
-			Object value = mapAttribute.get(name);        				
-			log("[populateField]: name:"+name+", value:"+(value==null?"null":value.toString()+", valueclass: "+value.getClass().getName()));
+		String name = field.getName();
+		Object value = mapAttribute.get(name);        				
+		log("[populateField]: name:"+name+", value:"+(value==null?"null":value.toString()+", valueclass: "+value.getClass().getName()));
+		populateField(field, value);
+	}
+	
+	public void populateField(Field field, Object value) {
 
 			if(field instanceof CheckBoxGroup) {
 				List<Field<?>> boxes = (List<Field<?>>)((CheckBoxGroup)field).getAll();
@@ -238,7 +244,7 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 				return;
 			}
 			if(field instanceof RadioGroup) {
-				// go on
+				// go on, to avoid going into MultiField(see below)
 			}
 			else if(field instanceof MultiField) {
 				List<Field<?>> subFields = ((MultiField)field).getAll();
@@ -322,10 +328,12 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 				for(Field<?> r:radios) {
 					Radio radio = (Radio)r;
 					if(value.toString().equals(radio.getValueAttribute())) {
-						radio.setRawValue("true");						
+						radio.setValue(true);
+//						radio.setRawValue("true");						
 					}
 					else {
-						radio.setRawValue("false");
+						radio.setValue(false);
+//						radio.setRawValue("false");
 					}
 				}
 				

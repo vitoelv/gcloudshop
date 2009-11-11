@@ -1,9 +1,7 @@
 package com.jcommerce.web.front.action;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,10 +14,8 @@ import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IGoods;
 import com.jcommerce.gwt.client.util.URLConstants;
-import com.jcommerce.web.front.action.helper.Pager;
 import com.jcommerce.web.to.BrandWrapper;
 import com.jcommerce.web.to.GoodsWrapper;
-import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.to.WrapperUtil;
 import com.jcommerce.web.util.LibMain;
 
@@ -42,7 +38,7 @@ public class BrandAction extends BaseAction {
 		String sPage = (String)request.getParameter("page");
 		int page = (sPage!=null && Integer.valueOf(sPage)>0) ? Integer.valueOf(sPage) : 1;
 		
-		String sSize = (String)ShopConfigWrapper.getDefaultConfig().get("pageSize");
+		String sSize = (String)getCachedShopConfig().get("pageSize");
 		int size = (sSize!=null && Integer.valueOf(sSize)>0) ? Integer.valueOf(sSize) : 10; 
 		
 		String cat = (String)request.getParameter("cat");
@@ -62,7 +58,8 @@ public class BrandAction extends BaseAction {
 		List<Category> relatedCate = brandRelatedCat();
 		request.setAttribute("brandCatList", relatedCate); // 相关分类
 
-		LibMain.assignPager(APP_BRAND, cate, recordCount, size, sort, order, page, "", brandId, 0, 0, display, "", "", null, getRequest());
+		LibMain.assignPager(APP_BRAND, cate, recordCount, size, sort, order, page, 
+				"", brandId, 0, 0, display, "", "", null, getRequest(), getCachedShopConfig());
 		
 		request.setAttribute("priceMin", 0);
 		request.setAttribute("priceMax", 0);
@@ -117,7 +114,7 @@ public class BrandAction extends BaseAction {
 			debug("in execute");
 			super.execute();	        
 	        HttpServletRequest request = getRequest();
-	        includeCart(request);
+	        includeCart();
 	        includeCategoryTree(request);
 	        includeHistory(request);
 	        

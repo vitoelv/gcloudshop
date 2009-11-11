@@ -71,7 +71,7 @@ public class LibOrder {
     	return total;
     }
     
-    public static Map<String, Object> getCartGoods(String sessionId, IDefaultManager manager) {
+    public static Map<String, Object> getCartGoods(String sessionId, IDefaultManager manager, ShopConfigWrapper scw) {
     	Map<String, Object> map = new HashMap<String, Object>();
     	List<CartWrapper> goodsList = new ArrayList<CartWrapper>();
     	Total total = new Total();
@@ -96,7 +96,7 @@ public class LibOrder {
     		}else {
     			virtualGoodsCount++;
     		}
-    		int showGoodsInCart = (Integer)ShopConfigWrapper.getDefaultConfig().get("showGoodsInCart");
+    		int showGoodsInCart = (Integer)scw.get("showGoodsInCart");
     		if(showGoodsInCart == 2 || showGoodsInCart ==3) {
     			String goodsId = cart.getGoodsId();
     			Goods goods = (Goods)manager.get(ModelNames.GOODS, goodsId);

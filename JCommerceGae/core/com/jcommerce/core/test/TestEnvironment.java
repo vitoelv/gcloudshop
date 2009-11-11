@@ -11,7 +11,7 @@ class TestEnvironment implements ApiProxy.Environment {
     }
 
     public String getVersionId() {
-        return "2";
+        return "3";
     }
 
     public void setDefaultNamespace(String s) { }
