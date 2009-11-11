@@ -36,7 +36,7 @@ public class GoodsAction extends BaseAction {
         HttpServletRequest request = getRequest();        
 
         
-        includeCart(request);
+        includeCart();
         includeCategoryTree(request);
         
         includeGoodsRelated(request);
@@ -88,7 +88,7 @@ public class GoodsAction extends BaseAction {
         affiliate.put("on", "yes");
         request.setAttribute("affiliate", affiliate);
         
-        request.setAttribute("pointsName", ShopConfigWrapper.getDefaultConfig().get("pointsName"));
+        request.setAttribute("pointsName", getCachedShopConfig().get("pointsName"));
         
         return SUCCESS;
         

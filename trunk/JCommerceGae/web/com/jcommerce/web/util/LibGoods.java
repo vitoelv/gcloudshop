@@ -120,7 +120,11 @@ public class LibGoods {
 				continue;
 			}
 			
-			String group = attrGroupList.get(a.getAttrGroup().intValue());
+			String group = null;
+			int ag = a.getAttrGroup().intValue();
+			if(ag>=0 && ag < attrGroupList.size()) {
+				group = attrGroupList.get(ag);
+			}
 			if(group==null) {
 				group = Lang.getInstance().getString("goodsAttr");
 			}

@@ -1,66 +1,52 @@
 package com.jcommerce.web.to;
 
-import com.jcommerce.core.model.ModelObject;
-import com.jcommerce.core.model.ShopConfig;
-import com.jcommerce.web.front.action.IWebConstants;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.*;
 
-public class ShopConfigWrapper extends BaseModelWrapper {
+public class ShopConfigWrapper extends BaseWrapper {
 	
-	public static final String CFG_KEY_SHOP_COUNTRY = "shop_country";
-	public static final String CFG_KEY_TIME_FORMAT = "time_format";
-	public static final String CFG_KEY_COMMENT_CHECK = "comment_check";
+	public ShopConfigWrapper() {
+		init();
+	}
 	
 	@Override
-	protected Object getWrapped() {
-		return getSC();
+	public void clear() {
+		super.clear();
+		init();
 	}
 	
-	ShopConfig shopConfig;
-	public ShopConfigWrapper(ModelObject sc) {
-		this.shopConfig = (ShopConfig)sc;
+	public void init() {
+		// default values
+		this.put("showGoodssn", "true");
+		this.put("showGoodsnumber", "true");
+		this.put("showBrand", "true");
+
+		this.put("showAddtime", "true");
+		this.put("showGoodsnumber", "true");
+		this.put("showGoodsnumber", "true");
+		this.put("showGoodsnumber", "true");
+		this.put("goodsattrStyle", 1);
+		this.put("pageSize", "2");
+		this.put("pointsName", "积分");
 		
-		// TODO just temporarily overcome exceptions
-	}
-	
-	public static final ShopConfigWrapper getDefaultConfig() {
+		this.put("shopRegClosed", 0);
+		this.put("pageStyle", 0);
 		
-		ShopConfig sc =  new ShopConfig();
-		ShopConfigWrapper scw = (ShopConfigWrapper)WrapperUtil.wrap(sc, ShopConfigWrapper.class);
-		scw.put("showGoodssn", "true");
-		scw.put("showGoodsnumber", "true");
-		scw.put("showBrand", "true");
-		scw.put("showGoodsweight", "true");
-		scw.put("showAddtime", "true");
-		scw.put("showMarketprice", "true");
-		scw.put("showGoodsnumber", "true");
-		scw.put("showGoodsnumber", "true");
-		scw.put("showGoodsnumber", "true");
-		scw.put("goodsattrStyle", 1);
-		scw.put("pageSize", "2");
-		scw.put("pointsName", "积分");
-		
-		scw.put("shopRegClosed", 0);
-		scw.put("pageStyle", 0);
-		
-		scw.put("oneStepBuy", 2);
+		this.put("oneStepBuy", 2);
 		
 		//1只显示文字 2只显示图片 3显示文字与图片
-		scw.put("showGoodsInCart", 3);
+		this.put("showGoodsInCart", 3);
 		
-		scw.put("showGoodsAttribute", 0);
+		this.put("showGoodsAttribute", 0);
 		
 		// TODO make it configurable thru GUI
-		scw.put(CFG_KEY_SHOP_COUNTRY, "agpnY2xvdWRzaG9wciULEgZSZWdpb24iGV8yM2ZiMGJiYjAxMjNmYjBiYmI3NDAwMDAM");
-		scw.put(CFG_KEY_TIME_FORMAT, "yyyy-MMM-dd");
-		scw.put(CFG_KEY_COMMENT_CHECK, 0);
-		return scw;
+//		this.put(CFG_KEY_SHOW_GOODSWEIGHT, "true");
+//		this.put(CFG_KEY_SHOW_MARKETPRICE, "true");
+//		this.put(CFG_KEY_TIME_FORMAT, "yyyy-MMM-dd");
 		
+		this.put(CFG_KEY_SHOP_COUNTRY, "agpnY2xvdWRzaG9wciULEgZSZWdpb24iGV8yM2ZiMGJiYjAxMjNmYjBiYmI3NDAwMDAM");
+
+		this.put(CFG_KEY_COMMENT_CHECK, 0);				
 	}
-	
-	public ShopConfig getSC() {
-		return shopConfig;
-	}
-	
-	
+
 
 }

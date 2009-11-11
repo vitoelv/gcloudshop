@@ -16,6 +16,7 @@ import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IComment;
+import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.web.front.action.IWebConstants;
 import com.jcommerce.web.front.action.helper.Pager;
 import com.jcommerce.web.to.CommentWrapper;
@@ -35,14 +36,14 @@ public class LibMain {
 	 * @params  integer     $page
 	 * @return  array
 	 */
-	public static Map<String, Object> assignComment(String id, Long type, int page, IDefaultManager manager) {
+	public static Map<String, Object> assignComment(String id, Long type, int page, IDefaultManager manager, ShopConfigWrapper scw) {
 		/* 取得评论列表 */
 		Criteria c = new Criteria();
 		c.addCondition(new Condition(IComment.ID_VALUE, Condition.EQUALS, id));
 		c.addCondition(new Condition(IComment.COMMENT_TYPE, Condition.EQUALS, type.toString()));
 		c.addCondition(new Condition(IComment.STATUS, Condition.EQUALS, IComment.STATUS_ACTIVE.toString()));
 		int count = manager.getCount(ModelNames.COMMENT, c);
-		int size = ShopConfigWrapper.getDefaultConfig().getInt("comments_number");
+		int size = scw.getInt("comments_number");
 		if(size<0) {
 			size = 5;
 		}
@@ -68,7 +69,7 @@ public class LibMain {
 							, "\n", "<br />"));
 			commentWrapper.put("rank", comment.getCommentRank());
 			String addTime = LibTime.localDate(
-					ShopConfigWrapper.getDefaultConfig().getString(ShopConfigWrapper.CFG_KEY_TIME_FORMAT), 
+					scw.getString(IShopConfigMeta.CFG_KEY_TIME_FORMAT), 
 					comment.getAddTime());
 			commentWrapper.put("addTime", addTime);
 			
@@ -122,7 +123,8 @@ public class LibMain {
     public static void assignPager(
     		String app, Long catLongId, int recordCount, int size, String sort, String order, int page, 
     		String keyword, String brandId, double priceMin, double priceMax,
-    		String displayType, String filterAttr, String urlFormat, Map<String, Object> schArray, HttpServletRequest request) {
+    		String displayType, String filterAttr, String urlFormat, Map<String, Object> schArray, 
+    		HttpServletRequest request, ShopConfigWrapper scw) {
     	
     	int pageCount = recordCount > 0 ? (recordCount / size)+1 : 1;
     	
@@ -164,7 +166,7 @@ public class LibMain {
         	
         }
         
-        pager.setStyleid((Integer)ShopConfigWrapper.getDefaultConfig().get("pageStyle"));
+        pager.setStyleid((Integer)scw.get("pageStyle"));
         
         int pagePrev  = (page > 1) ? page - 1 : 1;
         int pageNext  = (page < pageCount) ? page + 1 : pageCount;
@@ -201,7 +203,7 @@ public class LibMain {
      * @return  array       $pager
      */
     
-    public static Pager getPager(String url, Map<String, Object> param, int recordCount, int page, int size) {
+    public static Pager getPager(String url, Map<String, Object> param, int recordCount, int page, int size, ShopConfigWrapper scw) {
     	if(size<1) {
     		size = 10;
     	}
@@ -214,7 +216,7 @@ public class LibMain {
     		page = pageCount;
     	}
     	Pager pager = new Pager();
-    	pager.setStyleid((Integer)ShopConfigWrapper.getDefaultConfig().get("pageStyle"));
+    	pager.setStyleid((Integer)scw.get("pageStyle"));
         int pagePrev  = (page > 1) ? page - 1 : 1;
         int pageNext  = (page < pageCount) ? page + 1 : pageCount;
         

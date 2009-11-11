@@ -98,5 +98,11 @@
 		<ref local="DAO"/>
 	 </property>
    </bean>
+   
+   <bean id="ShopConfigManager" class="com.jcommerce.core.service.config.ShopConfigManagerImpl">
+	 <property name="dao">
+		<ref local="DAO"/>
+	 </property>
+   </bean>   
     <!-- Add Managers here -->
 </beans>

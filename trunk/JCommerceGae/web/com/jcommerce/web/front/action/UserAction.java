@@ -20,6 +20,7 @@ import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IOrderInfo;
 import com.jcommerce.gwt.client.model.IRegion;
 import com.jcommerce.gwt.client.model.IUser;
+import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.gwt.client.util.URLConstants;
 import com.jcommerce.web.front.action.helper.Pager;
 import com.jcommerce.web.to.Affiliate;
@@ -132,7 +133,7 @@ public class UserAction extends BaseAction {
 				uw.put("isValidate", 1);
 				uw.put("shippedOrder", null);
 				request.setAttribute("info", uw);
-				request.setAttribute("userNotice", ShopConfigWrapper.getDefaultConfig().get("userNotice"));
+				request.setAttribute("userNotice", getCachedShopConfig().get("userNotice"));
 				request.setAttribute("prompt", new String[0]);
 				includeUserMenu();
 				return RES_USER_CLIPS;
@@ -141,7 +142,7 @@ public class UserAction extends BaseAction {
 				request.setAttribute("enabledCaptcha", 0);
 				request.setAttribute("rand", new Double(1000000*Math.random()).longValue());
 				
-				request.setAttribute("shopRegClosed", ShopConfigWrapper.getDefaultConfig().get("shopRegClosed"));
+				request.setAttribute("shopRegClosed", getCachedShopConfig().get("shopRegClosed"));
 				return RES_USER_PASSPORT;
 			}
 			else if("login".equals(action)) {
@@ -208,7 +209,7 @@ public class UserAction extends BaseAction {
 				
 				Map<String, Object> param = new HashMap<String, Object>();
 				param.put("act", action);
-				Pager pager = LibMain.getPager("user.action", param, recordCount, page, -1);
+				Pager pager = LibMain.getPager("user.action", param, recordCount, page, -1, getCachedShopConfig());
 				
 				request.setAttribute("pager", pager);
 				request.setAttribute("orders", 
@@ -220,7 +221,7 @@ public class UserAction extends BaseAction {
 			/* 收货地址列表界面*/
 			else if("address_list".equals(action) || "addressList".equals(action)) {
 				includeUserMenu();
-				String shopCountry = (String)ShopConfigWrapper.getDefaultConfig().get(ShopConfigWrapper.CFG_KEY_SHOP_COUNTRY);
+				String shopCountry = (String)getCachedShopConfig().get(IShopConfigMeta.CFG_KEY_SHOP_COUNTRY);
 				
 				/* 取得国家列表、商店所在国家、商店所在国家的省列表 */
 				request.setAttribute("countryList", LibCommon.getRegion(IRegion.TYPE_COUNTRY, null,getDefaultManager()));

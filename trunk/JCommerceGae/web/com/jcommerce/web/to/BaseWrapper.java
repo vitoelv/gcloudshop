@@ -64,5 +64,9 @@ public class BaseWrapper {
 		values.put(key, value);
 	}
 	
+	public void clear() {
+		values.clear();
+	}
+	
 	
 }

@@ -63,7 +63,7 @@ public class BrandPanel extends BaseEntityEditPanel {
 		}
 		
 		public String getMenuDisplayName() {
-			return "New Brand";
+			return "新建品牌";
 		}
 	}
 	

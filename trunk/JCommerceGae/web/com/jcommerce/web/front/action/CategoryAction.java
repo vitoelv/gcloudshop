@@ -37,7 +37,7 @@ public class CategoryAction extends BaseAction {
 			debug("in execute");
 			super.execute();
 			HttpServletRequest request = getRequest();
-			includeCart(request);
+			includeCart();
 			includeCategoryTree(request);
 
 			includeFilterAttr();
@@ -83,7 +83,7 @@ public class CategoryAction extends BaseAction {
 		String sPage = (String)request.getParameter("page");
 		int page = (sPage!=null && Integer.valueOf(sPage)>0) ? Integer.valueOf(sPage) : 1;
 		
-		String sSize = (String)ShopConfigWrapper.getDefaultConfig().get("pageSize");
+		String sSize = (String)getCachedShopConfig().get("pageSize");
 		int size = (sSize!=null && Integer.valueOf(sSize)>0) ? Integer.valueOf(sSize) : 10; 
 		
 		String brandId = (String)request.getParameter("brand");
@@ -139,7 +139,8 @@ public class CategoryAction extends BaseAction {
 		List<GoodsWrapper> gws = WrapperUtil.wrap(goods, GoodsWrapper.class);
 		request.setAttribute("goodsList", gws);
 		
-		LibMain.assignPager("category", catLongId, count, size, sort, order, page, "", brandId, 0, 0, display, "", "", null, getRequest());
+		LibMain.assignPager("category", catLongId, count, size, sort, order, page,
+				"", brandId, 0, 0, display, "", "", null, getRequest(), getCachedShopConfig());
 		
 
 	}

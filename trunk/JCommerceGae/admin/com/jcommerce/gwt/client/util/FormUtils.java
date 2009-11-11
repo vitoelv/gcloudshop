@@ -11,6 +11,7 @@ import com.extjs.gxt.ui.client.widget.form.Radio;
 import com.extjs.gxt.ui.client.widget.form.RadioGroup;
 import com.jcommerce.gwt.client.Logger;
 import com.jcommerce.gwt.client.form.BeanObject;
+import com.jcommerce.gwt.client.widgets.MyRadioGroup;
 
 public class FormUtils {
     public static void log(String s) {
@@ -33,18 +34,21 @@ public class FormUtils {
     			continue;
     		}
     		// TODO handle CheckBoxes which are special
-    		if(field instanceof RadioGroup) {
+    		if(field instanceof MyRadioGroup) {
     			Radio selected = (Radio)value;
-    			name = selected.getName();
+//    			name = selected.getName();
 
     			value = selected.getValueAttribute();
     		}
-    		if(field instanceof ComboBox) {
+    		else if(field instanceof RadioGroup) {
+    			throw new RuntimeException("please use MyRadioGroup instead of RadioGroup! name="+name+", value="+value);
+    		}
+    		else if(field instanceof ComboBox) {
     			ComboBox box = (ComboBox)field;
     			String key = box.getValueField();
     			value = ((BeanObject)value).get(key);
     		}
-    		log("name: "+field.getName()+", value: ("+value+")");
+    		log("name: "+name+", value: ("+value+")");
     		props.put(name, value);
     	}
     	return props;
