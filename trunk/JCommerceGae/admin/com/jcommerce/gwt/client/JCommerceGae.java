@@ -52,7 +52,7 @@ import com.jcommerce.gwt.client.service.RemoteService;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class JCommerceGae implements EntryPoint, ValueChangeHandler<String>, GWT.UncaughtExceptionHandler, ApplicationListener{
+public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, ApplicationListener{
 	/**
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
@@ -84,9 +84,7 @@ public class JCommerceGae implements EntryPoint, ValueChangeHandler<String>, GWT
     	return me;
     }
     
-	public void onValueChange(ValueChangeEvent<String> event) {
-		String fullHistoryToken = event.getValue(); 
-		// TODO Auto-generated method stub
+	public void onHistoryChanged(String fullHistoryToken) {
 		try {
 			System.out.println("--- hyperLinkHandler");
 			String[] parsed = PageState
@@ -135,7 +133,12 @@ public class JCommerceGae implements EntryPoint, ValueChangeHandler<String>, GWT
 	public void onModuleLoad() {
 		me = this;
 		GWT.setUncaughtExceptionHandler(this);
-		History.addValueChangeHandler(this);
+		History.addValueChangeHandler(new ValueChangeHandler<String>() {
+			public void onValueChange(ValueChangeEvent<String> event) {
+				String fullHistoryToken = event.getValue(); 
+				onHistoryChanged(fullHistoryToken);
+			}
+		});
 
 		RemoteService.init();
 
