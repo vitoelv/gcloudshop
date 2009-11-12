@@ -55,7 +55,6 @@ public class LibGoods {
 		// 1st round loop
 		for (Category cat : allCats) {
 			cpMap.put(cat.getPkId(), cat.getParentId());
-
 			List<CategoryWrapper> children = pcMap.get(cat.getParentId());
 			if (children == null) {
 				children = new ArrayList<CategoryWrapper>();
@@ -63,12 +62,12 @@ public class LibGoods {
 			}
 			children.add(new CategoryWrapper(cat));
 		}
-
-		
-		
 		
 		List<CategoryWrapper> level1 = pcMap.get(parentId);
-
+		if(level1==null) {
+			// to overcome NPE in case there is no any category at all
+			level1 = new ArrayList<CategoryWrapper>();
+		}
 		for (CategoryWrapper cw : level1) {
 			List<CategoryWrapper> level2 = pcMap.get(cw.getPkId());
 			if (level2 != null) {
