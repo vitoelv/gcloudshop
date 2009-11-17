@@ -19,6 +19,7 @@ import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.SimpleOptionData;
 import com.jcommerce.gwt.client.panels.BaseEntityEditPanel;
 import com.jcommerce.gwt.client.panels.Success;
+import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.RemoteService;
 import com.jcommerce.gwt.client.util.FormUtils;
 import com.jcommerce.gwt.client.widgets.MyRadioGroup;
@@ -51,7 +52,7 @@ public class ShopConfigPanel extends BaseEntityEditPanel {
 		}
 		
 		public String getMenuDisplayName() {
-			return "商店设置";
+			return Resources.constants.Shop_setup();
 		}
 	}
 	
@@ -70,7 +71,7 @@ public class ShopConfigPanel extends BaseEntityEditPanel {
     }
 
     public String getName() {
-        return "商店设置"; 
+        return Resources.constants.Shop_setup(); 
     }
 
 

@@ -56,6 +56,8 @@ public class AttributeListPanel extends ContentWidget {
 		String AttributeList_InputType();
 		String AttributeList_Values();
 		String AttributeList_SortOrder();
+		String AttributeList_title();
+		String AttributeList_addType();
 	}
 	
 	public static class State extends PageState {
@@ -84,7 +86,7 @@ public class AttributeListPanel extends ContentWidget {
 	
     @Override
     public Button getShortCutButton() {
-      Button sButton = new Button("添加属性");
+      Button sButton = new Button(Resources.constants.AttributeList_addType());
       sButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
           public void componentSelected(ButtonEvent ce) {
           	onShortCutButtonClicked();
@@ -133,7 +135,7 @@ public class AttributeListPanel extends ContentWidget {
 
 	@Override
 	public String getName() {
-		return "商品属性";
+		return Resources.constants.AttributeList_title();
 	}
     protected void onRender(Element parent, int index) {
     	super.onRender(parent, index);

@@ -52,9 +52,14 @@ import com.jcommerce.gwt.client.widgets.ActionCellRenderer;
  */
 public class BrandListPanel extends ContentWidget {    
 	
+	public static interface Constants {
+        String GoodsBrand_title();
+        
+    }
+	
 //	ColumnPanel contentPanel = new ColumnPanel();
     ListBox b_list = new ListBox();    
-    Button btnAdd = new Button("添加品牌");
+    Button btnAdd = new Button(Resources.constants.NewBrand_title());
     ListBox lstAction = new ListBox();
     Button btnAct = new Button("OK");
     PagingToolBar toolBar;    
@@ -64,7 +69,7 @@ public class BrandListPanel extends ContentWidget {
 			return BrandListPanel.class.getName();
 		}
 		public String getMenuDisplayName() {
-			return "商品品牌";
+			return Resources.constants.GoodsBrand_title();
 		}
 	}
 	
@@ -84,13 +89,13 @@ public class BrandListPanel extends ContentWidget {
     }
 
     public String getName() {
-        return "商品品牌";
+        return Resources.constants.GoodsBrand_title();
     }
     
     @Override
     public Button getShortCutButton() {
 //    	return btnAdd;
-      Button buttonAddClone = new Button("添加品牌");
+      Button buttonAddClone = new Button(Resources.constants.NewBrand_title());
       buttonAddClone.addSelectionListener(new SelectionListener<ButtonEvent>() {
           public void componentSelected(ButtonEvent ce) {
           	onButtonAddClicked();
@@ -136,12 +141,12 @@ public class BrandListPanel extends ContentWidget {
         List<ColumnConfig> columns = new ArrayList<ColumnConfig>();
         //CheckBoxSelectionModel<BeanObject> sm = new CheckBoxSelectionModel<BeanObject>();
         //columns.add(sm.getColumn());        
-        columns.add(new ColumnConfig(IBrand.BRAND_NAME, "品牌名称", 80));
-        columns.add(new ColumnConfig(IBrand.SITE_URL, "品牌网址", 150));
-        columns.add(new ColumnConfig(IBrand.BRAND_DESC, "品牌描述", 230));
-        columns.add(new ColumnConfig(IBrand.SORT_ORDER, "排序", 50));
-        columns.add(new CheckColumnConfig(IBrand.IS_SHOW, "是否显示", 80));
-        ColumnConfig actcol = new ColumnConfig("Action", "操作", 140);
+        columns.add(new ColumnConfig(IBrand.BRAND_NAME, Resources.constants.NewBrand_name(), 80));
+        columns.add(new ColumnConfig(IBrand.SITE_URL, Resources.constants.NewBrand_site(), 150));
+        columns.add(new ColumnConfig(IBrand.BRAND_DESC, Resources.constants.NewBrand_description(), 230));
+        columns.add(new ColumnConfig(IBrand.SORT_ORDER, Resources.constants.NewBrand_order(), 50));
+        columns.add(new CheckColumnConfig(IBrand.IS_SHOW, Resources.constants.NewBrand_showOrNot(), 80));
+        ColumnConfig actcol = new ColumnConfig("Action", Resources.constants.action(), 140);
         columns.add(actcol);
 
 
@@ -157,12 +162,12 @@ public class BrandListPanel extends ContentWidget {
 
         ActionCellRenderer render = new ActionCellRenderer(grid);
         ActionCellRenderer.ActionInfo act = new ActionCellRenderer.ActionInfo();        
-        act.setText("编辑 ");
+        act.setText(Resources.constants.edit());
         act.setAction("changeBrand($pkId)");
         act.setTooltip(Resources.constants.edit());
         render.addAction(act);
         act = new ActionCellRenderer.ActionInfo();
-        act.setText(" 删除");
+        act.setText(Resources.constants.delete());
 		act.setAction("deleteBrand($pkId)");
 		act.setTooltip(Resources.constants.delete());
 		render.addAction(act);

@@ -27,6 +27,7 @@ import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.GalleryForm;
 import com.jcommerce.gwt.client.model.IGoods;
 import com.jcommerce.gwt.client.model.IGoodsGallery;
+import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.DeleteService;
 import com.jcommerce.gwt.client.service.ListService;
 import com.jcommerce.gwt.client.util.URLConstants;
@@ -99,12 +100,12 @@ public class GalleryPanel4 extends TabItem {
 		cl.setWidth("100%");
 		lcc.setLayout(cl);
 		
-		Text lbl1 = new Text("Image Description :");
+		Text lbl1 = new Text(Resources.constants.NewGoods_imageDescription());
 		final TextField<String> t1 = new TextField<String>();
 		t1.setName(buildElementName(IGoodsGallery.IMG_DESC));
 //		t1.setFieldLabel("Name :");
 		
-		Text lbl2 = new Text("Image File :");
+		Text lbl2 = new Text(Resources.constants.NewGoods_imageFile());
 		final FileUploadField file = new FileUploadField();
 		file.setName(buildElementName(IGoodsGallery.IMAGE));
 		

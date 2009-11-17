@@ -15,6 +15,7 @@ import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.CategoryForm;
 import com.jcommerce.gwt.client.model.ICategory;
+import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.ListService;
 import com.jcommerce.gwt.client.widgets.MyRadioGroup;
 
@@ -23,6 +24,27 @@ import com.jcommerce.gwt.client.widgets.MyRadioGroup;
  */
 public class CategoryPanel extends BaseEntityEditPanel {    
 	
+	public static interface Constants {
+        String Category_title();
+        String Category_categoryList();
+        String Category_name();
+        String Category_parentCategory();
+        String Category_topCategory();
+        String Category_unit();
+        String Category_showInNavi();
+        String Category_priceNumber();
+        String Category_css();
+        String Category_yes();
+        String Category_no();
+        String Category_order();
+        String Category_showOrNot();
+        String Category_editCategory();
+        String Category_priceTip();
+        String Category_cssTip();
+        String Category_addSuccessfully();
+        String Category_modifySuccessfully();
+    }
+	
 	@Override
 	public String getEntityClassName() {
 		return ModelNames.CATEGORY; 
@@ -30,7 +52,7 @@ public class CategoryPanel extends BaseEntityEditPanel {
     @Override
     public Button getShortCutButton() {
 //    	return btnAdd;
-      Button buttonAddClone = new Button("分类列表");
+      Button buttonAddClone = new Button(Resources.constants.Category_categoryList());
       buttonAddClone.addSelectionListener(new SelectionListener<ButtonEvent>() {
           public void componentSelected(ButtonEvent ce) {
           	onButtonListClicked();
@@ -54,7 +76,7 @@ public class CategoryPanel extends BaseEntityEditPanel {
 			return CategoryPanel.class.getName();
 		}
 		public String getMenuDisplayName() {
-			return "New Category";
+			return Resources.constants.Category_title();
 		}
 	}
 	private State curState = new State();
@@ -84,9 +106,9 @@ public class CategoryPanel extends BaseEntityEditPanel {
 
     public String getName() {
     	if(!getCurState().getIsEdit())
-			return "添加分类";
+			return Resources.constants.Category_title();
 		else
-			return "编辑分类";    	
+			return Resources.constants.Category_editCategory();    	
     }
     
 
@@ -95,72 +117,72 @@ public class CategoryPanel extends BaseEntityEditPanel {
     public void setupPanelLayout() {
         System.out.println("----------CategoryPanel");
 
-        TextField<String> fText = CategoryForm.getNameField("分类名称：");
-        fText.setFieldLabel("分类名称");
+        TextField<String> fText = CategoryForm.getNameField(Resources.constants.Category_name()+"：");
+        fText.setFieldLabel(Resources.constants.Category_name());
         formPanel.add(fText, sfd());
         
         categoryList = new ListStore<BeanObject>();
         fParentId = CategoryForm.getParentIdField();
-        fParentId.setFieldLabel("上级分类");
+        fParentId.setFieldLabel(Resources.constants.Category_parentCategory());
         fParentId.setStore(categoryList);
-        fParentId.setEmptyText("顶级分类");
+        fParentId.setEmptyText(Resources.constants.Category_topCategory());
         formPanel.add(fParentId, sfd());
         
         fText = CategoryForm.getMeasureUnitField();
-        fText.setFieldLabel("数量单位");
+        fText.setFieldLabel(Resources.constants.Category_unit());
         formPanel.add(fText, sfd());
         
         NumberField fNum = CategoryForm.getSortOrderField();
-        fNum.setFieldLabel("排序");
+        fNum.setFieldLabel(Resources.constants.Category_order());
         formPanel.add(fNum, tfd());
 
         mfIsShow = new MyRadioGroup();
 		formPanel.add(mfIsShow, sfd());
-		mfIsShow.setFieldLabel("是否显示");
+		mfIsShow.setFieldLabel(Resources.constants.Category_showOrNot());
 		mfIsShow.setName(ICategory.IS_SHOW);
 
 		mfIsShow.setSelectionRequired(true);
 		Radio yes = new Radio();
 		yes.setName(ICategory.IS_SHOW);
 		yes.setValueAttribute("true");
-		yes.setBoxLabel("是");
+		yes.setBoxLabel(Resources.constants.Category_yes());
 		mfIsShow.add(yes);
 		
 		Radio no = new Radio();
 		no.setName(ICategory.IS_SHOW);
 		no.setValueAttribute("false");
-		no.setBoxLabel("否");
+		no.setBoxLabel(Resources.constants.Category_no());
 		mfIsShow.add(no);
         
 		
 
 		
 		mfShowInNav = new MyRadioGroup();
-		mfShowInNav.setFieldLabel("是否显示在导航栏");
+		mfShowInNav.setFieldLabel(Resources.constants.Category_showInNavi());
 		mfShowInNav.setName(ICategory.SHOW_IN_NAV);
 		mfShowInNav.setSelectionRequired(true);
 		yes = new Radio();
 		yes.setName(ICategory.SHOW_IN_NAV);
 		yes.setValueAttribute("1");
-		yes.setBoxLabel("是");
+		yes.setBoxLabel(Resources.constants.Category_yes());
 		mfShowInNav.add(yes);
 		
 		no = new Radio();
 		no.setName(ICategory.SHOW_IN_NAV);
 		no.setValueAttribute("0");
-		no.setBoxLabel("否");
+		no.setBoxLabel(Resources.constants.Category_no());
 		mfShowInNav.add(no);
         
 		formPanel.add(mfShowInNav, sfd());
 		
         fText = CategoryForm.getGradeField();
-        fText.setFieldLabel("？价格区间个数");
-        fText.setToolTip("该选项表示该分类下商品最低价与最高价之间的划分的等级个数，填0表示不做分级，最多不能超过10个。");
+        fText.setFieldLabel("？"+Resources.constants.Category_priceNumber());
+        fText.setToolTip(Resources.constants.Category_priceTip());
         formPanel.add(fText, tfd());
         
         fText = CategoryForm.getStyleField();
-        fText.setFieldLabel("？分类的样式表文件");
-        fText.setToolTip("您可以为每一个商品分类指定一个样式表文件。例如文件存放在 themes 目录下则输入：themes/style.css");
+        fText.setFieldLabel("？"+Resources.constants.Category_css());
+        fText.setToolTip(Resources.constants.Category_cssTip());
         formPanel.add(fText, tfd());
 
     }   
@@ -192,9 +214,9 @@ public class CategoryPanel extends BaseEntityEditPanel {
 	public void gotoSuccessPanel() {
     	Success.State newState = new Success.State();
     	if(!getCurState().getIsEdit()) {
-    		newState.setMessage("添加商品分类成功");
+    		newState.setMessage(Resources.constants.Category_addSuccessfully());
     	} else {
-    		newState.setMessage("修改商品分类成功");
+    		newState.setMessage(Resources.constants.Category_modifySuccessfully());
     	}
     	
     	CategoryListPanel.State choice1 = new CategoryListPanel.State();

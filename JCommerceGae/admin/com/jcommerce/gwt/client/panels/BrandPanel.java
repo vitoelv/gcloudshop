@@ -23,7 +23,20 @@ import com.jcommerce.gwt.client.resources.Resources;
  */
 public class BrandPanel extends BaseEntityEditPanel {    	
     
-   
+	public static interface Constants {
+		String NewBrand_title();
+		String NewBrand_editBrand();
+		String NewBrand_brandList();
+		String NewBrand_name();
+		String NewBrand_site();
+		String NewBrand_LOGO();
+		String NewBrand_description();
+		String NewBrand_order();
+		String NewBrand_showOrNot();
+        String NewBrand_addSuccessfully();
+        String NewBrand_modifySuccessfully();
+    }
+	
 	@Override
 	public String getEntityClassName() {
 		return ModelNames.BRAND; 
@@ -31,7 +44,7 @@ public class BrandPanel extends BaseEntityEditPanel {
     @Override
     public Button getShortCutButton() {
 //    	return btnAdd;
-      Button buttonAddClone = new Button("品牌列表");
+      Button buttonAddClone = new Button(Resources.constants.NewBrand_brandList());
       buttonAddClone.addSelectionListener(new SelectionListener<ButtonEvent>() {
           public void componentSelected(ButtonEvent ce) {
           	onButtonListClicked();
@@ -63,7 +76,7 @@ public class BrandPanel extends BaseEntityEditPanel {
 		}
 		
 		public String getMenuDisplayName() {
-			return "新建品牌";
+			return Resources.constants.NewBrand_title();
 		}
 	}
 	
@@ -83,9 +96,9 @@ public class BrandPanel extends BaseEntityEditPanel {
 
     public String getName() {
     	if(!getCurState().getIsEdit())
-        	return "添加品牌";
+        	return Resources.constants.NewBrand_title();
         else
-            return "编辑品牌"; 
+            return Resources.constants.NewBrand_editBrand(); 
     	
     }
     
@@ -101,30 +114,30 @@ public class BrandPanel extends BaseEntityEditPanel {
     	idField = BrandForm.getIdField();
     	formPanel.add(idField);
     	
-        TextField<String> nameField = BrandForm.getNameField("品牌名称：");
-        nameField.setFieldLabel("品牌名称");
+        TextField<String> nameField = BrandForm.getNameField(Resources.constants.NewBrand_name()+"：");
+        nameField.setFieldLabel(Resources.constants.NewBrand_name());
         formPanel.add(nameField, sfd());
         
-        TextField<String> siteField = BrandForm.getSiteField("品牌网址：");
-        siteField.setFieldLabel("品牌网址");
+        TextField<String> siteField = BrandForm.getSiteField(Resources.constants.NewBrand_site()+"：");
+        siteField.setFieldLabel(Resources.constants.NewBrand_site());
         formPanel.add(siteField, lfd());
         
-        FileUploadField logoField = BrandForm.getLogoField("品牌LOGO：");
-        logoField.setFieldLabel("品牌LOGO");
+        FileUploadField logoField = BrandForm.getLogoField(Resources.constants.NewBrand_LOGO()+"：");
+        logoField.setFieldLabel(Resources.constants.NewBrand_LOGO());
         formPanel.add(logoField, sfd());
         
-        TextArea descField = BrandForm.getDescField("品牌描述：");
+        TextArea descField = BrandForm.getDescField(Resources.constants.NewBrand_description()+"：");
         descField.setHeight("180px");
         descField.setWidth("100px");        
-        descField.setFieldLabel("品牌描述");
+        descField.setFieldLabel(Resources.constants.NewBrand_description());
         formPanel.add(descField, lfd());
         
-        TextField<String> orderField = BrandForm.getOrderField("排序：");
-        orderField.setFieldLabel("排序");
+        TextField<String> orderField = BrandForm.getOrderField(Resources.constants.NewBrand_order()+"：");
+        orderField.setFieldLabel(Resources.constants.NewBrand_order());
         formPanel.add(orderField, sfd());
         
-        CheckBox showField = BrandForm.getShowField("是否显示：");
-        showField.setFieldLabel("是否显示");
+        CheckBox showField = BrandForm.getShowField(Resources.constants.NewBrand_showOrNot()+"：");
+        showField.setFieldLabel(Resources.constants.NewBrand_showOrNot());
         formPanel.add(showField, sfd());
         
 
@@ -196,9 +209,9 @@ public class BrandPanel extends BaseEntityEditPanel {
 	public void gotoSuccessPanel() {
     	Success.State newState = new Success.State();
     	if(!getCurState().getIsEdit()) {
-    		newState.setMessage("添加商品品牌成功");
+    		newState.setMessage(Resources.constants.NewBrand_addSuccessfully());
     	} else {
-    		newState.setMessage("修改商品品牌成功");
+    		newState.setMessage(Resources.constants.NewBrand_modifySuccessfully());
     	}
     	
     	BrandListPanel.State choice1 = new BrandListPanel.State();

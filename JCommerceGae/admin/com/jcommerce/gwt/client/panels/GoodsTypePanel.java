@@ -4,11 +4,11 @@ import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.GoodsTypeForm;
+import com.jcommerce.gwt.client.resources.Resources;
 
 public class GoodsTypePanel extends BaseEntityEditPanel {
 	public static interface Constants {
-//		String GoodsType_Name();
-
+		String GoodsTypeEdit_title();
 	}
 	
 	public static class State extends BaseEntityEditPanel.State {
@@ -29,14 +29,14 @@ public class GoodsTypePanel extends BaseEntityEditPanel {
 	@Override
 	public void setupPanelLayout() {
         
-        TextField<String> nameField = GoodsTypeForm.getNameField("商品类型名称：");
-        nameField.setFieldLabel("商品类型名称");
+        TextField<String> nameField = GoodsTypeForm.getNameField(Resources.constants.GoodsTypeList_ColumnName()+"：");
+        nameField.setFieldLabel(Resources.constants.GoodsTypeList_ColumnName());
         formPanel.add(nameField);
         
-        TextArea agField = GoodsTypeForm.getAttributeGroupField("属性分组：");
+        TextArea agField = GoodsTypeForm.getAttributeGroupField(Resources.constants.GoodsTypeList_ColumnGroup()+"：");
         agField.setHeight("180px");
         agField.setWidth("100px");        
-        agField.setFieldLabel("属性分组");
+        agField.setFieldLabel(Resources.constants.GoodsTypeList_ColumnGroup());
         formPanel.add(agField);
         
         // TODO make it english : ? 
@@ -72,7 +72,7 @@ public class GoodsTypePanel extends BaseEntityEditPanel {
 
 	@Override
 	public String getName() {
-        return "商品类型编辑版2";
+        return Resources.constants.GoodsTypeEdit_title();
 	}
 
 	public void postSuperRefresh() {

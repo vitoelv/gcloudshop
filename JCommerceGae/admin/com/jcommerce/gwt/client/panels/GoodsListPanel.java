@@ -79,16 +79,14 @@ public class GoodsListPanel extends ContentWidget {
 	    String Goods_marketPrice();
 	    String Goods_giveIntegral();
 	    String Goods_integral();
+	    String Goods_rankIntegral();
 	    String Goods_promotePrice();
-	    String Goods_image();
-	    String Goods_thumb();
+	    String Goods_promoteDate();
 	    String Goods_weight();
 	    String Goods_number();
-	    String Goods_warnNumber();
 	    String Goods_hotsold();
 	    String Goods_newAdded();
 	    String Goods_bestSold();
-	    String Goods_brief();
 	    String Goods_sellerNote();
 	    String Goods_onSale();
 	}
