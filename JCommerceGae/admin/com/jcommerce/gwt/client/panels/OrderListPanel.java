@@ -20,6 +20,7 @@ import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.model.IOrderInfo;
+import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.Criteria;
 import com.jcommerce.gwt.client.service.PagingListService;
 import com.jcommerce.gwt.client.widgets.ActionCellRenderer;
@@ -41,7 +42,7 @@ public class OrderListPanel  extends ContentWidget{
 
 	@Override
 	public String getName() {
-		return "订单列表";
+		return Resources.constants.OrderList_title();
 	}
 	
 	public static OrderListPanel getInstance(){
@@ -63,7 +64,7 @@ public class OrderListPanel  extends ContentWidget{
 		}
 		@Override
 		public String getMenuDisplayName() {
-			return "订单列表";
+			return Resources.constants.OrderList_title();
 		}
 	}
 
@@ -94,19 +95,19 @@ public class OrderListPanel  extends ContentWidget{
 		final CheckBoxSelectionModel<BeanObject> smRowSelection = new CheckBoxSelectionModel<BeanObject>();
 		columns.add(smRowSelection.getColumn());
 
-		ColumnConfig col = new ColumnConfig(IOrderInfo.ORDER_SN, "订单号", 100);
+		ColumnConfig col = new ColumnConfig(IOrderInfo.ORDER_SN, Resources.constants.OrderList_orderSN(), 100);
 		columns.add(col);
-		col = new ColumnConfig(IOrderInfo.ADD_TIME, "下单时间", 100);
+		col = new ColumnConfig(IOrderInfo.ADD_TIME, Resources.constants.OrderList_addTime(), 100);
 		columns.add(col);
-		col = new ColumnConfig(IOrderInfo.CONSIGNEE, "收货人", 100);
+		col = new ColumnConfig(IOrderInfo.CONSIGNEE, Resources.constants.OrderList_consignee(), 100);
 		columns.add(col);
-		col = new ColumnConfig(IOrderInfo.GOODS_AMOUNT, "总金额", 100);
+		col = new ColumnConfig(IOrderInfo.GOODS_AMOUNT, Resources.constants.OrderList_totalAmount(), 100);
 		columns.add(col);
-		col = new ColumnConfig(IOrderInfo.ORDER_AMOUNT, "应付金额", 100);
+		col = new ColumnConfig(IOrderInfo.ORDER_AMOUNT, Resources.constants.OrderList_shouldPay(), 100);
 		columns.add(col);
-		col = new ColumnConfig(IOrderInfo.ORDER_STATUS, "订单状态", 100);
+		col = new ColumnConfig(IOrderInfo.ORDER_STATUS, Resources.constants.OrderList_state(), 100);
 		columns.add(col);
-		ColumnConfig actcol = new ColumnConfig("Action", "操作", 100);
+		ColumnConfig actcol = new ColumnConfig("Action", Resources.constants.OrderList_action(), 100);
 		columns.add(actcol);
 
 		ColumnModel cm = new ColumnModel(columns);
@@ -121,12 +122,12 @@ public class OrderListPanel  extends ContentWidget{
 		ActionCellRenderer.ActionInfo act = new ActionCellRenderer.ActionInfo();
 		act.setImage(GWT.getModuleBaseURL()+"icon_edit.gif");
 		act.setAction("viewOrder($pkId)");
-		act.setTooltip("查看");
+		act.setTooltip(Resources.constants.edit());
 		render.addAction(act);
 		act = new ActionCellRenderer.ActionInfo();		
 		act.setImage(GWT.getModuleBaseURL()+"icon_trash.gif");
 		act.setAction("deleteOrder($pkId)");
-		act.setTooltip("删除");
+		act.setTooltip(Resources.constants.delete());
 		render.addAction(act);
 
 		actcol.setRenderer(render);
