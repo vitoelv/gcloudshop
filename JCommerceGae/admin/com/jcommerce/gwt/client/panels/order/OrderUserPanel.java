@@ -22,12 +22,24 @@ import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.UserForm;
 import com.jcommerce.gwt.client.model.IOrderInfo;
 import com.jcommerce.gwt.client.panels.OrderListPanel;
+import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.CreateService;
 
 public class OrderUserPanel extends ContentWidget{
+	
+	public interface Constants {
+		String OrderUser_title();
+		String OrderUser_anonymousUser();
+		String OrderUser_otherUser();
+		String OrderUser_search();
+		String OrderUser_next();
+		String OrderUser_cancel();
+	}
+	
 
 	private static OrderUserPanel instance = null;
 	private State curState = new State();
+	
 
 	@Override
 	protected State getCurState() {
@@ -41,7 +53,7 @@ public class OrderUserPanel extends ContentWidget{
 
 	@Override
 	public String getName() {
-		return "添加订单";
+		return Resources.constants.OrderUser_title();
 	}
 	
 	public static OrderUserPanel getInstance(){
@@ -69,7 +81,7 @@ public class OrderUserPanel extends ContentWidget{
 		}
 		@Override
 		public String getMenuDisplayName() {
-			return "添加订单";
+			return Resources.constants.OrderUser_title();
 		}
 	}
 	
@@ -91,14 +103,14 @@ public class OrderUserPanel extends ContentWidget{
 		vp.setSpacing(10);
 		rAnonymousUser = new Radio();
 		rAnonymousUser.setName("user");
-		rAnonymousUser.setBoxLabel("匿名用户");
+		rAnonymousUser.setBoxLabel(Resources.constants.OrderUser_anonymousUser());
 		vp.add(rAnonymousUser);
 		
 		HorizontalPanel hp = new HorizontalPanel();
 		
 		rOtherUser = new Radio();
 		rOtherUser.setName("user");
-		rOtherUser.setBoxLabel("按会员编号或会员名搜索");
+		rOtherUser.setBoxLabel(Resources.constants.OrderUser_otherUser());
 		hp.add(rOtherUser);
 		
 		rgroup = new RadioGroup();
@@ -110,7 +122,7 @@ public class OrderUserPanel extends ContentWidget{
 		hp.add(searchCondition);
 		
 		search = new Button();
-		search.setText("搜索");
+		search.setText(Resources.constants.OrderUser_search());
 		hp.add(search);
 		
 		cbUser = new ComboBox<UserForm>();
@@ -129,7 +141,7 @@ public class OrderUserPanel extends ContentWidget{
 		hpButton.setWidth("100%");
 		
 		next = new Button();
-		next.setText("下一步");
+		next.setText(Resources.constants.OrderUser_next());
 		next.addSelectionListener(new SelectionListener<ButtonEvent>(){
 			
 			@Override
@@ -139,7 +151,7 @@ public class OrderUserPanel extends ContentWidget{
 		hpButton.add(next);
 		
 		cancel = new Button();
-		cancel.setText("取消");
+		cancel.setText(Resources.constants.OrderUser_cancel());
 		cancel.addSelectionListener(new SelectionListener<ButtonEvent>(){
 
 			@Override
