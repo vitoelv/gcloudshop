@@ -52,9 +52,15 @@ import com.jcommerce.gwt.client.widgets.ActionCellRenderer;
  */
 public class CategoryListPanel extends ContentWidget {    
 	
+	public static interface Constants {
+        String CategoryList_title();
+        String CategoryList_navigator();
+        String CategoryList_priceLevel();
+    }
+	
 //	ColumnPanel contentPanel = new ColumnPanel();
     ListBox b_list = new ListBox();    
-    Button btnAdd = new Button("添加分类");
+    Button btnAdd = new Button(Resources.constants.Category_title());
     ListBox lstAction = new ListBox();
     Button btnAct = new Button("OK");
     PagingToolBar toolBar;    
@@ -81,7 +87,7 @@ public class CategoryListPanel extends ContentWidget {
 			return CategoryListPanel.class.getName();
 		}
 		public String getMenuDisplayName() {
-			return "商品分类";
+			return Resources.constants.CategoryList_title();
 		}
 	}
 	private State curState = new State();
@@ -97,7 +103,7 @@ public class CategoryListPanel extends ContentWidget {
     }
 
     public String getName() {
-        return "商品分类";
+        return Resources.constants.CategoryList_title();
     }
     
     
@@ -122,9 +128,9 @@ public class CategoryListPanel extends ContentWidget {
         List<ColumnConfig> columns = new ArrayList<ColumnConfig>();
         //CheckBoxSelectionModel<BeanObject> sm = new CheckBoxSelectionModel<BeanObject>();
         //columns.add(sm.getColumn());        
-        columns.add(new ColumnConfig(ICategory.CAT_NAME, "分类名称", 150));
-        columns.add(new ColumnConfig(ICategory.MEASURE_UNIT, "数量单位", 80));
-        columns.add(new CheckColumnConfig(ICategory.SHOW_IN_NAV, "导航栏", 80) {
+        columns.add(new ColumnConfig(ICategory.CAT_NAME, Resources.constants.Category_name(), 150));
+        columns.add(new ColumnConfig(ICategory.MEASURE_UNIT, Resources.constants.Category_unit(), 80));
+        columns.add(new CheckColumnConfig(ICategory.SHOW_IN_NAV, Resources.constants.CategoryList_navigator(), 80) {
         	// TODO: wrap the code for Long type column into a baseclass
         	  protected String getCheckState(ModelData model, String property, int rowIndex,
         		      int colIndex) {
@@ -134,10 +140,10 @@ public class CategoryListPanel extends ContentWidget {
         		    return on;
         		  }
         });
-        columns.add(new CheckColumnConfig(ICategory.IS_SHOW, "是否显示", 80));        
-        columns.add(new ColumnConfig(ICategory.GRADE, "价格分级", 60));
-        columns.add(new ColumnConfig(ICategory.SORT_ORDER, "排序", 50));        
-        ColumnConfig actcol = new ColumnConfig("Action", "操作", 150);
+        columns.add(new CheckColumnConfig(ICategory.IS_SHOW, Resources.constants.Category_showOrNot(), 80));        
+        columns.add(new ColumnConfig(ICategory.GRADE, Resources.constants.CategoryList_priceLevel(), 60));
+        columns.add(new ColumnConfig(ICategory.SORT_ORDER, Resources.constants.Category_order(), 50));        
+        ColumnConfig actcol = new ColumnConfig("Action", Resources.constants.action(), 150);
         columns.add(actcol);
 
         ColumnModel cm = new ColumnModel(columns);
@@ -151,11 +157,11 @@ public class CategoryListPanel extends ContentWidget {
 
         ActionCellRenderer render = new ActionCellRenderer(grid);
         ActionCellRenderer.ActionInfo act = new ActionCellRenderer.ActionInfo();        
-        act.setText("编辑 ");
+        act.setText(Resources.constants.edit());
         act.setAction("changeCategory($pkId)");
         render.addAction(act);
         act = new ActionCellRenderer.ActionInfo();
-        act.setText(" 删除");
+        act.setText(" " + Resources.constants.delete());
 		act.setAction("deleteCategory($pkId)");
 		act.setTooltip(Resources.constants.GoodsList_action_delete());
 		render.addAction(act);
@@ -174,7 +180,7 @@ public class CategoryListPanel extends ContentWidget {
         panel.setBottomComponent(toolBar);
         
         panel.setButtonAlign(HorizontalAlignment.CENTER);
-        panel.addButton(new com.extjs.gxt.ui.client.widget.button.Button("添加分类", new SelectionListener<ButtonEvent>() {
+        panel.addButton(new com.extjs.gxt.ui.client.widget.button.Button(Resources.constants.Category_title(), new SelectionListener<ButtonEvent>() {
           public void componentSelected(ButtonEvent ce) {
 //              JCommerceGae.getInstance().displayNewCategory();
         	  	CategoryPanel.State newState = new CategoryPanel.State();

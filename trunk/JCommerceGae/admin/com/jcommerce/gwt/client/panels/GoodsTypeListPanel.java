@@ -41,6 +41,11 @@ public class GoodsTypeListPanel extends ContentWidget {
 	public static interface Constants {
 		String GoodsTypeList_MenuName();
 		String GoodsTypeList_ColumnName();
+		String GoodsTypeList_ColumnGroup();
+		String GoodsTypeList_ColumnNumber();
+		String GoodsTypeList_ColumnState();
+		String GoodsTypeList_typeList();
+		String GoodsTypeList_addNewType();
 
 	}
 	public static class State extends PageState {
@@ -207,13 +212,13 @@ public class GoodsTypeListPanel extends ContentWidget {
         
         List<ColumnConfig> columns = new ArrayList<ColumnConfig>();
 //        columns.add(new ColumnConfig(IGoodsType.NAME, "商品类型名称", 150));
-		ColumnConfig col = new ColumnConfig(GoodsTypeForm.CAT_NAME, "商品类型名称", 150);
+		ColumnConfig col = new ColumnConfig(GoodsTypeForm.CAT_NAME, Resources.constants.GoodsTypeList_ColumnName(), 150);
 		col.setEditor(new CellEditor(GoodsTypeForm.getNameField(Resources.constants.GoodsTypeList_ColumnName())));
 		columns.add(col);
 		
-        columns.add(new ColumnConfig(GoodsTypeForm.ATTR_GROUP, "属性分组", 120));
-        columns.add(new ColumnConfig(GoodsTypeForm.ATTRCOUNT, "属性数", 80));
-        CheckColumnConfig ccc1 = new CheckColumnConfig(GoodsTypeForm.ENABLED, "状态", 80);
+        columns.add(new ColumnConfig(GoodsTypeForm.ATTR_GROUP, Resources.constants.GoodsTypeList_ColumnGroup(), 120));
+        columns.add(new ColumnConfig(GoodsTypeForm.ATTRCOUNT, Resources.constants.GoodsTypeList_ColumnNumber(), 80));
+        CheckColumnConfig ccc1 = new CheckColumnConfig(GoodsTypeForm.ENABLED, Resources.constants.GoodsTypeList_ColumnState(), 80);
         ccc1.setFixed(false);
         columns.add(ccc1);
         ColumnConfig actcol = new ColumnConfig("Action", Resources.constants
@@ -232,16 +237,16 @@ public class GoodsTypeListPanel extends ContentWidget {
         ActionCellRenderer render = new ActionCellRenderer(grid);
         ActionCellRenderer.ActionInfo act = null;
         act = new ActionCellRenderer.ActionInfo();        
-        act.setText("属性列表 ");
+        act.setText(Resources.constants.GoodsTypeList_typeList());
         act.setAction("getAttrList($pkId)");
         render.addAction(act);
         
         act = new ActionCellRenderer.ActionInfo();
-        act.setText("编辑 ");
+        act.setText(Resources.constants.edit());
         act.setAction("editGoodsType($pkId)");
         render.addAction(act);
         act = new ActionCellRenderer.ActionInfo();
-        act.setText(" 删除");
+        act.setText(Resources.constants.delete());
 		act.setAction("deleteGoodsType($pkId)");
 		act.setTooltip(Resources.constants.delete());
 		render.addAction(act);
@@ -285,7 +290,7 @@ public class GoodsTypeListPanel extends ContentWidget {
 					}
 				}));
 		
-        panel.addButton(new com.extjs.gxt.ui.client.widget.button.Button("添加类型", 
+        panel.addButton(new com.extjs.gxt.ui.client.widget.button.Button(Resources.constants.GoodsTypeList_addNewType(), 
         		new SelectionListener<ButtonEvent>() {
         	public void componentSelected(ButtonEvent ce) {
               	newGoodsType();

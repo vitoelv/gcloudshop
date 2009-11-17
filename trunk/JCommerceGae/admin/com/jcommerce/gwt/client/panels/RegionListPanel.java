@@ -43,6 +43,13 @@ import com.jcommerce.gwt.client.util.FormUtils;
 
 public class RegionListPanel extends ContentWidget {
 
+	public static interface Constants {
+		String RegionList_menuName();
+		String RegionList_title();
+		String RegionList_previousLevel();
+		String RegionList_manage();
+	}
+	
 	public static class State extends PageState {
 		public static final String PARENT_PARENT_ID = "parentparentId";
 		public static final String PARENT_ID = "parentId";
@@ -58,7 +65,7 @@ public class RegionListPanel extends ContentWidget {
 		}
 
 		public String getMenuDisplayName() {
-			return "地区列表11";
+			return Resources.constants.RegionList_menuName();
 		}
 		
 		public void setParentId(String parentId){
@@ -110,7 +117,7 @@ public class RegionListPanel extends ContentWidget {
 	
 	@Override
 	public String getName() {
-		return "地区";
+		return Resources.constants.RegionList_title();
 	}
 
 	private static RegionListPanel instance;
@@ -147,7 +154,7 @@ public class RegionListPanel extends ContentWidget {
 	protected void onRender(Element parent, int index) {
 		super.onRender(parent, index);
 		
-	      btnBack.setText("返回上一级");
+	      btnBack.setText(Resources.constants.RegionList_previousLevel());
 			btnBack.addSelectionListener(new SelectionListener<ButtonEvent>() {
 				public void componentSelected(ButtonEvent sender) {
 					onBackClicked();

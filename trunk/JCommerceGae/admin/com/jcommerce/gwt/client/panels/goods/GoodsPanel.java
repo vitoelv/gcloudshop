@@ -80,6 +80,19 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
         String NewGoods_tabLink();
         String NewGoods_tabAccessories();
         String NewGoods_tabArticle();
+        String NewGoods_recommend();
+        String NewGoods_promote();
+        String NewGoods_calculateByMaretPrice();
+        String NewGoods_onSaleOrNot();
+        String NewGoods_imageDescription();
+        String NewGoods_imageFile();
+        String NewGoods_type();
+        String NewGoods_tipSN();
+        String NewGoods_tipGiveIntegral();
+        String NewGoods_tipRankIntegral();
+        String NewGoods_tipIntegral();
+        String NewGoods_editGoods();
+        String NewGoods_addSuccessfully();
         
     }
     	 
@@ -140,7 +153,8 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
     @Override
     public void gotoSuccessPanel() {
     	Success.State newState = new Success.State();
-    	newState.setMessage("编辑商品类型成功");
+    	//newState.setMessage("编辑商品类型成功");
+    	newState.setMessage(Resources.constants.NewGoods_addSuccessfully());
     	
     	GoodsListPanel.State choice1 = new GoodsListPanel.State();
     	newState.addChoice(GoodsListPanel.getInstance().getName(), choice1.getFullHistoryToken());
@@ -150,7 +164,7 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
     @Override
     public Button getShortCutButton() {
 //    	return btnAdd;
-      Button buttonAddClone = new Button("商品列表");
+      Button buttonAddClone = new Button(Resources.constants.GoodsList_title());
       buttonAddClone.addSelectionListener(new SelectionListener<ButtonEvent>() {
           public void componentSelected(ButtonEvent ce) {
           	onButtonListClicked();
@@ -174,7 +188,7 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
     	if(!getCurState().getIsEdit())            
     		return Resources.constants.NewGoods_title();
         else
-        	return "编辑商品信息";
+        	return Resources.constants.NewGoods_editGoods();
     }
     
     public void onNewBrandClicked() {
@@ -356,7 +370,7 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
         contentPanelOther.add(fNum, sfd());
         
         CheckBoxGroup checkGroup = new CheckBoxGroup();
-        checkGroup.setFieldLabel("加入推荐");
+        checkGroup.setFieldLabel(Resources.constants.NewGoods_recommend());
         
         CheckBox box = GoodsForm.getHotSoldField();
         box.setBoxLabel(Resources.constants.Goods_hotsold());
@@ -374,8 +388,8 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
 
 		
         box = GoodsForm.getIsOnSaleField();
-        box.setFieldLabel("上架");
-        box.setBoxLabel("打勾表示允许销售，否则不允许销售。");
+        box.setFieldLabel(Resources.constants.Goods_onSale());
+        box.setBoxLabel(Resources.constants.NewGoods_onSaleOrNot());
         contentPanelOther.add(box, sfd());
 		
 		
@@ -428,7 +442,7 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
         fText = GoodsForm.getSnField();
         fText.setMaxLength(20);
         fText.setFieldLabel(Resources.constants.Goods_SN());
-        fText.setToolTip("如果您不输入商品货号，系统将自动生成一个唯一的货号。");
+        fText.setToolTip(Resources.constants.NewGoods_tipSN());
         
         contentPanelGeneral.add(fText, sfd());
         
@@ -447,7 +461,7 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
         
         mfBrand.add(fListBrand);
         
-        Button button = new Button("添加品牌");
+        Button button = new Button(Resources.constants.NewBrand_title());
         AdapterField af = new AdapterField(button);
         af.setHideLabel(true);
         mfBrand.add(af);
@@ -458,14 +472,14 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
         		}
         	});
         
-        TextField<String> fBrandName = BrandForm.getNameField("品牌名称");
+        TextField<String> fBrandName = BrandForm.getNameField(Resources.constants.NewBrand_name());
         fBrandName.setMessageTarget("tooltip");
         fBrandName.setHideLabel(true);
         fBrandNameAd = new AdapterField(fBrandName);
         fBrandNameAd.setVisible(false);
         mfBrand.add(fBrandNameAd);
         
-        Button bOkNewBrand = new Button("确定");
+        Button bOkNewBrand = new Button(Resources.constants.ok());
         bOkNewBrandAd = new AdapterField(bOkNewBrand);
         bOkNewBrandAd.setHideLabel(true);
         bOkNewBrandAd.setVisible(false);
@@ -514,13 +528,13 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
         
         
         MultiField mfShopPrice = new MultiField();
-        mfShopPrice.setFieldLabel("ShopPrice");
+        mfShopPrice.setFieldLabel(Resources.constants.Goods_shopPrice());
         
         nfShopPrice = GoodsForm.getShopPriceField();
         nfShopPrice.setHideLabel(true);
         mfShopPrice.add(nfShopPrice);
         
-        Button bCalShopPrice = new Button("根据市场价计算");
+        Button bCalShopPrice = new Button(Resources.constants.NewGoods_calculateByMaretPrice());
         AdapterField bCalShopPriceAd = new AdapterField(bCalShopPrice);
         bCalShopPriceAd.setHideLabel(true);
         mfShopPrice.add(bCalShopPriceAd);
@@ -534,22 +548,22 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
         contentPanelGeneral.add(mfShopPrice, lfd());
         
         nfMarketPrice = GoodsForm.getMarketPriceField();
-        nfMarketPrice.setFieldLabel("MarketPrice");
+        nfMarketPrice.setFieldLabel(Resources.constants.Goods_marketPrice());
         contentPanelGeneral.add(nfMarketPrice, sfd()); 
         
         NumberField fNum = GoodsForm.getGiveIntegralField();
-        fNum.setFieldLabel("？赠送消费积分数");
-        fNum.setToolTip("购买该商品时赠送消费积分数,-1表示按商品价格赠送");
+        fNum.setFieldLabel("？"+Resources.constants.Goods_giveIntegral());
+        fNum.setToolTip(Resources.constants.NewGoods_tipGiveIntegral());
         contentPanelGeneral.add(fNum, sfd()); 
         
         fNum = GoodsForm.getRankIntegralField();
-        fNum.setFieldLabel("？赠送等级积分数");
-        fNum.setToolTip("购买该商品时赠送等级积分数,-1表示按商品价格赠送");
+        fNum.setFieldLabel("？"+Resources.constants.Goods_rankIntegral());
+        fNum.setToolTip(Resources.constants.NewGoods_tipRankIntegral());
         contentPanelGeneral.add(fNum, sfd()); 
         
         fNum = GoodsForm.getRankIntegralField();
-        fNum.setFieldLabel("？积分购买额度");
-        fNum.setToolTip("购买该商品时最多可以使用多少钱的积分");
+        fNum.setFieldLabel("？"+Resources.constants.Goods_integral());
+        fNum.setToolTip(Resources.constants.NewGoods_tipIntegral());
         contentPanelGeneral.add(fNum, sfd()); 
         
 //        MultiField mfPromote = new MultiField();
@@ -559,20 +573,20 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
         cbIsPromote.setValueAttribute("true");
         cbIsPromote.addListener(Events.Change, this);
 //      cbIsPromote.setHideLabel(true);
-        cbIsPromote.setFieldLabel("促销");        
+        cbIsPromote.setFieldLabel(Resources.constants.NewGoods_promote());        
 //        mfPromote.add(cbIsPromote);
         contentPanelGeneral.add(cbIsPromote, tfd());
         
         
         nfPromotePrice = GoodsForm.getPromotePriceField();
-        nfPromotePrice.setFieldLabel("促销价格");
+        nfPromotePrice.setFieldLabel(Resources.constants.Goods_promotePrice());
         nfPromotePrice.setEnabled(false);
 //        mfPromote.add(nfPromotePrice);
 //        contentPanelGeneral.add(mfPromote, lfd()); 
         contentPanelGeneral.add(nfPromotePrice, tfd());
         
         MultiField mfPromote2 = new MultiField();
-        mfPromote2.setFieldLabel("促销日期");
+        mfPromote2.setFieldLabel(Resources.constants.Goods_promoteDate());
         
         dfPromoteStartDate = GoodsForm.getPromoteStartDateField();
         dfPromoteStartDate.setPropertyEditor(new DateTimePropertyEditor(GWTFormatUtils.shortDateFormat()));

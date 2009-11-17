@@ -31,6 +31,7 @@ import com.jcommerce.gwt.client.model.IAttribute;
 import com.jcommerce.gwt.client.model.IGoods;
 import com.jcommerce.gwt.client.model.IGoodsAttr;
 import com.jcommerce.gwt.client.model.IGoodsType;
+import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.Condition;
 import com.jcommerce.gwt.client.service.Criteria;
 import com.jcommerce.gwt.client.service.ListService;
@@ -62,7 +63,7 @@ class GoodsAttributePanel  extends TabItem {
         fListTypes.setDisplayField(IGoodsType.CAT_NAME);
         fListTypes.setValueField(IGoodsType.PK_ID);
         
-        fListTypes.setFieldLabel("GoodsType");
+        fListTypes.setFieldLabel(Resources.constants.NewGoods_type());
         fListTypes.setStore(goodsTypeList);
 
         fListTypes.setEmptyText("Select a Type...");   
