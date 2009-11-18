@@ -45,6 +45,7 @@ public interface IShopConstants extends Constants,
   /**
    * @return the title of the application
    */
+  String ManagementCenter();
   String mainTitle();
   
   String categoryGoods();

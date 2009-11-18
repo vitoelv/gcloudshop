@@ -6,8 +6,6 @@ package com.jcommerce.gwt.client.resources;
 public interface ShopConfigConstants {
 	String Shop_setup();
 
-	String Shop_shipping();
-
 	String Shop_name();
 
 	String Shop_title();
