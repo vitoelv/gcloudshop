@@ -49,11 +49,8 @@ public interface IShopConstants extends Constants,
   
   String categoryGoods();
   String categoryOrder();
-  String categoryMember();
   String categorySystem();
-  String categoryStatistics();
-  
-  String mainLinkHomepage();
+
   String mainLinkGuide();
   String mainLinkNotepad();
   String mainLinkRefresh();

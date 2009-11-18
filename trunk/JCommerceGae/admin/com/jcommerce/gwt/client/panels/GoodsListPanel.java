@@ -87,7 +87,6 @@ public class GoodsListPanel extends ContentWidget {
 	    String Goods_hotsold();
 	    String Goods_newAdded();
 	    String Goods_bestSold();
-	    String Goods_sellerNote();
 	    String Goods_onSale();
 	}
 	

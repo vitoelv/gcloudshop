@@ -70,8 +70,6 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
     
     public static interface Constants {
         String NewGoods_title();
-        String NewGoods_create();
-        String NewGoods_cancel();
         String NewGoods_tabGeneral();
         String NewGoods_tabDetail();
         String NewGoods_tabOther();
