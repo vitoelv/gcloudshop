@@ -31,15 +31,12 @@
       <item name="Business" href="coop-business.html"/>
     </menu>
     
-    <menu name="Developer">
-          <item name="Data Viewer (Dev Env Only)" href="../_ah/admin"/>
-    </menu>
-
     <menu name="Under Construction">
       <item name="News" href="news.html"/>
       <item name="Download" href="download.html"/>
       <item name="License" href="license.html"/>
       <item name="Discussion" href="discussion.html" />
+      <item name="Developer" href="developer.html" />      
     </menu>
     
 	<!--
