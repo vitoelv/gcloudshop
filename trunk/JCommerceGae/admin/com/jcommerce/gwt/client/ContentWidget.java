@@ -9,6 +9,7 @@ import com.extjs.gxt.ui.client.widget.layout.TableData;
 import com.extjs.gxt.ui.client.widget.layout.TableLayout;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Widget;
+import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.util.GWTUtils;
 
 public abstract class ContentWidget extends ContentPanel {
@@ -115,7 +116,7 @@ public abstract class ContentWidget extends ContentPanel {
         title.setHeaderVisible(false);
         tl.setCellPadding(10);
 //        title.setSpacing(10);
-        Html html = new Html("<B>管理中心</B> - "+this.getName());
+        Html html = new Html("<B>"+Resources.constants.ManagementCenter()+"</B> - "+this.getName());
         TableData td = new TableData();
         td.setHorizontalAlign(Style.HorizontalAlignment.LEFT);
         td.setWidth("50%");
