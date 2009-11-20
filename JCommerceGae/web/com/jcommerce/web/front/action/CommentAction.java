@@ -3,6 +3,7 @@ package com.jcommerce.web.front.action;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,6 +15,7 @@ import com.jcommerce.gwt.client.model.IComment;
 import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.ShopConfigWrapper;
+import com.jcommerce.web.util.LibMain;
 
 public class CommentAction extends BaseAction {
 	public void debug(String s) {
@@ -44,7 +46,7 @@ public class CommentAction extends BaseAction {
 	        res.put("error", 0);
 	        res.put("message", "");
 	        res.put("content", "");
-	        
+	        System.out.println(act);
 	        if(StringUtils.isEmpty(act)) {
 	            /*
 	             * act 参数为空
@@ -66,6 +68,17 @@ public class CommentAction extends BaseAction {
 	        	}
 	        }
 	        
+	        /*修改，处理翻页*/
+	        else if(act.equals("gotopage")) {
+	        	String id = request.getParameter("id");
+	        	Long type = Long.parseLong(request.getParameter("type"));
+	        	int page = Integer.parseInt(request.getParameter("page"));
+	        	
+	        	Map<String, Object> cmt = LibMain.assignComment(id, type, page, getDefaultManager(), getCachedShopConfig());
+	    		request.setAttribute("comments", cmt.get("comments"));
+	    		request.setAttribute("pager", cmt.get("pager"));
+	        }
+	        /*修改完*/
 	        if(res.getInt("error")==0) {
 	        	res.put("message", getCommentCheckConfig()>0 ? Lang.getInstance().getString("cmtSubmitWait") 
 	        					: Lang.getInstance().getString("cmtSubmitDone"));

@@ -1,15 +1,27 @@
 package com.jcommerce.web.to;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 
+import com.jcommerce.core.model.Comment;
 import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.ModelObject;
+import com.jcommerce.core.service.Condition;
+import com.jcommerce.core.service.Criteria;
+import com.jcommerce.core.service.IDefaultManager;
+import com.jcommerce.core.service.impl.DefaultManagerImpl;
+import com.jcommerce.gwt.client.ModelNames;
+import com.jcommerce.gwt.client.model.IComment;
 import com.jcommerce.gwt.client.util.URLConstants;
+import com.jcommerce.web.front.action.GoodsAction;
 import com.jcommerce.web.util.WebFormatUtils;
 
 public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
 	
 	public static final String GOODS_BRAND = "goodsBrand";
+	private IDefaultManager manager = null;
 	
 	Goods goods;
 	@Override
@@ -56,10 +68,24 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
     public String getShopPriceFormated() {
     	return WebFormatUtils.priceFormat(getGoods().getShopPrice());
     }
-    
+     /*修改,获得用户评价等级*/
     public String getCommentRank() {
-    	return "TODO comment Rank";
+    	String id = getGoods().getPkId();
+    	Condition codition = new Condition(IComment.ID_VALUE,Condition.EQUALS,id);
+        Criteria criteria = new Criteria();
+        criteria.addCondition(codition);
+        List<Comment> comments = (List<Comment>) manager.getList(ModelNames.COMMENT,criteria);
+        Long sum = 0L;
+        int number = comments.size();
+        for(Iterator iterator = comments.iterator();iterator.hasNext();) {
+        	Comment comment = (Comment) iterator.next();
+        	Long rank = comment.getCommentRank();
+        	sum += rank;
+        }
+        String rank = ((int)Math.ceil(sum / number)) + "";
+    	return rank;
     }
+    /*修改完*/
     
     public String getBonusMoney() {
     	return "TODO bonus Money";
@@ -74,6 +100,17 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
     
     public String getPromotePrice() {
     	return WebFormatUtils.priceFormat(getGoods().getPromotePrice());
+    }
+    
+    public String getIsPromote() {
+    	if(!getGoods().getIsPromote())
+    		return null;
+    	else
+    		return "true";
+    }
+    
+    public void setManager(IDefaultManager manager) {
+    	this.manager = manager;
     }
     
 //    public String getGoodsNumber() {
