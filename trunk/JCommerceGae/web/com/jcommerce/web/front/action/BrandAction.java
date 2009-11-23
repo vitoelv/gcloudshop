@@ -109,10 +109,9 @@ public class BrandAction extends BaseAction {
 	}
 	
 	@Override
-	public String execute() throws Exception {
+	public String onExecute() throws Exception {
 		try {
-			debug("in execute");
-			super.execute();	        
+			debug("in execute");        
 	        HttpServletRequest request = getRequest();
 	        includeCart();
 	        includeCategoryTree(request);

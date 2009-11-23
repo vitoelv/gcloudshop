@@ -37,6 +37,11 @@ public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopCo
 		metaList = new ArrayList<ShopConfigMeta>();
 		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_NAME,	"gCouldShop", CFG_TYPE_TEXT, "商店名称", null, null));
 		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_TITLE, "gCouldShop 演示站", CFG_TYPE_TEXT, "商店标题", null, "商店的标题将显示在浏览器的标题栏"));
+		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_QQ, "800120110,10001", CFG_TYPE_TEXT, "客服QQ号码", null , null));
+		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_WW, "911119991", CFG_TYPE_TEXT, "淘宝旺旺", null, null));	
+		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_SKYPE, "", CFG_TYPE_TEXT, "Skype", null, null));	
+		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_YM, "", CFG_TYPE_TEXT, "Yahoo Messenger", null, null));	
+		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_MSN, "", CFG_TYPE_TEXT, "MSN Messenger", null, null));			
 		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_DESC, "gCouldShop 演示站", CFG_TYPE_TEXT, "商店描述", null, null));
 		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_KEYWORDS, "gCouldShop 演示站", CFG_TYPE_TEXT, "商店关键字", null, null));
 		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_NOTICE, 

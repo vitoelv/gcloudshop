@@ -63,7 +63,11 @@
 		<action name="message" method="execute" class="messageAction">
 			<result name="success" type="freemarker">/web/front/message.ftl</result>
 			<result name="error" type="redirectAction">home</result>
-		</action>		
+		</action>	
+		<action name="article" method="execute" class="articleAction">
+			<result name="success" type="freemarker">/web/front/article.ftl</result>
+			<result name="error" type="redirectAction">home</result>
+		</action>	
 	</package>
 </struts>
 

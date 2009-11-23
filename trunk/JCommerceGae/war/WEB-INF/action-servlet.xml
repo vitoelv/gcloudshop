@@ -75,5 +75,12 @@
         class="com.jcommerce.web.front.action.CommentAction"
         parent="baseAction" >
 
-	</bean>					
+	</bean>	
+	<bean name="articleAction" scope="prototype"
+        class="com.jcommerce.web.front.action.ArticleAction"
+        parent="baseAction" >
+
+	</bean>	
+	
+				
 </beans>

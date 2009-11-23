@@ -13,19 +13,23 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.ServletActionContext;
 
 import com.jcommerce.core.model.Brand;
-import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.OrderGoods;
+import com.jcommerce.core.model.OrderInfo;
 import com.jcommerce.core.model.Session;
+import com.jcommerce.core.model.Shipping;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
+import com.jcommerce.core.service.Order;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IGoods;
+import com.jcommerce.gwt.client.model.IOrderInfo;
+import com.jcommerce.gwt.client.model.IShipping;
 import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.gwt.client.util.URLConstants;
 import com.jcommerce.web.front.action.helper.Pager;
 import com.jcommerce.web.to.BrandWrapper;
-import com.jcommerce.web.to.GoodsWrapper;
-import com.jcommerce.web.to.WrapperUtil;
+import com.jcommerce.web.to.OrderInfoWrapper;
+import com.jcommerce.web.to.ShippingWrapper;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 
@@ -48,7 +52,7 @@ public class HomeAction extends BaseAction {
 
     public void includeBrands(HttpServletRequest request) {
     	// brands.ftl
-        List<Brand> brands = (List<Brand>)getDefaultManager().getList(ModelNames.BRAND, null);
+        List<Brand> brands = (List<Brand>)getDefaultManager().getList(ModelNames.BRAND, null,0,11);
         
         Criteria criteria = new Criteria();
         Condition cond = new Condition();
@@ -74,10 +78,10 @@ public class HomeAction extends BaseAction {
 //      request.setAttribute("new_articles", articleManager.getArticleList());
         request.setAttribute("newArticles", new ArrayList());    	
     }
-    public void includePromotionInfo(HttpServletRequest request) {
-    	// promotion_info.ftl
-        request.setAttribute("promotionInfo", new ArrayList());
-    	
+
+    public void includeRecommendPromotion(HttpServletRequest request) {
+    	// recommend_promotion.ftl
+        request.setAttribute("promotionGoods", new ArrayList());
     }
     public void includeOrderQuery(HttpServletRequest request) {
         // order_query.ftl
@@ -86,16 +90,50 @@ public class HomeAction extends BaseAction {
     public void includeInvoiceQuery(HttpServletRequest request) {
         // invoice_query.ftl
     	// TODO invoice query
-    	//      request.setAttribute("invoiceList", new ArrayList());
+//    	Criteria criteria = new Criteria();
+//    	
+//        Condition cond = new Condition();
+//        cond.setField(IOrderInfo.INVOICE_NO);
+//        cond.setOperator(Condition.GREATERTHAN);
+//        cond.setValue("");
+//        
+//        Condition cond2 = new Condition();
+//        cond2.setField(IOrderInfo.SHIPPING_STATUS);
+//        cond2.setOperator(Condition.EQUALS);
+//        cond2.setValue(IOrderInfo.SS_SHIPPED+"");
+//        
+//        Order order = new Order();
+//        order.setField(IOrderInfo.SHIPPING_TIME);
+//        order.setAscend(Order.DESCEND);
+//        
+//    	List<OrderInfo> orderInfos = (List<OrderInfo>)getDefaultManager().getList(ModelNames.ORDERINFO, criteria,0,10);
+//        
+//        criteria.removeAllCondition();
+//        criteria.removeOrder(order);
+//        
+//        cond.setField(IShipping.SHIPPING_ID);
+//        cond.setOperator(Condition.EQUALS);
+//        List<OrderInfoWrapper> OrderInfoList = new ArrayList<OrderInfoWrapper>();
+//        for (OrderInfo orderInfo:orderInfos) {
+//            cond.setValue(orderInfo.getShippingId());
+//            criteria.addCondition(cond);
+//            List shippingList = getDefaultManager().getList(ModelNames.SHIPPING, criteria);
+//            if(shippingList.size()!=0){
+//	            ShippingWrapper sw = new ShippingWrapper((Shipping)shippingList.get(0));
+//	            shippingList.add(sw);
+//            }
+//	        criteria.removeAllCondition();
+//        }
+    	request.setAttribute("invoiceList", new ArrayList());
 	
     }
     public void includeAuction(HttpServletRequest request) {
         // auction.ftl
-    	//        	request.setAttribute("auctionList", new ArrayList());    	
+    	request.setAttribute("auctionList", new ArrayList());    	
     }
     public void includeGroupBuy(HttpServletRequest request) {
         // group_buy.ftl
-//    	request.setAttribute("groupBuyGoods", new ArrayList());    	
+    	request.setAttribute("groupBuyGoods", new ArrayList());    	
     }
     public void includeTop10(HttpServletRequest request) {
     	// top10.ftl
@@ -138,13 +176,12 @@ public class HomeAction extends BaseAction {
     }
 
     @Override
-    public String execute() throws Exception {
+    public String onExecute() throws Exception {
         if (log.isDebugEnabled()) {
             log.debug("entering 'home' method...");
         }
         debug("in execute");
         
-        super.execute();
         
         HttpServletRequest request = getRequest();        
         
@@ -181,10 +218,11 @@ public class HomeAction extends BaseAction {
         includeInvoiceQuery(request);
         includeAuction(request);
         includeGroupBuy(request);
+        includePromotionInfo(request);
+        includeRecommendPromotion(request);
         
 //        //Cart Info.....
 //        cartInfoShow(request);
-        
         return  Action.SUCCESS;
     }
     private Session getSession(HttpServletRequest request) {
