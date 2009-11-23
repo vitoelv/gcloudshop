@@ -1,7 +1,7 @@
 <#if  auctionList??  >
 <div class="box">
  <div class="box_1">
-  <h3><span>${lang.auctionGoods}</span><a href="auction.action"><img src="../images/more.gif"></a></h3>
+  <h3><span>${lang.auctionGoods}</span><a href="auction.action"><img src="images/more.gif"></a></h3>
     <div class="centerPadd">
     <div class="clearfix goodsBox" style="border:none;">
       <#list auctionList as auction>

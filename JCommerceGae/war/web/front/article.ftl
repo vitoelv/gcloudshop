@@ -51,7 +51,7 @@
          <#if  article.content??  >
           ${article.content}
          </#if>
-         <#if  article.openType  ==  2  ||  article.openType??  ==  1  ><br />
+         <#if  article.openType  ==  2  ||  article.openType  ==  1  ><br />
          <div><a href="${article.fileUrl}" target="_blank">${lang.relativeFile}</a></div>
           </#if>
          <div style="padding:8px; margin-top:15px; text-align:left; border-top:1px solid #ccc;">

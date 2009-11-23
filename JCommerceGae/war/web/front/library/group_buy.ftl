@@ -1,7 +1,7 @@
 <#if  groupBuyGoods??  >
 <div class="box">
  <div class="box_1">
-  <h3><span>${lang.groupBuyGoods}</span><a href="group_buy.action"><img src="../images/more.gif"></a></h3>
+  <h3><span>${lang.groupBuyGoods}</span><a href="group_buy.action"><img src="images/more.gif"></a></h3>
     <div class="centerPadd">
     <div class="clearfix goodsBox" style="border:none;">
       <#list groupBuyGoods as goods>
