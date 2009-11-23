@@ -112,6 +112,8 @@ public abstract class ContentWidget extends ContentPanel {
 		super.onRender(parent, pos);
         ContentPanel title = new ContentPanel();
         TableLayout tl = new TableLayout(2);
+        
+        tl.setWidth("100%");
         title.setLayout(tl);
         title.setHeaderVisible(false);
         tl.setCellPadding(10);
