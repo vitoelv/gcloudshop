@@ -12,6 +12,7 @@ public interface ModelNames {
     public static final String ORDERINFO = "com.jcommerce.core.model.OrderInfo";
     public static final String ORDERGOODS = "com.jcommerce.core.model.OrderGoods";
     public static final String USER = "com.jcommerce.core.model.User";
+    public static final String USER_RANK = "com.jcommerce.core.model.UserRank";
     public static final String USERADDRESS = "com.jcommerce.core.model.UserAddress";
     public static final String USERRANK = "com.jcommerce.core.model.UserRank";
     public static final String ATTRIBUTE = "com.jcommerce.core.model.Attribute";
@@ -32,4 +33,5 @@ public interface ModelNames {
     
        
     public static final String CART = "com.jcommerce.core.model.Cart";
+
 }
