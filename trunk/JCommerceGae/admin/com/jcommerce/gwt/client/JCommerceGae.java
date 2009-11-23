@@ -35,6 +35,7 @@ import com.jcommerce.gwt.client.panels.GoodsTypePanel;
 import com.jcommerce.gwt.client.panels.OrderListPanel;
 import com.jcommerce.gwt.client.panels.RegionListPanel;
 import com.jcommerce.gwt.client.panels.RegionPanel;
+import com.jcommerce.gwt.client.panels.UserListPanel;
 
 import com.jcommerce.gwt.client.panels.Success;
 import com.jcommerce.gwt.client.panels.goods.GoodsPanel;
@@ -364,12 +365,19 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
     	final Button orderlist = new Button();
     	final Button Comments = new Button();
     	final Button userList = new Button();
+
     	home.setText(Resources.constants.navHome());
     	setnavi.setText(Resources.constants.navSetting());
     	goodslist.setText(Resources.constants.navGoodsList());
     	orderlist.setText(Resources.constants.navOrderList());
     	Comments.setText(Resources.constants.navComment());
     	userList.setText(Resources.constants.navMemberList());
+    	userList.addClickHandler(new ClickHandler(){
+            public void onClick(ClickEvent event) {
+				PageState  state = UserListPanel.getInstance().getCurState();
+				state.execute();
+			}
+    	});
     	home.addStyleName("Nav_button");
     	setnavi.addStyleName("Nav_button");
     	goodslist.addStyleName("Nav_button");
@@ -492,6 +500,10 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 			else if(pageClassName.equals(ShopConfigPanel.class.getName())){
 				page = ShopConfigPanel.getInstance();
 			}
+			else if(pageClassName.equals(UserListPanel.class.getName())){
+				page = UserListPanel.getInstance();
+			}
+
 			if (page != null) {
 				pageRegistry.put(pageClassName, page);
 			} else {
