@@ -38,9 +38,8 @@ public class GoodsAction extends BaseAction {
 	}
 	
 	@Override
-	public String execute() throws Exception {
+	public String onExecute() throws Exception {
 		try {
-		super.execute();
         
         HttpServletRequest request = getRequest();        
 
