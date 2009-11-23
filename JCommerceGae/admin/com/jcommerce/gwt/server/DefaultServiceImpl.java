@@ -19,9 +19,11 @@ import com.extjs.gxt.ui.client.data.PagingLoadConfig;
 import com.extjs.gxt.ui.client.data.PagingLoadResult;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jcommerce.core.model.ModelObject;
+import com.jcommerce.core.model.Session;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.util.MyPropertyUtil;
 import com.jcommerce.gwt.client.IDefaultService;
+import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.resources.IShopConstants;
 import com.jcommerce.gwt.client.service.Condition;
@@ -58,6 +60,11 @@ public class DefaultServiceImpl extends RemoteServiceServlet implements IDefault
             e.printStackTrace();
         }
         
+        //clear session log
+        IDefaultManager defaultManager = (IDefaultManager)springContext.getBean("DefaultManager");
+        for (Object ele : defaultManager.getList(ModelNames.SESSION, null)) {
+			defaultManager.txdelete(ModelNames.SESSION, ((Session)ele).getPkId());
+		}
         
 //      regionManager = (RegionManager)ctx.getBean("RegionManager");
 //      goodsTypeManager = (GoodsTypeManager)ctx.getBean("GoodsTypeManager");

@@ -60,6 +60,10 @@
 		<listener-class>example.InitListener</listener-class>
 	</listener>
 	
+	<listener>
+		<listener-class>com.jcommerce.web.util.SessionListener</listener-class>
+	</listener>
+	
 	<servlet>
 		<servlet-name>freemarker</servlet-name>
 		<servlet-class>freemarker.ext.servlet.FreemarkerServlet</servlet-class>

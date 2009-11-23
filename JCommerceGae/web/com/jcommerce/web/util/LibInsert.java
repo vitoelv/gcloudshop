@@ -74,4 +74,19 @@ public class LibInsert {
 		
 		
 	}
+	/**
+	 * 获得查询时间
+	 *
+	 * @access  public
+	 * @return  string
+	 */
+	public void insertQueryTime(IDefaultManager manager,Long queryStartTime,HttpServletRequest request){
+		Long queryEndTime = System.currentTimeMillis();
+		Lang lang = Lang.getInstance();
+		String queryInfo = new PrintfFormat(lang.getString("queryInfo")).sprintf((queryEndTime-queryStartTime)/1000.0);
+		
+		int onlineCount = manager.getCount("com.jcommerce.core.model.Session", null);
+		String onlineInfo = new PrintfFormat(lang.getString("onlineInfo")).sprintf(onlineCount+"");
+		request.setAttribute("queryInfo",queryInfo+onlineInfo);
+	}
 }

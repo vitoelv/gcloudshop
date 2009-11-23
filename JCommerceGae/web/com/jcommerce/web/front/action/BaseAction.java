@@ -1,5 +1,6 @@
 package com.jcommerce.web.front.action;
 
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -47,7 +48,7 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 
-public class BaseAction extends ActionSupport implements IPageConstants, IWebConstants, IConstants{
+public abstract class BaseAction extends ActionSupport implements IPageConstants, IWebConstants, IConstants{
 //	private static Map<String, String> constants = new HashMap<String, String>();
 	
 	private IShippingMetaManager shippingMetaManager;
@@ -55,7 +56,8 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 	private IWebManager webManager;
 	private IDefaultManager defaultManager;
 	private IShopConfigManager shopConfigManager;
-	
+	private Long queryStartTime = 0L;
+
 	public void debug(String s) {
 		System.out.println(" in [BaseAction]: "+s );
 	}
@@ -107,17 +109,38 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 	
 	public void includePageFooter(HttpServletRequest request) {
         // page_footer.ftl
-        request.setAttribute("copyright", "Copyright");
+		ShopConfigWrapper shopConfig = getCachedShopConfig();
+        request.setAttribute("copyright", "Copyright © 2005-2009 GCSHOP 版权所有，并保留所有权利。");
         request.setAttribute("shopAddress", "Shop Address");
-        request.setAttribute("shopPostcode", "Postcode:1000000");
-        request.setAttribute("copryright", "Copyright"); //??
+        request.setAttribute("shopPostcode", "Postcode:100000");
+//      request.setAttribute("copryright", "Copyright"); //??
         request.setAttribute("servicePhone", "010-11110000"); 
         request.setAttribute("serviceEmail", "test@gmail.com");
-        request.setAttribute("qq", new String[0]);
-        request.setAttribute("ww", new String[0]);
-        request.setAttribute("ym", new String[0]);
-        request.setAttribute("msn", new String[0]);
-        request.setAttribute("skype", new String[0]);
+        if(!shopConfig.getString(CFG_KEY_SHOP_QQ).equals("")){
+        	request.setAttribute("qq", shopConfig.getString(CFG_KEY_SHOP_QQ).split(","));
+        }else{
+        	request.setAttribute("qq", new String[0]);
+        }
+        if(!shopConfig.getString(CFG_KEY_SHOP_WW).equals("")){
+        	request.setAttribute("ww", shopConfig.getString(CFG_KEY_SHOP_WW).split(","));
+        }else{
+        	request.setAttribute("ww", new String[0]);
+        }
+        if(!shopConfig.getString(CFG_KEY_SHOP_YM).equals("")){
+        	request.setAttribute("ym", shopConfig.getString(CFG_KEY_SHOP_YM).split(","));
+        }else{
+        	request.setAttribute("ym", new String[0]);
+        }
+        if(!shopConfig.getString(CFG_KEY_SHOP_MSN).equals("")){
+        	request.setAttribute("msn", shopConfig.getString(CFG_KEY_SHOP_MSN).split(","));
+        }else{
+        	request.setAttribute("msn", new String[0]);
+        }
+        if(!shopConfig.getString(CFG_KEY_SHOP_SKYPE).equals("")){
+        	request.setAttribute("skype", shopConfig.getString(CFG_KEY_SHOP_SKYPE).split(","));
+        }else{
+        	request.setAttribute("skype", new String[0]);
+        }
         request.setAttribute("ecsVersion", "1.0");
         request.setAttribute("licensed", "licensed");
         request.setAttribute("feedUrl", "feedUrl");
@@ -131,6 +154,11 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
         
 		return lang;
 	}
+    public void includePromotionInfo(HttpServletRequest request) {
+    	// promotion_info.ftl
+    	
+        request.setAttribute("promotionInfo", new ArrayList());
+    }
 
 	public void includeUrHere(HttpServletRequest request) {
 		// ur_here.ftl
@@ -189,7 +217,7 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
         cond1.setOperator(Condition.EQUALS);
         cond1.setValue("true");
         c1.addCondition(cond1);
-        List<Goods> list = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1);
+        List<Goods> list = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1,0,5);
         return filterGoods(list);
          
     }
@@ -201,7 +229,7 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
         cond1.setValue("true");
         c1.addCondition(cond1);
         
-        List<Goods> list = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1);
+        List<Goods> list = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1,0,5);
         return filterGoods(list);
 
     }
@@ -212,7 +240,7 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
         cond1.setOperator(Condition.EQUALS);
         cond1.setValue("true");
         c1.addCondition(cond1);
-        List<Goods> list = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1);
+        List<Goods> list = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1,0,5);
         return filterGoods(list);
 
     }
@@ -235,39 +263,39 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 	public void includeHelp(HttpServletRequest request) {
 		List<HelpCat> helps = new ArrayList<HelpCat>();
 		List<HelpItem> item = new ArrayList<HelpItem>();
-		item.add(new HelpItem("article.php?id=7", "订购方式", "订购方式"));
-		item.add(new HelpItem("article.php?id=7", "购物流程", "购物流程"));
-		item.add(new HelpItem("article.php?id=7", "售后流程", "售后流程"));
+		item.add(new HelpItem("article.action?id=1", "订购方式", "订购方式"));
+		item.add(new HelpItem("article.action?id=1", "购物流程", "购物流程"));
+		item.add(new HelpItem("article.action?id=1", "售后流程", "售后流程"));
 		helps.add(new HelpCat("新手上路", item));
 		
 		item = new ArrayList<HelpItem>();
-		item.add(new HelpItem("article.php?id=7", "如何分辨水货手机", "如何分辨水货手机"));
-		item.add(new HelpItem("article.php?id=7", "如何享受全国联保", "如何享受全国联保"));
-		item.add(new HelpItem("article.php?id=7", "如何分辨原装电池", "如何分辨原装电池"));
+		item.add(new HelpItem("article.action?id=1", "如何分辨水货手机", "如何分辨水货手机"));
+		item.add(new HelpItem("article.action?id=1", "如何享受全国联保", "如何享受全国联保"));
+		item.add(new HelpItem("article.action?id=1", "如何分辨原装电池", "如何分辨原装电池"));
 		helps.add(new HelpCat("手机常识", item));
 		
 		item = new ArrayList<HelpItem>();
-		item.add(new HelpItem("article.php?id=7", "支付方式说明", "支付方式说明"));
-		item.add(new HelpItem("article.php?id=7", "配送支付智能查询", "配送支付智能查询"));
-		item.add(new HelpItem("article.php?id=7", "货到付款区域", "货到付款区域"));
+		item.add(new HelpItem("article.action?id=1", "支付方式说明", "支付方式说明"));
+		item.add(new HelpItem("article.action?id=1", "配送支付智能查询", "配送支付智能查询"));
+		item.add(new HelpItem("article.action?id=1", "货到付款区域", "货到付款区域"));
 		helps.add(new HelpCat("配送与支付", item));
 		
 		item = new ArrayList<HelpItem>();
-		item.add(new HelpItem("article.php?id=7", "产品质量保证", "产品质量保证"));
-		item.add(new HelpItem("article.php?id=7", "售后服务保证", "售后服务保证"));
-		item.add(new HelpItem("article.php?id=7", "退换货原则", "退换货原则"));
+		item.add(new HelpItem("article.action?id=1", "产品质量保证", "产品质量保证"));
+		item.add(new HelpItem("article.action?id=1", "售后服务保证", "售后服务保证"));
+		item.add(new HelpItem("article.action?id=1", "退换货原则", "退换货原则"));
 		helps.add(new HelpCat("服务保证", item));
 		
 		item = new ArrayList<HelpItem>();
-		item.add(new HelpItem("article.php?id=7", "投诉与建议", "投诉与建议"));
-		item.add(new HelpItem("article.php?id=7", "选机咨询", "选机咨询"));
-		item.add(new HelpItem("article.php?id=7", "网站故障报告", "网站故障报告"));
+		item.add(new HelpItem("article.action?id=1", "投诉与建议", "投诉与建议"));
+		item.add(new HelpItem("article.action?id=1", "选机咨询", "选机咨询"));
+		item.add(new HelpItem("article.action?id=1", "网站故障报告", "网站故障报告"));
 		helps.add(new HelpCat("联系我们", item));
 		
 		item = new ArrayList<HelpItem>();
-		item.add(new HelpItem("article.php?id=7", "我的订单", "我的订单"));
-		item.add(new HelpItem("article.php?id=7", "我的收藏", "我的收藏"));
-		item.add(new HelpItem("article.php?id=7", "资金管理", "资金管理"));
+		item.add(new HelpItem("article.action?id=1", "我的订单", "我的订单"));
+		item.add(new HelpItem("article.action?id=1", "我的收藏", "我的收藏"));
+		item.add(new HelpItem("article.action?id=1", "资金管理", "资金管理"));
 		helps.add(new HelpCat("会员中心", item));
 		
 		request.setAttribute("helps", helps);
@@ -278,14 +306,16 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
         
 		includeMemberInfo();
 		// Navigator ............
+		Lang lang = Lang.getInstance();
 
 		Navigator nav = new Navigator();
-        nav.addTop(new ComponentUrl("cart.action", getText("browse_cart"), 1));
-        nav.addTop(new ComponentUrl("user.action", getText("user_center"), 1));
-        nav.addTop(new ComponentUrl("pick_out.action", getText("pick_out_center"), 1));
-        nav.addTop(new ComponentUrl("group_by.action", getText("buy_by_group"), 1));
-        nav.addTop(new ComponentUrl("snatch.action", getText("snatch"), 1));
-        nav.addTop(new ComponentUrl("tag_cloud.action", getText("tag_cloud"), 1));
+        nav.addTop(new ComponentUrl("cart.action", getText(lang.getString("viewCart")), 1));
+        nav.addTop(new ComponentUrl("user.action", getText(lang.getString("userCenter")), 1));
+        nav.addTop(new ComponentUrl("pick_out.action", getText(lang.getString("pickOut")), 1));
+        nav.addTop(new ComponentUrl("group_by.action", getText(lang.getString("groupBuy")), 1));
+        nav.addTop(new ComponentUrl("snatch.action", getText(lang.getString("snatch")), 1));
+        nav.addTop(new ComponentUrl("tag_cloud.action", getText(lang.getString("tagCloud")), 1));
+        
         
         nav.addBottom(new ComponentUrl("article.action?id=1", getText("免责条款"), 1));
         nav.addBottom(new ComponentUrl("article.action?id=2", getText("隐私保护"), 1));
@@ -357,12 +387,12 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
     public HttpSession getSession() {
     	return getRequest().getSession();
     }
-    
-	public String execute() throws Exception {
-		
-		HttpServletRequest request = getRequest();
-//        HttpServletResponse response = (HttpServletResponse)ctx.get(ServletActionContext.HTTP_RESPONSE); 
-        
+    public void beforeExecute(){
+    	queryStartTime = System.currentTimeMillis();
+    	
+    	HttpServletRequest request = getRequest();
+//      HttpServletResponse response = (HttpServletResponse)ctx.get(ServletActionContext.HTTP_RESPONSE); 
+      
 		String queryString = request.getQueryString();
 		String requestURL = request.getRequestURI();
 		
@@ -377,24 +407,34 @@ public class BaseAction extends ActionSupport implements IPageConstants, IWebCon
 		Object obj = getSession().getAttribute("WW_TRANS_I18N_LOCALE");
 		debug("locale: "+obj);
 		
-        setPageMeta(request);
-        includeHelp(request);
-        includeUrHere(request);
-        includePageFooter(request);
-        getLangMap(request);
-        includePageHeader(request);
-        setSessionUser(request);
-        
-        // just empty
-        ShopConfigWrapper shopConfig = getCachedShopConfig();
-        request.setAttribute("cfg", shopConfig);
-        
-//        setShowMarketplace(request);
-        assignSmartyGlobal();
-        
-		return null;
+      setPageMeta(request);
+      includeHelp(request);
+      includeUrHere(request);
+      includePageFooter(request);
+      getLangMap(request);
+      includePageHeader(request);
+      setSessionUser(request);
+      
+      // just empty
+      ShopConfigWrapper shopConfig = getCachedShopConfig();
+      request.setAttribute("cfg", shopConfig);
+      // TODO
+      request.setAttribute("shopName", shopConfig.get(CFG_KEY_SHOP_NAME));
+      
+//      setShowMarketplace(request);
+      	assignSmartyGlobal();
+    }
+    
+	public String execute() throws Exception {
+		beforeExecute();
+        String returnValue = onExecute();
+        afterExecute();
+		return returnValue;
 	}
-	
+	public abstract String onExecute() throws Exception; 
+	public void afterExecute(){
+		new LibInsert().insertQueryTime(getDefaultManager(),queryStartTime,getRequest());
+	}
 
 	public void assignSmartyGlobal() {
 		HttpServletRequest request = getRequest();
