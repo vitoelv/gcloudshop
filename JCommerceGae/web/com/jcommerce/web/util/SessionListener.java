@@ -20,7 +20,7 @@ public class SessionListener implements HttpSessionListener {
 	private void init(){
 		getDefaultManager().txdelete(ModelNames.SESSION, null);
 	}
-	@Override
+	
 	public void sessionCreated(HttpSessionEvent se) {
 		
 		Session session = (Session)getDefaultManager().get(ModelNames.SESSION, se.getSession().getId());
@@ -47,7 +47,6 @@ public class SessionListener implements HttpSessionListener {
 
 	}
 
-	@Override
 	public void sessionDestroyed(HttpSessionEvent se) {
 		getDefaultManager().txdelete(ModelNames.SESSION, se.getSession().getId());
 
