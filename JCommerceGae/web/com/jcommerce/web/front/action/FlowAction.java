@@ -558,9 +558,8 @@ public class FlowAction extends BaseAction {
     }
     
 	@Override
-	public String execute() throws Exception {
+	public String onExecute() throws Exception {
 		try {
-			super.execute();
 			
 			ActionContext ctx = ActionContext.getContext();        
 	        HttpServletRequest request = (HttpServletRequest)ctx.get(ServletActionContext.HTTP_REQUEST);      

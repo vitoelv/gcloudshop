@@ -63,10 +63,9 @@ public class UserAction extends BaseAction {
 	private InputStream isRegistered;
 	
 	@Override
-	public String execute() throws Exception {
+	public String onExecute() throws Exception {
 		try {
 			debug("in execute");
-			super.execute();
 			HttpServletRequest request = getRequest();
 
 			String userId = (String)getSession().getAttribute(KEY_USER_ID);
@@ -122,7 +121,6 @@ public class UserAction extends BaseAction {
 			// see http://struts.apache.org/2.x/docs/freemarker.html
 			// solution: see this.toString()
 //			request.setAttribute("action", action);
-			
 			
 			
 			if("default".equals(action)) {
@@ -313,8 +311,6 @@ public class UserAction extends BaseAction {
 					return null;
 				}
 				
-				
-				
 			}
 			else if("order_detail".equals(action) || "orderDetail".equals(action)) {
 				
@@ -495,6 +491,7 @@ public class UserAction extends BaseAction {
 		else {
 			User user = getUser(username);
 			if(user!=null) {
+				getSession().setAttribute("userInfo", user);//modifyed
 				getSession().setAttribute(KEY_USER_ID, user.getPkId());
 				getSession().setAttribute(KEY_USER_NAME, username);
 				getSession().setAttribute(KEY_USER_EMAIL, user.getEmail());
@@ -521,7 +518,10 @@ public class UserAction extends BaseAction {
 		}
 		
 		if(error==null) {
-			getSession().setAttribute(KEY_USER_ID, username);
+			user = getUser(username);//modified
+			getSession().setAttribute(KEY_USER_ID, user.getPkId());
+			getSession().setAttribute(KEY_USER_NAME, user.getUserName());
+			getSession().setAttribute(KEY_USER_EMAIL, user.getEmail());
 			// TODO update user's "other" properties 
 			
 		}

@@ -32,10 +32,9 @@ public class CategoryAction extends BaseAction {
 		return URLConstants.ACTION_CATEGORY;
 	}
 	@Override
-	public String execute() throws Exception {
+	public String onExecute() throws Exception {
 		try {
 			debug("in execute");
-			super.execute();
 			HttpServletRequest request = getRequest();
 			includeCart();
 			includeCategoryTree(request);

@@ -6,10 +6,9 @@ public class MessageAction extends BaseAction {
 	
 	
 	@Override
-	public String execute() throws Exception {
+	public String onExecute() throws Exception {
 		try {
 			debug("in execute");
-			super.execute();
 			HttpServletRequest request = getRequest();
 			
 			super.includeHelp(request);

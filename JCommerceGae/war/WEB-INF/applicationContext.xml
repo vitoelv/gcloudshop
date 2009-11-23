@@ -104,5 +104,8 @@
 		<ref local="DAO"/>
 	 </property>
    </bean>   
+   
+   <bean id="spring" class="com.jcommerce.web.util.SpringUtil">
+   </bean>
     <!-- Add Managers here -->
 </beans>
