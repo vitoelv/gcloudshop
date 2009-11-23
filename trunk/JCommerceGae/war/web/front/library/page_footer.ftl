@@ -6,7 +6,7 @@
    <#if  navigatorList.bottom??  >
    <#list navigatorList.bottom as nav>
         <a href="${nav.url}" <#if  nav.opennew  ==  1  > target="_blank" </#if>>${nav.name}</a> 
-        <#if  nav_has_next??  >
+        <#if  nav_has_next  >
            -   
         </#if>
       </#list>
@@ -43,12 +43,12 @@
       </#list>
       <#list ym as im>
       <#if  im??  >
-      <a href="http://edit.yahoo.com/config/send_webmesg?.target=${im}n&.src=pg" target="_blank"><img src="../images/yahoo.gif" width="18" height="17" border="0" alt="Yahoo Messenger" /> ${im}</a>
+      <a href="http://edit.yahoo.com/config/send_webmesg?.target=${im}n&.src=pg" target="_blank"><img src="images/yahoo.gif" width="18" height="17" border="0" alt="Yahoo Messenger" /> ${im}</a>
       </#if>
       </#list>
       <#list msn as im>
       <#if  im??  >
-      <img src="../images/msn.gif" width="18" height="17" border="0" alt="MSN" /> <a href="msnim:chat?contact=${im}">${im}</a>
+      <img src="images/msn.gif" width="18" height="17" border="0" alt="MSN" /> <a href="msnim:chat?contact=${im}">${im}</a>
       </#if>
       </#list>
       <#list skype as im>
@@ -59,12 +59,12 @@
   <#if  icpNumber??  >
   ${lang.icpNumber}:<a href="http://www.miibeian.gov.cn/" target="_blank">${icpNumber}</a><br />
   </#if>
-  TODO query info<br />
-  <a href="http://www.ecshop.com" target="_blank" style=" font-family:Verdana; font-size:11px;">Powered by <strong><span style="color: #3366FF">gCloudShop</span> <span style="color: #FF9966">${ecsVersion}</span></strong></a> ${licensed}<br />
+  ${queryInfo}<br />
+  <a href="http://gcloudshop.appspot.com" target="_blank" style=" font-family:Verdana; font-size:11px;">Powered by <strong><span style="color: #3366FF">gCloudShop</span> <span style="color: #FF9966">${ecsVersion}</span></strong></a> ${licensed}<br />
     <#if  statsCode??  >
     <div align="left">${statsCode}</div>
     </#if>
-		<div align="left"  id="rss"><a href="${feedUrl}"><img src="../images/xml_rss2.gif" alt="rss" /></a></div>
+		<div align="left"  id="rss"><a href="${feedUrl}"><img src="images/xml_rss2.gif" alt="rss" /></a></div>
  </div>
 </div>
 

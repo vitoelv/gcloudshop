@@ -15,7 +15,7 @@ var process_request = "${lang.processRequest}";
    <li id="topNav" class="clearfix">
     <#list navigatorList.top as nav>
             <a href="${nav.url}" <#if  nav.opennew  ==  1  > target="_blank" </#if>>${nav.name}</a>
-            <#if  nav_has_next??  >
+            <#if  nav_has_next  >
              |
             </#if>
     </#list>
