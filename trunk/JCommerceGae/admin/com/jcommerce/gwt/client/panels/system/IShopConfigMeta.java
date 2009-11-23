@@ -27,6 +27,11 @@ public interface IShopConfigMeta {
 	public static final String CFG_KEY_SHOP_KEYWORDS = "shop_keywords";
 	public static final String CFG_KEY_SHOP_NOTICE = "shop_notice";
 	public static final String CFG_KEY_SHOP_COUNTRY = "shop_country";
+	public static final String CFG_KEY_SHOP_QQ = "qq";
+	public static final String CFG_KEY_SHOP_WW = "ww";
+	public static final String CFG_KEY_SHOP_YM = "ym";
+	public static final String CFG_KEY_SHOP_MSN = "msn";
+	public static final String CFG_KEY_SHOP_SKYPE = "skype";
 	
 	// goods
 	public static final String CFG_KEY_SHOW_MARKETPRICE = "showMarketprice";
