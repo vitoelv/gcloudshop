@@ -177,7 +177,7 @@ function reg(str){
       </#if>
       <li class="clearfix">
        <dd>
-       <strong>${lang.amount}：</strong><font id="ECS_GOODS_AMOUNT" class="shop"></font>
+       <strong>${lang.amount}：</strong><font id="ECS_GOODS_AMOUNT" class="shop">${goods.shopPrice}</font>
        </dd>
        <dd class="ddR">
        <#if  (goods.giveIntegral  >  0)  >
@@ -204,15 +204,14 @@ function reg(str){
       
       <#list specification?keys as specKey>
       <#assign spec = specification.get(specKey)>
-      <li class="padd loop">
+      <li class="padd loop" >
       <strong>${spec.name}:</strong><br />
-        
                     <#if  spec.attrType  ==  1  >
-                      <#if  cfg.goodsattrStyle  ==  1  >
+                      <#if  cfg.goodsattrStyle  ==  1  >    
                         <#list spec.values as value>
                         <label for="spec_value_${value.id}">
-                        <input type="radio" name="spec_${specKey}" value="${value.id}" id="spec_value_${value.id}" <#if  key  ==  0  >checked</#if> onclick="changePrice()" />
-                        ${value.label} [<#if  value.price  >  0  >${lang.plus}<#elseif  value.price  <  0  >${lang.minus}</#if> ${value.formatPrice|abs}] </label><br />
+                        <input type="radio" name="spec_${specKey}" value="${value.id}" id="spec_value_${value.id}"  <#if  key  ==  0  >checked</#if> onclick="changePrice()" />
+                        ${value.label} [<#if  value.price  gt  0  >${lang.plus}<#elseif  value.price  lt  0  >${lang.minus}</#if> ${value.formatPrice}] </label><br />
                         </#list>
                         <input type="hidden" name="spec_list" value="${key}" />
                         <#else>
@@ -227,9 +226,9 @@ function reg(str){
                       <#list spec.values as value>
                       <label for="spec_value_${value.id}">
                       <input type="checkbox" name="spec_${specKey}" value="${value.id}" id="spec_value_${value.id}" onclick="changePrice()" />
-                      ${value.label} [<#if  value.price  >  0  >${lang.plus}<#elseif  value.price  <  0  >${lang.minus}</#if> ${value.formatPrice|abs}] </label><br />
+                      ${value.label} [<#if  value.price  gt  0  >${lang.plus}<#elseif  value.price  lt  0  >${lang.minus}</#if> ${value.formatPrice}] </label><br />
                       </#list>
-                      <input type="hidden" name="spec_list" value="${key}" />
+					  <input type="hidden" name="spec_list" value="${key}" />
                     </#if>
       </li>
       </#list>
@@ -334,7 +333,7 @@ function reg(str){
 <script type="text/javascript">
 var goods_id = ${goodsId};
 var goodsattr_style = ${cfg.goodsattrStyle};
-var gmt_end_time = ${promoteEndTime};
+var gmt_end_time = ${promoteEndTime} / 1000;
 <#list lang.goodsJs?keys as key> <#assign item = lang.goodsJs.get(key)>
 var ${key} = "${item}";
 </#list>
@@ -342,6 +341,7 @@ var goodsId = ${goodsId};
 var now_time = ${nowTime};
 
 onload = function(){
+
   changePrice();
   fixpng();
   try {onloadLeftTime();}
@@ -372,8 +372,10 @@ function changePriceResponse(res)
   {
     document.forms['ECS_FORMBUY'].elements['number'].value = res.qty;
 
-    if (document.getElementById('ECS_GOODS_AMOUNT'))
+    if (document.getElementById('ECS_GOODS_AMOUNT')) {
+
       document.getElementById('ECS_GOODS_AMOUNT').innerHTML = res.result;
+    }
   }
 }
 

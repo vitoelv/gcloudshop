@@ -82,7 +82,9 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
         	Long rank = comment.getCommentRank();
         	sum += rank;
         }
-        String rank = ((int)Math.ceil(sum / number)) + "";
+        String rank = "0";
+        if(number > 0)
+        	rank = ((int)Math.ceil(sum / number)) + "";
     	return rank;
     }
     /*修改完*/

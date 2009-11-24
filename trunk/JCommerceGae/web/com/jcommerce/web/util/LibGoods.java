@@ -141,11 +141,31 @@ public class LibGoods {
 				prop.put("value", ga.getAttrValue());
 				props.add(prop);
 			}
+			/*修改,获得商品规格*/
 			else {
 				// TODO support non-simple properties
-				
+				String name = a.getAttrName();
+				Specification spe = result.getSpe().get(name);
+				if(spe == null) {
+					spe = new Specification();
+					result.getSpe().put(name, spe);
+				}
+				spe.setName(name);
+				spe.setAttrType(a.getAttrType());
+				List<Value> values = (List<Value>) spe.getValues();
+				if(values == null) {
+					values = new ArrayList<Value>();
+				}
+				Value v = new Value();
+				v.setId(ga.getLongId()+"");
+				v.setLabel(ga.getAttrValue());
+				if(ga.getAttrPrice() != null)
+					v.setPrice(Math.abs(Double.parseDouble(ga.getAttrPrice())));
+				values.add(v);
+				spe.setValues(values);
 				
 			}
+			/*修改*/
 			
 			// TODO property link 
 			
@@ -159,7 +179,7 @@ public class LibGoods {
 	
 	public static class GoodsPropertiesResult {
 		private Map<String, List<Map<String, String>>> pro = new HashMap<String, List<Map<String, String>>>();
-		private Map<String, Map<String, Object>> spe = new HashMap<String, Map<String, Object>>();
+		private Map<String, Specification> spe = new HashMap<String, Specification>();
 
 		public Map<String, List<Map<String, String>>> getPro() {
 			return pro;
@@ -169,14 +189,68 @@ public class LibGoods {
 			this.pro = pro;
 		}
 
-		public Map<String, Map<String, Object>> getSpe() {
+		public Map<String, Specification> getSpe() {
 			return spe;
 		}
 
-		public void setSpe(Map<String, Map<String, Object>> spe) {
+		public void setSpe(Map<String, Specification> spe) {
 			this.spe = spe;
 		}
 		
+	}
+	public static class Specification {
+		private String name;
+		private long attrType;
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public long getAttrType() {
+			return attrType;
+		}
+		public void setAttrType(long attrType) {
+			this.attrType = attrType;
+		}
+		public List<Value> getValues() {
+			return values;
+		}
+		public void setValues(List<Value> values) {
+			this.values = values;
+		}
+		private List<Value> values;
+	}
+	
+	public static class Value {
+		private String id;
+		private String label;
+		private double price;
+		private String formatPrice;
+		public void setId(String id) {
+			this.id = id;
+		}
+		public String getId() {
+			return id;
+		}
+		public void setLabel(String label) {
+			this.label = label;
+		}
+		public String getLabel() {
+			return label;
+		}
+		public double getPrice() {
+			return price;
+		}
+		public void setPrice(double price) {
+			this.price = price;
+		}
+		public String getFormatPrice() {
+			return WebFormatUtils.priceFormat(getPrice());
+		}
+		public void setFormatPrice(String formatPrice) {
+			this.formatPrice = formatPrice;
+		}
 	}
 	
 	
