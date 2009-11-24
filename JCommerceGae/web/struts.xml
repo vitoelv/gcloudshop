@@ -20,6 +20,10 @@
 		<action name="goods" method="execute" class="goodsAction">
 			<result name="success" type="freemarker">/web/front/goods.ftl</result>
 			<result name="error" type="redirectAction">home</result>
+			<result name="price" type="stream">
+     			<param name="contentType">application/json</param>
+     			<param name="inputName">jsonRes</param>
+   			</result>
 		</action>
 		<action name="flow" method="execute" class="flowAction">
 			<result name="success" type="freemarker">/web/front/flow.ftl</result>

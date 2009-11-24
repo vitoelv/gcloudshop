@@ -1,5 +1,7 @@
 package com.jcommerce.web.front.action;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,9 +11,12 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.JSONObject;
+
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.Comment;
 import com.jcommerce.core.model.Goods;
+import com.jcommerce.core.model.GoodsAttr;
 import com.jcommerce.core.model.GoodsGallery;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
@@ -32,6 +37,7 @@ public class GoodsAction extends BaseAction {
 	public static final String KEY_GOODS_ID = "goodsId";
 	public static final String KEY_PROMOTE_END_TIME = "promoteEndTime";
 	public static final String KEY_NOW_TIME = "nowTime";
+	private InputStream jsonRes;
 	
 	public void debug(String s) {
 		System.out.println(" in [GoodsAction]: "+s );
@@ -72,13 +78,6 @@ public class GoodsAction extends BaseAction {
 	        
 	        
 	    GoodsWrapper gw = new GoodsWrapper(goods);
-	    /*修改,修改商品点击次数*/
-	    if(act == null) {
-		    gw.setManager(manager);
-		    goods.setClickCount(goods.getClickCount() + 1);
-		    manager.txattach(goods);
-	    }
-	    /*修改完*/
 	        
 	    request.setAttribute("goods", gw);
 	        
@@ -100,6 +99,7 @@ public class GoodsAction extends BaseAction {
 	    GoodsPropertiesResult result = LibGoods.getGoodsProperties(goodsId, manager); // 获得商品的规格和属性
 	    request.setAttribute("properties", result.getPro());
 	    request.setAttribute("specification", result.getSpe());
+	    request.setAttribute("key", 0);
 	    includeComment(IComment.TYPE_GOODS, goodsId);
 	       
 	    request.setAttribute(KEY_GOODS_ID, gw.getGoodsId());
@@ -112,6 +112,20 @@ public class GoodsAction extends BaseAction {
 	    request.setAttribute("affiliate", affiliate);
 	      
 	    request.setAttribute("pointsName", getCachedShopConfig().get("pointsName"));
+	    
+	    /*修改,修改商品点击次数*/
+	    if(act == null) {
+		    gw.setManager(manager);
+		    goods.setClickCount(goods.getClickCount() + 1);
+		    manager.txattach(goods);
+	    }
+	    /*修改完*/
+	        
+	    /*修改，改变属性、数量时重新计算商品价格*/
+	    else if(act.equals("price")) {
+	    	return getTotalPrice(request, goods);
+	    }
+	    /*修改完*/
 
         return SUCCESS;
         
@@ -119,6 +133,41 @@ public class GoodsAction extends BaseAction {
 			ex.printStackTrace();
 			throw new RuntimeException(ex);
 		}
+	}
+	
+	//获得商品总价格
+	public String getTotalPrice(HttpServletRequest request, Goods goods ) {
+		
+		IDefaultManager manager = getDefaultManager();
+		String attr = request.getParameter("attr");
+    	int number = Integer.parseInt(request.getParameter("number"));
+    	double shopPrice = goods.getShopPrice() * number;
+    	
+    	double attrPrice = 0;
+    	if(!attr.equals("")) {
+    		String[] ids = attr.split(",");
+    		for(int i = 0;i < ids.length;i++) {
+	    		GoodsAttr goodsAttr = (GoodsAttr)manager.get(ModelNames.GOODSATTR,Long.parseLong(ids[i]));
+			    attrPrice += goodsAttr.getAttrPrice() == null ? 0 : Double.parseDouble(goodsAttr.getAttrPrice());
+    		}
+    	}
+	    double total = shopPrice + attrPrice;
+	    System.out.println(total);
+	   
+	    JSONObject res = new JSONObject();
+	    try {
+			res.put("qty", number);
+			res.put("result", total);
+			res.put("err_msg", "");
+	
+			String out = res.toString();
+			debug("in [caculate]: out="+out);
+		
+			setJsonRes(new ByteArrayInputStream(out.getBytes(IWebConstants.ENC)));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	    return "price";
 	}
 	
 	public void includeGoodsRelated(HttpServletRequest request) {
@@ -140,6 +189,14 @@ public class GoodsAction extends BaseAction {
 		request.setAttribute("tags", new String[0]);
 	}
 	public void includeBoughtGoods(HttpServletRequest request) {
+	}
+
+	public void setJsonRes(InputStream jsonRes) {
+		this.jsonRes = jsonRes;
+	}
+
+	public InputStream getJsonRes() {
+		return jsonRes;
 	}
 
 

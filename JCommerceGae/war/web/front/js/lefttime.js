@@ -124,7 +124,7 @@ function macauclock()
   showtime();
 }
 
-function onloadLeftTime(now_time)
+function onload_leftTime(now_time)
 {
   /* 第一次运行时初始化语言项目 */
   try
@@ -164,4 +164,8 @@ function onloadLeftTime(now_time)
   catch (e)
   {
   }
+}
+function onloadLeftTime(now_time)
+{
+	onload_leftTime(now_time);
 }
