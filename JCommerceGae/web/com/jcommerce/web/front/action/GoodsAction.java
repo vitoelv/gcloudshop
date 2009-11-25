@@ -103,7 +103,7 @@ public class GoodsAction extends BaseAction {
 	    includeComment(IComment.TYPE_GOODS, goodsId);
 	       
 	    request.setAttribute(KEY_GOODS_ID, gw.getGoodsId());
-	    request.setAttribute(KEY_PROMOTE_END_TIME, goods.getPromoteEndDate());
+	    request.setAttribute(KEY_PROMOTE_END_TIME, goods.getPromoteEndDate() / 1000);
 	    request.setAttribute(KEY_NOW_TIME, new Date().getTime());
 	        
 	    // TODO 
