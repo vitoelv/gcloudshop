@@ -545,6 +545,7 @@ public class DWTConverter {
 	public String compileInsert(Map<String, String> para) {
 		String res="";
 		// TODO insert is difficult
+		String name = para.get("name");
 		if(para.get("name").equals("cart_info")) {
 			res = "TODO cart info";
 		} else if(para.get("name").equals("query_info")){
@@ -553,8 +554,9 @@ public class DWTConverter {
 			res = "TODO history";
 		} else if(para.get("name").contains("comments")){
 			//TODO {insert name='comments' type=$type id=$id}
-			// currently <#include "commentstype.ftl">
-			res = "TODO comments";			
+//			 currently <#include "commentstype.ftl">
+//			res = "TODO comments";			
+			res = "<#include \"comments_list.ftl\">";
 		}else {
 			res = "<#include \""+para.get("name")+".ftl\">";
 		}
@@ -615,7 +617,7 @@ public class DWTConverter {
 		res = replacePhpVars(res);
 		debug("in [replaceVars] after[replacePhpVars]: res = "+res);
 		
-		res2 = res2.replace("|escape:html", "?html");
+		res2 = res.replace("|escape:html", "?html");
 		// TODO escape URL
 		res2 = res2.replace("|escape:url", "");
 		// TODO what does it mean in DWT?

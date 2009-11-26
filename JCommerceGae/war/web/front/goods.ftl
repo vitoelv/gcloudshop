@@ -294,7 +294,7 @@ function reg(str){
   <!-- TemplateBeginEditable name="右边可编辑区域" -->
 <#include "library/goods_tags.ftl">
 <#include "library/bought_goods.ftl">
-<#include "library/comments_list.ftl">
+<#include "library/comments.ftl">
 <!-- TemplateEndEditable -->
   </div>
   <!--right end-->
