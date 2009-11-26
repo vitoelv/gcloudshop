@@ -67,7 +67,7 @@ public class LibInsert {
 		}
 		
 		res = new PrintfFormat(Lang.getInstance().getString("cartInfo")).sprintf(new Object[]{number, WebFormatUtils.priceFormat(amount)});
-		res = new StringBuffer("<a href=\"flow.php\" title=\"")
+		res = new StringBuffer("<a href=\"flow.action\" title=\"")
 								.append(Lang.getInstance().getString("viewCart"))
 								.append("\">").append(res).append("</a>").toString();
 		return res;
