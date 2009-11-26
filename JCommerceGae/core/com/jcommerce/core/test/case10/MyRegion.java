@@ -1,6 +1,7 @@
 package com.jcommerce.core.test.case10;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -32,7 +33,10 @@ public class MyRegion extends ModelObject {
     private String name;
     
     @Persistent
-    private List<MyRegion> children;
+    private MyRegion myparent;
+    
+    @Persistent(mappedBy="myparent")
+    private Set<MyRegion> children = new HashSet<MyRegion>();
     
 	public String getPkId() {
 		return pkId;
@@ -66,11 +70,21 @@ public class MyRegion extends ModelObject {
 		this.name = name;
 	}
 
-	public List<MyRegion> getChildren() {
+	public Set<MyRegion> getChildren() {
 		return children;
 	}
 
-	public void setChildren(List<MyRegion> children) {
+	public void setChildren(Set<MyRegion> children) {
 		this.children = children;
 	}
+
+	public MyRegion getMyparent() {
+		return myparent;
+	}
+
+	public void setMyparent(MyRegion myparent) {
+		this.myparent = myparent;
+	}
+
+
 }

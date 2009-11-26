@@ -1,3 +1,18 @@
+<!--
+USAGE: refer to the below KEYWORD definition:
+
+    public static final String SEP_NEWLINE = "\r\n";
+    public static final String SEP_CLASSNAME = "::";
+    public static final String SEP_COLUMNS_VALUES = ",";
+    public static final String SEP_CLS_KEYNAME = ":";
+    public static final String SEP_PARENT_CHILD = "|";
+    
+    public static final String SEP_START_COMMENT = "<!--";
+    public static final String SEP_END_COMMENT = "-->";
+    public static final String SEP_COMMENT = "#";
+
+-->
+
 
 ::com.jcommerce.core.model.GoodsType
 keyName,catName,enabled,attrGroup
@@ -18,7 +33,10 @@ Brand:_brand1,微软,,microsoft,,false,0
 Brand:_brand2,诺基亚,,nokia,,false,0
 
 
+
 ::com.jcommerce.core.model.Category
 keyName,parentId,catName,keywords,catDesc,sortOrder,templateFile,measureUnit,showInNav,style,isShow,grade
 Category:_cat1,,手机通讯,,,0,,台,1,,true,0
 Category:_cat2,,电脑,,,0,,台,1,,true,0
+Category:_cat3,Category:_cat1,精品手机,,,0,,台,1,,true,0
+Category:_cat4,Category:_cat1,商务手机,,,0,,台,1,,true,0

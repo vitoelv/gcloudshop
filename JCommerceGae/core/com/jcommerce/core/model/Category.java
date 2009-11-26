@@ -1,13 +1,13 @@
 package com.jcommerce.core.model;
 
-import java.util.HashSet;
-import java.util.Set;
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+
+import com.jcommerce.core.annotation.IsPK;
 
 /**  
  * generated with my extension of middleGen 
@@ -46,6 +46,7 @@ public class Category extends ModelObject {
   private java.lang.String catDesc; 
 
   @Persistent
+  @IsPK(clazz="com.jcommerce.core.model.Category")
   private java.lang.String parentId; 
 
   @Persistent

@@ -16,9 +16,13 @@ public class LiveDSHelper extends BaseDAOTestCase {
 	
 	@Override
     public String getDbStorePath() {
-    	return "D:/JCommerce/JCommerceGae/war";
-//    	return "D:/JCommerce/JCommerceGae/testdatastore";
+//    	return "D:/JCommerce/JCommerceGae/war";
+    	return "D:/JCommerce/JCommerceGae/testdatastore";
     }
+	private boolean isIncremental() {
+		return false;
+//		return true;
+	}
 	
 	@Override
 	public boolean needCleanOnStartup() {
@@ -28,7 +32,9 @@ public class LiveDSHelper extends BaseDAOTestCase {
 	public void testInitialDS() {
 		System.out.println("start of testInitialDS...");
 		try {
-			clearDS();
+			if(!isIncremental()) {
+				clearDS();
+			}
 			
 			IDefaultManager manager = getDefaultManager();
 			InputStream in = LiveDSHelper.class.getClassLoader().getResourceAsStream("com/jcommerce/core/test/mydata.txt");
@@ -91,6 +97,28 @@ public class LiveDSHelper extends BaseDAOTestCase {
 			}
 			
 			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+		}
+		System.out.println("end of testQueryGoods...");
+		
+		
+	}
+	
+	public void testQueryAttributes() {
+		System.out.println("start of testQueryAttributes...");
+		try {
+			IDefaultManager manager = getDefaultManager();
+
+			List<Attribute> list = (List<Attribute>)manager.getList(Attribute.class.getName(), null);
+			for(Attribute att:list) {
+				System.out.println("name: "+att.getAttrName());
+				System.out.println("goodsType: "+att.getGoodsType());
+				
+			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
