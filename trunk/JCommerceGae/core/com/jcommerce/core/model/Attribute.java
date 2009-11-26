@@ -36,7 +36,7 @@ public class Attribute extends ModelObject {
     
     @Override
     public ModelObject getParent(){
-    	return goodsType;
+    	return getGoodsType();
     }
 
 public GoodsType getGoodsType() {

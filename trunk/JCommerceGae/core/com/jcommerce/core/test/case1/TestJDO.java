@@ -8,6 +8,8 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import com.jcommerce.core.dao.impl.PMF;
+import com.jcommerce.core.model.Attribute;
+import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.test.BaseDAOTestCase;
 
@@ -166,10 +168,13 @@ public class TestJDO extends BaseDAOTestCase {
 		System.out.println("start of testAddPersonAndAddressReverse");
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
+			
+			// add
 			pm.currentTransaction().begin();
 			Person p = new Person();
 //			String pid = "_"+UUIDHexGenerator.newUUID();
 //			p.setId(pid);
+			p.setKeyName("p1");
 			p.setName("xxx");
 			
 			pm.makePersistent(p);
@@ -182,6 +187,7 @@ public class TestJDO extends BaseDAOTestCase {
 			
 			pm.currentTransaction().begin();
 			Address a = new Address();
+			a.setKeyName("a1");
 			a.setLoc("zzz");
 //			Person p3 = pm.getObjectById(Person.class, pid);
 //			System.out.println("p3="+p3);
@@ -190,24 +196,37 @@ public class TestJDO extends BaseDAOTestCase {
 			pm.makePersistent(a);
 			pm.currentTransaction().commit();
 			
-			pm.currentTransaction().begin();
-			Person p1 = (Person)pm.getObjectById(Person.class, pid);
-			Set addresses = p1.getAddresses();
-			System.out.println("size :"+addresses.size());
-			Address a1 = (Address)addresses.iterator().next();
-			String aid = a1.getPkId();
-			System.out.println("aid: "+aid);
-			pm.currentTransaction().commit();
+			
+			// verify relation
+//			pm.currentTransaction().begin();
+//			Person p1 = (Person)pm.getObjectById(Person.class, pid);
+//			Set addresses = p1.getAddresses();
+//			System.out.println("size :"+addresses.size());
+//			Address a1 = (Address)addresses.iterator().next();
+//			String aid = a1.getPkId();
+//			System.out.println("aid: "+aid);
+//			pm.currentTransaction().commit();
+//			System.out.println("size after tx:"+p1.getAddresses().size());			
+			
+			// verify reverse relation
+//			pm.currentTransaction().begin();
+//			Address a2 = (Address)pm.getObjectById(Address.class, aid);
+//			Person p2 = a2.getPerson();
+//			System.out.println("p2: "+p2.getName());
+//			pm.currentTransaction().commit();
+
 			
 			
-			pm.currentTransaction().begin();
-			Address a2 = (Address)pm.getObjectById(Address.class, aid);
-			Person p2 = a2.getPerson();
-			System.out.println("p2: "+p2.getName());
-			pm.currentTransaction().commit();
+			// verify with list
+			Query q = pm.newQuery(Address.class);
+			List<Address> res = (List<Address>)q.execute();
+			System.out.println("size of res: "+res.size());
+			assertTrue(1==res.size());
+			p = res.get(0).getPerson();
+			System.out.println("p: "+p);
 			
-			pm.close();
-			System.out.println("size after tx:"+p1.getAddresses().size());
+
+
 		}catch (Exception e) {
 			e.printStackTrace();
 			assertTrue(false);
@@ -216,7 +235,54 @@ public class TestJDO extends BaseDAOTestCase {
 		}
 	}
 	
-	
+	public void testAddGtAndAttrReverse() throws Exception{
+		System.out.println("start of testAddGtAndAttrReverse");
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			
+			// add
+			pm.currentTransaction().begin();
+			GoodsType p = new GoodsType();
+			p.setKeyName("p1");
+			p.setCatName("xxx");
+			
+			pm.makePersistent(p);
+			String pid = p.getPkId();
+			
+			pm.currentTransaction().commit();
+			System.out.println("pid="+pid+", p="+p);
+			
+			
+			
+			pm.currentTransaction().begin();
+			Attribute a = new Attribute();
+			a.setKeyName("a1");
+			a.setAttrName("zzz");
+//			Person p3 = pm.getObjectById(Person.class, pid);
+//			System.out.println("p3="+p3);
+			// reverse relationship
+			 a.setGoodsType(p);
+			pm.makePersistent(a);
+			pm.currentTransaction().commit();
+			
+			
+			// verify with list
+			Query q = pm.newQuery(Attribute.class);
+			List<Attribute> res = (List<Attribute>)q.execute();
+			System.out.println("size of res: "+res.size());
+			assertTrue(1==res.size());
+			p = res.get(0).getGoodsType();
+			System.out.println("p: "+p);
+			
+
+
+		}catch (Exception e) {
+			e.printStackTrace();
+			assertTrue(false);
+		}finally {
+			pm.close();
+		}
+	}
 	public void testQueryAddressByPerson() throws Exception{
 		System.out.println("start of testQueryAddressByPerson");
 		PersistenceManager pm = PMF.get().getPersistenceManager();

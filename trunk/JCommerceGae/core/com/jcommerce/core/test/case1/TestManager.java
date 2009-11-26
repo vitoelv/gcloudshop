@@ -6,9 +6,10 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.jcommerce.core.dao.impl.PMF;
+import com.jcommerce.core.model.Attribute;
+import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.service.CustomizedManager;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.test.BaseDAOTestCase;
@@ -93,7 +94,74 @@ public class TestManager extends BaseDAOTestCase {
 		}
 	}
 	
-	
+	public void testAddGtAndAttrReverse() throws Exception{
+		System.out.println("start of testAddGtAndAttrReverse");
+		IDefaultManager manager = getDefaultManager();
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			// prepare
+			GoodsType gt = new GoodsType();
+			gt.setCatName("xxx");
+			String gtid = manager.txadd(gt);
+			System.out.println("gtid="+gtid+", p="+gt);
+			System.out.println("gt.getId="+gt.getPkId());
+			
+			Attribute a = new Attribute();
+			a.setAttrName("zzz");
+			GoodsType to = new GoodsType();
+			to.setPkId(gtid);
+			a.setGoodsType(to);
+			String aid = manager.txadd(a);
+			
+//			a.setGoodsType(gt);
+//			String aid = manager.txattach(a);
+			
+//			pm.currentTransaction().begin();
+//			gt = pm.getObjectById(GoodsType.class, gtid);
+//			a.setGoodsType(gt);
+//			a.setKeyName("a1");
+//			pm.makePersistent(a);
+//			String aid = a.getPkId();
+//			pm.currentTransaction().commit();
+			System.out.println("aid="+aid+", a="+a);
+			
+			// verify
+			a = (Attribute)manager.get(Attribute.class.getName(), aid);
+			gt = a.getGoodsType();
+			System.out.println("p: "+gt);
+			assertTrue(gt!=null);
+			
+			// verify with list
+			Query q = pm.newQuery(Attribute.class);
+			List<Attribute> res = (List<Attribute>)q.execute();
+			// with below code the attached parent won't be accessible, so it's really matter of pm.close()
+//			List<Attribute> res = new ArrayList<Attribute>();
+//			res.addAll((List<Attribute>)q.execute());
+//			pm.close();
+			System.out.println("size of res: "+res.size());
+			assertTrue(1==res.size());
+			gt = res.get(0).getGoodsType();
+			System.out.println("p: "+gt);
+			assertTrue(gt!=null);
+			
+			
+			// verify with list manager
+			List<Attribute> res1 = manager.getList(Attribute.class.getName(), null);
+			System.out.println("size of res1: "+res1.size());
+			assertTrue(1==res1.size());
+			gt = res1.get(0).getGoodsType();
+			System.out.println("p: "+gt);
+			assertTrue(gt!=null);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			assertTrue(false);
+		}finally {
+			if(!pm.isClosed()) {
+				pm.close();
+			}
+		}
+	}
 	
 	public void testQueryAddressByPerson2() throws Exception{
 		System.out.println("start of testQueryAddressByPerson2");

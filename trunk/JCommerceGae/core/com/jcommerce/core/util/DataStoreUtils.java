@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gwt.dev.asm.Attribute;
+import com.jcommerce.core.annotation.IsPK;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.Category;
 import com.jcommerce.core.model.GoodsType;
@@ -236,7 +238,8 @@ public class DataStoreUtils implements IConstants{
     			}
     			
     			if(className!=null) {
-    				ModelObject obj = (ModelObject)Class.forName(className).newInstance();
+    				Class clazz = Class.forName(className);
+    				ModelObject obj = (ModelObject)clazz.newInstance();
     				
     				values = ConvertUtil.split(newline, SEP_COLUMNS_VALUES);
     				// won't work in case ,, occur in the sequence
@@ -254,7 +257,20 @@ public class DataStoreUtils implements IConstants{
     						obj.setPkId(getIdFromChainedKeyName(value));
     					}
     					else {
-    						BeanUtils.setProperty(obj, column, value);
+        					Field f = clazz.getDeclaredField(column);
+        					Annotation isPK = f.getAnnotation(IsPK.class);
+        					if(isPK!=null) {
+        						// expect a pk value, need convert from keyName->pk
+        						if(StringUtils.isEmpty(value)) {
+        							BeanUtils.setProperty(obj, column, null);
+        						}
+        						else {
+        							BeanUtils.setProperty(obj, column, getIdFromChainedKeyName(value));
+        						}
+        					}
+        					else {
+        						BeanUtils.setProperty(obj, column, value);
+        					}
     					}
     				}
     				
@@ -360,6 +376,7 @@ public class DataStoreUtils implements IConstants{
 	            Class ft = field.getType();
 //	            System.out.println("fn: "+fn+", ft: "+ft.getName());
 	            Object value = PropertyUtils.getProperty(obj, fn);
+	            IsPK isPK = field.getAnnotation(IsPK.class);
 	            
 	            if("keyName".equals(fn)) {
 	            	StringBuffer buf1 = new StringBuffer();
@@ -368,6 +385,13 @@ public class DataStoreUtils implements IConstants{
 	            }
 	            else if(value==null) {
 	            	
+	            }
+	            else if(isPK!=null) {
+	            	// convert PK->keyName
+	            	ModelObject target = manager.get(isPK.clazz(), (String)value);
+	            	StringBuffer buf1 = new StringBuffer();
+	            	getChainedKeyName(buf1, target, manager);
+	            	strValue = buf1.toString();
 	            }
 	            else if(Collection.class.isAssignableFrom(ft)) {
 	            	strValue = Arrays.toString(((Collection)value).toArray());

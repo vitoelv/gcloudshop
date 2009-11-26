@@ -1,13 +1,13 @@
 package com.jcommerce.core.model;
 
-import java.util.HashSet;
-import java.util.Set;
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+
+import com.jcommerce.core.annotation.IsPK;
 
 /**  
  * generated with my extension of middleGen 
@@ -39,6 +39,7 @@ public class Region extends ModelObject {
   private java.lang.String regionId; 
 
   @Persistent
+  @IsPK(clazz="com.jcommerce.core.model.Region")
   private java.lang.String parentId; 
 
   @Persistent
