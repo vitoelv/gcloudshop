@@ -41,7 +41,6 @@ import com.jcommerce.web.to.OrderInfoWrapper;
 import com.jcommerce.web.to.PaymentWrapper;
 import com.jcommerce.web.to.RegionWrapper;
 import com.jcommerce.web.to.ShippingWrapper;
-import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.to.Total;
 import com.jcommerce.web.to.UserAddressWrapper;
 import com.jcommerce.web.to.WrapperUtil;
@@ -569,6 +568,9 @@ public class FlowAction extends BaseAction {
 			
 			String step = request.getParameter(KEY_STEP);
 			debug("step: "+step);
+			if(step==null) {
+				step = STEP_CART;
+			}
 			
 			request.setAttribute("showMarketprice", getCachedShopConfig().get("showMarketprice"));
 			
