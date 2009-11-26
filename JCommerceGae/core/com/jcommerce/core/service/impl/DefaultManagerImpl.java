@@ -6,6 +6,7 @@ package com.jcommerce.core.service.impl;
 
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -60,10 +61,13 @@ public class DefaultManagerImpl implements IDefaultManager {
 		}
 	}
     public boolean txdelete (String modelName, String id) {
-    	
     	boolean res = getDao().delete(modelName, id);
     	return res;
     }
+    public void txdeleteall (Collection<ModelObject> objs) {
+    	getDao().deleteAll(objs);
+    }
+    
     
 	public ModelObject get (String modelName, String id) {
 		ModelObject obj = getDao().get(modelName, id);
@@ -100,7 +104,20 @@ public class DefaultManagerImpl implements IDefaultManager {
     }
     
 
-
+    public List getListByIds (String modelName, List<String> ids) {
+    	debug("[getListByIds]: modelName="+modelName);
+    	List res = new ArrayList();
+    	for(String id : ids) {
+    		ModelObject obj = getDao().get(modelName, id);
+    		if(obj!=null) {
+    			res.add(obj);
+    		}
+    	}
+    	return res;
+    	
+    	
+    }
+    
     public List getList(String modelName, Criteria criteria) {
         debug("[getList]: modelName="+modelName);
         
@@ -176,6 +193,10 @@ public class DefaultManagerImpl implements IDefaultManager {
 	        	Object val = PropertyUtils.getProperty(to, name);
 	        	debug("name="+name+", type="+type+", val="+val);
 	        	if ( ModelObject.class.isAssignableFrom(type)) {
+	        		// parent is just a method
+	        		if("parent".equals(name)) {
+	        			continue;
+	        		}
 	        		ModelObject toPopulate = (ModelObject)PropertyUtils.getProperty(to, name);
 	        		if(toPopulate == null) {
 	        			// the form contains no info about associated object, just neglect

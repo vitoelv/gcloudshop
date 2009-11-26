@@ -261,7 +261,6 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
 						if(firstRow>=0 && maxRow>=0) {
 							query.setRange(firstRow, firstRow+maxRow);
 						}
-						
 						result = (List)query.executeWithArray(paras.toArray());
 						// 	do some further stuff with the result list
 						return result;
@@ -347,29 +346,19 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
         	}
         }
     }
-
-    
-    public void save(ModelObject obj) {
-        if (obj == null) {
-            throw new IllegalArgumentException("obj = null");
-        }
-        
-//        if (getById(getId(obj)) == null) {
-//            Serializable id = getHibernateTemplate().save(obj);
-//            setId(obj, id);
-//        } else {
-//            getHibernateTemplate().update(obj);
-//        }
-//        ModelObject _obj = (ModelObject)getHibernateTemplate().merge(obj);
-//        setId(obj, getId(_obj));
-    }    
     
     public void deleteAll(Collection<ModelObject> objs) {
         if (objs == null) {
             throw new IllegalArgumentException("objs = null");
         }
-        
-//        getHibernateTemplate().deleteAll(objs);
+        try {
+        	JdoTemplate jdoTemplate =getJdoTemplate();
+        	jdoTemplate.deletePersistentAll(objs);
+        	
+        } catch (Exception ex) {
+        	ex.printStackTrace();
+        	throw new RuntimeException(ex);
+        }
     }    
 
     
