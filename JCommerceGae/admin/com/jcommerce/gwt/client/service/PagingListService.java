@@ -45,7 +45,7 @@ public class PagingListService extends RemoteService {
         final IDefaultServiceAsync service = getDefaultService();
         MyRpcProxy<PagingLoadResult<BeanObject>> proxy = new MyRpcProxy<PagingLoadResult<BeanObject>>() {
             public void load(Object loadConfig, AsyncCallback<PagingLoadResult<BeanObject>> callback) {
-                service.getPagingList(model, criteria, wantedFields, (PagingLoadConfig) loadConfig, callback);
+                service.getPagingList(model, getCriteria(), wantedFields, (PagingLoadConfig) loadConfig, callback);
             }
         };
         proxy.setCriteria(criteria);
