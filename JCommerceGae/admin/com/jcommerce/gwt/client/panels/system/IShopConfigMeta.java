@@ -32,6 +32,11 @@ public interface IShopConfigMeta {
 	public static final String CFG_KEY_SHOP_YM = "ym";
 	public static final String CFG_KEY_SHOP_MSN = "msn";
 	public static final String CFG_KEY_SHOP_SKYPE = "skype";
+	public static final String CFG_KEY_SHOP_COPYRIGHT = "copyright";
+	public static final String CFG_KEY_SHOP_ADDRESS = "shop_address";
+	public static final String CFG_KEY_SHOP_POSTCODE = "shop_postcode";
+	public static final String CFG_KEY_SHOP_SERVICE_PHONE = "service_phone";
+	public static final String CFG_KEY_SHOP_SERVICE_EMAIL = "service_email";
 	
 	// goods
 	public static final String CFG_KEY_SHOW_MARKETPRICE = "showMarketprice";
