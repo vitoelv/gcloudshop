@@ -49,12 +49,13 @@ public class LibGoods {
 
 		
 		// child->parent
-		Map<String, String> cpMap = new HashMap<String, String>();
+//		Map<String, String> cpMap = new HashMap<String, String>();
+		
 		// parent->children
 		Map<String, List<CategoryWrapper>> pcMap = new HashMap<String, List<CategoryWrapper>>();
 		// 1st round loop
 		for (Category cat : allCats) {
-			cpMap.put(cat.getPkId(), cat.getParentId());
+//			cpMap.put(cat.getPkId(), cat.getParentId());
 			List<CategoryWrapper> children = pcMap.get(cat.getParentId());
 			if (children == null) {
 				children = new ArrayList<CategoryWrapper>();
