@@ -25,6 +25,7 @@ import com.jcommerce.web.to.WrapperUtil;
 import com.jcommerce.web.util.LibCommon;
 import com.jcommerce.web.util.LibGoods;
 import com.jcommerce.web.util.LibMain;
+import com.jcommerce.web.util.WebUtils;
 
 public class CategoryAction extends BaseAction {
 	
@@ -84,9 +85,9 @@ public class CategoryAction extends BaseAction {
         	throw new RuntimeException("cat id is null");
         }
         
-        Long catLongId = Long.valueOf(_id);
-        debug("in [includeGoodsList]: catLongId="+catLongId);
-        
+        Long catLongId = WebUtils.tryGetLongId(_id);
+        String catId = catLongId == null? _id : null;
+        debug("in [includeGoodsList]: catLongId="+catLongId+", catId="+catId);
 
 		String sPage = (String)request.getParameter("page");
 		int page = (sPage!=null && Integer.valueOf(sPage)>0) ? Integer.valueOf(sPage) : 1;
@@ -114,8 +115,21 @@ public class CategoryAction extends BaseAction {
 			order = "ASC";
 		}
 		
-		Category cat = getCatInfo(catLongId);
-		String catId = cat.getPkId();
+
+		Category cat = null;
+		if(catLongId!=null) {
+			cat = getCatInfo(catLongId);
+		}else {
+			cat = getCatInfo(catId);
+		}
+		if(cat==null) {
+			throw new RuntimeException("cannot find category");
+		}
+		catId = cat.getPkId();
+		catLongId = cat.getLongId();
+		
+
+		
 		CategoryWrapper cw = new CategoryWrapper(cat);
 		String brandName = "";
 		if(StringUtils.isEmpty(brandId)) {
@@ -168,6 +182,10 @@ public class CategoryAction extends BaseAction {
 	private Category getCatInfo(Long catLongId) {
 		return (Category)getDefaultManager().get(ModelNames.CATEGORY, catLongId);
 	}
+	private Category getCatInfo(String catId) {
+		return (Category)getDefaultManager().get(ModelNames.CATEGORY, catId);
+	}
+	
 	
 	private Long getParentGrade(String catId) {
 		Map<String, String> parentArr = new HashMap<String, String>();
