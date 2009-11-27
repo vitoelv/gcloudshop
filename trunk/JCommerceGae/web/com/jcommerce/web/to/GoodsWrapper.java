@@ -101,7 +101,12 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
     }
     
     public String getPromotePrice() {
-    	return WebFormatUtils.priceFormat(getGoods().getPromotePrice());
+    	if(getIsPromote()!=null){
+    		return WebFormatUtils.priceFormat(getGoods().getPromotePrice());
+    	}
+    	else{
+    		return "";
+    	}
     }
     
     public String getIsPromote() {
@@ -109,6 +114,14 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
     		return null;
     	else
     		return "true";
+    }
+    
+    public String getMarketPrice(){
+    	return WebFormatUtils.priceFormat(getGoods().getMarketPrice());
+    }
+    
+    public String getShopPrice(){
+    	return WebFormatUtils.priceFormat(getGoods().getShopPrice());
     }
     
     public void setManager(IDefaultManager manager) {

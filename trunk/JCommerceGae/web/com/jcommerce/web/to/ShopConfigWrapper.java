@@ -25,7 +25,7 @@ public class ShopConfigWrapper extends BaseWrapper {
 		this.put("showGoodsnumber", "true");
 		this.put("showGoodsnumber", "true");
 		this.put("goodsattrStyle", 1);
-		this.put("pageSize", "2");
+		this.put("pageSize", "5");
 		this.put("pointsName", "积分");
 		
 		this.put("shopRegClosed", 0);

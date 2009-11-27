@@ -1,5 +1,6 @@
 package com.jcommerce.web.front.action;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,13 +11,16 @@ import org.datanucleus.util.StringUtils;
 
 import com.jcommerce.core.model.Category;
 import com.jcommerce.core.model.Goods;
+import com.jcommerce.core.service.Condition;
+import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
+import com.jcommerce.core.service.Order;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.ICategory;
+import com.jcommerce.gwt.client.model.IGoods;
 import com.jcommerce.gwt.client.util.URLConstants;
 import com.jcommerce.web.to.CategoryWrapper;
 import com.jcommerce.web.to.GoodsWrapper;
-import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.to.WrapperUtil;
 import com.jcommerce.web.util.LibCommon;
 import com.jcommerce.web.util.LibGoods;
@@ -43,12 +47,16 @@ public class CategoryAction extends BaseAction {
 			includeFilterAttr();
 			includePriceGrade();
 			includeHistory(request);
-
+			
+			//必须在includeRecommendBest之前，否则includeRecommendBest无法获取信息
+			includeGoodsList();
+			
 			// TODO maybe this only include goods belong to the category?
 			includeRecommendBest(request);
 
-			includeGoodsList();
+			
 
+			request.setAttribute("showMarketprice", getCachedShopConfig().get("showMarketprice"));
 //			String categoryId = request.getParameter("id");
 //			debug("in [execute]: categoryId=" + categoryId);
 //
@@ -84,6 +92,7 @@ public class CategoryAction extends BaseAction {
 		int page = (sPage!=null && Integer.valueOf(sPage)>0) ? Integer.valueOf(sPage) : 1;
 		
 		String sSize = (String)getCachedShopConfig().get("pageSize");
+	
 		int size = (sSize!=null && Integer.valueOf(sSize)>0) ? Integer.valueOf(sSize) : 10; 
 		
 		String brandId = (String)request.getParameter("brand");
@@ -92,10 +101,18 @@ public class CategoryAction extends BaseAction {
 		}
 
 		
-		String sort = "goods_id";  //'goods_id', 'shop_price', 'last_update'
-		String order = "ASC"; // ASC DESC
-		String display = DISPLAY_LIST;
-		
+		String sort = (String)request.getParameter("sort");  //'goods_id', 'shop_price', 'last_update'
+		String order = (String)request.getParameter("order"); // ASC DESC
+		String display = (String)request.getParameter("display");
+		if(display == null){
+			display = DISPLAY_GRID;
+		}
+		if(sort == null){
+			sort = "goodsName";
+		}
+		if(order == null){
+			order = "ASC";
+		}
 		
 		Category cat = getCatInfo(catLongId);
 		String catId = cat.getPkId();
@@ -173,8 +190,47 @@ public class CategoryAction extends BaseAction {
 	private int getCategoryGoodsCount(List<String> children, String brandId, int priceMin, int priceMax) {
 		// TODO getCategoryGoodsCount
 		IDefaultManager manager = getDefaultManager();
+        List<Goods> goods = new ArrayList<Goods>();
+        
+        Criteria criteria = new Criteria();
+        
+        Condition cond = new Condition();
+        cond.setField(IGoods.CATEGORY_IDS);
+        cond.setOperator(Condition.EQUALS);
+        criteria.addCondition(cond);
+        
+        if(!brandId.equals("")){
+        	Condition cond2 = new Condition();
+        	cond2.setField(IGoods.BRAND_ID);
+        	cond2.setOperator(Condition.EQUALS);
+        	cond2.setValue(brandId);
+        	criteria.addCondition(cond2);
+        }
+        
+        if(priceMin > 0){
+        	Condition cond3 = new Condition();
+        	cond3.setField(IGoods.SHOP_PRICE);
+        	cond3.setOperator(Condition.GREATERTHAN);
+        	cond3.setValue(priceMin+"");
+        	criteria.addCondition(cond3);
+        }
+        
+        if(priceMax > 0){
+        	Condition cond4 = new Condition();
+        	cond4.setField(IGoods.SHOP_PRICE);
+        	cond4.setOperator(Condition.LESSTHAN);
+        	cond4.setValue(priceMax+"");
+        	criteria.addCondition(cond4);
+        }     
+        
+        for (String cid : children) {
+        	cond.setValue(cid);        	
+        	goods.addAll((List<Goods>)manager.getList(ModelNames.GOODS, criteria));
+		}
+        // 没有扩展分类，暂时不必要去重
+        //LibCommon.removeDuplicateWithOrder(goods);
 		
-		return manager.getCount(ModelNames.GOODS, null);
+		return goods.size();
 	}
 	
 	private List<Goods> categoryGetGoods(List<String> children, String brandId, int priceMin, int priceMax,
@@ -184,7 +240,82 @@ public class CategoryAction extends BaseAction {
 		IDefaultManager manager = getDefaultManager();
         int firstRow = (page-1)*size;
         int maxRow = size;
-		return (List<Goods>)manager.getList(ModelNames.GOODS, null, firstRow, maxRow);
+        List<Goods> goods = new ArrayList<Goods>();
+        
+        Criteria criteria = new Criteria();
+        
+        Condition cond = new Condition();
+        cond.setField(IGoods.CATEGORY_IDS);
+        cond.setOperator(Condition.EQUALS);
+        criteria.addCondition(cond);
+
+        if(!brandId.equals("")){
+        	Condition cond2 = new Condition();
+        	cond2.setField(IGoods.BRAND_ID);
+        	cond2.setOperator(Condition.EQUALS);
+        	cond2.setValue(brandId);
+        	criteria.addCondition(cond2);
+        }
+        
+        if(priceMin > 0){
+        	Condition cond3 = new Condition();
+        	cond3.setField(IGoods.SHOP_PRICE);
+        	cond3.setOperator(Condition.GREATERTHAN);
+        	cond3.setValue(priceMin+"");
+        	criteria.addCondition(cond3);
+        }
+        
+        if(priceMax > 0){
+        	Condition cond4 = new Condition();
+        	cond4.setField(IGoods.SHOP_PRICE);
+        	cond4.setOperator(Condition.LESSTHAN);
+        	cond4.setValue(priceMax+"");
+        	criteria.addCondition(cond4);
+        }  
+
+        Order order1 = new Order();
+        order1.setField(IGoods.PK_ID);
+        if(order.equals("ASC")){
+        	order1.setAscend(Order.ASCEND);
+        }
+        else{
+        	order1.setAscend(Order.DESCEND);
+        }
+        //criteria.addOrder(order1);
+                
+        for (String cid : children) {
+        	cond.setValue(cid);
+        	goods.addAll((List<Goods>)manager.getList(ModelNames.GOODS, criteria,firstRow,maxRow));
+		}
+        //  没有扩展分类，暂时不必要去重
+        //LibCommon.removeDuplicateWithOrder(goods);
+        if(goods.size()<maxRow){
+        	maxRow = goods.size();
+        }
+		return goods.subList(firstRow, maxRow);
 		
 	}
+	@Override
+	public void includeRecommendBest(HttpServletRequest request) {
+    	setCatRecSign(request); 	
+        request.setAttribute("bestGoods", getBestSoldGoods(getCatInfo((Long)request.getAttribute("category")).getPkId(),request));
+    }
+	
+	private List getBestSoldGoods(String catId ,HttpServletRequest request) {
+		List<GoodsWrapper> goodsList = (List<GoodsWrapper>)request.getAttribute("goodsList");
+		List<GoodsWrapper> list = new ArrayList<GoodsWrapper>();
+		for (GoodsWrapper goodsWrapper : goodsList) {
+			if((Boolean)goodsWrapper.get("isBest")){
+				list.add(goodsWrapper);
+			}
+		}
+		if(list.size()>0){
+			return list;
+		}
+		else{
+			return null;
+		}
+		         
+    }
+	
 }

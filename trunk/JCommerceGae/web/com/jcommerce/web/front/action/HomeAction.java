@@ -101,6 +101,9 @@ public class HomeAction extends BaseAction {
 //        Order order = new Order();
 //        order.setField(IOrderInfo.SHIPPING_TIME);
 //        order.setAscend(Order.DESCEND);
+//    	criteria.addCondition(cond);
+//    	criteria.addCondition(cond2);
+//    	criteria.addOrder(order);
 //        
 //    	List<OrderInfo> orderInfos = (List<OrderInfo>)getDefaultManager().getList(ModelNames.ORDERINFO, criteria,0,10);
 //        
