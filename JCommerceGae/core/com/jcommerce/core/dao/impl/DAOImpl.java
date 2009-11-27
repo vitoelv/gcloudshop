@@ -77,6 +77,11 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
     		if(StringUtils.isEmpty(to.getPkId())) {
     			to.setPkId(null);
     		}
+    		if(to.getLongId()==null) {
+    			// means the to is new
+    			// this is mainly used in import util
+    			to.setLongId(UUIDLongGenerator.newUUID());
+    		}
 			getJdoTemplate().makePersistent(to);
 			id = to.getPkId();
 		} catch (Exception e) {
