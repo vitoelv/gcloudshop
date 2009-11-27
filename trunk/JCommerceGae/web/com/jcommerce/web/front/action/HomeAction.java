@@ -12,24 +12,20 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.ServletActionContext;
 
+import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Brand;
+import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.model.OrderGoods;
-import com.jcommerce.core.model.OrderInfo;
 import com.jcommerce.core.model.Session;
-import com.jcommerce.core.model.Shipping;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
-import com.jcommerce.core.service.Order;
+import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IGoods;
-import com.jcommerce.gwt.client.model.IOrderInfo;
-import com.jcommerce.gwt.client.model.IShipping;
 import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.gwt.client.util.URLConstants;
 import com.jcommerce.web.front.action.helper.Pager;
 import com.jcommerce.web.to.BrandWrapper;
-import com.jcommerce.web.to.OrderInfoWrapper;
-import com.jcommerce.web.to.ShippingWrapper;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 
@@ -175,13 +171,25 @@ public class HomeAction extends BaseAction {
     	
     }
 
+    private void testOpenPMInView() {
+    	// test that if the related object can be accessed out of manager
+    	IDefaultManager manager = getDefaultManager();
+		List<Attribute> res1 = manager.getList(Attribute.class.getName(), null);
+		debug("[testOpenPMInView] size of res1: "+res1.size());
+		if(res1.size()>0) {
+			GoodsType gt = res1.get(0).getGoodsType();
+			debug("[testOpenPMInView] p: "+gt);
+		}
+		
+    }
+    
     @Override
     public String onExecute() throws Exception {
         if (log.isDebugEnabled()) {
             log.debug("entering 'home' method...");
         }
         debug("in execute");
-        
+        testOpenPMInView();
         
         HttpServletRequest request = getRequest();        
         

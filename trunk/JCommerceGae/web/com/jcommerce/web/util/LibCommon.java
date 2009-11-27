@@ -19,6 +19,10 @@ import com.jcommerce.web.to.WrapperUtil;
 
 public class LibCommon {
 
+	
+	public static String buildUri(String app, Map<String, Object> uriArgs, String append) {
+		return buildUri(app, uriArgs, append, 0, 0);
+	}
 	/**
 	 * 重写 URL 地址
 	 *
