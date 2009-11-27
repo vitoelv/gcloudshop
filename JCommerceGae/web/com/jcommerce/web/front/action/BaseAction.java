@@ -1,6 +1,17 @@
 package com.jcommerce.web.front.action;
 
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.*;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_ADDRESS;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_COPYRIGHT;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_MSN;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_NAME;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_POSTCODE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_QQ;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_SERVICE_EMAIL;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_SERVICE_PHONE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_SKYPE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_WW;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_YM;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -111,12 +122,16 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
 	public void includePageFooter(HttpServletRequest request) {
         // page_footer.ftl
 		ShopConfigWrapper shopConfig = getCachedShopConfig();
-        request.setAttribute("copyright", "Copyright © 2005-2009 GCSHOP 版权所有，并保留所有权利。");
-        request.setAttribute("shopAddress", "Shop Address");
-        request.setAttribute("shopPostcode", "Postcode:100000");
-//      request.setAttribute("copryright", "Copyright"); //??
-        request.setAttribute("servicePhone", "010-11110000"); 
-        request.setAttribute("serviceEmail", "test@gmail.com");
+        request.setAttribute("copyright", shopConfig.getString(CFG_KEY_SHOP_COPYRIGHT));
+        request.setAttribute("shopAddress", shopConfig.getString(CFG_KEY_SHOP_ADDRESS));
+        request.setAttribute("shopPostcode", shopConfig.getString(CFG_KEY_SHOP_POSTCODE));
+        if(!shopConfig.getString(CFG_KEY_SHOP_SERVICE_PHONE).equals("")){
+        	request.setAttribute("servicePhone", shopConfig.getString(CFG_KEY_SHOP_SERVICE_PHONE)); 
+        }
+        if(!shopConfig.getString(CFG_KEY_SHOP_SERVICE_EMAIL).equals("")){
+        	request.setAttribute("serviceEmail", shopConfig.getString(CFG_KEY_SHOP_SERVICE_EMAIL));
+        } 
+        
         if(!shopConfig.getString(CFG_KEY_SHOP_QQ).equals("")){
         	request.setAttribute("qq", shopConfig.getString(CFG_KEY_SHOP_QQ).split(","));
         }else{
@@ -313,6 +328,19 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
 		Lang lang = Lang.getInstance();
 
 		Navigator nav = new Navigator();
+//		List<Nav> navList = defaultManager.getList(ModelNames.NAV, null);
+//		for (Nav navInfo : navList) {
+//			if(navInfo.getType().equals("top")){
+//				nav.addTop(new ComponentUrl(navInfo.getUrl(),lang.getString(navInfo.getName()),navInfo.getOpennew().intValue()));
+//			}
+//			else if(navInfo.getType().equals("middle")){
+//				nav.addMiddle(new ComponentUrl(navInfo.getUrl(),lang.getString(navInfo.getName()),navInfo.getOpennew().intValue()));
+//			}
+//			else if(navInfo.getType().equals("bottom")){
+//				nav.addBottom(new ComponentUrl(navInfo.getUrl(),lang.getString(navInfo.getName()),navInfo.getOpennew().intValue()));
+//			}
+//		}
+		
         nav.addTop(new ComponentUrl("cart.action", getText(lang.getString("viewCart")), 1));
         nav.addTop(new ComponentUrl("user.action", getText(lang.getString("userCenter")), 1));
         nav.addTop(new ComponentUrl("pick_out.action", getText(lang.getString("pickOut")), 1));
@@ -340,7 +368,7 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
         while (it.hasNext()) {
             Category cat = it.next();
             if (cat.getShowInNav() == DBTYPE_TRUE)
-                nav.addMiddle(new ComponentUrl("category.action?id="+cat.getPkId(), cat.getCatName(), 1, 0));
+                nav.addMiddle(new ComponentUrl("category.action?id="+cat.getLongId(), cat.getCatName(), 1, 0));
         }
 
         request.setAttribute("navigatorList", nav);	

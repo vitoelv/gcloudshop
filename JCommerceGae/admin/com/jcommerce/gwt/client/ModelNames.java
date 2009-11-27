@@ -26,6 +26,7 @@ public interface ModelNames {
     public static final String AREAREGION= "com.jcommerce.core.model.AreaRegion";
     public static final String COMMENT= "com.jcommerce.core.model.Comment";
     public static final String SESSION= "com.jcommerce.core.model.Session";
+    public static final String NAV= "com.jcommerce.core.model.Nav";
     
     public static final String PAYMENT_META = "PaymentMeta";
     public static final String SHIPPING_META = "ShippingMeta";

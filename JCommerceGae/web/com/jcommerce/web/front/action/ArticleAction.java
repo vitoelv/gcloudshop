@@ -36,7 +36,6 @@ public class ArticleAction extends BaseAction {
         }
         debug("in execute");
         HttpServletRequest request = getRequest();     
-        super.execute();
         includeCart();
         includeCategoryTree(request);
         includeRecommendBest(request);
@@ -48,7 +47,6 @@ public class ArticleAction extends BaseAction {
 
         article.put("content","维护中...");
         
-        super.afterExecute();
         return  Action.SUCCESS;
     }
    

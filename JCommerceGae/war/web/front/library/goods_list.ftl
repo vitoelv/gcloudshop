@@ -19,7 +19,7 @@
 <option value="${key}" <#if pager.order == key>selected</#if> >${val}</option>
 </#list>
       </select>
-      <input type="image" name="imageField" src="../images/bnt_go.gif" alt="go"/>
+      <input type="image" name="imageField" src="images/bnt_go.gif" alt="go"/>
       <input type="hidden" name="category" value="${category}" />
       <input type="hidden" name="display" value="${pager.display}" id="display" />
       <input type="hidden" name="brand" value="${brandId}" />
@@ -126,7 +126,7 @@
     </li>
     <li class="action">
     <a href="javascript:collect(${goods.goodsId});" class="abg f6">${lang.favourableGoods}</a>
-    <a href="javascript:addToCart(${goods.goodsId})"><img src="../images/bnt_buy_1.gif"></a>
+    <a href="javascript:addToCart(${goods.goodsId})"><img src="images/bnt_buy_1.gif"></a>
     </li>
     </ul>
     </#list>
