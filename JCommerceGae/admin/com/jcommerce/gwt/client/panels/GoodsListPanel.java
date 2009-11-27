@@ -75,6 +75,7 @@ public class GoodsListPanel extends ContentWidget {
 	    String Goods_SN();
 	    String Goods_brand();
 	    String Goods_category();
+	    String Goods_category_extended();
 	    String Goods_shopPrice();
 	    String Goods_marketPrice();
 	    String Goods_giveIntegral();
