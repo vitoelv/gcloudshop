@@ -4,7 +4,9 @@ import java.io.InputStream;
 import java.io.StringBufferInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -12,14 +14,18 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.jcommerce.core.model.OrderInfo;
 import com.jcommerce.core.model.User;
 import com.jcommerce.core.model.UserAddress;
+import com.jcommerce.core.model.UserRank;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
+import com.jcommerce.core.util.UUIDLongGenerator;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IOrderInfo;
 import com.jcommerce.gwt.client.model.IRegion;
 import com.jcommerce.gwt.client.model.IUser;
+import com.jcommerce.gwt.client.model.IUserRank;
 import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.gwt.client.util.URLConstants;
 import com.jcommerce.web.front.action.helper.Pager;
@@ -67,9 +73,8 @@ public class UserAction extends BaseAction {
 		try {
 			debug("in execute");
 			HttpServletRequest request = getRequest();
-
 			String userId = (String)getSession().getAttribute(KEY_USER_ID);
-			
+
 			action = request.getParameter("act");
 			if(action==null) {
 				action = "default";
@@ -125,11 +130,19 @@ public class UserAction extends BaseAction {
 			
 			if("default".equals(action)) {
 				
-				request.setAttribute("rankName", "注册用户");
+				request.setAttribute("rankName", "");
 				request.setAttribute("nextRankName", "");
 				UserWrapper uw = getUserDefault(userId);
+				//查找userRank和nextRank
+				UserRank userRank = getUserRank(uw,request);
+				if(userRank != null && userRank.getMaxPoints() > 0) {
+					getNextRank(uw,userRank,request);
+				}
+				
+				uw.setManager(getDefaultManager());
 				uw.put("isValidate", 1);
 				uw.put("shippedOrder", null);
+				
 				request.setAttribute("info", uw);
 				request.setAttribute("userNotice", getCachedShopConfig().get("userNotice"));
 				request.setAttribute("prompt", new String[0]);
@@ -364,6 +377,7 @@ public class UserAction extends BaseAction {
 			throw new RuntimeException(ex);
 		}
 	}
+
 	/**
 	 *  获取指订单的详情
 	 *
@@ -491,7 +505,8 @@ public class UserAction extends BaseAction {
 		else {
 			User user = getUser(username);
 			if(user!=null) {
-				getSession().setAttribute("userInfo", user);//modifyed
+				//修改，放入wrapper,member_info.ftl 调用getUsername()方法
+				getSession().setAttribute("userInfo", new UserWrapper(user));//modifyed
 				getSession().setAttribute(KEY_USER_ID, user.getPkId());
 				getSession().setAttribute(KEY_USER_NAME, username);
 				getSession().setAttribute(KEY_USER_EMAIL, user.getEmail());
@@ -505,6 +520,7 @@ public class UserAction extends BaseAction {
 		user.setUserName(username);
 		user.setPassword(password);
 		user.setEmail(email);
+		int length = other.size();
 		// TODO wrap it and return error code
 		String error = null;
 		try {
@@ -582,5 +598,79 @@ public class UserAction extends BaseAction {
 		return WebFormatUtils.phpVarFromat(action);
 	}
 
+	//查找userRank
+	public UserRank getUserRank(UserWrapper uw,HttpServletRequest request) {
+		//查找用户rank
+		String userRankId = uw.getUserRank()+"";
+		long rankPoints = uw.getRankPoints();
+		Criteria criteria = new Criteria();
+		
+		//当用户的rankId为0时，根据rankPoints查找，否则根据rankId查找 
+		if(!userRankId.equals("0")) {
+			Condition condition = new Condition(IUserRank.RANK_ID,Condition.EQUALS,userRankId);
+			criteria.addCondition(condition);
+		}
+		List<UserRank> userRanks = getDefaultManager().getList(ModelNames.USER_RANK, criteria);
+		UserRank rank = null;
+		for(Iterator iterator = userRanks.iterator();iterator.hasNext();) {
+			UserRank userRank = (UserRank)iterator.next();
+			//rankId为0时,根据rankPoints判断rank
+			if(userRankId.equals("0")) {
+				//当rank的maxPoints为0时，说明是代销用户，代销用户只能根据rankId判断
+				if(userRank.getMaxPoints() > 0 && rankPoints >= userRank.getMinPoints() && rankPoints <= userRank.getMaxPoints()) {
+					rank = userRank;
+					request.setAttribute("rankName", "您的等级是" + userRank.getRankName());
+					break;
+				}
+			}
+			//否则，根据rankId判断
+			else {
+				rank = userRank;
+				request.setAttribute("rankName", "您的等级是" + userRank.getRankName());
+			}
+		}
+		
+		return rank;
+	}
+	
+	//根据userRank查找nextRank
+	public void getNextRank(UserWrapper uw, UserRank userRank, HttpServletRequest request) {
+		
+		UserRank nextRank = null;
+		//首先查询有没有最低积分等于该用户所属rank的最高积分的rank，如果有则是nextRank
+		Condition condition = new Condition(IUserRank.MIN_POINTS,Condition.EQUALS,userRank.getMaxPoints()+"");
+		Criteria criteria = new Criteria();
+		criteria.addCondition(condition);
+		List<UserRank> nextUserRanks = getDefaultManager().getList(ModelNames.USER_RANK, criteria);
+		
+		//存在相等
+		if(nextUserRanks.size() > 0) {
+			nextRank = nextUserRanks.get(0);
+		}
+		
+		//不存在，查找出所有最低积分高于该用户所属rank的最高积分的rank，从中选出最低积分最低的那个作为nextRank
+		else {
+			condition.setOperator(Condition.GREATERTHAN);
+			criteria.removeAllCondition();
+			criteria.addCondition(condition);
+			nextUserRanks = getDefaultManager().getList(ModelNames.USER_RANK, criteria);
 
+			long minPoints = -1;
+			for(Iterator iterator = nextUserRanks.iterator();iterator.hasNext();) {
+				UserRank rank = (UserRank)iterator.next();
+				if(minPoints == -1) {
+					minPoints = rank.getMinPoints();
+				}
+				if(rank.getMinPoints() <= minPoints) {
+					nextRank = rank;
+					minPoints = rank.getMinPoints();
+				}
+			}
+		}		
+		
+		if(nextRank != null) {
+			long points = nextRank.getMinPoints() - uw.getRankPoints(); //距离升级差的积分
+			request.setAttribute("nextRankName", "您还差" +points + "积分达到" + nextRank.getRankName());
+		}
+	}
 }
