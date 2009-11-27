@@ -1,5 +1,7 @@
 package com.jcommerce.web.util;
 
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_TITLE;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,8 +9,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.datanucleus.util.StringUtils;
 
+import com.jcommerce.core.model.Category;
 import com.jcommerce.core.model.Comment;
 import com.jcommerce.core.model.User;
 import com.jcommerce.core.service.Condition;
@@ -26,6 +30,129 @@ import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.to.UserWrapper;
 
 public class LibMain {
+	
+	
+	/**
+	 * 获得指定分类的所有上级分类
+	 *
+	 * @access  public
+	 * @param   integer $cat    分类编号
+	 * @return  array
+	 */
+	public static String[][] getParentCats(String catId) {
+		if(StringUtils.isEmpty(catId)) {
+			return new String[0][];
+		}
+		
+		List<String[]> cats = new ArrayList<String[]>();
+		
+		List<Category> arr = SpringUtil.getDefaultManager().getList(ModelNames.CATEGORY, null);
+		
+		int index = 0;
+		String currentCatId = catId;
+		while(true) {
+			for(Category row: arr) {
+				if(currentCatId.equals(row.getPkId())) {
+					currentCatId = row.getParentId();
+					
+					String[] cat = new String[]{row.getPkId(), row.getCatName()};
+					cats.add(cat);
+					
+					index++;
+					break;
+				}
+			}
+			
+			if(index==0 || StringUtils.isEmpty(currentCatId)) {
+				break;
+			}
+		}
+		
+		
+		return cats.toArray(new String[0][]);
+	}
+	
+	
+	
+	/**
+	 * 取得当前位置和页面标题
+	 *
+	 * @access  public
+	 * @param   integer     $cat    分类编号（只有商品及分类、文章及分类用到）
+	 * @param   string      $str    商品名、文章标题或其他附加的内容（无链接）
+	 * @return  array
+	 */
+	public static void assignUrHere(HttpServletRequest request, String cat, String str) {
+		// ur_here.ftl
+		
+		/* 取得文件名 */
+		// /web/front/goods.action?act=price&id=126438149&attr=&number=1&1259214737720720
+		String requestURL = request.getRequestURI();
+		int i1 = requestURL.lastIndexOf('/');
+		int i2 = requestURL.indexOf(".action");
+		
+		String fileName = "home";
+		if(i1>=0 && i2>=0 && i2>=i1+1) {
+			fileName = requestURL.substring(i1+1, i2);
+		}
+		
+		/* 初始化“页面标题”和“当前位置” */
+	    String pageTitle = SpringUtil.getShopConfigManager().getCachedShopConfig().getString(CFG_KEY_SHOP_TITLE) + "- Powered by GCShop";
+	    String urHere = "<a href=\".\">"+Lang.getInstance().getString("home") + "</a>";
+	    
+	    
+	    /* 根据文件名分别处理中间的部分 */
+	    if(!"home".equals(fileName)) {
+	    	/* 处理有分类的 */
+	    	if("category".equals(fileName) || "goods".equals(fileName) || "articleCat".equals(fileName)
+	    			|| "article".equals(fileName) || "brand".equals(fileName)) {
+	    		String key = "";
+	    		String type = "";
+	    		String[][] catArr = null;
+	            /* 商品分类或商品 */
+	            if ("category".equals(fileName) || "goods".equals(fileName) || "brand".equals(fileName))
+	            {	    		
+	            	if(cat!=null) {
+	            		catArr = getParentCats(cat);
+	            		key = "cid";
+	            		type = "category";
+	            	}else {
+	            		catArr = new String[0][];
+	            	}
+	            }
+	            
+	            /* 循环分类 */
+	            if(catArr!=null) {
+	            	
+	            	ArrayUtils.reverse(catArr);
+	            	
+	            	for(String[] val : catArr) {
+	            		pageTitle = WebUtils.encodeHtml(val[1]) + "_" + pageTitle;
+	            		Map<String, Object> args = new HashMap<String, Object>();
+	            		args.put(key, val[0]);
+	            		urHere = urHere + " <code>&gt;</code> <a href=\"" + 
+	            				LibCommon.buildUri(type, args, val[1])+ "\">" + WebUtils.encodeHtml(val[1]) + "</a>";
+	            		
+	            	}
+
+	            	
+	            }
+	            
+	    	}
+	    }
+        /* 处理最后一部分 */
+        if (!StringUtils.isEmpty(str)) {
+            pageTitle  = str + "_" + pageTitle;
+            urHere    += " <code>&gt;</code> " + str;
+        }
+
+        /* 返回值 */
+        request.setAttribute("pageTitle", pageTitle);		
+        request.setAttribute("urHere", urHere);
+        
+	}
+
+	
 	
 	/**
 	 * 查询评论内容

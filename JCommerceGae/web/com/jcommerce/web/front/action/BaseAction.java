@@ -2,6 +2,7 @@ package com.jcommerce.web.front.action;
 
 import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -160,10 +161,7 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
         request.setAttribute("promotionInfo", new ArrayList());
     }
 
-	public void includeUrHere(HttpServletRequest request) {
-		// ur_here.ftl
-        request.setAttribute("urHere", "urHere");		
-	}
+
 	public void includeCart() {
 		String res = LibInsert.insertCartInfo(getDefaultManager(), getRequest());
 		// TODO need convert insert clause to a variable during transform to .ftl
@@ -252,7 +250,13 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
     	LibInsert.insertComments(type, id, getDefaultManager(), getRequest(), getCachedShopConfig());
     }
     
-    
+    public void includeUrHere() {
+    	// provide a default value to avoid freeMarker error
+    	// however this could be override by calling LibMain.assignUrHere from Action
+    	
+    	getRequest().setAttribute("urHere", "TODO: urHere");
+    	
+    }
     
 	public void includeFilterAttr() {
 		// TODO includeFilterAttr
@@ -409,7 +413,7 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
 		
       setPageMeta(request);
       includeHelp(request);
-      includeUrHere(request);
+      includeUrHere();
       includePageFooter(request);
       getLangMap(request);
       includePageHeader(request);

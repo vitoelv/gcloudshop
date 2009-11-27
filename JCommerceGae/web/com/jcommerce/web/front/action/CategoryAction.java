@@ -36,6 +36,7 @@ public class CategoryAction extends BaseAction {
 		try {
 			debug("in execute");
 			HttpServletRequest request = getRequest();
+			
 			includeCart();
 			includeCategoryTree(request);
 
@@ -140,6 +141,9 @@ public class CategoryAction extends BaseAction {
 		
 		LibMain.assignPager("category", catLongId, count, size, sort, order, page,
 				"", brandId, 0, 0, display, "", "", null, getRequest(), getCachedShopConfig());
+		
+		
+		LibMain.assignUrHere(request, catId, "");
 		
 
 	}

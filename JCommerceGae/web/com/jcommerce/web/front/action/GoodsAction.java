@@ -29,6 +29,7 @@ import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.to.WrapperUtil;
 import com.jcommerce.web.util.LibGoods;
+import com.jcommerce.web.util.LibMain;
 import com.jcommerce.web.util.WebUtils;
 import com.jcommerce.web.util.LibGoods.GoodsPropertiesResult;
 
@@ -95,7 +96,11 @@ public class GoodsAction extends BaseAction {
 	    List<GoodsGalleryWrapper> goodsGalleryWrapper = WrapperUtil.wrap(goodsGallery, GoodsGalleryWrapper.class);
 	    request.setAttribute("pictures", goodsGalleryWrapper);
 	    /*修改完*/
-	        
+	    
+	    
+	    LibMain.assignUrHere(getRequest(), goods.getCatId(), goods.getGoodsName());
+	    
+	    
 	    GoodsPropertiesResult result = LibGoods.getGoodsProperties(goodsId, manager); // 获得商品的规格和属性
 	    request.setAttribute("properties", result.getPro());
 	    request.setAttribute("specification", result.getSpe());
