@@ -63,6 +63,13 @@ public class GoodsForm extends BeanObject implements IGoods {
 		return field;
 	}
 	
+	public static ComboBox<BeanObject> getCatIdField() {
+		ComboBox<BeanObject> field = new ComboBox<BeanObject>();
+		field.setName(CAT_ID);
+		field.setDisplayField(ICategory.CAT_NAME);
+        field.setValueField(ICategory.PK_ID);
+		return field;
+	}
 	public static ListField<BeanObject> getCategoryIdsField() {
 		ListField<BeanObject> field = new ListField<BeanObject>();
 		field.setName(CATEGORY_IDS);

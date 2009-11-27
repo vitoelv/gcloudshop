@@ -98,7 +98,8 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
     ComboBox<BeanObject> fListBrand;
     
     ListStore<BeanObject> categoryList;
-    ListField<BeanObject> fListCategory;
+    ComboBox<BeanObject> cbListCategory;
+    ListField<BeanObject> lfListCategory;
     
     
     AdapterField fBrandNameAd;
@@ -444,6 +445,36 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
         
         contentPanelGeneral.add(fText, sfd());
         
+        
+        // category and extended categories
+        categoryList = new ListStore<BeanObject>();
+        
+        cbListCategory = GoodsForm.getCatIdField();
+        cbListCategory.setFieldLabel(Resources.constants.Goods_category());
+        cbListCategory.setStore(categoryList);
+        cbListCategory.setEmptyText("");
+        cbListCategory.setWidth(150);
+        contentPanelGeneral.add(cbListCategory);
+        
+        
+        lfListCategory = GoodsForm.getCategoryIdsField();
+        lfListCategory.setFieldLabel(Resources.constants.Goods_category_extended());
+        
+        lfListCategory.setStore(categoryList);
+        lfListCategory.setEmptyText("Select one or more Categories...");   
+        lfListCategory.setWidth(150);   
+        lfListCategory.addSelectionChangedListener(new SelectionChangedListener<BeanObject>() {
+        	// TODO however this won't work
+			@Override
+			public void selectionChanged(SelectionChangedEvent<BeanObject> se) {
+				Info.display("ah-oh", "CLICKED");
+				
+			}
+        	
+        });
+        contentPanelGeneral.add(lfListCategory);
+        
+        
         brandList = new ListStore<BeanObject>();
         fListBrand = GoodsForm.getBrandIdField();
         fListBrand.setHideLabel(true);
@@ -507,22 +538,7 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
         
 
         
-        fListCategory = GoodsForm.getCategoryIdsField();
-        fListCategory.setFieldLabel(Resources.constants.Goods_category());
-        categoryList = new ListStore<BeanObject>();
-        fListCategory.setStore(categoryList);
-        fListCategory.setEmptyText("Select one or more Categories...");   
-        fListCategory.setWidth(150);   
-        fListCategory.addSelectionChangedListener(new SelectionChangedListener<BeanObject>() {
 
-			@Override
-			public void selectionChanged(SelectionChangedEvent<BeanObject> se) {
-				Info.display("ah-oh", "CLICKED");
-				
-			}
-        	
-        });
-        contentPanelGeneral.add(fListCategory);
         
         
         MultiField mfShopPrice = new MultiField();
@@ -630,7 +646,8 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
 			public void onSuccess(List<BeanObject> beans) {
 		    	categoryList.removeAll();
 				categoryList.add(beans);
-				populateField(fListCategory);
+				populateField(cbListCategory);
+				populateField(lfListCategory);
 			}
 		});
 		
