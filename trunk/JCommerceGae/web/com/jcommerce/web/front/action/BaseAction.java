@@ -341,7 +341,7 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
 //			}
 //		}
 		
-        nav.addTop(new ComponentUrl("cart.action", getText(lang.getString("viewCart")), 1));
+        nav.addTop(new ComponentUrl("flow.action", getText(lang.getString("viewCart")), 1));
         nav.addTop(new ComponentUrl("user.action", getText(lang.getString("userCenter")), 1));
         nav.addTop(new ComponentUrl("pick_out.action", getText(lang.getString("pickOut")), 1));
         nav.addTop(new ComponentUrl("group_by.action", getText(lang.getString("groupBuy")), 1));
@@ -424,17 +424,17 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
     	
     	HttpServletRequest request = getRequest();
 //      HttpServletResponse response = (HttpServletResponse)ctx.get(ServletActionContext.HTTP_RESPONSE); 
-      
+		HttpSession session = request.getSession();
+		
 		String queryString = request.getQueryString();
 		String requestURL = request.getRequestURI();
-		
 		String reqStr = StringUtils.isBlank(queryString) ? requestURL : requestURL+"?"+queryString;
-
+		
 		debug("currentQueryString=["+reqStr+"]");
-		debug("lastQueryString=["+getSession().getAttribute("currentQueryString")+"]");
-		getSession().setAttribute("lastQueryString", getSession().getAttribute("currentQueryString"));
-		getSession().setAttribute("currentQueryString", reqStr);
-
+		debug("lastQueryString=["+session.getAttribute("currentQueryString")+"]");
+		session.setAttribute("lastQueryString", session.getAttribute("currentQueryString"));
+		session.setAttribute("currentQueryString", reqStr);
+		
 		
 		Object obj = getSession().getAttribute("WW_TRANS_I18N_LOCALE");
 		debug("locale: "+obj);

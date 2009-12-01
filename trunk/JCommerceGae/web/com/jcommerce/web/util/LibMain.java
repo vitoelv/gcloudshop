@@ -87,14 +87,7 @@ public class LibMain {
 		
 		/* 取得文件名 */
 		// /web/front/goods.action?act=price&id=126438149&attr=&number=1&1259214737720720
-		String requestURL = request.getRequestURI();
-		int i1 = requestURL.lastIndexOf('/');
-		int i2 = requestURL.indexOf(".action");
-		
-		String fileName = "home";
-		if(i1>=0 && i2>=0 && i2>=i1+1) {
-			fileName = requestURL.substring(i1+1, i2);
-		}
+		String fileName = WebUtils.getActionName(request);
 		
 		/* 初始化“页面标题”和“当前位置” */
 	    String pageTitle = SpringUtil.getShopConfigManager().getCachedShopConfig().getString(CFG_KEY_SHOP_TITLE) + "- Powered by GCShop";
