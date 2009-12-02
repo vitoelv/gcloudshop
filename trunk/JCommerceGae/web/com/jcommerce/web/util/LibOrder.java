@@ -90,6 +90,9 @@ public class LibOrder {
     		
     		total.setGoodsPrice(total.getGoodsPrice() + cart.getGoodsPrice()*cart.getGoodsNumber());
     		total.setMarketPrice(total.getMarketPrice() + cart.getMarketPrice()*cart.getGoodsNumber());
+    		//设置节省的钱及比例
+    		total.setSaving(total.getSaving() + cart.getMarketPrice()*cart.getGoodsNumber() - cart.getGoodsPrice()*cart.getGoodsNumber());
+    		total.setSaveRate(total.getSaving() / total.getMarketPrice());
     		
     		if(cart.getIsReal()) {
     			realGoodsCount++;

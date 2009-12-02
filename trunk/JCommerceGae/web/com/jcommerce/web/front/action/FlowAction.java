@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,17 +15,21 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.struts2.ServletActionContext;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.jcommerce.core.model.AreaRegion;
 import com.jcommerce.core.model.Cart;
 import com.jcommerce.core.model.Constants;
+import com.jcommerce.core.model.Goods;
+import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.model.OrderGoods;
 import com.jcommerce.core.model.OrderInfo;
 import com.jcommerce.core.model.Payment;
 import com.jcommerce.core.model.Shipping;
 import com.jcommerce.core.model.ShippingArea;
+import com.jcommerce.core.model.User;
 import com.jcommerce.core.model.UserAddress;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
@@ -33,6 +38,7 @@ import com.jcommerce.core.service.shipping.impl.BaseShippingMetaPlugin;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.ICart;
 import com.jcommerce.gwt.client.model.IRegion;
+import com.jcommerce.gwt.client.model.IUser;
 import com.jcommerce.gwt.client.model.IUserAddress;
 import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.web.to.CartWrapper;
@@ -43,8 +49,10 @@ import com.jcommerce.web.to.RegionWrapper;
 import com.jcommerce.web.to.ShippingWrapper;
 import com.jcommerce.web.to.Total;
 import com.jcommerce.web.to.UserAddressWrapper;
+import com.jcommerce.web.to.UserWrapper;
 import com.jcommerce.web.to.WrapperUtil;
 import com.jcommerce.web.util.LibCommon;
+import com.jcommerce.web.util.LibMain;
 import com.jcommerce.web.util.LibOrder;
 import com.jcommerce.web.util.PrintfFormat;
 import com.opensymphony.xwork2.ActionContext;
@@ -62,6 +70,10 @@ public class FlowAction extends BaseAction {
     public static final String STEP_CHECKOUT = "checkout";
     public static final String STEP_CONSIGNEE = "consignee";
     public static final String STEP_DONE = "done";
+    public static final String STEP_DROP_GOODS = "drop_goods";
+    public static final String STEP_CLEAR = "clear";
+    public static final String STEP_UPDATE_CART = "update_cart";
+    public static final String STEP_LOGIN = "login";
     
     public static final String PARA_GOODS_ID = "goods_id";
     
@@ -69,7 +81,6 @@ public class FlowAction extends BaseAction {
     private InputStream jsonRes;
     private String shipping; 
     private String payment;
-
 
     
     private String stepAddToCart(HttpServletRequest request) throws JSONException{
@@ -91,9 +102,18 @@ public class FlowAction extends BaseAction {
 			//clearCart();
 		}
 		
+		//修改，获得商品规格
+		JSONArray specArray = goods.getJSONArray("spec");
+		List spec = null;
+		for(int i = 0;i < specArray.length();i++) {
+			if(spec == null) {
+				spec = new ArrayList();
+			}
+			spec.add(specArray.get(i));
+		}
 		
 		boolean suc = getWebManager().addToCart(
-				goodsId , goods.getInt("number"), null, request.getSession().getId(), userId, null);
+				goodsId , goods.getInt("number"), spec, request.getSession().getId(), userId, null);
 		
 		JSONObject res = new JSONObject();;
 		res.put("error", 0);
@@ -143,6 +163,7 @@ public class FlowAction extends BaseAction {
 			request.setAttribute("showGoodsThumb", getCachedShopConfig().get("showGoodsInCart"));		   
 		    /* 增加是否在购物车里显示商品属性 */
 			// do not show goodsattr
+			System.out.println(getCachedShopConfig().get("showGoodsAttribute"));
 			request.setAttribute("showGoodsAttribute", getCachedShopConfig().get("showGoodsAttribute"));
 			
 			request.setAttribute(KEY_STEP, STEP_CART);
@@ -176,6 +197,9 @@ public class FlowAction extends BaseAction {
     
 
     private String stepConsignee(HttpServletRequest request, boolean isSubmission) {
+    	if(request.getParameter(KEY_DIRECT_SHOPPING) != null) {
+    		getSession().setAttribute(KEY_DIRECT_SHOPPING, 1);
+    	}
     	if(!isSubmission) {
     	if(request.getAttribute(KEY_DIRECT_SHOPPING)!=null) {
     		getSession().setAttribute(KEY_DIRECT_SHOPPING, 1);
@@ -239,6 +263,30 @@ public class FlowAction extends BaseAction {
         /*------------------------------------------------------ */
     	HttpSession session = request.getSession();
     	String userId = (String)session.getAttribute(KEY_USER_ID);
+    	
+    	//判断购物车中是否有商品,如果没有就返回首页
+    	Criteria criteria = new Criteria();
+    	criteria.addCondition(new Condition(ICart.SESSION_ID,Condition.EQUALS,getSession().getId()));
+    	int count = getDefaultManager().getCount(ModelNames.CART, criteria);
+    	if(count == 0) {
+    		LibMain.showMessage(Lang.getInstance().getString("noGoodsInCart"), null, null, "info", true, request);
+    		return "message";
+    	}
+    	
+    	//判断是否登录
+    	String isDerect = getSession().getAttribute(KEY_DIRECT_SHOPPING) + "";//是否不登录，直接购买
+    	if(!isDerect.equals("1") && userId == null) {
+    		Lang lang = Lang.getInstance();
+    		Object flowLoginRegister = lang.get("flowLoginRegister");
+    		List<Object> list = new ArrayList<Object>();
+    		list.add(flowLoginRegister);
+    		lang.put("flowLoginRegister", list);
+    		
+    		request.setAttribute("key","");
+    		request.setAttribute("anonymousBuy", 1);
+    		request.setAttribute("step", "login");
+    		return SUCCESS;
+    	}
     	
     	Long flowType = (Long)session.getAttribute(KEY_FLOW_TYPE);
 //    	if(flowType==CART_GROUP_BUY_GOODS) 
@@ -587,8 +635,21 @@ public class FlowAction extends BaseAction {
 			}
 			else if(STEP_CONSIGNEE.equals(step)) {
 				return stepConsignee(request, true);
-			} else if(STEP_DONE.equals(step)) {
+			} 
+			else if(STEP_DONE.equals(step)) {
 				return stepDone(request);
+			}
+			else if(STEP_DROP_GOODS.equals(step)) {
+				return dropGoods(request);
+			}
+			else if(STEP_CLEAR.equals(step)){
+				return clear(request);
+			}
+			else if(STEP_UPDATE_CART.equals(step)) {
+				return updateCart(request);
+			}
+			else if(STEP_LOGIN.equals(step)) {
+				return login(request);
 			}
 			else {
 				return SUCCESS;
@@ -601,6 +662,180 @@ public class FlowAction extends BaseAction {
 		}
 	}
 	
+	//修改，用户登录，注册
+	private String login(HttpServletRequest request) {
+		String act = request.getParameter("act");
+		//登录
+		Lang lang = Lang.getInstance();
+		if(act.equals("signin")) {
+			if(login(request.getParameter("username"),request.getParameter("password"))) {
+				return stepCheckout(request);
+			}
+			else {
+				LibMain.showMessage(lang.getString("signinFailed"), null,null, "info", true, request);
+				return "message";
+			}
+		}
+		
+		//注册
+		else {
+			User user = new User();
+			String userName = request.getParameter("username");
+			String email = request.getParameter("email");
+			String password = request.getParameter("password");
+			String confirmPassword = request.getParameter("confirm_password");
+			
+			Criteria criteriaName = new Criteria();
+			criteriaName.addCondition(new Condition(IUser.USER_NAME,Condition.EQUALS,userName));
+			Criteria criteriaEmail = new Criteria();
+			criteriaEmail.addCondition(new Condition(IUser.EMAIL,Condition.EQUALS,email));
+			
+			if(getDefaultManager().getCount(ModelNames.USER, criteriaName) > 0) {
+				LibMain.showMessage(new PrintfFormat(lang.getString("usernameExist")).sprintf(new Object[]{userName}), null, null, "info", true, request);
+				return "message";
+			}
+			else if(getDefaultManager().getCount(ModelNames.USER, criteriaEmail) > 0) {
+				LibMain.showMessage(lang.getString("msgEmailRegistered"), null, null, "info", true, request);
+				return "message";
+			}
+			else {
+				user.setUserName(userName);
+				user.setEmail(email);
+				user.setPassword(password);
+				getDefaultManager().txadd(user);
+				setSession(userName);
+				return stepConsignee(request,false);
+			}
+		}
+	}
+	/********************用户登录，将userId存入session*********************/
+	public boolean checkUser(String username, String password) {
+		
+		User user = getUser(username);
+		if(user == null) {
+			return false;
+		}
+		
+		if(password!=null) {
+			return password.equals(user.getPassword());
+		}
+		else {
+			return true;
+		}
+		
+	}
+	private boolean login(String username, String password) {
+		if(checkUser(username, password)) {
+			setSession(username);
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	private void setSession(String username) {
+		if(StringUtils.isEmpty(username)) {
+			// destroy session
+			getSession().setAttribute(KEY_USER_ID, null);
+		}
+		else {
+			User user = getUser(username);
+			if(user!=null) {
+				//修改，放入wrapper,member_info.ftl 调用getUsername()方法
+				getSession().setAttribute("userInfo", new UserWrapper(user));//modifyed
+				getSession().setAttribute(KEY_USER_ID, user.getPkId());
+				getSession().setAttribute(KEY_USER_NAME, username);
+				getSession().setAttribute(KEY_USER_EMAIL, user.getEmail());
+			}
+		}
+		
+	}
+	public User getUser(String username) {
+		Criteria c = new Criteria();
+		Condition cond = new Condition();
+		cond.setField(IUser.USER_NAME);
+		cond.setOperator(Condition.EQUALS);
+		cond.setValue(username);
+		c.addCondition(cond);
+		
+		List<User> res = (List<User>)getDefaultManager().getList(ModelNames.USER, c);
+		User user = res.size()>0 ? res.get(0) : null;
+		
+		return user;
+	}
+	/*************************登录完*******************************************************/
+
+	//修改，更新购物车,修改商品数量
+	private String updateCart(HttpServletRequest request) {
+		String sessionId = request.getSession().getId();
+		Criteria criteria = new Criteria();
+		criteria.addCondition(new Condition(ICart.SESSION_ID,Condition.EQUALS,sessionId));
+		List<Cart> carts = getDefaultManager().getList(ModelNames.CART, criteria);
+		for(Iterator iterator = carts.iterator();iterator.hasNext();) {
+			Cart cart = (Cart)iterator.next();
+			String id = cart.getPkId();
+			String goodsId = cart.getGoodsId();
+			//从页面获得修改后的商品数量,如果输入的不是数字，不更新商品数量
+			long newGoodsNum = 0;
+			try {
+				newGoodsNum = Long.parseLong(request.getParameter("goods_number[" + id + "]"));
+			} catch(Exception NumberFormatException) {
+				newGoodsNum = cart.getGoodsNumber();
+			}
+			
+			//对商品数量进行了修改
+			Lang lang = Lang.getInstance();
+			if(newGoodsNum != cart.getGoodsNumber()) {
+				//判断库存是否足够
+				Goods goods = (Goods) getDefaultManager().get(ModelNames.GOODS,goodsId);
+				if(newGoodsNum <= goods.getGoodsNumber()) {
+					cart.setGoodsNumber(newGoodsNum);
+					getDefaultManager().txattach(cart);
+					LibMain.showMessage(lang.getString("updateCartNotice"), lang.getString("backToCart"),"flow.action", "info", true, request);
+				}
+				else {
+					String goodsName = goods.getGoodsName();
+					long goodsNumber = goods.getGoodsNumber();
+					LibMain.showMessage(new PrintfFormat(lang.getString("stockInsufficiency")).sprintf(new Object[]{goodsName,goodsNumber,goodsNumber})
+							, null,null, "info", false, request);
+					
+				}
+			}
+			else {
+				LibMain.showMessage(lang.getString("updateCartNotice"), lang.getString("backToCart"),"flow.action", "info", true, request);
+			}
+		}
+		return "message";
+	}
+
+	//修改，清空购物车
+	private String clear(HttpServletRequest request) {
+		String sessionId = request.getSession().getId();
+		Condition condition = new Condition(ICart.SESSION_ID,Condition.EQUALS,sessionId);
+		Criteria criteria = new Criteria();
+		criteria.addCondition(condition);
+		List<ModelObject> carts = getDefaultManager().getList(ModelNames.CART, criteria);
+		getDefaultManager().txdeleteall(carts);
+		return stepCart(request);
+	}
+
+	//修改，从购物车中删除一个商品
+	private String dropGoods(HttpServletRequest request) {		
+		String recId = request.getParameter("id");
+		Cart cart = (Cart) getDefaultManager().get(ModelNames.CART, recId);
+		String parentId = cart.getParentId();
+		//删除配件
+		if(parentId == null || parentId.equals(0)){
+			String goodsId = cart.getGoodsId();
+			Criteria criteria = new Criteria();
+			criteria.addCondition(new Condition(ICart.PARENT_ID,Condition.EQUALS,goodsId));
+			List<ModelObject> deleteCart = (List<ModelObject>) getDefaultManager().getList(ModelNames.CART, criteria);
+			getDefaultManager().txdeleteall(deleteCart);
+		}
+		getDefaultManager().txdelete(ModelNames.CART, recId);
+		return stepCart(request);
+	}
+
 	public void includeOrderTotal(HttpServletRequest request) {
 		// TODO
 //		Total total = new Total();

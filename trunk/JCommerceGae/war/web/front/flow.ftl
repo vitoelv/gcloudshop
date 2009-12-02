@@ -68,7 +68,7 @@
               </#if>
                 </td>
 							<#if  showGoodsAttribute  ==  1  >	
-              <td bgcolor="#ffffff">${goods.goodsAttr|nl2br}</td>
+              <td bgcolor="#ffffff">${goods.goodsAttr}</td>
 							</#if>
               <#if  showMarketprice??  >
               <td align="right" bgcolor="#ffffff">${goods.marketPrice}</td>
@@ -106,7 +106,7 @@
         </form>
         <table width="99%" align="center" border="0" cellpadding="5" cellspacing="0" bgcolor="#dddddd">
           <tr>
-            <td bgcolor="#ffffff"><a href="./"><img src="images/continue.gif" alt="continue" /></a></td>
+            <td bgcolor="#ffffff"><a href="home.action"><img src="images/continue.gif" alt="continue" /></a></td>
             <td bgcolor="#ffffff" align="right"><a href="flow.action?step=checkout"><img src="images/checkout.gif" alt="checkout" /></a></td>
           </tr>
         </table>
@@ -280,7 +280,7 @@ var ${key} = "${item}";
             <tr>
               <td bgcolor="#ffffff">
               <a href="goods.action?id=${goods.goodsId}" target="_blank" class="f6">${goods.goodsName}</a>
-                <#if  (goods.parentId  !=  "")  >
+                <#if  (goods.parentId??)  >
                 <span style="color:#FF0000">（${lang.accessories}）</span>
                 <#elseif  goods.isGift??  >
                 <span style="color:#FF0000">（${lang.largess}）</span>
@@ -617,7 +617,7 @@ var ${key} = "${item}";
           var ${key} = "${item}";
         </#list>
 
-        {literal}
+        
         function checkLoginForm(frm) {
           if (Utils.isEmpty(frm.elements['username'].value)) {
             alert(username_not_null);
