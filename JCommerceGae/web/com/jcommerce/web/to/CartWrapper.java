@@ -20,6 +20,14 @@ public class CartWrapper extends BaseModelWrapper {
 		return cart;
 	}
 	
+	public String getRecId() {
+		return getCart().getPkId();
+	}
+	
+	public String getParentId() {
+		return getCart().getParentId();
+	}
+	
 	public String getFormatedGoodsPrice() {
 		return WebFormatUtils.priceFormat(getCart().getGoodsPrice());
 	}
