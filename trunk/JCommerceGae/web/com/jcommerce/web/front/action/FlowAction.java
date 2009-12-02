@@ -104,11 +104,8 @@ public class FlowAction extends BaseAction {
 		
 		//修改，获得商品规格
 		JSONArray specArray = goods.getJSONArray("spec");
-		List spec = null;
+		List spec = new ArrayList();
 		for(int i = 0;i < specArray.length();i++) {
-			if(spec == null) {
-				spec = new ArrayList();
-			}
 			spec.add(specArray.get(i));
 		}
 		
@@ -274,8 +271,8 @@ public class FlowAction extends BaseAction {
     	}
     	
     	//判断是否登录
-    	String isDerect = getSession().getAttribute(KEY_DIRECT_SHOPPING) + "";//是否不登录，直接购买
-    	if(!isDerect.equals("1") && userId == null) {
+    	String isDirect = getSession().getAttribute(KEY_DIRECT_SHOPPING) + "";//是否不登录，直接购买
+    	if(!isDirect.equals("1") && userId == null) {
     		Lang lang = Lang.getInstance();
     		Object flowLoginRegister = lang.get("flowLoginRegister");
     		List<Object> list = new ArrayList<Object>();
