@@ -1,8 +1,15 @@
 package com.jcommerce.web.front.action;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,12 +17,17 @@ import javax.servlet.http.HttpServletRequest;
 import org.datanucleus.util.StringUtils;
 import org.json.JSONObject;
 
+import com.google.gwt.user.client.Random;
 import com.jcommerce.core.model.Comment;
 import com.jcommerce.gwt.client.model.IComment;
 import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.util.LibMain;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 
 public class CommentAction extends BaseAction {
 	public void debug(String s) {
@@ -46,6 +58,8 @@ public class CommentAction extends BaseAction {
 	        res.put("message", "");
 	        res.put("content", "");
 	        System.out.println(act);
+	        
+	        String content = null;
 	        if(StringUtils.isEmpty(act)) {
 	            /*
 	             * act 参数为空
@@ -64,6 +78,7 @@ public class CommentAction extends BaseAction {
 	        	else {
 	        		// TODO verify comments:  captcha and anti-rebot
 	        		addComment(cmt);
+	        		content = getContent(id,type,page,request);
 	        	}
 	        }
 	        
@@ -73,15 +88,14 @@ public class CommentAction extends BaseAction {
 	        	Long type = Long.parseLong(request.getParameter("type"));
 	        	int page = Integer.parseInt(request.getParameter("page"));
 	        	
-	        	Map<String, Object> cmt = LibMain.assignComment(id, type, page, getDefaultManager(), getCachedShopConfig());
-	    		request.setAttribute("comments", cmt.get("comments"));
-	    		request.setAttribute("pager", cmt.get("pager"));
+	        	content = getContent(id,type,page,request);
 	        }
 	        /*修改完*/
 	        if(res.getInt("error")==0) {
 	        	res.put("message", getCommentCheckConfig()>0 ? Lang.getInstance().getString("cmtSubmitWait") 
 	        					: Lang.getInstance().getString("cmtSubmitDone"));
-//	        	res.put("content", value);
+	        	
+	        	res.put("content", content);
 	        }
 	        
 			String out = res.toString();
@@ -143,4 +157,42 @@ public class CommentAction extends BaseAction {
 		
 		
 	}
+	
+	//返回刷新评论所需的内容
+	public String getContent(String id, Long type, int page, HttpServletRequest request) throws IOException, TemplateException {
+		
+		//设置显示页面所需的数据
+		Map<String, Object> cmt = LibMain.assignComment(id, type, page, getDefaultManager(), getCachedShopConfig());		          	
+     	Map map = new HashMap();
+     	Lang lang = Lang.getInstance();             	       
+
+		map.put("lang", lang);
+		map.put("comments", cmt.get("comments"));
+		map.put("pager", cmt.get("pager"));
+		map.put("commentType", type);
+		map.put("id", id);
+		map.put("enabledCaptcha", false);
+		
+		Map<String, Object> smarty = new HashMap<String, Object>();
+        Map<String, String> server = new HashMap<String, String>();
+        server.put("PHP_SELF", getSelfURL());        
+        smarty.put("server", server);
+        
+        Map<String, Object> session = new HashMap<String, Object>();
+        session.put("userName", getSession().getAttribute(KEY_USER_NAME));
+        String email = (String)getSession().getAttribute(KEY_USER_EMAIL);
+        session.put("email",  email==null? "" : email);
+        smarty.put("session", session);
+        map.put("smarty", smarty);
+		
+        //根据数据将ftl转化为html，并以String类型返回
+        Configuration cfg = new Configuration();
+    	cfg.setDirectoryForTemplateLoading(new File("D:/Jcommerce/JCommerceGae/war/web/front/library"));  
+		Template t = cfg.getTemplate("comments_list.ftl");
+		StringWriter stringWriter = new StringWriter();
+     	t.process(map, stringWriter);
+     	return stringWriter.toString();
+	}
+
+		
 }
