@@ -15,6 +15,7 @@ import com.jcommerce.core.util.Utf8ResourceBundle;
 public class Lang extends BaseWrapper {
 	
 	public static Lang getInstance() {
+		// TODO not thread-safe
 		if(instance==null) {
 			instance = new Lang();
 		}
@@ -22,21 +23,29 @@ public class Lang extends BaseWrapper {
 	}
 	
 	private static Lang instance;
-	ResourceBundle rb;
+	
+	
 	
 	@Override
 	public Object get(String key) {
-		
-		Object val = null;
-		try {
-			val = rb.getString(key);
-		} catch (Exception e) {
-		}
-		if(val == null) {
-			val = super.get(key);
-		}
+		// just for easy debugging
+		Object val = super.get(key);
 		return val;
 	}
+	
+//	@Override
+//	public Object get(String key) {
+//		
+//		Object val = null;
+//		try {
+//			val = rb.getString(key);
+//		} catch (Exception e) {
+//		}
+//		if(val == null) {
+//			val = super.get(key);
+//		}
+//		return val;
+//	}
 	
 	public String getString(String key) {
 		return (String)get(key);
@@ -44,9 +53,16 @@ public class Lang extends BaseWrapper {
 	
 	
 	private Lang() {
-		
+		// TODO switch locale
+		Locale locale = Locale.CHINESE;
+		loadFromBundel("com.jcommerce.web.resource.lang", locale);
+		loadFromBundel("com.jcommerce.web.resource.lang-changed", locale);
+
+	}
+	
+	private void loadFromBundel(String bundleName, Locale locale) {
 		// TODO add support of english
-		rb = Utf8ResourceBundle.getBundle("com.jcommerce.web.resource.lang", Locale.CHINESE);
+		ResourceBundle rb = Utf8ResourceBundle.getBundle(bundleName, locale);
 		Enumeration keys = rb.getKeys();
 		String regex = "([^\\[]*)(?:\\[([^\\]]+)\\])?";
 		Pattern p = Pattern.compile(regex);
@@ -67,7 +83,7 @@ public class Lang extends BaseWrapper {
         display.put("list", "list");
         display.put("grid", "grid");
         display.put("text", "text");
-        values.put("display", display);
+        values.put("display", display);		
 	}
 	
 	// make it static for unit testing
