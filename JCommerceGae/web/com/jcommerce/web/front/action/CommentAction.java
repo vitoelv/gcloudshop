@@ -4,12 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,15 +14,14 @@ import javax.servlet.http.HttpServletRequest;
 import org.datanucleus.util.StringUtils;
 import org.json.JSONObject;
 
-import com.google.gwt.user.client.Random;
 import com.jcommerce.core.model.Comment;
 import com.jcommerce.gwt.client.model.IComment;
 import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.web.to.Lang;
-import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.util.LibMain;
 
 import freemarker.template.Configuration;
+import freemarker.template.ObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
@@ -164,6 +160,7 @@ public class CommentAction extends BaseAction {
 		//设置显示页面所需的数据
 		Map<String, Object> cmt = LibMain.assignComment(id, type, page, getDefaultManager(), getCachedShopConfig());		          	
      	Map map = new HashMap();
+
      	Lang lang = Lang.getInstance();             	       
 
 		map.put("lang", lang);
@@ -187,6 +184,16 @@ public class CommentAction extends BaseAction {
 		
         //根据数据将ftl转化为html，并以String类型返回
         Configuration cfg = new Configuration();
+
+        // TODO: 
+        // as shown in TestFreeMarker, it's not perfect that the ?keys will return method names also, need refer to how spring freemarker plugin do the render
+        // NOTE: however in runtime it works ok !!
+        
+		// refer to JAVADOC: Configuration.isClassicCompatible()
+		cfg.setClassicCompatible(true);
+		// refer to Freemarker manuual chapter: Bean wrapper
+		cfg.setObjectWrapper(ObjectWrapper.BEANS_WRAPPER);
+		
     	cfg.setDirectoryForTemplateLoading(new File("D:/Jcommerce/JCommerceGae/war/web/front/library"));  
 		Template t = cfg.getTemplate("comments_list.ftl");
 		StringWriter stringWriter = new StringWriter();
