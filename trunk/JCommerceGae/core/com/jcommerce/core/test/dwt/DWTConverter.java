@@ -170,7 +170,11 @@ public class DWTConverter {
 //				} catch (Exception e) {
 //				}
 //				if(k2number==Integer.MIN_VALUE) {
-					k2 = replacePhpVars(k2);
+
+					// we do not convert php style varibles, 
+					// bcause the variables are normally access from javascript, e.g. flowJs[invalidEmail]
+					// k2 = replacePhpVars(k2);
+
 					Map<String,String> val = (Map)res.get(k1);
 					if(val==null) {
 						val = new HashMap<String, String>();
@@ -448,6 +452,9 @@ public class DWTConverter {
 	}
 	public String select(String tag) {
 //		$tag = stripslashes(trim($tag));
+		
+		boolean bypassConvertVar = false;
+		
 		debug("in [select]: tag="+tag);
 		String res = "";
 		tag = tag.trim();
@@ -504,7 +511,7 @@ public class DWTConverter {
 			
 			else if("insert_scripts".equals(tag_sel)) {
 				Map<String, String> m = getPara(tag.substring(15)); 
-				
+				bypassConvertVar = true;
 				res = compileInsertScripts(m);
 				
 			}else if("insert".equals(tag_sel)) {
@@ -537,7 +544,10 @@ public class DWTConverter {
 		
 		
 		debug("outof [select]: res="+res);
-		res = replaceVars(res);
+		
+		if(!bypassConvertVar) {
+			res = replaceVars(res);
+		}
 		
 		return res;
 	}

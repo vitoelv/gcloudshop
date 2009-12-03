@@ -142,7 +142,7 @@ public class TestJava extends TestCase {
 		}
 
 		m.appendTail (sb); 
-		System.out.println (sb); 
+		System.out.println ("result: "+sb); 
 	}
 	
 	public String select (String s) {
@@ -406,7 +406,10 @@ public class TestJava extends TestCase {
 			// 1) parsing each token accurately, with or without space
 			// 2) replace PHPVar with JavaVar only for those token contains "$" 
 			
-			String tag = "if $action_xxx.abc[xby] eq \"account_deposit\"";
+//			String tag = "if $action_xxx.abc[xby] eq \"account_deposit\"";
+			
+			
+			String tag = "insert_scripts files='utils.js,transport.js,region.js,shopping_flow.js'";
 			
 			DWTConverter dwtConverter = new DWTConverter();
 			dwtConverter.foreachStack.push("abc");
