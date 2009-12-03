@@ -167,7 +167,7 @@ public class LibMain {
 		if(size<0) {
 			size = 5;
 		}
-		int pageCount = count > 0 ? (count / size)+1 : 1;
+		int pageCount = (int) (count > 0 ? (Math.ceil((double)count / size)) : 1);
 		
 		Map<String, CommentWrapper> arr = new HashMap<String, CommentWrapper>();
 		List<String> ids = new ArrayList<String>();

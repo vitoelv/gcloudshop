@@ -11,11 +11,9 @@ import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
-import com.jcommerce.core.service.impl.DefaultManagerImpl;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IComment;
 import com.jcommerce.gwt.client.util.URLConstants;
-import com.jcommerce.web.front.action.GoodsAction;
 import com.jcommerce.web.util.WebFormatUtils;
 
 public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
@@ -84,7 +82,7 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
         }
         String rank = "0";
         if(number > 0)
-        	rank = ((int)Math.ceil(sum / number)) + "";
+        	rank = ((int)Math.ceil((double)sum / number)) + "";
     	return rank;
     }
     /*修改完*/
