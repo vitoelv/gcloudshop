@@ -146,7 +146,7 @@ public class PaymentMetaManagerImpl implements IPaymentMetaManager{
             obj.setPayConfig(plugin.getDefaultConfigMeta().getPayConfig());
             
             obj.setPayDesc(plugin.getDefaultConfigMeta().getPayDesc());
-            obj.setEnabled(false);
+            obj.setEnabled(true);
             obj.setPayFee(plugin.getDefaultConfigMeta().getPayFee());
             obj.setPayName(plugin.getDefaultConfigMeta().getPayName());
             obj.setIsOnline(plugin.getDefaultConfigMeta().getIsOnline());

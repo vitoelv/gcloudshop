@@ -1,6 +1,10 @@
 package com.jcommerce.web.to;
 
+import java.util.Iterator;
+import java.util.Set;
+
 import com.jcommerce.core.model.Cart;
+import com.jcommerce.core.model.GoodsAttr;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.web.util.WebFormatUtils;
 
@@ -25,6 +29,7 @@ public class CartWrapper extends BaseModelWrapper {
 	}
 	
 	public String getParentId() {
+		System.out.println(getCart().getParentId()+"+++++++++++++++++++++++++++++++++++++++");
 		return getCart().getParentId();
 	}
 	
@@ -34,4 +39,18 @@ public class CartWrapper extends BaseModelWrapper {
 	public String getFormatedSubtotal() {
 		return WebFormatUtils.priceFormat(getCart().getGoodsPrice() * getCart().getGoodsNumber());
 	}
+	
+    public String getFormatedMarketPrice(){
+    	return WebFormatUtils.priceFormat(getCart().getMarketPrice());
+    }
+    
+    public String getGoodsAttr(){
+    	if( getCart().getGoodsAttr() != null ){
+    		return getCart().getGoodsAttr();
+    	}
+    	else{
+    		return "";
+    	}
+    	
+    }
 }

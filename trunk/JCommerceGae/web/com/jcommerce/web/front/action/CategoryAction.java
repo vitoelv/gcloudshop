@@ -245,8 +245,8 @@ public class CategoryAction extends BaseAction {
         	cond.setValue(cid);        	
         	goods.addAll((List<Goods>)manager.getList(ModelNames.GOODS, criteria));
 		}
-        // 没有扩展分类，暂时不必要去重
-        //LibCommon.removeDuplicateWithOrder(goods);
+        
+        LibCommon.removeDuplicateWithOrder(goods);
 		
 		return goods.size();
 	}
@@ -305,8 +305,8 @@ public class CategoryAction extends BaseAction {
         	cond.setValue(cid);
         	goods.addAll((List<Goods>)manager.getList(ModelNames.GOODS, criteria,firstRow,maxRow));
 		}
-        //  没有扩展分类，暂时不必要去重
-        //LibCommon.removeDuplicateWithOrder(goods);
+        
+        LibCommon.removeDuplicateWithOrder(goods);
         if(goods.size()<maxRow){
         	maxRow = goods.size();
         }

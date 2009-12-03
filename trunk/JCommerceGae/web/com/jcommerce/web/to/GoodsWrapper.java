@@ -2,11 +2,13 @@ package com.jcommerce.web.to;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.jcommerce.core.model.Comment;
 import com.jcommerce.core.model.Goods;
+import com.jcommerce.core.model.GoodsAttr;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
@@ -117,7 +119,7 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
     public String getMarketPrice(){
     	return WebFormatUtils.priceFormat(getGoods().getMarketPrice());
     }
-    
+        
     public String getShopPrice(){
     	return WebFormatUtils.priceFormat(getGoods().getShopPrice());
     }

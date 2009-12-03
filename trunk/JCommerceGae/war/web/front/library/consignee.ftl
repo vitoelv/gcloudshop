@@ -30,7 +30,7 @@
       <select name="district" id="selDistricts_${sn}" <#if  !districtList[sn]??  >style="display:none"</#if> style="border:1px solid #ccc;">
         <option value="0">${lang.pleaseSelect}${nameOfRegion[3]}</option>
         <#list districtList[sn] as district>
-        <option value="${district.regionId}" <#if  consignee.district  ==  district.regionId??  >selected</#if>>${district.regionName}</option>
+        <option value="${district.regionId}" <#if  consignee.district  ==  district.regionId  >selected</#if>>${district.regionName}</option>
         </#list>
       </select>
     ${lang.requireField} </td>

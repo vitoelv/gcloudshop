@@ -23,28 +23,10 @@ public class SessionListener implements HttpSessionListener {
 	
 	public void sessionCreated(HttpSessionEvent se) {
 		
-		Session session = (Session)getDefaultManager().get(ModelNames.SESSION, se.getSession().getId());
-		if(session == null){
-			// TODO  ip,data
-			session = new Session();
-			session.setSesskey(se.getSession().getId());
-			session.setExpiry((new Date()).getTime());
-			
-			getDefaultManager().txadd(session);
-			
-		}else{
-			if(((new Date()).getTime()-session.getExpiry()) <= maxLifeTime){
-				session.setExpiry((new Date()).getTime());
-				getDefaultManager().txupdate(session);
-			}else{
-				getDefaultManager().txdelete(ModelNames.SESSION, session.getPkId());
-				session = new Session();
-				session.setSesskey(se.getSession().getId());
-				session.setExpiry((new Date()).getTime());
-				getDefaultManager().txadd(session);
-			}
-		}
-
+		Session session = new Session();
+		session.setSesskey(se.getSession().getId());
+		session.setExpiry((new Date()).getTime());
+		getDefaultManager().txadd(session);
 	}
 
 	public void sessionDestroyed(HttpSessionEvent se) {

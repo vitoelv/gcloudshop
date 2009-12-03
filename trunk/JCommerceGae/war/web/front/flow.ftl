@@ -12,7 +12,7 @@
 <link href="style.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript" src="js/common.js"></script>
-<script type="text/javascript" src="js/shoppingFlow.js"></script>
+<script type="text/javascript" src="js/shopping_flow.js"></script>
 
 </head>
 <body>
@@ -249,7 +249,7 @@ var ${key} = "${item}";
           
         </script>
         <!-- 如果有收货地址，循环显示用户的收获地址 -->
-        <!-- #list consigneeList?keys as sn> <!--#assign consignee = consigneeList[sn]--> 
+        <!-- #list consigneeList?keys as sn --> <!--#assign consignee = consigneeList[sn]--> 
         <#list consigneeList as consignee> <#assign sn = consignee_index> 
         <form action="flow.action" method="post" name="theForm" id="theForm" onsubmit="return checkConsignee(this)">
         <#include "library/consignee.ftl">
@@ -282,7 +282,7 @@ var ${key} = "${item}";
               <a href="goods.action?id=${goods.goodsId}" target="_blank" class="f6">${goods.goodsName}</a>
                 <#if  (goods.parentId??)  >
                 <span style="color:#FF0000">（${lang.accessories}）</span>
-                <#elseif  goods.isGift??  >
+                <#elseif  goods.isGift  >
                 <span style="color:#FF0000">（${lang.largess}）</span>
                 </#if>
               </td>
@@ -354,7 +354,7 @@ var ${key} = "${item}";
             </tr>
             <#list shippingList as shipping>
             <tr>
-              <td bgcolor="#ffffff" valign="top"><input name="shipping" type="radio" value="1" <#if  order.shippingId  ==  shipping.shippingId  >checked="true"</#if> supportCod="${shipping.supportCod}" insure="${shipping.insure}" onclick="selectShipping(this)" />
+              <td bgcolor="#ffffff" valign="top"><input name="shipping" type="radio" value="${shipping.shippingId}" <#if  order.shippingId  ==  shipping.shippingId  >checked="true"</#if> supportCod="${shipping.supportCod}" insure="${shipping.insure}" onclick="selectShipping(this)" />
               </td>
               <td bgcolor="#ffffff" valign="top"><strong>${shipping.shippingName}</strong></td>
               <td bgcolor="#ffffff" valign="top">${shipping.shippingDesc}</td>

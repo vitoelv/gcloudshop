@@ -2,8 +2,13 @@ package com.jcommerce.web.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.jcommerce.core.model.Category;
 import com.jcommerce.core.model.Region;
@@ -14,6 +19,7 @@ import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IRegion;
 import com.jcommerce.web.front.action.IWebConstants;
 import com.jcommerce.web.to.CategoryWrapper;
+import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.RegionWrapper;
 import com.jcommerce.web.to.WrapperUtil;
 
@@ -145,7 +151,9 @@ public class LibCommon {
 	public static List<RegionWrapper> getRegion(Long regionType, String parentId, IDefaultManager manager) {
 		Criteria c = new Criteria();
 		c.addCondition(new Condition(IRegion.REGION_TYPE, Condition.EQUALS, regionType.toString()));
-		c.addCondition(new Condition(IRegion.PARENT_ID, Condition.EQUALS, parentId));
+		if(parentId != null){
+			c.addCondition(new Condition(IRegion.PARENT_ID, Condition.EQUALS, parentId));
+		}
 		List<Region> list = (List<Region>)manager.getList(ModelNames.REGION, c);
 		return WrapperUtil.wrap(list, RegionWrapper.class);
 		
@@ -215,5 +223,44 @@ public class LibCommon {
 
     	return res;
     }
+    /**
+	 * arraylist去重
+	 * @param arlList
+	 */
+	public static void removeDuplicateWithOrder(List arlList) 
+	{
+	  Set set = new HashSet();
+	  List newList = new ArrayList();
+	  for (Iterator iter = arlList.iterator(); iter.hasNext(); )
+	  {
+	      Object element = iter.next();
+	      if (set.add(element)){
+	    	  newList.add(element);
+	      }
+	  }
+	  arlList.clear();
+	  arlList.addAll(newList);
+	}
+	
+	/**
+	 * 格式化重量：小于1千克用克表示，否则用千克表示
+	 * @param   float   $weight     重量
+	 * @return  string  格式化后的重量
+	 */
+	public static String formatedWeight(double weight){
+		Long newWeight = Math.round(weight);
+		Lang lang = Lang.getInstance();
+		if( newWeight > 0 ){
+			if( newWeight < 1 ){
+				return newWeight.intValue() * 1000 + lang.getString("gram");
+			}
+			else{
+				return newWeight.intValue() + lang.getString("kilogram");
+			}
+		}
+		else{
+			return "0";
+		}
+	}
 	
 }

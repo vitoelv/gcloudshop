@@ -34,4 +34,13 @@ public class OrderInfoWrapper extends BaseModelWrapper {
     public String getOrderId() {
     	return getOrderInfo().getPkId();
     }
+    
+    public String getPostscript() {
+    	if( orderInfo.getPostscript() != null){
+			return orderInfo.getPostscript();
+	    }
+		else{
+			return "";
+		}
+	}
 }

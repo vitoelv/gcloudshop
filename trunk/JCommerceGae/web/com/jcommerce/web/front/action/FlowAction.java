@@ -27,17 +27,20 @@ import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.model.OrderGoods;
 import com.jcommerce.core.model.OrderInfo;
 import com.jcommerce.core.model.Payment;
+import com.jcommerce.core.model.Session;
 import com.jcommerce.core.model.Shipping;
 import com.jcommerce.core.model.ShippingArea;
 import com.jcommerce.core.model.User;
 import com.jcommerce.core.model.UserAddress;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
+import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.service.shipping.IShippingMetaPlugin;
 import com.jcommerce.core.service.shipping.impl.BaseShippingMetaPlugin;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.ICart;
 import com.jcommerce.gwt.client.model.IRegion;
+import com.jcommerce.gwt.client.model.IShipping;
 import com.jcommerce.gwt.client.model.IUser;
 import com.jcommerce.gwt.client.model.IUserAddress;
 import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
@@ -47,6 +50,7 @@ import com.jcommerce.web.to.OrderInfoWrapper;
 import com.jcommerce.web.to.PaymentWrapper;
 import com.jcommerce.web.to.RegionWrapper;
 import com.jcommerce.web.to.ShippingWrapper;
+import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.to.Total;
 import com.jcommerce.web.to.UserAddressWrapper;
 import com.jcommerce.web.to.UserWrapper;
@@ -54,6 +58,7 @@ import com.jcommerce.web.to.WrapperUtil;
 import com.jcommerce.web.util.LibCommon;
 import com.jcommerce.web.util.LibMain;
 import com.jcommerce.web.util.LibOrder;
+import com.jcommerce.web.util.LibTransaction;
 import com.jcommerce.web.util.PrintfFormat;
 import com.opensymphony.xwork2.ActionContext;
 
@@ -82,6 +87,7 @@ public class FlowAction extends BaseAction {
     private String shipping; 
     private String payment;
 
+
     
     private String stepAddToCart(HttpServletRequest request) throws JSONException{
 		setOrder(request);
@@ -98,8 +104,8 @@ public class FlowAction extends BaseAction {
 		
 		/* 如果是一步购物，先清空购物车 */
 		if((Integer)getCachedShopConfig().get("oneStepBuy")==1) {
-			// TODO clearCart
-			//clearCart();
+			Long flowType = (Long)getSession().getAttribute(KEY_FLOW_TYPE);
+			clearCart(flowType);
 		}
 		
 		//修改，获得商品规格
@@ -181,57 +187,73 @@ public class FlowAction extends BaseAction {
     				consignee = new UserAddressWrapper(list.get(0));
     			}
     		}
+    		else{
+    			consignee = new UserAddressWrapper(new UserAddress());
+    		}
     	}
 		return consignee;
     	
     	
     }
     
-    private boolean checkConsigneeInfo(UserAddressWrapper consignee, Long flowType) {
-    	return consignee != null;
-    }
-
-    
-
-    private String stepConsignee(HttpServletRequest request, boolean isSubmission) {
-    	if(request.getParameter(KEY_DIRECT_SHOPPING) != null) {
-    		getSession().setAttribute(KEY_DIRECT_SHOPPING, 1);
-    	}
-    	if(!isSubmission) {
-    	if(request.getAttribute(KEY_DIRECT_SHOPPING)!=null) {
-    		getSession().setAttribute(KEY_DIRECT_SHOPPING, 1);
-    	}
-    	
-    	includeConsignee(request);
-		
-		
-    	List<UserAddressWrapper> consigneeList = new ArrayList<UserAddressWrapper>();
-    	UserAddressWrapper consignee = (UserAddressWrapper)getSession().getAttribute(KEY_FLOW_CONSIGNEE);
-    	if(consignee == null) {
-    		consignee = new UserAddressWrapper(new UserAddress());
-//    		consignee.put("country", ShopConfigWrapper.getDefaultConfig().get(ShopConfigWrapper.CFG_KEY_SHOP_COUNTRY));
-    		consignee.getUserAddress().setCountry((String)getCachedShopConfig().get(IShopConfigMeta.CFG_KEY_SHOP_COUNTRY));
-    	}
-		consigneeList.add(consignee);
-		
-    	request.setAttribute("consigneeList", consigneeList);
-    	
-
-
-    	
-    	request.setAttribute(KEY_STEP, STEP_CONSIGNEE);
-    	
-    	return SUCCESS;    
+    private String stepConsignee(HttpServletRequest request) {
+    	if(request.getMethod().equals("GET")) {
+	    	if(request.getAttribute(KEY_DIRECT_SHOPPING) != null) {
+	    		getSession().setAttribute(KEY_DIRECT_SHOPPING, new Integer(1));
+	    	}
+	    	
+	    	includeConsignee(request);
+	    	List<UserAddressWrapper> consigneeList = null;
+			
+	    	/* 获得用户所有的收货人信息 */
+	        if (request.getSession().getAttribute("userId") != null)
+	        {
+	        	consigneeList = LibTransaction.getConsigneeList((String)request.getSession().getAttribute("userId"), getDefaultManager());
+	        }
+	        else
+	        {
+		    	consigneeList = new ArrayList<UserAddressWrapper>();
+		    	UserAddressWrapper consignee = (UserAddressWrapper)getSession().getAttribute(KEY_FLOW_CONSIGNEE);
+		    	if(consignee == null) {
+		    		consignee = new UserAddressWrapper(new UserAddress());
+		//    		consignee.put("country", ShopConfigWrapper.getDefaultConfig().get(ShopConfigWrapper.CFG_KEY_SHOP_COUNTRY));
+		    		consignee.getUserAddress().setCountry((String)getCachedShopConfig().get(IShopConfigMeta.CFG_KEY_SHOP_COUNTRY));
+		    	}
+				consigneeList.add(consignee);
+	        }
+			
+	    	request.setAttribute("consigneeList", consigneeList);
+	    	
+	
+	    	request.setAttribute(KEY_STEP, STEP_CONSIGNEE);
+	    	
+	    	return SUCCESS;    
     	} 
     	else {
-    		UserAddressWrapper c = new UserAddressWrapper(new UserAddress());
-    		c.put("addressId", 1);
-    		c.put("consignee", 1);
-    		c.put("country", 1);
-    		c.put("province", 1);
-    		c.put("city", 1);
-    		c.put("district", 1);	
-    		getSession().setAttribute(KEY_FLOW_CONSIGNEE, c);
+    		/*
+             * 保存收货人信息
+             */
+    		UserAddressWrapper consignee = new UserAddressWrapper(new UserAddress());
+    		consignee.setAddressId( request.getParameter("address_id") == null ? "" : request.getParameter("address_id"));
+    		consignee.setConsignee( request.getParameter("consignee") == null ? "" : request.getParameter("consignee"));
+    		consignee.setCountry( request.getParameter("country") == null ? "" : request.getParameter("country"));
+    		consignee.setProvince( request.getParameter("province") == null ? "" : request.getParameter("province"));
+    		consignee.setCity( request.getParameter("city") == null ? "" : request.getParameter("city"));
+    		consignee.setDistrict( request.getParameter("district") == null ? "" : request.getParameter("district"));
+    		consignee.setEmail( request.getParameter("email") == null ? "" : request.getParameter("email"));
+    		consignee.setAddress( request.getParameter("address") == null ? "" : request.getParameter("address"));
+    		consignee.setZipcode( request.getParameter("zipcode") == null ? "" : request.getParameter("zipcode"));
+    		consignee.setTel( request.getParameter("tel") == null ? "" : request.getParameter("tel"));
+    		consignee.setMobile( request.getParameter("mobile") == null ? "" : request.getParameter("mobile"));
+    		consignee.setSignBuilding( request.getParameter("sign_building") == null ? "" : request.getParameter("sign_building"));
+    		consignee.setBestTime( request.getParameter("best_time") == null ? "" : request.getParameter("best_time"));
+    		
+    		if (request.getSession().getAttribute("userId") != null){
+    			consignee.put("userId", request.getSession().getAttribute("userId"));
+    			LibTransaction.saveConsignee(consignee, true, getDefaultManager());
+    		}
+    		
+    		getSession().setAttribute(KEY_FLOW_CONSIGNEE, consignee);
     		
     		return stepCheckout(request);
     	}
@@ -250,7 +272,8 @@ public class FlowAction extends BaseAction {
     	List<List<RegionWrapper>> districtList = new ArrayList<List<RegionWrapper>>();
     	districtList.add(LibCommon.getRegion(IRegion.TYPE_DISTRICT, null, getDefaultManager()));
     	request.setAttribute("districtList", districtList);
-    	request.setAttribute("realGoodsCount", 1);
+    	request.setAttribute("realGoodsCount", LibOrder.existRealGoods(0, Constants.CART_GENERAL_GOODS, getDefaultManager(), request.getSession().getId()) ? 1: 0);
+    	// TODO nameOfRegion 应从shopConfig获取
     	request.setAttribute("nameOfRegion", new String[]{"国家", "省", "市", "区"});
 	}
 	
@@ -271,8 +294,9 @@ public class FlowAction extends BaseAction {
     	}
     	
     	//判断是否登录
-    	String isDirect = getSession().getAttribute(KEY_DIRECT_SHOPPING) + "";//是否不登录，直接购买
-    	if(!isDirect.equals("1") && userId == null) {
+    	Integer isDirect = (Integer)getSession().getAttribute(KEY_DIRECT_SHOPPING);//是否不登录，直接购买
+    	if(isDirect != null && isDirect != 1 && userId == null) {
+
     		Lang lang = Lang.getInstance();
     		Object flowLoginRegister = lang.get("flowLoginRegister");
     		List<Object> list = new ArrayList<Object>();
@@ -292,21 +316,30 @@ public class FlowAction extends BaseAction {
     	
     	UserAddressWrapper consignee = getConsignee(userId);
     	
-    	if(!checkConsigneeInfo(consignee, flowType)) {
-    		return stepConsignee(request, false);
+    	/* 检查收货人信息是否完整 */
+    	if(!LibOrder.checkConsigneeInfo(consignee, flowType,getDefaultManager(),session.getId())) {
+    		return stepConsignee(request);
     	}
 
     	getSession().setAttribute(KEY_FLOW_CONSIGNEE, consignee);
     	request.setAttribute("consignee", consignee);
+    	/* 对商品信息赋值 */
     	request.setAttribute("goodsList", WrapperUtil.wrap(carts, CartWrapper.class));
     	
-    	request.setAttribute("allowEditCart", 0);
+    	/* 对是否允许修改购物车赋值 */
+    	if( (Constants.CART_GENERAL_GOODS == flowType ) || 
+    			((Integer)((ShopConfigWrapper)request.getAttribute("cfg")).get("oneStepBuy") == 1 )){
+    	    request.setAttribute("allowEditCart", 0);
+    	}
+    	else{
+    		request.setAttribute("allowEditCart", 1);
+    	}
     	request.setAttribute("config", getCachedShopConfig());
     	
         /*
          * 取得订单信息
          */
-    	OrderInfo order = flowOrderInfo();
+    	OrderInfo order = LibOrder.flowOrderInfo(session,getDefaultManager());
     	OrderInfoWrapper ow = new OrderInfoWrapper(order);
     	getRequest().setAttribute("order", ow);
     	
@@ -314,31 +347,30 @@ public class FlowAction extends BaseAction {
         /*
          * 计算订单的费用
          */
-    	Total total = LibOrder.orderFee(order,carts, consignee);
+    	Total total = LibOrder.orderFee(order,carts, consignee,getDefaultManager(),session);
     	
     	// debug
     	debug("in [flowcheckout]: realGoodsCount="+total.getRealGoodsCount());
     	
+    	Lang lang = Lang.getInstance();
+    	
     	request.setAttribute("total", total);
-    	request.setAttribute("shoppingMoney", total.getGoodsPriceFormated());
-    	request.setAttribute("marketPriceDesc", "market Price: xxx, total saving: yyy, saving rate: zzz");
+    	request.setAttribute("shoppingMoney", new PrintfFormat( lang.getString("shoppingMoney")).sprintf(total.getGoodsPriceFormated()));
+    	request.setAttribute("marketPriceDesc", new PrintfFormat(lang.getString("thanMarketPrice")).sprintf(new Object[]{total.getMarketPriceFormated(),total.getSavingFormated(),total.getSaveRateFormated()}));
     	
     	
         /* 取得配送列表 */
     	List<ShippingWrapper> shippingList = availableShippingList(consignee.getUserAddress());
-    	double goodsWeight = 0;
-    	double goodsAmount = 0;
+    	Map<String,Object> weightPrice = LibOrder.cartWeightPrice(Constants.CART_GENERAL_GOODS, session.getId(), getDefaultManager());
     	boolean insureDisabled = true;
     	boolean codDisabled = true;
-    	for(Cart cart: carts) {
-    		goodsWeight+=cart.getGoodsWeight()*cart.getGoodsNumber();
-    		goodsAmount+=cart.getGoodsPrice()*cart.getGoodsNumber();
-    	}
+    	
     	for(ShippingWrapper sw : shippingList) {
     		String shippingCode = sw.getShipping().getShippingCode();
     		String configure = sw.getConfigure();
+    		double shippingFee = LibOrder.shippingFee(shippingCode, configure,((Double)weightPrice.get("weight")).doubleValue(), ((Double)weightPrice.get("amount")).doubleValue() );
+    		
 			Map<String, String> configValues = BaseShippingMetaPlugin.deserialize(configure);
-			double shippingFee = getShippingMetaManager().calculate(shippingCode, goodsWeight, goodsAmount, configValues);
 			sw.setShippingFee(shippingFee);
 			String freeMoney = configValues.get(IShippingMetaPlugin.KEY_FREE_MONEY);
 			sw.setFreeMoney(Double.valueOf(freeMoney));
@@ -378,29 +410,10 @@ public class FlowAction extends BaseAction {
     	cond.setOperator(Condition.EQUALS);
     	cond.setValue(String.valueOf(flowType));
     	cr.addCondition(cond);
-    	List<Cart> carts = (List<Cart>)getDefaultManager().getList(Cart.class.getName(), cr);
+    	List<Cart> carts = (List<Cart>)getDefaultManager().getList(ModelNames.CART, cr);
     	return carts;
     }
-    private OrderInfo flowOrderInfo(){
-    	OrderInfo order = (OrderInfo)getSession().getAttribute(KEY_FLOW_ORDER);
-    	if(order == null) {
-    		order = new OrderInfo();
-    		
-//    		getSession().setAttribute(KEY_FLOW_ORDER, order);
-    	}
-    	/* 初始化配送和支付方式 */
-    	if(order.getShippingId()==null || order.getPayId() == null) {
-    		/* 如果还没有设置配送和支付 */
-    		if(getSession().getAttribute(KEY_USER_ID)!=null) {
-    			/* 用户已经登录了，则获得上次使用的配送和支付 */
-    			
-    		}
-    		
-    		
-    	}
-
-    	return order;
-    }
+    
     
 
     private List<PaymentWrapper> availablePaymentList() {
@@ -436,6 +449,7 @@ public class FlowAction extends BaseAction {
     
     private List<ShippingWrapper> availableShippingList(UserAddress ua) {
     	List<ShippingWrapper> list = new ArrayList<ShippingWrapper>();
+    	Set set = new HashSet();
     	
     	Set<String> uaRegions = new HashSet<String>();
     	uaRegions.add(ua.getCountry());
@@ -457,12 +471,13 @@ public class FlowAction extends BaseAction {
     				debug("Shipping with code: "+s.getShippingCode()+" has an empty configuration!!");
     				continue;
     			}
-    			ShippingWrapper sw = new ShippingWrapper(s); 
-    			sw.setConfigure(configure);
-    			list.add(sw);
+    			if(set.add(s)){
+	    			ShippingWrapper sw = new ShippingWrapper(s); 
+	    			sw.setConfigure(configure);
+	    			list.add(sw);
+    			}
     		}
     	}
-
     	return list;
     }
     
@@ -475,12 +490,37 @@ public class FlowAction extends BaseAction {
     		flowType = Constants.CART_GENERAL_GOODS;
     	}
     	
+    	/* 检查购物车中是否有商品 */
+    	Criteria criteria = new Criteria();
+    	criteria.addCondition(new Condition(ICart.SESSION_ID,Condition.EQUALS,getSession().getId()));
+    	int count = getDefaultManager().getCount(ModelNames.CART, criteria);
+    	if(count == 0) {
+    		LibMain.showMessage(Lang.getInstance().getString("noGoodsInCart"), null, null, "info", true, request);
+    		return "message";
+    	}
     	String userId = (String)getSession().getAttribute(KEY_USER_ID);
+    	
+    	//判断是否登录
+    	Integer isDirect = (Integer)getSession().getAttribute(KEY_DIRECT_SHOPPING);//是否不登录，直接购买
+    	if(isDirect != null && isDirect != 1 && userId == null) {
+
+    		Lang lang = Lang.getInstance();
+    		Object flowLoginRegister = lang.get("flowLoginRegister");
+    		List<Object> list = new ArrayList<Object>();
+    		list.add(flowLoginRegister);
+    		lang.put("flowLoginRegister", list);
+    		
+    		request.setAttribute("key","");
+    		request.setAttribute("anonymousBuy", 1);
+    		request.setAttribute("step", "login");
+    		return SUCCESS;
+    	}
+    	
+    	
     	UserAddressWrapper consignee = getConsignee(userId);
     	
-    	if(!checkConsigneeInfo(consignee, flowType)) {
-    		boolean isSubmit =false;
-    		return stepConsignee(request, isSubmit);
+    	if(!LibOrder.checkConsigneeInfo(consignee, flowType, getDefaultManager(), userId)) {
+    		return stepConsignee(request);
     	}
     	
     	
@@ -492,28 +532,63 @@ public class FlowAction extends BaseAction {
     	
     	order.setUserId(userId);
     	order.setAddTime(new Date().getTime());
-    	order.setPayName("货到付款");
+    	order.setPostscript(request.getParameter("postscript").trim());
+    	order.setHowOos(request.getParameter("how_oos"));
+//    	order.setPayName("货到付款");
     	
     	
     	/* 订单中的商品 */
     	List<Cart> carts = cartGoods(flowType);
+    	if(carts == null) {
+    		LibMain.showMessage(Lang.getInstance().getString("noGoodsInCart"), null, null, "info", true, request);
+    		return "message";
+    	}
+    	
+    	/* 收货人信息 */
+    	order.setAddress(consignee.getUserAddress().getAddress());
+    	order.setBestTime(consignee.getUserAddress().getBestTime());
+    	order.setMobile(consignee.getUserAddress().getMobile());
+    	order.setTel(consignee.getUserAddress().getTel());
+    	order.setEmail(consignee.getUserAddress().getEmail());
+    	order.setSignBuilding(consignee.getUserAddress().getSignBuilding());
+    	//order.setCountry(consignee.getUserAddress().getCountry());
+    	//order.setProvince(consignee.getUserAddress().getProvince());
+    	//order.setCity(consignee.getUserAddress().getCity());
+    	//order.setDistrict(consignee.getUserAddress().getDistrict());
+    	order.setConsignee(consignee.getUserAddress().getConsignee());
+    	order.setZipcode(consignee.getUserAddress().getZipcode());
+    	order.setKeyName(consignee.getUserAddress().getKeyName());
     	
     	/* 订单中的总额 */
-    	Total total = LibOrder.orderFee(order, carts, consignee);
+    	Total total = LibOrder.orderFee(order, carts, consignee , getDefaultManager() , request.getSession());
     	order.setGoodsAmount(total.getGoodsPrice());
     	order.setOrderAmount(total.getAmount());
     	order.setOrderSn(getOrderSn());
     	
     	// TODO /* 配送方式 */
+    	Shipping shipping = null ;
+    	if(StringUtils.isNotEmpty(order.getShippingId())){
+    		
+    		try {
+				shipping = LibOrder.shippingInfo(order.getShippingId() , getDefaultManager());
+			} catch (Exception e) {
+				e.printStackTrace();
+				return INPUT;				
+			}
+			order.setShippingName(shipping.getShippingName());
+    	}
+    	order.setShippingFee(total.getShippingFee());
+    	order.setInsureFee(total.getShippingInsure());
    	
     	// TODO /* 支付方式 */
     	Payment paymentObj = null;
     	if(StringUtils.isNotEmpty(order.getPayId())) {
-    		paymentObj = (Payment)getDefaultManager().get(ModelNames.PAYMENT, order.getPayId());
+    		paymentObj = LibOrder.paymentInfo(order.getPayId(), getDefaultManager());
     		order.setPayName(paymentObj.getPayName());
     	}
     	
     	order.setPayFee(total.getPayFee());
+    	
     	
     	/* 插入订单表 */
     	
@@ -585,6 +660,7 @@ public class FlowAction extends BaseAction {
         unset(KEY_DIRECT_SHOPPING);
         
     	request.setAttribute(KEY_STEP, STEP_DONE);
+    	
     	return SUCCESS;
     }
     
@@ -592,9 +668,29 @@ public class FlowAction extends BaseAction {
     	getSession().removeAttribute(key);
     }
     private void clearCart(Long flowType) {
+    	Criteria criteria = new Criteria();
+		Condition condition = new Condition();		
+
+		condition.setField(ICart.SESSION_ID);
+		condition.setOperator(Condition.EQUALS);
+		condition.setValue(getSession().getId());
+		
+		Condition condition2 = new Condition();		
+
+		condition2.setField(ICart.REC_TYPE);
+		condition2.setOperator(Condition.EQUALS);
+		condition2.setValue(flowType.toString());
+		
+		criteria.addCondition(condition);
+		criteria.addCondition(condition2);
+		List<Cart> list = getDefaultManager().getList(ModelNames.CART, criteria);
     	
+        for (Cart cart : list) {
+        	getDefaultManager().txdelete(ModelNames.CART , cart.getPkId());
+		}
     }
     private void clearAllFiles() {
+    	//TODO
     	
     }
     private String getOrderSn() {
@@ -607,7 +703,7 @@ public class FlowAction extends BaseAction {
 			
 			ActionContext ctx = ActionContext.getContext();        
 	        HttpServletRequest request = (HttpServletRequest)ctx.get(ServletActionContext.HTTP_REQUEST);      
-	        
+	        LibMain.assignUrHere(request, "", Lang.getInstance().getString("shoppingFlow"));
 
 //			includeOrderTotal(request);
 			
@@ -631,7 +727,7 @@ public class FlowAction extends BaseAction {
 				return stepCheckout(request);
 			}
 			else if(STEP_CONSIGNEE.equals(step)) {
-				return stepConsignee(request, true);
+				return stepConsignee(request);
 			} 
 			else if(STEP_DONE.equals(step)) {
 				return stepDone(request);
@@ -701,7 +797,7 @@ public class FlowAction extends BaseAction {
 				user.setPassword(password);
 				getDefaultManager().txadd(user);
 				setSession(userName);
-				return stepConsignee(request,false);
+				return stepConsignee(request);
 			}
 		}
 	}
@@ -768,7 +864,9 @@ public class FlowAction extends BaseAction {
 		Criteria criteria = new Criteria();
 		criteria.addCondition(new Condition(ICart.SESSION_ID,Condition.EQUALS,sessionId));
 		List<Cart> carts = getDefaultManager().getList(ModelNames.CART, criteria);
+
 		Lang lang = Lang.getInstance();
+
 		for(Iterator iterator = carts.iterator();iterator.hasNext();) {
 			Cart cart = (Cart)iterator.next();
 			String id = cart.getPkId();
@@ -782,6 +880,7 @@ public class FlowAction extends BaseAction {
 			}
 			
 			//对商品数量进行了修改
+
 			if(newGoodsNum != cart.getGoodsNumber()) {
 				//判断库存是否足够
 				Goods goods = (Goods) getDefaultManager().get(ModelNames.GOODS,goodsId);
@@ -805,7 +904,7 @@ public class FlowAction extends BaseAction {
 		if(carts.size() == 0) {
 			LibMain.showMessage(lang.getString("updateCartNotice"), lang.getString("backToCart"),"flow.action", "info", true, request);
 		}
-		
+
 		return "message";
 	}
 
