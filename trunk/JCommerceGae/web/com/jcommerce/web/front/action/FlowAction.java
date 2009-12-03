@@ -768,6 +768,7 @@ public class FlowAction extends BaseAction {
 		Criteria criteria = new Criteria();
 		criteria.addCondition(new Condition(ICart.SESSION_ID,Condition.EQUALS,sessionId));
 		List<Cart> carts = getDefaultManager().getList(ModelNames.CART, criteria);
+		Lang lang = Lang.getInstance();
 		for(Iterator iterator = carts.iterator();iterator.hasNext();) {
 			Cart cart = (Cart)iterator.next();
 			String id = cart.getPkId();
@@ -781,7 +782,6 @@ public class FlowAction extends BaseAction {
 			}
 			
 			//对商品数量进行了修改
-			Lang lang = Lang.getInstance();
 			if(newGoodsNum != cart.getGoodsNumber()) {
 				//判断库存是否足够
 				Goods goods = (Goods) getDefaultManager().get(ModelNames.GOODS,goodsId);
@@ -802,6 +802,10 @@ public class FlowAction extends BaseAction {
 				LibMain.showMessage(lang.getString("updateCartNotice"), lang.getString("backToCart"),"flow.action", "info", true, request);
 			}
 		}
+		if(carts.size() == 0) {
+			LibMain.showMessage(lang.getString("updateCartNotice"), lang.getString("backToCart"),"flow.action", "info", true, request);
+		}
+		
 		return "message";
 	}
 
