@@ -191,7 +191,7 @@ public class ShippingMetaManagerImpl extends DefaultManagerImpl implements IShip
             obj.setShippingName(meta.getShippingName());
             obj.setShippingDesc(meta.getShippingDesc());
             obj.setInsure(meta.getInsure());
-            obj.setEnabled(false);
+            obj.setEnabled(true);
             dao.add(obj);
         } catch (RuntimeException e) {
             // TODO Auto-generated catch block

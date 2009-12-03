@@ -760,7 +760,7 @@ var ${key} = "${item}";
             <script type="text/javascript" src="js/utils.js"></script>
 <script type="text/javascript" src="js/transport.js"></script>
 <script type="text/javascript" src="js/region.js"></script>
-<script type="text/javascript" src="js/shoppingFlow.js"></script>
+<script type="text/javascript" src="js/shopping_flow.js"></script>
 
             <script type="text/javascript">
               region.isAdmin = false;

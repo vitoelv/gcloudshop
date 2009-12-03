@@ -5,31 +5,31 @@ import com.jcommerce.web.util.WebFormatUtils;
 public class Total extends BaseWrapper{
 
 	Double discount = 0.0;
-	String discountFormated = "0.0";
+//	String discountFormated = "0.0";
 	
 	Double tax = 0.0;
-	String taxFormated = "0.0";
+//	String taxFormated = "0.0";
 	
 	Double shippingFee = 0.0;
-	String shippingFeeFormated = "0.0";
+//	String shippingFeeFormated = "0.0";
 	Double shippingInsure = 0.0;
-	String shippingInsureFormated = "0.0";
+//	String shippingInsureFormated = "0.0";
 	
 	Double payFee = 0.0;
-	String payFeeFormated = "0.0";
+//	String payFeeFormated = "0.0";
 	
 	Double packFee = 0.0;
-	String packFeeFormated = "0.0";
+//	String packFeeFormated = "0.0";
 	Double cardFee = 0.0;
-	String cardFeeFormated = "0.0";
+//	String cardFeeFormated = "0.0";
 	Double surplus = 0.0;
-	String surplusFormated = "0.0";
+//	String surplusFormated = "0.0";
 	
 	Integer integral = 0;
 	String integralFormated = "0";
-	
+		
 	Double bonus = 0.0;
-	String bonusFormated = "0.0";
+//	String bonusFormated = "0.0";
 	
 	Double amount = 0.0;
 //	String amountFormated= "0.0";
@@ -165,104 +165,48 @@ public class Total extends BaseWrapper{
 
 
 	public String getDiscountFormated() {
-		return discountFormated;
+		return WebFormatUtils.priceFormat(discount);
 	}
-
-
-	public void setDiscountFormated(String discountFormated) {
-		this.discountFormated = discountFormated;
-	}
-
 
 	public String getTaxFormated() {
-		return taxFormated;
+		return WebFormatUtils.priceFormat(tax);
 	}
-
-
-	public void setTaxFormated(String taxFormated) {
-		this.taxFormated = taxFormated;
-	}
-
 
 	public String getShippingFeeFormated() {
-		return shippingFeeFormated;
+		return WebFormatUtils.priceFormat(shippingFee);
 	}
-
-
-	public void setShippingFeeFormated(String shippingFeeFormated) {
-		this.shippingFeeFormated = shippingFeeFormated;
-	}
-
 
 	public String getShippingInsureFormated() {
-		return shippingInsureFormated;
+		return WebFormatUtils.priceFormat(shippingInsure);
 	}
-
-
-	public void setShippingInsureFormated(String shippingInsureFormated) {
-		this.shippingInsureFormated = shippingInsureFormated;
-	}
-
 
 	public String getPayFeeFormated() {
-		return payFeeFormated;
+		return WebFormatUtils.priceFormat(payFee);
 	}
-
-
-	public void setPayFeeFormated(String payFeeFormated) {
-		this.payFeeFormated = payFeeFormated;
-	}
-
 
 	public String getPackFeeFormated() {
-		return packFeeFormated;
+		return WebFormatUtils.priceFormat(packFee);
 	}
-
-
-	public void setPackFeeFormated(String packFeeFormated) {
-		this.packFeeFormated = packFeeFormated;
-	}
-
 
 	public String getCardFeeFormated() {
-		return cardFeeFormated;
+		return WebFormatUtils.priceFormat(cardFee);
 	}
-
-
-	public void setCardFeeFormated(String cardFeeFormated) {
-		this.cardFeeFormated = cardFeeFormated;
-	}
-
-
+	
 	public String getSurplusFormated() {
-		return surplusFormated;
+		return WebFormatUtils.priceFormat(surplus);
 	}
-
-
-	public void setSurplusFormated(String surplusFormated) {
-		this.surplusFormated = surplusFormated;
-	}
-
 
 	public String getIntegralFormated() {
 		return integralFormated;
 	}
-
-
+	
 	public void setIntegralFormated(String integralFormated) {
 		this.integralFormated = integralFormated;
 	}
-
-
+	
 	public String getBonusFormated() {
-		return bonusFormated;
+		return WebFormatUtils.priceFormat(bonus);
 	}
-
-
-	public void setBonusFormated(String bonusFormated) {
-		this.bonusFormated = bonusFormated;
-	}
-
 
 	public Double getAmount() {
 		return amount;

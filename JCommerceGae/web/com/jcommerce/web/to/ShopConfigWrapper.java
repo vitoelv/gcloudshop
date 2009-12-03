@@ -36,7 +36,7 @@ public class ShopConfigWrapper extends BaseWrapper {
 		//1只显示文字 2只显示图片 3显示文字与图片
 		this.put("showGoodsInCart", 3);
 		
-		this.put("showGoodsAttribute", 0);
+		this.put("showGoodsAttribute", 1);
 		
 		// TODO make it configurable thru GUI
 //		this.put(CFG_KEY_SHOW_GOODSWEIGHT, "true");

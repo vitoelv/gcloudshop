@@ -51,4 +51,21 @@ public class LibTransaction {
 		
 	}
 	
+	/**
+	 * 保存用户的收货人信息
+	 * 如果收货人信息中的 id 为 0 则新增一个收货人信息
+	 *
+	 * @access  public
+	 * @param   array   $consignee
+	 * @param   boolean $default        是否将该收货人信息设置为默认收货人信息
+	 * @return  boolean
+	 */
+	public static boolean saveConsignee(UserAddressWrapper consignee , boolean isDefault , IDefaultManager manager){
+		/* 修改地址 */
+		String id = manager.txattach(consignee.getUserAddress());
+		if(isDefault){
+			// TODO isDefault
+		}
+		return true;
+	}
 }

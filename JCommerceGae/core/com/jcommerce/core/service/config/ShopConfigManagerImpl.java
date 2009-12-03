@@ -39,6 +39,8 @@ public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopCo
 		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_TITLE, "gCouldShop 演示站", CFG_TYPE_TEXT, "商店标题", null, "商店的标题将显示在浏览器的标题栏"));		
 		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_DESC, "gCouldShop 演示站", CFG_TYPE_TEXT, "商店描述", null, null));
 		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_KEYWORDS, "gCouldShop 演示站", CFG_TYPE_TEXT, "商店关键字", null, null));
+		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_COUNTRY, "1", CFG_TYPE_SELECT, "所在国家", 
+				new String[][]{new String[]{"1","中国"}, new String[]{"2","美国"}}, null));
 		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_ADDRESS, "", CFG_TYPE_TEXT, "详细地址", null , null));
 		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_POSTCODE, "", CFG_TYPE_TEXT, "邮编", null , null));
 		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_QQ, "800120110,10001", CFG_TYPE_TEXT, "客服QQ号码", null , null));
