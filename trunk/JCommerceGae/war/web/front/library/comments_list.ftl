@@ -37,7 +37,7 @@
           <#if  pager.pageFirst??  ><a href="${pager.pageFirst}">1 ...</a></#if>
           <#if  pager.pagePrev??  ><a class="prev" href="${pager.pagePrev}">${lang.pagePrev}</a></#if>
           <#list pager.pageNumber?keys as key> <#assign item = pager.pageNumber.get(key)>
-                <#if  pager.page  ==  key??  >
+                <#if  pager.page  ==  key  >
                 <span class="page_now">${key}</span>
                 <#else>
                 <a href="${item}">[${key}]</a>
@@ -154,7 +154,7 @@ function submitComment(frm)
 
 //  if (cmt.username.length == 0)
 //  {
-//     alert(cmtEmptyUsername);
+//     alert(cmt_empty_username);
 //     return false;
 //  }
 
@@ -162,25 +162,25 @@ function submitComment(frm)
   {
      if (!(Utils.isEmail(cmt.email)))
      {
-        alert(cmtErrorEmail);
+        alert(cmt_error_email);
         return false;
       }
    }
    else
    {
-        alert(cmtEmptyEmail);
+        alert(cmt_empty_email);
         return false;
    }
 
    if (cmt.content.length == 0)
    {
-      alert(cmtEmptyContent);
+      alert(cmt_empty_content);
       return false;
    }
 
    if (cmt.enabled_captcha > 0 && cmt.captcha.length == 0 )
    {
-      alert(captchaNotNull);
+      alert(captcha_not_null);
       return false;
    }
 
