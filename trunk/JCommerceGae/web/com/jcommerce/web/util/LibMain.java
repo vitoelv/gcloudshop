@@ -4,8 +4,10 @@ import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHO
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,16 +15,19 @@ import org.apache.commons.lang.ArrayUtils;
 import org.datanucleus.util.StringUtils;
 
 import com.jcommerce.core.model.Category;
+import com.jcommerce.core.model.CollectGood;
 import com.jcommerce.core.model.Comment;
 import com.jcommerce.core.model.User;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
+import com.jcommerce.gwt.client.model.ICollectGood;
 import com.jcommerce.gwt.client.model.IComment;
 import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.web.front.action.IWebConstants;
 import com.jcommerce.web.front.action.helper.Pager;
+import com.jcommerce.web.to.CollectGoodWrapper;
 import com.jcommerce.web.to.CommentWrapper;
 import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.Message;
@@ -218,7 +223,56 @@ public class LibMain {
 		
 	}
 	
-	
+	/**
+	 * 获得收藏列表
+	 */
+	public static Map<String, Object> assignCollectionList(String userId, int page, IDefaultManager manager, ShopConfigWrapper scw) {
+		Criteria criteria = new Criteria();
+		criteria.addCondition(new Condition(ICollectGood.USER_ID, Condition.EQUALS, userId));
+		
+		int count = manager.getCount(ModelNames.COLLECTGOOD, criteria);
+		int size = scw.getInt("collection_number");
+		if(size<0) {
+			size = 5;
+		}
+		int pageCount = (int) (count > 0 ? (Math.ceil((double)count / size)) : 1);
+		
+		List<CollectGood> collectGoods = manager.getList(ModelNames.COLLECTGOOD, criteria, (page-1)*size, size);
+		
+	    List<CollectGoodWrapper> goodsList = new ArrayList<CollectGoodWrapper>();
+		for(Iterator iterator = collectGoods.iterator();iterator.hasNext();) {
+			CollectGood collectGood = (CollectGood) iterator.next();
+			CollectGoodWrapper wrapper = new CollectGoodWrapper(collectGood);
+			wrapper.setManager(manager);
+			goodsList.add(wrapper);
+		}
+		
+		Pager pager = new Pager();
+		pager.setPage(page);
+        pager.setSize(size);
+        pager.setRecordCount(count);
+        pager.setPageCount(pageCount);
+        
+        Map<Integer, Integer> array = new TreeMap<Integer, Integer>();
+        for(int i = 0;i < pageCount;i++) {
+        	array.put(i+1, i+1);
+        }
+        pager.setArray(array);
+        
+        Map<String, Object> search = new HashMap<String, Object>();
+        search.put("act", "collection_list");
+        pager.setSearch(search);
+        
+		pager.setPageFirst("user.action?act=collection_list&page=1");
+		pager.setPagePrev(page > 1 ? "user.action?act=collection_list&page=" + (page - 1) : "javascript:;");
+		pager.setPageNext(page < pageCount ? "user.action?act=collection_list&page=" + (page + 1) : "javascript:;");
+		pager.setPageLast(page < pageCount ? "user.action?act=collection_list&page=" + (pageCount) : "javascript:;");
+		
+		Map<String, Object> cmt = new HashMap<String, Object>();
+		cmt.put("goodsList",goodsList);
+		cmt.put("pager", pager);
+		return cmt;
+	}
 	
 	
 	/**
