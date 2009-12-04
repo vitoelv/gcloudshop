@@ -96,7 +96,7 @@ public class LibMain {
 		
 		/* 初始化“页面标题”和“当前位置” */
 	    String pageTitle = SpringUtil.getShopConfigManager().getCachedShopConfig().getString(CFG_KEY_SHOP_TITLE) + "- Powered by GCShop";
-	    String urHere = "<a href=\".\">"+Lang.getInstance().getString("home") + "</a>";
+	    String urHere = "<a href=\"/web/front/home.action\">"+Lang.getInstance().getString("home") + "</a>";
 	    
 	    
 	    /* 根据文件名分别处理中间的部分 */
