@@ -342,10 +342,13 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
 //		}
 		
         nav.addTop(new ComponentUrl("flow.action", getText(lang.getString("viewCart")), 1));
-        nav.addTop(new ComponentUrl("user.action", getText(lang.getString("userCenter")), 1));
+//        nav.addTop(new ComponentUrl("user.action", getText(lang.getString("userCenter")), 1));
         nav.addTop(new ComponentUrl("pick_out.action", getText(lang.getString("pickOut")), 1));
-        nav.addTop(new ComponentUrl("group_by.action", getText(lang.getString("groupBuy")), 1));
-        nav.addTop(new ComponentUrl("snatch.action", getText(lang.getString("snatch")), 1));
+        
+        
+//        nav.addTop(new ComponentUrl("group_by.action", getText(lang.getString("groupBuy")), 1));
+//        nav.addTop(new ComponentUrl("snatch.action", getText(lang.getString("snatch")), 1));
+        
         nav.addTop(new ComponentUrl("tag_cloud.action", getText(lang.getString("tagCloud")), 1));
         
         
