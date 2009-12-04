@@ -1,5 +1,6 @@
 package com.jcommerce.web.front.action;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringBufferInputStream;
 import java.util.ArrayList;
@@ -11,9 +12,14 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONObject;
 
+import com.jcommerce.core.model.CollectGood;
+import com.jcommerce.core.model.Goods;
+import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.model.OrderInfo;
 import com.jcommerce.core.model.User;
 import com.jcommerce.core.model.UserAddress;
@@ -22,6 +28,8 @@ import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.util.UUIDLongGenerator;
 import com.jcommerce.gwt.client.ModelNames;
+import com.jcommerce.gwt.client.model.ICart;
+import com.jcommerce.gwt.client.model.ICollectGood;
 import com.jcommerce.gwt.client.model.IOrderInfo;
 import com.jcommerce.gwt.client.model.IRegion;
 import com.jcommerce.gwt.client.model.IUser;
@@ -30,6 +38,7 @@ import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.gwt.client.util.URLConstants;
 import com.jcommerce.web.front.action.helper.Pager;
 import com.jcommerce.web.to.Affiliate;
+import com.jcommerce.web.to.CollectGoodWrapper;
 import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.OrderGoodsWrapper;
 import com.jcommerce.web.to.OrderInfoWrapper;
@@ -37,6 +46,7 @@ import com.jcommerce.web.to.RegionWrapper;
 import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.to.UserAddressWrapper;
 import com.jcommerce.web.to.UserWrapper;
+import com.jcommerce.web.to.WrapperUtil;
 import com.jcommerce.web.util.ConstantsMappingUtils;
 import com.jcommerce.web.util.LibCommon;
 import com.jcommerce.web.util.LibMain;
@@ -59,6 +69,7 @@ public class UserAction extends BaseAction {
 	public static final String RES_USER_CLIPS = "user_clips";
 	public static final String RES_IS_REGISTERED = "is_registered";
 	public static final String RES_USER_TRANSACTION = "user_transaction";
+	public static final String RES_COLLECT = "collect";
 	
 	private String username;
 	private String password;
@@ -67,6 +78,7 @@ public class UserAction extends BaseAction {
 	private String action;
 	
 	private InputStream isRegistered;
+	private InputStream collectGoods;
 	
 	@Override
 	public String onExecute() throws Exception {
@@ -366,6 +378,77 @@ public class UserAction extends BaseAction {
 				return LibMain.showMessage(Lang.getInstance().getString("logout"), Lang.getInstance().getString("backHomeLnk"), 
 						"home.action", "info", true, request);
 			}
+			//加入收藏夹
+			else if("collect".equals(action)) {
+				String goodsId = request.getParameter("id");
+				Goods goods = (Goods) getDefaultManager().get(ModelNames.GOODS, Long.parseLong(goodsId));
+				goodsId = goods.getPkId();
+				
+				JSONObject res = new JSONObject();
+				//判断是否登录
+				if(userId == null) {					
+					res.put("message", Lang.getInstance().get("loginPlease"));
+				}
+				
+				//检查是否已经存在于用户的收藏夹 
+				else {
+					Criteria criteria = new Criteria();
+					criteria.addCondition(new Condition(ICollectGood.USER_ID, Condition.EQUALS, userId));
+					criteria.addCondition(new Condition(ICollectGood.GOODS_ID, Condition.EQUALS, goodsId));
+					int count = getDefaultManager().getCount(ModelNames.COLLECTGOOD, criteria);
+					if(count > 0) {
+						res.put("message", Lang.getInstance().get("collectExisted"));
+					}
+					else {
+						long addTime = new Date().getTime();
+						
+						CollectGood collectGood = new CollectGood();
+						collectGood.setUserId(userId);
+						collectGood.setAddTime(addTime);
+						collectGood.setGoodsId(goodsId);
+						getDefaultManager().txadd(collectGood);
+						res.put("message", Lang.getInstance().get("collectSuccess"));
+					}
+				}
+				String out = res.toString();
+				collectGoods = new ByteArrayInputStream(out.getBytes(IWebConstants.ENC));
+				return RES_COLLECT;
+			}
+			
+			//收藏夹列表
+			else if("collection_list".equals(action)) {
+				includeUserMenu();				
+				int page = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
+				return setCollectionList(page, userId, request);				
+			}
+			
+			//关注
+			else if("add_to_attention".equals(action)) {
+				includeUserMenu();	
+				String id = request.getParameter("rec_id");
+				setAttention(id, true);
+				action = "collection_list";
+				return setCollectionList(1, userId, request);				
+			}
+			
+			//取消关注
+			else if("del_attention".equals(action)) {
+				includeUserMenu();	
+				String id = request.getParameter("rec_id");
+				setAttention(id, false);
+				action = "collection_list";
+				return setCollectionList(1, userId, request);				
+			}
+			
+			//从收藏夹中删除
+			else if("delete_collection".equals(action)) {
+				includeUserMenu();	
+				String id = request.getParameter("collection_id");
+				getDefaultManager().txdelete(ModelNames.COLLECTGOOD, id);
+				action = "collection_list";
+				return setCollectionList(1, userId, request);
+			}
+			
 			else {
 				includeUserMenu();
 				return RES_USER_CLIPS;
@@ -376,6 +459,39 @@ public class UserAction extends BaseAction {
 			ex.printStackTrace();
 			throw new RuntimeException(ex);
 		}
+	}
+
+	private String setCollectionList(int page, String userId, HttpServletRequest request) {
+		Map<String, Object> cmt = LibMain.assignCollectionList(userId, page, getDefaultManager(), getCachedShopConfig());		
+		List<CollectGoodWrapper> goodsList = (List<CollectGoodWrapper>) cmt.get("goodsList");
+		Pager pager = (Pager) cmt.get("pager");
+		
+		request.setAttribute("goodsList", goodsList);
+		request.setAttribute("pager", pager);
+		request.setAttribute("userId", userId);
+		request.setAttribute("url", "");
+		
+//		Map<String, Object> smarty = (Map<String, Object>) request.getAttribute("smarty");
+//
+//        Map<String, String> server = (Map<String, String>) smarty.get("server");
+//        server.put("PHP_SELF", getSelfURL() + "?act=collection_list");        
+//        smarty.put("server", server);
+//        
+//        Map<String, Object> session = new HashMap<String, Object>();
+//        session.put("userName", getSession().getAttribute(KEY_USER_NAME));
+//        String email = (String)getSession().getAttribute(KEY_USER_EMAIL);
+//        session.put("email",  email==null? "" : email);
+//        smarty.put("session", session);
+//        request.setAttribute("smarty", smarty);
+		
+		return RES_USER_CLIPS;		
+	}
+
+	//设置关注状态
+	private void setAttention(String id, boolean state) {
+		CollectGood collectGood = (CollectGood) getDefaultManager().get(ModelNames.COLLECTGOOD, id);
+		collectGood.setIsAttention(state);
+		getDefaultManager().txupdate(collectGood);		
 	}
 
 	/**
@@ -494,6 +610,13 @@ public class UserAction extends BaseAction {
 		}
 	}
 	private void logout() {
+		//清空该用户的购物车
+		String sessionId = getSession().getId();
+		Condition condition = new Condition(ICart.SESSION_ID,Condition.EQUALS,sessionId);
+		Criteria criteria = new Criteria();
+		criteria.addCondition(condition);
+		List<ModelObject> carts = getDefaultManager().getList(ModelNames.CART, criteria);
+		getDefaultManager().txdeleteall(carts);
 		getSession().invalidate();
 		
 	}
@@ -672,5 +795,13 @@ public class UserAction extends BaseAction {
 			long points = nextRank.getMinPoints() - uw.getRankPoints(); //距离升级差的积分
 			request.setAttribute("nextRankName", "您还差" +points + "积分达到" + nextRank.getRankName());
 		}
+	}
+
+	public void setCollectGoods(InputStream collectGoods) {
+		this.collectGoods = collectGoods;
+	}
+
+	public InputStream getCollectGoods() {
+		return collectGoods;
 	}
 }

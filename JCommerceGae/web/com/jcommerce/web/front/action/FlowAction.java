@@ -20,9 +20,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.jcommerce.core.model.AreaRegion;
+import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Cart;
 import com.jcommerce.core.model.Constants;
 import com.jcommerce.core.model.Goods;
+import com.jcommerce.core.model.GoodsAttr;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.model.OrderGoods;
 import com.jcommerce.core.model.OrderInfo;
@@ -39,6 +41,7 @@ import com.jcommerce.core.service.shipping.IShippingMetaPlugin;
 import com.jcommerce.core.service.shipping.impl.BaseShippingMetaPlugin;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.ICart;
+import com.jcommerce.gwt.client.model.IGoodsAttr;
 import com.jcommerce.gwt.client.model.IRegion;
 import com.jcommerce.gwt.client.model.IShipping;
 import com.jcommerce.gwt.client.model.IUser;
@@ -95,6 +98,7 @@ public class FlowAction extends BaseAction {
 		setPayment(request);
 		
 		HttpSession session = request.getSession();
+		JSONObject res = new JSONObject();
 		
 		String userId = (String)session.getAttribute(KEY_USER_ID);
 
@@ -115,15 +119,39 @@ public class FlowAction extends BaseAction {
 			spec.add(specArray.get(i));
 		}
 		
-		boolean suc = getWebManager().addToCart(
-				goodsId , goods.getInt("number"), spec, request.getSession().getId(), userId, null);
+		//判断是否选择了商品规格，如果没有选择，error=6，跳到商品详情页
+		int specNum = 0;//商品规格的数量
+		if(spec.size() == 0) {
+			Goods good = (Goods) getDefaultManager().get(ModelNames.GOODS, goodsId);
+			Set<GoodsAttr> gas = good.getAttributes();	
+			for(GoodsAttr ga:gas) {
+				String id = ga.getAttrId();
+				Attribute attribute = (Attribute) getDefaultManager().get(ModelNames.ATTRIBUTE, id);
+				Long attrType = attribute.getAttrType();
+				if(attrType != 0) {
+					specNum++;
+					break;
+				}
+			}
+			
+			//商品有规格，但是没有选择
+			if(specNum > 0) {
+				res.put("error",6);
+				res.put("message", Lang.getInstance().get("selectSpec"));
+				res.put("goods_id", goodsId);
+			}
+		}
 		
-		JSONObject res = new JSONObject();;
-		res.put("error", 0);
-		res.put("content", "<B>cart info</B>");
-		res.put("one_step_buy", (Integer)getCachedShopConfig().get("oneStepBuy"));
-		// 购物车确定提示:  直接进入购物车 refer to common.js addToCartResponse
-		res.put("confirm_type", "3");
+		if(spec.size() != 0 || specNum == 0){
+			boolean suc = getWebManager().addToCart(
+					goodsId , goods.getInt("number"), spec, request.getSession().getId(), userId, null);
+			
+			res.put("error", 0);
+			res.put("content", "<B>cart info</B>");
+			res.put("one_step_buy", (Integer)getCachedShopConfig().get("oneStepBuy"));
+			// 购物车确定提示:  直接进入购物车 refer to common.js addToCartResponse
+			res.put("confirm_type", "3");
+		}
 
 		String out = res.toString();
 		debug("in [addToCart]: out="+out);

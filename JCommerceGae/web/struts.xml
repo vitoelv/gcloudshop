@@ -62,6 +62,10 @@
      			<param name="contentType">html/text</param>
      			<param name="inputName">isRegistered</param>
    			</result>
+   			<result name="collect" type="stream">
+     			<param name="contentType">application/json</param>
+     			<param name="inputName">collectGoods</param>
+   			</result>
 			<result name="error" type="redirectAction">home</result>
 		</action>
 		<action name="message" method="execute" class="messageAction">
