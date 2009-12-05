@@ -82,5 +82,10 @@
 
 	</bean>	
 	
+	<bean name="captchaAction" scope="prototype"
+        class="com.jcommerce.web.front.action.CaptchaAction">
+
+	</bean>
+	
 				
 </beans>

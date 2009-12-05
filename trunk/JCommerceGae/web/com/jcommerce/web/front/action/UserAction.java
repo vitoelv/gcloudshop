@@ -21,6 +21,7 @@ import com.jcommerce.core.model.CollectGood;
 import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.model.OrderInfo;
+import com.jcommerce.core.model.Session;
 import com.jcommerce.core.model.User;
 import com.jcommerce.core.model.UserAddress;
 import com.jcommerce.core.model.UserRank;
@@ -52,6 +53,7 @@ import com.jcommerce.web.util.LibCommon;
 import com.jcommerce.web.util.LibMain;
 import com.jcommerce.web.util.LibOrder;
 import com.jcommerce.web.util.LibTransaction;
+import com.jcommerce.web.util.PrintfFormat;
 import com.jcommerce.web.util.WebFormatUtils;
 
 
@@ -69,22 +71,33 @@ public class UserAction extends BaseAction {
 	public static final String RES_USER_CLIPS = "user_clips";
 	public static final String RES_IS_REGISTERED = "is_registered";
 	public static final String RES_USER_TRANSACTION = "user_transaction";
+	public static final String RES_CHECK_EMAIL = "check_email";
 	public static final String RES_COLLECT = "collect";
+
 	
 	private String username;
 	private String password;
 	private String email;
+	private String captcha;
+	
+
 	private Map<String, String> other;
 	private String action;
 	
 	private InputStream isRegistered;
+	private InputStream isUsed;
 	private InputStream collectGoods;
+
+	
 	
 	@Override
 	public String onExecute() throws Exception {
 		try {
 			debug("in execute");
 			HttpServletRequest request = getRequest();
+			
+			LibMain.assignUrHere(request, "", Lang.getInstance().getString("userCenter"));
+			
 			String userId = (String)getSession().getAttribute(KEY_USER_ID);
 
 			action = request.getParameter("act");
@@ -168,6 +181,14 @@ public class UserAction extends BaseAction {
 				request.setAttribute("shopRegClosed", getCachedShopConfig().get("shopRegClosed"));
 				return RES_USER_PASSPORT;
 			}
+			else if("check_email".equals(action)){
+				if(checkEmail(getEmail())) {
+					isUsed = new StringBufferInputStream("false");
+				}else {
+					isUsed = new StringBufferInputStream("ok");
+				}
+				return RES_CHECK_EMAIL;
+			}
 			else if("login".equals(action)) {
 				request.setAttribute("backAct", backAct);
 				return RES_USER_PASSPORT;
@@ -198,12 +219,18 @@ public class UserAction extends BaseAction {
 
 			}
 			else if("act_register".equals(action) || "actRegister".equals(action)) {
-				String error = register(getUsername(), getPassword(), getEmail(), other);
-				if(error == null) {
-					return LibMain.showMessage(Lang.getInstance().getString("registerSuccess"), Lang.getInstance().getString("profileLnk"), 
-							"user.action", "info", true, request);
-				} else {
-					return LibMain.showMessage(error, Lang.getInstance().getString("signUp"), 
+				if(getCaptcha().equals((String)getSession().getAttribute("captcha"))){
+					String error = register(getUsername(), getPassword(), getEmail(), other );
+					if(error == null) {
+						return LibMain.showMessage( new PrintfFormat(Lang.getInstance().getString("registerSuccess")).sprintf(getUsername()), Lang.getInstance().getString("profileLnk"), 
+								"user.action", "info", true, request);
+					} else {
+						return LibMain.showMessage(error, Lang.getInstance().getString("signUp"), 
+								"user.action?act=register", "info", true, request);
+					}
+				}
+				else{
+					return LibMain.showMessage(Lang.getInstance().getString("invalidCaptcha"), Lang.getInstance().getString("signUp"), 
 							"user.action?act=register", "info", true, request);
 				}
 			}
@@ -600,6 +627,25 @@ public class UserAction extends BaseAction {
 		}
 		
 	}
+	public boolean checkEmail(String email) {
+		
+		if(email != null) {
+			Criteria c = new Criteria();
+			Condition cond = new Condition();
+			cond.setField(IUser.EMAIL);
+			cond.setOperator(Condition.EQUALS);
+			cond.setValue(email);
+			c.addCondition(cond);
+			
+			List<User> res = (List<User>)getDefaultManager().getList(ModelNames.USER, c);
+			return res.size() > 0 ? true : false;
+		}
+		
+		
+		return false;
+
+		
+	}
 	private boolean login(String username, String password) {
 		if(checkUser(username, password)) {
 			setSession(username);
@@ -699,6 +745,13 @@ public class UserAction extends BaseAction {
 		this.email = email;
 	}
 
+	public String getCaptcha() {
+		return captcha;
+	}
+
+	public void setCaptcha(String captcha) {
+		this.captcha = captcha;
+	}
 
 	public Map<String, String> getOther() {
 		return other;
@@ -712,7 +765,9 @@ public class UserAction extends BaseAction {
 	public InputStream getIsRegistered() {
 		return isRegistered;
 	}
-	
+	public InputStream getIsUsed() {
+		return isUsed;
+	}
 	
 	public String toString() {
 		// this is a tricky hacking
