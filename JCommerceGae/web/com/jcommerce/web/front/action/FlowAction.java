@@ -719,6 +719,7 @@ public class FlowAction extends BaseAction {
     }
     private void clearAllFiles() {
     	//TODO
+    	getSession().setAttribute("flowOrder", null);
     	
     }
     private String getOrderSn() {
