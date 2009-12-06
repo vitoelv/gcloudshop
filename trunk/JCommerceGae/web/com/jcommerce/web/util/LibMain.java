@@ -33,6 +33,7 @@ import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.Message;
 import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.to.UserWrapper;
+import com.jcommerce.web.to.WrapperUtil;
 
 public class LibMain {
 	
@@ -270,6 +271,54 @@ public class LibMain {
 		
 		Map<String, Object> cmt = new HashMap<String, Object>();
 		cmt.put("goodsList",goodsList);
+		cmt.put("pager", pager);
+		return cmt;
+	}
+	
+	/**
+	 * 获得评论列表
+	 */
+	public static Map<String, Object> assignCommentList(String userId, int page, IDefaultManager manager, ShopConfigWrapper scw) {
+		Criteria criteria = new Criteria();
+		criteria.addCondition(new Condition(IComment.USER_ID,Condition.EQUALS,userId));
+		
+		int count = manager.getCount(ModelNames.COMMENT, criteria);
+		int size = scw.getInt("comment_number");
+		if(size<0) {
+			size = 5;
+		}
+		int pageCount = (int) (count > 0 ? (Math.ceil((double)count / size)) : 1);
+		
+		List<Comment> commentList = manager.getList(ModelNames.COMMENT, criteria, (page-1)*size, size);
+		List<CommentWrapper> commentListWrapper = WrapperUtil.wrap(commentList, CommentWrapper.class);
+		for(Iterator iterator = commentListWrapper.iterator(); iterator.hasNext();) {
+			CommentWrapper commentWrapper = (CommentWrapper) iterator.next();
+			commentWrapper.setManager(manager);
+		}
+		
+		Pager pager = new Pager();
+		pager.setPage(page);
+        pager.setSize(size);
+        pager.setRecordCount(count);
+        pager.setPageCount(pageCount);
+        
+        Map<Integer, Integer> array = new TreeMap<Integer, Integer>();
+        for(int i = 0;i < pageCount;i++) {
+        	array.put(i+1, i+1);
+        }
+        pager.setArray(array);
+        
+        Map<String, Object> search = new HashMap<String, Object>();
+        search.put("act", "comment_list");
+        pager.setSearch(search);
+        
+		pager.setPageFirst("user.action?act=comment_list&page=1");
+		pager.setPagePrev(page > 1 ? "user.action?act=comment_list&page=" + (page - 1) : "javascript:;");
+		pager.setPageNext(page < pageCount ? "user.action?act=comment_list&page=" + (page + 1) : "javascript:;");
+		pager.setPageLast(page < pageCount ? "user.action?act=comment_list&page=" + (pageCount) : "javascript:;");
+		
+		Map<String, Object> cmt = new HashMap<String, Object>();
+		cmt.put("commentList",commentListWrapper);
 		cmt.put("pager", pager);
 		return cmt;
 	}

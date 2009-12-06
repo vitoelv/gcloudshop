@@ -135,7 +135,7 @@ public class CommentAction extends BaseAction {
 		}
 		comment.setStatus(status);
 		comment.setUserId((String)getSession().getAttribute(KEY_USER_ID));
-		comment.setEmail((String)getSession().getAttribute(KEY_USER_EMAIL));
+		comment.setEmail((String)(getSession().getAttribute(KEY_USER_EMAIL) == null ? cmt.getString("email") : getSession().getAttribute(KEY_USER_EMAIL)));
 		comment.setUserName((String)getSession().getAttribute(KEY_USER_NAME));
 		
 		comment.setCommentType(cmt.getLong("type"));

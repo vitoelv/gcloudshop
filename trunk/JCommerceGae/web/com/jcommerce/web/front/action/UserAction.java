@@ -18,6 +18,7 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.jcommerce.core.model.CollectGood;
+import com.jcommerce.core.model.Comment;
 import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.model.OrderInfo;
@@ -31,6 +32,7 @@ import com.jcommerce.core.util.UUIDLongGenerator;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.ICart;
 import com.jcommerce.gwt.client.model.ICollectGood;
+import com.jcommerce.gwt.client.model.IComment;
 import com.jcommerce.gwt.client.model.IOrderInfo;
 import com.jcommerce.gwt.client.model.IRegion;
 import com.jcommerce.gwt.client.model.IUser;
@@ -40,6 +42,7 @@ import com.jcommerce.gwt.client.util.URLConstants;
 import com.jcommerce.web.front.action.helper.Pager;
 import com.jcommerce.web.to.Affiliate;
 import com.jcommerce.web.to.CollectGoodWrapper;
+import com.jcommerce.web.to.CommentWrapper;
 import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.OrderGoodsWrapper;
 import com.jcommerce.web.to.OrderInfoWrapper;
@@ -476,6 +479,22 @@ public class UserAction extends BaseAction {
 				return setCollectionList(1, userId, request);
 			}
 			
+			//评论列表
+			else if("comment_list".equals(action)) {
+				includeUserMenu();	
+				int page = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
+				return setCommentList(page, userId, request);	
+			}
+			
+			//删除评论
+			else if("del_cmt".equals(action)) {
+				includeUserMenu();
+				String id = request.getParameter("id");
+				getDefaultManager().txdelete(ModelNames.COMMENT, id);
+				action = "comment_list";
+				return setCommentList(1, userId, request);
+			}
+						
 			else {
 				includeUserMenu();
 				return RES_USER_CLIPS;
@@ -498,18 +517,16 @@ public class UserAction extends BaseAction {
 		request.setAttribute("userId", userId);
 		request.setAttribute("url", "");
 		
-//		Map<String, Object> smarty = (Map<String, Object>) request.getAttribute("smarty");
-//
-//        Map<String, String> server = (Map<String, String>) smarty.get("server");
-//        server.put("PHP_SELF", getSelfURL() + "?act=collection_list");        
-//        smarty.put("server", server);
-//        
-//        Map<String, Object> session = new HashMap<String, Object>();
-//        session.put("userName", getSession().getAttribute(KEY_USER_NAME));
-//        String email = (String)getSession().getAttribute(KEY_USER_EMAIL);
-//        session.put("email",  email==null? "" : email);
-//        smarty.put("session", session);
-//        request.setAttribute("smarty", smarty);
+		return RES_USER_CLIPS;		
+	}
+	
+	private String setCommentList(int page, String userId, HttpServletRequest request) {
+		Map<String, Object> cmt = LibMain.assignCommentList(userId, page, getDefaultManager(), getCachedShopConfig());		
+		List<CommentWrapper> commentList = (List<CommentWrapper>) cmt.get("commentList");
+		Pager pager = (Pager) cmt.get("pager");
+		
+		request.setAttribute("commentList", commentList);
+		request.setAttribute("pager", pager);
 		
 		return RES_USER_CLIPS;		
 	}

@@ -48,6 +48,7 @@ public class ShopConfigWrapper extends BaseWrapper {
 		this.put(CFG_KEY_COMMENT_CHECK, 0);		
 		this.put("comments_number", 5);
 		this.put("collection_number", 5);
+		this.put("comment_number", 5);
 	}
 
 
