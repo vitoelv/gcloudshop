@@ -132,45 +132,44 @@ public class UserAddressWrapper extends BaseModelWrapper {
 		  userAddress.setBestTime(newBestTime);
 	  }
 
-
-	public java.lang.String getCountry() {
-		return StringUtils.defaultIfEmpty(getUserAddress().getCountry(), "");
-	}
-
-
-	public void setCountry(java.lang.String country) {
-		userAddress.setCountry(country);
-	}
+		public java.lang.String getCountry() {
+			return StringUtils.defaultIfEmpty(getUserAddress().getCountry(), "");
+		}
 
 
-	public java.lang.String getProvince() {
-		return StringUtils.defaultIfEmpty(getUserAddress().getProvince(), "");
-	}
+		public void setCountry(java.lang.String country) {
+			userAddress.setCountry(country);
+		}
 
 
-	public void setProvince(java.lang.String province) {
-		userAddress.setProvince(province);
-	}
+		public java.lang.String getProvince() {
+			return StringUtils.defaultIfEmpty(getUserAddress().getProvince(), "");
+		}
 
 
-	public java.lang.String getCity() {
-		return StringUtils.defaultIfEmpty(getUserAddress().getCity(), "");
-	}
+		public void setProvince(java.lang.String province) {
+			userAddress.setProvince(province);
+		}
 
 
-	public void setCity(java.lang.String city) {
-		userAddress.setCity(city);
-	}
+		public java.lang.String getCity() {
+			return StringUtils.defaultIfEmpty(getUserAddress().getCity(), "");
+		}
 
 
-	public java.lang.String getDistrict() {
-		return StringUtils.defaultIfEmpty(getUserAddress().getDistrict(), "");
-	}
+		public void setCity(java.lang.String city) {
+			userAddress.setCity(city);
+		}
 
 
-	public void setDistrict(java.lang.String district) {
-		userAddress.setDistrict(district);
-	}
+		public java.lang.String getDistrict() {
+			return StringUtils.defaultIfEmpty(getUserAddress().getDistrict(), "");
+		}
+
+
+		public void setDistrict(java.lang.String district) {
+			userAddress.setDistrict(district);
+		}
 
 	
 

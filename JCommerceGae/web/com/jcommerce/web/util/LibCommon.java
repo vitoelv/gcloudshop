@@ -1,5 +1,8 @@
 package com.jcommerce.web.util;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,6 +25,11 @@ import com.jcommerce.web.to.CategoryWrapper;
 import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.RegionWrapper;
 import com.jcommerce.web.to.WrapperUtil;
+
+import freemarker.template.Configuration;
+import freemarker.template.ObjectWrapper;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 
 public class LibCommon {
 
@@ -261,6 +269,27 @@ public class LibCommon {
 		else{
 			return "0";
 		}
+	}
+	
+	public static String getTempleteContent( Map map , String templateName) throws IOException, TemplateException {
+		//根据数据将ftl转化为html，并以String类型返回
+        Configuration cfg = new Configuration();
+
+        // TODO: 
+        // as shown in TestFreeMarker, it's not perfect that the ?keys will return method names also, need refer to how spring freemarker plugin do the render
+        // NOTE: however in runtime it works ok !!
+        
+		// refer to JAVADOC: Configuration.isClassicCompatible()
+		cfg.setClassicCompatible(true);
+		// refer to Freemarker manuual chapter: Bean wrapper
+		cfg.setObjectWrapper(ObjectWrapper.BEANS_WRAPPER);
+		
+    	cfg.setDirectoryForTemplateLoading(new File("D:/Jcommerce/JCommerceGae/war/web/front/library"));  
+		Template t = cfg.getTemplate(templateName);
+		StringWriter stringWriter = new StringWriter();
+     	t.process(map, stringWriter);
+     	return stringWriter.toString();
+		
 	}
 	
 }

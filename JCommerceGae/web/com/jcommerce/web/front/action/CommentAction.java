@@ -18,6 +18,7 @@ import com.jcommerce.core.model.Comment;
 import com.jcommerce.gwt.client.model.IComment;
 import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.web.to.Lang;
+import com.jcommerce.web.util.LibCommon;
 import com.jcommerce.web.util.LibMain;
 
 import freemarker.template.Configuration;
@@ -182,23 +183,7 @@ public class CommentAction extends BaseAction {
         smarty.put("session", session);
         map.put("smarty", smarty);
 		
-        //根据数据将ftl转化为html，并以String类型返回
-        Configuration cfg = new Configuration();
-
-        // TODO: 
-        // as shown in TestFreeMarker, it's not perfect that the ?keys will return method names also, need refer to how spring freemarker plugin do the render
-        // NOTE: however in runtime it works ok !!
-        
-		// refer to JAVADOC: Configuration.isClassicCompatible()
-		cfg.setClassicCompatible(true);
-		// refer to Freemarker manuual chapter: Bean wrapper
-		cfg.setObjectWrapper(ObjectWrapper.BEANS_WRAPPER);
-		
-    	cfg.setDirectoryForTemplateLoading(new File("D:/Jcommerce/JCommerceGae/war/web/front/library"));  
-		Template t = cfg.getTemplate("comments_list.ftl");
-		StringWriter stringWriter = new StringWriter();
-     	t.process(map, stringWriter);
-     	return stringWriter.toString();
+        return LibCommon.getTempleteContent( map, "comments_list.ftl");
 	}
 
 		
