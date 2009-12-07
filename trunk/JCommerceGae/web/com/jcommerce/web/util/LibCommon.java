@@ -78,6 +78,9 @@ public class LibCommon {
     		}    		
     		
     	}
+    	else if(IWebConstants.APP_GOODS.equals(app)) {
+    		buf.append("goods.action?id=").append(uriArgs.get("gid"));
+    	}
     	return buf.toString();
     }
 	/**

@@ -13,12 +13,13 @@ import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHO
 import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_YM;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,6 +54,7 @@ import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.to.WrapperUtil;
 import com.jcommerce.web.to.HelpCat.HelpItem;
+import com.jcommerce.web.util.LibCommon;
 import com.jcommerce.web.util.LibGoods;
 import com.jcommerce.web.util.LibInsert;
 import com.jcommerce.web.util.LibMain;
@@ -69,7 +71,14 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
 	private IDefaultManager defaultManager;
 	private IShopConfigManager shopConfigManager;
 	private Long queryStartTime = 0L;
+	private String historyList = "";
 
+	public String getHistoryList() {
+		return historyList;
+	}
+	public void setHistoryList(String historyList) {
+		this.historyList = historyList;
+	}
 	public void debug(String s) {
 		System.out.println(" in [BaseAction]: "+s );
 	}
@@ -200,8 +209,20 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
 		
 	}
 	public void includeHistory(HttpServletRequest request) {
-		Lang lang = getLangMap(request);
-		lang.put("viewHistory", "查看历史");
+		Set<GoodsWrapper> viewHistory = (HashSet<GoodsWrapper>)getSession().getAttribute("viewHistory");
+	    
+		if( viewHistory != null && viewHistory.size() > 0 ){
+	    	StringBuffer sb = new StringBuffer();
+	    	
+	    	for (GoodsWrapper goodsWrapper : viewHistory) {
+	    		Map map = new HashMap();
+	    		map.put("gid", goodsWrapper.getPkId());
+	    		String shortName = goodsWrapper.getName().length() > 10 ? goodsWrapper.getName().substring(0, 10)+"..." : goodsWrapper.getName();
+	    		String goodsUrl = LibCommon.buildUri("goods", map , "" , 0 , 0);
+				sb.append("<ul class='clearfix'><li class='goodsimg'><a href='"+goodsUrl+"' target='_blank'><img src='"+goodsWrapper.getThumb()+"' alt='"+goodsWrapper.getName()+"' class='B_blue' /></a></li><li><a href='"+goodsUrl+"' target='_blank' title='"+goodsWrapper.getName()+"'>"+shortName+"</a><br />"+Lang.getInstance().getString("shopPrice")+"<font class='f1'>"+goodsWrapper.getShopPriceFormated()+"</font><br /></li></ul>");
+			}
+	    	historyList = sb.toString();
+	    }
 	}
 	public void includeComments(HttpServletRequest request) {
 	}
