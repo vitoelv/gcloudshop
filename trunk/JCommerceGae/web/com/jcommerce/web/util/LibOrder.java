@@ -105,10 +105,10 @@ public class LibOrder {
     	String shippingCodFee = null;
         if( !"".equals(order.getShippingId()) && (total.getRealGoodsCount() > 0 )){
         	List<String> regionIdList = new ArrayList<String>();
-        	regionIdList.add( (String)consignee.get("country") );
-        	regionIdList.add( (String)consignee.get("province") );
-        	regionIdList.add( (String)consignee.get("city") );
-        	regionIdList.add( (String)consignee.get("district") );
+        	regionIdList.add( (String)consignee.getCountry() );
+        	regionIdList.add( (String)consignee.getProvince() );
+        	regionIdList.add( (String)consignee.getCity() );
+        	regionIdList.add( (String)consignee.getDistrict());
         	Map<String,Object> shippingInfo = shippingAreaInfo(order.getShippingId(),regionIdList,manager);
         	
         	if(!shippingInfo.isEmpty()){
@@ -122,7 +122,7 @@ public class LibOrder {
         		}
         		
         		if((Boolean)shippingInfo.get("supportCod")){
-        			shippingCodFee = (String)shippingInfo.get("payFee");
+        			shippingCodFee = ((Double)shippingInfo.get("payFee")).toString();
         		}
         	}
         }
@@ -442,7 +442,7 @@ public class LibOrder {
 			Shipping shipping = (Shipping)list.get(0);
 			for (ShippingArea shippingArea : shipping.getShippingAreas()) {
 				for (AreaRegion areaRegion : shippingArea.getAreaRegions()) {
-					if(regionIdList.contains(areaRegion.getPkId())){
+					if(regionIdList.contains(areaRegion.getRegionId())){
 						Map<String,String> shippingConfig = BaseShippingMetaPlugin.deserialize(shippingArea.getConfigure());
 						if(shippingConfig.containsKey("payFee")){
 							shippingAreaInfo.put("payFee", shippingConfig.get("payFee"));

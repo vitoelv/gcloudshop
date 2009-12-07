@@ -26,4 +26,8 @@ public class PaymentWrapper extends BaseModelWrapper {
     public String getPayId() {
     	return getPayment().getPkId();
     }
+    
+    public String getFormatPayFee(){
+    	return "<span id=\"ECS_CODFEE\">"+ getPayment().getPayFee()  + "</span>";
+    }
 }

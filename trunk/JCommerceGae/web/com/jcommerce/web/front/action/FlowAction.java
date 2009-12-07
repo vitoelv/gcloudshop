@@ -1,9 +1,13 @@
 package com.jcommerce.web.front.action;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -65,18 +69,24 @@ import com.jcommerce.web.util.LibTransaction;
 import com.jcommerce.web.util.PrintfFormat;
 import com.opensymphony.xwork2.ActionContext;
 
+import freemarker.template.TemplateException;
+
 public class FlowAction extends BaseAction {
 	public void debug(String s) {
 		System.out.println(" in [FlowAction]: "+s );
 	}
 	
 	public static final String RES_ADD_TO_CART = "addToCart";
+	public static final String RES_SELECT_PAYMENT = "selectPayment";
+	public static final String RES_SELECT_SHIPPING = "selectShipping";
 	
 	public static final String KEY_STEP = "step";
 	public static final String STEP_ADD_TO_CART = "add_to_cart";
 	public static final String STEP_CART = "cart";
     public static final String STEP_CHECKOUT = "checkout";
     public static final String STEP_CONSIGNEE = "consignee";
+    public static final String STEP_SELECT_SHIPPING = "select_shipping";
+    public static final String STEP_SELECT_PAYMENT = "select_payment";
     public static final String STEP_DONE = "done";
     public static final String STEP_DROP_GOODS = "drop_goods";
     public static final String STEP_CLEAR = "clear";
@@ -181,7 +191,7 @@ public class FlowAction extends BaseAction {
 			request.setAttribute("total", total);
 			
 			//购物车的描述的格式化
-			request.setAttribute("shoppingMoney", total.getGoodsPriceFormated());
+			request.setAttribute("shoppingMoney", new PrintfFormat(Lang.getInstance().getString("shoppingMoney")).sprintf(total.getGoodsPriceFormated()));
 			request.setAttribute("marketPriceDesc", new PrintfFormat(Lang.getInstance().getString("thanMarketPrice")).sprintf(
 					new Object[]{total.getMarketPriceFormated(), total.getSavingFormated(), total.getSaveRateFormated()}));
 			
@@ -214,6 +224,9 @@ public class FlowAction extends BaseAction {
     			if(list.size()>0) {
     				consignee = new UserAddressWrapper(list.get(0));
     			}
+    			else{
+    				consignee = new UserAddressWrapper(new UserAddress());
+    			}
     		}
     		else{
     			consignee = new UserAddressWrapper(new UserAddress());
@@ -226,7 +239,7 @@ public class FlowAction extends BaseAction {
     
     private String stepConsignee(HttpServletRequest request) {
     	if(request.getMethod().equals("GET")) {
-	    	if(request.getAttribute(KEY_DIRECT_SHOPPING) != null) {
+	    	if(request.getParameter(KEY_DIRECT_SHOPPING) != null) {
 	    		getSession().setAttribute(KEY_DIRECT_SHOPPING, new Integer(1));
 	    	}
 	    	
@@ -323,7 +336,7 @@ public class FlowAction extends BaseAction {
     	
     	//判断是否登录
     	Integer isDirect = (Integer)getSession().getAttribute(KEY_DIRECT_SHOPPING);//是否不登录，直接购买
-    	if(isDirect != null && isDirect != 1 && userId == null) {
+    	if((isDirect == null || isDirect != 1) && userId == null) {
 
     		Lang lang = Lang.getInstance();
     		Object flowLoginRegister = lang.get("flowLoginRegister");
@@ -509,7 +522,120 @@ public class FlowAction extends BaseAction {
     	return list;
     }
     
-    
+    private String stepSelectShipping(HttpServletRequest request) throws JSONException, IOException, TemplateException{
+    	JSONObject res = new JSONObject();
+    	
+    	/* 取得购物类型 */
+    	Long flowType = (Long)getSession().getAttribute(KEY_FLOW_TYPE);
+    	if(flowType == null) {
+    		flowType = Constants.CART_GENERAL_GOODS;
+    	}
+    	
+    	/* 获得收货人信息 */
+    	String userId = (String)getSession().getAttribute(KEY_USER_ID);
+    	UserAddressWrapper consignee = getConsignee(userId);
+    	
+    	/* 对商品信息赋值 */
+    	List<Cart> carts = cartGoods(flowType); // 取得商品列表，计算合计
+    	
+    	if(carts == null || !LibOrder.checkConsigneeInfo( consignee , flowType , getDefaultManager() , getSession().getId() )) {
+    		LibMain.showMessage(Lang.getInstance().getString("noGoodsInCart"), null, null, "info", true, request);
+    		return "message";
+    	}
+    	else{
+    		
+            /* 取得订单信息 */
+            OrderInfo order = LibOrder.flowOrderInfo(getSession() , getDefaultManager());
+
+            order.setShippingId(request.getParameter("shipping"));
+            List<String> regionIdList = new ArrayList<String>();
+        	regionIdList.add( (String)consignee.getCountry());
+        	regionIdList.add( (String)consignee.getProvince());
+        	regionIdList.add( (String)consignee.getCity() );
+        	regionIdList.add( (String)consignee.getDistrict() );
+        	Map<String,Object> shippingInfo = LibOrder.shippingAreaInfo(order.getShippingId(),regionIdList,getDefaultManager());
+        	
+        	
+            /* 计算订单的费用 */
+            Total total = LibOrder.orderFee(order, carts, consignee, getDefaultManager(), getSession());
+            
+            res.put("cod_fee" , shippingInfo.get("payFee")); 
+            res.put("need_insure", 0 );
+            res.put("content", getOrderTotalContent(total));
+            
+    	}
+    	
+    	String out = res.toString();
+		debug("in [stepSelectShipping]: out="+out);
+		try {
+			jsonRes = new ByteArrayInputStream(out.getBytes(IWebConstants.ENC));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		request.setAttribute(KEY_STEP, STEP_CHECKOUT);
+    	return RES_SELECT_SHIPPING;
+    }
+    private String stepSelectPayment(HttpServletRequest request) throws JSONException, IOException, TemplateException{
+    	JSONObject res = new JSONObject();
+    	
+    	/* 取得购物类型 */
+    	Long flowType = (Long)getSession().getAttribute(KEY_FLOW_TYPE);
+    	if(flowType == null) {
+    		flowType = Constants.CART_GENERAL_GOODS;
+    	}
+    	
+    	/* 获得收货人信息 */
+    	String userId = (String)getSession().getAttribute(KEY_USER_ID);
+    	UserAddressWrapper consignee = getConsignee(userId);
+    	
+    	/* 对商品信息赋值 */
+    	List<Cart> carts = cartGoods(flowType); // 取得商品列表，计算合计
+    	
+    	if(carts == null || !LibOrder.checkConsigneeInfo( consignee , flowType , getDefaultManager() , getSession().getId() )) {
+    		LibMain.showMessage(Lang.getInstance().getString("noGoodsInCart"), null, null, "info", true, request);
+    		return "message";
+    	}
+    	else{
+    		
+            /* 取得订单信息 */
+            OrderInfo order = LibOrder.flowOrderInfo(getSession() , getDefaultManager());
+
+            order.setPayId(request.getParameter("payment"));
+            Payment paymentInfo = LibOrder.paymentInfo( order.getPayId() , getDefaultManager());
+            res.put("pay_code" , paymentInfo.getPayCode()); 
+
+            /* 保存 session */
+            getSession().setAttribute("flowOrder", order);
+
+            /* 计算订单的费用 */
+            Total total = LibOrder.orderFee(order, carts, consignee, getDefaultManager(), getSession());
+            System.out.println(total.getShippingFeeFormated()+"---------------------------------------------");
+            res.put("content", getOrderTotalContent(total));
+    	}
+    	String out = res.toString();
+		debug("in [stepSelectPayment]: out="+out);
+		try {
+			jsonRes = new ByteArrayInputStream(out.getBytes(IWebConstants.ENC));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		request.setAttribute(KEY_STEP, STEP_CHECKOUT);
+    	return RES_SELECT_PAYMENT;
+    }
+    private String getOrderTotalContent(Total total) throws IOException, TemplateException{
+    	//设置显示页面所需的数据
+//		Map<String, Object> cmt = LibMain.assignComment(id, type, page, getDefaultManager(), getCachedShopConfig());		          	
+     	Map map = new HashMap();
+
+     	Lang lang = Lang.getInstance();             	       
+
+		map.put("lang", lang);
+		map.put("config", getSession().getAttribute("cfg"));
+		map.put("total", total);
+		map.put("userId", getSession().getAttribute(KEY_USER_ID));
+		    	
+    	return LibCommon.getTempleteContent( map, "order_total.ftl");
+    }
     
     private String stepDone(HttpServletRequest request) {
     	
@@ -757,7 +883,13 @@ public class FlowAction extends BaseAction {
 			}
 			else if(STEP_CONSIGNEE.equals(step)) {
 				return stepConsignee(request);
-			} 
+			}
+			else if(STEP_SELECT_PAYMENT.equals(step)) {
+				return stepSelectPayment(request);
+			}
+			else if(STEP_SELECT_SHIPPING.equals(step)) {
+				return stepSelectShipping(request);
+			}
 			else if(STEP_DONE.equals(step)) {
 				return stepDone(request);
 			}
@@ -1007,4 +1139,5 @@ public class FlowAction extends BaseAction {
 	public void setPayment(String payment) {
 		this.payment = payment;
 	}
+	
 }

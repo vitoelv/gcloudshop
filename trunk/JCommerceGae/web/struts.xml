@@ -32,7 +32,14 @@
      			<param name="contentType">application/json</param>
      			<param name="inputName">jsonRes</param>
    			</result>
-			
+   			<result name="selectShipping" type="stream">
+     			<param name="contentType">application/json</param>
+     			<param name="inputName">jsonRes</param>
+   			</result>
+   			<result name="selectPayment" type="stream">
+     			<param name="contentType">application/json</param>
+     			<param name="inputName">jsonRes</param>
+   			</result>			
 		</action>
 		<action name="category" method="execute" class="categoryAction">
 			<result name="success" type="freemarker">/web/front/category.ftl</result>
