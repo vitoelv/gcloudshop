@@ -389,17 +389,17 @@ public class LibOrder {
 		condition.setOperator(Condition.EQUALS);
 		condition.setValue((String)session.getAttribute("userId"));
 		
-		Order order = new Order();
-		order.setField(IOrderInfo.ORDER_ID);
-		order.setAscend(Order.DESCEND);
+//		Order order = new Order();
+//		order.setField(IOrderInfo.ORDER_ID);
+//		order.setAscend(Order.DESCEND);
 		
 		
 		criteria.addCondition(condition);
-		criteria.addOrder(order);
+//		criteria.addOrder(order);
 		List<OrderInfo> list = manager.getList(ModelNames.ORDERINFO, criteria,0,1);
     	
 		Map<String,String> map = new HashMap<String,String>();
-		if(null == list){
+		if(0 == list.size()){
 			/* 如果获得是一个空数组，则返回默认值 */
 			map.put("shippingId", "0");
 			map.put("payId", "0");			

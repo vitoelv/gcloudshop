@@ -5,9 +5,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -131,6 +133,23 @@ public class GoodsAction extends BaseAction {
 	    	return getTotalPrice(request, goods);
 	    }
 	    /*修改完*/
+	    
+	    /* 记录浏览历史 */
+	    Set<GoodsWrapper> viewHistory = (HashSet<GoodsWrapper>)getSession().getAttribute("viewHistory");
+	    if( viewHistory == null ){
+	    	viewHistory = new HashSet<GoodsWrapper>();
+	    }
+	    
+	    if(viewHistory.size() < 5 ){
+	    	viewHistory.add(gw); 
+		    getSession().setAttribute("viewHistory" , viewHistory);
+	    }
+	    else{
+	    	if(viewHistory.add(gw)){
+	    		viewHistory.remove(viewHistory.toArray()[0]);
+	    	}
+	    }
+	    
 
         return SUCCESS;
         

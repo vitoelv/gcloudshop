@@ -3,7 +3,7 @@
   <h3><span>${lang.viewHistory}</span></h3>
   <div class="boxCenterList RelaArticle">
      <ul class="clearfix" id="history">
-    TODO history
+    ${historyList}
     </ul>
   </div>
  </div>
