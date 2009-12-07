@@ -131,4 +131,52 @@ public class TestInheritance extends BaseDAOTestCase {
 			pm.close();
 		}
 	}
+    
+    
+    public void testLoad3() {
+		System.out.println("start of testLoad3");
+
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			String pid = null;
+			Parent3 p = null;
+			Child3 c1=null, c2=null;
+			clearDS();
+
+
+			pm.currentTransaction().begin();
+			p = new Parent3();
+			p.setName("yyy");
+			c1 = new Child3();
+			c1.setName("abc");
+			p.setThe1(c1);
+//			c1.setParent(p);
+			
+			c2 = new Child3();
+			c2.setName("abc");
+			p.setThe2(c2);
+//			c2.setParent(p);
+			p = pm.makePersistent(p);
+			pm.currentTransaction().commit();
+			
+			// this will work
+			pid = p.getPkId();
+			System.out.println("pid: "+pid);
+			String c1id = c1.getPkId();
+			String c2id = c2.getPkId();
+			System.out.println("c1id: "+c1id+", c2id: "+c2id);
+			
+			
+			p = pm.getObjectById(Parent3.class, pid);
+			c1 = p.getThe1();
+			c2 = p.getThe2();
+			System.out.println("size: "+c1+", "+c2);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertTrue(false);
+		} finally {
+			pm.close();
+		}
+	}
 }
