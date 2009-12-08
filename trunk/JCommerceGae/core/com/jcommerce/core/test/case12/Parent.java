@@ -10,7 +10,9 @@ import javax.jdo.annotations.Persistent;
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 
 public class Parent extends BaseObject {
-	
+    @Persistent
+	private String name;
+    
     @Persistent(mappedBy="parent")
     private Set<Child> children = new HashSet<Child>();
 
@@ -19,6 +21,12 @@ public class Parent extends BaseObject {
 	}
 	public void setChildren(Set<Child> children) {
 		this.children = children;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
     
 }

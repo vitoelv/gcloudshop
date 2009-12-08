@@ -7,7 +7,9 @@ import javax.jdo.annotations.Persistent;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Parent2 extends BaseObject {
-	
+    @Persistent
+	private String name;
+    
 	@Persistent
 	private Child2 the1;
 	
@@ -28,6 +30,14 @@ public class Parent2 extends BaseObject {
 
 	public void setThe2(Child2 the2) {
 		this.the2 = the2;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	
