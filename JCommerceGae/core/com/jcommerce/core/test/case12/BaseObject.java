@@ -17,7 +17,10 @@ public abstract class BaseObject {
 	private String pkId;
     
     @Persistent
-	private String name;
+    @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
+    private String keyName;
+    
+
 
 	public String getPkId() {
 		return pkId;
@@ -27,12 +30,14 @@ public abstract class BaseObject {
 		this.pkId = pkId;
 	}
 
-	public String getName() {
-		return name;
+
+
+	public String getKeyName() {
+		return keyName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setKeyName(String keyName) {
+		this.keyName = keyName;
 	}
     
     
