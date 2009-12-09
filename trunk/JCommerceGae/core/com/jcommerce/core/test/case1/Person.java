@@ -15,10 +15,7 @@ import com.jcommerce.core.model.ModelObject;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Person extends ModelObject{
-    @Override
-    public ModelObject getParent() {
-    	return null;
-    }
+
 	public Person() {
 		
 	}

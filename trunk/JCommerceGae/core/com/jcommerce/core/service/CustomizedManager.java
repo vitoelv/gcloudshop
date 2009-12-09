@@ -13,7 +13,7 @@ public interface CustomizedManager {
     public int getGoodsTypeListWithAttrCount(List<GoodsType> resultSet, int firstRow, int maxRow, Criteria criteria);
     
     public String addBrand(Brand to);
-    
+    public boolean updateBrand(Brand to);
 //    public String addPerson(Person to, Address a);
     
     public String addGoods(Goods to);

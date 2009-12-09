@@ -50,7 +50,7 @@ public class BrandForm extends BeanObject implements IBrand{
 	}
 	public static FileUploadField getLogoField(String fieldTitle) {
 		FileUploadField nameField = new FileUploadField();
-		nameField.setName(BRAND_LOGO);
+		nameField.setName(LOGO_FILE);
 //		nameField.setMaxLength(10);
 		nameField.setAutoValidate(true);
 //		nameField.addAllowedTypes(new String[]{".jpg", ".gif"});

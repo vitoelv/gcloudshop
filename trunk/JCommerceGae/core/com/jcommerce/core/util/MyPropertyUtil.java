@@ -3,11 +3,9 @@ package com.jcommerce.core.util;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +15,7 @@ import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.jcommerce.core.model.DSFile;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.gwt.client.model.IModelObject;
 
@@ -49,7 +48,16 @@ public class MyPropertyUtil {
 	        		ModelObject assoc = (ModelObject)PropertyUtils.getProperty(obj, name);
 	        		if(assoc!=null) {
 	        			res.put(name, assoc.getPkId());
+	        			
+		        		// debug only
+		        		if(type.equals(DSFile.class)){
+		        			String xxx = ((DSFile)assoc).getPkId();
+		        			System.out.println("xxx: "+xxx+", pkid: "+assoc.getPkId());
+		        		}
+
 	        		}
+	        		
+	        		
 	        	}
 	        	else if(Set.class.isAssignableFrom(type)) {
 	        		Field field = obj.getClass().getDeclaredField(name);
@@ -177,16 +185,21 @@ public class MyPropertyUtil {
         
         try {
         HashMap<String, Object> _props = new HashMap<String, Object>(); 
-        Field[] fields = dest.getClass().getDeclaredFields();
-        for (int i = 0; i < fields.length; i++) {
-            if (Modifier.isStatic(fields[i].getModifiers())) {
-                continue;
-            }
+//        Field[] fields = dest.getClass().getDeclaredFields();
+		PropertyDescriptor srcDescriptors[] = BeanUtilsBean.getInstance()
+			.getPropertyUtils().getPropertyDescriptors(dest);
+		
+		for (PropertyDescriptor pd : srcDescriptors) {
+			String fn = pd.getName();
+			if("class".equals(fn)) {
+				continue;
+			}
+			Class type = pd.getPropertyType();
             
-            Field field = fields[i];
-            String fn = field.getName();
-            Class type = field.getType(); 
-            debug("fn:"+fn+" field.getType():"+field.getType());
+//            Field field = fields[i];
+//            String fn = field.getName();
+//            Class type = field.getType(); 
+            debug("fn:"+fn+" type:"+type);
             if (!orig.containsKey(fn)) {
                 continue;
             }
@@ -218,7 +231,7 @@ public class MyPropertyUtil {
             } else if (Collection.class.isAssignableFrom(type)) {
                 Collection col = null;
                 if (value != null) {
-            		if(MyPropertyUtil.isFieldCollectionOfModel(field)) {
+            		if(MyPropertyUtil.isFieldCollectionOfModel(dest.getClass().getDeclaredField(fn))) {
             			// NOTE: this means always Add/Update child ModelObject separately
             			continue;
             		}
@@ -269,6 +282,6 @@ public class MyPropertyUtil {
     
     public static void debug(String s) {
     	
-//    	System.out.println("MyPropertyUtil: "+s);
+    	System.out.println("in [MyPropertyUtil]: "+s);
     }
 }

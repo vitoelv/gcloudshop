@@ -11,18 +11,8 @@ import com.google.appengine.api.datastore.Blob;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true")
 public class DSFile extends ModelObject {
-    @Override
-    public ModelObject getParent() {
-    	return null;
-    }
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String pkId;
-    
-    @Persistent
-    @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
-    private String keyName;
+
+
 	
     @Persistent
     private Blob content;
@@ -34,25 +24,6 @@ public class DSFile extends ModelObject {
     private String mimeType;
 
     
-	@Override
-	public String getPkId() {
-		return pkId;
-	}
-
-	@Override
-	public String getKeyName() {
-		return keyName;
-	}
-
-	@Override
-	public void setPkId(String pkId) {
-		this.pkId = pkId;
-	}
-
-	@Override
-	public void setKeyName(String kn) {
-		this.keyName = kn;
-	}
 
 	public Blob getContent() {
 		return content;

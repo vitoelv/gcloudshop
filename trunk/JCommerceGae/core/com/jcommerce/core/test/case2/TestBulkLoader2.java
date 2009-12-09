@@ -21,7 +21,26 @@ public class TestBulkLoader2 extends BaseDAOTestCase {
     	return true;
     }
 	
+    public void testLoad() {
+		System.out.println("start of testLoad");
 
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+
+			clearDS();
+			pm.currentTransaction().begin();
+			Parent p = new Parent();
+			p.setName("xxx");
+			p = pm.makePersistent(p);
+			
+			pm.currentTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			assertTrue(false);
+		} finally {
+			pm.close();
+		}
+	}
     
     public void testLoadAndUnload() {
 		System.out.println("start of testLoadAndUnload");

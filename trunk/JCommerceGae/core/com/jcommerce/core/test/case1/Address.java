@@ -15,10 +15,7 @@ public class Address extends ModelObject{
 	public Address() {
 		
 	}
-    @Override
-    public ModelObject getParent() {
-    	return person;
-    }
+
 	
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)

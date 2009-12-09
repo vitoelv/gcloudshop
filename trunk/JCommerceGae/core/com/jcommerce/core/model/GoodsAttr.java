@@ -9,6 +9,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.jcommerce.core.annotation.IsPK;
+
 /**  
  * generated with my extension of middleGen 
  * @author <a href="http://code.google.com/p/gcloudshop/">Leon</a>
@@ -17,26 +19,13 @@ import javax.jdo.annotations.PrimaryKey;
 @PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true") 
 public class GoodsAttr extends ModelObject {
 
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String pkId;
-    
-    @Persistent
-    @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
-    private String keyName;
-    
-    @Persistent
-    private Long longId;
+
     
     // relations
     	@Persistent
 	private Goods goods;
 
-  @Override
-  public ModelObject getParent(){
-  	return goods;
-  }
+
   
 public Goods getGoods() {
 	return goods;
@@ -55,6 +44,7 @@ public void setGoods(Goods goods) {
   private java.lang.String goodsId; 
 
   @Persistent
+  @IsPK(myclazz="com.jcommerce.core.model.Attribute")
   private java.lang.String attrId; 
 
   @Persistent
@@ -69,31 +59,6 @@ public void setGoods(Goods goods) {
 	}
 
 
-	@Override
-	public Long getLongId() {
-		return longId;
-	}
-
-	@Override
-	public void setLongId(Long longId) {
-		this.longId = longId;
-	}
-
-	public String getPkId() {
-		return pkId;
-	}
-
-	public void setPkId(String pkId) {
-		this.pkId = pkId;
-	}
-
-	public String getKeyName() {
-		return keyName;
-	}
-
-	public void setKeyName(String keyName) {
-		this.keyName = keyName;
-	}
 
 
 

@@ -19,9 +19,11 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import com.google.gwt.dev.asm.Attribute;
 import com.jcommerce.core.annotation.IsPK;
+import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.Category;
 import com.jcommerce.core.model.GoodsType;
@@ -206,12 +208,16 @@ public class DataStoreUtils implements IConstants{
 			String[] columns = null;
 			String[] values = null;
 			boolean inComment = false;
+			
+			String newRecord = null;
+			String newline = null;
     		while(true) {
-    			String newline = reader.readLine();
+    			newline = reader.readLine();
     			System.out.println("newline: "+newline);
     			if(newline==null) {
     				break;
     			}
+    			
     			newline = newline.trim();
     			if(StringUtils.isBlank(newline)) {
     				continue;
@@ -232,20 +238,50 @@ public class DataStoreUtils implements IConstants{
     			}
     			if(newline.startsWith(SEP_CLASSNAME)) {
     				className = newline.substring(2);
+    				// columnnames line must be right after classname line
     				newline = reader.readLine().trim();
     				columns = StringUtils.split(newline, SEP_COLUMNS_VALUES);
     				continue;
     			}
     			
+    			
+    			// TODO using XML
+//    			// start of records
+    			if(newline.startsWith(SEP_START_OF_RECORD)) {
+    				if (newline.endsWith(SEP_END_OF_RECORD)) {
+    					newRecord = StringUtils.substringBetween(newline, SEP_START_OF_RECORD, SEP_END_OF_RECORD);
+					} else {
+	    				// reserve the NEWLINE
+	    				StringBuffer buf = new StringBuffer(StringUtils.substringAfter(newline, SEP_START_OF_RECORD)).append(SEP_NEWLINE);
+						// read until hit end of record
+						while (true) {
+							String s = reader.readLine();
+							if(s==null) {
+								throw new RuntimeException("without EOR");
+							}
+							if(s.endsWith(SEP_END_OF_RECORD)) {
+								buf.append(StringUtils.substringBeforeLast(s, SEP_END_OF_RECORD));
+								newRecord = buf.toString();
+								break;
+							}
+							else {
+								buf.append(s).append(SEP_NEWLINE);
+							}
+						}
+						
+					}
+				}    			
+    			
+    			
     			if(className!=null) {
     				Class clazz = Class.forName(className);
     				ModelObject obj = (ModelObject)clazz.newInstance();
     				
-    				values = ConvertUtil.split(newline, SEP_COLUMNS_VALUES);
+    				values = ConvertUtil.split(newRecord, SEP_COLUMNS_VALUES);
     				// won't work in case ,, occur in the sequence
 //    				values = StringUtils.split(newline, SEP_COLUMNS_VALUES);
     				if(columns.length!=values.length) {
-    					System.out.println("skipping line: "+newline+
+    					System.out.println("skipping line: "+newRecord+
     							", value length: "+values.length+
     							", column length: "+columns.length);
     					continue;
@@ -306,13 +342,13 @@ public class DataStoreUtils implements IConstants{
     	try {
     	Class cls = Class.forName(className);
     	ModelObject temp = (ModelObject)cls.newInstance();
-    	List<Field> exportableFields = new ArrayList<Field>();
+    	List<String> exportableFields = new ArrayList<String>();
     	Field[] fields = cls.getDeclaredFields();
     	StringBuffer buf = new StringBuffer();
     	buf.append(SEP_CLASSNAME).append(className).append(SEP_NEWLINE);
     	
     	// ensure id is the first field
-    	exportableFields.add(cls.getDeclaredField("keyName"));
+    	exportableFields.add("keyName");
     	buf.append("keyName");
     	for(Field field:fields) {
     		
@@ -354,55 +390,68 @@ public class DataStoreUtils implements IConstants{
             		continue;
             	}
             }
-            exportableFields.add(field);
+            exportableFields.add(fn);
             buf.append(SEP_COLUMNS_VALUES).append(fn);
     	}
     	buf.append(SEP_NEWLINE);
     	out.write(buf.toString().getBytes(ENCODING));
+    	
     	
 		List res = new ArrayList();
 		manager.getList(res, className, null, -1, -1);
 		for(Iterator it = res.iterator();it.hasNext();) {
 			ModelObject obj = (ModelObject)it.next();
 			buf = new StringBuffer();
+			buf.append(SEP_START_OF_RECORD);
 			int i=0;
-			for(Field field:exportableFields) {
+			for(String fn:exportableFields) {
 				if(i!=0) {
 					buf.append(SEP_COLUMNS_VALUES);
 				}
 				i++;
 				String strValue = "";
-	            String fn = field.getName();
-	            Class ft = field.getType();
-//	            System.out.println("fn: "+fn+", ft: "+ft.getName());
 	            Object value = PropertyUtils.getProperty(obj, fn);
-	            IsPK isPK = field.getAnnotation(IsPK.class);
-	            
 	            if("keyName".equals(fn)) {
 	            	StringBuffer buf1 = new StringBuffer();
-	            	getChainedKeyName(buf1, (ModelObject)obj, manager);
+	            	Key key = KeyFactory.stringToKey(obj.getPkId());
+	            	getChainedKeyName(buf1, key, manager);
 	            	strValue = buf1.toString();
 	            }
 	            else if(value==null) {
 	            	
 	            }
-	            else if(isPK!=null) {
-	            	// convert PK->keyName
-	            	ModelObject target = manager.get(isPK.clazz(), (String)value);
-	            	StringBuffer buf1 = new StringBuffer();
-	            	getChainedKeyName(buf1, target, manager);
-	            	strValue = buf1.toString();
-	            }
-	            else if(Collection.class.isAssignableFrom(ft)) {
-	            	strValue = Arrays.toString(((Collection)value).toArray());
-	            }
 	            else {
-	            	strValue = value.toString();
-	            }
+					Field field = cls.getDeclaredField(fn);
+					Class ft = field.getType();
+					 System.out.println("fn: "+fn+", ft: "+ft.getName());
+
+					IsPK isPK = field.getAnnotation(IsPK.class);
+					if (isPK != null) {
+						// convert PK->keyName
+						ModelObject target = manager.get(isPK.myclazz(),
+								(String) value);
+						StringBuffer buf1 = new StringBuffer();
+						Key key = KeyFactory.stringToKey(obj.getPkId());
+						getChainedKeyName(buf1, key, manager);
+						strValue = buf1.toString();
+					} else if (Collection.class.isAssignableFrom(ft)) {
+						strValue = Arrays.toString(((Collection) value)
+								.toArray());
+					} else if(Blob.class.isAssignableFrom(ft)) {
+						// TODO store the blob content to a file then store the file path
+						Blob blob = (Blob)value;
+						// file operation is not allowed in GAE project, moved to separate project for local testing
+						
+						
+						
+					} else {
+						strValue = value.toString();
+					}
+				}
 				buf.append(strValue);
 //				buf.append(SEP_COLUMNS_VALUES);
 			}
-			buf.append(SEP_NEWLINE);
+			buf.append(SEP_END_OF_RECORD).append(SEP_NEWLINE);
 			out.write(buf.toString().getBytes(ENCODING));
 
 		}
@@ -420,15 +469,17 @@ public class DataStoreUtils implements IConstants{
     public static final String SEP_COLUMNS_VALUES = ",";
     public static final String SEP_CLS_KEYNAME = ":";
     public static final String SEP_PARENT_CHILD = "|";
+    public static final String SEP_START_OF_RECORD = "SOR>";
+    public static final String SEP_END_OF_RECORD = "<EOR";
     
     public static final String SEP_START_COMMENT = "<!--";
     public static final String SEP_END_COMMENT = "-->";
     public static final String SEP_COMMENT = "#";
     
-    public static void getChainedKeyName(StringBuffer buf, ModelObject obj, IDefaultManager manager) {
-    	Object parent = obj.getParent();
-    	if(parent != null) {
-    		getChainedKeyName(buf, (ModelObject)parent, manager);
+    public static void getChainedKeyName(StringBuffer buf, Key key, IDefaultManager manager) {
+    	Key pKey = key.getParent();
+    	if(pKey != null) {
+    		getChainedKeyName(buf, pKey, manager);
 //    		if(parent instanceof ModelObject) {
 //    			getChainedKeyName(buf, (ModelObject)parent, manager);
 //    		} else if(parent instanceof String[]) {
@@ -443,8 +494,7 @@ public class DataStoreUtils implements IConstants{
 //    		}
     		buf.append(SEP_PARENT_CHILD);
     	} 
-    	String keyName = KeyFactory.stringToKey(obj.getPkId()).getName();
-    	buf.append(obj.getClass().getSimpleName()).append(SEP_CLS_KEYNAME).append(keyName);
+    	buf.append(key.getKind()).append(SEP_CLS_KEYNAME).append(key.getName());
 
     	return;
     }

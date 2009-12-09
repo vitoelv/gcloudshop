@@ -15,7 +15,7 @@ public interface IGoods extends IModelObject {
   public static final String ATTRIBUTES = "attributes";
   public static final String IMAGE = "image";
 //  public static final String IMAGEFILEID = "imageFileId";
-  public static final String THUMB = "thumb";
+//  public static final String THUMB = "thumb";
 //  public static final String THUMBFILEID = "thumbFileId";  
   // fields
 

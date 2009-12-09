@@ -1,0 +1,94 @@
+<!--
+USAGE: refer to the below KEYWORD definition:
+
+    public static final String SEP_NEWLINE = "\r\n";
+    public static final String SEP_CLASSNAME = "::";
+    public static final String SEP_COLUMNS_VALUES = ",";
+    public static final String SEP_CLS_KEYNAME = ":";
+    public static final String SEP_PARENT_CHILD = "|";
+    public static final String SEP_START_OF_RECORD = "SOR>";
+    public static final String SEP_END_OF_RECORD = "<EOR";
+    
+    public static final String SEP_START_COMMENT = "<!--";
+    public static final String SEP_END_COMMENT = "-->";
+    public static final String SEP_COMMENT = "#";
+-->
+
+::com.jcommerce.core.model.Region
+keyName,regionId,parentId,regionName,regionType,agencyId
+SOR>Region:_r086,,,中国,0,<EOR
+SOR>Region:_r086_10,,Region:_r086,北京,1,<EOR
+SOR>Region:_r086_10_10,,Region:_r086_10,海淀区,2,<EOR
+SOR>Region:_r086_10_20,,Region:_r086_10,昌平区,2,<EOR
+SOR>Region:_r086_11,,Region:_r086,天津,1,<EOR
+SOR>Region:_r086_12,,Region:_r086,浙江,1,<EOR
+SOR>Region:_r086_12_01,,Region:_r086_12,杭州,2,<EOR
+SOR>Region:_r086_12_01_1,,Region:_r086_12_01,南平区,3,<EOR
+SOR>Region:_r086_12_02,,Region:_r086_12,金华,2,<EOR
+SOR>Region:_r001,,,美国,0,<EOR
+SOR>Region:_r2_10_00_0,,Region:_r001,加州,1,<EOR
+SOR>Region:_r2_11_00_0,,Region:_r001,佛州,1,<EOR
+
+
+::com.jcommerce.core.model.Goods
+keyName,goodsTypeId,image,imageFileId,thumb,thumbFileId,goodsId,catId,goodsSn,goodsName,goodsNameStyle,clickCount,brandId,providerName,goodsNumber,goodsWeight,marketPrice,shopPrice,promotePrice,promoteStartDate,promoteEndDate,warnNumber,keywords,goodsBrief,goodsDesc,goodsThumb,goodsImg,originalImg,isReal,extensionCode,isOnSale,isAloneSale,integral,addTime,sortOrder,isDelete,isBest,isNew,isHot,isPromote,bonusTypeId,lastUpdate,goodsType,sellerNote,giveIntegral,rankIntegral
+
+SOR>Goods:_g1,GoodsType:_gt1,,Goods:_g1|GoodsGallery:_gg1|DSFile:_dsf3,,,,Category:_c001_001,,Nokia97,,22,Brand:_b1,,0,0.0,1111.0,888.8,0.0,0,0,0,,,
+<P> it's just Nokia!!</P>
+,,,,false,,false,false,0,0,0,false,true,true,false,false,,0,0,,1,3<EOR
+
+SOR>Goods:_g2,GoodsType:_gt1,,Goods:_g2|GoodsGallery:_gg3|DSFile:_dsf5,,,,Category:_c001_002,,Moto RAZR V8,,17,Brand:_b2,,0,0.0,100.0,80.0,0.0,0,0,0,,,
+<P>作为K1的升级版本，KRZR K2配备了<STRONG><FONT color=#ff0000 size=3>200万像素的摄像头</FONT></STRONG>，
+同时屏幕方面也上升至QVGA（320×240像素）分辨率的标准，不过这次摩托KRZR K2是一款工作在CDMA 1X网络环境下的机型。</P>
+,,,,false,,false,false,0,0,0,false,true,true,false,false,,0,0,,1,1<EOR
+
+
+::com.jcommerce.core.model.GoodsGallery
+keyName,imageFileId,image,thumb,imgId,goodsId,imgUrl,imgDesc,thumbUrl,imgOriginal
+SOR>Goods:_g1|GoodsGallery:_gg1,Goods:_g1|GoodsGallery:_gg1|DSFile:_dsf3,,,,,,zzz,,<EOR
+SOR>Goods:_g1|GoodsGallery:_gg2,Goods:_g1|GoodsGallery:_gg2|DSFile:_dsf4,,,,,,eee,,<EOR
+SOR>Goods:_g2|GoodsGallery:_gg3,Goods:_g2|GoodsGallery:_gg3|DSFile:_dsf5,,,,,,zzz,,<EOR
+SOR>Goods:_g2|GoodsGallery:_gg4,Goods:_g2|GoodsGallery:_gg4|DSFile:_dsf6,,,,,,zzzz,,<EOR
+
+
+::com.jcommerce.core.model.GoodsAttr
+keyName,goodsAttrId,goodsId,attrId,attrValue,attrPrice
+SOR>Goods:_g1|GoodsAttr:_ga1,,,GoodsType:_gt1|Attribute:_a1,33,<EOR
+SOR>Goods:_g1|GoodsAttr:_ga2,,,GoodsType:_gt1|Attribute:_a2,111,<EOR
+SOR>Goods:_g2|GoodsAttr:_ga3,,,GoodsType:_gt1|Attribute:_a1,22,<EOR
+SOR>Goods:_g2|GoodsAttr:_ga4,,,GoodsType:_gt1|Attribute:_a2,22,<EOR
+
+::com.jcommerce.core.model.DSFile
+keyName,content,fileName,mimeType
+SOR>Brand:_b1|DSFile:_dsf1,Nokia.gif,D:\JCommerce\JCommerceGae\testThumb\Nokia.gif,image/gif<EOR
+SOR>Brand:_b2|DSFile:_dsf2,Moto.gif,D:\JCommerce\JCommerceGae\testThumb\Moto.gif,image/gif<EOR
+SOR>Goods:_g1|GoodsGallery:_gg1|DSFile:_dsf3,Nokia1.jpg,D:\JCommerce\JCommerceGae\testThumb\Nokia1.jpg,image/pjpeg<EOR
+SOR>Goods:_g1|GoodsGallery:_gg2|DSFile:_dsf4,Nokia2.jpg,D:\JCommerce\JCommerceGae\testThumb\Nokia2.jpg,image/pjpeg<EOR
+SOR>Goods:_g2|GoodsGallery:_gg3|DSFile:_dsf5,Moto1.jpg,D:\JCommerce\JCommerceGae\testThumb\Moto1.jpg,image/pjpeg<EOR
+SOR>Goods:_g2|GoodsGallery:_gg4|DSFile:_dsf6,Moto2.jpg,D:\JCommerce\JCommerceGae\testThumb\Moto2.jpg,image/pjpeg<EOR
+
+::com.jcommerce.core.model.GoodsType
+keyName,catId,catName,enabled,attrGroup
+SOR>GoodsType:_gt1,,手机,false,abc<EOR
+SOR>GoodsType:_gt2,,电脑,false,<EOR
+
+::com.jcommerce.core.model.Attribute
+keyName,attrId,catId,attrName,attrInputType,attrType,attrValues,attrIndex,sortOrder,isLinked,attrGroup
+SOR>GoodsType:_gt1|Attribute:_a1,,,大小,2,0,,1,0,true,0<EOR
+SOR>GoodsType:_gt1|Attribute:_a2,,,续航时间,0,0,,0,0,false,0<EOR
+SOR>GoodsType:_gt2|Attribute:_a3,,,内存容量,0,0,,0,0,false,0<EOR
+
+::com.jcommerce.core.model.Brand
+keyName,logoFileId,brandId,brandName,brandLogo,brandDesc,siteUrl,sortOrder,isShow
+SOR>Brand:_b1,Brand:_b1|DSFile:_dsf1,,nokia,,it's nokia,,0,false<EOR
+SOR>Brand:_b2,Brand:_b2|DSFile:_dsf2,,moto,,it's moto,,0,false<EOR
+
+
+
+::com.jcommerce.core.model.Category
+keyName,catId,catName,keywords,catDesc,parentId,sortOrder,templateFile,measureUnit,showInNav,style,isShow,grade,filterAttr
+SOR>Category:_c001,,手机通讯,,,,0,,台,0,22,true,2,0<EOR
+SOR>Category:_c001_001,,GSM手机,,,Category:_c001,0,,台,0,,true,0,0<EOR
+SOR>Category:_c001_002,,CDMA手机,,,Category:_c001,0,,台,1,,true,0,0<EOR
+SOR>Category:_c002,,手机配件,,,,0,,只,1,,true,0,0<EOR
+

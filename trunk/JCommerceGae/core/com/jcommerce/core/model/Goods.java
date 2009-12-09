@@ -3,12 +3,11 @@ package com.jcommerce.core.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
+
+import com.jcommerce.core.annotation.IsPK;
 
 /**  
  * generated with my extension of middleGen 
@@ -18,26 +17,16 @@ import javax.jdo.annotations.PrimaryKey;
 @PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true") 
 public class Goods extends ModelObject {
 
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String pkId;
-    
-    @Persistent
-    @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
-    private String keyName;
-    
-    @Persistent
-    private Long longId;
+
     
     // relations
-        @Persistent(mappedBy="goods")
+    @Persistent(mappedBy="goods")
     private Set<GoodsGallery> galleries = new HashSet<GoodsGallery>();
     @Persistent
     private Set<String>categoryIds = new HashSet<String>();
+    
     @Persistent
-    private String mainCategoryId;
-    @Persistent
+    @IsPK(myclazz="com.jcommerce.core.model.GoodsType")
     private String goodsTypeId;
     // uni-direction owned
     @Persistent
@@ -45,6 +34,7 @@ public class Goods extends ModelObject {
 	@Persistent
 	private String image;
     @Persistent
+    @IsPK(myclazz="com.jcommerce.core.model.DSFile")
     private String imageFileId;
     @Persistent
     private DSFile imageFile;
@@ -85,14 +75,7 @@ public void setCategoryIds(Set<String> categoryIds) {
 }
 
 
-public String getMainCategoryId() {
-	return mainCategoryId;
-}
 
-
-public void setMainCategoryId(String mainCategoryId) {
-	this.mainCategoryId = mainCategoryId;
-}
 
 
 public String getGoodsTypeId() {
@@ -109,6 +92,7 @@ public void setGoodsTypeId(String goodsTypeId) {
   private java.lang.String goodsId; 
 
   @Persistent
+  @IsPK(myclazz="com.jcommerce.core.model.Category")
   private java.lang.String catId; 
 
   @Persistent
@@ -124,6 +108,7 @@ public void setGoodsTypeId(String goodsTypeId) {
   private java.lang.Long clickCount=0l; 
 
   @Persistent
+  @IsPK(myclazz="com.jcommerce.core.model.Brand")
   private java.lang.String brandId; 
 
   @Persistent
@@ -231,31 +216,6 @@ public void setGoodsTypeId(String goodsTypeId) {
 	}
 
 
-	@Override
-	public Long getLongId() {
-		return longId;
-	}
-
-	@Override
-	public void setLongId(Long longId) {
-		this.longId = longId;
-	}
-
-	public String getPkId() {
-		return pkId;
-	}
-
-	public void setPkId(String pkId) {
-		this.pkId = pkId;
-	}
-
-	public String getKeyName() {
-		return keyName;
-	}
-
-	public void setKeyName(String keyName) {
-		this.keyName = keyName;
-	}
 
 
 

@@ -208,7 +208,7 @@ public class TestInheritance extends BaseDAOTestCase {
 		}
 	}
     
-    
+    // load brands using pm
     public void testLoadBrand() {
 		System.out.println("start of testLoadBrand");
 
@@ -376,6 +376,8 @@ public class TestInheritance extends BaseDAOTestCase {
 		}
 		
     }
+    
+    // load brands using managers instead of pm
     public void testLoadBrand2() {
 		System.out.println("start of testLoadBrand2");
 

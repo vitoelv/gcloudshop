@@ -40,6 +40,7 @@ public interface IDefaultManager {
 	public String txattach (ModelObject to);
 	public boolean txupdate (ModelObject to);
 	public boolean txdelete (String modelName, String id);
+	public boolean txdelete (ModelObject po);
 	public void txdeleteall (Collection<ModelObject> objs);
 	
 	

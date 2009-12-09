@@ -119,12 +119,12 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
     		form.put(IGoods.IMAGE, ((FileForm)form.get(IGoods.IMAGE)).getFileName());    			
 		}
 
-		DSFile thumbFile = null;
-		fileForm = (FileForm)form.get(IGoods.THUMB);
-		if(fileForm!=null) {
-			thumbFile = getFile(fileForm);
-    		form.put(IGoods.THUMB, ((FileForm)form.get(IGoods.THUMB)).getFileName());
-		}
+//		DSFile thumbFile = null;
+//		fileForm = (FileForm)form.get(IGoods.THUMB);
+//		if(fileForm!=null) {
+//			thumbFile = getFile(fileForm);
+//    		form.put(IGoods.THUMB, ((FileForm)form.get(IGoods.THUMB)).getFileName());
+//		}
 		
 		GoodsForm bean = new GoodsForm(Goods.class.getName(), form);
 		MyPropertyUtil.form2To(to, bean.getProperties());
@@ -143,7 +143,7 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
 		}
 		
 		to.setImageFile(imageFile);
-		to.setThumbFile(thumbFile);
+//		to.setThumbFile(thumbFile);
 
 		
 		Set<GoodsGallery> galleries = to.getGalleries();

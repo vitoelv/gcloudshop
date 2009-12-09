@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.ZipInputStream;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -145,6 +146,8 @@ public class GWTHttpServlet extends HttpServlet {
 								+ " detected, contentType="
 								+ item.getContentType());
 
+						ZipInputStream zin = new ZipInputStream(stream);
+						
 						// Process the input stream
 
 						FileForm file = null;
@@ -162,11 +165,14 @@ public class GWTHttpServlet extends HttpServlet {
 							if (contentLength < 1024) {
 								data = new String(bytes);
 							}
-
-							file = new FileForm(name);
-							file.setContent(bytes);
-							file.setFileName(item.getName());
-							file.setMimeType(item.getContentType());
+							
+							// if no file is uploaded, the field is still there, but length of stream is 0;
+							if(bytes.length>0) {
+								file = new FileForm(name);
+								file.setContent(bytes);
+								file.setFileName(item.getName());
+								file.setMimeType(item.getContentType());
+							}
 
 						} else {
 							data = new String(
@@ -226,9 +232,16 @@ public class GWTHttpServlet extends HttpServlet {
 
 			}
 
+			// debug only
 			for(String key:form.keySet()) {
-				debug("key="+key+", value="+form.get(key)+", valueclass="+form.get(key).getClass().getName());
+				try {
+					debug("key="+key+", value="+form.get(key)+", valueclass="+
+							(form.get(key) == null ? "null" : form.get(key).getClass().getName()));
+				} catch (Exception ex) {
+					debug("key="+key);
+				}
 			}
+				
 			
 			// special handling for GXT-ComboBox
 			for(String name:form.keySet()) {
