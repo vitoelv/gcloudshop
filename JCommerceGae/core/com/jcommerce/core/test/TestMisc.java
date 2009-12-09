@@ -1,5 +1,6 @@
 package com.jcommerce.core.test;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -13,7 +14,10 @@ import junit.framework.TestCase;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.jcommerce.core.annotation.IsPK;
 import com.jcommerce.core.model.Brand;
+import com.jcommerce.core.model.Category;
+import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.util.ConvertUtil;
 
 public class TestMisc extends TestCase {
@@ -82,6 +86,21 @@ public class TestMisc extends TestCase {
 			System.out.println("s: "+s);
 		}
 		
+	}
+	
+	public void testAnnotation() {
+		try {
+			Field f = Goods.class.getDeclaredField("goodsTypeId");
+			Annotation isPK = f.getAnnotation(IsPK.class);
+			System.out.println("isPK = "+isPK);
+			
+			f = Category.class.getDeclaredField("parentId");
+			isPK = f.getAnnotation(IsPK.class);
+			System.out.println("isPK = "+isPK);
+		
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 }
