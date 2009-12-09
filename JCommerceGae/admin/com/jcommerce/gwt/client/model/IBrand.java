@@ -8,8 +8,9 @@ package com.jcommerce.gwt.client.model;
  
 public interface IBrand extends IModelObject {
    
-   // relation
-      
+  // relation
+  public static final String LOGO_FILE_ID = "logoFileId";
+  public static final String LOGO_FILE = "logoFile";
   // fields
   public static final String BRAND_ID = "brandId"; 
   public static final String BRAND_NAME = "brandName"; 

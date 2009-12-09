@@ -60,6 +60,10 @@ public class DefaultManagerImpl implements IDefaultManager {
 			throw new RuntimeException(e);
 		}
 	}
+    public boolean txdelete (ModelObject po) {
+    	boolean res = getDao().delete(po);
+    	return res;
+    }
     public boolean txdelete (String modelName, String id) {
     	boolean res = getDao().delete(modelName, id);
     	return res;

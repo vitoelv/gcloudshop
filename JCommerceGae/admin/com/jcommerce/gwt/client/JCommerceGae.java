@@ -205,16 +205,16 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
         Tree mainMenu = app.getMainMenu();      
         
         TreeItem catGoods = mainMenu.addItem(Resources.constants.categoryGoods());
-        
-
-        setupMainMenuOption(catGoods, new CategoryPanel.State(), Resources.images.catWidgets());
-		setupMainMenuOption(catGoods, new GoodsPanel.State(), Resources.images.catWidgets());      
+        setupMainMenuOption(catGoods, new GoodsListPanel.State(), Resources.images.catWidgets());
+        setupMainMenuOption(catGoods, new GoodsPanel.State(), Resources.images.catWidgets());   
+        setupMainMenuOption(catGoods, new CategoryListPanel.State(), Resources.images.catWidgets());
+        setupMainMenuOption(catGoods, new BrandListPanel.State(), Resources.images.catWidgets());
+        setupMainMenuOption(catGoods, new GoodsTypeListPanel.State(), Resources.images.catWidgets());
+//        setupMainMenuOption(catGoods, new CategoryPanel.State(), Resources.images.catWidgets());
+//        setupMainMenuOption(catGoods, new BrandPanel.State(), Resources.images.catWidgets());		   
 		
-        setupMainMenuOption(catGoods, new BrandPanel.State(), Resources.images.catWidgets());
-		setupMainMenuOption(catGoods, new GoodsListPanel.State(), Resources.images.catWidgets());
-		setupMainMenuOption(catGoods, new GoodsTypeListPanel.State(), Resources.images.catWidgets());
-      	setupMainMenuOption(catGoods, new BrandListPanel.State(), Resources.images.catWidgets());
-		setupMainMenuOption(catGoods, new CategoryListPanel.State(), Resources.images.catWidgets());
+      	
+		
 		
 		TreeItem catOrder = mainMenu.addItem(Resources.constants.categoryOrder());
 		setupMainMenuOption(catOrder, new OrderListPanel.State(), Resources.images.catWidgets());

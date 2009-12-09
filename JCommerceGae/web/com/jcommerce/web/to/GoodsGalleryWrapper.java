@@ -24,9 +24,12 @@ public class GoodsGalleryWrapper extends BaseModelWrapper implements URLConstant
 		return getGoodsGallery().getLongId();
 	}
 	public String getThumbUrl() {
-		if (getGoodsGallery().getThumbFileId() == null)
-			return null;
-		return SERVLET_IMAGE + getGoodsGallery().getThumbFileId();
+//		if (getGoodsGallery().getThumbFileId() == null)
+//			return null;
+//		return SERVLET_IMAGE + getGoodsGallery().getThumbFileId();
+		
+		// currently we do not have thumb due to DS issue 154
+		return getImgUrl();
 	}
 	public String getImgUrl() {
 		return SERVLET_IMAGE + getGoodsGallery().getImageFileId();

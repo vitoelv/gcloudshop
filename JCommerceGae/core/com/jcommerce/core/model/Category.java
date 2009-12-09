@@ -17,17 +17,7 @@ import com.jcommerce.core.annotation.IsPK;
 @PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true") 
 public class Category extends ModelObject {
 
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String pkId;
-    
-    @Persistent
-    @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
-    private String keyName;
-    
-    @Persistent
-    private Long longId;
+
     
     // relations
         
@@ -45,8 +35,8 @@ public class Category extends ModelObject {
   @Persistent
   private java.lang.String catDesc; 
 
+  @IsPK(myclazz="com.jcommerce.core.model.Category")
   @Persistent
-  @IsPK(clazz="com.jcommerce.core.model.Category")
   private java.lang.String parentId; 
 
   @Persistent
@@ -78,32 +68,6 @@ public class Category extends ModelObject {
 	public Category() {
 	}
 
-
-	@Override
-	public Long getLongId() {
-		return longId;
-	}
-
-	@Override
-	public void setLongId(Long longId) {
-		this.longId = longId;
-	}
-
-	public String getPkId() {
-		return pkId;
-	}
-
-	public void setPkId(String pkId) {
-		this.pkId = pkId;
-	}
-
-	public String getKeyName() {
-		return keyName;
-	}
-
-	public void setKeyName(String keyName) {
-		this.keyName = keyName;
-	}
 
 
 

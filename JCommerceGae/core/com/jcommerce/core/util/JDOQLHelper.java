@@ -1,12 +1,13 @@
 package com.jcommerce.core.util;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.util.List;
 
+import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.Order;
-import com.jcommerce.core.model.ModelObject;
 
 public class JDOQLHelper {
 	
@@ -88,7 +89,17 @@ public class JDOQLHelper {
     	String value = cond.getValue();
     	String paraName = name+"Param";
     	try {
-			Class fieldType = Class.forName(className).getDeclaredField(name).getType();
+    		Field field = null;
+    		try {
+				field = Class.forName(className).getDeclaredField(name);
+			} catch (NoSuchFieldException e) {
+			}
+			if(field == null) {
+    			// inherited from base
+    			field = ModelObject.class.getDeclaredField(name);
+    		}
+			
+			Class fieldType = field.getType();
 
             hql.append(" ").append(cond.getField());
 

@@ -12,10 +12,12 @@ import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.HiddenField;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.user.client.Window;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BrandForm;
 import com.jcommerce.gwt.client.form.GWTHttpDynaForm;
+import com.jcommerce.gwt.client.model.IBrand;
 import com.jcommerce.gwt.client.resources.Resources;
 
 /**
@@ -108,6 +110,7 @@ public class BrandPanel extends BaseEntityEditPanel {
 //    }
     
     HiddenField<String> idField;
+    FileUploadField fufLogo;
     
     @Override
     public void setupPanelLayout() {
@@ -122,9 +125,13 @@ public class BrandPanel extends BaseEntityEditPanel {
         siteField.setFieldLabel(Resources.constants.NewBrand_site());
         formPanel.add(siteField, lfd());
         
-        FileUploadField logoField = BrandForm.getLogoField(Resources.constants.NewBrand_LOGO()+"：");
-        logoField.setFieldLabel(Resources.constants.NewBrand_LOGO());
-        formPanel.add(logoField, sfd());
+        fufLogo = BrandForm.getLogoField(Resources.constants.NewBrand_LOGO()+"：");
+        fufLogo.setFieldLabel(Resources.constants.NewBrand_LOGO());
+        formPanel.add(fufLogo, sfd());
+        
+        HiddenField<String> hfLogoFileId = new HiddenField<String>();
+        hfLogoFileId.setName(IBrand.LOGO_FILE_ID);
+        formPanel.add(hfLogoFileId,sfd());
         
         TextArea descField = BrandForm.getDescField(Resources.constants.NewBrand_description()+"：");
         descField.setHeight("180px");
@@ -195,12 +202,39 @@ public class BrandPanel extends BaseEntityEditPanel {
     		idField.setValue(null);
     	}
     	formPanel.setAction(GWTHttpDynaForm.constructURL(action, method));
+    	
+    	boolean enabled = fufLogo.isEnabled();
+    	boolean isreadonly = fufLogo.isReadOnly();
+    	
+    	System.out.println("isenabled? "+enabled+", readonly? "+isreadonly);
+    	fufLogo.reset();
+    	fufLogo.setValue("");
+    	isreadonly = fufLogo.isReadOnly();
+    	enabled = fufLogo.isEnabled();
+    	System.out.println("isenabled? "+enabled+", readonly? "+isreadonly);
+    	InputElement ele = fufLogo.getFileInput();
+    	if(ele!=null) {
+    		String val = ele.getValue();
+    		String type = ele.getType();
+    		String name = ele.getName();
+    		System.out.println("val: +"+val+", type="+type+", name="+name);
+    	}
+    	fufLogo.setEnabled(true);
+    	fufLogo.setReadOnly(false);
+
     }
     
     @Override
     protected void submit() {
     	// test
     	// add field on the fly
+    	InputElement ele = fufLogo.getFileInput();
+    	if(ele!=null) {
+    		String val = ele.getValue();
+    		String type = ele.getType();
+    		String name = ele.getName();
+    		System.out.println("val: +"+val+", type="+type+", name="+name);
+    	}
     	
     	formPanel.submit();
     }

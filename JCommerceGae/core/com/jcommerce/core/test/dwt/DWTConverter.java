@@ -390,9 +390,13 @@ public class DWTConverter {
 		// TODO  <!-- {foreach from=$spec.values item=value key=key} -->
 		// {foreach name=nav_top_list from=$navigator_list.top item=nav} --> // name is no use for freemarker..
 		// TODO <!-- {foreach from=$how_oos_list key=how_oos_id item=how_oos_name} -->
-		// expect sth like:  <#list consigneeList?keys as sn> <#assign consignee = consigneeList[sn]> 
+ 
 		
 		// TODO <!-- {foreach from=$province_list.$sn item=province} -->  // consignee.lbi
+		
+		// TODO <!-- {foreach from=$consignee_list item=consignee key=sn} --> flow.dwt 246
+		// ?? expect sth like:  <#list consigneeList?keys as sn> <#assign consignee = consigneeList[sn]>
+		// in fact we use <#list consigneeList as consignee> <#assign sn = consignee_index> 
 		
 		String res = "";
 		
@@ -676,6 +680,7 @@ public class DWTConverter {
 	public String replacePhpVars(String res) {
 		// replace PHP style variables to Java style
 		String res2;
+		// TODO escape _index to avoid override result of foreach conversion 
 		String regex = "_([a-z])";
 //		String regex = "(\\s^[\\s|_|\"]*)_([a-z])";
 		res2 = preg_replace(regex, new RegexReplaceCallback() {

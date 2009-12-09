@@ -2,25 +2,34 @@ package com.jcommerce.core.test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.List;
 
 import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Brand;
-import com.jcommerce.core.model.Category;
+import com.jcommerce.core.model.DSFile;
 import com.jcommerce.core.model.Goods;
-import com.jcommerce.core.model.GoodsType;
+import com.jcommerce.core.model.GoodsGallery;
+import com.jcommerce.core.model.ModelObject;
+import com.jcommerce.core.model.Session;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.util.DataStoreUtils;
 
 public class LiveDSHelper extends BaseDAOTestCase {
 	
+	public static final String LIVEDS_PATH = "com/jcommerce/core/test/liveDSData/";
+	public static final String LIVEDS_DATA = "mydata.txt";
+	public static final String LIVEDS_FILE = "files";
+	
 	@Override
     public String getDbStorePath() {
-//    	return "D:/JCommerce/JCommerceGae/war";
-    	return "D:/JCommerce/JCommerceGae/testdatastore";
+    	return "D:/JCommerce/JCommerceGae/war";
+//    	return "D:/JCommerce/JCommerceGae/testdatastore";
     }
 	private boolean isIncremental() {
+		// false if want to clear before importing
 		return false;
+		// true if want to import without clearing old data
 //		return true;
 	}
 	
@@ -28,6 +37,16 @@ public class LiveDSHelper extends BaseDAOTestCase {
 	public boolean needCleanOnStartup() {
     	return false;
     }
+	
+	public void testDeleteAllSession() {
+		System.out.println("started");		
+		Session s = new Session();
+		getDefaultManager().txadd(s);
+		
+		Collection<ModelObject> res = getDefaultManager().getList(Session.class.getName(), null);
+		getDefaultManager().txdeleteall(res);
+		System.out.println("finished");		
+	}
 	
 	public void testInitialDS() {
 		System.out.println("start of testInitialDS...");
@@ -37,7 +56,7 @@ public class LiveDSHelper extends BaseDAOTestCase {
 			}
 			
 			IDefaultManager manager = getDefaultManager();
-			InputStream in = LiveDSHelper.class.getClassLoader().getResourceAsStream("com/jcommerce/core/test/mydata.txt");
+			InputStream in = LiveDSHelper.class.getClassLoader().getResourceAsStream(LIVEDS_PATH+LIVEDS_FILE);
 			
 //			BufferedReader reader = new BufferedReader(new InputStreamReader(in, ENCODING));
 //			while(true) {
@@ -67,10 +86,16 @@ public class LiveDSHelper extends BaseDAOTestCase {
 			IDefaultManager manager = getDefaultManager();
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-			DataStoreUtils.exportDS2(out, GoodsType.class.getName(), manager);
-			DataStoreUtils.exportDS2(out, Attribute.class.getName(), manager);
+//			DataStoreUtils.exportDS2(out, Region.class.getName(), manager);
+//			DataStoreUtils.exportDS2(out, Goods.class.getName(), manager);
+//			DataStoreUtils.exportDS2(out, GoodsGallery.class.getName(), manager);
+//			DataStoreUtils.exportDS2(out, GoodsAttr.class.getName(), manager);
+			DataStoreUtils.exportDS2(out, DSFile.class.getName(), manager);
+			
+//			DataStoreUtils.exportDS2(out, GoodsType.class.getName(), manager);
+//			DataStoreUtils.exportDS2(out, Attribute.class.getName(), manager);
 			DataStoreUtils.exportDS2(out, Brand.class.getName(), manager);
-			DataStoreUtils.exportDS2(out, Category.class.getName(), manager);
+//			DataStoreUtils.exportDS2(out, Category.class.getName(), manager);
 			out.flush();
 			String exported = new String(out.toByteArray(), ENCODING);
 

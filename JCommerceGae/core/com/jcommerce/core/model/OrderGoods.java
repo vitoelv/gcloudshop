@@ -17,17 +17,7 @@ import javax.jdo.annotations.PrimaryKey;
 @PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true") 
 public class OrderGoods extends ModelObject {
 
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String pkId;
-    
-    @Persistent
-    @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
-    private String keyName;
-    
-    @Persistent
-    private Long longId;
+
     
     // relations
         
@@ -81,31 +71,7 @@ public class OrderGoods extends ModelObject {
 	}
 
 
-	@Override
-	public Long getLongId() {
-		return longId;
-	}
 
-	@Override
-	public void setLongId(Long longId) {
-		this.longId = longId;
-	}
-
-	public String getPkId() {
-		return pkId;
-	}
-
-	public void setPkId(String pkId) {
-		this.pkId = pkId;
-	}
-
-	public String getKeyName() {
-		return keyName;
-	}
-
-	public void setKeyName(String keyName) {
-		this.keyName = keyName;
-	}
 
 
 

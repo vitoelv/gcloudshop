@@ -1,13 +1,13 @@
 package com.jcommerce.core.model;
 
-import java.util.HashSet;
-import java.util.Set;
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+
+import com.jcommerce.core.annotation.IsPK;
 
 /**  
  * generated with my extension of middleGen 
@@ -17,35 +17,23 @@ import javax.jdo.annotations.PrimaryKey;
 @PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true") 
 public class Brand extends ModelObject {
 
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String pkId;
-    
-    @Persistent
-    @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
-    private String keyName;
-    
-    @Persistent
-    private Long longId;
-    
     // relations
         // TODO leon combine logo and logoFileId to a DSFile instance, 
     // in order to make DSFile a child of Brand, and thus can be put in a DS transaction
     @Persistent
+    @IsPK(myclazz="com.jcommerce.core.model.DSFile")
     private String logoFileId;
     
-//    @Persistent
-//    private DSFile logo;
+    @Persistent
+    private DSFile logoFile;
 
-public String getLogoFileId() {
-	return logoFileId;
-}
+	public String getLogoFileId() {
+		return logoFileId;
+	}
 
-
-public void setLogoFileId(String logoFileId) {
-	this.logoFileId = logoFileId;
-}
+	public void setLogoFileId(String logoFileId) {
+		this.logoFileId = logoFileId;
+	}
     
     
   // fields
@@ -76,31 +64,6 @@ public void setLogoFileId(String logoFileId) {
 	}
 
 
-	@Override
-	public Long getLongId() {
-		return longId;
-	}
-
-	@Override
-	public void setLongId(Long longId) {
-		this.longId = longId;
-	}
-
-	public String getPkId() {
-		return pkId;
-	}
-
-	public void setPkId(String pkId) {
-		this.pkId = pkId;
-	}
-
-	public String getKeyName() {
-		return keyName;
-	}
-
-	public void setKeyName(String keyName) {
-		this.keyName = keyName;
-	}
 
 
 
@@ -171,5 +134,15 @@ public void setLogoFileId(String logoFileId) {
   public void setIsShow(java.lang.Boolean newIsShow) {
     isShow = newIsShow;
   }
+
+public DSFile getLogoFile() {
+	return logoFile;
+}
+
+public void setLogoFile(DSFile logoFile) {
+	this.logoFile = logoFile;
+}
+
+
 
 }

@@ -103,13 +103,26 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     }
     public String addBrand(Brand to) {
     	try {
-    		populateIdWithPo(to);
-			String res = dao.add(to);
+    		String bkn = UUIDHexGenerator.newUUID(); 
+    		to.setKeyName(bkn);
+    		to.setLongId(UUIDLongGenerator.newUUID());
+    		DSFile file = to.getLogoFile();
+			String fkn = UUIDHexGenerator.newUUID();
+			String fid = KeyFactory.keyToString(new KeyFactory.Builder("Brand",bkn).addChild("DSFile", fkn).getKey());
+			file.setKeyName(fkn);
+			to.setLogoFileId(fid);
+			
+			String res = txattach(to); 
+    		
+    		
+//    		populateIdWithPo(to);
+//			String res = dao.add(to);
 			
 //			DSFile logo = to.getLogo();
 //			String id = logo.getPkId();
 //			System.out.println("id: "+id);
 
+			
 			// NOTE: This does not work
 			// throw exception: 
 			// can't update the same entity twice in a transaction or operation
@@ -122,6 +135,46 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 		}
     }
     
+    public boolean updateBrand(Brand to) {
+    	try {
+    		String id = to.getPkId();
+    		System.out.println("id: "+id);
+    		Brand po = (Brand)get(Brand.class.getName(), id);
+    		if(po==null) {
+    			// TODO 
+    		}
+    		String bkn = po.getKeyName();
+    		
+    		
+    		String fkn = null;
+    		String fid = null;
+    		DSFile newFile = null, oldFile = null;
+    		MyPropertyUtil.copySimpleProperties(po, to);
+    		if(to.getLogoFile()==null) {
+    			// no new logofile, do nothing
+    			
+    		}
+    		else {
+    			oldFile = po.getLogoFile();
+        		newFile = to.getLogoFile();
+    			fkn = UUIDHexGenerator.newUUID();
+    			fid = KeyFactory.keyToString(new KeyFactory.Builder("Brand",bkn).addChild("DSFile", fkn).getKey());
+    			newFile.setKeyName(fkn);
+    			po.setLogoFileId(fid);
+    			po.setLogoFile(newFile);
+    		}
+    		
+			String res = txattach(po);
+			
+			boolean suc = txdelete(oldFile);
+
+			return true;
+    	} catch (Exception e) {
+
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+    }
     public String addGoods(Goods to) {
     	try {
     		String goodskn = UUIDHexGenerator.newUUID();

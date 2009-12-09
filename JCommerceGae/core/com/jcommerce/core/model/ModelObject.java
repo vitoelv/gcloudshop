@@ -2,46 +2,85 @@ package com.jcommerce.core.model;
 
 import java.io.Serializable;
 
+import javax.jdo.annotations.Extension;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.Inheritance;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
 import com.jcommerce.gwt.client.util.URLConstants;
 
-
-
+@PersistenceCapable(identityType = IdentityType.APPLICATION) 
+@Inheritance(customStrategy = "complete-table")
 public abstract class ModelObject implements Serializable, URLConstants {
 	
+    @PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
+    private String pkId;
+    
+    @Persistent
+    @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
+    private String keyName;
+    
+    @Persistent
+    private Long longId;
+
+    
+//    public ModelObject getParent(){
+//    	return null;
+//    }
+
+
+
+
+
+
+	public String getPkId() {
+		return pkId;
+	}
+
+
+
+
+
+
+	public void setPkId(String pkId) {
+		this.pkId = pkId;
+	}
+
+
+
+
+
+
+	public String getKeyName() {
+		return keyName;
+	}
+
+
+
+
+
+
+	public void setKeyName(String keyName) {
+		this.keyName = keyName;
+	}
+
+
+
+
+
 
 	public Long getLongId() {
-		return null;
+		return longId;
 	}
 
 	public void setLongId(Long longId) {
+		this.longId = longId;
 	}
-	
-    
-//    public String getModelName() {
-//        return getClass().getSimpleName();
-//    }
-//    public String toString() {
-//        return ToStringBuilder.reflectionToString(this,
-//                ToStringStyle.MULTI_LINE_STYLE);
-//    }
-//
-//    public boolean equals(Object o) {
-//        return EqualsBuilder.reflectionEquals(this, o);
-//    }
-
-//    public int hashCode() {
-//        return HashCodeBuilder.reflectionHashCode(this);
-//    }
-    
-	public abstract void setPkId(String pkId);
-    public abstract String getPkId();
-    
-	public abstract void setKeyName(String kn);
-    public abstract String getKeyName();
-    
-    public ModelObject getParent(){
-    	return null;
-    }
     
 
 }

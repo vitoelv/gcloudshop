@@ -143,11 +143,11 @@ public class GoodsForm extends BeanObject implements IGoods {
 		field.setName(IMAGE);
 		return field;
 	}
-	public static FileUploadField getThumbField() {
-		FileUploadField field = new FileUploadField();
-		field.setName(THUMB);
-		return field;
-	}
+//	public static FileUploadField getThumbField() {
+//		FileUploadField field = new FileUploadField();
+//		field.setName(THUMB);
+//		return field;
+//	}
 	public static NumberField getWeightField(String fieldTitle) {
 		NumberField field = new NumberField();
 		field.setName(GOODS_WEIGHT);

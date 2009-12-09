@@ -9,6 +9,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.jcommerce.core.annotation.IsPK;
+
 /**  
  * generated with my extension of middleGen 
  * @author <a href="http://code.google.com/p/gcloudshop/">Leon</a>
@@ -17,17 +19,7 @@ import javax.jdo.annotations.PrimaryKey;
 @PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true") 
 public class GoodsGallery extends ModelObject {
 
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
-    private String pkId;
-    
-    @Persistent
-    @Extension(vendorName="datanucleus", key="gae.pk-name", value="true")
-    private String keyName;
-    
-    @Persistent
-    private Long longId;
+
     
     // relations
     	@Persistent
@@ -35,21 +27,19 @@ public class GoodsGallery extends ModelObject {
     @Persistent
 	private DSFile imageFile;
     @Persistent
+    @IsPK(myclazz="com.jcommerce.core.model.DSFile")
 	private String imageFileId;
-    @Persistent
-	private DSFile thumbFile;
-    @Persistent
-	private String thumbFileId;
+//    @Persistent
+//	private DSFile thumbFile;
+//    @Persistent
+//	private String thumbFileId;
 	@Persistent
 	private String image;
 	@Persistent
 	private String thumb;
 	
 	
-	@Override
-  public ModelObject getParent(){
-  	return goods;
-  }
+
 	
 public Goods getGoods() {
 	return goods;
@@ -81,24 +71,7 @@ public void setImageFileId(String imageFileId) {
 }
 
 
-public DSFile getThumbFile() {
-	return thumbFile;
-}
 
-
-public void setThumbFile(DSFile thumbFile) {
-	this.thumbFile = thumbFile;
-}
-
-
-public String getThumbFileId() {
-	return thumbFileId;
-}
-
-
-public void setThumbFileId(String thumbFileId) {
-	this.thumbFileId = thumbFileId;
-}    
     
   // fields
   @Persistent
@@ -125,31 +98,7 @@ public void setThumbFileId(String thumbFileId) {
 	}
 
 
-	@Override
-	public Long getLongId() {
-		return longId;
-	}
 
-	@Override
-	public void setLongId(Long longId) {
-		this.longId = longId;
-	}
-
-	public String getPkId() {
-		return pkId;
-	}
-
-	public void setPkId(String pkId) {
-		this.pkId = pkId;
-	}
-
-	public String getKeyName() {
-		return keyName;
-	}
-
-	public void setKeyName(String keyName) {
-		this.keyName = keyName;
-	}
 
 
 
