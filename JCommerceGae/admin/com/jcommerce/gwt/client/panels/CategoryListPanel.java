@@ -27,6 +27,7 @@ import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.store.Record;
 import com.extjs.gxt.ui.client.store.StoreEvent;
 import com.extjs.gxt.ui.client.store.StoreListener;
+import com.extjs.gxt.ui.client.store.TreeStore;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.grid.CheckColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
@@ -34,6 +35,8 @@ import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 import com.extjs.gxt.ui.client.widget.grid.Grid;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.toolbar.PagingToolBar;
+import com.extjs.gxt.ui.client.widget.treegrid.EditorTreeGrid;
+import com.extjs.gxt.ui.client.widget.treegrid.TreeGridCellRenderer;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ListBox;
@@ -44,6 +47,7 @@ import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.model.ICategory;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.DeleteService;
+import com.jcommerce.gwt.client.service.ListService;
 import com.jcommerce.gwt.client.service.PagingListService;
 import com.jcommerce.gwt.client.widgets.ActionCellRenderer;
 
@@ -105,16 +109,16 @@ public class CategoryListPanel extends ContentWidget {
     public String getName() {
         return Resources.constants.CategoryList_title();
     }
-    
+    TreeStore<BeanObject> store= new TreeStore<BeanObject>();
     
     protected void onRender(Element parent, int index) {
     	super.onRender(parent, index);
 
-        BasePagingLoader loader = new PagingListService().getLoader(ModelNames.CATEGORY);
+        //BasePagingLoader loader = new PagingListService().getLoader(ModelNames.CATEGORY);
 
-        loader.load(0, 50);
+        //loader.load(0, 50);
     	
-        final ListStore<BeanObject> store = new ListStore<BeanObject>(loader);
+        //final ListStore<BeanObject> store = new ListStore<BeanObject>(loader);
 
         store.addStoreListener(new StoreListener<BeanObject>() {
             public void storeUpdate(StoreEvent<BeanObject> se) {
@@ -122,13 +126,15 @@ public class CategoryListPanel extends ContentWidget {
             }
         });
         
-        toolBar = new PagingToolBar(50);
-        toolBar.bind(loader);
+        //toolBar = new PagingToolBar(50);
+        //toolBar.bind(loader);
 
         List<ColumnConfig> columns = new ArrayList<ColumnConfig>();
         //CheckBoxSelectionModel<BeanObject> sm = new CheckBoxSelectionModel<BeanObject>();
-        //columns.add(sm.getColumn());        
-        columns.add(new ColumnConfig(ICategory.CAT_NAME, Resources.constants.Category_name(), 150));
+        //columns.add(sm.getColumn()); 
+        ColumnConfig colName = new ColumnConfig(ICategory.CAT_NAME, Resources.constants.Category_name(), 150);
+        colName.setRenderer(new TreeGridCellRenderer<BeanObject>());
+        columns.add(colName);
         columns.add(new ColumnConfig(ICategory.MEASURE_UNIT, Resources.constants.Category_unit(), 80));
         columns.add(new CheckColumnConfig(ICategory.SHOW_IN_NAV, Resources.constants.CategoryList_navigator(), 80) {
         	// TODO: wrap the code for Long type column into a baseclass
@@ -148,7 +154,7 @@ public class CategoryListPanel extends ContentWidget {
 
         ColumnModel cm = new ColumnModel(columns);
 
-        Grid<BeanObject> grid = new Grid<BeanObject>(store, cm);
+        EditorTreeGrid<BeanObject> grid = new EditorTreeGrid<BeanObject>(store, cm);
         grid.setLoadMask(true);
         grid.setBorders(true);
         //grid.setSelectionModel(sm);
@@ -227,7 +233,18 @@ public class CategoryListPanel extends ContentWidget {
 				});
     }
     public void refresh(){
-    	toolBar.refresh();
+    	new ListService().treeListBeans(ModelNames.CATEGORY,null,new ListService.Listener(){
+
+			@Override
+			public void onSuccess(List<BeanObject> beans) {
+				if(store.getChildCount()>0){
+					store.removeAll();
+				}
+				store.add(beans, true);
+			}
+    		
+    	});
+    	//toolBar.refresh();
     }
 
 }

@@ -13,6 +13,7 @@ import com.jcommerce.gwt.client.IDefaultServiceAsync;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.util.MyListLoader;
 import com.jcommerce.gwt.client.util.MyRpcProxy;
+import com.jcommerce.gwt.client.util.TreeListUtils;
 
 public class ListService extends RemoteService {
     public void listBeans(String model, final Listener listener) {
@@ -64,7 +65,32 @@ public class ListService extends RemoteService {
             }
         });        
     }
-
+    
+    public void treeListBeans(final String model, Criteria criteria, final Listener listener) {
+        if (model == null) {
+            throw new RuntimeException("model = null");
+        }
+        
+        final IDefaultServiceAsync service = getDefaultService();
+        service.getList(model, criteria, new AsyncCallback<List<BeanObject>>() {
+            public synchronized void onSuccess(List<BeanObject> result) {
+                if (listener != null) {
+                	if(!result.isEmpty()){
+                	    result = TreeListUtils.toTreeList(result);
+                	}
+                    listener.onSuccess(result);
+                }
+            }
+            public synchronized void onFailure(Throwable caught) {
+                System.out.println("ListService: getList onFailure(model="+model+", error="+caught);
+                
+                if (listener != null) {
+                    listener.onFailure(caught);
+                }
+            }
+        });        
+    }
+    
     public void listBeans(final String model, String fieldName, String value, final Listener listener) {
 		Criteria criteria = new Criteria();
 		Condition cond = new Condition();

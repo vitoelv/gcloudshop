@@ -109,8 +109,10 @@ public class Category extends ModelObject {
     catDesc = newCatDesc;
   }
 
-
-
+  public java.lang.String getTreeParentId(){
+	  return parentId;
+  }
+  
   public java.lang.String getParentId() {
     return parentId;
   }
