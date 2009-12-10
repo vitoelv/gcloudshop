@@ -86,6 +86,11 @@
         class="com.jcommerce.web.front.action.CaptchaAction">
 
 	</bean>
+	<bean name="searchAction" scope="prototype"
+        class="com.jcommerce.web.front.action.SearchAction"
+        parent="baseAction" >
+
+	</bean>	
 	
 				
 </beans>

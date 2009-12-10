@@ -93,7 +93,7 @@
         </td>
       </tr>
       </#if>
-      <#if  goodsTypeSelected  >  0  >
+      <#if  goodsTypeSelected  &gt;  0  >
       <#list goodsAttributes as item>
       <#if  item.type  ==  1  >
       <tr>
@@ -169,13 +169,13 @@
               <select name="order">
               TODO: htmlOptions CLAUSE
               </select>
-              <input type="image" name="imageField" src="../images/bnt_go.gif" alt="go"/>
+              <input type="image" name="imageField" src="images/bnt_go.gif" alt="go"/>
               <input type="hidden" name="page" value="${pager.page}" />
               <input type="hidden" name="display" value="${pager.display}" id="display" />
-              <#list  as >
-              <#if  key  !=  "sort"  &&  key??  !=  "order"  >
+              <#list pager.search?keys as key> <#assign item = pager.search.get(key)>
+              <#if  key  !=  "sort"  &&  key  !=  "order"  >
                 <#if  key  ==  'keywords'  >
-                  <input type="hidden" name="${key}" value="${item:decodeUrl}" />
+                  <input type="hidden" name="${key}" value="${item}" />
                 <#else>
                   <input type="hidden" name="${key}" value="${item}" />
                 </#if>
@@ -189,12 +189,12 @@
           <form action="compare.action" method="post" name="compareForm" id="compareForm" onsubmit="return compareGoods(this);">
           <#if  pager.display  ==  'list'  >
               <div class="goodsList">
-                <#list goodsList as goods>
+                <#list goodsList as goods><#assign sn = goods_index >
                 <#if  goods.goodsId??  >
-                <ul class="clearfix bgcolor"<#if  smarty.foreach.goodsList.index??  %  2  ==  0  >id=""<#else>id="bgcolor"</#if>>
+                <ul class="clearfix bgcolor"<#if  sn  %  2  ==  0  >id=""<#else>id="bgcolor"</#if>>
                 <li>
                 <br>
-                <a href="javascript:;" id="compareLink" onClick="Compare.add(${goods.goodsId},'${goods.goodsName:"quotes"}','${goods.type}')" class="f6">${lang.compare}</a>
+                <a href="javascript:;" id="compareLink" onClick="Compare.add(${goods.goodsId},'${goods.goodsName}','${goods.type}')" class="f6">${lang.compare}</a>
                 </li>
                 <li class="thumb"><a href="${goods.url}"><img src="${goods.goodsThumb}" alt="${goods.goodsName}" /></a></li>
                 <li class="goodsName">
@@ -221,7 +221,7 @@
                 </li>
                 <li class="action">
                 <a href="javascript:collect(${goods.goodsId});" class="abg f6">${lang.favourableGoods}</a>
-                <a href="javascript:addToCart(${goods.goodsId})"><img src="../images/bnt_buy_1.gif"></a>
+                <a href="javascript:addToCart(${goods.goodsId})"><img src="images/bnt_buy_1.gif"></a>
                 </li>
                 </ul>
                 </#if>
@@ -245,7 +245,7 @@
                         </#if>
                        <a href="javascript:collect(${goods.goodsId});" class="f6">${lang.btnCollect}</a> |
                        <a href="javascript:addToCart(${goods.goodsId})" class="f6">${lang.btnBuy}</a> |
-                       <a href="javascript:;" id="compareLink" onClick="Compare.add(${goods.goodsId},'${goods.goodsName:"quotes"}','${goods.type}')" class="f6">${lang.compare}</a>
+                       <a href="javascript:;" id="compareLink" onClick="Compare.add(${goods.goodsId},'${goods.goodsName}','${goods.type}')" class="f6">${lang.compare}</a>
                     </div>
                 </#if>
                 </#list>
@@ -253,10 +253,10 @@
                 </div>
              <#elseif  pager.display  ==  'text'  >
               <div class="goodsList">
-              <#list goodsList as goods>
-               <ul class="clearfix bgcolor"<#if  smarty.foreach.goodsList.index??  %  2  ==  0  >id=""<#else>id="bgcolor"</#if>>
+              <#list goodsList as goods><#assign sn = goods_index >
+               <ul class="clearfix bgcolor"<#if  sn  %  2  ==  0  >id=""<#else>id="bgcolor"</#if>>
               <li style="margin-right:15px;">
-              <a href="javascript:;" id="compareLink" onClick="Compare.add(${goods.goodsId},'${goods.goodsName:"quotes"}','${goods.type}')" class="f6">${lang.compare}</a>
+              <a href="javascript:;" id="compareLink" onClick="Compare.add(${goods.goodsId},'${goods.goodsName}','${goods.type}')" class="f6">${lang.compare}</a>
               </li>
               <li class="goodsName">
               <a href="${goods.url}" class="f6 f5">
@@ -282,7 +282,7 @@
               </li>
               <li class="action">
               <a href="javascript:collect(${goods.goodsId});" class="abg f6">${lang.favourableGoods}</a>
-              <a href="javascript:addToCart(${goods.goodsId})"><img src="../images/bnt_buy_1.gif"></a>
+              <a href="javascript:addToCart(${goods.goodsId})"><img src="images/bnt_buy_1.gif"></a>
               </li>
               </ul>
               </#list>
@@ -290,11 +290,11 @@
              </#if>
           </form>
           <script type="text/javascript">
-        <#list lang.compareJs as item>
+        <#list lang.compareJs?keys as key> <#assign item = lang.compareJs.get(key)>
         var ${key} = "${item}";
         </#list>
 
-				<#list lang.compareJs as item>
+				<#list lang.compareJs?keys as key> <#assign item = lang.compareJs.get(key)>
         <#if  key  !=  'buttonCompare'  >
         var ${key} = "${item}";
         <#else>

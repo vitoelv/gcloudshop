@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.datanucleus.util.StringUtils;
+
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.Category;
 import com.jcommerce.core.model.Goods;
@@ -32,6 +34,13 @@ public class BrandAction extends BaseAction {
 	public void includeGoodsList() {
 		HttpServletRequest request = getRequest();
         String brandId = request.getParameter("id");
+        if(StringUtils.isEmpty(brandId)) {
+        	brandId = request.getParameter("brand");
+        }
+        if(StringUtils.isEmpty(brandId)) {
+        	// sth wrong, maybe goto home
+        	throw new RuntimeException("brand id is null");
+        }
         request.setAttribute("brandId", brandId);
         
 
@@ -45,9 +54,18 @@ public class BrandAction extends BaseAction {
 		long cate = (cat!=null && Integer.valueOf(cat)>0) ? Integer.valueOf(cat) : 0;
 		request.setAttribute("category", cate);
 		
-		String sort = "goods_id";  //'goods_id', 'shop_price', 'last_update'
-		String order = "ASC"; // ASC DESC
-		String display = DISPLAY_LIST;
+		String sort = (String)request.getParameter("sort");  //'goods_id', 'shop_price', 'last_update'
+		String order = (String)request.getParameter("order"); // ASC DESC
+		String display = (String)request.getParameter("display");
+		if(display == null){
+			display = DISPLAY_GRID;
+		}
+		if(sort == null){
+			sort = "goodsName";
+		}
+		if(order == null){
+			order = "ASC";
+		}
 		// TODO
 		int recordCount = goodsCountByBrand(brandId, cate);
 		
@@ -125,14 +143,24 @@ public class BrandAction extends BaseAction {
 	        includeGoodsList();
 	        
 	        String brandId = request.getParameter("id");
+	        if(StringUtils.isEmpty(brandId)) {
+	        	brandId = request.getParameter("brand");
+	        }
+	        if(StringUtils.isEmpty(brandId)) {
+	        	// sth wrong, maybe goto home
+	        	throw new RuntimeException("brand id is null");
+	        }
 	        debug("in [execute]: brandId="+brandId);
 	        
 	        IDefaultManager manager = getDefaultManager();
 	        Brand brand = (Brand)manager.get(ModelNames.BRAND, brandId);
 	        BrandWrapper bw = new BrandWrapper(brand);
-	        request.setAttribute("brand", bw);
 	        
-	        
+	        bw.put("brandLogo", URLConstants.SERVLET_BRANDLOGO+brand.getLogoFileId());
+
+	        request.setAttribute("brand", bw);    
+	       
+	        LibMain.assignUrHere(request, "" , (String)bw.get("brandName"));
 			return SUCCESS;
         
 		} catch (Exception ex) {

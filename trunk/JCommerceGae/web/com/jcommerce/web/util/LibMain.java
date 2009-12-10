@@ -428,7 +428,7 @@ public class LibMain {
     
     public static Pager getPager(String url, Map<String, Object> param, int recordCount, int page, int size, ShopConfigWrapper scw) {
     	if(size<1) {
-    		size = 10;
+    		size = 5;
     	}
     	if(page<1) {
     		page = 1;
