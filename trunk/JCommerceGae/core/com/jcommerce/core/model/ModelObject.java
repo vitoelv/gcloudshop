@@ -70,6 +70,10 @@ public abstract class ModelObject implements Serializable, URLConstants {
 	}
 
 
+   public String getTreeParentId(){
+	   return null;
+   }
+   
 
 
 
