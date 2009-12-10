@@ -131,6 +131,9 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
 //    public String getGoodsNumber() {
 //    	return String.valueOf(getGoods().getPromotePrice());
 //    }
+    public String getType(){
+    	return goods.getGoodsTypeId();
+    }
 
 
 }
