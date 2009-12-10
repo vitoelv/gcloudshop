@@ -92,6 +92,10 @@
 				<param name="contentType">image/JPEG</param>
 				<param name="inputName">output</param>
 			</result>
+		</action>
+		<action name="search" method="execute" class="searchAction">
+			<result name="success" type="freemarker">/web/front/search.ftl</result>
+			<result name="error" type="redirectAction">home</result>
 		</action>		
 	</package>
 </struts>

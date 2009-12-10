@@ -401,8 +401,8 @@ public class LibOrder {
 		Map<String,String> map = new HashMap<String,String>();
 		if(0 == list.size()){
 			/* 如果获得是一个空数组，则返回默认值 */
-			map.put("shippingId", "0");
-			map.put("payId", "0");			
+			map.put("shippingId", "");
+			map.put("payId", "");			
 		}
 		else
 		{

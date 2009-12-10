@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-
+import com.google.appengine.repackaged.com.google.common.base.StringUtil;
+import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.Category;
 import com.jcommerce.core.model.Region;
 import com.jcommerce.core.service.Condition;
@@ -83,6 +83,19 @@ public class LibCommon {
     	}
     	return buf.toString();
     }
+    
+    /**
+     * 取得品牌列表
+     * @return array 品牌列表 id => name
+     */
+    public static Map<String,String> getBrandList( IDefaultManager manager){
+    	List<Brand> brandList = manager.getList(ModelNames.BRAND, null);
+    	Map<String,String> brandMap = new HashMap<String,String>();
+    	for (Brand brand : brandList) {
+			brandMap.put(brand.getPkId(), brand.getBrandName());
+		}
+    	return brandMap;
+    }
 	/**
 	 * 获得指定分类下的子分类的数组
 	 * 
@@ -139,6 +152,113 @@ public class LibCommon {
 		}
 
 		return res;
+	}
+	
+	public static String selectCatList(String catId, String selected , int level,
+			boolean isShowAll, IDefaultManager manager) {
+
+		StringBuffer res = new StringBuffer();
+
+		List<Category> allCats = (List<Category>) manager.getList(
+				ModelNames.CATEGORY, null);
+		if(allCats.size() == 0 ){
+			return res.toString();
+		}
+//		Map<String,String> idNameMap = new HashMap<String,String>();
+		
+		// parent->children
+		Map<String, List<CategoryWrapper>> pcMap = new HashMap<String, List<CategoryWrapper>>();
+		// 1st round loop
+		for (Category cat : allCats) {
+//			cpMap.put(cat.getPkId(), cat.getParentId());
+			List<CategoryWrapper> children = pcMap.get(cat.getParentId());
+			if (children == null) {
+				children = new ArrayList<CategoryWrapper>();
+				pcMap.put(cat.getParentId(), children);
+			}
+			children.add(new CategoryWrapper(cat));
+		}
+		
+		List<CategoryWrapper> level1 = pcMap.get(null);
+		if(level1==null) {
+			// to overcome NPE in case there is no any category at all
+			return res.toString();
+		}
+		for (CategoryWrapper cw : level1) {
+			res.append("<option value='"+cw.getPkId()+"' ");
+			res.append(cw.getPkId().equals(selected) ? "selected='true'" : "");
+			res.append(" >"+StringUtil.repeat("&nbsp", 0) + cw.getString("catName") + "</option>");
+			List<CategoryWrapper> level2 = pcMap.get(cw.getPkId());
+			if (level2 != null) {
+				for (CategoryWrapper categoryWrapper : level2) {
+					res.append("<option value='"+categoryWrapper.getPkId()+"' ");
+					res.append(categoryWrapper.getPkId().equals(selected) ? "selected='true'" : "");
+					res.append(" >"+StringUtil.repeat("&nbsp", 4) + categoryWrapper.getString("catName") + "</option>");
+				}
+			}
+		}
+		
+		
+		
+		
+		
+//		for (Category cat : allCats) {
+//			idNameMap.put(cat.getPkId(), cat.getCatName());
+//		}		
+
+//		// child->parent
+//		Map<String, String> cpMap = new HashMap<String, String>();
+//		// parent->children
+//		Map<String, List<CategoryWrapper>> pcMap = new HashMap<String, List<CategoryWrapper>>();
+//		// 1st round loop
+//		for (Category cat : allCats) {
+//			cpMap.put(cat.getPkId(), cat.getParentId());
+//
+//			List<CategoryWrapper> children = pcMap.get(cat.getParentId());
+//			if (children == null) {
+//				children = new ArrayList<CategoryWrapper>();
+//				pcMap.put(cat.getParentId(), children);
+//			}
+//			children.add(new CategoryWrapper(cat));
+//		}
+		
+//		if(catId != null ){
+//			// 2st round loop
+//			for (String cId : cpMap.keySet()) {
+//				int foundLevel = findParent(-1, cId, catId, cpMap);
+//				if (foundLevel < 0) {
+//					// didn't find catId as parent
+//	
+//					// } else if(foundLevel > level){
+//					// level deeper than required
+//	
+//				} else {
+//					res.append("<option value='"+cId+"'>");
+//					res.append(StringUtil.repeat("&nbsp", foundLevel*4) + idNameMap.get(cId) + "</option>");
+//				}
+//			}
+//		}
+//		else{
+//			// 2st round loop
+//			for (CategoryWrapper cw : pcMap.get(null)) {
+//				for (String cId : cpMap.keySet()) {
+//					int foundLevel = findParent(-1, cId, cw.getPkId(), cpMap);
+//					if (foundLevel < 0) {
+//						// didn't find catId as parent
+//		
+//						// } else if(foundLevel > level){
+//						// level deeper than required
+//		
+//					} else {
+//						res.append("<option value='"+cId+"'>");
+//						res.append(StringUtil.repeat("&nbsp", foundLevel*4) + idNameMap.get(cId) + "</option>");
+//					}
+//				}
+//
+//			}
+//		}
+
+		return res.toString();
 	}
 
 	public static int findParent(int searchLevel, String cId, String catId,

@@ -219,7 +219,10 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
 	    		map.put("gid", goodsWrapper.getPkId());
 	    		String shortName = goodsWrapper.getName().length() > 10 ? goodsWrapper.getName().substring(0, 10)+"..." : goodsWrapper.getName();
 	    		String goodsUrl = LibCommon.buildUri("goods", map , "" , 0 , 0);
-				sb.append("<ul class='clearfix'><li class='goodsimg'><a href='"+goodsUrl+"' target='_blank'><img src='"+goodsWrapper.getThumb()+"' alt='"+goodsWrapper.getName()+"' class='B_blue' /></a></li><li><a href='"+goodsUrl+"' target='_blank' title='"+goodsWrapper.getName()+"'>"+shortName+"</a><br />"+Lang.getInstance().getString("shopPrice")+"<font class='f1'>"+goodsWrapper.getShopPriceFormated()+"</font><br /></li></ul>");
+	    		sb.append("<li><a href='" + goodsUrl + "' title='" + goodsWrapper.getName() + "'>" + shortName + "</a></li>");
+	    		/* for ecshop 2.7.0
+	    		sb.append("<ul class='clearfix'><li class='goodsimg'><a href='"+goodsUrl+"' target='_blank'><img src='"+goodsWrapper.getThumb()+"' alt='"+goodsWrapper.getName()+"' class='B_blue' /></a></li><li><a href='"+goodsUrl+"' target='_blank' title='"+goodsWrapper.getName()+"'>"+shortName+"</a><br />"+Lang.getInstance().getString("shopPrice")+"<font class='f1'>"+goodsWrapper.getShopPriceFormated()+"</font><br /></li></ul>");
+				*/
 			}
 	    	historyList = sb.toString();
 	    }

@@ -213,7 +213,7 @@ public class CategoryAction extends BaseAction {
         Criteria criteria = new Criteria();
         
         Condition cond = new Condition();
-        cond.setField(IGoods.CATEGORY_IDS);
+        cond.setField(IGoods.CAT_ID);
         cond.setOperator(Condition.EQUALS);
         criteria.addCondition(cond);
         
@@ -242,7 +242,7 @@ public class CategoryAction extends BaseAction {
         }     
         
         for (String cid : children) {
-        	cond.setValue(cid);        	
+        	cond.setValue(cid);  
         	goods.addAll((List<Goods>)manager.getList(ModelNames.GOODS, criteria));
 		}
         
@@ -263,7 +263,7 @@ public class CategoryAction extends BaseAction {
         Criteria criteria = new Criteria();
         
         Condition cond = new Condition();
-        cond.setField(IGoods.CATEGORY_IDS);
+        cond.setField(IGoods.CAT_ID);
         cond.setOperator(Condition.EQUALS);
         criteria.addCondition(cond);
 

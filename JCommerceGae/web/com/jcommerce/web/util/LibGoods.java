@@ -178,6 +178,22 @@ public class LibGoods {
 		
 	}
 	
+	/**
+	 * 获得属性相同的商品
+	 *
+	 * @access  public
+	 * @param   array   $attr   // 包含了属性名称,ID的数组
+	 * @return  array
+	 */
+	public static List getSameAttributeGoods(GoodsPropertiesResult gpr){
+		List result = new ArrayList();
+		
+		
+		return result;
+	}
+	
+	
+	
 	public static class GoodsPropertiesResult {
 		private Map<String, List<Map<String, String>>> pro = new HashMap<String, List<Map<String, String>>>();
 		private Map<String, Specification> spe = new HashMap<String, Specification>();
