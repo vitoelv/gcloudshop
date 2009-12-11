@@ -1,10 +1,11 @@
 package com.jcommerce.web.to;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BaseWrapper {
+public class BaseWrapper implements Serializable{
 	public void debug(String s) {
 		System.out.println(" in [BaseWrapper]: "+s );
 	}
