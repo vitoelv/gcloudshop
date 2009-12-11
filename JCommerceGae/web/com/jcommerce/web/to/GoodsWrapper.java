@@ -52,7 +52,7 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
     	return ACTION_GOODS+getGoods().getPkId();    	
     }
     public String getShortStyleName() {
-    	return getGoods().getGoodsName().length()>10? getGoods().getGoodsName().substring(0, 10)+"...":getGoods().getGoodsName();
+    	return getGoods().getGoodsName().length()>17? getGoods().getGoodsName().substring(0, 10)+"...":getGoods().getGoodsName();
     }
     public String getGoodsStyleName() {
     	return StringUtils.defaultIfEmpty(getGoods().getGoodsNameStyle(), getGoods().getGoodsName());
@@ -133,6 +133,10 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
 //    }
     public String getType(){
     	return goods.getGoodsTypeId();
+    }
+    
+    public String getShortName(){
+    	return getShortStyleName();
     }
 
 

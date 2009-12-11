@@ -43,7 +43,7 @@ public class LibTransaction {
 		Condition cond = new Condition(IUserAddress.USER_ID, Condition.EQUALS, userId);
 		c.addCondition(cond);
 		
-		List<UserAddress> list = (List)manager.getList(ModelNames.USERADDRESS, c, 0, 5);
+		List<UserAddress> list = (List)manager.getList(ModelNames.USERADDRESS, c ,0 ,5);
 		
 		return WrapperUtil.wrap(list, UserAddressWrapper.class);
 		
@@ -63,6 +63,9 @@ public class LibTransaction {
 	public static boolean saveConsignee(UserAddressWrapper consignee , boolean isDefault , IDefaultManager manager){
 		/* 修改地址 */
 		String id = manager.txattach(consignee.getUserAddress());
+		User user = (User)manager.get(ModelNames.USER,consignee.getUserId());
+		user.setAddressId(id);
+		manager.txattach(user);
 		if(isDefault){
 			// TODO isDefault
 		}
