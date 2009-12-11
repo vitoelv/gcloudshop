@@ -222,7 +222,7 @@ public class UserAction extends BaseAction {
 
 			}
 			else if("act_register".equals(action) || "actRegister".equals(action)) {
-				if(getCaptcha().equals((String)getSession().getAttribute("captcha"))){
+				if(getCaptcha().toLowerCase().equals(((String)getSession().getAttribute("captcha")).toLowerCase())){
 					String error = register(getUsername(), getPassword(), getEmail(), other );
 					if(error == null) {
 						return LibMain.showMessage( new PrintfFormat(Lang.getInstance().getString("registerSuccess")).sprintf(getUsername()), Lang.getInstance().getString("profileLnk"), 
