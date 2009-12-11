@@ -98,7 +98,7 @@ public class LibGoods {
 //		criteria.addCondition( new Condition(IGoods.IS_ALONE_SALE,Condition.EQUALS,"true"));
 		criteria.addCondition( new Condition(IGoods.IS_DELETE,Condition.EQUALS,"false"));
 		criteria.addCondition( new Condition(IGoods.IS_PROMOTE,Condition.EQUALS,"true"));
-		criteria.addCondition( new Condition(IGoods.PROMOTE_START_DATE,Condition.LESSTHAN,time.toString()));
+//		criteria.addCondition( new Condition(IGoods.PROMOTE_START_DATE,Condition.LESSTHAN,time.toString()));
 //		criteria.addCondition( new Condition(IGoods.PROMOTE_END_DATE,Condition.GREATERTHAN,time.toString()));
 		return manager.getList(ModelNames.GOODS, criteria , 0 , num );
 		
