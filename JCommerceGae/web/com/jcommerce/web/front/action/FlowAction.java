@@ -3,8 +3,6 @@ package com.jcommerce.web.front.action;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,21 +31,17 @@ import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.model.OrderGoods;
 import com.jcommerce.core.model.OrderInfo;
 import com.jcommerce.core.model.Payment;
-import com.jcommerce.core.model.Session;
 import com.jcommerce.core.model.Shipping;
 import com.jcommerce.core.model.ShippingArea;
 import com.jcommerce.core.model.User;
 import com.jcommerce.core.model.UserAddress;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
-import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.service.shipping.IShippingMetaPlugin;
 import com.jcommerce.core.service.shipping.impl.BaseShippingMetaPlugin;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.ICart;
-import com.jcommerce.gwt.client.model.IGoodsAttr;
 import com.jcommerce.gwt.client.model.IRegion;
-import com.jcommerce.gwt.client.model.IShipping;
 import com.jcommerce.gwt.client.model.IUser;
 import com.jcommerce.gwt.client.model.IUserAddress;
 import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
@@ -286,8 +280,9 @@ public class FlowAction extends BaseAction {
     		/*
              * 保存收货人信息
              */
-    		UserAddressWrapper consignee = new UserAddressWrapper(new UserAddress());
-    		consignee.setAddressId( request.getParameter("address_id") == null ? "" : request.getParameter("address_id"));
+//    		UserAddressWrapper consignee = new UserAddressWrapper();
+    		UserAddress consignee = new UserAddress();
+    		consignee.setPkId(request.getParameter("address_id"));
     		consignee.setConsignee( request.getParameter("consignee") == null ? "" : request.getParameter("consignee"));
     		consignee.setCountry( request.getParameter("country") == null ? "" : request.getParameter("country"));
     		consignee.setProvince( request.getParameter("province") == null ? "" : request.getParameter("province"));
@@ -303,7 +298,7 @@ public class FlowAction extends BaseAction {
     		
     		if (request.getSession().getAttribute(KEY_USER_ID) != null){
     			consignee.setUserId( (String)request.getSession().getAttribute(KEY_USER_ID));
-    			LibTransaction.saveConsignee(consignee, true, getDefaultManager());
+    			LibTransaction.saveConsignee(new UserAddressWrapper(consignee), true, getDefaultManager());
     		}
     		
     		getSession().setAttribute(KEY_FLOW_CONSIGNEE, consignee);

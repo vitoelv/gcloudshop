@@ -2,6 +2,8 @@ package com.jcommerce.web.util;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.jcommerce.core.model.OrderInfo;
 import com.jcommerce.core.model.User;
 import com.jcommerce.core.model.UserAddress;
@@ -62,9 +64,16 @@ public class LibTransaction {
 	 */
 	public static boolean saveConsignee(UserAddressWrapper consignee , boolean isDefault , IDefaultManager manager){
 		/* 修改地址 */
-		String id = manager.txattach(consignee.getUserAddress());
+		UserAddress ua = consignee.getUserAddress();
+		String uaId = ua.getPkId();
+		if(StringUtils.isEmpty(uaId)) {
+			uaId = manager.txadd(ua);
+		} else {
+			manager.txupdate(ua);
+		}
+		
 		User user = (User)manager.get(ModelNames.USER,consignee.getUserId());
-		user.setAddressId(id);
+		user.setAddressId(uaId);
 		manager.txattach(user);
 		if(isDefault){
 			// TODO isDefault
