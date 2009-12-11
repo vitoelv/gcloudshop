@@ -216,8 +216,11 @@ public class FlowAction extends BaseAction {
     	UserAddressWrapper consignee = (UserAddressWrapper)getSession().getAttribute(KEY_FLOW_CONSIGNEE);
     	if(consignee == null) {
     		if(StringUtils.isNotEmpty(userId)) {
+    			
+//    			User user = (User)getDefaultManager().get(ModelNames.USER, userId);
     			 /* 如果不存在，则取得用户的默认收货人信息 */
     			Criteria c = new Criteria();
+    			
     			c.addCondition(new Condition(IUserAddress.USER_ID, Condition.EQUALS, userId));
     			List<UserAddress> list = getDefaultManager().getList(ModelNames.USERADDRESS, c);
     			// now we only have one
@@ -247,9 +250,18 @@ public class FlowAction extends BaseAction {
 	    	List<UserAddressWrapper> consigneeList = null;
 			
 	    	/* 获得用户所有的收货人信息 */
-	        if (request.getSession().getAttribute("userId") != null)
+	        if (request.getSession().getAttribute(KEY_USER_ID) != null)
 	        {
-	        	consigneeList = LibTransaction.getConsigneeList((String)request.getSession().getAttribute("userId"), getDefaultManager());
+	        	consigneeList = LibTransaction.getConsigneeList((String)request.getSession().getAttribute(KEY_USER_ID), getDefaultManager());
+	        	if(consigneeList.size()==0){
+	        		UserAddressWrapper consignee = (UserAddressWrapper)getSession().getAttribute(KEY_FLOW_CONSIGNEE);
+			    	if(consignee == null) {
+			    		consignee = new UserAddressWrapper(new UserAddress());
+			//    		consignee.put("country", ShopConfigWrapper.getDefaultConfig().get(ShopConfigWrapper.CFG_KEY_SHOP_COUNTRY));
+			    		consignee.getUserAddress().setCountry((String)getCachedShopConfig().get(IShopConfigMeta.CFG_KEY_SHOP_COUNTRY));
+			    	}
+					consigneeList.add(consignee);
+	        	}
 	        }
 	        else
 	        {
@@ -289,8 +301,8 @@ public class FlowAction extends BaseAction {
     		consignee.setSignBuilding( request.getParameter("sign_building") == null ? "" : request.getParameter("sign_building"));
     		consignee.setBestTime( request.getParameter("best_time") == null ? "" : request.getParameter("best_time"));
     		
-    		if (request.getSession().getAttribute("userId") != null){
-    			consignee.put("userId", request.getSession().getAttribute("userId"));
+    		if (request.getSession().getAttribute(KEY_USER_ID) != null){
+    			consignee.setUserId( (String)request.getSession().getAttribute(KEY_USER_ID));
     			LibTransaction.saveConsignee(consignee, true, getDefaultManager());
     		}
     		
@@ -356,6 +368,7 @@ public class FlowAction extends BaseAction {
     	List<Cart> carts = cartGoods(flowType);
     	
     	UserAddressWrapper consignee = getConsignee(userId);
+    	System.out.println();
     	
     	/* 检查收货人信息是否完整 */
     	if(!LibOrder.checkConsigneeInfo(consignee, flowType,getDefaultManager(),session.getId())) {

@@ -2,6 +2,7 @@ package com.jcommerce.web.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +15,13 @@ import com.jcommerce.core.model.Category;
 import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.GoodsAttr;
 import com.jcommerce.core.model.GoodsType;
+import com.jcommerce.core.service.Condition;
+import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IAttribute;
+import com.jcommerce.gwt.client.model.IGoods;
+import com.jcommerce.gwt.client.resources.GoodsConstants;
 import com.jcommerce.web.to.CategoryWrapper;
 import com.jcommerce.web.to.Lang;
 
@@ -79,6 +84,25 @@ public class LibGoods {
 		return level1;
 	}
 
+	/**
+	 * 获得促销商品
+	 *
+	 * @access  public
+	 * @return  array
+	 */
+	public static List<Goods> getPromoteGoods( int num , IDefaultManager manager){
+		Long time = new Date().getTime();
+		
+		Criteria criteria = new Criteria();
+		criteria.addCondition( new Condition(IGoods.IS_ON_SALE,Condition.EQUALS,"true"));
+//		criteria.addCondition( new Condition(IGoods.IS_ALONE_SALE,Condition.EQUALS,"true"));
+		criteria.addCondition( new Condition(IGoods.IS_DELETE,Condition.EQUALS,"false"));
+		criteria.addCondition( new Condition(IGoods.IS_PROMOTE,Condition.EQUALS,"true"));
+		criteria.addCondition( new Condition(IGoods.PROMOTE_START_DATE,Condition.LESSTHAN,time.toString()));
+//		criteria.addCondition( new Condition(IGoods.PROMOTE_END_DATE,Condition.GREATERTHAN,time.toString()));
+		return manager.getList(ModelNames.GOODS, criteria , 0 , num );
+		
+	}
 	
 	
 	/**
@@ -215,6 +239,7 @@ public class LibGoods {
 		}
 		
 	}
+	
 	public static class Specification {
 		private String name;
 		private long attrType;

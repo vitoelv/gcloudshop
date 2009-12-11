@@ -1,5 +1,7 @@
 package com.jcommerce.web.to;
 
+import java.math.BigDecimal;
+
 import com.jcommerce.web.util.WebFormatUtils;
 
 public class Total extends BaseWrapper{
@@ -260,7 +262,7 @@ public class Total extends BaseWrapper{
 
 
 	public String getSavingFormated() {
-		return WebFormatUtils.priceFormat(saving);
+		return WebFormatUtils.priceFormat(new BigDecimal(saving).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue());
 	}
 
 

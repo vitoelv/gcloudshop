@@ -317,6 +317,9 @@ public class SearchAction extends BaseAction {
     	    		}
     	    	}
     	    }
+    	    criteria.addCondition( new Condition(IGoods.IS_ON_SALE,Condition.EQUALS,"1"));
+    		criteria.addCondition( new Condition(IGoods.IS_ALONE_SALE,Condition.EQUALS,"1"));
+    		criteria.addCondition( new Condition(IGoods.IS_DELETE,Condition.EQUALS,"0"));
     	    List<Goods> resGoods = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, criteria );
     		List<GoodsWrapper> result = null;
     	    if(attrNum > 0 ){

@@ -26,6 +26,9 @@ import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.gwt.client.util.URLConstants;
 import com.jcommerce.web.front.action.helper.Pager;
 import com.jcommerce.web.to.BrandWrapper;
+import com.jcommerce.web.to.GoodsWrapper;
+import com.jcommerce.web.to.WrapperUtil;
+import com.jcommerce.web.util.LibGoods;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 
@@ -77,7 +80,7 @@ public class HomeAction extends BaseAction {
 
     public void includeRecommendPromotion(HttpServletRequest request) {
     	// recommend_promotion.ftl
-        request.setAttribute("promotionGoods", new ArrayList());
+        request.setAttribute("promotionGoods", WrapperUtil.wrap(LibGoods.getPromoteGoods(5, getDefaultManager()), GoodsWrapper.class));
     }
     public void includeOrderQuery(HttpServletRequest request) {
         // order_query.ftl
