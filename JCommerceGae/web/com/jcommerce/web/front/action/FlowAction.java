@@ -788,6 +788,7 @@ public class FlowAction extends BaseAction {
     		og.setParentId(cart.getParentId());
     		og.setIsGift(cart.getIsGift());
     		String ogId = getDefaultManager().txadd(og);
+    		LibOrder.changeOrderGoodsStorage(og, getDefaultManager());
     	}
     	
     	

@@ -402,14 +402,16 @@ public class SearchAction extends BaseAction {
     			attributes.put("attr", new ArrayList());
     			return attributes;
     		}
+    		
     		cond = new Condition();
-			cond.setField(IGoodsType.LONG_ID);
-			cond.setOperator(Condition.EQUALS);
-			
     		if(catId > 0){
+				cond.setField(IGoodsType.LONG_ID);
+				cond.setOperator(Condition.EQUALS);
     			cond.setValue(catId.toString());
     		}				
     		else{
+    			cond.setField(IGoodsType.PK_ID);
+    			cond.setOperator(Condition.EQUALS);
     			cond.setValue(cate.keySet().toArray()[0].toString());
     		}
     		criteria.addCondition(cond);

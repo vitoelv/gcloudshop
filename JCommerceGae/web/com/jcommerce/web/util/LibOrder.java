@@ -642,4 +642,33 @@ public class LibOrder {
 		
     }
     
+    /**
+     * 改变订单中商品库存
+     * @param   int     $order_id   订单号
+     * @param   bool    $is_dec     是否减少库存
+     * @param   bool    $storage     减库存的时机，1，下订单时；0，发货时；
+     */
+    public static void changeOrderGoodsStorage(OrderGoods orderGoods , IDefaultManager manager){
+    	changeGoodsStorage(orderGoods.getGoodsId(),orderGoods.getGoodsNumber(),manager);
+    }
+    /**
+     * 商品库存增与减
+     * @param   int    $good_id    商品ID
+     * @param   int    $number     增减数量，默认0；
+     * @return  bool               true，成功；false，失败；
+     */
+    public static boolean changeGoodsStorage(String goodsId , Long number , IDefaultManager manager){
+    	if(goodsId == null || number == 0 ){
+    		return false;
+    	}
+    	Goods goods = (Goods)manager.get(ModelNames.GOODS, goodsId);
+    	if(goods != null){
+	    	goods.setGoodsNumber(goods.getGoodsNumber()+number );
+	    	manager.txattach(goods);
+	    	return true;
+    	}
+    	else{
+    		return false;
+    	}
+    }
 }
