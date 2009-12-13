@@ -207,7 +207,7 @@ public class FlowAction extends BaseAction {
 		}
     }
     private UserAddressWrapper getConsignee(String userId) {
-    	UserAddressWrapper consignee = (UserAddressWrapper)getSession().getAttribute(KEY_FLOW_CONSIGNEE);
+    	UserAddressWrapper consignee = (UserAddressWrapper) getSession().getAttribute(KEY_FLOW_CONSIGNEE);
     	if(consignee == null) {
     		if(StringUtils.isNotEmpty(userId)) {
     			
@@ -221,9 +221,10 @@ public class FlowAction extends BaseAction {
     			if(list.size()>0) {
     				consignee = new UserAddressWrapper(list.get(0));
     			}
-    			else{
+    			else {
     				consignee = new UserAddressWrapper(new UserAddress());
     			}
+
     		}
     		else{
     			consignee = new UserAddressWrapper(new UserAddress());
@@ -301,7 +302,7 @@ public class FlowAction extends BaseAction {
     			LibTransaction.saveConsignee(new UserAddressWrapper(consignee), true, getDefaultManager());
     		}
     		
-    		getSession().setAttribute(KEY_FLOW_CONSIGNEE, consignee);
+    		getSession().setAttribute(KEY_FLOW_CONSIGNEE, new UserAddressWrapper(consignee));
     		
     		return stepCheckout(request);
     	}
@@ -390,6 +391,7 @@ public class FlowAction extends BaseAction {
          */
     	OrderInfo order = LibOrder.flowOrderInfo(session,getDefaultManager());
     	OrderInfoWrapper ow = new OrderInfoWrapper(order);
+    	ow.setManager(getDefaultManager());
     	getRequest().setAttribute("order", ow);
     	
 
@@ -688,6 +690,7 @@ public class FlowAction extends BaseAction {
     	
     	OrderInfo order = new OrderInfo();
     	OrderInfoWrapper ow = (OrderInfoWrapper)WrapperUtil.wrap(order, OrderInfoWrapper.class);
+    	ow.setManager(getDefaultManager());
     	order.setShippingId(shipping);
     	order.setPayId(payment);
     	debug("payment: "+payment+", shipping: "+shipping);

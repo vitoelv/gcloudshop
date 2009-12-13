@@ -15,7 +15,7 @@ import javax.jdo.annotations.PrimaryKey;
  */
  
 @PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true") 
-public class OrderGoods extends ModelObject {
+public class OrderGoods extends ModelObject implements Cloneable{
 
 
     
@@ -213,4 +213,13 @@ public class OrderGoods extends ModelObject {
     isGift = newIsGift;
   }
 
+  public Object clone() {   
+		OrderGoods o = null;   
+		try {   
+			o = (OrderGoods) super.clone();   
+		} catch (CloneNotSupportedException e) {   
+			e.printStackTrace();   
+		}   
+		return o;   
+	  } 
 }

@@ -9,11 +9,21 @@ public class ConstantsMappingUtils {
 		int s = (int)os;
 		String res = "";
 		switch(s) { 
-			case IOrderInfo.OS_CANCELED: res = "OS_CANCELED";
-			case IOrderInfo.OS_CONFIRMED: res = "OS_CONFIRMED";
-			case IOrderInfo.OS_INVALID: res = "OS_INVALID";
-			case IOrderInfo.OS_RETURNED: res = "OS_RETURNED";
-			case IOrderInfo.OS_UNCONFIRMED: res = "OS_UNCONFIRMED";
+			case IOrderInfo.OS_CANCELED: 
+				res = "OS_CANCELED";
+				break;
+			case IOrderInfo.OS_CONFIRMED: 
+				res = "OS_CONFIRMED";
+				break;
+			case IOrderInfo.OS_INVALID: 
+				res = "OS_INVALID";
+				break;
+			case IOrderInfo.OS_RETURNED: 
+				res = "OS_RETURNED";
+				break;
+			case IOrderInfo.OS_UNCONFIRMED: 
+				res = "OS_UNCONFIRMED";
+				break;
 		}
 		return res;
 	}
@@ -22,9 +32,15 @@ public class ConstantsMappingUtils {
 		int s = (int)ps;
 		String res ="";
 		switch(s) {
-			case IOrderInfo.PS_PAYED: res = "PS_PAYED"; 
-			case IOrderInfo.PS_PAYING: res = "PS_PAYING";
-			case IOrderInfo.PS_UNPAYED: res = "PS_UNPAYED";
+			case IOrderInfo.PS_PAYED: 
+				res = "PS_PAYED"; 
+				break;
+			case IOrderInfo.PS_PAYING: 
+				res = "PS_PAYING";
+				break;
+			case IOrderInfo.PS_UNPAYED:
+				res = "PS_UNPAYED";
+				break;
 		}
 		return res;
 	}
@@ -33,10 +49,18 @@ public class ConstantsMappingUtils {
 		int s = (int)ss;
 		String res = "";
 		switch(s) {
-			case IOrderInfo.SS_PREPARING: res = "SS_PREPARING"; 
-			case IOrderInfo.SS_RECEIVED: res = "SS_RECEIVED";
-			case IOrderInfo.SS_SHIPPED: res = "SS_SHIPPED";
-			case IOrderInfo.SS_UNSHIPPED: res = "SS_UNSHIPPED";
+			case IOrderInfo.SS_PREPARING: 
+				res = "SS_PREPARING"; 
+				break;
+			case IOrderInfo.SS_RECEIVED: 
+				res = "SS_RECEIVED";
+				break;
+			case IOrderInfo.SS_SHIPPED: 
+				res = "SS_SHIPPED";
+				break;
+			case IOrderInfo.SS_UNSHIPPED: 
+				res = "SS_UNSHIPPED";
+				break;
 		}
 		return res;
 	}

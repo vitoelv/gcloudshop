@@ -236,7 +236,6 @@ public class LibMain {
 		if(size<0) {
 			size = 5;
 		}
-		int pageCount = (int) (count > 0 ? (Math.ceil((double)count / size)) : 1);
 		
 		List<CollectGood> collectGoods = manager.getList(ModelNames.COLLECTGOOD, criteria, (page-1)*size, size);
 		
@@ -248,28 +247,10 @@ public class LibMain {
 			goodsList.add(wrapper);
 		}
 		
-		Pager pager = new Pager();
-		pager.setPage(page);
-        pager.setSize(size);
-        pager.setRecordCount(count);
-        pager.setPageCount(pageCount);
-        
-        Map<Integer, Integer> array = new TreeMap<Integer, Integer>();
-        for(int i = 0;i < pageCount;i++) {
-        	array.put(i+1, i+1);
-        }
-        pager.setArray(array);
-        
-        Map<String, Object> search = new HashMap<String, Object>();
-        search.put("act", "collection_list");
-        pager.setSearch(search);
-        
-		pager.setPageFirst("user.action?act=collection_list&page=1");
-		pager.setPagePrev(page > 1 ? "user.action?act=collection_list&page=" + (page - 1) : "javascript:;");
-		pager.setPageNext(page < pageCount ? "user.action?act=collection_list&page=" + (page + 1) : "javascript:;");
-		pager.setPageLast(page < pageCount ? "user.action?act=collection_list&page=" + (pageCount) : "javascript:;");
-		
 		Map<String, Object> cmt = new HashMap<String, Object>();
+		Map<String, Object> search = new HashMap<String, Object>();
+        search.put("act", "collection_list");
+		Pager pager = getPager("", search, count, page, size, scw);
 		cmt.put("goodsList",goodsList);
 		cmt.put("pager", pager);
 		return cmt;
@@ -287,7 +268,6 @@ public class LibMain {
 		if(size<0) {
 			size = 5;
 		}
-		int pageCount = (int) (count > 0 ? (Math.ceil((double)count / size)) : 1);
 		
 		List<Comment> commentList = manager.getList(ModelNames.COMMENT, criteria, (page-1)*size, size);
 		List<CommentWrapper> commentListWrapper = WrapperUtil.wrap(commentList, CommentWrapper.class);
@@ -296,28 +276,10 @@ public class LibMain {
 			commentWrapper.setManager(manager);
 		}
 		
-		Pager pager = new Pager();
-		pager.setPage(page);
-        pager.setSize(size);
-        pager.setRecordCount(count);
-        pager.setPageCount(pageCount);
-        
-        Map<Integer, Integer> array = new TreeMap<Integer, Integer>();
-        for(int i = 0;i < pageCount;i++) {
-        	array.put(i+1, i+1);
-        }
-        pager.setArray(array);
-        
-        Map<String, Object> search = new HashMap<String, Object>();
-        search.put("act", "comment_list");
-        pager.setSearch(search);
-        
-		pager.setPageFirst("user.action?act=comment_list&page=1");
-		pager.setPagePrev(page > 1 ? "user.action?act=comment_list&page=" + (page - 1) : "javascript:;");
-		pager.setPageNext(page < pageCount ? "user.action?act=comment_list&page=" + (page + 1) : "javascript:;");
-		pager.setPageLast(page < pageCount ? "user.action?act=comment_list&page=" + (pageCount) : "javascript:;");
-		
 		Map<String, Object> cmt = new HashMap<String, Object>();
+		Map<String, Object> search = new HashMap<String, Object>();
+        search.put("act", "comment_list");
+		Pager pager = getPager("", search, count, page, size, scw);
 		cmt.put("commentList",commentListWrapper);
 		cmt.put("pager", pager);
 		return cmt;
@@ -433,7 +395,7 @@ public class LibMain {
     	if(page<1) {
     		page = 1;
     	}
-    	int pageCount = recordCount > 0 ? (recordCount / size)+1 : 1;
+    	int pageCount = (int) (recordCount > 0 ? (Math.ceil((double)recordCount / size)) : 1);
     	
     	if(page > pageCount) {
     		page = pageCount;

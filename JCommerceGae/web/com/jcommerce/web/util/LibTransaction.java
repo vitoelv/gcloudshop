@@ -1,6 +1,8 @@
 package com.jcommerce.web.util;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -13,6 +15,7 @@ import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IOrderInfo;
 import com.jcommerce.gwt.client.model.IUserAddress;
+import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.OrderInfoWrapper;
 import com.jcommerce.web.to.UserAddressWrapper;
 import com.jcommerce.web.to.UserWrapper;
@@ -35,8 +38,22 @@ public class LibTransaction {
 		
 		List<OrderInfo> list = (List)manager.getList(ModelNames.ORDERINFO, c, start, size);
 		
+		List<OrderInfoWrapper> wrapperList = new ArrayList<OrderInfoWrapper>();
+		for(OrderInfo orderInfo : list) {
+			OrderInfoWrapper ow = new OrderInfoWrapper(orderInfo);
+			/* 订单 支付 配送 状态语言项 */
+			String str = ConstantsMappingUtils.getOrderStatus(ow.getOrderInfo().getOrderStatus());
+			String orderStatus = (String) ((Map)Lang.getInstance().get("os")).get(str);
+			str = ConstantsMappingUtils.getPayStatus(ow.getOrderInfo().getPayStatus());
+			String payStatus = (String) ((Map)Lang.getInstance().get("ps")).get(str);
+			str = ConstantsMappingUtils.getShippingStatus(ow.getOrderInfo().getShippingStatus());
+			String shippingStatus = (String) ((Map)Lang.getInstance().get("ss")).get(str);
+			
+			ow.put("orderStatus", orderStatus + "," + payStatus + "," + shippingStatus);
+			wrapperList.add(ow);
+		}
 		
-		return WrapperUtil.wrap(list, OrderInfoWrapper.class);
+		return wrapperList;
 	}
 	
 	

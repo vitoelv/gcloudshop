@@ -18,4 +18,7 @@ public class OrderGoodsWrapper extends BaseModelWrapper {
 	public OrderGoods getOrderGoods() {
 		return orderGoods;
 	}
+	public String getParentId() {
+		return getOrderGoods().getParentId();
+	}
 }
