@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,10 +18,15 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
+import com.jcommerce.core.model.Attribute;
+import com.jcommerce.core.model.Cart;
 import com.jcommerce.core.model.CollectGood;
 import com.jcommerce.core.model.Comment;
+import com.jcommerce.core.model.Constants;
 import com.jcommerce.core.model.Goods;
+import com.jcommerce.core.model.GoodsAttr;
 import com.jcommerce.core.model.ModelObject;
+import com.jcommerce.core.model.OrderGoods;
 import com.jcommerce.core.model.OrderInfo;
 import com.jcommerce.core.model.Session;
 import com.jcommerce.core.model.User;
@@ -28,14 +34,18 @@ import com.jcommerce.core.model.UserAddress;
 import com.jcommerce.core.model.UserRank;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
+import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.util.UUIDLongGenerator;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.ICart;
 import com.jcommerce.gwt.client.model.ICollectGood;
 import com.jcommerce.gwt.client.model.IComment;
+import com.jcommerce.gwt.client.model.IGoods;
+import com.jcommerce.gwt.client.model.IOrderGoods;
 import com.jcommerce.gwt.client.model.IOrderInfo;
 import com.jcommerce.gwt.client.model.IRegion;
 import com.jcommerce.gwt.client.model.IUser;
+import com.jcommerce.gwt.client.model.IUserAddress;
 import com.jcommerce.gwt.client.model.IUserRank;
 import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.gwt.client.util.URLConstants;
@@ -76,6 +86,7 @@ public class UserAction extends BaseAction {
 	public static final String RES_USER_TRANSACTION = "user_transaction";
 	public static final String RES_CHECK_EMAIL = "check_email";
 	public static final String RES_COLLECT = "collect";
+	public static final String RES_RETURN_TO_CART = "return_to_cart";
 
 	
 	private String username;
@@ -90,7 +101,7 @@ public class UserAction extends BaseAction {
 	private InputStream isRegistered;
 	private InputStream isUsed;
 	private InputStream collectGoods;
-
+	private InputStream returnToCart;
 	
 	
 	@Override
@@ -197,7 +208,6 @@ public class UserAction extends BaseAction {
 				return RES_USER_PASSPORT;
 			}
 			else if("act_login".equals(action) || "actLogin".equals(action)) {
-				backAct = request.getParameter("back_act");
 				if(backAct!=null) {
 					backAct = backAct.trim();
 				}
@@ -253,21 +263,7 @@ public class UserAction extends BaseAction {
 				
 			} 
 			else if("order_list".equals(action) || "orderList".equals(action)){
-				String sPage = (String)request.getParameter("page");
-				int page = (sPage!=null && Integer.valueOf(sPage)>0) ? Integer.valueOf(sPage) : 1;
-				Criteria criteria = new Criteria();
-				Condition cond = new Condition(IOrderInfo.USER_ID, Condition.EQUALS, userId);
-				criteria.addCondition(cond);
-				int recordCount = getDefaultManager().getCount(ModelNames.ORDERINFO, criteria);
-				
-				Map<String, Object> param = new HashMap<String, Object>();
-				param.put("act", action);
-				Pager pager = LibMain.getPager("user.action", param, recordCount, page, -1, getCachedShopConfig());
-				
-				request.setAttribute("pager", pager);
-				request.setAttribute("orders", 
-						LibTransaction.getUserOrders(userId, pager.getSize(), pager.getStart(), getDefaultManager()));
-				
+				getOrderList(request, userId);
 				includeUserMenu();
 				return RES_USER_TRANSACTION;
 			}
@@ -373,6 +369,7 @@ public class UserAction extends BaseAction {
 				String orderId = request.getParameter("order_id");
 			    /* 订单详情 */
 				OrderInfoWrapper ow = getOrderDetail(orderId, userId);
+				ow.setManager(getDefaultManager());
 				if(ow==null) {
 					
 				}
@@ -494,7 +491,220 @@ public class UserAction extends BaseAction {
 				action = "comment_list";
 				return setCommentList(1, userId, request);
 			}
-						
+			
+			//合并订单
+			else if("merge_order".equals(action)) {
+				includeUserMenu();
+				
+				String fromOrderSn = request.getParameter("from_order");
+				Criteria criteria = new Criteria();
+				criteria.addCondition(new Condition(IOrderInfo.ORDER_SN, Condition.EQUALS, fromOrderSn));
+				OrderInfo fromOrder = (OrderInfo) getDefaultManager().getList(ModelNames.ORDERINFO, criteria).get(0);
+				String fromId = fromOrder.getPkId();
+				
+				String toOrderSn = request.getParameter("to_order");
+				criteria.removeAllCondition();
+				criteria.addCondition(new Condition(IOrderInfo.ORDER_SN, Condition.EQUALS, toOrderSn));
+				OrderInfo toOrder = (OrderInfo) getDefaultManager().getList(ModelNames.ORDERINFO, criteria).get(0);
+				String toId = toOrder.getPkId();
+				
+				//合并订单
+				OrderInfo newOrder = (OrderInfo) toOrder.clone();
+				long addTime = new Date().getTime();
+				newOrder.setAddTime(addTime);
+				newOrder.setPkId("");
+				newOrder.setGoodsAmount(newOrder.getGoodsAmount() + fromOrder.getGoodsAmount());
+				
+				String shippingCodFee = null;
+				if(newOrder.getShippingId() != null) {
+					// 重新计算配送费用
+					Map<String,Object> weightPrice = LibOrder.getWeightPrice(fromOrder.getPackId(), toOrder.getPkId(), getDefaultManager());
+					UserAddressWrapper consignee = (UserAddressWrapper)getSession().getAttribute(KEY_FLOW_CONSIGNEE);
+			    	if(consignee == null) {
+			    		 /* 如果不存在，则取得用户的默认收货人信息 */
+			    		Criteria c = new Criteria();
+			    		c.addCondition(new Condition(IUserAddress.USER_ID, Condition.EQUALS, userId));
+			    		List<UserAddress> list = getDefaultManager().getList(ModelNames.USERADDRESS, c);
+			    		if(list.size()>0) {
+			    			consignee = new UserAddressWrapper(list.get(0));
+			    		}
+			    		else {
+		    				consignee = new UserAddressWrapper(new UserAddress());
+		    			}
+			    	}
+			    	List<String> regionIdList = new ArrayList<String>();
+		        	regionIdList.add( (String)consignee.getCountry() );
+		        	regionIdList.add( (String)consignee.getProvince() );
+		        	regionIdList.add( (String)consignee.getCity() );
+		        	regionIdList.add( (String)consignee.getDistrict());
+		        	Map<String,Object> shippingInfo = LibOrder.shippingAreaInfo(newOrder.getShippingId(),regionIdList,getDefaultManager());
+		        	if(!shippingInfo.isEmpty()){
+			        	newOrder.setShippingFee(LibOrder.shippingFee((String)shippingInfo.get("shippingCode"),(String)shippingInfo.get("configure"),(Double)weightPrice.get("weight"),(Double)weightPrice.get("amount")));
+			        	if( ( newOrder.getInsureFee() != 0 ) && (Integer.parseInt((String)shippingInfo.get("insure")) > 0 )){
+			        		newOrder.setInsureFee(LibOrder.shippingInsureFee( (Double)weightPrice.get("amount") , (String)shippingInfo.get("insure")));
+		        		}
+			        	else{
+			        		newOrder.setInsureFee(0.0);
+		        		}
+			        	if((Boolean)shippingInfo.get("supportCod")){
+		        			shippingCodFee = ((Double)shippingInfo.get("payFee")).toString();
+		        		}
+		        	}
+				}
+				// 合并余额、已付款金额
+				newOrder.setSurplus(newOrder.getSurplus() + fromOrder.getSurplus());
+				newOrder.setMoneyPaid(newOrder.getMoneyPaid() + newOrder.getMoneyPaid());
+				if(newOrder.getPayId()!= ""){
+					newOrder.setPayFee(LibOrder.payFee(newOrder.getPayId(),newOrder.getGoodsAmount(),shippingCodFee,getDefaultManager()));
+		        }
+				newOrder.setOrderAmount(newOrder.getGoodsAmount() + newOrder.getShippingFee() + newOrder.getInsureFee() + newOrder.getPayFee());
+				
+				//删除原订单
+				getDefaultManager().txdelete(ModelNames.ORDERINFO, fromId);
+				getDefaultManager().txdelete(ModelNames.ORDERINFO, toId);
+				
+				getDefaultManager().txadd(newOrder);
+				
+				//更新订单商品
+				criteria.removeAllCondition();
+				criteria.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, fromId));
+				List<OrderGoods> orderGoods = getDefaultManager().getList(ModelNames.ORDERGOODS, criteria);
+				criteria.removeAllCondition();
+				criteria.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, toId));
+				orderGoods.addAll(getDefaultManager().getList(ModelNames.ORDERGOODS, criteria));
+				
+//				for(OrderGoods goods : orderGoods) {
+//					goods.setOrderId(newOrder.getPkId());
+//					getDefaultManager().txattach(goods);
+//					System.out.println(goods.getOrderId());
+//				}
+				
+				for(OrderGoods goods : orderGoods) {
+					OrderGoods g = (OrderGoods) goods.clone();
+					g.setOrderId(newOrder.getPkId());
+					getDefaultManager().txdelete(ModelNames.ORDERGOODS, goods.getPkId());
+					getDefaultManager().txadd(g);
+					System.out.println(g.getOrderId());
+				}
+				return LibMain.showMessage(Lang.getInstance().getString("mergeOrderSuccess"), Lang.getInstance().getString("orderListLnk"), 
+						"user.action?act=order_list", "info", true, request);
+			}
+			
+			//取消订单
+			else if("cancel_order".equals(action)) {
+				String orderId = request.getParameter("orderId");
+				IDefaultManager manager = getDefaultManager();
+				
+				/* 查询订单信息，检查状态 */
+				OrderInfo orderInfo = (OrderInfo) manager.get(ModelNames.ORDERINFO, orderId);
+				if(orderInfo == null) {
+					return LibMain.showMessage(Lang.getInstance().getString("orderExist"), Lang.getInstance().getString("orderListLnk"), 
+							"user.action?act=order_list", "error", true, request);
+				}
+				
+				// 订单状态只能是“未确认”或“已确认”
+				if(orderInfo.getOrderStatus() != IOrderInfo.OS_CONFIRMED && orderInfo.getOrderStatus() != IOrderInfo.OS_UNCONFIRMED) {
+					return LibMain.showMessage(Lang.getInstance().getString("currentOsNotUnconfirmed"), Lang.getInstance().getString("orderListLnk"), 
+							"user.action?act=order_list", "error", true, request);
+				}
+				
+				//订单一旦确认，不允许用户取消
+				if(orderInfo.getOrderStatus() == IOrderInfo.OS_CONFIRMED) {
+					return LibMain.showMessage(Lang.getInstance().getString("currentOsAlreadyConfirmed"), Lang.getInstance().getString("orderListLnk"), 
+							"user.action?act=order_list", "error", true, request);
+				}
+				
+				// 发货状态只能是“未发货”
+				if(orderInfo.getShippingStatus() != IOrderInfo.SS_UNSHIPPED) {
+					return LibMain.showMessage(Lang.getInstance().getString("currentSsNotCancel"), Lang.getInstance().getString("orderListLnk"), 
+							"user.action?act=order_list", "error", true, request);
+				}
+				
+				// 如果付款状态是“已付款”、“付款中”，不允许取消，要取消和商家联系
+				if(orderInfo.getPayStatus() != IOrderInfo.PS_UNPAYED) {
+					return LibMain.showMessage(Lang.getInstance().getString("currentPsNotCancel"), Lang.getInstance().getString("orderListLnk"), 
+							"user.action?act=order_list", "error", true, request);
+				}
+				
+				//将用户订单设置为取消
+				orderInfo.setOrderStatus((long)IOrderInfo.OS_CANCELED);
+				manager.txattach(orderInfo);
+					/*TODO 退货用户余额 */
+					/*TODO 如果使用库存，且下订单时减库存，则增加库存 */
+				
+				includeUserMenu();
+				getOrderList(request, userId);
+				action = "orderList";
+				return RES_USER_TRANSACTION;
+			}
+			
+			//确认收货
+			else if("affirm_received".equals(action)) {
+				String orderId = request.getParameter("orderId");
+				IDefaultManager manager = getDefaultManager();
+				
+				 /* 查询订单信息，检查状态 */
+				OrderInfo orderInfo = (OrderInfo) manager.get(ModelNames.ORDERINFO, orderId);
+				if(orderInfo.getOrderStatus() == IOrderInfo.SS_RECEIVED) {
+					return LibMain.showMessage(Lang.getInstance().getString("orderAlreadyReceived"), Lang.getInstance().getString("orderListLnk"), 
+							"user.action?act=order_list", "error", true, request);
+				}
+				if(orderInfo.getOrderStatus() != IOrderInfo.SS_SHIPPED) {
+					return LibMain.showMessage(Lang.getInstance().getString("orderInvalid"), Lang.getInstance().getString("orderListLnk"), 
+							"user.action?act=order_list", "error", true, request);
+				}
+				
+				/* 修改订单发货状态为“确认收货” */
+				orderInfo.setShippingStatus((long)IOrderInfo.SS_RECEIVED);
+				manager.txupdate(orderInfo);
+				includeUserMenu();
+				getOrderList(request, userId);
+				action = "orderList";
+				return RES_USER_TRANSACTION;
+			}
+			
+			//将订单中的商品放入购入车
+			else if("return_to_cart".equals(action)) {
+				JSONObject res = new JSONObject();
+				
+				String orderId = request.getParameter("order_id");
+				Criteria criteria = new Criteria();
+				criteria.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, orderId));
+				List<OrderGoods> orderGoods = getDefaultManager().getList(ModelNames.ORDERGOODS, criteria);
+				
+				for(OrderGoods orderGood : orderGoods) {
+					Goods goods = (Goods) getDefaultManager().get(ModelNames.GOODS, orderGood.getGoodsId());
+					
+					// 如果该商品不存在，已删除或下架，处理下一个商品
+					if(goods == null || goods.getIsDelete() || !goods.getIsOnSale()) {
+						continue;
+					}
+					//TODO 库存
+					
+					//获取订单商品的规格
+					String orderGoodsAttr = orderGood.getGoodsAttr();
+					String[] attrs = orderGoodsAttr.split("<br>");
+					List<String> spec = new ArrayList<String>();
+					Set<GoodsAttr> goodsAttr = goods.getAttributes();
+					for(Iterator iterator = goodsAttr.iterator(); iterator.hasNext();) {
+						GoodsAttr attr = (GoodsAttr)iterator.next();
+						for(int i = 0;i < attrs.length;i++) {
+							Attribute attribute = (Attribute) getDefaultManager().get(ModelNames.ATTRIBUTE, attr.getAttrId());
+							String attrName = attribute.getAttrName();
+							String attrKeyValue = attrName + ":" + attr.getAttrValue();
+							if(attrKeyValue.equals(attrs[i]))
+								spec.add(attr.getLongId().toString());
+						}
+					}
+					addToCart(goods.getLongId() , orderGood.getGoodsNumber(), spec, request.getSession().getId(), userId, null);
+				}
+				
+				res.put("message", Lang.getInstance().getString("returnToCartSuccess"));
+				String out = res.toString();
+				setReturnToCart(new ByteArrayInputStream(out.getBytes(IWebConstants.ENC)));
+				return RES_RETURN_TO_CART;
+			}
+			
 			else {
 				includeUserMenu();
 				return RES_USER_CLIPS;
@@ -505,6 +715,118 @@ public class UserAction extends BaseAction {
 			ex.printStackTrace();
 			throw new RuntimeException(ex);
 		}
+	}
+
+	private void addToCart(Long goodsId, Long num, List spec, String sessionId,
+			String userId, Object parentId) {
+
+		Goods goods = (Goods) getDefaultManager().get(Goods.class.getName(), goodsId);
+		
+//		if(StringUtils.isNotEmpty(cartId))
+
+		String goodsSpecId = "";
+		for(Iterator iterator = spec.iterator();iterator.hasNext();) {
+			String id = (String) iterator.next();
+			if(!goodsSpecId.equals(""))
+				goodsSpecId += ",";
+			goodsSpecId += id;
+		}
+		
+		//查找购物车中是否已有该商品，且规格不一样，如果有，将商品数加一
+		Criteria criteria = new Criteria();
+		criteria.addCondition(new Condition(ICart.SESSION_ID,Condition.EQUALS,sessionId));
+		criteria.addCondition(new Condition(ICart.GOODS_ID,Condition.EQUALS,goods.getPkId()));
+		criteria.addCondition(new Condition(ICart.GOODS_ATTR_ID,Condition.EQUALS,goodsSpecId));
+		List<Cart> carts = getDefaultManager().getList(ModelNames.CART, criteria); 
+		if(carts.size() > 0) {
+			Cart cart = carts.get(0);
+			cart.setGoodsNumber(cart.getGoodsNumber() + num);
+			getDefaultManager().txattach(cart);
+		}
+		
+		//不存在该商品
+		else {
+    		Cart cart = new Cart();
+    		cart.setGoodsId(goods.getPkId());
+    		cart.setSessionId(sessionId);
+    		cart.setUserId(userId);
+    		cart.setGoodsSn(goods.getGoodsSn());
+    		cart.setRecType(Constants.CART_GENERAL_GOODS);
+    		cart.setGoodsNumber(num);
+    		cart.setGoodsPrice(goods.getShopPrice());
+    		cart.setMarketPrice(goods.getMarketPrice());
+    		cart.setGoodsName(goods.getGoodsName());
+    		cart.setGoodsWeight(goods.getGoodsWeight());
+    		
+    		//获得商品规格
+    		String goodsSpec = "";
+    		for(Iterator iterator = spec.iterator();iterator.hasNext();) {
+    			long goodsAttrId = Long.parseLong((String) iterator.next());
+    			
+    			GoodsAttr goodsAttr = (GoodsAttr) getDefaultManager().get(ModelNames.GOODSATTR, goodsAttrId);
+    			String attrId = goodsAttr.getAttrId();
+    			Attribute attribute = (Attribute) getDefaultManager().get(ModelNames.ATTRIBUTE, attrId);
+    			
+    			String attrName = attribute.getAttrName();
+    			String attrValue = goodsAttr.getAttrValue();
+    			String attrPrice = goodsAttr.getAttrPrice();
+    			
+    			if(attrPrice == null || Double.parseDouble(attrPrice) == 0) {
+    				goodsSpec += attrName + ":" + attrValue + "<br>";
+    			}
+    			else {
+    				goodsSpec += attrName + ":" + attrValue + "[" + attrPrice + "]" + "<br>";
+    			}
+    		}
+    		cart.setGoodsAttrId(goodsSpecId);
+    		cart.setGoodsAttr(goodsSpec);
+    		
+    		getDefaultManager().txadd(cart);
+		}		
+	}
+
+	//获得订单列表，取消订单、确认收货后调用此方法进入订单列表页面
+	private void getOrderList(HttpServletRequest request, String userId) {
+		String sPage = (String)request.getParameter("page");
+		int page = (sPage!=null && Integer.valueOf(sPage)>0) ? Integer.valueOf(sPage) : 1;
+		Criteria criteria = new Criteria();
+		Condition cond = new Condition(IOrderInfo.USER_ID, Condition.EQUALS, userId);
+		criteria.addCondition(cond);
+		int recordCount = getDefaultManager().getCount(ModelNames.ORDERINFO, criteria);
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("act", action);
+		Pager pager = LibMain.getPager("user.action", param, recordCount, page, -1, getCachedShopConfig());
+		
+		request.setAttribute("pager", pager);
+		request.setAttribute("orders", 
+				LibTransaction.getUserOrders(userId, pager.getSize(), pager.getStart(), getDefaultManager()));
+		
+		//获得可合并订单
+		List<String> mergeOrder = new ArrayList<String>();
+    	
+    	//可合并订单的条件，未付款&&未配送&&(未确认||已确认)
+    	criteria.removeAllCondition();
+    	Condition user = new Condition(IOrderInfo.USER_ID, Condition.EQUALS, userId);
+    	Condition unPayed = new Condition(IOrderInfo.PAY_STATUS, Condition.EQUALS, "0");
+    	Condition unShipped = new Condition(IOrderInfo.SHIPPING_STATUS, Condition.EQUALS, "0");
+    	Condition unConfirmed = new Condition(IOrderInfo.ORDER_STATUS, Condition.EQUALS, "0");
+    	Condition confirmed = new Condition(IOrderInfo.ORDER_STATUS, Condition.EQUALS, "1");
+    	criteria.addCondition(user);
+    	criteria.addCondition(unPayed);
+    	criteria.addCondition(unShipped);
+    	criteria.addCondition(confirmed);		    	
+    	List<OrderInfo> orders = getDefaultManager().getList(ModelNames.ORDERINFO, criteria);
+    	
+    	criteria.removeCondition(confirmed);
+    	criteria.addCondition(unConfirmed);
+    	orders.addAll(getDefaultManager().getList(ModelNames.ORDERINFO, criteria));
+    	
+    	for(Iterator iterator = orders.iterator(); iterator.hasNext();) {
+    		OrderInfo order = (OrderInfo) iterator.next();
+    		mergeOrder.add(order.getOrderSn());
+    	}
+		request.setAttribute("merge", mergeOrder);		
 	}
 
 	private String setCollectionList(int page, String userId, HttpServletRequest request) {
@@ -875,5 +1197,13 @@ public class UserAction extends BaseAction {
 
 	public InputStream getCollectGoods() {
 		return collectGoods;
+	}
+
+	public void setReturnToCart(InputStream returnToCart) {
+		this.returnToCart = returnToCart;
+	}
+
+	public InputStream getReturnToCart() {
+		return returnToCart;
 	}
 }

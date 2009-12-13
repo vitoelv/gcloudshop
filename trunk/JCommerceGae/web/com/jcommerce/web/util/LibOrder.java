@@ -2,6 +2,7 @@ package com.jcommerce.web.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -642,6 +643,47 @@ public class LibOrder {
 		
     }
     
+    /**
+     * 通过orderId获得合并订单后商品的总重量、总价格、总数量
+     * @param fromId
+     * @param toId
+     * @param manager
+     * @return
+     */
+    public static Map<String,Object> getWeightPrice(String fromId, String toId, IDefaultManager manager){
+    	/* 获得购物车中商品的总重量 */
+    	Map<String,Object> weightPrice = new HashMap<String,Object>();
+    	double weight = 0;
+		double number = 0;
+		double amount = 0;
+		
+		Criteria criteria = new Criteria();
+		criteria.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, fromId));
+		List<OrderGoods> fromGoods = manager.getList(ModelNames.ORDERGOODS, criteria);
+		
+		criteria.removeAllCondition();
+		criteria.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, toId));
+		List<OrderGoods> toGoods = manager.getList(ModelNames.ORDERGOODS, criteria);
+		toGoods.addAll(fromGoods);
+		
+		for(Iterator iterator = toGoods.iterator(); iterator.hasNext();) {
+			OrderGoods orderGoods = (OrderGoods)iterator.next();
+			String goodsId = orderGoods.getGoodsId();
+			Goods goods = (Goods) manager.get(ModelNames.GOODS, goodsId);
+			
+			weight += goods.getGoodsWeight();
+			number += orderGoods.getGoodsNumber();
+			amount += orderGoods.getGoodsPrice() * orderGoods.getGoodsNumber();
+		}
+
+		String formatedWeight  = LibCommon.formatedWeight(weight);
+		weightPrice.put("weight", new Double(weight));
+		weightPrice.put("number", new Double(number) );
+		weightPrice.put("amount", new Double(amount) );
+		weightPrice.put("formatedWeight", formatedWeight );
+    	return weightPrice;
+    }
+
     /**
      * 改变订单中商品库存
      * @param   int     $order_id   订单号

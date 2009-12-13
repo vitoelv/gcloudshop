@@ -1,5 +1,6 @@
 package com.jcommerce.core.model;
 
+
 import java.util.HashSet;
 import java.util.Set;
 import javax.jdo.annotations.Extension;
@@ -15,7 +16,7 @@ import javax.jdo.annotations.PrimaryKey;
  */
  
 @PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true") 
-public class OrderInfo extends ModelObject {
+public class OrderInfo extends ModelObject implements Cloneable{
 
 
     
@@ -859,5 +860,15 @@ public class OrderInfo extends ModelObject {
   public void setDiscount(java.lang.Double newDiscount) {
     discount = newDiscount;
   }
+  
+  public Object clone() {   
+	OrderInfo o = null;   
+	try {   
+		o = (OrderInfo) super.clone();   
+	} catch (CloneNotSupportedException e) {   
+		e.printStackTrace();   
+	}   
+	return o;   
+  }   
 
 }

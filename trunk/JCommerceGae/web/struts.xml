@@ -77,6 +77,10 @@
      			<param name="contentType">application/json</param>
      			<param name="inputName">collectGoods</param>
    			</result>
+   			<result name="return_to_cart" type="stream">
+     			<param name="contentType">application/json</param>
+     			<param name="inputName">returnToCart</param>
+   			</result>
 			<result name="error" type="redirectAction">home</result>
 		</action>
 		<action name="message" method="execute" class="messageAction">
