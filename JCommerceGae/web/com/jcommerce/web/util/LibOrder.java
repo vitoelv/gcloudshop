@@ -275,7 +275,7 @@ public class LibOrder {
     		Condition condition2 = new Condition();
     		condition2.setField(ICart.IS_REAL);
     		condition2.setOperator(Condition.EQUALS);
-    		condition2.setValue("1");
+    		condition2.setValue("true");
     		
     		Condition condition3 = new Condition();
     		condition3.setField(ICart.REC_TYPE);
@@ -284,7 +284,7 @@ public class LibOrder {
     		
     		
     		criteria.addCondition(condition);
-    		criteria.addCondition(condition2);
+//    		criteria.addCondition(condition2);
     		criteria.addCondition(condition3);
     		num = manager.getCount(ModelNames.CART, criteria);
     	}
@@ -299,10 +299,10 @@ public class LibOrder {
     		Condition condition2 = new Condition();
     		condition2.setField(ICart.IS_REAL);
     		condition2.setOperator(Condition.EQUALS);
-    		condition2.setValue("1");
+    		condition2.setValue("true");
     		
     		criteria.addCondition(condition);
-    		criteria.addCondition(condition2);
+//    		criteria.addCondition(condition2);
     		num = manager.getCount(ModelNames.ORDERGOODS, criteria);
     	}
     	return num > 0;
@@ -691,7 +691,7 @@ public class LibOrder {
      * @param   bool    $storage     减库存的时机，1，下订单时；0，发货时；
      */
     public static void changeOrderGoodsStorage(OrderGoods orderGoods , IDefaultManager manager){
-    	changeGoodsStorage(orderGoods.getGoodsId(),orderGoods.getGoodsNumber(),manager);
+    	changeGoodsStorage(orderGoods.getGoodsId(),-orderGoods.getGoodsNumber(),manager);
     }
     /**
      * 商品库存增与减
