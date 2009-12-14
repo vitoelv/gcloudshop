@@ -217,14 +217,18 @@
               <td width="12%" align="left" bgcolor="#ffffff"><select name="to_order">
               <option value="0">${lang.select}</option>
 
-                  TODO: htmlOptions CLAUSE
+                  <#list merge as m>
+                  	  <option value="${m}">${m}</option>
+                  </#list>
 
                 </select></td>
               <td width="19%" align="right" bgcolor="#ffffff">${lang.secondOrder}:</td>
               <td width="11%" align="left" bgcolor="#ffffff"><select name="from_order">
               <option value="0">${lang.select}</option>
 
-                  TODO: htmlOptions CLAUSE
+                  <#list merge as m>
+                  	  <option value="${m}">${m}</option>
+                  </#list>
 
                 </select></td>
               <td width="36%" bgcolor="#ffffff">&nbsp;<input name="act" value="merge_order" type="hidden" />
