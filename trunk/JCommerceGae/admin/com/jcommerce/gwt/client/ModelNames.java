@@ -28,6 +28,7 @@ public interface ModelNames {
     public static final String SESSION= "com.jcommerce.core.model.Session";
     public static final String NAV= "com.jcommerce.core.model.Nav";
     public static final String COLLECTGOOD= "com.jcommerce.core.model.CollectGood";
+    public static final String ARTICLE_CAT= "com.jcommerce.core.model.ArticleCat";
     
     public static final String PAYMENT_META = "PaymentMeta";
     public static final String SHIPPING_META = "ShippingMeta";
