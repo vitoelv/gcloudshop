@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jcommerce.gwt.client.Application.ApplicationListener;
+import com.jcommerce.gwt.client.panels.ArticleCatListPanel;
 import com.jcommerce.gwt.client.panels.AttributeListPanel;
 import com.jcommerce.gwt.client.panels.AttributePanel;
 import com.jcommerce.gwt.client.panels.BrandListPanel;
@@ -226,6 +227,9 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 		setupMainMenuOption(system, new PaymentMetaListPanel.State(),Resources.images.catWidgets()); 
 		setupMainMenuOption(system, new ShippingMetaListPanel.State(),Resources.images.catWidgets());   
         setupMainMenuOption(system, new RegionListPanel.State(), Resources.images.catWidgets());
+        
+        TreeItem article = mainMenu.addItem("Article Management");
+        setupMainMenuOption(article, new ArticleCatListPanel.State(),Resources.images.catWidgets());
 		
         
 //		setupMainMenuOption(catGoods, new UserComments.State(), Resources.images.catWidgets());		
@@ -503,6 +507,10 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 			else if(pageClassName.equals(UserListPanel.class.getName())){
 				page = UserListPanel.getInstance();
 			}
+			else if(pageClassName.equals(ArticleCatListPanel.class.getName())){
+				page = ArticleCatListPanel.getInstance();
+			}
+			
 
 			if (page != null) {
 				pageRegistry.put(pageClassName, page);
