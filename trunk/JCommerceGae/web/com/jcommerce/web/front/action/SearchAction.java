@@ -224,7 +224,7 @@ public class SearchAction extends BaseAction {
     				cond = new Condition();
             		cond.setField(IGoods.IS_BEST);
             		cond.setOperator(Condition.EQUALS);
-            		cond.setValue("1");
+            		cond.setValue("true");
             		criteria.addCondition(cond);
             		urHere = Lang.getInstance().getString("bestGoods");
     			}
@@ -232,7 +232,7 @@ public class SearchAction extends BaseAction {
     				cond = new Condition();
             		cond.setField(IGoods.IS_NEW);
             		cond.setOperator(Condition.EQUALS);
-            		cond.setValue("1");
+            		cond.setValue("true");
             		criteria.addCondition(cond);
             		urHere = Lang.getInstance().getString("newGoods");
     			}
@@ -240,7 +240,7 @@ public class SearchAction extends BaseAction {
     				cond = new Condition();
             		cond.setField(IGoods.IS_HOT);
             		cond.setOperator(Condition.EQUALS);
-            		cond.setValue("1");
+            		cond.setValue("true");
             		criteria.addCondition(cond);
             		urHere = Lang.getInstance().getString("hotGoods");
     			}
@@ -317,8 +317,9 @@ public class SearchAction extends BaseAction {
     	    		}
     	    	}
     	    }
-    	    criteria.addCondition( new Condition(IGoods.IS_ON_SALE,Condition.EQUALS,"1"));
-    		criteria.addCondition( new Condition(IGoods.IS_ALONE_SALE,Condition.EQUALS,"1"));
+    	    criteria.addCondition( new Condition(IGoods.IS_ON_SALE,Condition.EQUALS,"true"));
+    	    //TODO set  is alone sale true
+    		criteria.addCondition( new Condition(IGoods.IS_ALONE_SALE,Condition.EQUALS,"false"));
     		criteria.addCondition( new Condition(IGoods.IS_DELETE,Condition.EQUALS,"0"));
     	    List<Goods> resGoods = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, criteria );
     		List<GoodsWrapper> result = null;

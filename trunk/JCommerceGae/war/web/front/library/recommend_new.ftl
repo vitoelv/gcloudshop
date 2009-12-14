@@ -26,7 +26,7 @@
            </font>
         </div>
   </#list>
-  <div class="more"><a href="../search.action?intro=new"><img src="images/more.gif" /></a></div>
+  <div class="more"><a href="search.action?intro=new"><img src="images/more.gif" /></a></div>
   <#if  catRecSign  !=  1  >
   </div>
 </div>

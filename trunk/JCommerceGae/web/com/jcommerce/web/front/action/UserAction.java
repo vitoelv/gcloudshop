@@ -297,21 +297,20 @@ public class UserAction extends BaseAction {
 					consigneeList.add(holder);
 				}
 				
-				UserAddressWrapper uaw = consigneeList.get(0);
+				
 				request.setAttribute("consigneeList", consigneeList);
-				
+				List<List<RegionWrapper>> provinceList = new ArrayList<List<RegionWrapper>>();
+				List<List<RegionWrapper>> cityList = new ArrayList<List<RegionWrapper>>();
+				List<List<RegionWrapper>> districtList = new ArrayList<List<RegionWrapper>>();
 				 //取得国家列表，如果有收货人列表，取得省市区列表
-		    	List<List<RegionWrapper>> provinceList = new ArrayList<List<RegionWrapper>>();
-		    	provinceList.add(LibCommon.getRegion(IRegion.TYPE_PROVINCE,uaw.getUserAddress().getCountry(), getDefaultManager()));
-		    	request.setAttribute("provinceList", provinceList);
-		    	
-		    	List<List<RegionWrapper>> cityList = new ArrayList<List<RegionWrapper>>();
-		    	cityList.add(LibCommon.getRegion(IRegion.TYPE_CITY, uaw.getUserAddress().getProvince(), getDefaultManager()));
-		    	request.setAttribute("cityList", cityList);
-		    	List<List<RegionWrapper>> districtList = new ArrayList<List<RegionWrapper>>();
-		    	districtList.add(LibCommon.getRegion(IRegion.TYPE_DISTRICT,uaw.getUserAddress().getCity(), getDefaultManager()));
-		    	request.setAttribute("districtList", districtList);
-				
+				for (UserAddressWrapper userAddressWrapper : consigneeList) {
+			    	provinceList.add(LibCommon.getRegion(IRegion.TYPE_PROVINCE,userAddressWrapper.getUserAddress().getCountry(), getDefaultManager()));
+			    	request.setAttribute("provinceList", provinceList.toArray());
+			    	cityList.add(LibCommon.getRegion(IRegion.TYPE_CITY, userAddressWrapper.getUserAddress().getProvince(), getDefaultManager()));
+			    	request.setAttribute("cityList", cityList.toArray());
+			    	districtList.add(LibCommon.getRegion(IRegion.TYPE_DISTRICT,userAddressWrapper.getUserAddress().getCity(), getDefaultManager()));
+			    	request.setAttribute("districtList", districtList.toArray());
+				}
 		    	
 		    	
 		    	//赋值于模板

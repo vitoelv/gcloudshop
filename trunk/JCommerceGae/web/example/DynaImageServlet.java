@@ -1,10 +1,17 @@
 package example;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,35 +50,35 @@ public class DynaImageServlet extends HttpServlet {
             
             String fileId = request.getParameter("fileId");
             System.out.println("fileId: "+fileId);
-            if(StringUtils.isNotEmpty(fileId)) {
+//            if(StringUtils.isNotEmpty(fileId) && !fileId.equals("null") ) {
             	writeImage(response, manager, fileId);
             	return;
-            }
+//            }
             
             
             
             // test purpose only
-            List<Brand> res = new ArrayList<Brand>();
-            manager.getList(res, Brand.class.getName(), null, -1, -1);
-            String logoFileId = null;
-            for(Brand brand:res) {
-            	logoFileId = brand.getLogoFileId();
-//            	String fileName = brand.getLogo();
-//            	String name = brand.getName();
-//            	System.out.println("name: "+name+", fileName: "+fileName+", fileId: "+logoFileId);
-//            	if(!StringUtils.isEmpty(logoFileId) && "bbb".equals(name)) {
-//            		break;
-//            	}
-            	
-            }
-            
-            if(logoFileId!=null) {
-            	writeImage(response, manager, logoFileId);
-            	
-            }
-            else {
-            	response.sendRedirect("/jcommercegae/gwt/standard/images/corner.png");
-            }
+//            List<Brand> res = new ArrayList<Brand>();
+//            manager.getList(res, Brand.class.getName(), null, -1, -1);
+//            String logoFileId = null;
+//            for(Brand brand:res) {
+//            	logoFileId = brand.getLogoFileId();
+////            	String fileName = brand.getLogo();
+////            	String name = brand.getName();
+////            	System.out.println("name: "+name+", fileName: "+fileName+", fileId: "+logoFileId);
+////            	if(!StringUtils.isEmpty(logoFileId) && "bbb".equals(name)) {
+////            		break;
+////            	}
+//            	
+//            }
+//            
+//            if(logoFileId!=null) {
+//            	writeImage(response, manager, logoFileId);
+//            	
+//            }
+//            else {
+//            	response.sendRedirect("/jcommercegae/gwt/standard/images/corner.png");
+//            }
             } catch (Exception ex) {
             	ex.printStackTrace();
             }
@@ -81,9 +88,19 @@ public class DynaImageServlet extends HttpServlet {
 			IDefaultManager manager, String logoFileId) throws IOException {
 		DSFile dsFile = (DSFile)manager.get(DSFile.class.getName(), logoFileId);
 		System.out.println("dsFile: "+dsFile);
-		byte[] content = dsFile.getContent().getBytes();
-		response.setHeader("Content-Type", "image/jpeg");
-		response.getOutputStream().write(content);
+		response.setHeader("Content-Type", "image/gif");
+		if( dsFile == null ){
+			 InputStream is = this.getClass().getResourceAsStream("noPicture.gif");  
+			 int leng = is.available();  
+			 BufferedInputStream buff = new BufferedInputStream(is);  
+			 byte[] mapObj = new byte[leng];  
+			 buff.read(mapObj, 0, leng);  
+			 response.getOutputStream().write(mapObj);
+		}
+		else {
+			byte[] content = dsFile.getContent().getBytes();
+			response.getOutputStream().write(content);
+		}		
 	}
     
 
