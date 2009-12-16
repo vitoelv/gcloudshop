@@ -1,23 +1,23 @@
 package com.jcommerce.gwt.client.resources;
 
 import com.google.gwt.i18n.client.Constants;
-import com.jcommerce.gwt.client.panels.AttributeListPanel;
-import com.jcommerce.gwt.client.panels.GoodsListPanel;
-import com.jcommerce.gwt.client.panels.GoodsTypeListPanel;
-import com.jcommerce.gwt.client.panels.RegionPanel;
+import com.jcommerce.gwt.client.panels.goods.AttributeListPanel;
+import com.jcommerce.gwt.client.panels.goods.AttributePanel;
+import com.jcommerce.gwt.client.panels.goods.BrandListPanel;
+import com.jcommerce.gwt.client.panels.goods.BrandPanel;
+import com.jcommerce.gwt.client.panels.goods.CategoryListPanel;
+import com.jcommerce.gwt.client.panels.goods.CategoryPanel;
+import com.jcommerce.gwt.client.panels.goods.GoodsListPanel;
 import com.jcommerce.gwt.client.panels.goods.GoodsPanel;
+import com.jcommerce.gwt.client.panels.goods.GoodsTypeListPanel;
+import com.jcommerce.gwt.client.panels.goods.GoodsTypePanel;
+import com.jcommerce.gwt.client.panels.member.UserListPanel;
 import com.jcommerce.gwt.client.panels.order.OrderUserPanel;
 import com.jcommerce.gwt.client.panels.system.PaymentMetaListPanel;
+import com.jcommerce.gwt.client.panels.system.RegionListPanel;
+import com.jcommerce.gwt.client.panels.system.RegionPanel;
 import com.jcommerce.gwt.client.panels.system.ShippingAreaListPanel;
 import com.jcommerce.gwt.client.panels.system.ShippingMetaListPanel;
-import com.jcommerce.gwt.client.panels.BrandPanel;
-import com.jcommerce.gwt.client.panels.GoodsTypePanel;
-import com.jcommerce.gwt.client.panels.BrandListPanel;
-import com.jcommerce.gwt.client.panels.CategoryPanel;
-import com.jcommerce.gwt.client.panels.CategoryListPanel;
-import com.jcommerce.gwt.client.panels.AttributePanel;
-import com.jcommerce.gwt.client.panels.RegionListPanel;
-import com.jcommerce.gwt.client.panels.UserListPanel;
 /**
  * Constants used throughout the showcase.
  */

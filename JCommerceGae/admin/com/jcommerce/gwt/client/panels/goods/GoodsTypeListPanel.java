@@ -1,4 +1,4 @@
-package com.jcommerce.gwt.client.panels;
+package com.jcommerce.gwt.client.panels.goods;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,15 +86,15 @@ public class GoodsTypeListPanel extends ContentWidget {
 
 	private native void initJS(GoodsTypeListPanel me) /*-{
     $wnd.getAttrList = function (id) {
-        me.@com.jcommerce.gwt.client.panels.GoodsTypeListPanel::getAttrList(Ljava/lang/String;)(id);
+        me.@com.jcommerce.gwt.client.panels.goods.GoodsTypeListPanel::getAttrList(Ljava/lang/String;)(id);
     };
     
     $wnd.editGoodsType = function (id) {
-        me.@com.jcommerce.gwt.client.panels.GoodsTypeListPanel::editGoodsType(Ljava/lang/String;)(id);
+        me.@com.jcommerce.gwt.client.panels.goods.GoodsTypeListPanel::editGoodsType(Ljava/lang/String;)(id);
     };
     
     $wnd.deleteGoodsType = function (id) {
-        me.@com.jcommerce.gwt.client.panels.GoodsTypeListPanel::deleteGoodsType(Ljava/lang/String;)(id);
+        me.@com.jcommerce.gwt.client.panels.goods.GoodsTypeListPanel::deleteGoodsType(Ljava/lang/String;)(id);
     };
     }-*/;
 	private void newGoodsType() {

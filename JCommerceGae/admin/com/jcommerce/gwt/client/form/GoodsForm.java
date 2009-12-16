@@ -52,6 +52,7 @@ public class GoodsForm extends BeanObject implements IGoods {
 		field.setName(BRAND_ID);
 		field.setDisplayField(IBrand.BRAND_NAME);
         field.setValueField(IBrand.PK_ID);
+        field.setAllowBlank(false);
 		return field;
 	}
 	
@@ -68,6 +69,7 @@ public class GoodsForm extends BeanObject implements IGoods {
 		field.setName(CAT_ID);
 		field.setDisplayField(ICategory.CAT_NAME);
         field.setValueField(ICategory.PK_ID);
+        field.setAllowBlank(false);
 		return field;
 	}
 	public static ListField<BeanObject> getCategoryIdsField() {
@@ -194,9 +196,20 @@ public class GoodsForm extends BeanObject implements IGoods {
 	}
 	
 	public static HtmlEditor getDescField() {
-		MyHTMLEditor field = new MyHTMLEditor();
+		MyHTMLEditor field = new MyHTMLEditor() {
+			@Override
+			protected boolean validateValue(String value) {
+				if(super.validateValue(value) == false) {
+					return false;
+				}
+				if(value!=null && value.length()>500) {
+					markInvalid("Size of content must be less than 500 words.");
+					return false;
+				}
+				return true;
+			}			
+		};
 		field.setName(GOODS_DESC);
-
 		field.setAutoValidate(true);
 		return field;
 	}

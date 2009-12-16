@@ -1,4 +1,4 @@
-package com.jcommerce.gwt.client.panels;
+package com.jcommerce.gwt.client.panels.system;
 
 
 import java.util.HashMap;

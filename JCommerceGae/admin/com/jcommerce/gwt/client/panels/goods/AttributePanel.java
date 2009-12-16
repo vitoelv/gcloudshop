@@ -1,4 +1,4 @@
-package com.jcommerce.gwt.client.panels;
+package com.jcommerce.gwt.client.panels.goods;
 
 import java.util.List;
 
@@ -17,6 +17,9 @@ import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.SimpleOptionData;
 import com.jcommerce.gwt.client.model.IAttribute;
 import com.jcommerce.gwt.client.model.IGoodsType;
+import com.jcommerce.gwt.client.panels.BaseEntityEditPanel;
+import com.jcommerce.gwt.client.panels.Success;
+import com.jcommerce.gwt.client.panels.BaseEntityEditPanel.State;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.ListService;
 import com.jcommerce.gwt.client.widgets.SimpleStaticComboBox;

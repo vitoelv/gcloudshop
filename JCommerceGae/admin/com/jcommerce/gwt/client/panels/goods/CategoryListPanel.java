@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.jcommerce.gwt.client.panels;
+package com.jcommerce.gwt.client.panels.goods;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -200,10 +200,10 @@ public class CategoryListPanel extends ContentWidget {
     
     private native void initJS(CategoryListPanel me) /*-{
     $wnd.changeCategory = function (id) {
-        me.@com.jcommerce.gwt.client.panels.CategoryListPanel::modifyCategoryAndRefrsh(Ljava/lang/String;)(id);
+        me.@com.jcommerce.gwt.client.panels.goods.CategoryListPanel::modifyCategoryAndRefrsh(Ljava/lang/String;)(id);
     };
     $wnd.deleteCategory = function (id) {
-	    me.@com.jcommerce.gwt.client.panels.CategoryListPanel::deleteCategoryAndRefrsh(Ljava/lang/String;)(id);
+	    me.@com.jcommerce.gwt.client.panels.goods.CategoryListPanel::deleteCategoryAndRefrsh(Ljava/lang/String;)(id);
 	};
     }-*/;
     

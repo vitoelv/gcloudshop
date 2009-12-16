@@ -1,10 +1,11 @@
-package com.jcommerce.core.test;
+package com.jcommerce.core.test.case9;
 
 import java.util.Arrays;
 import java.util.Set;
 
 import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.service.IDefaultManager;
+import com.jcommerce.core.test.BaseDAOTestCase;
 import com.jcommerce.core.util.UUIDLongGenerator;
 
 public class TestGoods extends BaseDAOTestCase {

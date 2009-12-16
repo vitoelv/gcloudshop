@@ -107,10 +107,13 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     		to.setKeyName(bkn);
     		to.setLongId(UUIDLongGenerator.newUUID());
     		DSFile file = to.getLogoFile();
-			String fkn = UUIDHexGenerator.newUUID();
-			String fid = KeyFactory.keyToString(new KeyFactory.Builder("Brand",bkn).addChild("DSFile", fkn).getKey());
-			file.setKeyName(fkn);
-			to.setLogoFileId(fid);
+    		if (file != null) {
+				String fkn = UUIDHexGenerator.newUUID();
+				String fid = KeyFactory.keyToString(new KeyFactory.Builder(
+						"Brand", bkn).addChild("DSFile", fkn).getKey());
+				file.setKeyName(fkn);
+				to.setLogoFileId(fid);
+			}
 			
 			String res = txattach(to); 
     		
@@ -162,11 +165,12 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     			newFile.setKeyName(fkn);
     			po.setLogoFileId(fid);
     			po.setLogoFile(newFile);
+    			boolean suc = txdelete(oldFile);
     		}
     		
 			String res = txattach(po);
 			
-			boolean suc = txdelete(oldFile);
+			
 
 			return true;
     	} catch (Exception e) {

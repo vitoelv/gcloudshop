@@ -23,26 +23,26 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jcommerce.gwt.client.Application.ApplicationListener;
-import com.jcommerce.gwt.client.panels.ArticleCatListPanel;
-import com.jcommerce.gwt.client.panels.AttributeListPanel;
-import com.jcommerce.gwt.client.panels.AttributePanel;
-import com.jcommerce.gwt.client.panels.BrandListPanel;
-import com.jcommerce.gwt.client.panels.BrandPanel;
-import com.jcommerce.gwt.client.panels.CategoryListPanel;
-import com.jcommerce.gwt.client.panels.CategoryPanel;
-import com.jcommerce.gwt.client.panels.GoodsListPanel;
-import com.jcommerce.gwt.client.panels.GoodsTypeListPanel;
-import com.jcommerce.gwt.client.panels.GoodsTypePanel;
-import com.jcommerce.gwt.client.panels.OrderListPanel;
-import com.jcommerce.gwt.client.panels.RegionListPanel;
-import com.jcommerce.gwt.client.panels.RegionPanel;
-import com.jcommerce.gwt.client.panels.UserListPanel;
-
 import com.jcommerce.gwt.client.panels.Success;
+import com.jcommerce.gwt.client.panels.article.ArticleCatListPanel;
+import com.jcommerce.gwt.client.panels.data.ImportPanel;
+import com.jcommerce.gwt.client.panels.goods.AttributeListPanel;
+import com.jcommerce.gwt.client.panels.goods.AttributePanel;
+import com.jcommerce.gwt.client.panels.goods.BrandListPanel;
+import com.jcommerce.gwt.client.panels.goods.BrandPanel;
+import com.jcommerce.gwt.client.panels.goods.CategoryListPanel;
+import com.jcommerce.gwt.client.panels.goods.CategoryPanel;
+import com.jcommerce.gwt.client.panels.goods.GoodsListPanel;
 import com.jcommerce.gwt.client.panels.goods.GoodsPanel;
+import com.jcommerce.gwt.client.panels.goods.GoodsTypeListPanel;
+import com.jcommerce.gwt.client.panels.goods.GoodsTypePanel;
+import com.jcommerce.gwt.client.panels.member.UserListPanel;
+import com.jcommerce.gwt.client.panels.order.OrderListPanel;
 import com.jcommerce.gwt.client.panels.order.OrderUserPanel;
 import com.jcommerce.gwt.client.panels.system.PaymentMetaListPanel;
 import com.jcommerce.gwt.client.panels.system.PaymentMetaPanel;
+import com.jcommerce.gwt.client.panels.system.RegionListPanel;
+import com.jcommerce.gwt.client.panels.system.RegionPanel;
 import com.jcommerce.gwt.client.panels.system.ShippingAreaListPanel;
 import com.jcommerce.gwt.client.panels.system.ShippingAreaPanel;
 import com.jcommerce.gwt.client.panels.system.ShippingMetaListPanel;
@@ -211,11 +211,7 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
         setupMainMenuOption(catGoods, new CategoryListPanel.State(), Resources.images.catWidgets());
         setupMainMenuOption(catGoods, new BrandListPanel.State(), Resources.images.catWidgets());
         setupMainMenuOption(catGoods, new GoodsTypeListPanel.State(), Resources.images.catWidgets());
-//        setupMainMenuOption(catGoods, new CategoryPanel.State(), Resources.images.catWidgets());
-//        setupMainMenuOption(catGoods, new BrandPanel.State(), Resources.images.catWidgets());		   
-		
-      	
-		
+
 		
 		TreeItem catOrder = mainMenu.addItem(Resources.constants.categoryOrder());
 		setupMainMenuOption(catOrder, new OrderListPanel.State(), Resources.images.catWidgets());
@@ -228,51 +224,12 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 		setupMainMenuOption(system, new ShippingMetaListPanel.State(),Resources.images.catWidgets());   
         setupMainMenuOption(system, new RegionListPanel.State(), Resources.images.catWidgets());
         
-        TreeItem article = mainMenu.addItem("Article Management");
+        TreeItem article = mainMenu.addItem("文章管理");
         setupMainMenuOption(article, new ArticleCatListPanel.State(),Resources.images.catWidgets());
 		
-        
-//		setupMainMenuOption(catGoods, new UserComments.State(), Resources.images.catWidgets());		
-//
-//		setupMainMenuOption(catGoods,new GoodsTypeInfo.State(),Resources.images.catWidgets());
-//        
-//		TreeItem orderForm = mainMenu.addItem(Resources.constants.categoryOrder());		
-//		setupMainMenuOption(orderForm, new OrderList.State(), Resources.images.catWidgets());
-//		setupMainMenuOption(orderForm, new NewOrders.State(), Resources.images.catWidgets());
-//        
-//		TreeItem statisticsForm = mainMenu.addItem(Resources.constants.categoryStatistics());
-//		setupMainMenuOption(statisticsForm,new OrderStatistics.State(),Resources.images.catWidgets());
-//        
-//		TreeItem user = mainMenu.addItem(Resources.constants.categoryMember());
-//		setupMainMenuOption(user, new NewUsers.State(), Resources.images.catWidgets());
-//        
-//		TreeItem system = mainMenu.addItem(Resources.constants.categorySystem());
-//		setupMainMenuOption(system,new ShopSetup.State(),Resources.images.catWidgets());
-   
-        
-        
-        
-//        TreeItem catGoods = mainMenu.addItem(Resources.constants.categoryGoods());
-//        setupMainMenuOption(catGoods, new GoodsList(), Resources.images.catWidgets());
-//        setupMainMenuOption(catGoods, new BrandInfo(), Resources.images.catWidgets());
-//		setupMainMenuOption(catGoods, goodsPanel = new NewGoods(), Resources.images.catWidgets());
-//		setupMainMenuOption(catGoods, new CategoryInfo(), Resources.images.catWidgets());
-//		setupMainMenuOption(catGoods, new UserComments(), Resources.images.catWidgets());		
-//		setupMainMenuOption(catGoods, GoodsTypeList.getInstance(), Resources.images.catWidgets());
-//		setupMainMenuOption(catGoods,new GoodsTypeInfo(),Resources.images.catWidgets());
-		
+        TreeItem catData = mainMenu.addItem("数据维护");
+        setupMainMenuOption(catData, new ImportPanel.State(), Resources.images.catWidgets());        
 
-        
-//		TreeItem orderForm = mainMenu.addItem(Resources.constants.categoryOrder());		
-//		setupMainMenuOption(orderForm, new OrderList(), Resources.images.catWidgets());
-//		setupMainMenuOption(orderForm, new NewOrders(), Resources.images.catWidgets());
-//		TreeItem statisticsForm = mainMenu.addItem(Resources.constants.categoryStatistics());
-//		setupMainMenuOption(statisticsForm,new OrderStatistics(),Resources.images.catWidgets());
-//		TreeItem user = mainMenu.addItem(Resources.constants.categoryMember());
-//		setupMainMenuOption(user, new NewUsers(), Resources.images.catWidgets());
-//		TreeItem system = mainMenu.addItem(Resources.constants.categorySystem());
-//		setupMainMenuOption(system,new ShopSetup(),Resources.images.catWidgets());
-//      setupMainMenuOption(system,PaymentMetaList.getInstance(),Resources.images.catWidgets());
     }
 
     /**
@@ -451,7 +408,8 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 				page = CategoryListPanel.getInstance();
 			} else if (pageClassName.equals(CategoryPanel.class.getName())) {
 					page = CategoryPanel.getInstance();
-				
+			} else if (pageClassName.equals(ImportPanel.class.getName())) {
+				page = ImportPanel.getInstance();	
 //			} else if (pageClassName.equals(CommentInfo.class.getName())) {
 //				page = new CommentInfo();
 			} else if (pageClassName.equals(GoodsListPanel.class.getName())) {

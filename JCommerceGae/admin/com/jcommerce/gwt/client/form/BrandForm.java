@@ -60,7 +60,8 @@ public class BrandForm extends BeanObject implements IBrand{
 	public static TextArea getDescField(String fieldTitle) {
 		TextArea agField = new TextArea();
 		agField.setName(BRAND_DESC);
-		agField.setMaxLength(2000);
+		// max for DS String field is 500
+		agField.setMaxLength(500);
 		agField.setAutoValidate(true);
 		agField.setAllowBlank(true);
 		return agField;

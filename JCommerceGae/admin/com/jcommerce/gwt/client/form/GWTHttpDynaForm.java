@@ -16,8 +16,11 @@ import com.jcommerce.gwt.client.ClientHttpRequestHelper;
 
 public class GWTHttpDynaForm {
 	
+	// either set action/method or set url
 	private String action;
 	private String method;
+	private String url;
+	
 	private Map<String, String> params = new HashMap<String, String>();
 	private Listener listener;
 	
@@ -39,7 +42,9 @@ public class GWTHttpDynaForm {
 		return this.listener;
 	}
 	public void submit() {
-    	String url = constructURL(getAction(), getMethod());
+		if(url==null || "".equals(url)) {
+			url = constructURL(getAction(), getMethod());
+		}
     	RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, URL.encode(url));
     	builder.setHeader("Content-type", "application/x-www-form-urlencoded");
     	StringBuffer dataBuf = new StringBuffer();
@@ -113,6 +118,14 @@ public class GWTHttpDynaForm {
 
 	public void setMethod(String method) {
 		this.method = method;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
 	

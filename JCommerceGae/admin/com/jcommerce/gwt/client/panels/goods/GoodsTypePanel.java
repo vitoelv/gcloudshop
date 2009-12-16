@@ -1,9 +1,12 @@
-package com.jcommerce.gwt.client.panels;
+package com.jcommerce.gwt.client.panels.goods;
 
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.GoodsTypeForm;
+import com.jcommerce.gwt.client.panels.BaseEntityEditPanel;
+import com.jcommerce.gwt.client.panels.Success;
+import com.jcommerce.gwt.client.panels.BaseEntityEditPanel.State;
 import com.jcommerce.gwt.client.resources.Resources;
 
 public class GoodsTypePanel extends BaseEntityEditPanel {

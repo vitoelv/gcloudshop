@@ -1,4 +1,4 @@
-package com.jcommerce.gwt.client.panels;
+package com.jcommerce.gwt.client.panels.goods;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -39,7 +39,6 @@ import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.model.IBrand;
 import com.jcommerce.gwt.client.model.ICategory;
 import com.jcommerce.gwt.client.model.IGoods;
-import com.jcommerce.gwt.client.panels.goods.GoodsPanel;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.Condition;
 import com.jcommerce.gwt.client.service.Criteria;
@@ -468,10 +467,10 @@ public class GoodsListPanel extends ContentWidget {
 
 	private native void initJS(GoodsListPanel me) /*-{
 	   $wnd.deleteGoods = function (id) {
-	       me.@com.jcommerce.gwt.client.panels.GoodsListPanel::deleteGoodsAndRefrsh(Ljava/lang/String;)(id);
+	       me.@com.jcommerce.gwt.client.panels.goods.GoodsListPanel::deleteGoodsAndRefrsh(Ljava/lang/String;)(id);
 	   };
 	   $wnd.editGoods = function (id) {
-	       me.@com.jcommerce.gwt.client.panels.GoodsListPanel::editGoods(Ljava/lang/String;)(id);
+	       me.@com.jcommerce.gwt.client.panels.goods.GoodsListPanel::editGoods(Ljava/lang/String;)(id);
 	   };
 	   }-*/;
 

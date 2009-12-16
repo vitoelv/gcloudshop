@@ -1,4 +1,4 @@
-package com.jcommerce.gwt.client.panels;
+package com.jcommerce.gwt.client.panels.goods;
 
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.Events;
@@ -18,12 +18,15 @@ import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BrandForm;
 import com.jcommerce.gwt.client.form.GWTHttpDynaForm;
 import com.jcommerce.gwt.client.model.IBrand;
+import com.jcommerce.gwt.client.panels.BaseEntityEditPanel;
+import com.jcommerce.gwt.client.panels.BaseFileUploadFormPanel;
+import com.jcommerce.gwt.client.panels.Success;
 import com.jcommerce.gwt.client.resources.Resources;
 
 /**
  * Example file.
  */
-public class BrandPanel extends BaseEntityEditPanel {    	
+public class BrandPanel extends BaseFileUploadFormPanel {    	
     
 	public static interface Constants {
 		String NewBrand_title();
@@ -162,23 +165,7 @@ public class BrandPanel extends BaseEntityEditPanel {
 //        panel.setSpacing(10);
 
 //        formPanel.setAction(GWT.getModuleBaseURL() + "uploadService?class=Brand");
-        formPanel.setEncoding(FormPanel.Encoding.MULTIPART);
-        formPanel.setMethod(FormPanel.Method.POST);
-        formPanel.addListener(Events.Submit, new Listener<FormEvent>() {
-			public void handleEvent(FormEvent be) {
-				// TODO Auto-generated method stub
-				String result = be.getResultHtml();
-				if("0".equals(result)) {
-					gotoSuccessPanel();
-				}
-				else {
-					Window.alert("Error: "+result);	
-				}
-	
-			} 
-        });
-        
-        
+
 //        btnNew.addSelectionListener(new SelectionListener<ButtonEvent>() {
 //        	public void componentSelected(ButtonEvent sender) {
 //        		formPanel.submit();
@@ -224,21 +211,7 @@ public class BrandPanel extends BaseEntityEditPanel {
 
     }
     
-    @Override
-    protected void submit() {
-    	// test
-    	// add field on the fly
-    	InputElement ele = fufLogo.getFileInput();
-    	if(ele!=null) {
-    		String val = ele.getValue();
-    		String type = ele.getType();
-    		String name = ele.getName();
-    		System.out.println("val: +"+val+", type="+type+", name="+name);
-    	}
-    	
-    	formPanel.submit();
-    }
-    
+
 	@Override
 	public void gotoSuccessPanel() {
     	Success.State newState = new Success.State();

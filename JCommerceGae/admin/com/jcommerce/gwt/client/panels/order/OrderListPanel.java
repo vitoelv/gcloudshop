@@ -1,4 +1,4 @@
-package com.jcommerce.gwt.client.panels;
+package com.jcommerce.gwt.client.panels.order;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -186,10 +186,10 @@ public class OrderListPanel  extends ContentWidget{
 	
 	private native void initJS(OrderListPanel me) /*-{
 	   $wnd.deleteOrder = function (id) {
-	       me.@com.jcommerce.gwt.client.panels.OrderListPanel::deleteOrder(Ljava/lang/String;)(id);
+	       me.@com.jcommerce.gwt.client.panels.order.OrderListPanel::deleteOrder(Ljava/lang/String;)(id);
 	   };
 	   $wnd.viewOrder = function (id) {
-	       me.@com.jcommerce.gwt.client.panels.OrderListPanel::viewOrder(Ljava/lang/String;)(id);
+	       me.@com.jcommerce.gwt.client.panels.order.OrderListPanel::viewOrder(Ljava/lang/String;)(id);
 	   };
 	   }-*/;
 

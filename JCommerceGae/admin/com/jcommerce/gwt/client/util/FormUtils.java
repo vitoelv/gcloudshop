@@ -14,14 +14,13 @@ import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.widgets.MyRadioGroup;
 
 public class FormUtils {
-    public static void log(String s) {
-    	
+
+	public static void log(String s) {
     	StringBuffer buf = new StringBuffer();
     	buf.append("[FormUtils]:").append(s);
     	Logger.getClientLogger().log(buf.toString());
     	System.out.println(buf.toString());
     }
-    
     
 	public static Map<String, Object> getPropsFromForm(FormPanel formPanel) {
     	List<Field<?>> fields = formPanel.getFields();
