@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.jcommerce.gwt.client.panels;
+package com.jcommerce.gwt.client.panels.goods;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -207,10 +207,10 @@ public class BrandListPanel extends ContentWidget {
     
     private native void initJS(BrandListPanel me) /*-{
     $wnd.changeBrand = function (id) {
-        me.@com.jcommerce.gwt.client.panels.BrandListPanel::modifyBrandAndRefrsh(Ljava/lang/String;)(id);
+        me.@com.jcommerce.gwt.client.panels.goods.BrandListPanel::modifyBrandAndRefrsh(Ljava/lang/String;)(id);
     };
     $wnd.deleteBrand = function (id) {
-	    me.@com.jcommerce.gwt.client.panels.BrandListPanel::deleteBrandAndRefrsh(Ljava/lang/String;)(id);
+	    me.@com.jcommerce.gwt.client.panels.goods.BrandListPanel::deleteBrandAndRefrsh(Ljava/lang/String;)(id);
 	};
     }-*/;
     

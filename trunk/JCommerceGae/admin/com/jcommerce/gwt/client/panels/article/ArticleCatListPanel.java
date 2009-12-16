@@ -1,4 +1,4 @@
-package com.jcommerce.gwt.client.panels;
+package com.jcommerce.gwt.client.panels.article;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -55,7 +55,7 @@ public class GWTHttpServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		debug("==========================UploadFileServlet doPost()==================================");
+		debug("==========================GWTHttpServlet doPost()==================================");
 
 		int contentLength = request.getContentLength();
 		debug("contentLength: " + contentLength);
@@ -124,7 +124,7 @@ public class GWTHttpServlet extends HttpServlet {
 					
 					Object value = null;
 					if (item.isFormField()) {
-						String val = Streams.asString(stream);
+						String val = Streams.asString(stream, "UTF-8");
 						debug("Form field " + name
 								+ " with value " + val + " detected.");
 
@@ -137,9 +137,7 @@ public class GWTHttpServlet extends HttpServlet {
 //							form.put(name, val);
 							value = val;
 						}
-						
 
-						
 					} else {
 						debug("File field " + name
 								+ " with file name " + item.getName()

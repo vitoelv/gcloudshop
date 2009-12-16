@@ -24,7 +24,8 @@ import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.test.BaseDAOTestCase;
-import com.jcommerce.core.util.DataStoreUtils;
+import com.jcommerce.core.test.local.DataStoreUtils;
+
 
 public class TestBulkLoader extends BaseDAOTestCase {
 	public static String ENCODING = "UTF-8";

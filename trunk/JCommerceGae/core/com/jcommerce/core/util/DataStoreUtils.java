@@ -1,6 +1,7 @@
 package com.jcommerce.core.util;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -10,8 +11,13 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import javax.jdo.annotations.Persistent;
 
@@ -26,182 +32,85 @@ import com.jcommerce.core.annotation.IsPK;
 import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.Category;
+import com.jcommerce.core.model.DSFile;
+import com.jcommerce.core.model.Goods;
+import com.jcommerce.core.model.GoodsAttr;
+import com.jcommerce.core.model.GoodsGallery;
 import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.model.ModelObject;
+import com.jcommerce.core.model.Region;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.model.IModelObject;
 
 public class DataStoreUtils implements IConstants{
 	
 	
-//    public static void importDS(InputStream in, IDefaultManager manager) {
-//
-//    	try {
-//    		BufferedReader reader = new BufferedReader(new InputStreamReader(in, ENCODING));
-//    		
-//			String className = null;
-//			String[] columns = null;
-//			String[] values = null;
-//    		while(true) {
-//    			String newline = reader.readLine();
-//    			System.out.println("newline: "+newline);
-//    			if(newline==null) {
-//    				break;
-//    			}
-//    			newline = newline.trim();
-//    			if(StringUtils.isBlank(newline)) {
-//    				continue;
-//    			}
-//    			if(newline.startsWith("::")) {
-//    				className = newline.substring(2);
-//    				newline = reader.readLine().trim();
-//    				columns = StringUtils.split(newline, ",");
-//    				continue;
-//    			}
-//    			
-//    			if(className!=null) {
-//    				ModelObject obj = (ModelObject)Class.forName(className).newInstance();
-//    				
-//    				values = ConvertUtil.split(newline, ",");
-//    				// won't work in case ,, occur in the sequence
-////    				values = StringUtils.split(newline, ",");
-//    				if(columns.length!=values.length) {
-//    					System.out.println("skipping line: "+newline+
-//    							", value length: "+values.length+
-//    							", column length: "+columns.length);
-//    					continue;
-//    				}
-//    				for(int i=0;i<columns.length;i++) {
-//    					String column = columns[i];
-//    					String value = values[i];
-//    					BeanUtils.setProperty(obj, column, value);
-//    				}
-//    				
-//    				manager.attach(obj);
-//    			}
-//    			
-//    			
-//    		}
-//    		
-//    		
-//    		
-//    	} catch (Exception ex) {
-//    		ex.printStackTrace();
-//    		throw new RuntimeException();
-//    	}
-//    }
-//
-//    public static void exportDS(OutputStream out, String className, IDefaultManager manager) {
-//
-//    	try {
-//    	Class cls = Class.forName(className);
-//    	ModelObject temp = (ModelObject)cls.newInstance();
-//    	List<Field> exportableFields = new ArrayList<Field>();
-//    	Field[] fields = cls.getDeclaredFields();
-//    	StringBuffer buf = new StringBuffer();
-//    	buf.append("::").append(className).append("\r\n");
-//    	
-//    	// ensure id is the first field
-//    	exportableFields.add(cls.getDeclaredField("id"));
-//    	buf.append("id");
-//    	for(Field field:fields) {
-//    		
-//            String fn = field.getName();
-//            Class ft = field.getType();
-//            if (Modifier.isStatic(field.getModifiers())) {
-//                continue;
-//            }
-//            if(!PropertyUtils.isReadable(temp, fn)) {
-//            	continue;
-//            }
-//            if("class".equals(fn)) {
-//            	continue;
-//            }
-//            if("id".equals(fn)) {
-//            	continue;
-//            }
-//            if("keyName".equals(fn)) {
-//            	continue;
-//            }
-//            if(ModelObject.class.isAssignableFrom(ft)) {
-//            	// ingore owned relationship
-//            	continue;
-//            }
-//            Persistent p = field.getAnnotation(Persistent.class);
-//            if(p==null) {
-//            	// ingore non-persistable fields
-//            	continue;
-//            }
-//            
-//            if(Collection.class.isAssignableFrom(ft)) {
-//            	String type = field.getGenericType().toString();
-//            	String paraType = type.substring(type.indexOf('<')+1, type.indexOf('>'));
-//            	System.out.println("paraType="+paraType);
-//            	if(ModelObject.class.isAssignableFrom(Class.forName(paraType))) {
-//                	// ingore Collection of ModelObject
-//            		continue;
-//            	}
-//            	else {
-//            		// TODO leon
-//            		// allow collection of predefined class 
-//            		continue;
-//            	}
-//            }
-//            exportableFields.add(field);
-//            buf.append(",").append(fn);
-//    	}
-//    	buf.append("\r\n");
-//    	out.write(buf.toString().getBytes(ENCODING));
-//    	
-//		List res = new ArrayList();
-//		manager.getList(res, className, null, -1, -1);
-//		for(Iterator it = res.iterator();it.hasNext();) {
-//			ModelObject obj = (ModelObject)it.next();
-//			buf = new StringBuffer();
-//			int i=0;
-//			for(Field field:exportableFields) {
-//				if(i!=0) {
-//					buf.append(",");
-//				}
-//				i++;
-//				String strValue = "";
-//	            String fn = field.getName();
-//	            Class ft = field.getType();
-////	            System.out.println("fn: "+fn+", ft: "+ft.getName());
-//	            Object value = PropertyUtils.getProperty(obj, fn);
-//	            if(value==null) {
-//	            	
-//	            }
-//	            else if(Collection.class.isAssignableFrom(ft)) {
-//	            	strValue = Arrays.toString(((Collection)value).toArray());
-//	            }
-//	            else {
-//	            	strValue = value.toString();
-//	            }
-//				buf.append(strValue);
-////				buf.append(",");
-//			}
-//			buf.append("\r\n");
-//			out.write(buf.toString().getBytes(ENCODING));
-////			GoodsType gt = (GoodsType)it.next();
-////			buf.append(gt.getClass().getName()).append(",");
-////			buf.append(gt.getKeyName()).append(",");
-////			buf.append(gt.getName()).append(",");
-////			buf.append(gt.getAttributeGroup()).append("\r\n");
-//		}
-//		
-//		out.write("\r\n".getBytes(ENCODING));
-//    	} catch (Exception ex) {
-//    		ex.printStackTrace();
-//    		throw new RuntimeException();
-//    	}
-//		
-//    }
-    
-    
-    public static void importDS2(InputStream in, IDefaultManager manager) {
-
+	public static void importDSFromZip(InputStream in, IDefaultManager manager) {
     	try {
+			ZipInputStream zin = new ZipInputStream(in);
+
+			Map<String, String> fileNameIdMapping = new HashMap<String, String>();
+			while (true) {
+				ZipEntry entry = zin.getNextEntry();
+				if (entry == null) {
+					break;
+				}
+				String entryName = entry.getName();
+				System.out.println("entryName: " + entryName + ", size: "
+						+ entry.getSize());
+
+				if (entry.isDirectory()) {
+					continue;
+				} else {
+					// my data
+					if (entryName.endsWith(".txt")) {
+						fileNameIdMapping = DataStoreUtils.importDSData(zin,manager);
+					} else {
+						// TODO is it portable on Linux/Unix?
+						String fileName = StringUtils.substringAfterLast(entryName, "/");
+						String pkId = fileNameIdMapping.get(fileName);
+						if (pkId == null) {
+							System.out.println("fileName: "+ fileName+ " didn't find match ds record, sth wrong.");
+							continue;
+						}
+
+						DSFile dsFile = (DSFile) manager.get(DSFile.class
+								.getName(), pkId);
+						if (dsFile == null) {
+							System.out.println("dsFile pkId: " + pkId+ " does not exist, sth wrong.");
+							continue;
+						}
+
+						ByteArrayOutputStream out = new ByteArrayOutputStream();
+						byte[] buffer = new byte[4012];
+						while (true) {
+							int bytesRead = zin.read(buffer);
+							if (bytesRead == -1) {
+								break;
+							}
+							out.write(buffer, 0, bytesRead);
+						}
+						out.flush();
+						out.close();
+						dsFile.setContent(new Blob(out.toByteArray()));
+						manager.txattach(dsFile);
+
+					}
+				}
+
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new RuntimeException("error in import, cause: " + ex.getMessage());
+		}
+	}
+	
+    public static Map<String, String> importDSData(InputStream in, IDefaultManager manager) 
+    	throws Exception{
+    	
+    	Map<String, String> fileNameIdMapping = new HashMap<String, String>();
+
+
     		BufferedReader reader = new BufferedReader(new InputStreamReader(in, ENCODING));
     		
 			String className = null;
@@ -272,7 +181,6 @@ public class DataStoreUtils implements IConstants{
 					}
 				}    			
     			
-    			
     			if(className!=null) {
     				Class clazz = Class.forName(className);
     				ModelObject obj = (ModelObject)clazz.newInstance();
@@ -304,6 +212,12 @@ public class DataStoreUtils implements IConstants{
         							BeanUtils.setProperty(obj, column, getIdFromChainedKeyName(value));
         						}
         					}
+        					else if(Blob.class.isAssignableFrom(f.getType())) {
+        						if(StringUtils.isNotEmpty(value)){
+        							// keyName always go first, so pkId is generated already
+        							fileNameIdMapping.put(value, obj.getPkId());
+        						}
+        					}
         					else {
         						BeanUtils.setProperty(obj, column, value);
         					}
@@ -316,30 +230,56 @@ public class DataStoreUtils implements IConstants{
     			
     		}
     		
+    		return fileNameIdMapping;
     		
-    		
-    	} catch (Exception ex) {
-    		ex.printStackTrace();
-    		throw new RuntimeException();
-    	}
-    }
-    public static void exportDS2(OutputStream out, IDefaultManager manager) {
-    	String[] classes = new String[] {
-    			GoodsType.class.getName()
-    			, Attribute.class.getName()
-    			, Brand.class.getName()
-    			, Category.class.getName()
 
-    	};
-    	
-    	for(String cls:classes) {
-    		exportDS2(out, cls, manager);
-    	}
-    	
     }
-    public static void exportDS2(OutputStream out, String className, IDefaultManager manager) {
-
+    
+    
+    public static void exportDS2Zip (OutputStream out, IDefaultManager manager) {
+    	
     	try {
+			ZipOutputStream zout = new ZipOutputStream(out);
+
+			String[] classes = new String[] { GoodsType.class.getName(),
+					Attribute.class.getName(), Brand.class.getName(),
+					Category.class.getName(), Region.class.getName(),
+					Goods.class.getName(), GoodsGallery.class.getName(),
+					GoodsAttr.class.getName(), DSFile.class.getName() };
+
+			zout.putNextEntry(new ZipEntry("mydata.txt"));
+			
+			Map<String, String> fileIdNameMapping = new HashMap<String, String>();
+			for (String cls : classes) {
+				exportDSData(zout, cls, manager, fileIdNameMapping);
+			}
+			zout.closeEntry();
+			
+			
+			for(String pkId : fileIdNameMapping.keySet()) {
+				DSFile dsFile = (DSFile)manager.get(DSFile.class.getName(), pkId);
+				if(dsFile==null) {
+					System.out.println("dsFile pkId: "+pkId + " does not exist. sth wrong");
+				}
+				String fileName = fileIdNameMapping.get(pkId);
+				zout.putNextEntry(new ZipEntry("files/"+fileName));
+				zout.write(dsFile.getContent().getBytes());
+				zout.closeEntry();
+			}
+			zout.flush();
+			zout.close();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new RuntimeException("error in import, cause: " + ex.getMessage());
+		}
+    }
+    
+    
+    public static void exportDSData(OutputStream out, String className, 
+    		IDefaultManager manager, Map<String, String> fileIdNameMapping) throws Exception{
+
+    	
+
     	Class cls = Class.forName(className);
     	ModelObject temp = (ModelObject)cls.newInstance();
     	List<String> exportableFields = new ArrayList<String>();
@@ -437,12 +377,15 @@ public class DataStoreUtils implements IConstants{
 					} else if (Collection.class.isAssignableFrom(ft)) {
 						strValue = Arrays.toString(((Collection) value)
 								.toArray());
-					} else if(Blob.class.isAssignableFrom(ft)) {
-						// TODO store the blob content to a file then store the file path
-						Blob blob = (Blob)value;
-						// file operation is not allowed in GAE project, moved to separate project for local testing
+					} else if(Blob.class.isAssignableFrom(ft) && obj instanceof DSFile) {
+						// store the blob content to a file then store the file path
+						DSFile file = (DSFile)obj;
+						String fileName = file.getFileName();
+						String ext = StringUtils.substringAfterLast(fileName, ".");
+						String tempName = UUIDLongGenerator.newUUID().toString()+"."+ext;
+						strValue = tempName;
 						
-						
+						fileIdNameMapping.put(file.getPkId(), tempName);
 						
 					} else {
 						strValue = value.toString();
@@ -457,10 +400,7 @@ public class DataStoreUtils implements IConstants{
 		}
 		
 		out.write(SEP_NEWLINE.getBytes(ENCODING));
-    	} catch (Exception ex) {
-    		ex.printStackTrace();
-    		throw new RuntimeException();
-    	}
+
 		
     }
     
@@ -471,6 +411,7 @@ public class DataStoreUtils implements IConstants{
     public static final String SEP_PARENT_CHILD = "|";
     public static final String SEP_START_OF_RECORD = "SOR>";
     public static final String SEP_END_OF_RECORD = "<EOR";
+//    public static final String SEP_FILE = "TEMPFILEPATH==";
     
     public static final String SEP_START_COMMENT = "<!--";
     public static final String SEP_END_COMMENT = "-->";

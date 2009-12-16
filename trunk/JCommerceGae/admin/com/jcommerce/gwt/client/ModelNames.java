@@ -14,7 +14,6 @@ public interface ModelNames {
     public static final String USER = "com.jcommerce.core.model.User";
     public static final String USER_RANK = "com.jcommerce.core.model.UserRank";
     public static final String USERADDRESS = "com.jcommerce.core.model.UserAddress";
-    public static final String USERRANK = "com.jcommerce.core.model.UserRank";
     public static final String ATTRIBUTE = "com.jcommerce.core.model.Attribute";
     public static final String GOODSTYPE = "com.jcommerce.core.model.GoodsType";
     public static final String GOODSATTR = "com.jcommerce.core.model.GoodsAttr";

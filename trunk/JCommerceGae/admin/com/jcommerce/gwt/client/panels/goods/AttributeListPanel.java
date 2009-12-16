@@ -1,4 +1,4 @@
-package com.jcommerce.gwt.client.panels;
+package com.jcommerce.gwt.client.panels.goods;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -121,10 +121,10 @@ public class AttributeListPanel extends ContentWidget {
 	}
 	private native void initJS(AttributeListPanel me) /*-{
 	   $wnd.editAttribute = function (id) {
-	       me.@com.jcommerce.gwt.client.panels.AttributeListPanel::editAttribute(Ljava/lang/String;)(id);
+	       me.@com.jcommerce.gwt.client.panels.goods.AttributeListPanel::editAttribute(Ljava/lang/String;)(id);
 	   };
 	   $wnd.deleteAttribute = function (id) {
-	       me.@com.jcommerce.gwt.client.panels.AttributeListPanel::deleteAttributeAndRefresh(Ljava/lang/String;)(id);
+	       me.@com.jcommerce.gwt.client.panels.goods.AttributeListPanel::deleteAttributeAndRefresh(Ljava/lang/String;)(id);
 	   };
 	   }-*/;
 	

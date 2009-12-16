@@ -59,14 +59,14 @@ import com.jcommerce.gwt.client.form.GoodsForm;
 import com.jcommerce.gwt.client.model.IBrand;
 import com.jcommerce.gwt.client.model.IGoods;
 import com.jcommerce.gwt.client.panels.BaseEntityEditPanel;
-import com.jcommerce.gwt.client.panels.GoodsListPanel;
+import com.jcommerce.gwt.client.panels.BaseFileUploadFormPanel;
 import com.jcommerce.gwt.client.panels.Success;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.CreateService;
 import com.jcommerce.gwt.client.service.ListService;
 import com.jcommerce.gwt.client.util.GWTFormatUtils;
 
-public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEvent>{
+public class GoodsPanel extends BaseFileUploadFormPanel implements Listener<FieldEvent>{
     
     public static interface Constants {
         String NewGoods_title();
@@ -322,21 +322,7 @@ public class GoodsPanel extends BaseEntityEditPanel implements Listener<FieldEve
 //        	  }
 //        	});
         
-        formPanel.setEncoding(FormPanel.Encoding.MULTIPART);
-        formPanel.setMethod(FormPanel.Method.POST);
-        formPanel.addListener(Events.Submit, new Listener<FormEvent>() {
-			public void handleEvent(FormEvent be) {
-				// TODO Auto-generated method stub
-				String result = be.getResultHtml();
-				if("0".equals(result)) {
-					gotoSuccessPanel();
-				}
-				else {
-					Window.alert("Error: "+result);	
-				}
-	
-			} 
-        });
+
      
     }
 	private void setupOtherPanel(TabPanel tabs) {

@@ -70,6 +70,7 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 	protected abstract void setupPanelLayout();
 	protected abstract String getEntityClassName();
 	
+	
     Button btnNew = new Button();    
     Button btnReset = new Button();    
     
@@ -80,7 +81,7 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
     @Override
     protected void afterRender() {
     	super.afterRender();
-        System.out.println("----------GoodsType");
+
 //        add(formPanel);
         super.add(formPanel);
 //        formPanel.setBodyBorder(false);

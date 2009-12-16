@@ -1,4 +1,4 @@
-package com.jcommerce.gwt.client.panels;
+package com.jcommerce.gwt.client.panels.goods;
 
 import java.util.List;
 
@@ -15,6 +15,9 @@ import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.CategoryForm;
 import com.jcommerce.gwt.client.model.ICategory;
+import com.jcommerce.gwt.client.panels.BaseEntityEditPanel;
+import com.jcommerce.gwt.client.panels.Success;
+import com.jcommerce.gwt.client.panels.BaseEntityEditPanel.State;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.ListService;
 import com.jcommerce.gwt.client.widgets.MyRadioGroup;

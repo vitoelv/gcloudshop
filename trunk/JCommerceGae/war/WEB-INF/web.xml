@@ -30,7 +30,14 @@
   		</init-param>
   		
 	</filter>	
-
+ 	<filter>
+  		<filter-name>encodingFilter</filter-name>
+  		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+  		<init-param>
+   			<param-name>encoding</param-name>
+   			<param-value>UTF-8</param-value>
+  		</init-param>
+ 	</filter>
 	
     <filter>
         <filter-name>struts2</filter-name>
@@ -38,6 +45,11 @@
     </filter>
 
 
+   	<filter-mapping>
+  		<filter-name>encodingFilter</filter-name>
+  		<url-pattern>*</url-pattern>
+  		<!--  *.do, -->
+	</filter-mapping>
    	<filter-mapping>
   		<filter-name>UnderConstruction</filter-name>
   		<url-pattern>*.action</url-pattern>
@@ -82,6 +94,7 @@
 	</servlet>
  
 
+
     <servlet>
         <servlet-name>defaultService</servlet-name>
         <servlet-class>com.jcommerce.gwt.server.DefaultServiceImpl</servlet-class>
@@ -99,6 +112,12 @@
         <servlet-class>com.jcommerce.gwt.server.GWTHttpServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    
+    <servlet>
+        <servlet-name>imexportService</servlet-name>
+        <servlet-class>com.jcommerce.gwt.server.ImportExportServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>    
     
     <servlet>
         <servlet-name>dynaImageService</servlet-name>
@@ -135,7 +154,10 @@
         <servlet-name>gwtGttpService</servlet-name>
         <url-pattern>/admin/gwtHttpService.do</url-pattern>
     </servlet-mapping>
-    
+    <servlet-mapping>
+        <servlet-name>imexportService</servlet-name>
+        <url-pattern>/admin/imexportService.do</url-pattern>
+    </servlet-mapping>
 	
     <welcome-file-list>
     	<welcome-file>old_home.html</welcome-file>    

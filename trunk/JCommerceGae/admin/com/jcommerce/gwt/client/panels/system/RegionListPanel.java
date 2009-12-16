@@ -1,4 +1,4 @@
-package com.jcommerce.gwt.client.panels;
+package com.jcommerce.gwt.client.panels.system;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -441,10 +441,10 @@ public class RegionListPanel extends ContentWidget {
 	
     private native void initJS(RegionListPanel me) /*-{
     $wnd.onManageClicked = function (id, name) {
-        me.@com.jcommerce.gwt.client.panels.RegionListPanel::onManageClicked(Ljava/lang/String;Ljava/lang/String;)(id, name);
+        me.@com.jcommerce.gwt.client.panels.system.RegionListPanel::onManageClicked(Ljava/lang/String;Ljava/lang/String;)(id, name);
     };
     $wnd.onDeleteClicked = function (id) {
-	    me.@com.jcommerce.gwt.client.panels.RegionListPanel::onDeleteClicked(Ljava/lang/String;)(id);
+	    me.@com.jcommerce.gwt.client.panels.system.RegionListPanel::onDeleteClicked(Ljava/lang/String;)(id);
 	};
     }-*/;
 
