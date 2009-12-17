@@ -33,7 +33,7 @@ public class ImportExportServlet extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		super.doPost(request, response);
+		doPost(request, response);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -41,12 +41,12 @@ public class ImportExportServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		debug("==========================ImportExportServlet doPost()==================================");
-		int contentLength = request.getContentLength();
-		debug("contentLength: " + contentLength);
-		if (contentLength < 0) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-			return;
-		}
+//		int contentLength = request.getContentLength();
+//		debug("contentLength: " + contentLength);
+//		if (contentLength < 0) {
+//			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+//			return;
+//		}
 		try {
 
 			String action = request.getParameter("action");
@@ -158,6 +158,11 @@ public class ImportExportServlet extends HttpServlet{
 	protected void handleExport(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		
+        response.setContentType("application/zip");  
+        response.setHeader("Content-Disposition", "Attachment;Filename=\"exportedData.zip\"");
+        response.setHeader("Pragma", "public"); 
+        response.setHeader("Cache-Control", "must-revalidate");
+		DataStoreUtils.exportDS2Zip(response.getOutputStream(), SpringUtil.getDefaultManager());
 		
 	}	
 	

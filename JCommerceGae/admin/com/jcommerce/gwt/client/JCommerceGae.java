@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jcommerce.gwt.client.Application.ApplicationListener;
 import com.jcommerce.gwt.client.panels.Success;
 import com.jcommerce.gwt.client.panels.article.ArticleCatListPanel;
+import com.jcommerce.gwt.client.panels.data.ExportPanel;
 import com.jcommerce.gwt.client.panels.data.ImportPanel;
 import com.jcommerce.gwt.client.panels.goods.AttributeListPanel;
 import com.jcommerce.gwt.client.panels.goods.AttributePanel;
@@ -229,6 +230,7 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 		
         TreeItem catData = mainMenu.addItem("数据维护");
         setupMainMenuOption(catData, new ImportPanel.State(), Resources.images.catWidgets());        
+        setupMainMenuOption(catData, new ExportPanel.State(), Resources.images.catWidgets());
 
     }
 
@@ -396,9 +398,7 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 				page = PaymentMetaListPanel.getInstance();
 			} else if (pageClassName.equals(PaymentMetaPanel.class.getName())) {
 				page = PaymentMetaPanel.getInstance();
-//			} else if (pageClassName.equals(AttributeInfo.class.getName())) {
-//				page = new AttributeInfo();
-//			}
+
 			}else if (pageClassName.equals(RegionListPanel.class.getName())) {
 				page = RegionListPanel.getInstance(); 
 					
@@ -410,36 +410,17 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 					page = CategoryPanel.getInstance();
 			} else if (pageClassName.equals(ImportPanel.class.getName())) {
 				page = ImportPanel.getInstance();	
-//			} else if (pageClassName.equals(CommentInfo.class.getName())) {
-//				page = new CommentInfo();
+			} else if (pageClassName.equals(ExportPanel.class.getName())) {
+				page = ExportPanel.getInstance();				
+
 			} else if (pageClassName.equals(GoodsListPanel.class.getName())) {
 				page = GoodsListPanel.getInstance();
 			} else if (pageClassName.equals(BrandPanel.class.getName())) {
 				page = BrandPanel.getInstance();				
-//			} else if (pageClassName.equals(GoodsTypeInfo.class.getName())) {
-//				page = new GoodsTypeInfo();
-//			} else if (pageClassName.equals(NewAttribute.class.getName())) {
-//				page = new NewAttribute();
 
-//
-//			} else if (pageClassName.equals(NewGoodsType.class.getName())) {
-//				page = new NewGoodsType();
-//			} else if (pageClassName.equals(NewOrders.class.getName())) {
-//				page = new NewOrders();
-//			} else if (pageClassName.equals(NewUsers.class.getName())) {
-//				page = new NewUsers();
-//			} else if (pageClassName.equals(OrderInfo.class.getName())) {
-//				page = new OrderInfo();
-//			} else if (pageClassName.equals(OrderList.class.getName())) {
-//				page = new OrderList();
-//			} else if (pageClassName.equals(OrderStatistics.class.getName())) {
-//				page = new OrderStatistics();
-//			} else if (pageClassName.equals(ShopSetup.class.getName())) {
-//				page = new ShopSetup();
 			} else if (pageClassName.equals(Success.class.getName())) {
 				page = Success.getInstance();
-//			} else if (pageClassName.equals(UserComments.class.getName())) {
-//				page = new UserComments();
+
 
 			} else if (pageClassName.equals(RegionPanel.class.getName())) {
 				page = RegionPanel.getInstance();

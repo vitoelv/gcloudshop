@@ -6,6 +6,7 @@ import com.extjs.gxt.ui.client.event.WindowEvent;
 import com.extjs.gxt.ui.client.event.WindowListener;
 import com.extjs.gxt.ui.client.widget.Dialog;
 import com.extjs.gxt.ui.client.widget.Info;
+import com.extjs.gxt.ui.client.widget.Label;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.AdapterField;
 import com.extjs.gxt.ui.client.widget.form.FileUploadField;
@@ -134,12 +135,19 @@ public class ImportPanel extends BaseFileUploadFormPanel {
 		
 		formPanel.add(mf, super.tfd());
 		
+
 		
 		fufField = new FileUploadField();
 		fufField.setFieldLabel("Select File");
 		fufField.setName("file");
 		fufField.setAutoValidate(true);
 		formPanel.add(fufField);
+		
+		af = new AdapterField(new Label("Please refer to the exported file format"));
+		af.setFieldLabel("Note");
+		formPanel.add(af, sfd());
+		
+		
         formPanel.setAction("/admin/imexportService.do?action=import");
 
 	}

@@ -1,8 +1,14 @@
 package com.jcommerce.gwt.client.panels.data;
 
+import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.widget.Label;
+import com.extjs.gxt.ui.client.widget.Window;
+import com.extjs.gxt.ui.client.widget.button.Button;
+import com.extjs.gxt.ui.client.widget.form.AdapterField;
+import com.extjs.gxt.ui.client.widget.form.MultiField;
 import com.jcommerce.gwt.client.panels.BaseEntityEditPanel;
 import com.jcommerce.gwt.client.panels.Success;
-import com.jcommerce.gwt.client.resources.Resources;
 
 
 public class ExportPanel extends BaseEntityEditPanel{
@@ -52,7 +58,7 @@ public class ExportPanel extends BaseEntityEditPanel{
     	Success.State newState = new Success.State();
    		newState.setMessage("导出成功");
 
-    	ImportPanel.State choice1 = new ImportPanel.State();
+   		ExportPanel.State choice1 = new ExportPanel.State();
     	newState.addChoice(ExportPanel.getInstance().getName(), choice1.getFullHistoryToken());
     	
     	newState.execute(); 
@@ -61,26 +67,57 @@ public class ExportPanel extends BaseEntityEditPanel{
 
 	@Override
 	protected void postSuperRefresh() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	protected void setupPanelLayout() {
-		// TODO Auto-generated method stub
+		
+		AdapterField af = new AdapterField(new Label("Currently only export goods-related data and Region data"));
+		af.setFieldLabel("Note");
+		formPanel.add(af, sfd());
+		
+		Button bu = new Button("Export");
+		bu.setWidth(50);
+		bu.addSelectionListener(new SelectionListener<ButtonEvent>() {
+			public void componentSelected(ButtonEvent sender) {
+				   Window w = new Window();        
+				   w.setHeading("Export");
+				   w.setModal(false);
+				   w.setSize(200, 100);
+				   w.setMaximizable(false);
+				   w.setToolTip("Exporting...");
+				   w.setUrl("/admin/imexportService.do?action=export");
+				   w.show();
+
+                        
+			}
+		});
+
+		af = new AdapterField(bu);
+		af.setHideLabel(true);
+
+		MultiField mf = new MultiField();
+		mf.setFieldLabel("Export all data");
+		mf.add(af);
+		formPanel.add(mf, super.tfd());
+		
+
 		
 	}
 
+    @Override
+    protected void submit() {
+    	// do nothing
+    }
+	
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "cwBasicTextDescription";
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Export";
 	}
 
 	

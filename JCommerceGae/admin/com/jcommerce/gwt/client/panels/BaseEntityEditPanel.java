@@ -217,10 +217,10 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
     
     public void log(String s) {
     	
-    	StringBuffer buf = new StringBuffer();
-    	buf.append("[").append(this.getClass().getName()).append("]:").append(s);
-    	Logger.getClientLogger().log(buf.toString());
-    	System.out.println(buf.toString());
+//    	StringBuffer buf = new StringBuffer();
+//    	buf.append("[").append(this.getClass().getName()).append("]:").append(s);
+//    	Logger.getClientLogger().log(buf.toString());
+//    	System.out.println(buf.toString());
     }
     public BeanObject getEntity() {
     	return obj;

@@ -241,11 +241,14 @@ public class DataStoreUtils implements IConstants{
     	try {
 			ZipOutputStream zout = new ZipOutputStream(out);
 
-			String[] classes = new String[] { GoodsType.class.getName(),
-					Attribute.class.getName(), Brand.class.getName(),
+			String[] classes = new String[] { 
+					Brand.class.getName(),
+					GoodsType.class.getName(),
+					Attribute.class.getName(), 
 					Category.class.getName(), Region.class.getName(),
 					Goods.class.getName(), GoodsGallery.class.getName(),
-					GoodsAttr.class.getName(), DSFile.class.getName() };
+					GoodsAttr.class.getName(), DSFile.class.getName() 
+					};
 
 			zout.putNextEntry(new ZipEntry("mydata.txt"));
 			
@@ -371,7 +374,7 @@ public class DataStoreUtils implements IConstants{
 						ModelObject target = manager.get(isPK.myclazz(),
 								(String) value);
 						StringBuffer buf1 = new StringBuffer();
-						Key key = KeyFactory.stringToKey(obj.getPkId());
+						Key key = KeyFactory.stringToKey(target.getPkId());
 						getChainedKeyName(buf1, key, manager);
 						strValue = buf1.toString();
 					} else if (Collection.class.isAssignableFrom(ft)) {
