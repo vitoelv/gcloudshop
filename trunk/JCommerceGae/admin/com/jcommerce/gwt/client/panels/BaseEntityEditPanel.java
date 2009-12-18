@@ -133,16 +133,21 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 //	    	log("on Submit: formPanel="+formPanel);
 	    	try {
 	    	if(!formPanel.isValid()) {
-	    		Window.alert("Please check input before submit!!!");
+	    		Window.alert("Please check input before submit.");
 	    		return;
 	    	}
+	    	String error = validateForm();
+	    	if(error!=null && error.length()>0) {
+	    		Window.alert("Please check input before submit, error is: "+error);
+	    		return;
+	    	}
+	    	
 	    	if(!formPanel.isDirty()) {
 	    		// TODO this is optimisitic. should change it to based on a strategy configuration?
 	    		Window.alert("the form is not changed!!!");
 	    		gotoSuccessPanel();
 	    		return;
 	    	}
-	    	beforeSubmit();
 	    	submit();
 	    	} catch (Exception e) {
 	    		e.printStackTrace();
@@ -150,9 +155,11 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 	    }
 	};
 	
-	protected void beforeSubmit() {
-		// do nothing
+	
+	protected String validateForm() {
+		return null;
 	}
+	
 	protected void submit() {
 		// default implementation is thru GWT-RPC
 		Map<String, Object> props = FormUtils.getPropsFromForm(formPanel);

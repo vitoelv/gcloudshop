@@ -190,12 +190,7 @@ public class CategoryPanel extends BaseEntityEditPanel {
 
     }   
     
-//    @Override
-//    public void beforeSubmit() {
-//
-//    	mfIsShow.setName(ICategory.IS_SHOW);
-//    	mfShowInNav.setName(ICategory.SHOW_IN_NAV);
-//    }
+
     
     
     @Override

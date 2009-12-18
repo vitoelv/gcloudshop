@@ -29,6 +29,17 @@ public class GoodsForm extends BeanObject implements IGoods {
 	public GoodsForm(String modelName, Map<String, Object>props) {
 		super(modelName,props);
 	}
+	
+	public static String validate(Map<String, Object> props) {
+		String error = null;
+		Object endDate = props.get(PROMOTE_END_DATE);
+		Object startDate = props.get(PROMOTE_START_DATE);
+		// TODO
+		// if(endDate<startDate) error = "enddate should after startdate";
+		return error;
+		
+	}
+	
 	public static HiddenField<String> getIdField() {
 		HiddenField<String> idField = new HiddenField<String>();
 		idField.setName(PK_ID);

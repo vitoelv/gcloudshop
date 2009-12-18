@@ -28,28 +28,38 @@ public class FormUtils {
     	Map<String, Object> props = new HashMap<String, Object>();
     	for(Field field:fields) {
     		String name = field.getName();
-    		Object value = field.getValue();
-    		if(name ==null || value == null) {
+    		Object value = getValueFromField(field);
+    		log("name: "+name+", value: ("+value+")");
+    		if(name==null || value == null) {
     			continue;
     		}
-    		// TODO handle CheckBoxes which are special
-    		if(field instanceof MyRadioGroup) {
-    			Radio selected = (Radio)value;
-//    			name = selected.getName();
-
-    			value = selected.getValueAttribute();
-    		}
-    		else if(field instanceof RadioGroup) {
-    			throw new RuntimeException("please use MyRadioGroup instead of RadioGroup! name="+name+", value="+value);
-    		}
-    		else if(field instanceof ComboBox) {
-    			ComboBox box = (ComboBox)field;
-    			String key = box.getValueField();
-    			value = ((BeanObject)value).get(key);
-    		}
-    		log("name: "+name+", value: ("+value+")");
     		props.put(name, value);
     	}
     	return props;
+	}
+	
+	public static Object getValueFromField(Field field) {
+		String name = field.getName();
+		Object value = field.getValue();
+		if(value == null) {
+			return null;
+		}
+		// TODO handle CheckBoxes which are special
+		if(field instanceof MyRadioGroup) {
+			Radio selected = (Radio)value;
+//			name = selected.getName();
+
+			value = selected.getValueAttribute();
+		}
+		else if(field instanceof RadioGroup) {
+			throw new RuntimeException("please use MyRadioGroup instead of RadioGroup! name="+name+", value="+value);
+		}
+		else if(field instanceof ComboBox) {
+			ComboBox box = (ComboBox)field;
+			String key = box.getValueField();
+			value = ((BeanObject)value).get(key);
+		}
+
+		return value;
 	}
 }
