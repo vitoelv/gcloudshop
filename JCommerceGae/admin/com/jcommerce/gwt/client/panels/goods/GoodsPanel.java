@@ -17,6 +17,7 @@ package com.jcommerce.gwt.client.panels.goods;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.extjs.gxt.ui.client.event.ButtonEvent;
@@ -64,6 +65,7 @@ import com.jcommerce.gwt.client.panels.Success;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.CreateService;
 import com.jcommerce.gwt.client.service.ListService;
+import com.jcommerce.gwt.client.util.FormUtils;
 import com.jcommerce.gwt.client.util.GWTFormatUtils;
 
 public class GoodsPanel extends BaseFileUploadFormPanel implements Listener<FieldEvent>{
@@ -657,7 +659,13 @@ public class GoodsPanel extends BaseFileUploadFormPanel implements Listener<Fiel
     	System.out.println("method="+method);
     	formPanel.setAction(GWTHttpDynaForm.constructURL(action, method));
     }
-
+    
+    @Override
+	protected String validateForm() {
+    	Map<String, Object> props = FormUtils.getPropsFromForm(formPanel);
+		return GoodsForm.validate(props);
+	}
+    
     @Override
     protected void submit() {
     	
