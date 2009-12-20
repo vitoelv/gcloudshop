@@ -85,7 +85,7 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 //        add(formPanel);
         super.add(formPanel);
 //        formPanel.setBodyBorder(false);
-        formPanel.setWidth(800);
+        //formPanel.setWidth(800);
         
         FormLayout fl = new FormLayout();
         fl.setLabelWidth(150);
