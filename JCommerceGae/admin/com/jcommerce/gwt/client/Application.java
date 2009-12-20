@@ -1,13 +1,24 @@
 package com.jcommerce.gwt.client;
 
 import com.extjs.gxt.ui.client.Style;
+import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
+import com.extjs.gxt.ui.client.Style.LayoutRegion;
+import com.extjs.gxt.ui.client.Style.Orientation;
+import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.Style.VerticalAlignment;
-import com.extjs.gxt.ui.client.widget.HorizontalPanel;
+import com.extjs.gxt.ui.client.widget.ContentPanel;
+import com.extjs.gxt.ui.client.widget.Html;
+import com.extjs.gxt.ui.client.widget.Label;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.TabPanel;
-import com.extjs.gxt.ui.client.widget.VerticalPanel;
+import com.extjs.gxt.ui.client.widget.Viewport;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
+import com.extjs.gxt.ui.client.widget.layout.BorderLayout;
+import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
+import com.extjs.gxt.ui.client.widget.layout.FitData;
+import com.extjs.gxt.ui.client.widget.layout.FitLayout;
+import com.extjs.gxt.ui.client.widget.layout.RowLayout;
 import com.extjs.gxt.ui.client.widget.layout.TableData;
 import com.extjs.gxt.ui.client.widget.layout.TableLayout;
 import com.google.gwt.core.client.GWT;
@@ -21,11 +32,14 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeImages;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.TreeListener;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.client.ui.FlexTable.FlexCellFormatter;
 
@@ -89,7 +103,7 @@ public class Application extends Composite implements WindowResizeListener {
   /**
    * The main wrapper around the content and content title.
    */
-  private VerticalPanel contentLayout;
+  private SimplePanel contentLayout;
   
   /**
    * The main wrapper around the content and content title.
@@ -99,21 +113,27 @@ public class Application extends Composite implements WindowResizeListener {
   /**
    * The wrapper around the content.
    */
-  private SimplePanel contentWrapper;
+  private LayoutContainer contentWrapper;
     
   /**
    * The wrapper around the content title.
    */
-  private HTML contentTitleLeftWrapper;
+  //private HTML contentTitleLeftWrapper;
   /**
    * The wrapper around the content title.
    */
-  private SimplePanel contentTitleRightWrapper;
+ // private SimplePanel contentTitleRightWrapper;
   
   /**
    * The panel that holds the main links.
    */
-  private HorizontalPanel linksPanel;
+  private VerticalPanel linksPanel;
+  private HorizontalPanel links;
+  
+  /**
+   * The panel that holds the GuidePanel.
+   */
+  private HorizontalPanel navigationPanel;
 
   /**
    * The {@link ApplicationListener}.
@@ -133,81 +153,38 @@ public class Application extends Composite implements WindowResizeListener {
   /**
    * The panel that contains the title widget and links.
    */
-  private FlexTable topPanel;
+  private LayoutContainer topPanel;
 
   /**
    * Constructor.
    */
   public Application() {
     // Setup the main layout widget
-//    FlowPanel layout = new FlowPanel();
-	 
-	VerticalPanel layout = new VerticalPanel();
-    initWidget(layout);
+	Viewport mainContainer = new Viewport();
+	mainContainer.setHeight("100%");
+    initWidget(mainContainer);
+    BorderLayout bl = new BorderLayout();
+    mainContainer.setLayout(bl);
 
     // Setup the top panel with the title and links
     createTopPanel();
-    layout.add(topPanel);
+    topPanel.setBorders(true);
+    mainContainer.add(topPanel,new BorderLayoutData(LayoutRegion.NORTH,120));
 
     // Add the main menu
-    bottomPanel = new HorizontalPanel();
-    bottomPanel.setWidth(800);
-
-    bottomPanel.setSpacing(0);
-    bottomPanel.setVerticalAlign(VerticalAlignment.TOP);
-    layout.add(bottomPanel);
     createMainMenu();
-    bottomPanel.add(mainMenu);
+    mainContainer.add(mainMenu,new BorderLayoutData(LayoutRegion.WEST));
 
     // Setup the content layout
-    contentLayout = new VerticalPanel();
-    contentLayout.setWidth(800);
+    contentWrapper = new LayoutContainer(new FitLayout());
+    contentWrapper.setScrollMode(Scroll.AUTOY);
+    contentWrapper.setStyleName(DEFAULT_STYLE_NAME+"-content");
+    contentWrapper.setBorders(true);
+    contentLayout  = new SimplePanel();
+    contentWrapper.add(contentLayout);
 
-//    contentTitleLayout = new LayoutContainer();
-//    contentTitleLayout.setWidth(800);
-//    contentTitleLayout.setLayout(new TableLayout(2));
-    
-    bottomPanel.add(contentLayout);
-//    contentDecorator = new DecoratorPanel();
-//    contentDecorator.setWidget(contentLayout);
-//    contentDecorator.addStyleName(DEFAULT_STYLE_NAME + "-content-decorator");
-//    bottomPanel.add(contentDecorator);
-//    if (LocaleInfo.getCurrentLocale().isRTL()) {
-//      bottomPanel.setCellHorizontalAlignment(contentDecorator,
-//          HasHorizontalAlignment.ALIGN_LEFT);
-//      contentDecorator.getElement().setAttribute("align", "LEFT");
-//    } else {
-//      bottomPanel.setCellHorizontalAlignment(contentDecorator,
-//          HasHorizontalAlignment.ALIGN_RIGHT);
-//      contentDecorator.getElement().setAttribute("align", "RIGHT");
-//    }
-//    CellFormatter formatter = contentLayout.getCellFormatter();
-//    formatter.setStyleName(0, 0, DEFAULT_STYLE_NAME + "-content-title");
+    mainContainer.add(contentWrapper,new BorderLayoutData(LayoutRegion.CENTER));
 
-//    setContentTitle();
-
-    // Add the content wrapper
-    contentWrapper = new SimplePanel();
-    contentTitleLeftWrapper = new HTML("ISHOP管理中心");
-    contentTitleRightWrapper = new SimplePanel();
-    
-//    contentTitleLayout.add(contentTitleLeftWrapper, new TableData(Style.HorizontalAlignment.LEFT, Style.VerticalAlignment.MIDDLE));
-//    contentTitleLayout.add(contentTitleRightWrapper, new TableData(Style.HorizontalAlignment.RIGHT, Style.VerticalAlignment.MIDDLE));
-    
-
-    TableData fd = new TableData();
-    fd.setWidth("800px");
-//    contentLayout.add(contentTitleLayout, fd);
-    contentLayout.add(contentWrapper, fd);
-    
-
-
-    
-    
-//    contentLc = new VerticalPanel();
-//    contentLayout.add(contentLc, fd);
-    
-//    formatter.setStyleName(1, 0, DEFAULT_STYLE_NAME + "-content-wrapper");
     setContent(null);
   }
 
@@ -217,25 +194,24 @@ public class Application extends Composite implements WindowResizeListener {
    * @param link the widget to add to the mainLinks
    */
   public void addLink(Widget link) {
-    if (linksPanel.getItemCount() > 0) {
-      linksPanel.add(new HTML("&nbsp;|&nbsp;"));
+    if (links.getWidgetCount() > 0) {
+    	HTML seperaor = new HTML("|");
+      links.add(seperaor);
     }
-    linksPanel.add(link);
+    links.add(link);
   }
 
   /**
    * @return the {@link Widget} in the content area
    */
-  public Widget getContent() {
-    return contentWrapper.getWidget();
-  }
+//  public Widget getContent() {
+//    return contentWrapper.getWidget();
+//  }
 
   /**
    * @return the content title widget
    */
-//  public Widget getContentTitle() {
-//    return contentTitleLayout;
-//  }
+
 
   /**
    * @return the main menu.
@@ -257,13 +233,6 @@ public class Application extends Composite implements WindowResizeListener {
   /**
    * @return the {@link Widget} used as the title
    */
-  public Widget getTitleWidget() {
-    return topPanel.getWidget(0, 0);
-  }
-
-  public Widget getNavigationWidget(){
-	  return topPanel.getWidget(2, 0);
-  }
   
   public void onWindowResized(int width, int height) {
     if (width == windowWidth) {
@@ -281,9 +250,9 @@ public class Application extends Composite implements WindowResizeListener {
    */
   public void setContent(Widget content) {
     if (content == null) {
-      contentWrapper.setWidget(new HTML("&nbsp;"));
+      contentLayout.setWidget(new HTML("&nbsp;"));
     } else {
-      contentWrapper.setWidget(content);
+      contentLayout.setWidget(content);
     }
 
 	  
@@ -347,23 +316,23 @@ public class Application extends Composite implements WindowResizeListener {
    * 
    * @param title the content area title
    */
-  public void setContentTitleLeft(String title) {
-	  contentTitleLeftWrapper.setHTML(title);
-  }
+//  public void setContentTitleLeft(String title) {
+//	  contentTitleLeftWrapper.setHTML(title);
+//  }
   /**
    * Set the title of the content area.
    * 
    * @param title the content area title
    */
-  public void setContentTitleRight(Button button) {
-	  if(button==null) {
-		  contentTitleRightWrapper.setWidget(new HTML("TODO: override getShortCutButton"));
-//		  contentTitleLayout.setWidget(0,1, new HTML("&nbsp;&nbsp;TODO: override getShortCutButton"));
-	  }else {
-//		  contentTitleLayout.setWidget(0,1, button);
-		  contentTitleRightWrapper.setWidget(button);
-	  }
-  }
+//  public void setContentTitleRight(Button button) {
+//	  if(button==null) {
+//		  contentTitleRightWrapper.setWidget(new HTML("TODO: override getShortCutButton"));
+////		  contentTitleLayout.setWidget(0,1, new HTML("&nbsp;&nbsp;TODO: override getShortCutButton"));
+//	  }else {
+////		  contentTitleLayout.setWidget(0,1, button);
+//		  contentTitleRightWrapper.setWidget(button);
+//	  }
+//  }
   
   /**
    * Set the {@link ApplicationListener}.
@@ -381,7 +350,10 @@ public class Application extends Composite implements WindowResizeListener {
    * @param options the options widget
    */
   public void setOptionsWidget(Widget options) {
-    topPanel.setWidget(1, 1, options);
+	  options.setStyleName(DEFAULT_STYLE_NAME +"-options");
+	  options.setLayoutData(new FitData());
+	  topPanel.add(options, new BorderLayoutData(LayoutRegion.CENTER));
+    //topPanel.setWidget(1, 1, options);
   }
 
   /**
@@ -390,11 +362,14 @@ public class Application extends Composite implements WindowResizeListener {
    * @param title the title widget
    */
   public void setTitleWidget(Widget title) {
-    topPanel.setWidget(1, 0, title);
+	 title.setStyleName(DEFAULT_STYLE_NAME +"-title");
+	 topPanel.add(title,new BorderLayoutData(LayoutRegion.WEST));
+    //topPanel.setWidget(1, 0, title);
   }
 
   public void setNavigationWidget(Widget navigation){
-	  topPanel.setWidget(2, 0, navigation);
+	  navigation.setStyleName(DEFAULT_STYLE_NAME +"-navigation");
+	  topPanel.add(navigation, new BorderLayoutData(LayoutRegion.SOUTH,26));
   }
   
   @Override
@@ -454,45 +429,16 @@ public class Application extends Composite implements WindowResizeListener {
    */
   private void createTopPanel() {
     boolean isRTL = LocaleInfo.getCurrentLocale().isRTL();
-    topPanel = new FlexTable();
-    topPanel.setCellPadding(0);
-    topPanel.setCellSpacing(0);
+    topPanel = new LayoutContainer(new BorderLayout());
     topPanel.setStyleName(DEFAULT_STYLE_NAME + "-top");
-    FlexCellFormatter formatter = topPanel.getFlexCellFormatter();
-
-    // Setup the links cell
-    linksPanel = new HorizontalPanel();
-    topPanel.setWidget(0, 0, linksPanel);
-    formatter.setStyleName(0, 0, DEFAULT_STYLE_NAME + "-links");
-    if (isRTL) {
-      formatter.setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_LEFT);
-    } else {
-      formatter.setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_RIGHT);
-    }
-    formatter.setColSpan(0, 0, 2);
-
-    // Setup the title cell
-    setTitleWidget(null);
-    formatter.setStyleName(1, 0, DEFAULT_STYLE_NAME + "-title");
-
-    // Setup the options cell
-    setOptionsWidget(null);
-    formatter.setStyleName(1, 1, DEFAULT_STYLE_NAME + "-options");
-    // Setup the navigation cell
-    setNavigationWidget(null);
-    formatter.setStyleName(2,0,DEFAULT_STYLE_NAME +"-navigation");
-    formatter.setStyleName(2,1,DEFAULT_STYLE_NAME +"-navigation");
-    if (isRTL) {
-      formatter.setHorizontalAlignment(1, 1, HasHorizontalAlignment.ALIGN_LEFT);
-    } else {
-      formatter.setHorizontalAlignment(1, 1, HasHorizontalAlignment.ALIGN_RIGHT);
-    }
-
-    // Align the content to the top
-    topPanel.getRowFormatter().setVerticalAlign(0,
-        HasVerticalAlignment.ALIGN_TOP);
-    topPanel.getRowFormatter().setVerticalAlign(1,
-        HasVerticalAlignment.ALIGN_TOP);
+    topPanel.setStyleAttribute("padding", "0 0 0 0");
+    topPanel.setStyleAttribute("margin","0 0 4 0");
+    linksPanel = new VerticalPanel();
+    linksPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+    links = new HorizontalPanel();
+    linksPanel.add(links);
+    linksPanel.setStyleName(DEFAULT_STYLE_NAME + "-links");
+    topPanel.add(linksPanel, new BorderLayoutData(LayoutRegion.NORTH,24));
   }
   
   public String toString() {

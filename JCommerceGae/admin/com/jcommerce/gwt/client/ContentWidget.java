@@ -1,6 +1,7 @@
 package com.jcommerce.gwt.client;
 
 import com.extjs.gxt.ui.client.Style;
+import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.widget.Component;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.Html;
@@ -27,20 +28,9 @@ public abstract class ContentWidget extends ContentPanel {
         init();
     }
 
-//    public ContentWidget(Layout layout) {
-//        super(layout);
-//        init();
-//    }
-
-//    public boolean add(Widget panel) {
-//    	TableData td = new TableData();
-//    	td.setWidth("100%");
-//    	contentPanel.add(panel);
-//    	return true;
-//    }
     public boolean add(Component panel) {
     	TableData td = new TableData();
-    	td.setWidth("100%");
+    	//td.setWidth("100%");
     	add(panel, td);
     	return true;
     }
@@ -51,18 +41,11 @@ public abstract class ContentWidget extends ContentPanel {
     
     private void init() {
     	System.out.println("initlizing... "+this.getClass().getName());
-//    	this.setLayout(new TableLayout(1));
-//    	TableData td = new TableData();
-//    	td.setWidth("100%");
     	TableLayout tl = new TableLayout(1);
+    	tl.setWidth("100%");
         tl.setCellSpacing(20);
         setLayout(tl);
-
-//        this.setBodyBorder(false);
-        
-        // Add the name
-//        HTML nameWidget = new HTML("<b>"+getName()+"</b>");
-        // nameWidget.setStyleName(DEFAULT_STYLE_NAME + "-name");
+        setScrollMode(Scroll.AUTO);
         setHeaderVisible(false);
 
         // Add the description
@@ -112,7 +95,6 @@ public abstract class ContentWidget extends ContentPanel {
 		super.onRender(parent, pos);
         ContentPanel title = new ContentPanel();
         TableLayout tl = new TableLayout(2);
-        
         tl.setWidth("100%");
         title.setLayout(tl);
         title.setHeaderVisible(false);
