@@ -3,6 +3,8 @@ package com.jcommerce.gwt.client;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.extjs.gxt.ui.client.widget.HorizontalPanel;
+import com.extjs.gxt.ui.client.widget.Html;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -17,7 +19,6 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
@@ -158,9 +159,9 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 		setupMainMenu();
 		setupNavigationPanel();
 		app.setListener(this);
-		
 		// need add app first, to ensure the other widgets to be rendered when
 		// added to app
+		RootPanel.getBodyElement().setAttribute("style", "Padding:0;margin:0;");
 		RootPanel.get().add(app);
 
 		String initToken = History.getToken();
@@ -184,8 +185,7 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
      *            the constants with text
      */
     private void setupMainLinks() {
-        // Link to GWT Homepage
-   	
+        // Link to GWT Homepage	
     	app.addLink(new HTML("<a href=\"\" style=\"color: #ffffff;TEXT-DECORATION:none;\">"+ Resources.constants.mainLinkGuide() + "</a>"));		
 		app.addLink(new HTML("<a href=\"\" style=\"color: #ffffff;TEXT-DECORATION:none;\">"+ Resources.constants.mainLinkNotepad() + "</a>"));
 		app.addLink(new HTML("<a href=\"\" style=\"color: #ffffff;TEXT-DECORATION:none;\">"+ Resources.constants.mainLinkRefresh() + "</a>"));
@@ -300,7 +300,7 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
     private void setupTitlePanel() {         
 
         // Add the title and some images to the title bar
-        HorizontalPanel titlePanel = new HorizontalPanel();
+    	com.google.gwt.user.client.ui.HorizontalPanel titlePanel = new com.google.gwt.user.client.ui.HorizontalPanel();
         titlePanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         titlePanel.add(Resources.images.gwtLogo().createImage());          
         app.setTitleWidget(titlePanel);
@@ -312,7 +312,7 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
      * 
      */private void setupNavigationPanel(){
     	HorizontalPanel naviPanel = new HorizontalPanel();
-    	naviPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT); 
+    	//naviPanel.setHorizontalAlign(horizontalAlign)
     	app.setNavigationWidget(naviPanel);
     	final Button home = new Button();    	
     	home.addClickHandler(new ClickHandler() {
@@ -363,8 +363,6 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
     private void displayContentWidget(ContentWidget content) {
         if (content != null) {
         	app.setContent(content);
-//            app.setContentTitleLeft(Resources.constants.mainTitle()+"-"+content.getName());
-//            app.setContentTitleRight(content.getShortCutButton());
             content.refresh();
 //            System.out.println("app: "+app);
         }        
