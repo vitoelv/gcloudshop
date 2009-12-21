@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.FieldEvent;
@@ -288,6 +289,8 @@ public class GoodsPanel extends BaseFileUploadFormPanel implements Listener<Fiel
     	
 //        formPanel.setWidth(800);
         TabPanel tabs = new TabPanel();
+        tabs.setWidth(900);
+        tabs.setAutoHeight(true);
 //        tabs.setWidth(800);
 //        tabs.setAutoHeight(true);
 //        FormData fd = new FormData("100%");
