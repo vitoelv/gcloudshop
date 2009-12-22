@@ -180,11 +180,12 @@ public class LibOrder {
     	
     	for(Cart cart: carts) {
     		CartWrapper cw = new CartWrapper(cart);
+    		cw.setManager(manager);
     		
-    		total.setGoodsPrice(total.getGoodsPrice() + cart.getGoodsPrice()*cart.getGoodsNumber());
+    		total.setGoodsPrice(total.getGoodsPrice() + cw.getPrice() * cart.getGoodsNumber());
     		total.setMarketPrice(total.getMarketPrice() + cart.getMarketPrice()*cart.getGoodsNumber());
     		//设置节省的钱及比例
-    		total.setSaving(total.getSaving() + cart.getMarketPrice() * cart.getGoodsNumber() - cart.getGoodsPrice()*cart.getGoodsNumber());
+    		total.setSaving(total.getSaving() + cart.getMarketPrice() * cart.getGoodsNumber() - cw.getPrice()*cart.getGoodsNumber());
     		total.setSaveRate(( total.getMarketPrice() != 0.0 ) ? Math.round( total.getSaving() * 100 / total.getMarketPrice()) / 100.0 : 0.0);
     		
     		if(cart.getIsReal()) {
@@ -199,8 +200,8 @@ public class LibOrder {
     			cw.put("goodsThumb", new GoodsWrapper(goods).getGoodsThumb()); 
     		}
     		goodsList.add(cw);
-    		cw.put("subtotal", WebFormatUtils.priceFormat(cart.getGoodsPrice()*cart.getGoodsNumber()));
-    		cw.put("goodsPrice", WebFormatUtils.priceFormat(cart.getGoodsPrice()));
+    		cw.put("subtotal", WebFormatUtils.priceFormat(cw.getPrice() * cart.getGoodsNumber()));
+    		cw.put("goodsPrice", WebFormatUtils.priceFormat(cw.getPrice()));
     		cw.put("marketPrice", WebFormatUtils.priceFormat(cart.getMarketPrice()));
     		
     		
