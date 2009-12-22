@@ -12,10 +12,10 @@ import com.jcommerce.gwt.client.panels.goods.GoodsPanel;
 import com.jcommerce.gwt.client.panels.goods.GoodsTypeListPanel;
 import com.jcommerce.gwt.client.panels.goods.GoodsTypePanel;
 import com.jcommerce.gwt.client.panels.member.UserListPanel;
+import com.jcommerce.gwt.client.panels.member.UserPanel;
 import com.jcommerce.gwt.client.panels.order.OrderUserPanel;
 import com.jcommerce.gwt.client.panels.privilege.AdminListPanel;
 import com.jcommerce.gwt.client.panels.privilege.AdminUserPanel;
-import com.jcommerce.gwt.client.panels.privilege.AllotPrivilegePanel;
 import com.jcommerce.gwt.client.panels.system.PaymentMetaListPanel;
 import com.jcommerce.gwt.client.panels.system.RegionListPanel;
 import com.jcommerce.gwt.client.panels.system.RegionPanel;
@@ -33,8 +33,9 @@ public interface IShopConstants extends Constants,
 			RegionPanel.Constants, ShippingMetaListPanel.Constants,
 			ShippingAreaListPanel.Constants,BrandPanel.Constants,GoodsTypePanel.Constants,
 			BrandListPanel.Constants,CategoryPanel.Constants,CategoryListPanel.Constants,
-			AttributePanel.Constants,RegionListPanel.Constants,UserListPanel.Constants,
-			AdminUserPanel.Constants,AdminListPanel.Constants,AllotPrivilegePanel.Constants
+			AttributePanel.Constants,RegionListPanel.Constants,UserListPanel.Constants,UserPanel.Constants,
+			AdminUserPanel.Constants,AdminListPanel.Constants
+
 			{
 
 	
@@ -56,10 +57,10 @@ public interface IShopConstants extends Constants,
   String categoryGoods();
   String categoryOrder();
   String categorySystem();
+  String categoryUser();
   String categoryPrivilege();
   String categoryData();
   String categoryArticle();
-
   String mainLinkGuide();
   String mainLinkNotepad();
   String mainLinkRefresh();
