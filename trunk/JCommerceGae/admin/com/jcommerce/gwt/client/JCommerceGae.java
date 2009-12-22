@@ -41,6 +41,8 @@ import com.jcommerce.gwt.client.panels.goods.GoodsTypePanel;
 import com.jcommerce.gwt.client.panels.member.UserListPanel;
 import com.jcommerce.gwt.client.panels.order.OrderListPanel;
 import com.jcommerce.gwt.client.panels.order.OrderUserPanel;
+import com.jcommerce.gwt.client.panels.privilege.AdminListPanel;
+import com.jcommerce.gwt.client.panels.privilege.AdminUserPanel;
 import com.jcommerce.gwt.client.panels.system.PaymentMetaListPanel;
 import com.jcommerce.gwt.client.panels.system.PaymentMetaPanel;
 import com.jcommerce.gwt.client.panels.system.RegionListPanel;
@@ -225,12 +227,15 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 		setupMainMenuOption(system, new ShippingMetaListPanel.State(),Resources.images.catWidgets());   
         setupMainMenuOption(system, new RegionListPanel.State(), Resources.images.catWidgets());
         
-        TreeItem article = mainMenu.addItem("文章管理");
+        TreeItem article = mainMenu.addItem(Resources.constants.categoryArticle());
         setupMainMenuOption(article, new ArticleCatListPanel.State(),Resources.images.catWidgets());
 		
-        TreeItem catData = mainMenu.addItem("数据维护");
+        TreeItem catData = mainMenu.addItem(Resources.constants.categoryData());
         setupMainMenuOption(catData, new ImportPanel.State(), Resources.images.catWidgets());        
         setupMainMenuOption(catData, new ExportPanel.State(), Resources.images.catWidgets());
+
+        TreeItem privilege = mainMenu.addItem(Resources.constants.categoryPrivilege());      
+        setupMainMenuOption(privilege, new AdminListPanel.State(), Resources.images.catWidgets());
 
     }
 
@@ -446,6 +451,12 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 			}
 			else if(pageClassName.equals(ArticleCatListPanel.class.getName())){
 				page = ArticleCatListPanel.getInstance();
+			}
+			else if(pageClassName.equals(AdminListPanel.class.getName())){
+				page = AdminListPanel.getInstance();
+			}
+			else if(pageClassName.equals(AdminUserPanel.class.getName())){
+				page = AdminUserPanel.getInstance();
 			}
 			
 

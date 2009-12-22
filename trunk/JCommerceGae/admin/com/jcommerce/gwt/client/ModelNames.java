@@ -35,5 +35,8 @@ public interface ModelNames {
     
        
     public static final String CART = "com.jcommerce.core.model.Cart";
+    
+    public static final String ADMINUSER = "com.jcommerce.core.model.AdminUser";
+    public static final String ADMINACTION = "com.jcommerce.core.model.AdminAction";
 
 }

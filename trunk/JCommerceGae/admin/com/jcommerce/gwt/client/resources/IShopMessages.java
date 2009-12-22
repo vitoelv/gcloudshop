@@ -9,4 +9,5 @@ public interface IShopMessages extends Messages,
 		GoodsTypeForm.GoodsTypeFormMessage,  
 		RegionPanel.Message {
 	String blankText(String fieldTitle);
+	String emailFormatText();
 }
