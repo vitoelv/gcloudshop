@@ -38,6 +38,7 @@ import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.UserForm;
 import com.jcommerce.gwt.client.model.IUser;
 import com.jcommerce.gwt.client.model.IUserRank;
+import com.jcommerce.gwt.client.panels.goods.GoodsListPanel;
 import com.jcommerce.gwt.client.panels.goods.AttributeListPanel.State;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.DeleteService;
@@ -65,9 +66,10 @@ public class UserListPanel extends ContentWidget {
 		String UserList_tipShippingAddress();
 		String UserList_tipViewOrder();
 		String UserList_tipViewAcount();
+		String UserList_tipDropUser();
 		String UserList_AllUserRank();
 	}
-	private static class State extends PageState{
+	public static class State extends PageState{
 		public static final String USER_RANK_ID = "urid";
 		public static final String RANK_POINT_MIN = "urpmin";
 		public static final String RANK_POINT_MAX = "urpmax";
@@ -100,13 +102,14 @@ public class UserListPanel extends ContentWidget {
 		public String getUserName(){
 			return (String)getValue(USER_NAME);
 		}
+		public String getMenuDisplayName() {
+			return Resources.constants.UserList_title();
+		}
 	}
 	private UserListPanel(){
 		initJS(this);
 	}
-	private native void initJS(UserListPanel me)/*-{
-		
-	}-*/;
+	
 	private State curState = new State();
 	private static UserListPanel instance;
 	public static UserListPanel getInstance(){
@@ -204,7 +207,7 @@ public class UserListPanel extends ContentWidget {
 		ActionCellRenderer render = new ActionCellRenderer(grid);
 		ActionCellRenderer.ActionInfo act = new ActionCellRenderer.ActionInfo();
 		act.setImage(GWT.getModuleBaseURL()+"icon_edit.gif");
-		act.setAction("");
+		act.setAction("changeUser($pkId)");
 		act.setTooltip(Resources.constants.edit());
 		render.addAction(act);
 		act = new ActionCellRenderer.ActionInfo();		
@@ -221,6 +224,11 @@ public class UserListPanel extends ContentWidget {
 		act.setImage(GWT.getModuleBaseURL()+"icon_account.gif");
 		act.setAction("");
 		act.setTooltip(Resources.constants.UserList_tipViewAcount());
+		render.addAction(act);
+		act = new ActionCellRenderer.ActionInfo();		
+		act.setImage(GWT.getModuleBaseURL()+"icon_drop.gif");
+		act.setAction("deleteUser($pkId)");
+		act.setTooltip(Resources.constants.UserList_tipDropUser());
 		render.addAction(act);
 		colaction.setRenderer(render);
 		ContentPanel panel = new ContentPanel();
@@ -249,11 +257,16 @@ public class UserListPanel extends ContentWidget {
 		Button sButton = new Button(Resources.constants.UserList_btnAddUser());
 	      sButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
 	          public void componentSelected(ButtonEvent ce) {
-	          	//onShortCutButtonClicked();
+	          	onShortCutButtonClicked();
 	          }
 	      });
 	     return sButton;
 	}
+	public void onShortCutButtonClicked() {
+		UserPanel.State newState = new UserPanel.State();
+		newState.setIsEdit(false);
+		newState.execute();
+    }
 	@Override 
 	public PageState getCurState() {
 		// TODO Auto-generated method stub
@@ -328,6 +341,32 @@ public class UserListPanel extends ContentWidget {
 			
 		});
 	}
+	
+	private native void initJS(UserListPanel me)/*-{
+		$wnd.changeUser = function (id) {
+	        me.@com.jcommerce.gwt.client.panels.member.UserListPanel::modifyUserAndRefrsh(Ljava/lang/String;)(id);
+	    };
+	    $wnd.deleteUser = function (id) {
+		    me.@com.jcommerce.gwt.client.panels.member.UserListPanel::deleteUserAndRefrsh(Ljava/lang/String;)(id);
+		};
+	}-*/;
+	
+	private void modifyUserAndRefrsh(final String id) {
+		UserPanel.State newState = new UserPanel.State();
+		newState.setIsEdit(true);
+		newState.setPkId(id);
+		newState.execute();
+	}
+	
+	private void deleteUserAndRefrsh(final String id) {
+		new DeleteService().deleteBean(ModelNames.USER, id,
+				new DeleteService.Listener() {
+					public void onSuccess(Boolean success) {
+						toolBar.refresh();
+					}
+				});
+	}
+	
 	public void refresh(){
 		refreshUserRankList();
 		toolBar.refresh();

@@ -29,6 +29,7 @@ public interface ModelNames {
     public static final String COLLECTGOOD= "com.jcommerce.core.model.CollectGood";
     public static final String ARTICLE_CAT= "com.jcommerce.core.model.ArticleCat";
     
+    
     public static final String PAYMENT_META = "PaymentMeta";
     public static final String SHIPPING_META = "ShippingMeta";
 //    public static final String PAYMENT_CONFIG_META = "PaymentConfigMeta";
