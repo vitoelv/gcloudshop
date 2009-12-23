@@ -1,0 +1,21 @@
+   ---
+Live Demo 
+   ---
+   ---
+   ---
+   
+Live Demo
+
+   This is a live demo running on Google App Engine's server. Had already implemented many basic functionalities like goods browsing and shopping-cart. Latest development progress will be continuously updated.   
+   
+   {{{../web/front/home.action} Public portal home page}}:
+   
+   		* For public user to browse and buy goods.
+   		
+   		* Public user can choose to register and login, or start to use as an anonymous user.
+   
+   {{{../admin.html} Administrator portal home page}}.
+   	
+   		* For the shop owner to manage the shop.
+   		
+   		* As a demo user could login as admin, password is admin. 

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faqs xmlns="http://maven.apache.org/FML/1.0.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/FML/1.0.1 http://maven.apache.org/xsd/fml-1.0.1.xsd"
+  title="为什么您可能会关注gcShop"
+  toplink="false">
+
+  <part id="general">
+    <title>为什么您可能会关注gcShop</title>
+
+    <faq id="whats-foo">
+      <question>
+        	我是淘宝店主
+      </question>
+      <answer>
+        <p>gcShop为您提供了可定制的解决方案，您可以实现一些在淘宝或其他C2C/B2C门户网站上无法实现的功能和外观。
+        	已经有很多商家采用了独立网店系统，国内用户较多的有ShopEx和ECShop等，国外的有OSCommerce等</p>
+      </answer>
+    </faq>
+
+    <faq id="whats-bar">
+      <question>
+        	我有自己的域名和主机，我使用其他的独立网店程序
+      </question>
+      <answer>
+        <p>您的域名和主机有时会出现网络问题和死机么？会受到病毒和黑客的困扰么？
+        您遇到了用户增多时，由于服务器性能瓶颈导致用户体验下降从而流失么？</p>
+        	<p>如果有的话您可以考虑尝试gcShop，
+        	gcShop是建立在Google强大的服务器技术和服务之上，很大程度上减少您的烦恼。
+        	同时，感谢Google提供的免费服务和我们的免费软件，这一切都没有任何成本。
+        	</p>
+      </answer>
+    </faq>
+    
+    <faq id="whats-bar">
+      <question>
+        	我曾经是ECSHOP的用户。
+      </question>
+      <answer>
+        <p>您可以考虑尝试gcShop，在享受Google平台的优势之外，您还可以发现gcShop借鉴移植了ECSHOP很多功能和操作风格，
+        	易于上手，甚至直接支持已有的ECSHOP模板！</p>
+      </answer>
+    </faq>
+    
+    <faq id="whats-bar">
+      <question>
+        	我曾经是ECSHOP的开发者或定制开发者。
+      </question>
+      <answer>
+        <p>由于ECSHOP已经被收购并开始收费，如果您还喜爱ECSHOP，欢迎参与我们的gcShop。您的经验将给予我们很大帮助。</p>
+      </answer>
+    </faq>    
+    
+    <faq id="whats-bar">
+      <question>
+        	我是关心Google技术的开发者
+      </question>
+      <answer>
+        <p> 在gcShop里，您能发现我们在使用Google技术上的探索，例如Google App Engine，Google Web Toolkit等。
+        	欢迎加入我们，或者与我们分享你们的意见！</p>
+      </answer>
+    </faq>
+    
+    <faq id="whats-bar">
+      <question>
+        	我的公司或组织有兴趣利用Google云计算平台构建应用
+      </question>
+      <answer>
+        <p> 您会发现我们对Google云计算平台做了很多探索。您可以与我们联系商讨合作。</p>
+      </answer>
+    </faq>
+  </part>
+
+
+
+</faqs>

@@ -6,27 +6,17 @@ Features
    
 Features
 
-* General
+* Designed features
 
-   * Open source Java-based application.
+   * Open source and free Java-based application, running on Google cloud computing platform: Google App Engine.
    
-   * Template-based web user interface. (using designer-friendly Dreamweaver Template Template (.dwt))
+   * Support flexible way of Goods and Order configuration and processing, fulfilling your requirement.
+   
+   * Template-based web user interface, easy to customize. (using designer-friendly Dreamweaver Template Template (.dwt))
    
    * Google Web Toolkit based, easy-to-use Administrator Interface.
    
-* For ECSHOP Users
-
-   * Templates could be reused (with minimum change)
+   * Provide data backup and migration tools.
    
-   * Similar user interfaces.
-   
-   * Tools to migrate data
-
-* Google AppEngine
-
-   * Google's powerful cloud computing platform.
-   
-   * Free to start, pay when you need, pay for what you used.
-   
-   * Easy to extend to support rapidly increasing user for your application.
+   * Support add-on to interact with different payment and shipping solution provider.
    

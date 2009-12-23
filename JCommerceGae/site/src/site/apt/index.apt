@@ -1,21 +1,29 @@
    ---
-Introduction 
+Summary 
    ---
    ---
    ---
 
-Introduction
+News
 
-   This project is a migration of classic independent shop application ECShop (based on LAMP) to Google's cloud computing platform: Google AppEngine.   
-   
-   The name "gcShop" stands for:
-   
-      * "google cloud shop" system.
-      
-      * yet another "ecShop" just as "gPhone" over "iPhone".  
-   
-   
-   
- 
+	December 22 2009, gcShop version 0.9 is online. Included most basic functionalities.  
 
- 
+	November 01 2009, gc-shop.appspot.com is created, deployed the first test version.
+	
+Introduction	 
+
+   	gcShop is a shopping-cart software running on Google's cloud computing platform: Google App Engine.
+   
+   	The name "gcShop" means "Google cloud Shop".
+   
+   	gcShop is designed to be a Java-based, easily extendable shopping-cart software, which is fully integrate with Google's cloud computing platform and Google's other softwares and services.
+   
+   	gcShop is free, released under LGPL v3 licence.
+   
+	Read more about {{{features.html} features highlight}}.
+	
+	Read more about {{{why.html} Why gcShop?}}.
+	
+	Read more about {{{http://code.google.com/intl/en/appengine/whyappengine.html} What is Google cloud computing platform?}}.
+	
+	You can also try {{{demo.html} live demo}}.

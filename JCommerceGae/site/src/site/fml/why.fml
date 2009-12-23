@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faqs xmlns="http://maven.apache.org/FML/1.0.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/FML/1.0.1 http://maven.apache.org/xsd/fml-1.0.1.xsd"
+  title="Why gcShop?"
+  toplink="false">
+
+  <part id="general">
+    <title>Why gcShop?</title>
+
+    <faq id="whats-foo">
+      <question>
+        	I am shop-owner in eBay.
+      </question>
+      <answer>
+        <p>gcShop provide you customizable solution. You could implement your own functionalities and GUI style, which is impossible on eBay or other C2C/B2B web sites.
+        	There are already many shop owners used stand-alone shopping website. Most popular softwares in China are ShopEx and ECShop, while in US and Europe OSCommerce is popular.</p>
+      </answer>
+    </faq>
+
+    <faq id="whats-bar">
+      <question>
+        	I have my own domain and rented server. I use other shopping-cart software.
+      </question>
+      <answer>
+        <p> Did you experience network and server down-time? Did you ever be bothered with virus and hacker? 
+        Did you ever seen lost-of-users due to the down grade of user experience, 
+        which is caused by the server's performance bottleneck when number of users becomes large? </p>
+        	<p> If you did, you could consider to try gcShop,
+        	gcShop is established on Google's powerful server technologies and services, which will save you from trouble to many extend.
+        	At the same time, thanks for Google's free policy and our free software, you needn't pay for it!
+        	</p>
+      </answer>
+    </faq>
+    
+    <faq id="whats-bar">
+      <question>
+        	I used to be user of ECSHOP.
+      </question>
+      <answer>
+        <p> You could consider to try gcShop. In addition to enjoy the advantage of Google cloud computing platform, 
+        	you might discover that gcShop had migrated or implemented many functionalities and operation styles from ECSHOP.
+        	It will be easy to start with, we even support the existing ECSHOP templates! </p>
+      </answer>
+    </faq>
+    
+    <faq id="whats-bar">
+      <question>
+        	I used to be ECSHOP's developer or customizing developer.
+      </question>
+      <answer>
+        <p> ECSHOP has been acquired and started to charge. If you still like ECSHOP, welcome to participant in our gcShop. Your experience would give us great help. </p>
+      </answer>
+    </faq>    
+    
+    <faq id="whats-bar">
+      <question>
+        	I am a developer and I love Google technologies.
+      </question>
+      <answer>
+        <p> In gcShop, you would discover our effort on exploring Google technologies, e.g. Google App Engine, Google Web Toolkit, etc.
+        	Welcome to join us, or share with us your comments!</p>
+      </answer>
+    </faq>
+    
+    <faq id="whats-bar">
+      <question>
+        	My company or organization is interested to construct application with Google cloud computing platform.
+      </question>
+      <answer>
+        <p> You could find that we had gathered a lot experience by practicing on Google App Engine. You could contact us to discuss further cooperation. </p>
+      </answer>
+    </faq>
+  </part>
+
+</faqs>
