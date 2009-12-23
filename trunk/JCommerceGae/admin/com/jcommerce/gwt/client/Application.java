@@ -144,6 +144,7 @@ public class Application extends Composite implements WindowResizeListener {
    * The main menu.
    */
   private Tree mainMenu;
+  private LayoutContainer leftContainer = new LayoutContainer();
 
   /**
    * The last known width of the window.
@@ -172,8 +173,12 @@ public class Application extends Composite implements WindowResizeListener {
     mainContainer.add(topPanel,new BorderLayoutData(LayoutRegion.NORTH,120));
 
     // Add the main menu
+    leftContainer.setLayout(new FitLayout());
+    leftContainer.setScrollMode(Scroll.AUTOY);
+    leftContainer.setStyleAttribute("border", "4px solid #d0e4f6");
     createMainMenu();
-    mainContainer.add(mainMenu,new BorderLayoutData(LayoutRegion.WEST));
+    leftContainer.add(mainMenu);
+    mainContainer.add(leftContainer,new BorderLayoutData(LayoutRegion.WEST));
 
     // Setup the content layout
     contentWrapper = new LayoutContainer(new FitLayout());
@@ -351,7 +356,7 @@ public class Application extends Composite implements WindowResizeListener {
    */
   public void setOptionsWidget(Widget options) {
 	  options.setStyleName(DEFAULT_STYLE_NAME +"-options");
-	  options.setLayoutData(new FitData());
+//	  options.setLayoutData(new FitData());
 	  topPanel.add(options, new BorderLayoutData(LayoutRegion.CENTER));
     //topPanel.setWidget(1, 1, options);
   }
