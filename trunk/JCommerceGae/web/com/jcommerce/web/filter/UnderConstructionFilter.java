@@ -13,7 +13,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -45,7 +44,9 @@ public class UnderConstructionFilter implements Filter {
 		}
 		else {
 			debug("redirecting to under construction...");
-			httpResponse.sendRedirect("/underConstruction.jsp");
+//			httpResponse.setCharacterEncoding("UTF-8");
+			httpResponse.sendRedirect("/underConstruction_zh.html");
+//			request.getRequestDispatcher("/underConstruction.jsp").forward(request, response);
 		}
 	}
 
