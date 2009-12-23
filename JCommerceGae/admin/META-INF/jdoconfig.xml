@@ -13,6 +13,7 @@
        <property name="datanucleus.appengine.autoCreateDatastoreTxns" value="true"/>
        
        <!-- refering to: https://groups.google.com/group/google-appengine-java/browse_thread/thread/241f366dde05f9f3# -->
-       <property name="datanucleus.appengine.multipleRelationsOfSameTypeAreErrors" value="true"/>
+       <property name="datanucleus.appengine.allowMultipleRelationsOfSameType" value="true"/>
+       
    </persistence-manager-factory>
 </jdoconfig>
