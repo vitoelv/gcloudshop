@@ -374,7 +374,13 @@ public class FlowAction extends BaseAction {
     	getSession().setAttribute(KEY_FLOW_CONSIGNEE, consignee);
     	request.setAttribute("consignee", consignee);
     	/* 对商品信息赋值 */
-    	request.setAttribute("goodsList", WrapperUtil.wrap(carts, CartWrapper.class));
+    	List<CartWrapper> cartWrapper = new ArrayList<CartWrapper>();
+    	for(Cart cart : carts) {
+    		CartWrapper wrapper = new CartWrapper(cart);
+    		wrapper.setManager(getDefaultManager());
+    		cartWrapper.add(wrapper);
+    	}
+    	request.setAttribute("goodsList", cartWrapper);
     	
     	/* 对是否允许修改购物车赋值 */
     	if( (Constants.CART_GENERAL_GOODS == flowType ) || 
