@@ -19,6 +19,7 @@ import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 import com.extjs.gxt.ui.client.widget.grid.Grid;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.toolbar.PagingToolBar;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Element;
 import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.ModelNames;
@@ -179,12 +180,12 @@ public class AdminListPanel extends ContentWidget {
 
       ActionCellRenderer render = new ActionCellRenderer(grid);
       ActionCellRenderer.ActionInfo act = new ActionCellRenderer.ActionInfo();        
-      act.setText(Resources.constants.edit());
+      act.setImage(GWT.getModuleBaseURL()+"icon_edit.gif");
       act.setAction("editAdminUser($pkId)");
       act.setTooltip(Resources.constants.edit());
       render.addAction(act);
       act = new ActionCellRenderer.ActionInfo();
-      act.setText(Resources.constants.delete());
+      act.setImage(GWT.getModuleBaseURL()+"icon_trash.gif");
 		act.setAction("deleteAdminUser($pkId)");
 		act.setTooltip(Resources.constants.delete());
 		render.addAction(act);

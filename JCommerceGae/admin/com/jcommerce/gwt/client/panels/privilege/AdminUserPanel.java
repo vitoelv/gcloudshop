@@ -11,11 +11,11 @@ import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.Field;
+import com.extjs.gxt.ui.client.widget.form.HiddenField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.AdminUserForm;
 import com.jcommerce.gwt.client.form.BeanObject;
-import com.jcommerce.gwt.client.model.IAdminUser;
 import com.jcommerce.gwt.client.panels.BaseEntityEditPanel;
 import com.jcommerce.gwt.client.panels.Success;
 import com.jcommerce.gwt.client.resources.Resources;
@@ -209,25 +209,25 @@ public class AdminUserPanel extends BaseEntityEditPanel {
 	        fPassword.setFieldLabel(Resources.constants.AdminUser_password());
 	        formPanel.add(fPassword, sfd());
         }
-        TextField<String> fAddTime = AdminUserForm.getAddTimeField("");
+        HiddenField<String> fAddTime = AdminUserForm.getAddTimeField();
     	formPanel.add(fAddTime,sfd());
     	
-    	TextField<String> fActionList = AdminUserForm.getActionListField("");
+    	HiddenField<String> fActionList = AdminUserForm.getActionListField();
     	formPanel.add(fActionList,sfd());
     	
-    	TextField<String> fLastIp = AdminUserForm.getLastIpField("");
+    	HiddenField<String> fLastIp = AdminUserForm.getLastIpField();
     	formPanel.add(fLastIp , sfd());
     	
-    	TextField<String> fLastLogin = AdminUserForm.getLastLoginField("");
+    	HiddenField<String> fLastLogin = AdminUserForm.getLastLoginField();
     	formPanel.add(fLastLogin , sfd());
     	
-    	TextField<String> fNavList = AdminUserForm.getNavListField("");
+    	HiddenField<String> fNavList = AdminUserForm.getNavListField();
     	formPanel.add(fNavList , sfd());
     	
-    	TextField<String> fTodoList = AdminUserForm.getTodoListField("");
+    	HiddenField<String> fTodoList = AdminUserForm.getTodoListField();
     	formPanel.add(fTodoList , sfd());
     	
-    	TextField<String> fLangType = AdminUserForm.getLangTypeField("");
+    	HiddenField<String> fLangType = AdminUserForm.getLangTypeField();
     	formPanel.add(fLangType , sfd());   	
     	
     	

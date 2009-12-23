@@ -3,6 +3,7 @@ package com.jcommerce.gwt.client.form;
 import java.util.Date;
 import java.util.Map;
 
+import com.extjs.gxt.ui.client.widget.form.HiddenField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.jcommerce.gwt.client.model.IAdminUser;
 import com.jcommerce.gwt.client.resources.Resources;
@@ -42,7 +43,7 @@ public class AdminUserForm extends BeanObject implements IAdminUser {
 		TextField<String> field = new TextField<String>();
 		field.setName(USER_NAME);
 		field.setMaxLength(10);
-		field.setMinLength(4);
+//		field.setMinLength(4);
 		field.setAutoValidate(true);
 		field.setAllowBlank(false);
 		TextField<String>.TextFieldMessages tfm = field.new TextFieldMessages();
@@ -55,7 +56,7 @@ public class AdminUserForm extends BeanObject implements IAdminUser {
 		TextField<String> field = new TextField<String>();
 		field.setName(PASSWORD);
 		field.setMaxLength(10);
-		field.setMinLength(6);
+//		field.setMinLength(6);
 		field.setPassword(true);
 		field.setAutoValidate(true);
 		field.setAllowBlank(false);
@@ -69,7 +70,7 @@ public class AdminUserForm extends BeanObject implements IAdminUser {
 		TextField<String> field = new TextField<String>();
 		field.setName("confirmPassword");
 		field.setMaxLength(10);
-		field.setMinLength(6);
+//		field.setMinLength(6);
 		field.setPassword(true);
 		field.setAutoValidate(true);
 		field.setAllowBlank(true);
@@ -94,7 +95,7 @@ public class AdminUserForm extends BeanObject implements IAdminUser {
 		TextField<String> field = new TextField<String>();
 		field.setName("oldPassword");
 		field.setMaxLength(10);
-		field.setMinLength(6);
+//		field.setMinLength(6);
 		field.setPassword(true);
 		field.setAutoValidate(true);
 		field.setAllowBlank(true);
@@ -105,60 +106,53 @@ public class AdminUserForm extends BeanObject implements IAdminUser {
 		TextField<String> field = new TextField<String>();
 		field.setName("newPassword");
 		field.setMaxLength(10);
-		field.setMinLength(6);
+//		field.setMinLength(6);
 		field.setPassword(true);
 		field.setAutoValidate(true);
 		field.setAllowBlank(true);
 		return field;
 	}
 	
-	public static TextField<String> getAddTimeField(String fieldTitle){
-		TextField<String> field = new TextField<String>();
+	public static HiddenField<String> getAddTimeField(){
+		HiddenField<String> field = new HiddenField<String>();
 		field.setName(ADD_TIME);
 		field.setValue(new Date().getTime()+"");
-		field.setVisible(false);
 		return field;
 	}
 	
-	public static TextField<String> getActionListField(String fieldTitle){
-		TextField<String> field = new TextField<String>();
+	public static HiddenField<String> getActionListField(){
+		HiddenField<String> field = new HiddenField<String>();
 		field.setName(ACTION_LIST);
-		field.setVisible(false);
 		return field;
 	}
 	
-	public static TextField<String> getLastIpField(String fieldTitle){
-		TextField<String> field = new TextField<String>();
+	public static HiddenField<String> getLastIpField(){
+		HiddenField<String> field = new HiddenField<String>();
 		field.setName(LAST_IP);
-		field.setVisible(false);
 		return field;
 	}
 	
-	public static TextField<String> getLastLoginField(String fieldTitle){
-		TextField<String> field = new TextField<String>();
+	public static HiddenField<String> getLastLoginField(){
+		HiddenField<String> field = new HiddenField<String>();
 		field.setName(LAST_LOGIN);
-		field.setVisible(false);
 		return field;
 	}
 	
-	public static TextField<String> getLangTypeField(String fieldTitle){
-		TextField<String> field = new TextField<String>();
+	public static HiddenField<String> getLangTypeField(){
+		HiddenField<String> field = new HiddenField<String>();
 		field.setName(LANG_TYPE);
-		field.setVisible(false);
 		return field;
 	}
 	
-	public static TextField<String> getNavListField(String fieldTitle){
-		TextField<String> field = new TextField<String>();
+	public static HiddenField<String> getNavListField(){
+		HiddenField<String> field = new HiddenField<String>();
 		field.setName(NAV_LIST);
-		field.setVisible(false);
 		return field;
 	}
 	
-	public static TextField<String> getTodoListField(String fieldTitle){
-		TextField<String> field = new TextField<String>();
+	public static HiddenField<String> getTodoListField(){
+		HiddenField<String> field = new HiddenField<String>();
 		field.setName(TODOLIST);
-		field.setVisible(false);
 		return field;
 	}
 }
