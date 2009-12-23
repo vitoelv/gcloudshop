@@ -120,10 +120,7 @@ public class UserListPanel extends ContentWidget {
 	}
 	PagingToolBar toolBar;
 	BasePagingLoader loader = null;
-	int pageSize = 3;
-	ListBox listUserRank = new ListBox();
-	TextBox txtUserIntegralMax = new TextBox();
-	TextBox txtUserIntegralMin = new TextBox();
+	int pageSize = 5;
 	TextBox txtUserName = new TextBox();
 	Button btnSearch = new Button(Resources.constants.UserList_btnSearchUser());
 
@@ -131,12 +128,6 @@ public class UserListPanel extends ContentWidget {
 		super.onRender(parent,index);
 		HorizontalPanel header = new HorizontalPanel();
 		header.add(Resources.images.icon_search().createImage());
-		header.add(new Label(Resources.constants.UserList_userRank()));
-		header.add(listUserRank);
-		header.add(new Label(Resources.constants.UserList_minPoint()));
-		header.add(txtUserIntegralMin);
-		header.add(new Label(Resources.constants.UserList_maxPoint()));
-		header.add(txtUserIntegralMax);
 		header.add(new Label(Resources.constants.UserList_userName()));
 		header.add(txtUserName);
 		header.add(btnSearch);
@@ -212,7 +203,7 @@ public class UserListPanel extends ContentWidget {
 		render.addAction(act);
 		act = new ActionCellRenderer.ActionInfo();		
 		act.setImage(GWT.getModuleBaseURL()+"book_open.gif");
-		act.setAction("");
+		act.setAction("viewShippingAddress($pkId)");
 		act.setTooltip(Resources.constants.UserList_tipShippingAddress());
 		render.addAction(act);
 		act = new ActionCellRenderer.ActionInfo();		
@@ -322,32 +313,15 @@ public class UserListPanel extends ContentWidget {
 		
 	}
 	
-	private void refreshUserRankList(){
-		listUserRank.clear();
-		listUserRank.insertItem(Resources.constants.UserList_AllUserRank(), "all", 0);
-		new ListService().listBeans(ModelNames.USER_RANK, new ListService.Listener(){
-			int i;
-			public void onSuccess(List<BeanObject> res) {
-				for(Iterator<BeanObject> it = res.iterator();it.hasNext();){
-					BeanObject userRank = it.next();
-					listUserRank.insertItem(userRank.getString(IUserRank.RANK_NAME), userRank.getString(IUserRank.PK_ID), i);
-					if(getCurState()!=null){
-						
-					}
-					i++;
-					
-				}
-			}
-			
-		});
-	}
-	
 	private native void initJS(UserListPanel me)/*-{
 		$wnd.changeUser = function (id) {
 	        me.@com.jcommerce.gwt.client.panels.member.UserListPanel::modifyUserAndRefrsh(Ljava/lang/String;)(id);
 	    };
 	    $wnd.deleteUser = function (id) {
 		    me.@com.jcommerce.gwt.client.panels.member.UserListPanel::deleteUserAndRefrsh(Ljava/lang/String;)(id);
+		};
+		$wnd.viewShippingAddress = function (id) {
+		    me.@com.jcommerce.gwt.client.panels.member.UserListPanel::viewAddressAndRefrsh(Ljava/lang/String;)(id);
 		};
 	}-*/;
 	
@@ -367,8 +341,13 @@ public class UserListPanel extends ContentWidget {
 				});
 	}
 	
+	private void viewAddressAndRefrsh(final String id) {
+		ShippingAddressPanel.State newState = new ShippingAddressPanel.State();
+		newState.setPkId(id);
+		newState.execute();
+	}
+	
 	public void refresh(){
-		refreshUserRankList();
 		toolBar.refresh();
 	}
 

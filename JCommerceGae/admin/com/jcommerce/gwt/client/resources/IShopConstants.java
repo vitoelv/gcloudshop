@@ -13,6 +13,7 @@ import com.jcommerce.gwt.client.panels.goods.GoodsTypeListPanel;
 import com.jcommerce.gwt.client.panels.goods.GoodsTypePanel;
 import com.jcommerce.gwt.client.panels.member.UserListPanel;
 import com.jcommerce.gwt.client.panels.member.UserPanel;
+import com.jcommerce.gwt.client.panels.member.ShippingAddressPanel;
 import com.jcommerce.gwt.client.panels.order.OrderUserPanel;
 import com.jcommerce.gwt.client.panels.privilege.AdminListPanel;
 import com.jcommerce.gwt.client.panels.privilege.AdminUserPanel;
@@ -34,7 +35,7 @@ public interface IShopConstants extends Constants,
 			ShippingAreaListPanel.Constants,BrandPanel.Constants,GoodsTypePanel.Constants,
 			BrandListPanel.Constants,CategoryPanel.Constants,CategoryListPanel.Constants,
 			AttributePanel.Constants,RegionListPanel.Constants,UserListPanel.Constants,UserPanel.Constants,
-			AdminUserPanel.Constants,AdminListPanel.Constants
+			AdminUserPanel.Constants,AdminListPanel.Constants,ShippingAddressPanel.Constants
 
 			{
 

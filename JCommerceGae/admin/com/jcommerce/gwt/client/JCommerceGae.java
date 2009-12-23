@@ -38,6 +38,7 @@ import com.jcommerce.gwt.client.panels.goods.GoodsListPanel;
 import com.jcommerce.gwt.client.panels.goods.GoodsPanel;
 import com.jcommerce.gwt.client.panels.goods.GoodsTypeListPanel;
 import com.jcommerce.gwt.client.panels.goods.GoodsTypePanel;
+import com.jcommerce.gwt.client.panels.member.ShippingAddressPanel;
 import com.jcommerce.gwt.client.panels.member.UserListPanel;
 import com.jcommerce.gwt.client.panels.member.UserPanel;
 import com.jcommerce.gwt.client.panels.order.OrderListPanel;
@@ -458,6 +459,9 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 			}
 			else if(pageClassName.equals(UserPanel.class.getName())) {
 				page = UserPanel.getInstance();
+			}
+			else if(pageClassName.equals(ShippingAddressPanel.class.getName())) {
+				page = ShippingAddressPanel.getInstance();
 			}
 			else if(pageClassName.equals(ArticleCatListPanel.class.getName())){
 				page = ArticleCatListPanel.getInstance();
