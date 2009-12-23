@@ -1,6 +1,7 @@
 package com.jcommerce.gwt.client.panels.member;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,9 @@ import com.extjs.gxt.ui.client.widget.form.NumberField;
 import com.extjs.gxt.ui.client.widget.form.Radio;
 import com.extjs.gxt.ui.client.widget.form.RadioGroup;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.form.TimeField;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Widget;
 import com.jcommerce.core.model.UserRank;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BeanObject;
@@ -69,6 +72,7 @@ public class UserPanel extends BaseEntityEditPanel {
         String User_wrongpassword();
         String User_wrongqq();
         String User_wrongphone();
+        String User_wrongemail();
         String User_addSuccessfully();
         String User_modifySuccessfully();
     }
@@ -232,8 +236,6 @@ public class UserPanel extends BaseEntityEditPanel {
         formPanel.add(fText, sfd());
         fText = UserForm.getLastLoginField();
         formPanel.add(fText, sfd());
-        DateField fLastTime = UserForm.getLastTimeField();
-        formPanel.add(fLastTime, sfd());
         fText = UserForm.getLastIpField();
         formPanel.add(fText, sfd());
     }      
@@ -316,16 +318,13 @@ public class UserPanel extends BaseEntityEditPanel {
     
     //保存会员信息
     public void doSubmit() {
+    	
+    	//获得上次登录时间
 		Map<String, Object> props = FormUtils.getPropsFromForm(formPanel);
-//		Set keySet = props.keySet();
-//		for(Iterator i = keySet.iterator(); i.hasNext();) {
-//			String key = (String) i.next();
-//			String value = (String) props.get(key);
-//			System.out.println("+++++++++++++++++++++++++++");
-//			System.out.println(key + ":" + value==null?"?":value);
-//		}
-//		
-//		
+		Map<String, Object> mapAttribute = obj.getProperties();
+		Date lastTime = (Date) mapAttribute.get("lastTime");
+		props.put("lastTime", lastTime);
+		
     	BeanObject form = new BeanObject(getEntityClassName(), props);
     	if (getCurState().getIsEdit()) {
     		String id = getCurState().getPkId();

@@ -1,11 +1,10 @@
 package com.jcommerce.gwt.client.form;
 
-import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.extjs.gxt.ui.client.widget.form.DateField;
 import com.extjs.gxt.ui.client.widget.form.NumberField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.form.TimeField;
 import com.jcommerce.gwt.client.model.IUser;
-import com.jcommerce.gwt.client.model.IUserRank;
 import com.jcommerce.gwt.client.resources.Resources;
 
 public class UserForm  extends BeanObject implements IUser{
@@ -21,7 +20,7 @@ public class UserForm  extends BeanObject implements IUser{
 		field.setAutoValidate(true);
 		field.setAllowBlank(false);
 		TextField<String>.TextFieldMessages tfm = field.new TextFieldMessages();
-		tfm.setBlankText(Resources.messages.blankText(fieldTitle));
+		tfm.setBlankText(Resources.messages.blankText(fieldTitle));		
 		field.setMessages(tfm);
 		return field;
 	}
@@ -31,8 +30,10 @@ public class UserForm  extends BeanObject implements IUser{
 		field.setName(EMAIL);
 		field.setAutoValidate(true);
 		field.setAllowBlank(false);
+		field.setRegex("^[\\w-]+(\\.[\\w-]+)*@[\\w-]+(\\.[\\w-]+)+$");
 		TextField<String>.TextFieldMessages tfm = field.new TextFieldMessages();
 		tfm.setBlankText(Resources.messages.blankText(fieldTitle));
+		tfm.setRegexText(Resources.constants.User_wrongemail());
 		field.setMessages(tfm);
 		return field;
 	}
@@ -158,13 +159,6 @@ public class UserForm  extends BeanObject implements IUser{
 	public static TextField<String> getLastLoginField() {
 		TextField<String> field = new TextField<String>();
 		field.setName(LAST_LOGIN);
-		field.setVisible(false);
-		return field;
-	}
-
-	public static DateField getLastTimeField() {
-		DateField field = new DateField();
-		field.setName(LAST_TIME);
 		field.setVisible(false);
 		return field;
 	}
