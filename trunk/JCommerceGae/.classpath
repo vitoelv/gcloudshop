@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="lib" path="hotfix/gwt-dev-patch.jar"/>
 	<classpathentry excluding="com/jcommerce/gwt/server/PagingListAction.java|com/jcommerce/gwt/client/widgets/ChoicePanel.java|com/jcommerce/gwt/client/widgets/ColumnPanel.java|com/jcommerce/gwt/client/widgets/DateWidget.java|com/jcommerce/gwt/client/widgets/FileUploader.java|com/jcommerce/gwt/client/widgets/MultiValueSelector.java|com/jcommerce/gwt/client/widgets/ValueSelector.java|com/jcommerce/gwt/client/panels/goods/GalleryPanel.java|com/jcommerce/gwt/client/panels/goods/GalleryPanel2.java|com/jcommerce/gwt/client/panels/goods/GalleryPanel3.java" kind="src" path="admin"/>
 	<classpathentry kind="src" path="patch"/>
 	<classpathentry excluding="com/jcommerce/core/action/|com/jcommerce/core/module/IModule.java|com/jcommerce/core/module/ModuleLoader.java|com/jcommerce/core/module/payment/|com/jcommerce/core/module/shipping/|com/jcommerce/core/util/SendMail.java|src/|com/jcommerce/core/test/dataStore/|com/jcommerce/core/test/dwt/TestJarkataORO.java|com/jcommerce/core/test/case11/|com/jcommerce/core/test/TestZipImExport.java" kind="src" path="core"/>
