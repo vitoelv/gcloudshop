@@ -104,6 +104,8 @@ public class ShopConfigPanel extends BaseEntityEditPanel {
     	formPanel.setPadding(0);
     	formPanel.setHeaderVisible(false);
         tabs = new TabPanel();
+        tabs.setAutoHeight(true);
+        tabs.setWidth(900);
         formPanel.add(tabs);
 	}
 
