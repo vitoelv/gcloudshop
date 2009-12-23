@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="Maven">
+  <publishDate position="right"/>
+  
   <bannerLeft>
     <name>gcShop</name>
     <src>images/logo_165_100.gif</src>
@@ -15,16 +17,21 @@
     </links>
 
     <menu name="Project">
-      <item name="Introduction" href="index.html"/>
+      <item name="Summary" href="index.html"/>
       <item name="Features" href="features.html"/>
+      <item name="Why gcShop" href="why.html"/>
+      <item name="Live Demo" href="demo.html"/>
 	  <item name="Mailing List" href="mailing-list.html" />      
       <item name="Contact Us" href="contact.html" />
     </menu>
-    
+
+    <!--     
     <menu name="Live Demo">
-      <item name="Public portal" href="../web/front/home.action"/>
-      <item name="Administrator portal" href="../admin.html"/>
+
+      <item name="Public portal" href="../web/front/home.action" target="_blank"/>
+      <item name="Administrator portal" href="javascript: window.open('../admin.html'); return -1;"/>
     </menu>
+    -->
     
     <menu name="Seeking Cooperation">
       <item name="Technology" href="coop-technology.html"/>
@@ -32,11 +39,12 @@
     </menu>
     
     <menu name="Under Construction">
+      <item name="FAQ" href="faq.html"/>
       <item name="News" href="news.html"/>
       <item name="Download" href="download.html"/>
       <item name="License" href="license.html"/>
       <item name="Discussion" href="discussion.html" />
-      <item name="Developer" href="developer.html" />      
+      <!-- item name="Developer" href="developer.html" /-->      
     </menu>
     
 	<!--

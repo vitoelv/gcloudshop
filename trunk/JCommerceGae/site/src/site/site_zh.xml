@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Maven">
+  <publishDate position="right"/>
+
   <bannerLeft>
-    <name>gcShop</name>
+    <name>gcShop--基于Google App Engine的独立网店系统</name>
     <src>../images/logo_165_100.gif</src>
     <href>http://gcloudshop.appspot.com/</href>
   </bannerLeft>
@@ -15,16 +17,15 @@
     </links>
 
     <menu name="项目情况">
-      <item name="项目介绍" href="index.html"/>
+      <item name="项目概况" href="index.html"/>
       <item name="产品特性" href="features.html"/>
+	  <item name="为什么gcShop" href="why.html"/>      
+      <item name="在线演示" href="demo.html"/>
       <item name="邮件列表" href="mailing-list.html" />
       <item name="联系我们" href="contact.html" />
     </menu>
     
-    <menu name="在线演示">
-      <item name="公网界面" href="../../web/front/home.action?locale=zh"/>
-      <item name="管理界面" href="../../admin_zh.html"/>
-    </menu>
+
     
     <menu name="寻求合作">
       <item name="技术合作" href="coop-technology.html"/>
@@ -32,11 +33,12 @@
     </menu>
     
     <menu name="正在建设">
+      <item name="常见问题" href="faq.html"/>    
 	  <item name="项目新闻" href="news.html"/>
       <item name="资源下载" href="download.html"/>
       <item name="License" href="license.html"/>
       <item name="讨论讨论" href="discussion.html" />      
-      <item name="开发者" href="developer.html" />
+      <!-- item name="开发者" href="developer.html" /-->
     </menu>
 	<!--
 	no reports yet. 
