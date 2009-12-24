@@ -209,12 +209,12 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
 		
 	}
 	public void includeHistory(HttpServletRequest request) {
-		Set<GoodsWrapper> viewHistory = (HashSet<GoodsWrapper>)getSession().getAttribute("viewHistory");
+		Map<String,GoodsWrapper> viewHistory = (HashMap<String,GoodsWrapper>)getSession().getAttribute("viewHistory");
 	    
 		if( viewHistory != null && viewHistory.size() > 0 ){
 	    	StringBuffer sb = new StringBuffer();
 	    	
-	    	for (GoodsWrapper goodsWrapper : viewHistory) {
+	    	for (GoodsWrapper goodsWrapper : viewHistory.values()) {
 	    		Map map = new HashMap();
 	    		map.put("gid", goodsWrapper.getPkId());
 	    		String shortName = goodsWrapper.getName().length() > 10 ? goodsWrapper.getName().substring(0, 10)+"..." : goodsWrapper.getName();

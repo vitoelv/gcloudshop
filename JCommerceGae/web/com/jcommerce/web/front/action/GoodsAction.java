@@ -135,18 +135,18 @@ public class GoodsAction extends BaseAction {
 	    /*修改完*/
 	    
 	    /* 记录浏览历史 */
-	    Set<GoodsWrapper> viewHistory = (HashSet<GoodsWrapper>)getSession().getAttribute("viewHistory");
+	    Map<String,GoodsWrapper> viewHistory = (HashMap<String,GoodsWrapper>)getSession().getAttribute("viewHistory");
 	    if( viewHistory == null ){
-	    	viewHistory = new HashSet<GoodsWrapper>();
+	    	viewHistory = new HashMap<String,GoodsWrapper>();
 	    }
 	    
 	    if(viewHistory.size() < 5 ){
-	    	viewHistory.add(gw); 
+	    	viewHistory.put(gw.getPkId(),gw); 
 		    getSession().setAttribute("viewHistory" , viewHistory);
 	    }
 	    else{
-	    	if(viewHistory.add(gw)){
-	    		viewHistory.remove(viewHistory.toArray()[0]);
+	    	if(viewHistory.put(gw.getPkId(),gw) == null){
+	    		viewHistory.remove(viewHistory.keySet().toArray()[0]);
 	    	}
 	    }
 	    
