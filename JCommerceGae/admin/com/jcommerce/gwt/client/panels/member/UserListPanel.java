@@ -40,6 +40,7 @@ import com.jcommerce.gwt.client.model.IUser;
 import com.jcommerce.gwt.client.model.IUserRank;
 import com.jcommerce.gwt.client.panels.goods.GoodsListPanel;
 import com.jcommerce.gwt.client.panels.goods.AttributeListPanel.State;
+import com.jcommerce.gwt.client.panels.order.OrderListPanel;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.DeleteService;
 import com.jcommerce.gwt.client.service.ListService;
@@ -208,7 +209,7 @@ public class UserListPanel extends ContentWidget {
 		render.addAction(act);
 		act = new ActionCellRenderer.ActionInfo();		
 		act.setImage(GWT.getModuleBaseURL()+"icon_view.gif");
-		act.setAction("");
+		act.setAction("viewOrder($pkId)");
 		act.setTooltip(Resources.constants.UserList_tipViewOrder());
 		render.addAction(act);
 		act = new ActionCellRenderer.ActionInfo();		
@@ -323,6 +324,9 @@ public class UserListPanel extends ContentWidget {
 		$wnd.viewShippingAddress = function (id) {
 		    me.@com.jcommerce.gwt.client.panels.member.UserListPanel::viewAddressAndRefrsh(Ljava/lang/String;)(id);
 		};
+		$wnd.viewOrder = function (id) {
+		    me.@com.jcommerce.gwt.client.panels.member.UserListPanel::viewOrderAndRefrsh(Ljava/lang/String;)(id);
+		};
 	}-*/;
 	
 	private void modifyUserAndRefrsh(final String id) {
@@ -343,6 +347,12 @@ public class UserListPanel extends ContentWidget {
 	
 	private void viewAddressAndRefrsh(final String id) {
 		ShippingAddressPanel.State newState = new ShippingAddressPanel.State();
+		newState.setPkId(id);
+		newState.execute();
+	}
+	
+	private void viewOrderAndRefrsh(final String id) {
+		OrderListPanel.State newState = new OrderListPanel.State();
 		newState.setPkId(id);
 		newState.execute();
 	}
