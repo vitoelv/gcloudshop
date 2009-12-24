@@ -3,14 +3,17 @@ package com.jcommerce.web.front.action;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringBufferInputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -28,7 +31,9 @@ import com.jcommerce.core.model.GoodsAttr;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.model.OrderGoods;
 import com.jcommerce.core.model.OrderInfo;
+import com.jcommerce.core.model.Payment;
 import com.jcommerce.core.model.Session;
+import com.jcommerce.core.model.ShopConfig;
 import com.jcommerce.core.model.User;
 import com.jcommerce.core.model.UserAddress;
 import com.jcommerce.core.model.UserRank;
@@ -44,6 +49,7 @@ import com.jcommerce.gwt.client.model.IGoods;
 import com.jcommerce.gwt.client.model.IOrderGoods;
 import com.jcommerce.gwt.client.model.IOrderInfo;
 import com.jcommerce.gwt.client.model.IRegion;
+import com.jcommerce.gwt.client.model.IShopConfig;
 import com.jcommerce.gwt.client.model.IUser;
 import com.jcommerce.gwt.client.model.IUserAddress;
 import com.jcommerce.gwt.client.model.IUserRank;
@@ -178,7 +184,35 @@ public class UserAction extends BaseAction {
 					getNextRank(uw,userRank,request);
 				}
 				
-				uw.setManager(getDefaultManager());
+				String shopName = null;				
+				Condition codition = new Condition(IShopConfig.CODE,Condition.EQUALS,"shop_name");
+		        Criteria criteria = new Criteria();
+		        criteria.addCondition(codition);
+		        List<ShopConfig> shopConfigs = getDefaultManager().getList(ModelNames.SHOPCONFIG, criteria);
+		        for(Iterator iterator = shopConfigs.iterator();iterator.hasNext();) {
+		        	ShopConfig shopConfig = (ShopConfig)iterator.next();
+		        	shopName = shopConfig.getValue();
+		        }
+				uw.put("shopName", shopName);
+				
+				//获得上次登录时间
+				Date lastTime = uw.getUser().getLastTime() == null ? new Date() : uw.getUser().getLastTime();//如果是第一次登录，上次登录时间为本次登录时间 
+				SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
+				String lastTimeStr = formatter.format(lastTime);
+
+			    //记录本次登录时间
+				Date date = new Date();
+				uw.getUser().setLastTime(date);
+				getDefaultManager().txattach(uw.getUser());
+				uw.put("lastTime", lastTimeStr);
+				
+				//获得所有订单
+				Condition condition = new Condition(IOrderInfo.USER_ID,Condition.EQUALS,uw.getUser().getPkId());
+				criteria.removeAllCondition();
+				criteria.addCondition(condition);
+				List<OrderInfo> orderInfos = getDefaultManager().getList(ModelNames.ORDERINFO, criteria);
+				uw.setOrder(orderInfos);
+				
 				uw.put("isValidate", 1);
 				uw.put("shippedOrder", null);
 				
@@ -368,7 +402,6 @@ public class UserAction extends BaseAction {
 				String orderId = request.getParameter("order_id");
 			    /* 订单详情 */
 				OrderInfoWrapper ow = getOrderDetail(orderId, userId);
-				ow.setManager(getDefaultManager());
 				if(ow==null) {
 					
 				}
@@ -655,7 +688,7 @@ public class UserAction extends BaseAction {
 				
 				/* 修改订单发货状态为“确认收货” */
 				orderInfo.setShippingStatus((long)IOrderInfo.SS_RECEIVED);
-				manager.txupdate(orderInfo);
+				manager.txattach(orderInfo);
 				includeUserMenu();
 				getOrderList(request, userId);
 				action = "orderList";
@@ -908,7 +941,9 @@ public class UserAction extends BaseAction {
 		else {
 			ow.put("payOnline", "");
 		}
-				
+		String payId = ow.getOrderInfo().getPayId();
+    	Payment payment = (Payment) getDefaultManager().get(ModelNames.PAYMENT, payId);
+    	ow.put("payDesc", payment.getPayDesc());
 		return ow;
 		
 		
