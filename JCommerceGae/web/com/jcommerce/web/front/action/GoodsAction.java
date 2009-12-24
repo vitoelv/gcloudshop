@@ -87,13 +87,32 @@ public class GoodsAction extends BaseAction {
 	    String brandId = goods.getBrandId();
 	    Brand brand = (Brand)manager.get(ModelNames.BRAND, brandId);
 	    gw.put(GoodsWrapper.GOODS_BRAND, brand.getBrandName());
-	       
+	    
+	    //获得用户评价等级
+	    String id = gw.getGoods().getPkId();
+    	Condition condition = new Condition(IComment.ID_VALUE,Condition.EQUALS,id);
+        Criteria criteria = new Criteria();
+        criteria.addCondition(condition);
+        List<Comment> comments = (List<Comment>) manager.getList(ModelNames.COMMENT,criteria);
+        Long sum = 0L;
+        int number = comments.size();
+        for(Iterator iterator = comments.iterator();iterator.hasNext();) {
+        	Comment comment = (Comment) iterator.next();
+        	Long rank = comment.getCommentRank();
+        	sum += rank;
+        }
+        String rank = "0";
+        if(number > 0)
+        	rank = ((int)Math.ceil((double)sum / number)) + "";  
+        gw.put("commentRank", rank);
+	    
+	    
 	    request.setAttribute("rankPrices", new String[0]);
 	        
 	    /*修改,获得商品相册*/
-	    Condition codition = new Condition("goods",Condition.EQUALS,goodsId);
-	    Criteria criteria = new Criteria();
-	    criteria.addCondition(codition);
+	    Condition galleryCondition = new Condition("goods",Condition.EQUALS,goodsId);
+	    criteria.removeAllCondition();
+	    criteria.addCondition(galleryCondition);
 	    List<GoodsGallery> goodsGallery = (List<GoodsGallery>) manager.getList(ModelNames.GOODSGALLERY,criteria);
 	    List<GoodsGalleryWrapper> goodsGalleryWrapper = WrapperUtil.wrap(goodsGallery, GoodsGalleryWrapper.class);
 	    request.setAttribute("pictures", goodsGalleryWrapper);
@@ -122,7 +141,6 @@ public class GoodsAction extends BaseAction {
 	    
 	    /*修改,修改商品点击次数*/
 	    if(act == null) {
-		    gw.setManager(manager);
 		    goods.setClickCount(goods.getClickCount() + 1);
 		    manager.txattach(goods);
 	    }

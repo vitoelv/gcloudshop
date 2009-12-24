@@ -377,7 +377,19 @@ public class FlowAction extends BaseAction {
     	List<CartWrapper> cartWrapper = new ArrayList<CartWrapper>();
     	for(Cart cart : carts) {
     		CartWrapper wrapper = new CartWrapper(cart);
-    		wrapper.setManager(getDefaultManager());
+    		String id = wrapper.getCart().getGoodsId();
+    		Goods good = (Goods) getDefaultManager().get(ModelNames.GOODS, id);
+    		
+    		//判断是否促销
+    		Long promoteEndTime = good.getPromoteEndDate();
+    		Long promoteStartTime = good.getPromoteStartDate();
+    		Long nowTime = new Date().getTime();
+    		if(nowTime > promoteEndTime || nowTime < promoteStartTime) {
+    			wrapper.setPrice(wrapper.getCart().getGoodsPrice()) ;
+    		}
+    		else {
+    			wrapper.setPrice(good.getPromotePrice()) ;
+    		}
     		cartWrapper.add(wrapper);
     	}
     	request.setAttribute("goodsList", cartWrapper);
@@ -397,7 +409,6 @@ public class FlowAction extends BaseAction {
          */
     	OrderInfo order = LibOrder.flowOrderInfo(session,getDefaultManager());
     	OrderInfoWrapper ow = new OrderInfoWrapper(order);
-    	ow.setManager(getDefaultManager());
     	getRequest().setAttribute("order", ow);
     	
 
@@ -696,7 +707,6 @@ public class FlowAction extends BaseAction {
     	
     	OrderInfo order = new OrderInfo();
     	OrderInfoWrapper ow = (OrderInfoWrapper)WrapperUtil.wrap(order, OrderInfoWrapper.class);
-    	ow.setManager(getDefaultManager());
     	order.setShippingId(shipping);
     	order.setPayId(payment);
     	debug("payment: "+payment+", shipping: "+shipping);
