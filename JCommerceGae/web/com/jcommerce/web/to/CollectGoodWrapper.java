@@ -8,12 +8,15 @@ import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.util.URLConstants;
+import com.jcommerce.web.util.SpringUtil;
 import com.jcommerce.web.util.WebFormatUtils;
 
 public class CollectGoodWrapper extends BaseModelWrapper implements URLConstants{
 
 	CollectGood collectGood;
-	private IDefaultManager manager = null;
+	Goods goods;
+	
+	private IDefaultManager manager = SpringUtil.getDefaultManager();
 	@Override
 	protected Object getWrapped() {
 		return getCollectGood();
@@ -79,13 +82,15 @@ public class CollectGoodWrapper extends BaseModelWrapper implements URLConstants
 			return "";
 	}
 	
+	public void setGoods(Goods goods) {
+		this.goods = goods;
+	}
 	public Goods getGoods() {
-		String goodsId = getCollectGood().getGoodsId();
-		Goods goods = (Goods) manager.get(ModelNames.GOODS, goodsId);
 		return goods;
 	}
-	
-	public void setManager(IDefaultManager manager) {
-		this.manager = manager;
-	}
+//	public Goods getGoods() {
+//		String goodsId = getCollectGood().getGoodsId();
+//		Goods goods = (Goods) manager.get(ModelNames.GOODS, goodsId);
+//		return goods;
+//	}
 }

@@ -17,6 +17,7 @@ import org.datanucleus.util.StringUtils;
 import com.jcommerce.core.model.Category;
 import com.jcommerce.core.model.CollectGood;
 import com.jcommerce.core.model.Comment;
+import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.User;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
@@ -243,7 +244,11 @@ public class LibMain {
 		for(Iterator iterator = collectGoods.iterator();iterator.hasNext();) {
 			CollectGood collectGood = (CollectGood) iterator.next();
 			CollectGoodWrapper wrapper = new CollectGoodWrapper(collectGood);
-			wrapper.setManager(manager);
+			
+			String goodsId = wrapper.getCollectGood().getGoodsId();
+			Goods goods = (Goods) manager.get(ModelNames.GOODS, goodsId);
+			wrapper.setGoods(goods) ;
+			
 			goodsList.add(wrapper);
 		}
 		
@@ -273,7 +278,21 @@ public class LibMain {
 		List<CommentWrapper> commentListWrapper = WrapperUtil.wrap(commentList, CommentWrapper.class);
 		for(Iterator iterator = commentListWrapper.iterator(); iterator.hasNext();) {
 			CommentWrapper commentWrapper = (CommentWrapper) iterator.next();
-			commentWrapper.setManager(manager);
+			String goodsId = commentWrapper.getComment().getIdValue();
+			Goods goods = (Goods) manager.get(ModelNames.GOODS, goodsId);
+			commentWrapper.put("cmtName", goods.getGoodsName());
+			
+			String id = commentWrapper.getComment().getPkId();
+			criteria.removeAllCondition();
+			criteria.addCondition(new Condition(IComment.PARENT_ID, Condition.EQUALS, id));
+			List reply = manager.getList(ModelNames.COMMENT, criteria);
+			if(reply.size() == 0) {
+				commentWrapper.put("replyContent", null) ;
+			}
+			else {
+				Comment comment = (Comment) reply.get(0);
+				commentWrapper.put("replyContent", comment.getContent());
+			}
 		}
 		
 		Map<String, Object> cmt = new HashMap<String, Object>();

@@ -1,6 +1,7 @@
 package com.jcommerce.web.util;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -180,7 +181,20 @@ public class LibOrder {
     	
     	for(Cart cart: carts) {
     		CartWrapper cw = new CartWrapper(cart);
-    		cw.setManager(manager);
+    		
+    		String id = cw.getCart().getGoodsId();
+    		Goods good = (Goods) manager.get(ModelNames.GOODS, id);
+    		
+    		//判断是否促销
+    		Long promoteEndTime = good.getPromoteEndDate();
+    		Long promoteStartTime = good.getPromoteStartDate();
+    		Long nowTime = new Date().getTime();
+    		if(nowTime > promoteEndTime || nowTime < promoteStartTime) {
+    			cw.setPrice(cw.getCart().getGoodsPrice()) ;
+    		}
+    		else {
+    			cw.setPrice(good.getPromotePrice()) ;
+    		}
     		
     		total.setGoodsPrice(total.getGoodsPrice() + cw.getPrice() * cart.getGoodsNumber());
     		total.setMarketPrice(total.getMarketPrice() + cart.getMarketPrice()*cart.getGoodsNumber());

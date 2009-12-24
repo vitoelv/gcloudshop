@@ -10,16 +10,14 @@ import com.jcommerce.core.model.GoodsAttr;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
+import com.jcommerce.web.util.SpringUtil;
 import com.jcommerce.web.util.WebFormatUtils;
 
 public class CartWrapper extends BaseModelWrapper {
 
 	Cart cart;
-	private IDefaultManager manager;
+	double price;
 	
-	public void setManager(IDefaultManager manager) {
-		this.manager = manager;
-	}
 	@Override
 	protected Object getWrapped() {
 		return getCart();
@@ -43,35 +41,41 @@ public class CartWrapper extends BaseModelWrapper {
 	}
 	
 	public String getFormatedGoodsPrice() {
-		String goodsId = getCart().getGoodsId();
-		Goods goods = (Goods) manager.get(ModelNames.GOODS, goodsId);
-		
-		//判断是否促销
-		Long promoteEndTime = goods.getPromoteEndDate();
-		Long promoteStartTime = goods.getPromoteStartDate();
-		Long nowTime = new Date().getTime();
-		if(nowTime > promoteEndTime || nowTime < promoteStartTime) {
-			return WebFormatUtils.priceFormat(getCart().getGoodsPrice());
-		}
-		else {
-			return WebFormatUtils.priceFormat(goods.getPromotePrice());
-		}		
+//		String goodsId = getCart().getGoodsId();
+//		Goods goods = (Goods) manager.get(ModelNames.GOODS, goodsId);
+//		
+//		//判断是否促销
+//		Long promoteEndTime = goods.getPromoteEndDate();
+//		Long promoteStartTime = goods.getPromoteStartDate();
+//		Long nowTime = new Date().getTime();
+//		if(nowTime > promoteEndTime || nowTime < promoteStartTime) {
+//			return WebFormatUtils.priceFormat(getCart().getGoodsPrice());
+//		}
+//		else {
+//			return WebFormatUtils.priceFormat(goods.getPromotePrice());
+//		}	
+		return WebFormatUtils.priceFormat(getPrice());
 	}
 	
 	public double getPrice() {
-		String goodsId = getCart().getGoodsId();
-		Goods goods = (Goods) manager.get(ModelNames.GOODS, goodsId);
-		
-		//判断是否促销
-		Long promoteEndTime = goods.getPromoteEndDate();
-		Long promoteStartTime = goods.getPromoteStartDate();
-		Long nowTime = new Date().getTime();
-		if(nowTime > promoteEndTime || nowTime < promoteStartTime) {
-			return getCart().getGoodsPrice();
-		}
-		else {
-			return goods.getPromotePrice();
-		}
+//		String goodsId = getCart().getGoodsId();
+//		Goods goods = (Goods) manager.get(ModelNames.GOODS, goodsId);
+//		
+//		//判断是否促销
+//		Long promoteEndTime = goods.getPromoteEndDate();
+//		Long promoteStartTime = goods.getPromoteStartDate();
+//		Long nowTime = new Date().getTime();
+//		if(nowTime > promoteEndTime || nowTime < promoteStartTime) {
+//			return getCart().getGoodsPrice();
+//		}
+//		else {
+//			return goods.getPromotePrice();
+//		}
+		return price;
+	}
+	
+	public void setPrice(double price) {
+		this.price = price;
 	}
 	
 	public String getFormatedSubtotal() {
