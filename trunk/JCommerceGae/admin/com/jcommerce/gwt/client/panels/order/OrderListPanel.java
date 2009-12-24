@@ -20,9 +20,12 @@ import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.model.IOrderInfo;
+import com.jcommerce.gwt.client.model.IUserAddress;
 import com.jcommerce.gwt.client.resources.Resources;
+import com.jcommerce.gwt.client.service.Condition;
 import com.jcommerce.gwt.client.service.Criteria;
 import com.jcommerce.gwt.client.service.PagingListService;
+import com.jcommerce.gwt.client.util.MyRpcProxy;
 import com.jcommerce.gwt.client.widgets.ActionCellRenderer;
 
 public class OrderListPanel  extends ContentWidget{
@@ -57,7 +60,7 @@ public class OrderListPanel  extends ContentWidget{
 	}
 	
 	public static class State extends PageState {
-
+		public static final String PK_ID = "pkId";
 		@Override
 		public String getPageClassName() {
 			return OrderListPanel.class.getName();
@@ -66,16 +69,28 @@ public class OrderListPanel  extends ContentWidget{
 		public String getMenuDisplayName() {
 			return Resources.constants.OrderList_title();
 		}
+		public void setPkId(String gtid) {
+			setValue(PK_ID, gtid);
+		}
+		public String getPkId() {
+			return (String)getValue(PK_ID);
+		}
 	}
 
 	Criteria criteria = new Criteria();
 	PagingToolBar toolBar;
+	BasePagingLoader loader = null;
 	
 	@Override
 	protected void onRender(Element parent, int index) {
 		super.onRender(parent, index);
 		
-		BasePagingLoader loader = new PagingListService().getLoader(ModelNames.ORDERINFO, criteria);
+		String userId = getCurState().getPkId();
+		if(userId != null) {
+			criteria.addCondition(new Condition(IOrderInfo.USER_ID, Condition.EQUALS, userId));
+		}
+		
+		loader = new PagingListService().getLoader(ModelNames.ORDERINFO, criteria);
 		loader.load(0, 10);
 		final ListStore<BeanObject> store = new ListStore<BeanObject>(loader);
 //		store.addStoreListener(new StoreListener<BeanObject>() {
@@ -176,9 +191,20 @@ public class OrderListPanel  extends ContentWidget{
 	
 	@Override
 	public void refresh() {
+		refreshOrderList();
 		toolBar.refresh();
 	}
 	
+	private void refreshOrderList() {
+		String userId = getCurState().getPkId();
+		Criteria criteria = new Criteria(); 
+		if(userId != null) {
+			criteria.addCondition(new Condition(IUserAddress.USER_ID, Condition.EQUALS, userId));
+		}
+		MyRpcProxy proxy = (MyRpcProxy)loader.getProxy();
+		proxy.setCriteria(criteria);			
+	}
+
 //	private void updateOrder(BeanObject order, UpdateService.Listener listener){
 //		new UpdateService().updateBean(order.getString(IOrderInfo.ID), order,
 //				listener);
