@@ -124,7 +124,15 @@
         <servlet-class>example.DynaImageServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    
+     <servlet>
+        <servlet-name>loginAction</servlet-name>
+        <servlet-class>com.jcommerce.gwt.server.LoginAction</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>loginAction</servlet-name>
+        <url-pattern>/admin/LoginAction.do</url-pattern>
+    </servlet-mapping>
     
 	<servlet-mapping>
 		<servlet-name>freemarker</servlet-name>
@@ -162,6 +170,7 @@
     <welcome-file-list>
     	<welcome-file>old_home.html</welcome-file>    
     	<welcome-file>index.html</welcome-file>
+    	<welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
 
     <error-page>
