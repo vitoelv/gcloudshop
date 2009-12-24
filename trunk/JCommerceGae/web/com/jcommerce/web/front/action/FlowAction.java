@@ -728,7 +728,6 @@ public class FlowAction extends BaseAction {
     	//order.setDistrict(consignee.getUserAddress().getDistrict());
     	order.setConsignee(consignee.getUserAddress().getConsignee());
     	order.setZipcode(consignee.getUserAddress().getZipcode());
-    	order.setKeyName(consignee.getUserAddress().getKeyName());
     	
     	/* 订单中的总额 */
     	Total total = LibOrder.orderFee(order, carts, consignee , getDefaultManager() , request.getSession());
