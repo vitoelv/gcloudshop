@@ -16,12 +16,12 @@ import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IOrderInfo;
 import com.jcommerce.web.util.PrintfFormat;
+import com.jcommerce.web.util.SpringUtil;
 import com.jcommerce.web.util.WebFormatUtils;
 
 public class OrderInfoWrapper extends BaseModelWrapper {
 
 	OrderInfo orderInfo;
-	private IDefaultManager manager = null;
 	@Override
 	protected Object getWrapped() {
 		return getOrderInfo();
@@ -176,12 +176,6 @@ public class OrderInfoWrapper extends BaseModelWrapper {
     	return WebFormatUtils.priceFormat(getOrderInfo().getOrderAmount());
     }
     
-    public String getPayDesc() {
-    	String payId = getOrderInfo().getPayId();
-    	Payment payment = (Payment) manager.get(ModelNames.PAYMENT, payId);
-    	return payment.getPayDesc();
-    }
-    
     public String getPackName() {
     	return getOrderInfo().getPackName();
     }
@@ -199,8 +193,5 @@ public class OrderInfoWrapper extends BaseModelWrapper {
     }
     public String getHowOosName() {
     	return getOrderInfo().getHowOos() == null ? "" : getOrderInfo().getHowOos();
-    }
-    public void setManager(IDefaultManager manager) {
-    	this.manager = manager;
     }
 }

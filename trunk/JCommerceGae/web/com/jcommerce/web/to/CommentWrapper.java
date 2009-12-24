@@ -11,11 +11,12 @@ import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IComment;
+import com.jcommerce.web.util.SpringUtil;
 
 public class CommentWrapper extends BaseModelWrapper {
 
 	Comment comment;
-	private IDefaultManager manager = null;
+	private IDefaultManager manager  = SpringUtil.getDefaultManager();
 	@Override
 	protected Object getWrapped() {
 		return getComment();
@@ -33,11 +34,11 @@ public class CommentWrapper extends BaseModelWrapper {
 		return getComment().getCommentType().toString();
 	}
 	
-	public String getCmtName() {
-		String goodsId = getComment().getIdValue();
-		Goods goods = (Goods) manager.get(ModelNames.GOODS, goodsId);
-		return goods.getGoodsName();
-	}
+//	public String getCmtName() {
+//		String goodsId = getComment().getIdValue();
+//		Goods goods = (Goods) manager.get(ModelNames.GOODS, goodsId);
+//		return goods.getGoodsName();
+//	}
 
 	public String getFormatedAddTime() {
 		Long addTime = getComment().getAddTime();
@@ -53,21 +54,17 @@ public class CommentWrapper extends BaseModelWrapper {
 		return getComment().getContent();
 	}
 	
-	public String getReplyContent() {
-		String id = getComment().getPkId();
-		Criteria criteria = new Criteria();
-		criteria.addCondition(new Condition(IComment.PARENT_ID, Condition.EQUALS, id));
-		List reply = manager.getList(ModelNames.COMMENT, criteria);
-		if(reply.size() == 0) {
-			return null;
-		}
-		else {
-			Comment comment = (Comment) reply.get(0);
-			return comment.getContent();
-		}
-	}
-	
-	public void setManager(IDefaultManager manager) {
-		this.manager = manager;
-	}
+//	public String getReplyContent() {
+//		String id = getComment().getPkId();
+//		Criteria criteria = new Criteria();
+//		criteria.addCondition(new Condition(IComment.PARENT_ID, Condition.EQUALS, id));
+//		List reply = manager.getList(ModelNames.COMMENT, criteria);
+//		if(reply.size() == 0) {
+//			return null;
+//		}
+//		else {
+//			Comment comment = (Comment) reply.get(0);
+//			return comment.getContent();
+//		}
+//	}
 }

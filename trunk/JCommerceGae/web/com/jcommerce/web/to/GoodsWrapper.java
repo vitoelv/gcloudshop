@@ -16,12 +16,12 @@ import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IComment;
 import com.jcommerce.gwt.client.util.URLConstants;
+import com.jcommerce.web.util.SpringUtil;
 import com.jcommerce.web.util.WebFormatUtils;
 
 public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
 	
 	public static final String GOODS_BRAND = "goodsBrand";
-	private IDefaultManager manager = null;
 	
 	Goods goods;
 	@Override
@@ -68,26 +68,6 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
     public String getShopPriceFormated() {
     	return WebFormatUtils.priceFormat(getGoods().getShopPrice());
     }
-     /*修改,获得用户评价等级*/
-    public String getCommentRank() {
-    	String id = getGoods().getPkId();
-    	Condition codition = new Condition(IComment.ID_VALUE,Condition.EQUALS,id);
-        Criteria criteria = new Criteria();
-        criteria.addCondition(codition);
-        List<Comment> comments = (List<Comment>) manager.getList(ModelNames.COMMENT,criteria);
-        Long sum = 0L;
-        int number = comments.size();
-        for(Iterator iterator = comments.iterator();iterator.hasNext();) {
-        	Comment comment = (Comment) iterator.next();
-        	Long rank = comment.getCommentRank();
-        	sum += rank;
-        }
-        String rank = "0";
-        if(number > 0)
-        	rank = ((int)Math.ceil((double)sum / number)) + "";
-    	return rank;
-    }
-    /*修改完*/
     
     public String getBonusMoney() {
     	return "TODO bonus Money";
@@ -122,10 +102,6 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
         
     public String getShopPrice(){
     	return WebFormatUtils.priceFormat(getGoods().getShopPrice());
-    }
-    
-    public void setManager(IDefaultManager manager) {
-    	this.manager = manager;
     }
     
 //    public String getGoodsNumber() {
