@@ -1,6 +1,7 @@
 package com.jcommerce.gwt.client.resources;
 
 import com.google.gwt.i18n.client.Constants;
+import com.jcommerce.gwt.client.panels.article.ArticleCatListPanel;
 import com.jcommerce.gwt.client.panels.goods.AttributeListPanel;
 import com.jcommerce.gwt.client.panels.goods.AttributePanel;
 import com.jcommerce.gwt.client.panels.goods.BrandListPanel;
@@ -11,9 +12,9 @@ import com.jcommerce.gwt.client.panels.goods.GoodsListPanel;
 import com.jcommerce.gwt.client.panels.goods.GoodsPanel;
 import com.jcommerce.gwt.client.panels.goods.GoodsTypeListPanel;
 import com.jcommerce.gwt.client.panels.goods.GoodsTypePanel;
+import com.jcommerce.gwt.client.panels.member.ShippingAddressPanel;
 import com.jcommerce.gwt.client.panels.member.UserListPanel;
 import com.jcommerce.gwt.client.panels.member.UserPanel;
-import com.jcommerce.gwt.client.panels.member.ShippingAddressPanel;
 import com.jcommerce.gwt.client.panels.order.OrderUserPanel;
 import com.jcommerce.gwt.client.panels.privilege.AdminListPanel;
 import com.jcommerce.gwt.client.panels.privilege.AdminUserPanel;
@@ -22,6 +23,8 @@ import com.jcommerce.gwt.client.panels.system.RegionListPanel;
 import com.jcommerce.gwt.client.panels.system.RegionPanel;
 import com.jcommerce.gwt.client.panels.system.ShippingAreaListPanel;
 import com.jcommerce.gwt.client.panels.system.ShippingMetaListPanel;
+import com.jcommerce.gwt.client.panels.data.ImportPanel;
+import com.jcommerce.gwt.client.panels.data.ExportPanel;
 /**
  * Constants used throughout the showcase.
  */
@@ -35,7 +38,9 @@ public interface IShopConstants extends Constants,
 			ShippingAreaListPanel.Constants,BrandPanel.Constants,GoodsTypePanel.Constants,
 			BrandListPanel.Constants,CategoryPanel.Constants,CategoryListPanel.Constants,
 			AttributePanel.Constants,RegionListPanel.Constants,UserListPanel.Constants,UserPanel.Constants,
-			AdminUserPanel.Constants,AdminListPanel.Constants,ShippingAddressPanel.Constants
+			AdminUserPanel.Constants,AdminListPanel.Constants,ShippingAddressPanel.Constants,
+			ArticleCatListPanel.Constants,
+			ImportPanel.Constants, ExportPanel.Constants
 
 			{
 

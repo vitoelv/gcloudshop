@@ -46,7 +46,7 @@ import com.jcommerce.gwt.client.widgets.ActionCellRenderer;
 
 public class ArticleCatListPanel extends ContentWidget{
 	public static interface Constants {
-
+		String ArticleCat_MenuName();
 	}
 	
 	private ArticleCatListPanel(){
@@ -70,7 +70,7 @@ public class ArticleCatListPanel extends ContentWidget{
 			return ArticleCatListPanel.class.getName();
 		}
 		public String getMenuDisplayName() {
-			return "Article Category";
+			return Resources.constants.ArticleCat_MenuName();
 		}
     	
     }

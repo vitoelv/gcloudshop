@@ -16,8 +16,15 @@ import com.jcommerce.gwt.client.form.GWTHttpDynaForm;
 import com.jcommerce.gwt.client.panels.BaseEntityEditPanel;
 import com.jcommerce.gwt.client.panels.BaseFileUploadFormPanel;
 import com.jcommerce.gwt.client.panels.Success;
+import com.jcommerce.gwt.client.resources.Resources;
 
 public class ImportPanel extends BaseFileUploadFormPanel {
+	
+	public static interface Constants {
+        String Import_MenuName();
+        
+    }
+	
     /**
      * Initialize this example.
      */
@@ -38,7 +45,7 @@ public class ImportPanel extends BaseFileUploadFormPanel {
 		}
 		
 		public String getMenuDisplayName() {
-			return "Import";
+			return  Resources.constants.Import_MenuName();
 		}
 	}
 	
