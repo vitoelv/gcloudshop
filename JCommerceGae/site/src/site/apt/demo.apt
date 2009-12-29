@@ -14,7 +14,7 @@ Live Demo
    		
    		* Public user can choose to register and login, or start to use as an anonymous user.
    
-   {{{../admin.html} Administrator portal home page}}.
+   {{{../login.jsp} Administrator portal home page}}.
    	
    		* For the shop owner to manage the shop.
    		
