@@ -130,12 +130,14 @@ public class ImportExportServlet extends HttpServlet{
 		
 		IDefaultManager manager = SpringUtil.getDefaultManager();
 		String[] modelNames = new String[]{
+				ModelNames.ADMINUSER, ModelNames.ADMINACTION,
 				ModelNames.AREAREGION, ModelNames.ARTICLE_CAT, ModelNames.ATTRIBUTE
 				, ModelNames.BRAND, ModelNames.CART, ModelNames.CATEGORY
 				, ModelNames.COLLECTGOOD, ModelNames.COMMENT, ModelNames.GOODS
 				, ModelNames.GOODSATTR, ModelNames.GOODSGALLERY, ModelNames.GOODSTYPE
 				, ModelNames.ORDERGOODS, ModelNames.ORDERINFO, ModelNames.PAYMENT
-				, ModelNames.REGION, ModelNames.SESSION, ModelNames.SHIPPINGAREA
+				, ModelNames.REGION, ModelNames.SESSION
+				, ModelNames.SHIPPING, ModelNames.SHIPPINGAREA
 				, ModelNames.SHOPCONFIG, ModelNames.USER, ModelNames.USER_RANK
 				, ModelNames.USERADDRESS, DSFile.class.getName()
 				};

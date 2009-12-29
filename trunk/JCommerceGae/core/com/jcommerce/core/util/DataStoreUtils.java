@@ -29,6 +29,8 @@ import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.jcommerce.core.annotation.IsPK;
+import com.jcommerce.core.model.AdminUser;
+import com.jcommerce.core.model.AreaRegion;
 import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.Category;
@@ -38,7 +40,11 @@ import com.jcommerce.core.model.GoodsAttr;
 import com.jcommerce.core.model.GoodsGallery;
 import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.model.ModelObject;
+import com.jcommerce.core.model.Payment;
 import com.jcommerce.core.model.Region;
+import com.jcommerce.core.model.Shipping;
+import com.jcommerce.core.model.ShippingArea;
+import com.jcommerce.core.model.ShopConfig;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.model.IModelObject;
 
@@ -247,7 +253,12 @@ public class DataStoreUtils implements IConstants{
 					Attribute.class.getName(), 
 					Category.class.getName(), Region.class.getName(),
 					Goods.class.getName(), GoodsGallery.class.getName(),
-					GoodsAttr.class.getName(), DSFile.class.getName() 
+					GoodsAttr.class.getName(), DSFile.class.getName(), 
+					AdminUser.class.getName(), 
+					ShopConfig.class.getName()
+					,
+					Payment.class.getName(), Shipping.class.getName(),
+					ShippingArea.class.getName(), AreaRegion.class.getName()
 					};
 
 			zout.putNextEntry(new ZipEntry("mydata.txt"));
@@ -273,7 +284,7 @@ public class DataStoreUtils implements IConstants{
 			zout.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			throw new RuntimeException("error in import, cause: " + ex.getMessage());
+			throw new RuntimeException("error in export, cause: " + ex.getMessage());
 		}
     }
     
@@ -361,22 +372,26 @@ public class DataStoreUtils implements IConstants{
 	            	strValue = buf1.toString();
 	            }
 	            else if(value==null) {
-	            	
+	            	// if value is null, export as an empty string
 	            }
 	            else {
 					Field field = cls.getDeclaredField(fn);
 					Class ft = field.getType();
-					 System.out.println("fn: "+fn+", ft: "+ft.getName());
+					 System.out.println("fn: "+fn+", ft: "+ft.getName()+", value: "+value);
 
 					IsPK isPK = field.getAnnotation(IsPK.class);
 					if (isPK != null) {
 						// convert PK->keyName
 						ModelObject target = manager.get(isPK.myclazz(),
 								(String) value);
-						StringBuffer buf1 = new StringBuffer();
-						Key key = KeyFactory.stringToKey(target.getPkId());
-						getChainedKeyName(buf1, key, manager);
-						strValue = buf1.toString();
+						if(target!=null) {
+							StringBuffer buf1 = new StringBuffer();
+							Key key = KeyFactory.stringToKey(target.getPkId());
+							getChainedKeyName(buf1, key, manager);
+							strValue = buf1.toString();
+						}else {
+							System.out.println("failed to find a target of IsPk(class="+isPK.myclazz()+") field");
+						}
 					} else if (Collection.class.isAssignableFrom(ft)) {
 						strValue = Arrays.toString(((Collection) value)
 								.toArray());
@@ -459,6 +474,15 @@ public class DataStoreUtils implements IConstants{
     }
     
 
-    
+    public static String genKeyName(ModelObject obj) {
+    	// instead of using UUID, we try to make the keyname shorter while unique
+    	
+    	// hashcode append with last 4 number of nanotime
+    	String keyName = "_"+String.valueOf(obj.hashCode())+String.valueOf(System.nanoTime()%10000);
+    	
+    	return keyName;
+    	
+    	
+    }
     
 }

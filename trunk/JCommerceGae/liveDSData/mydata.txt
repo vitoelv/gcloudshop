@@ -18,8 +18,11 @@ USAGE: refer to the below KEYWORD definition:
 keyName,regionId,parentId,regionName,regionType,agencyId
 SOR>Region:_r086,,,中国,0,<EOR
 SOR>Region:_r086_10,,Region:_r086,北京,1,<EOR
-SOR>Region:_r086_10_10,,Region:_r086_10,海淀区,2,<EOR
-SOR>Region:_r086_10_20,,Region:_r086_10,昌平区,2,<EOR
+SOR>Region:_r086_10_01,,Region:_r086_10,北京市,2,<EOR
+SOR>Region:_r086_10_01_1,,Region:_r086_10_01,海淀区,3,<EOR
+SOR>Region:_r086_10_01_2,,Region:_r086_10_01,昌平区,3,<EOR
+SOR>Region:_r086_10_01_3,,Region:_r086_10_01,朝阳区,3,<EOR
+SOR>Region:_r086_10_01_4,,Region:_r086_10_01,东城区,3,<EOR
 SOR>Region:_r086_11,,Region:_r086,天津,1,<EOR
 SOR>Region:_r086_12,,Region:_r086,浙江,1,<EOR
 SOR>Region:_r086_12_01,,Region:_r086_12,杭州,2,<EOR
@@ -33,30 +36,51 @@ SOR>Region:_r2_11_00_0,,Region:_r001,佛州,1,<EOR
 ::com.jcommerce.core.model.Goods
 keyName,goodsTypeId,image,imageFileId,thumb,thumbFileId,goodsId,catId,goodsSn,goodsName,goodsNameStyle,clickCount,brandId,providerName,goodsNumber,goodsWeight,marketPrice,shopPrice,promotePrice,promoteStartDate,promoteEndDate,warnNumber,keywords,goodsBrief,goodsDesc,goodsThumb,goodsImg,originalImg,isReal,extensionCode,isOnSale,isAloneSale,integral,addTime,sortOrder,isDelete,isBest,isNew,isHot,isPromote,bonusTypeId,lastUpdate,goodsType,sellerNote,giveIntegral,rankIntegral
 
-SOR>Goods:_g1,GoodsType:_gt1,,Goods:_g1|GoodsGallery:_gg1|DSFile:_dsf3,,,,Category:_c001_001,,Nokia97,,22,Brand:_b1,,0,0.0,1111.0,888.8,0.0,0,0,0,,,
+SOR>Goods:_g0,GoodsType:_gt1,,Goods:_g0|GoodsGallery:_gg5|DSFile:_dsf7,,,,Category:_c001_001,,诺基亚5320 XpressMusic,,22,Brand:_b1,,200,200.0,2000.0,1600.0,1400.0,1259625600000,1298937600000,0,,,
+<p>诺基亚5320XpressMusic音乐手机采用XpressMusic系列常见的黑红、黑蓝配色方案，而材质方便则选用的是经过<strong><font color="#ff0000" size="3">抛光处理</font></strong>的工程塑料；
+	三围/体重为，为108&times;46&times;15mm/<strong><font color="#ff0000" size="3">90g</font></strong>，手感舒适。</p>
+,,,,false,,true,false,0,0,0,false,true,true,true,true,,0,0,,1,3<EOR
+
+SOR>Goods:_g1,GoodsType:_gt1,,Goods:_g1|GoodsGallery:_gg1|DSFile:_dsf3,,,,Category:_c001_001,,Nokia97,,22,Brand:_b1,,100,100.0,1111.0,888.8,0.0,0,0,0,,,
 <P> it's just Nokia!!</P>
 ,,,,false,,false,false,0,0,0,false,true,true,false,false,,0,0,,1,3<EOR
 
-SOR>Goods:_g2,GoodsType:_gt1,,Goods:_g2|GoodsGallery:_gg3|DSFile:_dsf5,,,,Category:_c001_002,,Moto RAZR V8,,17,Brand:_b2,,0,0.0,100.0,80.0,0.0,0,0,0,,,
+SOR>Goods:_g2,GoodsType:_gt1,,Goods:_g2|GoodsGallery:_gg3|DSFile:_dsf5,,,,Category:_c001_002,,Moto RAZR V8,,17,Brand:_b2,,100,100.0,100.0,80.0,0.0,0,0,0,,,
 <P>作为K1的升级版本，KRZR K2配备了<STRONG><FONT color=#ff0000 size=3>200万像素的摄像头</FONT></STRONG>，
 同时屏幕方面也上升至QVGA（320×240像素）分辨率的标准，不过这次摩托KRZR K2是一款工作在CDMA 1X网络环境下的机型。</P>
 ,,,,false,,false,false,0,0,0,false,true,true,false,false,,0,0,,1,1<EOR
 
+SOR>Goods:_g3,GoodsType:_gt1,,Goods:_g3|GoodsGallery:_gg11|DSFile:_dsf13,,,,Category:_c001_001,,Nokia97,,22,Brand:_b1,,200,200.0,1200.0,800.0,0.0,0,0,0,,,
+<P> 诺基亚N95在设计上采用了与N系同门机型N80相同的滑盖设计，这也是诺基亚少有的滑盖手机，但诺基亚似乎也越来越乐于推出滑盖机型了。 
+	比N80要略微大一些，但是在厚度上则要比N80薄了不少</P>
+,,,,false,,false,false,0,0,0,false,true,true,false,false,,0,0,,1,3<EOR
 
 ::com.jcommerce.core.model.GoodsGallery
 keyName,imageFileId,image,thumb,imgId,goodsId,imgUrl,imgDesc,thumbUrl,imgOriginal
-SOR>Goods:_g1|GoodsGallery:_gg1,Goods:_g1|GoodsGallery:_gg1|DSFile:_dsf3,,,,,,zzz,,<EOR
-SOR>Goods:_g1|GoodsGallery:_gg2,Goods:_g1|GoodsGallery:_gg2|DSFile:_dsf4,,,,,,eee,,<EOR
-SOR>Goods:_g2|GoodsGallery:_gg3,Goods:_g2|GoodsGallery:_gg3|DSFile:_dsf5,,,,,,zzz,,<EOR
-SOR>Goods:_g2|GoodsGallery:_gg4,Goods:_g2|GoodsGallery:_gg4|DSFile:_dsf6,,,,,,zzzz,,<EOR
+SOR>Goods:_g1|GoodsGallery:_gg1,Goods:_g1|GoodsGallery:_gg1|DSFile:_dsf3,,,,,,,,<EOR
+SOR>Goods:_g1|GoodsGallery:_gg2,Goods:_g1|GoodsGallery:_gg2|DSFile:_dsf4,,,,,,,,<EOR
+SOR>Goods:_g2|GoodsGallery:_gg3,Goods:_g2|GoodsGallery:_gg3|DSFile:_dsf5,,,,,,,,<EOR
+SOR>Goods:_g2|GoodsGallery:_gg4,Goods:_g2|GoodsGallery:_gg4|DSFile:_dsf6,,,,,,,,<EOR
+SOR>Goods:_g0|GoodsGallery:_gg5,Goods:_g0|GoodsGallery:_gg5|DSFile:_dsf7,,,,,,,,<EOR
+SOR>Goods:_g0|GoodsGallery:_gg6,Goods:_g0|GoodsGallery:_gg6|DSFile:_dsf8,,,,,,,,<EOR
+SOR>Goods:_g0|GoodsGallery:_gg7,Goods:_g0|GoodsGallery:_gg7|DSFile:_dsf9,,,,,,,,<EOR
+SOR>Goods:_g0|GoodsGallery:_gg8,Goods:_g0|GoodsGallery:_gg8|DSFile:_dsf10,,,,,,,,<EOR
+SOR>Goods:_g0|GoodsGallery:_gg9,Goods:_g0|GoodsGallery:_gg9|DSFile:_dsf11,,,,,,,,<EOR
+SOR>Goods:_g0|GoodsGallery:_gg10,Goods:_g0|GoodsGallery:_gg10|DSFile:_dsf12,,,,,,,,<EOR
+SOR>Goods:_g3|GoodsGallery:_gg11,Goods:_g3|GoodsGallery:_gg11|DSFile:_dsf13,,,,,,,,<EOR
+
 
 
 ::com.jcommerce.core.model.GoodsAttr
 keyName,goodsAttrId,goodsId,attrId,attrValue,attrPrice
-SOR>Goods:_g1|GoodsAttr:_ga1,,,GoodsType:_gt1|Attribute:_a1,33,<EOR
-SOR>Goods:_g1|GoodsAttr:_ga2,,,GoodsType:_gt1|Attribute:_a2,111,<EOR
-SOR>Goods:_g2|GoodsAttr:_ga3,,,GoodsType:_gt1|Attribute:_a1,22,<EOR
-SOR>Goods:_g2|GoodsAttr:_ga4,,,GoodsType:_gt1|Attribute:_a2,22,<EOR
+SOR>Goods:_g0|GoodsAttr:_ga00,,,GoodsType:_gt1|Attribute:_a1,3.0英寸 ,<EOR
+SOR>Goods:_g0|GoodsAttr:_ga01,,,GoodsType:_gt1|Attribute:_a2,240小时,<EOR
+SOR>Goods:_g1|GoodsAttr:_ga1,,,GoodsType:_gt1|Attribute:_a1,2.6英寸 ,<EOR
+SOR>Goods:_g1|GoodsAttr:_ga2,,,GoodsType:_gt1|Attribute:_a2,300小时,<EOR
+SOR>Goods:_g2|GoodsAttr:_ga3,,,GoodsType:_gt1|Attribute:_a1,2.2英寸 ,<EOR
+SOR>Goods:_g2|GoodsAttr:_ga4,,,GoodsType:_gt1|Attribute:_a2,400小时,<EOR
+SOR>Goods:_g3|GoodsAttr:_ga30,,,GoodsType:_gt1|Attribute:_a1,2.0英寸 ,<EOR
+SOR>Goods:_g3|GoodsAttr:_ga31,,,GoodsType:_gt1|Attribute:_a2,440小时,<EOR
 
 ::com.jcommerce.core.model.DSFile
 keyName,content,fileName,mimeType
@@ -66,6 +90,15 @@ SOR>Goods:_g1|GoodsGallery:_gg1|DSFile:_dsf3,Nokia1.jpg,D:\JCommerce\JCommerceGa
 SOR>Goods:_g1|GoodsGallery:_gg2|DSFile:_dsf4,Nokia2.jpg,D:\JCommerce\JCommerceGae\testThumb\Nokia2.jpg,image/pjpeg<EOR
 SOR>Goods:_g2|GoodsGallery:_gg3|DSFile:_dsf5,Moto1.jpg,D:\JCommerce\JCommerceGae\testThumb\Moto1.jpg,image/pjpeg<EOR
 SOR>Goods:_g2|GoodsGallery:_gg4|DSFile:_dsf6,Moto2.jpg,D:\JCommerce\JCommerceGae\testThumb\Moto2.jpg,image/pjpeg<EOR
+SOR>Goods:_g0|GoodsGallery:_gg5|DSFile:_dsf7,Nokia3_1.jpg,D:\JCommerce\JCommerceGae\testThumb\Nokia3_1.jpg,image/pjpeg<EOR
+SOR>Goods:_g0|GoodsGallery:_gg6|DSFile:_dsf8,Nokia3_2.jpg,D:\JCommerce\JCommerceGae\testThumb\Nokia3_2.jpg,image/pjpeg<EOR
+SOR>Goods:_g0|GoodsGallery:_gg7|DSFile:_dsf9,Nokia3_3.jpg,D:\JCommerce\JCommerceGae\testThumb\Nokia3_3.jpg,image/pjpeg<EOR
+SOR>Goods:_g0|GoodsGallery:_gg8|DSFile:_dsf10,Nokia3_4.jpg,D:\JCommerce\JCommerceGae\testThumb\Nokia3_4.jpg,image/pjpeg<EOR
+SOR>Goods:_g0|GoodsGallery:_gg9|DSFile:_dsf11,Nokia3_5.jpg,D:\JCommerce\JCommerceGae\testThumb\Nokia3_5.jpg,image/pjpeg<EOR
+SOR>Goods:_g0|GoodsGallery:_gg10|DSFile:_dsf12,Nokia3_6.jpg,D:\JCommerce\JCommerceGae\testThumb\Nokia3_6.jpg,image/pjpeg<EOR
+SOR>Goods:_g3|GoodsGallery:_gg11|DSFile:_dsf13,Nokia4.jpg,D:\JCommerce\JCommerceGae\testThumb\Nokia4.jpg,image/pjpeg<EOR
+
+
 
 ::com.jcommerce.core.model.GoodsType
 keyName,catId,catName,enabled,attrGroup
@@ -91,4 +124,50 @@ SOR>Category:_c001,,手机通讯,,,,0,,台,0,22,true,2,0<EOR
 SOR>Category:_c001_001,,GSM手机,,,Category:_c001,0,,台,0,,true,0,0<EOR
 SOR>Category:_c001_002,,CDMA手机,,,Category:_c001,0,,台,1,,true,0,0<EOR
 SOR>Category:_c002,,手机配件,,,,0,,只,1,,true,0,0<EOR
+
+
+::com.jcommerce.core.model.Payment
+keyName,payId,payCode,payName,payFee,payDesc,payOrder,payConfig,enabled,isCod,isOnline
+SOR>Payment:_pay1,,alyPay,支付宝,10,
+支付宝，是支付宝公司针对网上交易而特别推出的安全付款服务.<br/>
+<a href="https://www.alipay.com/himalayas/market.htm?type=from_agent_contract&id=C4335319945672464113" target="_blank">
+<font color="red">点此申请免费签约接口</font></a><br/>
+<a href="https://www.alipay.com/himalayas/market.htm?type=from_agent_contract&id=C4335319945674798119" target="_blank">
+<font color="red">点此申请预付费签约接口(600包4.2万、1800包18万交易额度)</font></a>,0,
+rO0ABXNyABFqYXZhLnV0aWwuSGFzaE1hcAUH2sHDFmDRAwACRgAKbG9hZEZhY3RvckkACXRocmVzaG9sZHhwP0AAAAAAAAx3CAAAABAAAAAGdAAKaXNfaW5zdGFudHB0AA5hbGlwYXlfcGFydG5lcnQAA2FiY3QAEmFsaXBheV9yZWFsX21ldGhvZHB0ABVhbGlwYXlfdmlydHVhbF9tZXRob2RwdAAOYWxpcGF5X2FjY291bnRwdAAKYWxpcGF5X2tleXB4,
+true,false,true<EOR
+
+SOR>Payment:_pay2,,ChinaBank,网银在线,2.5%,
+网银在线与中国工商银行、招商银行、中国建设银行、农业银行、民生银行等数十家金融机构达成协议。全面支持全国19家银行的信用卡及借记卡实现网上支付。
+（网址：http://www.chinabank.com.cn）,0,
+rO0ABXNyABFqYXZhLnV0aWwuSGFzaE1hcAUH2sHDFmDRAwACRgAKbG9hZEZhY3RvckkACXRocmVzaG9sZHhwP0AAAAAAAAx3CAAAABAAAAACdAANY2hpbmFiYW5rX2tleXQAD2FhYWFhYmJiYmJjY2NjY3QAEWNoaW5hYmFua19hY2NvdW50dAAIMjEwNDA3ODJ4,
+true,false,true<EOR
+
+
+::com.jcommerce.core.model.Shipping
+keyName,shippingId,shippingCode,shippingName,shippingDesc,insure,supportCod,enabled,shippingPrint
+SOR>Shipping:_ship1,,yuantong,圆通快递,上海圆通物流（速递）有限公司经过多年的网络快速发展，在中国速递行业中一直处于领先地位。为了能更好的发展国际快件市场，加快与国际市场的接轨，强化圆通的整体实力，圆通已在东南亚、欧美、中东、北美洲、非洲等许多城市运作国际快件业务 ,0,true,true,<EOR
+SOR>Shipping:_ship2,,ems,EMS,EMS 国内邮政特快专递描述内容,0,false,true,<EOR
+
+::com.jcommerce.core.model.ShippingArea
+keyName,shippingAreaId,shippingAreaName,shippingId,configure
+SOR>Shipping:_ship1|ShippingArea:_sa1,,北京市区,,rO0ABXNyABFqYXZhLnV0aWwuSGFzaE1hcAUH2sHDFmDRAwACRgAKbG9hZEZhY3RvckkACXRocmVzaG9sZHhwP0AAAAAAAAx3CAAAABAAAAADdAAJZnJlZU1vbmV5dAADMTAwdAAIc3RlcF9mZWV0AAE1dAAIYmFzZV9mZWVxAH4ABXg=<EOR
+SOR>Shipping:_ship1|ShippingArea:_sa2,,北京郊区,,rO0ABXNyABFqYXZhLnV0aWwuSGFzaE1hcAUH2sHDFmDRAwACRgAKbG9hZEZhY3RvckkACXRocmVzaG9sZHhwP0AAAAAAAAx3CAAAABAAAAADdAAJZnJlZU1vbmV5dAADMTIwdAAIc3RlcF9mZWV0AAIxNXQACGJhc2VfZmVlcQB+AAV4<EOR
+SOR>Shipping:_ship1|ShippingArea:_sa3,,其他城市,,rO0ABXNyABFqYXZhLnV0aWwuSGFzaE1hcAUH2sHDFmDRAwACRgAKbG9hZEZhY3RvckkACXRocmVzaG9sZHhwP0AAAAAAAAx3CAAAABAAAAADdAAJZnJlZU1vbmV5dAADMjIwdAAIc3RlcF9mZWV0AAIyNXQACGJhc2VfZmVlcQB+AAV4<EOR
+SOR>Shipping:_ship2|ShippingArea:_sa4,,全国,,rO0ABXNyABFqYXZhLnV0aWwuSGFzaE1hcAUH2sHDFmDRAwACRgAKbG9hZEZhY3RvckkACXRocmVzaG9sZHhwP0AAAAAAAAx3CAAAABAAAAADdAAJZnJlZU1vbmV5dAABMHQACHN0ZXBfZmVldAACMTV0AAhiYXNlX2ZlZXQAAjIweA==<EOR
+
+::com.jcommerce.core.model.AreaRegion
+keyName,shippingAreaId,regionId
+SOR>Shipping:_ship1|ShippingArea:_sa1|AreaRegion:_ar1,,Region:_r086_10_01_1<EOR
+SOR>Shipping:_ship1|ShippingArea:_sa1|AreaRegion:_ar2,,Region:_r086_10_01_3<EOR
+SOR>Shipping:_ship1|ShippingArea:_sa1|AreaRegion:_ar3,,Region:_r086_10_01_4<EOR
+SOR>Shipping:_ship1|ShippingArea:_sa2|AreaRegion:_ar4,,Region:_r086_10_01_2<EOR
+SOR>Shipping:_ship1|ShippingArea:_sa3|AreaRegion:_ar5,,Region:_r086<EOR
+SOR>Shipping:_ship2|ShippingArea:_sa4|AreaRegion:_ar6,,Region:_r086<EOR
+
+::com.jcommerce.core.model.AdminUser
+keyName,userId,userName,email,password,addTime,lastLogin,lastIp,actionList,navList,langType,agencyId,todolist
+SOR>AdminUser:_au1,,admin,admin@test.com,admin,1261559172647,0,,,,,,<EOR
+
+
 

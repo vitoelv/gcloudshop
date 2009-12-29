@@ -1,12 +1,11 @@
 package com.jcommerce.core.model;
 
-import javax.jdo.annotations.Extension;
-import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
+
+import com.jcommerce.core.annotation.IsPK;
 
 /**  
  * generated with my extension of middleGen 
@@ -29,6 +28,7 @@ public class AreaRegion extends ModelObject {
   @Persistent
   private java.lang.String shippingAreaId; 
 
+  @IsPK(myclazz="com.jcommerce.core.model.Region")
   @Persistent
   private java.lang.String regionId; 
 
