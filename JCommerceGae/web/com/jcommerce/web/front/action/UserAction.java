@@ -184,15 +184,16 @@ public class UserAction extends BaseAction {
 					getNextRank(uw,userRank,request);
 				}
 				
-				String shopName = null;				
-				Condition codition = new Condition(IShopConfig.CODE,Condition.EQUALS,"shop_name");
-		        Criteria criteria = new Criteria();
-		        criteria.addCondition(codition);
-		        List<ShopConfig> shopConfigs = getDefaultManager().getList(ModelNames.SHOPCONFIG, criteria);
-		        for(Iterator iterator = shopConfigs.iterator();iterator.hasNext();) {
-		        	ShopConfig shopConfig = (ShopConfig)iterator.next();
-		        	shopName = shopConfig.getValue();
-		        }
+//				String shopName = null;				
+//				Condition codition = new Condition(IShopConfig.CODE,Condition.EQUALS,"shop_name");
+//		        Criteria criteria = new Criteria();
+//		        criteria.addCondition(codition);
+//		        List<ShopConfig> shopConfigs = getDefaultManager().getList(ModelNames.SHOPCONFIG, criteria);
+//		        for(Iterator iterator = shopConfigs.iterator();iterator.hasNext();) {
+//		        	ShopConfig shopConfig = (ShopConfig)iterator.next();
+//		        	shopName = shopConfig.getValue();
+//		        }
+				String shopName = getCachedShopConfig().getString(IShopConfigMeta.CFG_KEY_SHOP_NAME);
 				uw.put("shopName", shopName);
 				
 				//获得上次登录时间
@@ -208,7 +209,7 @@ public class UserAction extends BaseAction {
 				
 				//获得所有订单
 				Condition condition = new Condition(IOrderInfo.USER_ID,Condition.EQUALS,uw.getUser().getPkId());
-				criteria.removeAllCondition();
+				Criteria criteria = new Criteria();
 				criteria.addCondition(condition);
 				List<OrderInfo> orderInfos = getDefaultManager().getList(ModelNames.ORDERINFO, criteria);
 				uw.setOrder(orderInfos);
