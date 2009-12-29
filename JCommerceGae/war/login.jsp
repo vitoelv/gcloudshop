@@ -8,8 +8,8 @@
 </head>
 <style>
 	#container {TEXT-ALIGN: center; vertical-align:middle;width:100%;height:100%;}
-	#inner1 { MARGIN-RIGHT: auto; MARGIN-LEFT: auto; border:5px solid #CDDEEE; height:247px; width:394px; top:120px;position:relative;} 
-	#inner2 { border:1px solid #348BDA;height:245px; width:392px;} 
+	#inner1 { MARGIN-RIGHT: auto; MARGIN-LEFT: auto; border:5px solid #CDDEEE; height:207px; width:394px; top:120px;position:relative;} 
+	#inner2 { border:1px solid #348BDA;height:205px; width:392px;} 
 	#title{height:38px;width:100%;}
 	#form {height:207px;width:100%;background:url(resources/images/login_bg.gif) repeat-x 0 0;text-align:left;}
 	#button {border:0px;width:50px;background:url(resources/images/loginBtn.png) no-repeat 0 0;width:50px;height:18px;padding-top:-1px;font-size:11px;font-family:Arial}
@@ -26,7 +26,7 @@
   <div id="container">
 	<div id="inner1">
 	<div id="inner2">
-		<div id="title">&nbsp;</div>
+		<!-- div id="title">abc</div-->
 		<div id="form">
 			<form id = "login" method="post" autocomplete="off" accept-charset="UTF-8">
 				<div class="label">User:</div>
@@ -37,6 +37,9 @@
 			    <input id="button" type="reset" valign="Reset" title="Reset credentials"/> </div>
 			</form>
 			<div id="errorPane" class="label">
+				<% String error = (String)request.getAttribute("error");
+					if(error == null) error = "";%>
+				<%=error%>
 			</div>
 		</div>
 	</div>
@@ -50,7 +53,7 @@
 		loginForm.submit();
 	}
   }
-  loginAction = "/admin/LoginAction.do";
+  loginAction = "/adminLogin.do";
   loginForm.action = loginAction;
 </script>
 </body>

@@ -8,15 +8,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
+import com.jcommerce.gwt.client.model.IAdminUser;
+import com.jcommerce.web.util.SpringUtil;
 
 public class LoginAction extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
@@ -29,22 +27,33 @@ public class LoginAction extends HttpServlet {
     }
     public void doPost(HttpServletRequest request, HttpServletResponse response) 
       throws ServletException, IOException {
+    	
       String username = request.getParameter("userName");
       String pwd = request.getParameter("userPwd");
       if(authenticate(username,pwd)){
     	  response.sendRedirect("/admin_zh.html");
       }
+      else {
+    	  request.setAttribute("error", "用户名或密码错误");
+    	  request.getRequestDispatcher("/login.jsp").forward(request, response);
+//    	  response.sendRedirect("/login.jsp?error=)
+      }
     }
     
     private Boolean authenticate(String name, String password){
-    	WebApplicationContext springContext = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+    	// TODO this is fake for demo start from empty data store
+    	if("admin".equals(name) && "admin".equals(password)) {
+    		return true;
+    	}
+    	
     	Boolean isExist = false;
-    	IDefaultManager manager = (IDefaultManager)springContext.getBean("DefaultManager");
+    	IDefaultManager manager = (IDefaultManager)SpringUtil.getDefaultManager();
     	Criteria criteria = new Criteria();
-    	criteria.addCondition(new Condition("userName",0,name));
-    	criteria.addCondition(new Condition("password",Condition.EQUALS,password));
-    	List res = manager.getList(ModelNames.ADMIN_USER, criteria);
-    	return res.isEmpty()?false:true;
+    	criteria.addCondition(new Condition(IAdminUser.USER_NAME,Condition.EQUALS,name));
+    	criteria.addCondition(new Condition(IAdminUser.PASSWORD,Condition.EQUALS,password));
+    	List res = manager.getList(ModelNames.ADMINUSER, criteria);
+    	isExist = res.isEmpty()?false:true;
+    	return isExist;
     }
 
 
