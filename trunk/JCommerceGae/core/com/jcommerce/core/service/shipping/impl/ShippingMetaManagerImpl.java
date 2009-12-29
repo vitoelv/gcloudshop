@@ -17,6 +17,7 @@ import com.jcommerce.core.service.shipping.IShippingMetaManager;
 import com.jcommerce.core.service.shipping.IShippingMetaPlugin;
 import com.jcommerce.core.service.shipping.ShippingAreaMeta;
 import com.jcommerce.core.service.shipping.ShippingConfigMeta;
+import com.jcommerce.core.util.DataStoreUtils;
 import com.jcommerce.core.util.MyPropertyUtil;
 import com.jcommerce.core.util.UUIDHexGenerator;
 import com.jcommerce.core.util.UUIDLongGenerator;
@@ -239,12 +240,12 @@ public class ShippingMetaManagerImpl extends DefaultManagerImpl implements IShip
 				to.setShipping(shipping);
 				
 				// new
-				String sakn = UUIDHexGenerator.newUUID();
+				String sakn = DataStoreUtils.genKeyName(to);
 				to.setKeyName(sakn);
 				to.setLongId(UUIDLongGenerator.newUUID());
 				
 				for(AreaRegion ar : to.getAreaRegions()) {
-					String arkn = UUIDHexGenerator.newUUID();	
+					String arkn = DataStoreUtils.genKeyName(ar);	
 //				String arid = KeyFactory.keyToString(new KeyFactory.Builder("ShippingArea",sakn).
 //									addChild("AreaRegion", arkn).getKey());
 					ar.setKeyName(arkn);
@@ -265,7 +266,7 @@ public class ShippingMetaManagerImpl extends DefaultManagerImpl implements IShip
 				MyPropertyUtil.copySimpleProperties(po, to);
 				po.getAreaRegions().clear();
 				for(AreaRegion ar : to.getAreaRegions()) {
-					String arkn = UUIDHexGenerator.newUUID();	
+					String arkn = DataStoreUtils.genKeyName(ar);	
 //				String arid = KeyFactory.keyToString(new KeyFactory.Builder("ShippingArea",sakn).
 //									addChild("AreaRegion", arkn).getKey());
 					ar.setKeyName(arkn);

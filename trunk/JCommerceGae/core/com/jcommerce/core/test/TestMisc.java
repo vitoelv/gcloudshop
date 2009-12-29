@@ -19,6 +19,7 @@ import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.Category;
 import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.util.ConvertUtil;
+import com.jcommerce.core.util.UUIDHexGenerator;
 
 public class TestMisc extends TestCase {
 	  public boolean[][] b = { { false, false }, { true, true } };
@@ -86,6 +87,21 @@ public class TestMisc extends TestCase {
 			System.out.println("s: "+s);
 		}
 		
+	}
+	public void testGenKeyName() {
+		genKeyName();
+		genKeyName();
+		genKeyName();
+	}
+	
+	private void genKeyName() {
+		Brand brand = new Brand();
+		String k1 = UUIDHexGenerator.newUUID();
+		String k2 = String.valueOf(brand.hashCode());
+		long nano = System.nanoTime();
+		String k3 = String.valueOf(nano);
+		String k4 = String.valueOf(nano%10000);
+		System.out.println("k1="+k1+", k2="+k2+", k3="+k3+", k4="+k4);		
 	}
 	
 	public void testAnnotation() {
