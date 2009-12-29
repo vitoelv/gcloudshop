@@ -608,14 +608,15 @@ public class LibOrder {
 		condition.setOperator(Condition.EQUALS);
 		condition.setValue(payId);
 		
-		Condition condition2 = new Condition();		
-
-		condition2.setField(IPayment.ENABLED);
-		condition2.setOperator(Condition.EQUALS);
-		condition2.setValue("true");
+		// TODO temporarily hide it, as the import of payment cannot recognize a true value for enabled
+//		Condition condition2 = new Condition();		
+//
+//		condition2.setField(IPayment.ENABLED);
+//		condition2.setOperator(Condition.EQUALS);
+//		condition2.setValue("true");
 		
 		criteria.addCondition(condition);
-		criteria.addCondition(condition2);
+//		criteria.addCondition(condition2);
 		List<Payment> paymentList = manager.getList(ModelNames.PAYMENT, criteria);
         if( paymentList.size() > 0 ){
         	return (Payment)paymentList.get(0);
