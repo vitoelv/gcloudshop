@@ -9,9 +9,15 @@ import com.extjs.gxt.ui.client.widget.form.AdapterField;
 import com.extjs.gxt.ui.client.widget.form.MultiField;
 import com.jcommerce.gwt.client.panels.BaseEntityEditPanel;
 import com.jcommerce.gwt.client.panels.Success;
+import com.jcommerce.gwt.client.resources.Resources;
 
 
 public class ExportPanel extends BaseEntityEditPanel{
+	
+	public static interface Constants {
+        String Export_MenuName();
+        
+    }
     /**
      * Initialize this example.
      */
@@ -32,7 +38,7 @@ public class ExportPanel extends BaseEntityEditPanel{
 		}
 		
 		public String getMenuDisplayName() {
-			return "Export";
+			return Resources.constants.Export_MenuName();
 		}
 	}
 	
@@ -72,7 +78,7 @@ public class ExportPanel extends BaseEntityEditPanel{
 	@Override
 	protected void setupPanelLayout() {
 		
-		AdapterField af = new AdapterField(new Label("Currently only export goods-related data and Region data"));
+		AdapterField af = new AdapterField(new Label("Currently will export all data supported"));
 		af.setFieldLabel("Note");
 		formPanel.add(af, sfd());
 		
