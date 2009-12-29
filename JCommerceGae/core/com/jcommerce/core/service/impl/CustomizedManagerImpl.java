@@ -21,6 +21,7 @@ import com.jcommerce.core.model.ShippingArea;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.CustomizedManager;
+import com.jcommerce.core.util.DataStoreUtils;
 import com.jcommerce.core.util.MyPropertyUtil;
 import com.jcommerce.core.util.UUIDHexGenerator;
 import com.jcommerce.core.util.UUIDLongGenerator;
@@ -103,12 +104,12 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     }
     public String addBrand(Brand to) {
     	try {
-    		String bkn = UUIDHexGenerator.newUUID(); 
+    		String bkn = DataStoreUtils.genKeyName(to); 
     		to.setKeyName(bkn);
     		to.setLongId(UUIDLongGenerator.newUUID());
     		DSFile file = to.getLogoFile();
     		if (file != null) {
-				String fkn = UUIDHexGenerator.newUUID();
+				String fkn = DataStoreUtils.genKeyName(file);
 				String fid = KeyFactory.keyToString(new KeyFactory.Builder(
 						"Brand", bkn).addChild("DSFile", fkn).getKey());
 				file.setKeyName(fkn);
@@ -160,7 +161,7 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     		else {
     			oldFile = po.getLogoFile();
         		newFile = to.getLogoFile();
-    			fkn = UUIDHexGenerator.newUUID();
+    			fkn = DataStoreUtils.genKeyName(newFile);
     			fid = KeyFactory.keyToString(new KeyFactory.Builder("Brand",bkn).addChild("DSFile", fkn).getKey());
     			newFile.setKeyName(fkn);
     			po.setLogoFileId(fid);
@@ -181,7 +182,7 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     }
     public String addGoods(Goods to) {
     	try {
-    		String goodskn = UUIDHexGenerator.newUUID();
+    		String goodskn = DataStoreUtils.genKeyName(to);
     		to.setKeyName(goodskn);
     		// TODO need overcome the checkbox issue
     		// just for test with Web Home page. 
@@ -194,14 +195,14 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     		
     		
 			for(GoodsGallery gallery:galleries) {
-				String gkn = UUIDHexGenerator.newUUID();
+				String gkn = DataStoreUtils.genKeyName(gallery);
 				gallery.setKeyName(gkn);
 //				String gid = KeyFactory.keyToString(new KeyFactory.Builder("Goods",goodskn).addChild("Gallery", gkn).getKey());
 //				gallery.setKeyName(gkn);
 //				gallery.setId(gid);
 				
 				DSFile file = gallery.getImageFile();
-				String fkn = UUIDHexGenerator.newUUID();
+				String fkn = DataStoreUtils.genKeyName(file);
 				String fid = KeyFactory.keyToString(new KeyFactory.Builder("Goods",goodskn).addChild(GoodsGallery.class.getSimpleName(), gkn).addChild("DSFile", fkn).getKey());
 				file.setKeyName(fkn);
 //				file.setId(fid);
@@ -220,7 +221,7 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 			
 			Set<GoodsAttr> gts = to.getAttributes();
 			for(GoodsAttr gt:gts) {
-				String gkn = UUIDHexGenerator.newUUID();
+				String gkn = DataStoreUtils.genKeyName(gt);
 				String gid = KeyFactory.keyToString(new KeyFactory.Builder("Goods",goodskn).addChild(GoodsAttr.class.getSimpleName(), gkn).getKey());
 				gt.setKeyName(gkn);
 //				gt.setId(gid);
@@ -288,10 +289,10 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 //					gallery.setImageFileId(gallery.getImageFile().getPkId());
 				} else {
 					// new gallery
-					String gkn = UUIDHexGenerator.newUUID();
+					String gkn = DataStoreUtils.genKeyName(gallery);
 					gallery.setKeyName(gkn);
 					DSFile file = gallery.getImageFile();
-					String fkn = UUIDHexGenerator.newUUID();
+					String fkn = DataStoreUtils.genKeyName(file);
 					file.setKeyName(fkn);
 					String fid = KeyFactory.keyToString(new KeyFactory.Builder("Goods",goodskn).addChild(GoodsGallery.class.getSimpleName(), gkn).addChild("DSFile", fkn).getKey());
 					gallery.setImageFileId(fid);
@@ -315,7 +316,7 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 			po.getAttributes().clear();
 			Set<GoodsAttr> gts = to.getAttributes();
 			for(GoodsAttr gt:gts) {
-				String gkn = UUIDHexGenerator.newUUID();
+				String gkn = DataStoreUtils.genKeyName(gt);
 				gt.setKeyName(gkn);
 				gt.setLongId(UUIDLongGenerator.newUUID());
 				po.getAttributes().add(gt);

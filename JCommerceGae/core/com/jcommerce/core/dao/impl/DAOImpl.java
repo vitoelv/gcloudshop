@@ -30,6 +30,7 @@ import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
+import com.jcommerce.core.util.DataStoreUtils;
 import com.jcommerce.core.util.JDOQLHelper;
 import com.jcommerce.core.util.MyPropertyUtil;
 import com.jcommerce.core.util.UUIDHexGenerator;
@@ -54,7 +55,7 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
 
     		if(StringUtils.isEmpty(to.getPkId())) {
     			// if id is not set, use keyname, otherwise use ID directly, same as attach
-    			to.setKeyName(UUIDHexGenerator.newUUID());
+    			to.setKeyName(DataStoreUtils.genKeyName(to));
     			to.setLongId(UUIDLongGenerator.newUUID());
     		}
     		
