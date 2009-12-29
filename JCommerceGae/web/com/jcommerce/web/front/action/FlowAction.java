@@ -235,8 +235,13 @@ public class FlowAction extends BaseAction {
     	
     }
     
+
     private String stepConsignee(HttpServletRequest request) {
-    	if(request.getMethod().equals("GET")) {
+    	boolean redirectToConsigneeAfterCheck = false;
+    	return stepConsignee(request, redirectToConsigneeAfterCheck);
+    }
+    private String stepConsignee(HttpServletRequest request, boolean redirectToConsigneeAfterCheck) {
+    	if(request.getMethod().equals("GET") || redirectToConsigneeAfterCheck) {
 	    	if(request.getParameter(KEY_DIRECT_SHOPPING) != null) {
 	    		getSession().setAttribute(KEY_DIRECT_SHOPPING, new Integer(1));
 	    	}
@@ -368,7 +373,8 @@ public class FlowAction extends BaseAction {
     	
     	/* 检查收货人信息是否完整 */
     	if(!LibOrder.checkConsigneeInfo(consignee, flowType,getDefaultManager(),session.getId())) {
-    		return stepConsignee(request);
+    		boolean redirectToConsigneeAfterCheck = true;
+    		return stepConsignee(request, redirectToConsigneeAfterCheck);
     	}
 
     	getSession().setAttribute(KEY_FLOW_CONSIGNEE, consignee);
@@ -701,7 +707,8 @@ public class FlowAction extends BaseAction {
     	UserAddressWrapper consignee = getConsignee(userId);
     	
     	if(!LibOrder.checkConsigneeInfo(consignee, flowType, getDefaultManager(), userId)) {
-    		return stepConsignee(request);
+    		boolean redirectToConsigneeAfterCheck = true;
+    		return stepConsignee(request, redirectToConsigneeAfterCheck);
     	}
     	
     	
