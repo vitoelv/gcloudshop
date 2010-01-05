@@ -380,25 +380,7 @@ public class FlowAction extends BaseAction {
     	getSession().setAttribute(KEY_FLOW_CONSIGNEE, consignee);
     	request.setAttribute("consignee", consignee);
     	/* 对商品信息赋值 */
-    	List<CartWrapper> cartWrapper = new ArrayList<CartWrapper>();
-    	for(Cart cart : carts) {
-    		CartWrapper wrapper = new CartWrapper(cart);
-    		String id = wrapper.getCart().getGoodsId();
-    		Goods good = (Goods) getDefaultManager().get(ModelNames.GOODS, id);
-    		
-    		//判断是否促销
-    		Long promoteEndTime = good.getPromoteEndDate();
-    		Long promoteStartTime = good.getPromoteStartDate();
-    		Long nowTime = new Date().getTime();
-    		if(nowTime > promoteEndTime || nowTime < promoteStartTime) {
-    			wrapper.setPrice(wrapper.getCart().getGoodsPrice()) ;
-    		}
-    		else {
-    			wrapper.setPrice(good.getPromotePrice()) ;
-    		}
-    		cartWrapper.add(wrapper);
-    	}
-    	request.setAttribute("goodsList", cartWrapper);
+    	request.setAttribute("goodsList", WrapperUtil.wrap(carts, CartWrapper.class));
     	
     	/* 对是否允许修改购物车赋值 */
     	if( (Constants.CART_GENERAL_GOODS == flowType ) || 

@@ -40,42 +40,8 @@ public class CartWrapper extends BaseModelWrapper {
 		return getCart().getParentId();
 	}
 	
-	public String getFormatedGoodsPrice() {
-//		String goodsId = getCart().getGoodsId();
-//		Goods goods = (Goods) manager.get(ModelNames.GOODS, goodsId);
-//		
-//		//判断是否促销
-//		Long promoteEndTime = goods.getPromoteEndDate();
-//		Long promoteStartTime = goods.getPromoteStartDate();
-//		Long nowTime = new Date().getTime();
-//		if(nowTime > promoteEndTime || nowTime < promoteStartTime) {
-//			return WebFormatUtils.priceFormat(getCart().getGoodsPrice());
-//		}
-//		else {
-//			return WebFormatUtils.priceFormat(goods.getPromotePrice());
-//		}	
-		return WebFormatUtils.priceFormat(getPrice());
-	}
-	
-	public double getPrice() {
-//		String goodsId = getCart().getGoodsId();
-//		Goods goods = (Goods) manager.get(ModelNames.GOODS, goodsId);
-//		
-//		//判断是否促销
-//		Long promoteEndTime = goods.getPromoteEndDate();
-//		Long promoteStartTime = goods.getPromoteStartDate();
-//		Long nowTime = new Date().getTime();
-//		if(nowTime > promoteEndTime || nowTime < promoteStartTime) {
-//			return getCart().getGoodsPrice();
-//		}
-//		else {
-//			return goods.getPromotePrice();
-//		}
-		return price;
-	}
-	
-	public void setPrice(double price) {
-		this.price = price;
+	public String getFormatedGoodsPrice() {	
+		return WebFormatUtils.priceFormat(getCart().getGoodsPrice());
 	}
 	
 	public String getFormatedSubtotal() {

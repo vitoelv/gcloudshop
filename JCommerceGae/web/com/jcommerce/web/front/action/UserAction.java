@@ -73,6 +73,7 @@ import com.jcommerce.web.util.LibMain;
 import com.jcommerce.web.util.LibOrder;
 import com.jcommerce.web.util.LibTransaction;
 import com.jcommerce.web.util.PrintfFormat;
+import com.jcommerce.web.util.SpringUtil;
 import com.jcommerce.web.util.WebFormatUtils;
 
 
@@ -729,7 +730,8 @@ public class UserAction extends BaseAction {
 								spec.add(attr.getLongId().toString());
 						}
 					}
-					addToCart(goods.getLongId() , orderGood.getGoodsNumber(), spec, request.getSession().getId(), userId, null);
+					SpringUtil.getWebManager().addToCart(goods.getLongId() , 
+							orderGood.getGoodsNumber(), spec, request.getSession().getId(), userId, null);
 				}
 				
 				res.put("message", Lang.getInstance().getString("returnToCartSuccess"));
@@ -750,73 +752,6 @@ public class UserAction extends BaseAction {
 		}
 	}
 
-	private void addToCart(Long goodsId, Long num, List spec, String sessionId,
-			String userId, Object parentId) {
-
-		Goods goods = (Goods) getDefaultManager().get(Goods.class.getName(), goodsId);
-		
-//		if(StringUtils.isNotEmpty(cartId))
-
-		String goodsSpecId = "";
-		for(Iterator iterator = spec.iterator();iterator.hasNext();) {
-			String id = (String) iterator.next();
-			if(!goodsSpecId.equals(""))
-				goodsSpecId += ",";
-			goodsSpecId += id;
-		}
-		
-		//查找购物车中是否已有该商品，且规格不一样，如果有，将商品数加一
-		Criteria criteria = new Criteria();
-		criteria.addCondition(new Condition(ICart.SESSION_ID,Condition.EQUALS,sessionId));
-		criteria.addCondition(new Condition(ICart.GOODS_ID,Condition.EQUALS,goods.getPkId()));
-		criteria.addCondition(new Condition(ICart.GOODS_ATTR_ID,Condition.EQUALS,goodsSpecId));
-		List<Cart> carts = getDefaultManager().getList(ModelNames.CART, criteria); 
-		if(carts.size() > 0) {
-			Cart cart = carts.get(0);
-			cart.setGoodsNumber(cart.getGoodsNumber() + num);
-			getDefaultManager().txattach(cart);
-		}
-		
-		//不存在该商品
-		else {
-    		Cart cart = new Cart();
-    		cart.setGoodsId(goods.getPkId());
-    		cart.setSessionId(sessionId);
-    		cart.setUserId(userId);
-    		cart.setGoodsSn(goods.getGoodsSn());
-    		cart.setRecType(Constants.CART_GENERAL_GOODS);
-    		cart.setGoodsNumber(num);
-    		cart.setGoodsPrice(goods.getShopPrice());
-    		cart.setMarketPrice(goods.getMarketPrice());
-    		cart.setGoodsName(goods.getGoodsName());
-    		cart.setGoodsWeight(goods.getGoodsWeight());
-    		
-    		//获得商品规格
-    		String goodsSpec = "";
-    		for(Iterator iterator = spec.iterator();iterator.hasNext();) {
-    			long goodsAttrId = Long.parseLong((String) iterator.next());
-    			
-    			GoodsAttr goodsAttr = (GoodsAttr) getDefaultManager().get(ModelNames.GOODSATTR, goodsAttrId);
-    			String attrId = goodsAttr.getAttrId();
-    			Attribute attribute = (Attribute) getDefaultManager().get(ModelNames.ATTRIBUTE, attrId);
-    			
-    			String attrName = attribute.getAttrName();
-    			String attrValue = goodsAttr.getAttrValue();
-    			String attrPrice = goodsAttr.getAttrPrice();
-    			
-    			if(attrPrice == null || Double.parseDouble(attrPrice) == 0) {
-    				goodsSpec += attrName + ":" + attrValue + "<br>";
-    			}
-    			else {
-    				goodsSpec += attrName + ":" + attrValue + "[" + attrPrice + "]" + "<br>";
-    			}
-    		}
-    		cart.setGoodsAttrId(goodsSpecId);
-    		cart.setGoodsAttr(goodsSpec);
-    		
-    		getDefaultManager().txadd(cart);
-		}		
-	}
 
 	//获得订单列表，取消订单、确认收货后调用此方法进入订单列表页面
 	private void getOrderList(HttpServletRequest request, String userId) {

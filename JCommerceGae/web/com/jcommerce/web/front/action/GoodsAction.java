@@ -183,7 +183,18 @@ public class GoodsAction extends BaseAction {
 		IDefaultManager manager = getDefaultManager();
 		String attr = request.getParameter("attr");
     	int number = Integer.parseInt(request.getParameter("number"));
-    	double shopPrice = goods.getShopPrice() * number;
+    	
+    	//判断是否促销
+		Long promoteEndTime = goods.getPromoteEndDate();
+		Long promoteStartTime = goods.getPromoteStartDate();
+		Long nowTime = new Date().getTime();
+    	double shopPrice = 0;
+		if(nowTime > promoteEndTime || nowTime < promoteStartTime) {
+			shopPrice = goods.getShopPrice() * number;
+		}
+		else {
+			shopPrice = goods.getPromotePrice() * number;
+		}		
     	
     	double attrPrice = 0;
     	if(!attr.equals("")) {
