@@ -3,7 +3,7 @@
  */
  body {
   background: #DDEEF2;
-  padding: 10px;
+  padding: 0px;
 }
 .Application-Reference-dark { 
   height: 5px;
@@ -12,10 +12,10 @@
 }
 .Application-top {
   width: 100%;
-  margin-bottom: 10px;
+  background: #278296;
 }
 .Application-title {
-  padding: 0px 0px 0px 10px;
+  margin:0px;
   background: #278296;
 }
 .Application-title h1 {
@@ -31,22 +31,25 @@
   font-size: 16px;
 }
 .Application-links {
-  padding: 2px 13px 2px 0px;
+  padding: 2px 0px 2px 0px;
+  margin: 0px;
   background: #278296;
   
 }
 .Application-links .gwt-HTML{
   font-size: 13px;
+  padding: 0 1 0 1;
   color: #FFFFFF;  
 }
 .Application-options {
-  padding: 6px 10px 0px 0px;
+  margin:0px;
+  padding:0px;
   background: #278296;
 }
 .Application-options .ex_button {
   width: 42px;
   height: 18px;
-  margin: 3px 0px 0px 10px;
+  margin: 3px 10px 0px 10px;
   padding: 0px;
   background: #DDEEF2;
   font-size: 12px;
@@ -75,6 +78,7 @@
 .Application-navigation .Nav_button {  
   height: 26px;  
   padding: 0px;
+  margin:0px;
   background: #9ccbd6;
   font-size: 12px;
   color: #335b64;
@@ -88,9 +92,9 @@
 	}
 
 .Application-content-title {  
-  padding: 4px 0px 3px 6px;
   text-align: left;
   background: #87C2D6;
+  margin:0px;
   border-bottom: 4px solid #278296;
 }
 .Application-content-title .gwt-TabBarItem {
