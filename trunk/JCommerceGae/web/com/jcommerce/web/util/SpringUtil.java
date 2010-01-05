@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import com.jcommerce.core.service.IDefaultManager;
+import com.jcommerce.core.service.IWebManager;
 import com.jcommerce.core.service.config.IShopConfigManager;
 import com.jcommerce.core.service.shipping.IShippingMetaManager;
 
@@ -27,5 +28,8 @@ public class SpringUtil implements ApplicationContextAware {
 	}
     public static IShippingMetaManager getShippingMetaManager(){
     	return (IShippingMetaManager)getBean("ShippingMetaManager");
+    }
+    public static IWebManager getWebManager() {
+    	return (IWebManager)getBean("WebManagerImpl");
     }
 }
