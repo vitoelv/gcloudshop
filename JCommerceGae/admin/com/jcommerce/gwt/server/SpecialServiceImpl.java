@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
@@ -50,6 +52,8 @@ import com.jcommerce.core.util.MyPropertyUtil;
 import com.jcommerce.gwt.client.ISpecialService;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BeanObject;
+import com.jcommerce.gwt.client.model.IAdminUser;
+import com.jcommerce.gwt.client.model.IComment;
 import com.jcommerce.gwt.client.model.IShippingArea;
 import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.gwt.client.panels.system.PaymentConfigFieldMetaForm;
@@ -581,4 +585,18 @@ public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecial
 			throw new RuntimeException();
 		}
 	}
+    public Map<String,String> getAdminUserInfo (){
+    	try {
+    		HttpSession session = this.getThreadLocalRequest().getSession();
+    		Map<String,String> adminInfo = new HashMap<String,String>();
+    	
+    		adminInfo.put( IAdminUser.USER_NAME , (String)session.getAttribute(IAdminUser.USER_NAME));
+			adminInfo.put( IAdminUser.EMAIL,  (String)session.getAttribute(IAdminUser.EMAIL));
+			adminInfo.put( IComment.IP_ADDRESS,  (String)session.getAttribute(IComment.IP_ADDRESS));
+    		return adminInfo;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+    }
 }

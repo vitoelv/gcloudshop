@@ -44,5 +44,6 @@ public interface ISpecialService extends RemoteService {
     
     public SortedMap<Integer, List<BeanObject>> getCombinedShopConfigMetaMap();
     public Boolean saveShopConfig(Map<String, BeanObject> formData);
+    public Map<String,String> getAdminUserInfo();
     
 }

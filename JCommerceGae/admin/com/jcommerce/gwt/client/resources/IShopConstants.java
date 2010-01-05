@@ -12,6 +12,8 @@ import com.jcommerce.gwt.client.panels.goods.GoodsListPanel;
 import com.jcommerce.gwt.client.panels.goods.GoodsPanel;
 import com.jcommerce.gwt.client.panels.goods.GoodsTypeListPanel;
 import com.jcommerce.gwt.client.panels.goods.GoodsTypePanel;
+import com.jcommerce.gwt.client.panels.goods.CommentListPanel;
+import com.jcommerce.gwt.client.panels.goods.CommentPanel;
 import com.jcommerce.gwt.client.panels.member.ShippingAddressPanel;
 import com.jcommerce.gwt.client.panels.member.UserListPanel;
 import com.jcommerce.gwt.client.panels.member.UserPanel;
@@ -37,11 +39,10 @@ public interface IShopConstants extends Constants,
 			RegionPanel.Constants, ShippingMetaListPanel.Constants,
 			ShippingAreaListPanel.Constants,BrandPanel.Constants,GoodsTypePanel.Constants,
 			BrandListPanel.Constants,CategoryPanel.Constants,CategoryListPanel.Constants,
-			AttributePanel.Constants,RegionListPanel.Constants,UserListPanel.Constants,UserPanel.Constants,
-			AdminUserPanel.Constants,AdminListPanel.Constants,ShippingAddressPanel.Constants,
-			ArticleCatListPanel.Constants,
-			ImportPanel.Constants, ExportPanel.Constants
-
+			AttributePanel.Constants,RegionListPanel.Constants,UserListPanel.Constants,
+			AdminUserPanel.Constants,AdminListPanel.Constants,CommentListPanel.Constants,CommentPanel.Constants,
+			UserPanel.Constants,ShippingAddressPanel.Constants,
+			ArticleCatListPanel.Constants,ImportPanel.Constants, ExportPanel.Constants
 			{
 
 	
@@ -97,5 +98,8 @@ public interface IShopConstants extends Constants,
   
   String OperationFailure();
   String OperationSuccessful();
+  
+  String deleteConfirmTitle();
+  String deleteConfirmContent();
   
 }
