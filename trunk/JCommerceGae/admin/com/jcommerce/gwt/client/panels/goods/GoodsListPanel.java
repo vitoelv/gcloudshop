@@ -456,7 +456,7 @@ public class GoodsListPanel extends ContentWidget {
 								+ listeners.get(i));
 					}
 				}
-				return false;
+				return true;
 			}
 
 			public void run() {

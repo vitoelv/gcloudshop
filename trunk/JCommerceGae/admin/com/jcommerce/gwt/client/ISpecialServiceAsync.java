@@ -47,4 +47,6 @@ public interface ISpecialServiceAsync {
     
     public void getCombinedShopConfigMetaMap(AsyncCallback<SortedMap<Integer, List<BeanObject>>> callback);
     public void saveShopConfig(Map<String, BeanObject> formData, AsyncCallback<Boolean> callback);
+
+    public void getAdminUserInfo(AsyncCallback<Map<String,String>> callback);
 }

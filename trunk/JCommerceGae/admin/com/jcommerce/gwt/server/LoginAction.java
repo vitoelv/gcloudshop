@@ -8,12 +8,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.jcommerce.core.model.AdminUser;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IAdminUser;
+import com.jcommerce.gwt.client.model.IComment;
 import com.jcommerce.web.util.SpringUtil;
 
 public class LoginAction extends HttpServlet {
@@ -30,8 +33,8 @@ public class LoginAction extends HttpServlet {
     	
       String username = request.getParameter("userName");
       String pwd = request.getParameter("userPwd");
-      if(authenticate(username,pwd)){
-    	  response.sendRedirect("/admin_zh.html");
+      if(authenticate(username,pwd,request)){
+    	  response.sendRedirect("/admin_zh.html?gwt.codesvr=192.168.68.75:9997");
       }
       else {
     	  request.setAttribute("error", "用户名或密码错误");
@@ -40,9 +43,13 @@ public class LoginAction extends HttpServlet {
       }
     }
     
-    private Boolean authenticate(String name, String password){
+    private Boolean authenticate(String name, String password,HttpServletRequest request){
     	// TODO this is fake for demo start from empty data store
     	if("admin".equals(name) && "admin".equals(password)) {
+    		AdminUser au = new AdminUser();
+    		au.setUserName("I am Admin");
+    		au.setEmail("adminUser@gmail.com");
+    		setAdminUserInfo(request,au);
     		return true;
     	}
     	
@@ -53,7 +60,16 @@ public class LoginAction extends HttpServlet {
     	criteria.addCondition(new Condition(IAdminUser.PASSWORD,Condition.EQUALS,password));
     	List res = manager.getList(ModelNames.ADMINUSER, criteria);
     	isExist = res.isEmpty()?false:true;
+    	if(isExist){
+    		setAdminUserInfo(request,(AdminUser)res.get(0));
+    	}
     	return isExist;
+    }
+    private void setAdminUserInfo(HttpServletRequest request , AdminUser adminUser){
+    	HttpSession session = request.getSession();
+    	session.setAttribute(IAdminUser.USER_NAME, adminUser.getUserName());
+    	session.setAttribute(IAdminUser.EMAIL, adminUser.getEmail());
+    	session.setAttribute(IComment.IP_ADDRESS, request.getRemoteAddr());
     }
 
 

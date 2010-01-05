@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
-import com.extjs.gxt.ui.client.widget.Html;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -34,6 +33,8 @@ import com.jcommerce.gwt.client.panels.goods.BrandListPanel;
 import com.jcommerce.gwt.client.panels.goods.BrandPanel;
 import com.jcommerce.gwt.client.panels.goods.CategoryListPanel;
 import com.jcommerce.gwt.client.panels.goods.CategoryPanel;
+import com.jcommerce.gwt.client.panels.goods.CommentListPanel;
+import com.jcommerce.gwt.client.panels.goods.CommentPanel;
 import com.jcommerce.gwt.client.panels.goods.GoodsListPanel;
 import com.jcommerce.gwt.client.panels.goods.GoodsPanel;
 import com.jcommerce.gwt.client.panels.goods.GoodsTypeListPanel;
@@ -214,6 +215,7 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
         setupMainMenuOption(catGoods, new GoodsListPanel.State(), Resources.images.catWidgets());
         setupMainMenuOption(catGoods, new GoodsPanel.State(), Resources.images.catWidgets());   
         setupMainMenuOption(catGoods, new CategoryListPanel.State(), Resources.images.catWidgets());
+        setupMainMenuOption(catGoods, new CommentListPanel.State(), Resources.images.catWidgets());
         setupMainMenuOption(catGoods, new BrandListPanel.State(), Resources.images.catWidgets());
         setupMainMenuOption(catGoods, new GoodsTypeListPanel.State(), Resources.images.catWidgets());
 
@@ -424,6 +426,10 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 			} else if (pageClassName.equals(ExportPanel.class.getName())) {
 				page = ExportPanel.getInstance();				
 
+			} else if (pageClassName.equals(CommentListPanel.class.getName())) {
+				page = CommentListPanel.getInstance();
+			} else if (pageClassName.equals(CommentPanel.class.getName())) {
+				page = CommentPanel.getInstance();
 			} else if (pageClassName.equals(GoodsListPanel.class.getName())) {
 				page = GoodsListPanel.getInstance();
 			} else if (pageClassName.equals(BrandPanel.class.getName())) {

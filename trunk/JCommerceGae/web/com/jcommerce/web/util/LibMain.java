@@ -169,20 +169,24 @@ public class LibMain {
 		c.addCondition(new Condition(IComment.ID_VALUE, Condition.EQUALS, id));
 		c.addCondition(new Condition(IComment.COMMENT_TYPE, Condition.EQUALS, type.toString()));
 		c.addCondition(new Condition(IComment.STATUS, Condition.EQUALS, IComment.STATUS_ACTIVE.toString()));
-		int count = manager.getCount(ModelNames.COMMENT, c);
+		
 		int size = scw.getInt("comments_number");
 		if(size<0) {
 			size = 5;
 		}
-		int pageCount = (int) (count > 0 ? (Math.ceil((double)count / size)) : 1);
 		
 		Map<String, CommentWrapper> arr = new HashMap<String, CommentWrapper>();
-		List<String> ids = new ArrayList<String>();
+		Map<String,Comment> pcMap = new HashMap<String,Comment>();
 		List<Comment> comments = manager.getList(ModelNames.COMMENT, c, (page-1)*size, size);
 		
 		for(Comment comment: comments) {
 			String cid = comment.getPkId();
-			ids.add(cid);
+			
+			if( !comment.getParentId().equals("") ){
+				pcMap.put(comment.getParentId(),comment);
+				continue;
+			}
+			
 			CommentWrapper commentWrapper = arr.get(cid);
 			if(commentWrapper == null) {
 				commentWrapper = new CommentWrapper(comment);
@@ -199,13 +203,27 @@ public class LibMain {
 					scw.getString(IShopConfigMeta.CFG_KEY_TIME_FORMAT), 
 					comment.getAddTime());
 			commentWrapper.put("addTime", addTime);
+			commentWrapper.put("reContent", null);
 			
 		}
+		
 		/* 取得已有回复的评论 */
-		if(ids.size()>0) {
-			// TODO comment reply
-			
+		for(String pid : pcMap.keySet() ){
+			CommentWrapper cw = arr.get(pid);
+			Comment pcw = pcMap.get(pid);
+			if( cw != null ){
+				cw.put("reContent", pcw.getContent());
+				cw.put("reEmail", pcw.getEmail());
+				cw.put("reAddTime", pcw.getAddTime());
+				cw.put("reUsername", pcw.getUserName());
+			}
 		}
+		
+		int count = arr.size();
+		
+		int pageCount = (int) (count > 0 ? (Math.ceil((double)count / size)) : 1);
+		
+		
 		
 		Pager pager = new Pager();
 		pager.setPage(page);

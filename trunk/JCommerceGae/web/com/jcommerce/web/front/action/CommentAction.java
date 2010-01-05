@@ -144,7 +144,8 @@ public class CommentAction extends BaseAction {
 		comment.setContent(cmt.getString("content"));
 		comment.setCommentRank(cmt.getLong("rank"));
 		comment.setAddTime(new Date().getTime());
-		comment.setParentId(null);
+		comment.setParentId("");
+		comment.setIpAddress(getRequest().getRemoteAddr());
 		
 
 		/* 保存评论内容 */
