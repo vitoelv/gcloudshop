@@ -17,4 +17,5 @@ public interface OrderConstants {
 	String OrderList_totalAmount();//总金额
 	String OrderList_shouldPay();//应付金额
 	String OrderList_action();//操作
+	String OrderList_anonymous();
 }

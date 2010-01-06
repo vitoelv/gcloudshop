@@ -13,27 +13,8 @@ import com.jcommerce.gwt.client.resources.Resources;
 public class OrderStateCellRenderer implements GridCellRenderer<BeanObject> {
     
 	GridView view;
-	int orderStatus; 
-	int shippingStatus;
-	int payStatus; 
-
-	public void setOrderStatus(long orderStatus) {
-		this.orderStatus = (int) orderStatus;
-	}
-
-
-	public void setShippingStatus(long shippingStatus) {
-		this.shippingStatus = (int) shippingStatus;
-	}
-
-
-	public void setPayStatus(long payStatus) {
-		this.payStatus = (int) payStatus;
-	}
-
-
-	public OrderStateCellRenderer(Grid grid) {
-    	this.view = grid.getView();
+	
+	public OrderStateCellRenderer() {
     }
     
 
@@ -44,6 +25,9 @@ public class OrderStateCellRenderer implements GridCellRenderer<BeanObject> {
 		String orderStatusStr = null;
 		String shippingStatusStr = null;
 		String payStatusStr = null;
+		int orderStatus = ((Long)model.get(IOrderInfo.ORDER_STATUS)).intValue(); 
+		int shippingStatus = ((Long)model.get(IOrderInfo.SHIPPING_STATUS)).intValue();
+		int payStatus = ((Long)model.get(IOrderInfo.PAY_STATUS)).intValue(); 
 		
 		switch(orderStatus) { 
 			case IOrderInfo.OS_CANCELED: 
