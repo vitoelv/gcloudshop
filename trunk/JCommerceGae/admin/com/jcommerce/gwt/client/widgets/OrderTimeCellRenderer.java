@@ -6,56 +6,37 @@ import java.util.Date;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.grid.ColumnData;
 import com.extjs.gxt.ui.client.widget.grid.Grid;
-import com.extjs.gxt.ui.client.widget.grid.GridCellRenderer;
-import com.extjs.gxt.ui.client.widget.grid.GridView;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.jcommerce.gwt.client.form.BeanObject;
+import com.jcommerce.gwt.client.model.IOrderInfo;
 
-public class OrderTimeCellRenderer implements GridCellRenderer<BeanObject> {
+public class OrderTimeCellRenderer extends TimeCellRenderer {
     
-	GridView view;
 	
-	long addTime;
-	String user = null;
-	
-	public long getAddTime() {
-		return addTime;
+	public OrderTimeCellRenderer() {
+		super();
 	}
 
-
-	public void setAddTime(long addTime) {
-		this.addTime = addTime;
-	}
-
-
-	public String getUser() {
-		return user;
-	}
-
-
-	public void setUser(String user) {
-		this.user = user;
-	}
-
-
-	public OrderTimeCellRenderer(Grid grid) {
-    	this.view = grid.getView();
-    }
-    
-
+	@Override
 	public Object render(BeanObject model, String property, ColumnData config,
 			final int rowIndex, final int colIndex, ListStore<BeanObject> store,
 			Grid<BeanObject> grid) {   
-		
-		Date time = new Date(addTime);
+//		String userId = model.getString(IOrderInfo.USER_ID);
+		Date dateTime = new Date((Long)model.get(IOrderInfo.ADD_TIME));
 		DateTimeFormat formatter = DateTimeFormat.getFormat("MM-dd HH:mm");
-		String timeStr = formatter.format(time);
-		if(user == null) {
-			return timeStr;
-		}
-		else {
-			return user + "<br>" + timeStr;
-		}
+		final String timeStr = formatter.format(dateTime);
+//		if ( userId == null ){
+//			return Resources.constants.OrderList_anonymous() + "<br>" + timeStr;
+//		}else{
+//			new ReadService().getBean(ModelNames.USER, userId, new ReadService.Listener(){
+//				@Override
+//				public void onSuccess(BeanObject bean) {
+//					setOrderTime( bean.getString(IUser.USER_NAME) + "<br>" + timeStr );
+//				}
+//	    	});
+//		}
+		return timeStr;
+		
 	}
 }
 

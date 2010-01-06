@@ -1,7 +1,6 @@
 package com.jcommerce.gwt.client.panels.member;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
@@ -28,25 +27,20 @@ import com.extjs.gxt.ui.client.widget.toolbar.PagingToolBar;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
-import com.jcommerce.gwt.client.form.AttributeForm;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.UserForm;
 import com.jcommerce.gwt.client.model.IUser;
-import com.jcommerce.gwt.client.model.IUserRank;
-import com.jcommerce.gwt.client.panels.goods.GoodsListPanel;
-import com.jcommerce.gwt.client.panels.goods.AttributeListPanel.State;
 import com.jcommerce.gwt.client.panels.order.OrderListPanel;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.DeleteService;
-import com.jcommerce.gwt.client.service.ListService;
 import com.jcommerce.gwt.client.service.PagingListService;
 import com.jcommerce.gwt.client.service.UpdateService;
 import com.jcommerce.gwt.client.widgets.ActionCellRenderer;
+import com.jcommerce.gwt.client.widgets.TimeCellRenderer;
 
 public class UserListPanel extends ContentWidget {
 	public static interface Constants {
@@ -185,8 +179,9 @@ public class UserListPanel extends ContentWidget {
 		//colpayPoint.setEditor(new CellEditor(new TextField()));
 		columns.add(colpayPoint);
 		ColumnConfig colregTime = new ColumnConfig(IUser.REG_TIME, Resources.constants.UserList_colRegTime(), 100);
-		//colpayPoint.setEditor(new CellEditor(new TextField()));
+		colregTime.setRenderer(new TimeCellRenderer());
 		columns.add(colregTime);
+		
 		ColumnConfig colaction = new ColumnConfig("Action", Resources.constants.action(), 100);
 		//colpayPoint.setEditor(new CellEditor(new TextField()));
 		columns.add(colaction);

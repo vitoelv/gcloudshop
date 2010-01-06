@@ -32,6 +32,7 @@ import com.jcommerce.gwt.client.service.DeleteService;
 import com.jcommerce.gwt.client.service.PagingListService;
 import com.jcommerce.gwt.client.service.UpdateService;
 import com.jcommerce.gwt.client.widgets.ActionCellRenderer;
+import com.jcommerce.gwt.client.widgets.TimeCellRenderer;
 
 public class AdminListPanel extends ContentWidget {
 
@@ -161,8 +162,14 @@ public class AdminListPanel extends ContentWidget {
       //columns.add(sm.getColumn());        
       columns.add(new ColumnConfig(IAdminUser.USER_NAME, Resources.constants.AdminList_userName(), 140));
       columns.add(new ColumnConfig(IAdminUser.EMAIL, Resources.constants.AdminList_email(), 150));
-      columns.add(new ColumnConfig(IAdminUser.ADD_TIME, Resources.constants.AdminList_addTime(), 150));
-      columns.add(new ColumnConfig(IAdminUser.LAST_LOGIN, Resources.constants.AdminList_lastLogin(), 150));
+      
+      ColumnConfig addTimeCol = new ColumnConfig(IAdminUser.ADD_TIME, Resources.constants.AdminList_addTime(), 150);
+      addTimeCol.setRenderer(new TimeCellRenderer());
+      columns.add(addTimeCol);
+      
+      ColumnConfig lastLoginCol = new ColumnConfig(IAdminUser.LAST_LOGIN, Resources.constants.AdminList_lastLogin(), 150);
+      lastLoginCol.setRenderer(new TimeCellRenderer());
+      columns.add(lastLoginCol);
      
       ColumnConfig actcol = new ColumnConfig("Action", Resources.constants.action(), 140);
       columns.add(actcol);

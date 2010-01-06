@@ -33,6 +33,7 @@ import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.CommentForm;
+import com.jcommerce.gwt.client.model.IAdminUser;
 import com.jcommerce.gwt.client.model.IComment;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.Condition;
@@ -42,6 +43,7 @@ import com.jcommerce.gwt.client.service.PagingListService;
 import com.jcommerce.gwt.client.service.UpdateService;
 import com.jcommerce.gwt.client.service.WaitService;
 import com.jcommerce.gwt.client.widgets.ActionCellRenderer;
+import com.jcommerce.gwt.client.widgets.TimeCellRenderer;
 
 public class CommentListPanel extends ContentWidget {
 	public static interface Constants {
@@ -208,7 +210,11 @@ public class CommentListPanel extends ContentWidget {
 		columns.add(objcol);
 		
 		columns.add(new ColumnConfig(CommentForm.IP_ADDRESS, Resources.constants.CommentList_ipAddress(), 120));
-		columns.add(new ColumnConfig(CommentForm.ADD_TIME, Resources.constants.CommentList_addTime(), 150));
+		
+		ColumnConfig addTimeCol = new ColumnConfig(CommentForm.ADD_TIME, Resources.constants.CommentList_addTime(), 150);
+	    addTimeCol.setRenderer(new TimeCellRenderer());
+	    columns.add(addTimeCol);
+		
 		columns.add(new ColumnConfig(CommentForm.STATUS, Resources.constants.CommentList_status(), 40));
 		
 		
