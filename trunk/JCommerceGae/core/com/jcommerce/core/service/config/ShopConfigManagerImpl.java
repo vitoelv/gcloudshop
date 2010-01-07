@@ -199,25 +199,25 @@ public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopCo
 				, CFG_TYPE_TEXTAREA, "商店公告", null, "以上内容将显示在首页商店公告中,注意控制公告内容长度不要超过公告显示区域大小。"));
 //		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_COUNTRY, "", CFG_TYPE_OPTIONS, "所在国家", null, null));
 		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_COPYRIGHT, "Copyright © 2008-2009 GCSHOP 版权所有，并保留所有权利。", CFG_TYPE_TEXT, "版权信息", null, null));	
-		defaultShopConfigMap_en.put(1, metaList);
+		defaultShopConfigMap.put(1, metaList);
 		
 		metaList = new ArrayList<ShopConfigMeta>();
 		metaList.add(new ShopConfigMeta(CFG_GROUP_DISPLAY, CFG_KEY_TIME_FORMAT, "yyyy-MMM-dd", CFG_TYPE_TEXT, "时间格式", null, null));
-		defaultShopConfigMap_en.put(3, metaList);
+		defaultShopConfigMap.put(3, metaList);
 		
 		metaList = new ArrayList<ShopConfigMeta>();
 		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOPPING_FLOW, CFG_KEY_CART_CONFIRM, "3", CFG_TYPE_OPTIONS, "购物车确定提示", 
 				new String[][]{new String[]{"1","提示用户，点击“确认”进购物车"}, new String[]{"2","提示用户，点击“取消”进购物车"},
 				new String[]{"3","直接进入购物车"}, new String[]{"4","不提示并停留在当前页面"}}, null));
-		defaultShopConfigMap_en.put(4, metaList);
+		defaultShopConfigMap.put(4, metaList);
 		
 		metaList = new ArrayList<ShopConfigMeta>();
 		metaList.add(new ShopConfigMeta(CFG_GROUP_GOODS, CFG_KEY_SHOW_GOODSWEIGHT, "1", CFG_TYPE_SELECT, "是否显示重量", 
 				new String[][]{new String[]{"1","显示"}, new String[]{"0","不显示"}}, null));
 		metaList.add(new ShopConfigMeta(CFG_GROUP_GOODS, CFG_KEY_SHOW_MARKETPRICE, "1", CFG_TYPE_SELECT, "是否显示市场价格", 
 				new String[][]{new String[]{"1","显示"}, new String[]{"0","不显示"}}, null));	
-		defaultShopConfigMap_en.put(5, metaList);
-		return defaultShopConfigMap_en;
+		defaultShopConfigMap.put(5, metaList);
+		return defaultShopConfigMap;
 	}
 
 
