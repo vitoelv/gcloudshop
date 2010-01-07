@@ -20,6 +20,11 @@ public interface IShopConfigMeta {
 	public static final String CFG_GROUP_SHOPPING_FLOW = "购物流程";
 	public static final String CFG_GROUP_GOODS = "商品显示";
 	
+	
+	// NOTE:  these keys are used as both roles: 
+	// 1. retrieve the value stored
+	// 2. to fetch the i11n lable string
+	
 	// basic
 	public static final String CFG_KEY_SHOP_NAME = "shop_name";
 	public static final String CFG_KEY_SHOP_TITLE = "shop_title";
