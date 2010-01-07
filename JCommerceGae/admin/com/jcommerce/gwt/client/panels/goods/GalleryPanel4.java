@@ -6,6 +6,7 @@ import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
+import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.Info;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.TabItem;
@@ -44,12 +45,14 @@ public class GalleryPanel4 extends TabItem {
 		this.gp = gp;
 				
 		TableLayout layout = new TableLayout(1);
+		layout.setWidth("100%");
 		layout.setCellSpacing(5);
 		layout.setCellPadding(5);
 		setLayout(layout);
 		
 		
 		TableLayout tl = new TableLayout(3);
+		tl.setWidth("100%");
 		tl.setBorder(1);
 		lc1.setLayout(tl);
 		lc1.setAutoHeight(true);
@@ -96,11 +99,13 @@ public class GalleryPanel4 extends TabItem {
 	private void addUploader(boolean isFirst) {
 		uploaderCount++;
 		final LayoutContainer lcc = new LayoutContainer();
-		TableRowLayout cl = new TableRowLayout();
-		cl.setWidth("100%");
+		lcc.setHeight(30);
+		RowLayout cl = new RowLayout();
+		cl.setOrientation(Orientation.HORIZONTAL);
 		lcc.setLayout(cl);
 		
 		Text lbl1 = new Text(Resources.constants.NewGoods_imageDescription());
+		lbl1.setAutoWidth(true);
 		final TextField<String> t1 = new TextField<String>();
 		t1.setName(buildElementName(IGoodsGallery.IMG_DESC));
 //		t1.setFieldLabel("Name :");
@@ -135,26 +140,20 @@ public class GalleryPanel4 extends TabItem {
 				}
 			});
 		}
-
-
-		TableData td = new TableData();
-		td.setWidth("5%");
+		RowData td = new RowData(26,26,new Margins(1,2,1,2));
+		
 		lcc.add(b1, td);
 		
-		td = new TableData();
-		td.setWidth("10%");
+		td = new RowData(-1,1,new Margins(4,2,3,2));
 		lcc.add(lbl1, td);
 
-		td = new TableData();
-		td.setWidth("20%");
+		td = new RowData(-1,1,new Margins(3,2,3,2));
 		lcc.add(t1, td);
 		
-		td = new TableData();
-		td.setWidth("10%");
+		td = new RowData(-1,1,new Margins(4,2,3,2));
 		lcc.add(lbl2, td);
 		
-		td = new TableData();
-		td.setWidth("20%");
+		td = new RowData(-1,1,new Margins(3,2,3,2));
 		lcc.add(file, td);
 		
 		lc2.add(lcc, new RowData(1, -1));
@@ -201,6 +200,7 @@ public class GalleryPanel4 extends TabItem {
 		
 		final LayoutContainer lc = new LayoutContainer();
 		TableLayout layout = new TableLayout(1);
+		layout.setWidth("100%");
 		layout.setCellHorizontalAlign(Style.HorizontalAlignment.CENTER);
 		layout.setCellVerticalAlign(Style.VerticalAlignment.MIDDLE);
 		layout.setCellSpacing(2);
