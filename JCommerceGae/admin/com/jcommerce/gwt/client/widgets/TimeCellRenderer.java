@@ -24,7 +24,7 @@ public class TimeCellRenderer implements GridCellRenderer<BeanObject> {
 	}
 
 
-	@Override
+
 	public Object render(BeanObject model, String property, ColumnData config,
 			int rowIndex, int colIndex, ListStore<BeanObject> store,
 			Grid<BeanObject> grid) {

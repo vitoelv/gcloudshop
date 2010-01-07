@@ -168,13 +168,13 @@ public class CommentPanel extends ContentWidget {
 	        
 	        RemoteService.getSpecialService().getAdminUserInfo(new AsyncCallback<Map<String,String>>(){
 
-				@Override
+
 				public void onFailure(Throwable caught) {
 					caught.printStackTrace();
 					Window.alert("ERROR: "+caught.getMessage());
 				}
 
-				@Override
+
 				public void onSuccess(Map<String, String> result) {
 					userNameField.setValue(result.get(IAdminUser.USER_NAME));
 					emailField.setValue(result.get(IAdminUser.EMAIL));
