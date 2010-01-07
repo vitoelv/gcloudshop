@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -97,7 +98,7 @@ public class LibMain {
 		String fileName = WebUtils.getActionName(request);
 		
 		/* 初始化“页面标题”和“当前位置” */
-	    String pageTitle = SpringUtil.getShopConfigManager().getCachedShopConfig().getString(CFG_KEY_SHOP_TITLE) + "- Powered by GCShop";
+	    String pageTitle = SpringUtil.getShopConfigManager().getCachedShopConfig((String)request.getSession().getAttribute("locale")).getString(CFG_KEY_SHOP_TITLE) + "- Powered by GCShop";
 	    String urHere = "<a href=\"/web/front/home.action\">"+Lang.getInstance().getString("home") + "</a>";
 	    
 	    

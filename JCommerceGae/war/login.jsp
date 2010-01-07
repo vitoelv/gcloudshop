@@ -4,6 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<% request.getSession().setAttribute("locale",request.getParameter("locale"));%>
 <title>GCShop Admin Login</title>
 </head>
 <style>

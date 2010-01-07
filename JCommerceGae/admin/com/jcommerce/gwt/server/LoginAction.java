@@ -34,7 +34,7 @@ public class LoginAction extends HttpServlet {
       String username = request.getParameter("userName");
       String pwd = request.getParameter("userPwd");
       if(authenticate(username,pwd,request)){
-    	  response.sendRedirect("/admin_zh.html?gwt.codesvr=192.168.68.75:9997");
+    	  response.sendRedirect("/admin.jsp?gwt.codesvr=192.168.68.75:9997");
       }
       else {
     	  request.setAttribute("error", "用户名或密码错误");

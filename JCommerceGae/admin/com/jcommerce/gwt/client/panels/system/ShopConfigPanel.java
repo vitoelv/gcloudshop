@@ -2,6 +2,7 @@ package com.jcommerce.gwt.client.panels.system;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.SortedMap;
 
@@ -123,22 +124,33 @@ public class ShopConfigPanel extends BaseEntityEditPanel {
        	retrieveEntity();
     }
     
+    
     // get called when refresh(), if isEdit
     protected void retrieveEntity() {
-    	RemoteService.getSpecialService().getCombinedShopConfigMetaMap(
-    			new AsyncCallback<SortedMap<Integer, List<BeanObject>>>() {
-					public void onFailure(Throwable caught) {
-						// TODO Auto-generated method stub
-					}
-					public void onSuccess(
-							SortedMap<Integer, List<BeanObject>> result) {
-						generateDynaFields(result);
-						layout();
-				        repaint();
-					}
-    		
-    	});
+    	RemoteService.getSpecialService().getLocale(
+    		new AsyncCallback<String>() {
+    			public void onFailure(Throwable caught) {
+    				// TODO Auto-generated method stub
+    			}
+    			public void onSuccess( String result) {
+    				RemoteService.getSpecialService().getCombinedShopConfigMetaMap( result ,
+    		    			new AsyncCallback<SortedMap<Integer, List<BeanObject>>>() {
+    							public void onFailure(Throwable caught) {
+    								// TODO Auto-generated method stub
+    							}
+    							public void onSuccess(
+    									SortedMap<Integer, List<BeanObject>> result) {
+    								generateDynaFields(result);
+    								layout();
+    						        repaint();
+    							}
+    		    	});
+    			}
+    		}
+    	);
     }
+    	
+    
 	protected void submit() {
 		Map<String, Object> props = FormUtils.getPropsFromForm(formPanel);
 		for(String code : props.keySet()) {
