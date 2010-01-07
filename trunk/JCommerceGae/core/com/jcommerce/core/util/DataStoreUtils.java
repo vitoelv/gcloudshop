@@ -31,6 +31,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.jcommerce.core.annotation.IsPK;
 import com.jcommerce.core.model.AdminUser;
 import com.jcommerce.core.model.AreaRegion;
+import com.jcommerce.core.model.ArticleCat;
 import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.Category;
@@ -257,6 +258,7 @@ public class DataStoreUtils implements IConstants{
 					AdminUser.class.getName(), 
 					ShopConfig.class.getName()
 					,
+					ArticleCat.class.getName(),
 					Payment.class.getName(), Shipping.class.getName(),
 					ShippingArea.class.getName(), AreaRegion.class.getName()
 					};

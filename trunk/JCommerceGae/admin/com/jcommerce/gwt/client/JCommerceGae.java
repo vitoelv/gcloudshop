@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jcommerce.gwt.client.Application.ApplicationListener;
 import com.jcommerce.gwt.client.panels.Success;
 import com.jcommerce.gwt.client.panels.article.ArticleCatListPanel;
+import com.jcommerce.gwt.client.panels.article.ArticleCatPanel;
 import com.jcommerce.gwt.client.panels.data.ExportPanel;
 import com.jcommerce.gwt.client.panels.data.ImportPanel;
 import com.jcommerce.gwt.client.panels.goods.AttributeListPanel;
@@ -471,6 +472,9 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 			}
 			else if(pageClassName.equals(ArticleCatListPanel.class.getName())){
 				page = ArticleCatListPanel.getInstance();
+			}
+			else if(pageClassName.equals(ArticleCatPanel.class.getName())){
+				page = ArticleCatPanel.getInstance();
 			}
 			else if(pageClassName.equals(AdminListPanel.class.getName())){
 				page = AdminListPanel.getInstance();

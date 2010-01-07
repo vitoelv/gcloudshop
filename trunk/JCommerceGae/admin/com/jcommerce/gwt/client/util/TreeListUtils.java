@@ -16,8 +16,10 @@ public class TreeListUtils {
 		Map<String,List<BeanObject>> pcMap = new HashMap<String,List<BeanObject>>();
 		for(BeanObject bean:beans){
 			String treeParentId = bean.getString(IModelObject.TREE_PARENT_ID);
-
 			beansMap.put(bean.getString(IModelObject.PK_ID), bean);
+			if(treeParentId!=null&&treeParentId.isEmpty()){
+				treeParentId = null;
+			}
 			List<BeanObject> children = pcMap.get(treeParentId);
 			if(children == null){
 				children = new ArrayList<BeanObject>();
@@ -34,7 +36,7 @@ public class TreeListUtils {
 			if(pcMap.containsKey(bean.getString(IModelObject.PK_ID))){
 				addChild(beansMap,pcMap,pcMap.get(bean.getString(IModelObject.PK_ID)));
 			}
-			if(bean.getString(IModelObject.TREE_PARENT_ID)!=null){
+			if(bean.getString(IModelObject.TREE_PARENT_ID)!=null&&!bean.getString(IModelObject.TREE_PARENT_ID).isEmpty()){
 				beansMap.get(bean.getString(IModelObject.TREE_PARENT_ID)).add(bean);
 			}
 		}
