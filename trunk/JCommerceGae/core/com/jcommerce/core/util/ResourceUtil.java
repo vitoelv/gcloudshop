@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 
 public class ResourceUtil {
 	
-	public static final String BUNDLE_SHOPCONFIG = "shopConfig";
+	public static final String BUNDLE_SHOPCONFIG = "com.jcommerce.core.resource.shopConfig";
 	
 	public static ResourceBundle getShopConfigResource(Locale locale) {
 		return ResourceBundle.getBundle(BUNDLE_SHOPCONFIG, locale);
