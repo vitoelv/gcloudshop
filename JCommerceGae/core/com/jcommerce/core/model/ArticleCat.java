@@ -9,6 +9,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.jcommerce.core.annotation.IsPK;
+
 /**  
  * generated with my extension of middleGen 
  * @author <a href="http://code.google.com/p/gcloudshop/">Leon</a>
@@ -40,12 +42,14 @@ public class ArticleCat extends ModelObject {
 
   @Persistent
   private java.lang.Long sortOrder=0l; 
+  
+  @IsPK(myclazz="com.jcommerce.core.model.ArticleCat")
+  @Persistent
+  private java.lang.String parentId; 
 
   @Persistent
   private java.lang.Long showInNav=0l; 
 
-  @Persistent
-  private java.lang.String parentId; 
 
 
 
@@ -128,6 +132,10 @@ public class ArticleCat extends ModelObject {
 
   public java.lang.String getParentId() {
     return parentId;
+  }
+  
+  public java.lang.String getTreeParentId(){
+	  return parentId;
   }
 
   public void setParentId(java.lang.String newParentId) {

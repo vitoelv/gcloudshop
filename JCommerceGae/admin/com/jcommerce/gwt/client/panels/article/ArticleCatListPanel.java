@@ -40,19 +40,32 @@ import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.model.IArticleCat;
 import com.jcommerce.gwt.client.model.ICategory;
 import com.jcommerce.gwt.client.resources.Resources;
+import com.jcommerce.gwt.client.service.DeleteService;
 import com.jcommerce.gwt.client.service.ListService;
-import com.jcommerce.gwt.client.service.PagingListService;
 import com.jcommerce.gwt.client.widgets.ActionCellRenderer;
 
 public class ArticleCatListPanel extends ContentWidget{
 	public static interface Constants {
 		String ArticleCat_MenuName();
+		String ArticleCat_col_name();
+		String ArticleCat_col_type();
+		String ArticleCat_col_desc();
+		String ArticleCat_col_order();
+		String ArticleCat_col_showInNav();
+		String ArticleCat_sbtn_add();
+		String ArticleCat_title();
 	}
 	
 	private ArticleCatListPanel(){
 		initJS(this);
 	}
 	private native void initJS(ArticleCatListPanel me) /*-{
+		$wnd.changeArticleCat = function (id) {
+           me.@com.jcommerce.gwt.client.panels.article.ArticleCatListPanel::modifyArticleCatAndRefrsh(Ljava/lang/String;)(id);
+        };
+        $wnd.deleteArticleCat = function(id){
+        	me.@com.jcommerce.gwt.client.panels.article.ArticleCatListPanel::deleteArticleCatAndRefrsh(Ljava/lang/String;)(id);
+        }
 	}-*/;
 	
 	private static ArticleCatListPanel instance;
@@ -80,6 +93,22 @@ public class ArticleCatListPanel extends ContentWidget{
 		// TODO Auto-generated method stub
 		return curState;
 	}
+	private void modifyArticleCatAndRefrsh(final String id){
+		ArticleCatPanel.State newState = new ArticleCatPanel.State();
+		newState.setIsEdit(true);
+		newState.setPkId(id);
+		newState.execute();
+	}
+	private void deleteArticleCatAndRefrsh(final String id){
+		new DeleteService().deleteBean(ModelNames.ARTICLE_CAT, id, new DeleteService.Listener(){
+
+			@Override
+			public void onSuccess(Boolean success) {
+				refresh();
+			}
+			
+		});
+	}
 	TreeStore<BeanObject> store = new TreeStore<BeanObject>();
 	protected void onRender(Element parent, int index) {
     	super.onRender(parent, index);
@@ -102,14 +131,14 @@ public class ArticleCatListPanel extends ContentWidget{
         List<ColumnConfig> columns = new ArrayList<ColumnConfig>();
         //CheckBoxSelectionModel<BeanObject> sm = new CheckBoxSelectionModel<BeanObject>();
         //columns.add(sm.getColumn()); 
-        ColumnConfig colName = new ColumnConfig(IArticleCat.CAT_NAME, "文章分类名称", 150);
+        ColumnConfig colName = new ColumnConfig(IArticleCat.CAT_NAME, Resources.constants.ArticleCat_col_name(), 150);
         colName.setRenderer(new TreeGridCellRenderer<BeanObject>());
         columns.add(colName);
-        columns.add(new ColumnConfig(IArticleCat.CAT_TYPE, "文章类型", 80));
+        columns.add(new ColumnConfig(IArticleCat.CAT_TYPE, Resources.constants.ArticleCat_col_type(), 150));
         
-        columns.add(new CheckColumnConfig(IArticleCat.CAT_DESC, "描述", 80));        
-        columns.add(new ColumnConfig(IArticleCat.SORT_ORDER,"排序", 50));
-        columns.add(new CheckColumnConfig(IArticleCat.SHOW_IN_NAV, "是否现实在导航栏", 80) {
+        columns.add(new ColumnConfig(IArticleCat.CAT_DESC, Resources.constants.ArticleCat_col_desc(), 200));        
+        columns.add(new ColumnConfig(IArticleCat.SORT_ORDER, Resources.constants.ArticleCat_col_order(), 80));
+        columns.add(new CheckColumnConfig(IArticleCat.SHOW_IN_NAV, Resources.constants.ArticleCat_col_showInNav(), 150) {
         	// TODO: wrap the code for Long type column into a baseclass
         	  protected String getCheckState(ModelData model, String property, int rowIndex,
         		      int colIndex) {
@@ -127,18 +156,17 @@ public class ArticleCatListPanel extends ContentWidget{
         EditorTreeGrid<BeanObject> grid = new EditorTreeGrid<BeanObject>(store, cm);
         grid.setLoadMask(true);
         grid.setBorders(true);
-        //grid.setSelectionModel(sm);
-//        grid.setAutoExpandColumn("forum");
+        grid.setAutoExpandColumn(IArticleCat.CAT_NAME);
 
 
         ActionCellRenderer render = new ActionCellRenderer(grid);
         ActionCellRenderer.ActionInfo act = new ActionCellRenderer.ActionInfo();        
         act.setText(Resources.constants.edit());
-        //act.setAction("changeCategory($pkId)");
+        act.setAction("changeArticleCat($pkId)");
         render.addAction(act);
         act = new ActionCellRenderer.ActionInfo();
         act.setText(" " + Resources.constants.delete());
-		//act.setAction("deleteCategory($pkId)");
+		act.setAction("deleteArticleCat($pkId)");
 		act.setTooltip(Resources.constants.GoodsList_action_delete());
 		render.addAction(act);
         actcol.setRenderer(render);        
@@ -147,40 +175,33 @@ public class ArticleCatListPanel extends ContentWidget{
         panel.setFrame(true);
         panel.setCollapsible(true);
         panel.setAnimCollapse(false);
-        //panel.setButtonAlign(HorizontalAlignment.CENTER);
         panel.setIconStyle("icon-table");
-        panel.setHeading("Paging Grid");
+        //panel.setHeading("Paging Grid");
         panel.setLayout(new FitLayout());
         panel.add(grid);
-        panel.setSize(800, 350);
-        //panel.setBottomComponent(toolBar);
-        
-        panel.setButtonAlign(HorizontalAlignment.CENTER);
-//        panel.addButton(new com.extjs.gxt.ui.client.widget.button.Button(Resources.constants.Category_title(), new SelectionListener<ButtonEvent>() {
-//          public void componentSelected(ButtonEvent ce) {
-////              JCommerceGae.getInstance().displayNewCategory();
-//        	  	CategoryPanel.State newState = new CategoryPanel.State();
-//				newState.setIsEdit(false);
-//				newState.execute();
-//          }
-//        }));
-        
+        panel.setHeight(350);
         add(panel);        
 	}
 	public Button getShortCutButton(){
-		Button sButton = new Button("增加文章分类");
+		Button sButton = new Button(Resources.constants.ArticleCat_sbtn_add());
 	      sButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
 	          public void componentSelected(ButtonEvent ce) {
-	          	//onShortCutButtonClicked();
+	          	onShortCutButtonClicked();
 	          }
 	      });
 	      return sButton;
 	}
+	public void onShortCutButtonClicked() {
+		ArticleCatPanel.State newState = new ArticleCatPanel.State();
+		newState.setIsEdit(false);
+		newState.execute();
+    }
 	 public void refresh(){
 	    	new ListService().treeListBeans(ModelNames.ARTICLE_CAT,null,new ListService.Listener(){
 
 				@Override
 				public void onSuccess(List<BeanObject> beans) {
+					System.out.println("========ArticleCat size = "+beans.size()+"====");
 					if(store.getChildCount()>0){
 						store.removeAll();
 					}
@@ -200,7 +221,7 @@ public class ArticleCatListPanel extends ContentWidget{
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return "Article Category";
+		return Resources.constants.ArticleCat_title();
 	}
 
 }
