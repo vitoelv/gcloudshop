@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -521,7 +522,8 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
 //	}
 	
 	public ShopConfigWrapper getCachedShopConfig() {
-		return getShopConfigManager().getCachedShopConfig();
+		
+		return getShopConfigManager().getCachedShopConfig((String)getSession().getAttribute("locale"));
 	}
 	
 	public IDefaultManager getDefaultManager() {

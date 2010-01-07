@@ -14,12 +14,11 @@ public interface IShopConfigMeta {
 	public static final String VALUE = "value";
 	
 	// TODO externalize the text string for g18n
-	public static final String CFG_GROUP_SHOP_INFO = "网店信息";
-	public static final String CFG_GROUP_BASIC = "基本设置";
-	public static final String CFG_GROUP_DISPLAY = "显示设置";
-	public static final String CFG_GROUP_SHOPPING_FLOW = "购物流程";
-	public static final String CFG_GROUP_GOODS = "商品显示";
-	
+//	public static final String CFG_GROUP_SHOP_INFO = "网店信息";
+//	public static final String CFG_GROUP_BASIC = "基本设置";
+//	public static final String CFG_GROUP_DISPLAY = "显示设置";
+//	public static final String CFG_GROUP_SHOPPING_FLOW = "购物流程";
+//	public static final String CFG_GROUP_GOODS = "商品显示";
 	
 	// NOTE:  these keys are used as both roles: 
 	// 1. retrieve the value stored

@@ -111,9 +111,9 @@ public class CommentAction extends BaseAction {
     
 	private int getCommentCheckConfig() {
 		int needCheck = getCachedShopConfig().getInt(IShopConfigMeta.CFG_KEY_COMMENT_CHECK);
-		if(Integer.MIN_VALUE==needCheck) {
-			needCheck = 0; // default we need check
-		}
+//		if(Integer.MIN_VALUE == needCheck) {
+//			needCheck = 0; // default we need check
+//		}
 		return needCheck;
 	}
 	/**
@@ -128,7 +128,7 @@ public class CommentAction extends BaseAction {
 		Comment comment = new Comment();
 		int needCheck = getCommentCheckConfig();
 		Long status;
-		if(needCheck>1){
+		if(needCheck == 1){
 			status = IComment.STATUS_INACTIVE;
 		}
 		else {

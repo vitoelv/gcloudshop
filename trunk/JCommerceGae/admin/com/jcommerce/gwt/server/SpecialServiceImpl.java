@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -531,10 +532,10 @@ public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecial
     	}
     }
     
-    public SortedMap<Integer, List<BeanObject>> getCombinedShopConfigMetaMap() {
+    public SortedMap<Integer, List<BeanObject>> getCombinedShopConfigMetaMap(String locale) {
     	try {
     	SortedMap<Integer, List<BeanObject>> resMap = new TreeMap<Integer, List<BeanObject>>();
-    	SortedMap<Integer, List<ShopConfigMeta>> map = getShopConfigManager().getCombinedShopConfigMetaMap();
+    	SortedMap<Integer, List<ShopConfigMeta>> map = getShopConfigManager().getCombinedShopConfigMetaMap(locale);
     	for(Integer i : map.keySet()) {
     		List<BeanObject> resList = resMap.get(i);
     		if(resList==null) {
@@ -598,5 +599,8 @@ public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecial
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
+    }
+    public String getLocale(){
+    	return (String)this.getThreadLocalRequest().getSession().getAttribute("locale");
     }
 }

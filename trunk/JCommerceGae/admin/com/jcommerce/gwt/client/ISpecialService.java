@@ -1,6 +1,7 @@
 package com.jcommerce.gwt.client;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.SortedMap;
 
@@ -42,8 +43,9 @@ public interface ISpecialService extends RemoteService {
     public ListLoadResult<BeanObject> getShippingAreaWithRegionNames(String shippingId, ListLoadConfig pgc);
     public Boolean saveShippingArea(BeanObject shippingArea);
     
-    public SortedMap<Integer, List<BeanObject>> getCombinedShopConfigMetaMap();
+    public SortedMap<Integer, List<BeanObject>> getCombinedShopConfigMetaMap(String Locale);
     public Boolean saveShopConfig(Map<String, BeanObject> formData);
     public Map<String,String> getAdminUserInfo();
+    public String getLocale();
     
 }
