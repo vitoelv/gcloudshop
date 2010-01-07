@@ -113,7 +113,7 @@ public class JDOQLHelper {
             } else if (op == Condition.GREATERTHAN) {
             	hql.append(" >= ");
             } else if (op == Condition.LESSTHAN) {
-                hql.append(" <= ").append(cond.getValue());
+                hql.append(" <= ");
             } else if (op == Condition.EQUALS) {
                 hql.append(" == ");
             } else {
