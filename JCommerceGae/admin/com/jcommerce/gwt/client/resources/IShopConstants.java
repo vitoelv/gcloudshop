@@ -29,6 +29,7 @@ import com.jcommerce.gwt.client.panels.system.ShippingMetaListPanel;
 import com.jcommerce.gwt.client.panels.data.ImportPanel;
 import com.jcommerce.gwt.client.panels.data.ExportPanel;
 import com.jcommerce.gwt.client.panels.order.OrderListPanel;
+import com.jcommerce.gwt.client.panels.order.SearchOrderPanel;
 /**
  * Constants used throughout the showcase.
  */
@@ -43,9 +44,10 @@ public interface IShopConstants extends Constants,
 			BrandListPanel.Constants,CategoryPanel.Constants,CategoryListPanel.Constants,
 			AttributePanel.Constants,RegionListPanel.Constants,UserListPanel.Constants,UserPanel.Constants,
 			AdminUserPanel.Constants,AdminListPanel.Constants,ShippingAddressPanel.Constants,
-			ArticleCatListPanel.Constants,ArticleCatPanel.Constants,
+			ArticleCatListPanel.Constants,
 			ImportPanel.Constants, ExportPanel.Constants, OrderListPanel.Constants,
-			CommentListPanel.Constants,CommentPanel.Constants
+			CommentListPanel.Constants,CommentPanel.Constants,SearchOrderPanel.Constants,
+			ArticleCatPanel.Constants
 			{
 
 	

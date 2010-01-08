@@ -45,6 +45,7 @@ import com.jcommerce.gwt.client.panels.member.UserListPanel;
 import com.jcommerce.gwt.client.panels.member.UserPanel;
 import com.jcommerce.gwt.client.panels.order.OrderListPanel;
 import com.jcommerce.gwt.client.panels.order.OrderUserPanel;
+import com.jcommerce.gwt.client.panels.order.SearchOrderPanel;
 import com.jcommerce.gwt.client.panels.privilege.AdminListPanel;
 import com.jcommerce.gwt.client.panels.privilege.AdminUserPanel;
 import com.jcommerce.gwt.client.panels.system.PaymentMetaListPanel;
@@ -224,6 +225,7 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 		TreeItem catOrder = mainMenu.addItem(Resources.constants.categoryOrder());
 		setupMainMenuOption(catOrder, new OrderListPanel.State(), Resources.images.catWidgets());
 		setupMainMenuOption(catOrder, new OrderUserPanel.State(), Resources.images.catWidgets());
+		setupMainMenuOption(catOrder, new SearchOrderPanel.State(), Resources.images.catWidgets());
 		
 		TreeItem system = mainMenu.addItem(Resources.constants.categorySystem());
 		setupMainMenuOption(system, new ShopConfigPanel.State(), Resources.images.catWidgets());
@@ -445,8 +447,9 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 			} else if (pageClassName.equals(OrderUserPanel.class.getName())) {
 				page = OrderUserPanel.getInstance();
 			} else if (pageClassName.equals(OrderListPanel.class.getName())) {
-				page = OrderListPanel.getInstance();
-			
+				page = OrderListPanel.getInstance();			
+			} else if (pageClassName.equals(SearchOrderPanel.class.getName())) {
+				page = SearchOrderPanel.getInstance();			
 			} else if (pageClassName.equals(ShippingMetaListPanel.class.getName())) {
 				page = ShippingMetaListPanel.getInstance();
 			} else if (pageClassName.equals(ShippingTemplatePanel.class.getName())) {
