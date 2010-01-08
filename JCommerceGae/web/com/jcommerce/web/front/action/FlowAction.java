@@ -64,6 +64,9 @@ import com.jcommerce.web.util.PrintfFormat;
 import com.opensymphony.xwork2.ActionContext;
 
 import freemarker.template.TemplateException;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_ONE_STEP_BUY;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_CART_CONFIRM;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_GOODS_IN_CART;
 
 public class FlowAction extends BaseAction {
 	public void debug(String s) {
@@ -111,7 +114,7 @@ public class FlowAction extends BaseAction {
 		debug("in [addToCart]: goodsId="+goodsId);
 		
 		/* 如果是一步购物，先清空购物车 */
-		if((Integer)getCachedShopConfig().get("oneStepBuy")==1) {
+		if(getCachedShopConfig().getInt(CFG_KEY_ONE_STEP_BUY)==1) {
 			Long flowType = (Long)getSession().getAttribute(KEY_FLOW_TYPE);
 			clearCart(flowType);
 		}
@@ -152,9 +155,9 @@ public class FlowAction extends BaseAction {
 			
 			res.put("error", 0);
 			res.put("content", "<B>cart info</B>");
-			res.put("one_step_buy", (Integer)getCachedShopConfig().get("oneStepBuy"));
+			res.put("one_step_buy", getCachedShopConfig().getInt(CFG_KEY_ONE_STEP_BUY));
 			// 购物车确定提示:  直接进入购物车 refer to common.js addToCartResponse
-			res.put("confirm_type", "3");
+			res.put("confirm_type", getCachedShopConfig().getInt(CFG_KEY_CART_CONFIRM));
 		}
 
 		String out = res.toString();
@@ -174,7 +177,7 @@ public class FlowAction extends BaseAction {
 
 		session.setAttribute(KEY_FLOW_TYPE, Constants.CART_GENERAL_GOODS);
 		/* 如果是一步购物，跳到结算中心 */
-		if ((Integer) getCachedShopConfig().get("oneStepBuy") == 1) {
+		if ( getCachedShopConfig().getInt(CFG_KEY_ONE_STEP_BUY) == 1) {
 			return stepCheckout(request);
 		} else {
 			
@@ -195,12 +198,11 @@ public class FlowAction extends BaseAction {
 			request.setAttribute("discount", 0);
 			
 			 /* 增加是否在购物车里显示商品图 */
-			request.setAttribute("showGoodsThumb", getCachedShopConfig().get("showGoodsInCart"));		   
+			request.setAttribute("showGoodsThumb", getCachedShopConfig().getInt(CFG_KEY_SHOW_GOODS_IN_CART));		   
 		    /* 增加是否在购物车里显示商品属性 */
 			// do not show goodsattr
-			System.out.println(getCachedShopConfig().get("showGoodsAttribute"));
-			request.setAttribute("showGoodsAttribute", getCachedShopConfig().get("showGoodsAttribute"));
-			
+			request.setAttribute("showGoodsAttribute", getCachedShopConfig().getInt(IShopConfigMeta.CFG_KEY_SHOW_GOODS_ATTRIBUTE));
+
 			request.setAttribute(KEY_STEP, STEP_CART);
 			
 			return SUCCESS;
@@ -243,7 +245,7 @@ public class FlowAction extends BaseAction {
     private String stepConsignee(HttpServletRequest request, boolean redirectToConsigneeAfterCheck) {
     	if(request.getMethod().equals("GET") || redirectToConsigneeAfterCheck) {
 	    	if(request.getParameter(KEY_DIRECT_SHOPPING) != null) {
-	    		getSession().setAttribute(KEY_DIRECT_SHOPPING, new Integer(1));
+	    		getSession().setAttribute(KEY_DIRECT_SHOPPING, getCachedShopConfig().getInt(CFG_KEY_ONE_STEP_BUY));
 	    	}
 	    	
 	    	includeConsignee(request);
@@ -258,7 +260,7 @@ public class FlowAction extends BaseAction {
 			    	if(consignee == null) {
 			    		consignee = new UserAddressWrapper(new UserAddress());
 			//    		consignee.put("country", ShopConfigWrapper.getDefaultConfig().get(ShopConfigWrapper.CFG_KEY_SHOP_COUNTRY));
-			    		consignee.getUserAddress().setCountry((String)getCachedShopConfig().get(IShopConfigMeta.CFG_KEY_SHOP_COUNTRY));
+			    		consignee.getUserAddress().setCountry(getCachedShopConfig().getString(IShopConfigMeta.CFG_KEY_SHOP_COUNTRY));
 			    	}
 					consigneeList.add(consignee);
 	        	}
@@ -270,7 +272,7 @@ public class FlowAction extends BaseAction {
 		    	if(consignee == null) {
 		    		consignee = new UserAddressWrapper(new UserAddress());
 		//    		consignee.put("country", ShopConfigWrapper.getDefaultConfig().get(ShopConfigWrapper.CFG_KEY_SHOP_COUNTRY));
-		    		consignee.getUserAddress().setCountry((String)getCachedShopConfig().get(IShopConfigMeta.CFG_KEY_SHOP_COUNTRY));
+		    		consignee.getUserAddress().setCountry(getCachedShopConfig().getString(IShopConfigMeta.CFG_KEY_SHOP_COUNTRY));
 		    	}
 				consigneeList.add(consignee);
 	        }
@@ -327,8 +329,9 @@ public class FlowAction extends BaseAction {
     	districtList.add(LibCommon.getRegion(IRegion.TYPE_DISTRICT, null, getDefaultManager()));
     	request.setAttribute("districtList", districtList);
     	request.setAttribute("realGoodsCount", LibOrder.existRealGoods(0, Constants.CART_GENERAL_GOODS, getDefaultManager(), request.getSession().getId()) ? 1: 0);
-    	// TODO nameOfRegion 应从shopConfig获取
-    	request.setAttribute("nameOfRegion", new String[]{"国家", "省", "市", "区"});
+    	ShopConfigWrapper scw = getCachedShopConfig();
+    	request.setAttribute("nameOfRegion", new String[]{scw.getString(IShopConfigMeta.CFG_KEY_NAME_OF_REGION_1), scw.getString(IShopConfigMeta.CFG_KEY_NAME_OF_REGION_2), 
+    			scw.getString(IShopConfigMeta.CFG_KEY_NAME_OF_REGION_3), scw.getString(IShopConfigMeta.CFG_KEY_NAME_OF_REGION_4)});
 	}
 	
     private String stepCheckout(HttpServletRequest request) {
@@ -384,7 +387,7 @@ public class FlowAction extends BaseAction {
     	
     	/* 对是否允许修改购物车赋值 */
     	if( (Constants.CART_GENERAL_GOODS == flowType ) || 
-    			((Integer)((ShopConfigWrapper)request.getAttribute("cfg")).get("oneStepBuy") == 1 )){
+    			(((ShopConfigWrapper)request.getAttribute("cfg")).getInt(IShopConfigMeta.CFG_KEY_ONE_STEP_BUY) == 1 )){
     	    request.setAttribute("allowEditCart", 0);
     	}
     	else{
@@ -713,7 +716,7 @@ public class FlowAction extends BaseAction {
     		LibMain.showMessage(Lang.getInstance().getString("noGoodsInCart"), null, null, "info", true, request);
     		return "message";
     	}
-    	
+    	//TODO city 等地址类型错误 应为String 而不是Long
     	/* 收货人信息 */
     	order.setAddress(consignee.getUserAddress().getAddress());
     	order.setBestTime(consignee.getUserAddress().getBestTime());
@@ -884,7 +887,7 @@ public class FlowAction extends BaseAction {
 				step = STEP_CART;
 			}
 			
-			request.setAttribute("showMarketprice", getCachedShopConfig().get("showMarketprice"));
+			request.setAttribute("showMarketprice", getCachedShopConfig().getInt(IShopConfigMeta.CFG_KEY_SHOW_MARKETPRICE));
 			
 			
 			if(STEP_ADD_TO_CART.equals(step)) {

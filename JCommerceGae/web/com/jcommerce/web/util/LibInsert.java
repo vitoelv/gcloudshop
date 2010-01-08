@@ -25,10 +25,12 @@ public class LibInsert {
 	 * @return  string
 	 */
 	public static void insertComments(Long type, String id, IDefaultManager manager, HttpServletRequest request, ShopConfigWrapper scw) {
+		//TODO
 		/* 验证码相关设置 */
 //		ShopConfigWrapper.getDefaultConfig().get("captcha")
 		
 		if(false) {
+			
 			request.setAttribute("enabledCaptcha", true);
 			request.setAttribute("rand", Random.nextInt());
 		}

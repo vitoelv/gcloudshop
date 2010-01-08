@@ -20,6 +20,9 @@ import com.jcommerce.web.to.BrandWrapper;
 import com.jcommerce.web.to.GoodsWrapper;
 import com.jcommerce.web.to.WrapperUtil;
 import com.jcommerce.web.util.LibMain;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_ORDER_TYPE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SORT_ORDER_TYPE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SORT_ORDER_METHOD;
 
 public class BrandAction extends BaseAction {
 	public void debug(String s) {
@@ -58,13 +61,13 @@ public class BrandAction extends BaseAction {
 		String order = (String)request.getParameter("order"); // ASC DESC
 		String display = (String)request.getParameter("display");
 		if(display == null){
-			display = DISPLAY_GRID;
+			display = getCachedShopConfig().getString(CFG_KEY_SHOW_ORDER_TYPE);
 		}
 		if(sort == null){
-			sort = "goodsName";
+			sort = getCachedShopConfig().getString(CFG_KEY_SORT_ORDER_METHOD);
 		}
 		if(order == null){
-			order = "ASC";
+			order = getCachedShopConfig().getString(CFG_KEY_SORT_ORDER_TYPE);
 		}
 		// TODO
 		int recordCount = goodsCountByBrand(brandId, cate);

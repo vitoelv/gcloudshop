@@ -1,6 +1,12 @@
 package com.jcommerce.core.service.config;
 
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_ARTICLE_NUMBER;
 import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_CART_CONFIRM;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_COMMENTS_NUMBER;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_COMMENT_CHECK;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_HISTORY_NUMBER;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_ONE_STEP_BUY;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_PAGE_SIZE;
 import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_ADDRESS;
 import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_COPYRIGHT;
 import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_COUNTRY;
@@ -18,15 +24,17 @@ import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHO
 import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_WW;
 import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_YM;
 import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_GOODSWEIGHT;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_GOODS_IN_CART;
 import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_MARKETPRICE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_ORDER_TYPE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SORT_ORDER_METHOD;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SORT_ORDER_TYPE;
 import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_TIME_FORMAT;
 import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_TYPE_OPTIONS;
 import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_TYPE_SELECT;
 import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_TYPE_TEXT;
 import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_TYPE_TEXTAREA;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_COMMENT_CHECK;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,14 +44,13 @@ import java.util.ResourceBundle;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang.StringUtils;
 
 import com.jcommerce.core.model.ShopConfig;
 import com.jcommerce.core.service.impl.DefaultManagerImpl;
 import com.jcommerce.core.util.ResourceUtil;
 import com.jcommerce.gwt.client.ModelNames;
+import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.web.to.ShopConfigWrapper;
 
 public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopConfigManager {
@@ -173,7 +180,6 @@ public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopCo
 		List<ShopConfigMeta> metaList = null;
 		ResourceBundle bundle = ResourceUtil.getShopConfigResource(locale);
 		
-		System.out.println(bundle.getString("CFG_GROUP_SHOP_INFO")+"+++++++++++++++++++++++++++++++++++++++++++++++");
 		// TODO use and i18n of tip string (last parameter of ShopConfigMeta)
 		metaList = new ArrayList<ShopConfigMeta>();
 //		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_NAME,	"gCouldShop", CFG_TYPE_TEXT, "商店名称", null, null));
@@ -193,26 +199,51 @@ public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopCo
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_MSN, "", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_SHOP_MSN"), null, bundle.getString("CFG_KEY_SHOP_MSN_NOTICE")));	
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_SERVICE_EMAIL, "", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_SHOP_SERVICE_EMAIL"), null, null));	
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_SERVICE_PHONE, "", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_SHOP_SERVICE_PHONE"), null, null));	
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), IShopConfigMeta.CFG_KEY_USER_NOTICE, 
+				"用户中心公告！"	, CFG_TYPE_TEXTAREA, bundle.getString("CFG_KEY_USER_NOTICE"), null, bundle.getString("CFG_KEY_USER_NOTICE_NOTICE")));
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_NOTICE, 
 				"欢迎光临手机网,我们的宗旨：诚信经营、服务客户！<MARQUEE onmouseover=this.stop() onmouseout=this.start() scrollAmount=3><U><FONT color=red><P>咨询电话010-10124444  010-21252454 8465544</P></FONT></U></MARQUEE>"
 				, CFG_TYPE_TEXTAREA, bundle.getString("CFG_KEY_SHOP_NOTICE"), null, bundle.getString("CFG_KEY_SHOP_NOTICE_NOTICE")));
 //		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_COUNTRY, "", CFG_TYPE_OPTIONS, "所在国家", null, null));
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_COPYRIGHT, "Copyright © 2008-2009 GCSHOP 版权所有，并保留所有权利。", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_SHOP_COPYRIGHT"), null, null));	
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), IShopConfigMeta.CFG_KEY_SHOP_REG_CLOSED, "0", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_SHOP_REG_CLOSED"), new String[][]{new String[]{"1",bundle.getString("Yes")}, new String[]{"0",bundle.getString("No")}}, null));
+		
 		defaultShopConfigMap.put(1, metaList);
 
 		
 		metaList = new ArrayList<ShopConfigMeta>();
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_BASIC"), CFG_KEY_COMMENT_CHECK, "1", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_COMMENT_CHECK"), new String[][]{new String[]{"1",bundle.getString("Yes")}, new String[]{"0",bundle.getString("No")}}, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_BASIC"), IShopConfigMeta.CFG_KEY_INTEGRAL_NAME, "积分", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_INTEGRAL_NAME"), null,  bundle.getString("CFG_KEY_INTEGRAL_NAME_NOTICE")));
 		defaultShopConfigMap.put(2, metaList);
 		
 		metaList = new ArrayList<ShopConfigMeta>();
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), CFG_KEY_TIME_FORMAT, "yyyy-MMM-dd", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_TIME_FORMAT"), null, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), CFG_KEY_COMMENTS_NUMBER, "5", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_COMMENTS_NUMBER"), null, bundle.getString("CFG_KEY_COMMENTS_NUMBER_NOTICE")));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), CFG_KEY_HISTORY_NUMBER, "5", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_HISTORY_NUMBER"), null, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), IShopConfigMeta.CFG_KEY_COLLECTION_NUMBER, "5", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_COLLECTION_NUMBER"), null, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), CFG_KEY_ARTICLE_NUMBER, "8", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_ARTICLE_NUMBER"), null, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), CFG_KEY_PAGE_SIZE, "10", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_PAGE_SIZE"), null, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), CFG_KEY_SORT_ORDER_TYPE, "1", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_SORT_ORDER_TYPE"), 
+				new String[][]{new String[]{"0",bundle.getString("CFG_SORT_GOODS_ID")}, new String[]{"1",bundle.getString("CFG_SORT_SHOP_PRICE")}, new String[]{"2",bundle.getString("CFG_SORT_LAST_UPDATE")}}, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), CFG_KEY_SORT_ORDER_METHOD, "1", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_SORT_ORDER_TYPE"), 
+				new String[][]{new String[]{"0",bundle.getString("CFG_SORT_DESC")}, new String[]{"1",bundle.getString("CFG_SORT_ASC")}}, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), CFG_KEY_SHOW_ORDER_TYPE, "2", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_SORT_ORDER_TYPE"), 
+				new String[][]{new String[]{"0",bundle.getString("CFG_SHOW_LIST")}, new String[]{"1",bundle.getString("CFG_SHOW_GRID")}, new String[]{"2",bundle.getString("CFG_SHOW_TEXT")}}, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), IShopConfigMeta.CFG_KEY_NAME_OF_REGION_1, "国家", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_NAME_OF_REGION_1"), null, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), IShopConfigMeta.CFG_KEY_NAME_OF_REGION_2, "省", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_NAME_OF_REGION_2"), null, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), IShopConfigMeta.CFG_KEY_NAME_OF_REGION_3, "市", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_NAME_OF_REGION_3"), null, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), IShopConfigMeta.CFG_KEY_NAME_OF_REGION_4, "区", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_NAME_OF_REGION_4"), null, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), IShopConfigMeta.CFG_KEY_PAGE_STYLE, "1", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_PAGE_STYLE"), 
+				new String[][]{new String[]{"0",bundle.getString("CFG_PAGE_STYLE_1")}, new String[]{"1",bundle.getString("CFG_PAGE_STYLE_2")}}, null));
 		defaultShopConfigMap.put(3, metaList);
 		
 		metaList = new ArrayList<ShopConfigMeta>();
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOPPING_FLOW"), CFG_KEY_CART_CONFIRM, "3", CFG_TYPE_OPTIONS, bundle.getString("CFG_KEY_CART_CONFIRM"), 
 				new String[][]{new String[]{"1",bundle.getString("CFG_KEY_CART_CONFIRM_TYPE_1")}, new String[]{"2",bundle.getString("CFG_KEY_CART_CONFIRM_TYPE_2")},
 				new String[]{"3",bundle.getString("CFG_KEY_CART_CONFIRM_TYPE_3")}, new String[]{"4",bundle.getString("CFG_KEY_CART_CONFIRM_TYPE_4")}}, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOPPING_FLOW"), CFG_KEY_ONE_STEP_BUY, "0", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_ONE_STEP_BUY"), new String[][]{new String[]{"1",bundle.getString("Yes")}, new String[]{"0",bundle.getString("No")}}, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOPPING_FLOW"), CFG_KEY_SHOW_GOODS_IN_CART, "3", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_SHOW_GOODS_IN_CART"), new String[][]{new String[]{"1",bundle.getString("CFG_SHOW_GOODS_IN_CART_TEXT")}, new String[]{"2",bundle.getString("CFG_SHOW_GOODS_IN_CART_IMG")}, new String[]{"3",bundle.getString("CFG_SHOW_GOODS_IN_CART_BOTH")}}, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOPPING_FLOW"), IShopConfigMeta.CFG_KEY_SHOW_GOODS_ATTRIBUTE, "0", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_SHOW_GOODS_ATTRIBUTE"), new String[][]{new String[]{"1",bundle.getString("Yes")}, new String[]{"0",bundle.getString("No")}}, null));
 		defaultShopConfigMap.put(4, metaList);
 		
 		metaList = new ArrayList<ShopConfigMeta>();

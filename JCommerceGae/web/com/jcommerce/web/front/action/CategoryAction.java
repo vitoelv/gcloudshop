@@ -1,5 +1,9 @@
 package com.jcommerce.web.front.action;
 
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_ORDER_TYPE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SORT_ORDER_METHOD;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SORT_ORDER_TYPE;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +22,7 @@ import com.jcommerce.core.service.Order;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.ICategory;
 import com.jcommerce.gwt.client.model.IGoods;
+import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.gwt.client.util.URLConstants;
 import com.jcommerce.web.to.CategoryWrapper;
 import com.jcommerce.web.to.GoodsWrapper;
@@ -57,7 +62,7 @@ public class CategoryAction extends BaseAction {
 
 			
 
-			request.setAttribute("showMarketprice", getCachedShopConfig().get("showMarketprice"));
+			request.setAttribute("showMarketprice", getCachedShopConfig().getInt(IShopConfigMeta.CFG_KEY_SHOW_MARKETPRICE));
 //			String categoryId = request.getParameter("id");
 //			debug("in [execute]: categoryId=" + categoryId);
 //
@@ -106,13 +111,13 @@ public class CategoryAction extends BaseAction {
 		String order = (String)request.getParameter("order"); // ASC DESC
 		String display = (String)request.getParameter("display");
 		if(display == null){
-			display = DISPLAY_GRID;
+			display = getCachedShopConfig().getString(CFG_KEY_SHOW_ORDER_TYPE);
 		}
 		if(sort == null){
-			sort = "goodsName";
+			sort = getCachedShopConfig().getString(CFG_KEY_SORT_ORDER_METHOD);
 		}
 		if(order == null){
-			order = "ASC";
+			order = getCachedShopConfig().getString(CFG_KEY_SORT_ORDER_TYPE);
 		}
 		
 
