@@ -6,50 +6,38 @@ import java.io.StringBufferInputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.jcommerce.core.model.Attribute;
-import com.jcommerce.core.model.Cart;
 import com.jcommerce.core.model.CollectGood;
-import com.jcommerce.core.model.Comment;
-import com.jcommerce.core.model.Constants;
 import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.GoodsAttr;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.model.OrderGoods;
 import com.jcommerce.core.model.OrderInfo;
 import com.jcommerce.core.model.Payment;
-import com.jcommerce.core.model.Session;
-import com.jcommerce.core.model.ShopConfig;
 import com.jcommerce.core.model.User;
 import com.jcommerce.core.model.UserAddress;
 import com.jcommerce.core.model.UserRank;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
-import com.jcommerce.core.util.UUIDLongGenerator;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.ICart;
 import com.jcommerce.gwt.client.model.ICollectGood;
-import com.jcommerce.gwt.client.model.IComment;
-import com.jcommerce.gwt.client.model.IGoods;
 import com.jcommerce.gwt.client.model.IOrderGoods;
 import com.jcommerce.gwt.client.model.IOrderInfo;
 import com.jcommerce.gwt.client.model.IRegion;
-import com.jcommerce.gwt.client.model.IShopConfig;
 import com.jcommerce.gwt.client.model.IUser;
 import com.jcommerce.gwt.client.model.IUserAddress;
 import com.jcommerce.gwt.client.model.IUserRank;
@@ -63,10 +51,8 @@ import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.OrderGoodsWrapper;
 import com.jcommerce.web.to.OrderInfoWrapper;
 import com.jcommerce.web.to.RegionWrapper;
-import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.to.UserAddressWrapper;
 import com.jcommerce.web.to.UserWrapper;
-import com.jcommerce.web.to.WrapperUtil;
 import com.jcommerce.web.util.ConstantsMappingUtils;
 import com.jcommerce.web.util.LibCommon;
 import com.jcommerce.web.util.LibMain;
@@ -219,16 +205,18 @@ public class UserAction extends BaseAction {
 				uw.put("shippedOrder", null);
 				
 				request.setAttribute("info", uw);
-				request.setAttribute("userNotice", getCachedShopConfig().get("userNotice"));
+				request.setAttribute("userNotice", getCachedShopConfig().getString(IShopConfigMeta.CFG_KEY_SHOP_NOTICE));
+				//TODO prompt??
 				request.setAttribute("prompt", new String[0]);
 				includeUserMenu();
 				return RES_USER_CLIPS;
 			}
 			else if("register".equals(action)) {
+				//TODO captcha验证码 应从后台设置
 				request.setAttribute("enabledCaptcha", 0);
 				request.setAttribute("rand", new Double(1000000*Math.random()).longValue());
 				
-				request.setAttribute("shopRegClosed", getCachedShopConfig().get("shopRegClosed"));
+				request.setAttribute("shopRegClosed", getCachedShopConfig().getString(IShopConfigMeta.CFG_KEY_SHOP_REG_CLOSED));
 				return RES_USER_PASSPORT;
 			}
 			else if("check_email".equals(action)){
@@ -306,7 +294,7 @@ public class UserAction extends BaseAction {
 			/* 收货地址列表界面*/
 			else if("address_list".equals(action) || "addressList".equals(action)) {
 				includeUserMenu();
-				String shopCountry = (String)getCachedShopConfig().get(IShopConfigMeta.CFG_KEY_SHOP_COUNTRY);
+				String shopCountry =getCachedShopConfig().getString(IShopConfigMeta.CFG_KEY_SHOP_COUNTRY);
 				
 				/* 取得国家列表、商店所在国家、商店所在国家的省列表 */
 				request.setAttribute("countryList", LibCommon.getRegion(IRegion.TYPE_COUNTRY, null,getDefaultManager()));

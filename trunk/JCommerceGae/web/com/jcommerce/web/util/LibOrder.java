@@ -33,6 +33,7 @@ import com.jcommerce.gwt.client.model.IOrderInfo;
 import com.jcommerce.gwt.client.model.IPayment;
 import com.jcommerce.gwt.client.model.IRegion;
 import com.jcommerce.gwt.client.model.IShipping;
+import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.web.front.action.FlowAction;
 import com.jcommerce.web.to.CartWrapper;
 import com.jcommerce.web.to.GoodsWrapper;
@@ -196,7 +197,7 @@ public class LibOrder {
     		}else {
     			virtualGoodsCount++;
     		}
-    		int showGoodsInCart = (Integer)scw.get("showGoodsInCart");
+    		int showGoodsInCart = scw.getInt(IShopConfigMeta.CFG_KEY_SHOW_GOODS_IN_CART);
     		if(showGoodsInCart == 2 || showGoodsInCart ==3) {
     			String goodsId = cart.getGoodsId();
     			Goods goods = (Goods)manager.get(ModelNames.GOODS, goodsId);

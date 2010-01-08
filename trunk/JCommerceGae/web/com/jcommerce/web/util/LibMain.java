@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -171,7 +169,7 @@ public class LibMain {
 		c.addCondition(new Condition(IComment.COMMENT_TYPE, Condition.EQUALS, type.toString()));
 		c.addCondition(new Condition(IComment.STATUS, Condition.EQUALS, IComment.STATUS_ACTIVE.toString()));
 		
-		int size = scw.getInt("comments_number");
+		int size = scw.getInt(IShopConfigMeta.CFG_KEY_COMMENTS_NUMBER);
 		if(size<0) {
 			size = 5;
 		}
@@ -252,7 +250,7 @@ public class LibMain {
 		criteria.addCondition(new Condition(ICollectGood.USER_ID, Condition.EQUALS, userId));
 		
 		int count = manager.getCount(ModelNames.COLLECTGOOD, criteria);
-		int size = scw.getInt("collection_number");
+		int size = scw.getInt(IShopConfigMeta.CFG_KEY_COLLECTION_NUMBER);
 		if(size<0) {
 			size = 5;
 		}
@@ -288,7 +286,7 @@ public class LibMain {
 		criteria.addCondition(new Condition(IComment.USER_ID,Condition.EQUALS,userId));
 		
 		int count = manager.getCount(ModelNames.COMMENT, criteria);
-		int size = scw.getInt("comment_number");
+		int size = scw.getInt(IShopConfigMeta.CFG_KEY_COMMENTS_NUMBER);
 		if(size<0) {
 			size = 5;
 		}
@@ -389,7 +387,7 @@ public class LibMain {
         	
         }
         
-        pager.setStyleid((Integer)scw.get("pageStyle"));
+        pager.setStyleid(scw.getInt(IShopConfigMeta.CFG_KEY_PAGE_STYLE));
         
         int pagePrev  = (page > 1) ? page - 1 : 1;
         int pageNext  = (page < pageCount) ? page + 1 : pageCount;
@@ -439,7 +437,7 @@ public class LibMain {
     		page = pageCount;
     	}
     	Pager pager = new Pager();
-    	pager.setStyleid((Integer)scw.get("pageStyle"));
+    	pager.setStyleid(scw.getInt(IShopConfigMeta.CFG_KEY_PAGE_STYLE));
         int pagePrev  = (page > 1) ? page - 1 : 1;
         int pageNext  = (page < pageCount) ? page + 1 : pageCount;
         

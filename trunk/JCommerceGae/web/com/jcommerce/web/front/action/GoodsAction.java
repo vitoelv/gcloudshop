@@ -25,6 +25,7 @@ import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IComment;
+import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.web.to.GoodsGalleryWrapper;
 import com.jcommerce.web.to.GoodsWrapper;
 import com.jcommerce.web.to.Lang;
@@ -137,7 +138,7 @@ public class GoodsAction extends BaseAction {
 	    affiliate.put("on", "yes");
 	    request.setAttribute("affiliate", affiliate);
 	      
-	    request.setAttribute("pointsName", getCachedShopConfig().get("pointsName"));
+	    request.setAttribute("pointsName", getCachedShopConfig().getString(IShopConfigMeta.CFG_KEY_INTEGRAL_NAME));
 	    
 	    /*修改,修改商品点击次数*/
 	    if(act == null) {

@@ -24,6 +24,7 @@ import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IGoods;
 import com.jcommerce.gwt.client.model.IGoodsAttr;
 import com.jcommerce.gwt.client.model.IGoodsType;
+import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.web.front.action.helper.Pager;
 import com.jcommerce.web.to.GoodsWrapper;
 import com.jcommerce.web.to.Lang;
@@ -31,7 +32,6 @@ import com.jcommerce.web.to.WrapperUtil;
 import com.jcommerce.web.util.LibCommon;
 import com.jcommerce.web.util.LibMain;
 import com.jcommerce.web.util.WebFormatUtils;
-import com.jcommerce.web.util.WebUtils;
 import com.opensymphony.xwork2.Action;
 
 public class SearchAction extends BaseAction {
@@ -213,7 +213,7 @@ public class SearchAction extends BaseAction {
     		String sPage = (String)request.getParameter("page");
     		int page = (sPage!=null && Integer.valueOf(sPage)>0) ? Integer.valueOf(sPage) : 1;
     		
-    		String sSize = (String)getCachedShopConfig().get("pageSize");
+    		String sSize = getCachedShopConfig().getString(IShopConfigMeta.CFG_KEY_PAGE_SIZE);
     		int size = (sSize!=null && Integer.valueOf(sSize)>0) ? Integer.valueOf(sSize) : 10; 
     		
     		String intromode = request.getParameter("intro") != null ? request.getParameter("intro").trim() : "";

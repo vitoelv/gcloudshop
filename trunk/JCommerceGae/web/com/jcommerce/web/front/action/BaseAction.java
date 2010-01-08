@@ -522,8 +522,11 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
 //	}
 	
 	public ShopConfigWrapper getCachedShopConfig() {
-		
-		return getShopConfigManager().getCachedShopConfig((String)getSession().getAttribute("locale"));
+		String locale = (String)getSession().getAttribute("locale");
+		if(locale == null){
+			locale = getRequest().getLocale().toString();
+		}
+		return getShopConfigManager().getCachedShopConfig(locale);
 	}
 	
 	public IDefaultManager getDefaultManager() {
