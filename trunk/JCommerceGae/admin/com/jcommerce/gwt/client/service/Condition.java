@@ -9,8 +9,9 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class Condition implements IsSerializable {
     public static int EQUALS = 0;
     public static int CONTAINS = 1;
-    public static int GREATERTHAN = 2;
-    public static int LESSTHAN = 3;
+    public static int LIKE = 2;
+    public static int GREATERTHAN = 3;
+    public static int LESSTHAN = 4;
     
     private String field;
     private String value;

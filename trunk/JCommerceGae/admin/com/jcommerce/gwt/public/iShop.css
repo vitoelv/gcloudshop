@@ -142,4 +142,7 @@
 .ishop-OrderGoods-dataRow td {
   padding-left: 20px;
 }
+.SearchOrderLabel {
+	cursor: pointer
+}
 
