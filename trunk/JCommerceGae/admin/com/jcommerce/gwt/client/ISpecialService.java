@@ -43,9 +43,9 @@ public interface ISpecialService extends RemoteService {
     public ListLoadResult<BeanObject> getShippingAreaWithRegionNames(String shippingId, ListLoadConfig pgc);
     public Boolean saveShippingArea(BeanObject shippingArea);
     
-    public SortedMap<Integer, List<BeanObject>> getCombinedShopConfigMetaMap(String Locale);
+    public SortedMap<Integer, List<BeanObject>> getCombinedShopConfigMetaMap();
     public Boolean saveShopConfig(Map<String, BeanObject> formData);
     public Map<String,String> getAdminUserInfo();
-    public String getLocale();
+
     
 }
