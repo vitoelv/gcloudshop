@@ -157,7 +157,7 @@ public class FlowAction extends BaseAction {
 			res.put("content", "<B>cart info</B>");
 			res.put("one_step_buy", getCachedShopConfig().getInt(CFG_KEY_ONE_STEP_BUY));
 			// 购物车确定提示:  直接进入购物车 refer to common.js addToCartResponse
-			res.put("confirm_type", getCachedShopConfig().getInt(CFG_KEY_CART_CONFIRM));
+			res.put("confirm_type", getCachedShopConfig().getString(CFG_KEY_CART_CONFIRM));
 		}
 
 		String out = res.toString();
