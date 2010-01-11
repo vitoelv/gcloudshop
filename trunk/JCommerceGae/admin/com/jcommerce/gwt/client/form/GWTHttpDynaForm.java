@@ -72,14 +72,15 @@ public class GWTHttpDynaForm {
       	    }
 
       	    public void onResponseReceived(Request request, Response response) {
-      	    	String text = response.getText();
+      	    	String result = response.getText();
       	    	int status = response.getStatusCode();
       	      if (200 == response.getStatusCode()) {
-      	    	  if("0".equals(text)) {
-      	    		  getListener().onSuccess(text);
+//      	    	  if("0".equals(text)) {
+      	    	  if(result!=null && result.contains("200 OK")) {
+      	    		  getListener().onSuccess(result);
       	    	  }
       	    	  else {
-      	    		getListener().onFailure(new Throwable(text));
+      	    		getListener().onFailure(new Throwable(result));
       	    	  }
       	      } else {
       	    	  getListener().onFailure(new Throwable(String.valueOf(status)));
