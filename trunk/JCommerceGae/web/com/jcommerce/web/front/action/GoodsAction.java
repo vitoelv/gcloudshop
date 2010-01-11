@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -38,18 +39,20 @@ import com.jcommerce.web.util.LibGoods.GoodsPropertiesResult;
 
 public class GoodsAction extends BaseAction {
 	
+	private static final Logger log = Logger.getLogger(GoodsAction.class.getName());
+	
 	public static final String KEY_GOODS_ID = "goodsId";
 	public static final String KEY_PROMOTE_END_TIME = "promoteEndTime";
 	public static final String KEY_NOW_TIME = "nowTime";
 	private InputStream jsonRes;
 	
 	public void debug(String s) {
-		System.out.println(" in [GoodsAction]: "+s );
+		log.finest(" in [GoodsAction]: "+s );
 	}
 	
 	@Override
 	public String onExecute() throws Exception {
-		try {
+
         
         HttpServletRequest request = getRequest();        
 
@@ -172,10 +175,7 @@ public class GoodsAction extends BaseAction {
 
         return SUCCESS;
         
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			throw new RuntimeException(ex);
-		}
+
 	}
 	
 	//获得商品总价格
