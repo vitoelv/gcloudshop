@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -19,6 +20,8 @@ import org.apache.commons.lang.StringUtils;
 import com.jcommerce.web.util.WebUtils;
 
 public class UnderConstructionFilter implements Filter {
+	
+	private static final Logger log = Logger.getLogger(UnderConstructionFilter.class.getName());
 
 	public void debug(String s) {
 		System.out.println("in [UnderConstructionFilter]: "+s);
@@ -38,12 +41,12 @@ public class UnderConstructionFilter implements Filter {
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
 
 		String actionName = WebUtils.getActionName(httpRequest);
-		debug("actionName="+actionName);
+		log.info("actionName="+actionName);
 		if(allowedActions.contains(actionName)) {
 			chain.doFilter(request, response);	
 		}
 		else {
-			debug("redirecting to under construction...");
+			log.warning("redirecting to under construction...");
 //			httpResponse.setCharacterEncoding("UTF-8");
 			httpResponse.sendRedirect("/underConstruction_zh.html");
 //			request.getRequestDispatcher("/underConstruction.jsp").forward(request, response);

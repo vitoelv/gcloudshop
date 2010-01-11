@@ -15,12 +15,11 @@ import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHO
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -65,7 +64,8 @@ import com.opensymphony.xwork2.ActionSupport;
 
 public abstract class BaseAction extends ActionSupport implements IPageConstants, IWebConstants, IConstants{
 //	private static Map<String, String> constants = new HashMap<String, String>();
-	
+	private static final Logger log = Logger.getLogger(BaseAction.class.getName());
+
 	private IShippingMetaManager shippingMetaManager;
 	private IPaymentMetaManager paymentMetaManager;
 	private IWebManager webManager;
@@ -81,7 +81,7 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
 		this.historyList = historyList;
 	}
 	public void debug(String s) {
-		System.out.println(" in [BaseAction]: "+s );
+		log.info(" in [BaseAction]: "+s );
 	}
 	@Override
     public String getText(String s) {
@@ -486,10 +486,23 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
     }
     
 	public String execute() throws Exception {
-		beforeExecute();
-        String returnValue = onExecute();
-        afterExecute();
-		return returnValue;
+		
+		log.entering(BaseAction.class.getName(), "execute");
+		try {
+			beforeExecute();
+			String returnValue = onExecute();
+			afterExecute();
+			
+			log.exiting(BaseAction.class.getName(), "execute");
+			return returnValue;
+			
+		} catch (RuntimeException re) {
+			log.throwing(BaseAction.class.getName(), "execute", re);
+			throw re;
+		} catch (Exception ex) {
+			log.throwing(BaseAction.class.getName(), "execute", ex);
+			throw new RuntimeException(ex);
+		}
 	}
 	public abstract String onExecute() throws Exception; 
 	public void afterExecute(){
