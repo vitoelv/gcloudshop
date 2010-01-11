@@ -129,6 +129,17 @@
         <servlet-class>com.jcommerce.gwt.server.LoginAction</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>MyServlet</servlet-name>
+        <servlet-class>com.jcommerce.gwt.server.MyServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>MyServlet</servlet-name>
+        <url-pattern>/myServlet.do</url-pattern>
+    </servlet-mapping>
+        
     <servlet-mapping>
         <servlet-name>loginAction</servlet-name>
         <url-pattern>/adminLogin.do</url-pattern>
