@@ -277,7 +277,7 @@ public class GWTHttpServlet extends HttpServlet {
 
 	public void processSuccess(HttpServletResponse response) {
 		try {
-			response.getWriter().print("0");
+			response.getWriter().print("200 OK");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
