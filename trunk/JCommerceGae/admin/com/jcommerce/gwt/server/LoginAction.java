@@ -65,8 +65,8 @@ public class LoginAction extends HttpServlet {
     	Boolean isExist = false;
     	IDefaultManager manager = (IDefaultManager)SpringUtil.getDefaultManager();
     	Criteria criteria = new Criteria();
-    	criteria.addCondition(new Condition(IAdminUser.USER_NAME,Condition.EQUALS,name));
-    	criteria.addCondition(new Condition(IAdminUser.PASSWORD,Condition.EQUALS,password));
+    	criteria.addCondition(new Condition(IAdminConstants.KEY_ADMIN_USERID,Condition.EQUALS,name));
+    	criteria.addCondition(new Condition(IAdminConstants.KEY_ADMIN_USEREMAIL,Condition.EQUALS,password));
     	List res = manager.getList(ModelNames.ADMINUSER, criteria);
     	isExist = res.isEmpty()?false:true;
     	if(isExist){
@@ -76,9 +76,9 @@ public class LoginAction extends HttpServlet {
     }
     private void setAdminUserInfo(HttpServletRequest request , AdminUser adminUser){
     	HttpSession session = request.getSession();
-    	session.setAttribute(IAdminUser.USER_NAME, adminUser.getUserName());
-    	session.setAttribute(IAdminUser.EMAIL, adminUser.getEmail());
-    	session.setAttribute(IComment.IP_ADDRESS, request.getRemoteAddr());
+    	session.setAttribute(IAdminConstants.KEY_ADMIN_USERID, adminUser.getUserName());
+    	session.setAttribute(IAdminConstants.KEY_ADMIN_USEREMAIL, adminUser.getEmail());
+    	session.setAttribute(IAdminConstants.KEY_ADMIN_USERIP, request.getRemoteAddr());
     }
 
 

@@ -593,9 +593,9 @@ public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecial
     		HttpSession session = this.getThreadLocalRequest().getSession();
     		Map<String,String> adminInfo = new HashMap<String,String>();
     	
-    		adminInfo.put( IAdminUser.USER_NAME , (String)session.getAttribute(IAdminUser.USER_NAME));
-			adminInfo.put( IAdminUser.EMAIL,  (String)session.getAttribute(IAdminUser.EMAIL));
-			adminInfo.put( IComment.IP_ADDRESS,  (String)session.getAttribute(IComment.IP_ADDRESS));
+    		adminInfo.put( IAdminUser.USER_NAME , (String)session.getAttribute(IAdminConstants.KEY_ADMIN_USERID));
+			adminInfo.put( IAdminUser.EMAIL,  (String)session.getAttribute(IAdminConstants.KEY_ADMIN_USEREMAIL));
+			adminInfo.put( IComment.IP_ADDRESS,  (String)session.getAttribute(IAdminConstants.KEY_ADMIN_USERIP));
     		return adminInfo;
 		} catch (Exception e) {
 			e.printStackTrace();

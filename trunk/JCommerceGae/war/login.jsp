@@ -16,9 +16,12 @@
 	String key = com.jcommerce.gwt.server.IAdminConstants.KEY_GWT_DEV_SERVER;
 	String devServer = request.getParameter(key);
 	if(devServer==null || devServer.length()==0) {
-		devServer = (String)request.getSession().getAttribute(key);
+		//devServer = (String)request.getSession().getAttribute(key);
+	} else {
+		// comes from dev_home.jsp (dev mode)
+		request.getSession().setAttribute(key, devServer);
 	}
-	request.getSession().setAttribute(key, devServer);
+	
 
 	
 	
