@@ -55,14 +55,23 @@ import com.jcommerce.web.to.ShopConfigWrapper;
 
 public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopConfigManager {
 
-	
-//	public SortedMap<Integer, List<ShopConfigMeta>> getCombinedShopConfigMetaMap() {
-//		return getCombinedShopConfigMetaMap(Locale.ENGLISH);
-//	}
+
+	private static Locale parseLocale(String locale) {
+		if(StringUtils.isBlank(locale)) {
+			locale = "zh"; // by default
+		}
+		try {
+			Locale loc = new Locale(locale);
+			return loc;
+		} catch (Exception ex) {
+			return Locale.CHINESE;
+		}
+		
+	}
 	
 	public SortedMap<Integer, List<ShopConfigMeta>> getCombinedShopConfigMetaMap(String locale) {
 //		SortedMap<Integer, List<ShopConfigMeta>> res = new TreeMap<Integer, List<ShopConfigMeta>>();
-		SortedMap<Integer, List<ShopConfigMeta>> defaultShopConfigMap = getDefaultShopConfigMap(new Locale(locale));
+		SortedMap<Integer, List<ShopConfigMeta>> defaultShopConfigMap = getDefaultShopConfigMap(parseLocale(locale));
 		try {
 			List<ShopConfig> scs = getList(ModelNames.SHOPCONFIG, null);
 			Map<String, ShopConfig> values = new HashMap<String, ShopConfig>();
