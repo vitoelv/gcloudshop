@@ -8,6 +8,7 @@ import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
@@ -227,6 +228,8 @@ public class DefaultManagerImpl implements IDefaultManager {
     
     public void debug(String s) {
     	
-    	System.out.println("DefaultManagerImpl: "+s);
+    	log.info("DefaultManagerImpl: "+s);
     }
+    
+    private static final Logger log = Logger.getLogger(DefaultManagerImpl.class.getName());
 }

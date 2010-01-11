@@ -3,6 +3,8 @@ package com.jcommerce.core.util;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.service.Condition;
@@ -10,6 +12,7 @@ import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.Order;
 
 public class JDOQLHelper {
+	private static final Logger log = Logger.getLogger(JDOQLHelper.class.getName());
 	
     public static String getJdoql(String className, Criteria criteria, List<Object> paras) {
         try {
@@ -19,12 +22,11 @@ public class JDOQLHelper {
 				jdoql.append(getWhereClause(className, criteria, paras));
 			}
 			
-			System.out.println("JDOQL: "+jdoql.toString());
+			log.info("JDOQL: "+jdoql.toString());
 			return jdoql.toString();
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.log(Level.SEVERE, "error when generating jdoql", e);
 			throw new RuntimeException(e);
 		}
     }
