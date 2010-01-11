@@ -24,7 +24,7 @@ import com.jcommerce.core.util.DataStoreUtils;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.web.util.SpringUtil;
 
-public class ImportExportServlet extends HttpServlet{
+public class ImportExportServlet extends GWTHttpServlet{
 	
 	void debug(String s) {
 		System.out.println("[ImportExportServlet]: "+s);
@@ -168,19 +168,6 @@ public class ImportExportServlet extends HttpServlet{
 		
 	}	
 	
-	public void processSuccess(HttpServletResponse response) {
-		try {
-			response.getWriter().print("0");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	public void processError(HttpServletResponse response, String error) {
-		try {
-			response.getWriter().print(error);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+
 	
 }
