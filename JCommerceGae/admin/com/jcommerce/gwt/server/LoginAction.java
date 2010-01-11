@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.jcommerce.core.model.AdminUser;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
@@ -33,8 +35,15 @@ public class LoginAction extends HttpServlet {
     	
       String username = request.getParameter("userName");
       String pwd = request.getParameter("userPwd");
+      // added
       if(authenticate(username,pwd,request)){
-    	  response.sendRedirect("/admin.jsp");
+    	  String adminUrl = "/admin.jsp";
+    	  String devServer = (String)request.getSession().getAttribute(IAdminConstants.KEY_GWT_DEV_SERVER);
+    	  if(StringUtils.isNotBlank(devServer)) {
+    		// in dev mode
+    		  adminUrl += "?"+IAdminConstants.KEY_GWT_DEV_SERVER+"="+devServer;
+    	  }
+    	  response.sendRedirect(adminUrl);
       }
       else {
     	  request.setAttribute("error", "用户名或密码错误");

@@ -4,7 +4,24 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<% request.getSession().setAttribute("locale",request.getParameter("locale"));%>
+<%
+	String locale = request.getParameter("locale");
+	if(!("en".equals(locale) || "zh".equals(locale))){
+  		// allow only "en" and "zh", other value will go to "zh" which is default
+	  locale = "zh";
+  	} 
+	request.getSession().setAttribute(com.jcommerce.gwt.server.IAdminConstants.KEY_LOCALE, locale);
+
+	// This is necessary to be allowed as entrance page in dev mode
+	String key = com.jcommerce.gwt.server.IAdminConstants.KEY_GWT_DEV_SERVER;
+	if(request.getSession().getAttribute(key)==null) {
+		String devServer = request.getParameter(key);
+		request.getSession().setAttribute(key, devServer);		
+	}
+
+	
+	
+%>
 <title>GCShop Admin Login</title>
 </head>
 <style>

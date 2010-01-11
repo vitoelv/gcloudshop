@@ -126,29 +126,23 @@ public class ShopConfigPanel extends BaseEntityEditPanel {
     
     
     // get called when refresh(), if isEdit
-    protected void retrieveEntity() {
-    	RemoteService.getSpecialService().getLocale(
-    		new AsyncCallback<String>() {
-    			public void onFailure(Throwable caught) {
-    				// TODO Auto-generated method stub
-    			}
-    			public void onSuccess( String result) {
-    				RemoteService.getSpecialService().getCombinedShopConfigMetaMap( result ,
-    		    			new AsyncCallback<SortedMap<Integer, List<BeanObject>>>() {
-    							public void onFailure(Throwable caught) {
-    								// TODO Auto-generated method stub
-    							}
-    							public void onSuccess(
-    									SortedMap<Integer, List<BeanObject>> result) {
-    								generateDynaFields(result);
-    								layout();
-    						        repaint();
-    							}
-    		    	});
-    			}
-    		}
-    	);
-    }
+	protected void retrieveEntity() {
+
+		RemoteService.getSpecialService().getCombinedShopConfigMetaMap(
+				new AsyncCallback<SortedMap<Integer, List<BeanObject>>>() {
+					public void onFailure(Throwable caught) {
+						// TODO Auto-generated method stub
+					}
+
+					public void onSuccess(
+							SortedMap<Integer, List<BeanObject>> result) {
+						generateDynaFields(result);
+						layout();
+						repaint();
+					}
+				});
+
+	}
     	
     
 	protected void submit() {

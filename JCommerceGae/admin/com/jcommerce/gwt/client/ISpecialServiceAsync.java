@@ -45,9 +45,9 @@ public interface ISpecialServiceAsync {
     public void getShippingAreaWithRegionNames(String shippingId, ListLoadConfig pgc, AsyncCallback<ListLoadResult<BeanObject>> callback);
     public void saveShippingArea(BeanObject shippingArea, AsyncCallback<Boolean> callback);
     
-    public void getCombinedShopConfigMetaMap(String locale,AsyncCallback<SortedMap<Integer, List<BeanObject>>> callback);
+    public void getCombinedShopConfigMetaMap(AsyncCallback<SortedMap<Integer, List<BeanObject>>> callback);
     public void saveShopConfig(Map<String, BeanObject> formData, AsyncCallback<Boolean> callback);
 
     public void getAdminUserInfo(AsyncCallback<Map<String,String>> callback);
-    public void getLocale(AsyncCallback<String> callback);
+
 }

@@ -10,19 +10,18 @@
 
 <html>
   <head>
-  <% 
-  String locale = (String)request.getSession().getAttribute("locale");
-  if(locale == null){
-	  response.sendRedirect("login.jsp?locale=zh");
-  }else{
-  	if(locale.equals("zh")){
-	  out.println("<meta name='gwt:property' content='locale=zh'>");
-  	}
- 	 else{
- 		out.println("<meta name='gwt:property' content='locale=en'>");
-  	}
-  }
+  <%
+	//NO, we do not allow directly access without going thru login.jsp
+	// TODO: add filter to check user token in session, apply to all .do and all .jsp URL  
+  
+  	String locale = (String)request.getSession().getAttribute(com.jcommerce.gwt.server.IAdminConstants.KEY_LOCALE);
+  	if(!("en".equals(locale) || "zh".equals(locale))){
+  		// TODO redirect to a page allowing selection of language. 
+	  	throw new RuntimeException("Go thru login.jsp first, please");
+  	} 
 	%>
+	
+	<meta name='gwt:property' content='locale=<%=locale%>'">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 
     <!--                                                               -->

@@ -532,8 +532,10 @@ public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecial
     	}
     }
     
-    public SortedMap<Integer, List<BeanObject>> getCombinedShopConfigMetaMap(String locale) {
+    public SortedMap<Integer, List<BeanObject>> getCombinedShopConfigMetaMap() {
     	try {
+    		String locale = (String)getThreadLocalRequest().getSession().getAttribute(IAdminConstants.KEY_LOCALE);
+    		
     	SortedMap<Integer, List<BeanObject>> resMap = new TreeMap<Integer, List<BeanObject>>();
     	SortedMap<Integer, List<ShopConfigMeta>> map = getShopConfigManager().getCombinedShopConfigMetaMap(locale);
     	for(Integer i : map.keySet()) {
@@ -600,7 +602,5 @@ public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecial
 			throw new RuntimeException();
 		}
     }
-    public String getLocale(){
-    	return (String)this.getThreadLocalRequest().getSession().getAttribute("locale");
-    }
+
 }
