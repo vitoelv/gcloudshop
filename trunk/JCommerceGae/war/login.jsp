@@ -14,10 +14,11 @@
 
 	// This is necessary to be allowed as entrance page in dev mode
 	String key = com.jcommerce.gwt.server.IAdminConstants.KEY_GWT_DEV_SERVER;
-	if(request.getSession().getAttribute(key)==null) {
-		String devServer = request.getParameter(key);
-		request.getSession().setAttribute(key, devServer);		
+	String devServer = request.getParameter(key);
+	if(devServer==null || devServer.length()==0) {
+		devServer = (String)request.getSession().getAttribute(key);
 	}
+	request.getSession().setAttribute(key, devServer);
 
 	
 	
