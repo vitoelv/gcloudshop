@@ -47,7 +47,7 @@ public class GoodsAction extends BaseAction {
 	private InputStream jsonRes;
 	
 	public void debug(String s) {
-		log.finest(" in [GoodsAction]: "+s );
+		log.info(" in [GoodsAction]: "+s );
 	}
 	
 	@Override
@@ -206,7 +206,7 @@ public class GoodsAction extends BaseAction {
     		}
     	}
 	    double total = shopPrice + attrPrice;
-	    System.out.println(total);
+	    debug("total: "+total);
 	   
 	    JSONObject res = new JSONObject();
 	    try {

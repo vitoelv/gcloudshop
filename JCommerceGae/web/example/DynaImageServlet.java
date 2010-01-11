@@ -1,17 +1,13 @@
 package example;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,9 +20,10 @@ import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.DSFile;
 import com.jcommerce.core.service.CustomizedManager;
 import com.jcommerce.core.service.IDefaultManager;
+import com.jcommerce.web.front.action.BaseAction;
 
 public class DynaImageServlet extends HttpServlet {
-	
+	private static final Logger log = Logger.getLogger(BaseAction.class.getName());
 	WebApplicationContext ctx = null;
 	
 	@Override
@@ -44,12 +41,12 @@ public class DynaImageServlet extends HttpServlet {
 	
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	System.out.println("==========================DynaImageServlet doGet()==================================");
+    	log.info("==========================DynaImageServlet doGet()==================================");
         try {
             IDefaultManager manager = getDefaultManager();
             
             String fileId = request.getParameter("fileId");
-            System.out.println("fileId: "+fileId);
+            log.info("fileId: "+fileId);
 //            if(StringUtils.isNotEmpty(fileId) && !fileId.equals("null") ) {
             	writeImage(response, manager, fileId);
             	return;
@@ -87,7 +84,7 @@ public class DynaImageServlet extends HttpServlet {
 	private void writeImage(HttpServletResponse response,
 			IDefaultManager manager, String logoFileId) throws IOException {
 		DSFile dsFile = (DSFile)manager.get(DSFile.class.getName(), logoFileId);
-		System.out.println("dsFile: "+dsFile);
+		log.info("dsFile: "+dsFile);
 		response.setHeader("Content-Type", "image/gif");
 		if( dsFile == null ){
 			 InputStream is = this.getClass().getResourceAsStream("noPicture.gif");  
@@ -106,7 +103,7 @@ public class DynaImageServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("==========================DynaImageServlet doPost()==================================");
+    	log.info("==========================DynaImageServlet doPost()==================================");
         try {
         IDefaultManager manager = getDefaultManager();
         

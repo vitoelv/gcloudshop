@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
@@ -22,6 +23,7 @@ import com.jcommerce.gwt.client.model.IModelObject;
 
 
 public class MyPropertyUtil {
+	private static final Logger log = Logger.getLogger(MyPropertyUtil.class.getName());
 	
 	// by default only copy simple fields and associated Object's Id, unless requested with wantedFields
     public static Map<String, Object> to2Form(ModelObject obj, List<String> wantedFields) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
@@ -52,7 +54,7 @@ public class MyPropertyUtil {
 		        		// debug only
 		        		if(type.equals(DSFile.class)){
 		        			String xxx = ((DSFile)assoc).getPkId();
-		        			System.out.println("xxx: "+xxx+", pkid: "+assoc.getPkId());
+		        			debug("xxx: "+xxx+", pkid: "+assoc.getPkId());
 		        		}
 
 	        		}
@@ -281,7 +283,6 @@ public class MyPropertyUtil {
     } 
     
     public static void debug(String s) {
-    	
-//    	System.out.println("in [MyPropertyUtil]: "+s);
+    	log.info("in [MyPropertyUtil]: "+s);
     }
 }

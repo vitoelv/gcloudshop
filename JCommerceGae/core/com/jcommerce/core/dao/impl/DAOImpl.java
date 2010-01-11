@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.jdo.JDOException;
 import javax.jdo.JDOObjectNotFoundException;
@@ -16,8 +17,6 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 import org.springframework.orm.jdo.JdoCallback;
 import org.springframework.orm.jdo.JdoObjectRetrievalFailureException;
@@ -33,12 +32,11 @@ import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.util.DataStoreUtils;
 import com.jcommerce.core.util.JDOQLHelper;
 import com.jcommerce.core.util.MyPropertyUtil;
-import com.jcommerce.core.util.UUIDHexGenerator;
 import com.jcommerce.core.util.UUIDLongGenerator;
 import com.jcommerce.gwt.client.model.IModelObject;
 
 public class DAOImpl extends JdoDaoSupport implements DAO {
-    protected Log log = LogFactory.getLog(getClass());
+	private static final Logger log = Logger.getLogger(DAOImpl.class.getName());
     
     public DAOImpl() {
     	setPersistenceManagerFactory(PMF.get());
@@ -118,17 +116,11 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
     		JdoTemplate jdoTemplate =getJdoTemplate();
     		
     		Object obj = (Object)jdoTemplate.getObjectById(Class.forName(modelName), id);
-    					
-//			Brand brand = (Brand)obj;
-//			System.out.println("name: "+brand.getName());
-//			System.out.println("SiteUrl: "+brand.getSiteUrl());
-//			System.out.println("SortOrder: "+brand.getSortOrder());
-//			System.out.println("Description: "+brand.getDescription());
-			
+
     		if(obj!=null) {
     			jdoTemplate.deletePersistent(obj);
     		}
-//			res = String.valueOf(obj.getPkId());
+
 			return true;
     	} catch (JDOObjectNotFoundException e) {
     		return true;
@@ -172,12 +164,12 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
 			if(obj instanceof GoodsType) {
 				GoodsType gt = (GoodsType)obj;
 				Set set = gt.getAttributes();
-				System.out.println("size: "+set.size());
+				log.info("size: "+set.size());
 			}
 			if(obj instanceof Goods) {
 				Goods g = (Goods)obj;
 				Set set = g.getCategoryIds();
-				System.out.println("size: "+(set==null? "null":set.size()));
+				log.info("size: "+(set==null? "null":set.size()));
 				
 			}
 			
@@ -283,7 +275,7 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
         	Iterator it = res.iterator();
         	if(it.hasNext()) {
         		ModelObject mo = (ModelObject)it.next();
-        		System.out.println("id: "+mo.getPkId());
+        		log.info("id: "+mo.getPkId());
         	}
 //            System.out.println("res.size: "+res.size());
             return res;
