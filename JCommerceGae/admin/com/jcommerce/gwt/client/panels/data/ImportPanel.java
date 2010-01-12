@@ -22,7 +22,16 @@ public class ImportPanel extends BaseFileUploadFormPanel {
 	
 	public static interface Constants {
         String Import_MenuName();
-        
+        String Import_Success();
+        String Import_SelectFile();
+        String Import_Note();
+        String Import_NoteInfo();
+        String Clear_MenuName();
+        String Clear_Warning();
+        String Clear_WarningInfo();
+        String Clear_Label();
+        String Clear_ToolTip();
+        String Clear_Success();
     }
 	
     /**
@@ -68,13 +77,23 @@ public class ImportPanel extends BaseFileUploadFormPanel {
 	@Override
 	public void gotoSuccessPanel() {
     	Success.State newState = new Success.State();
-   		newState.setMessage("导入成功");
+   		newState.setMessage(Resources.constants.Import_Success());
     	
     	ImportPanel.State choice1 = new ImportPanel.State();
     	newState.addChoice(ImportPanel.getInstance().getName(), choice1.getFullHistoryToken());
     	
     	newState.execute(); 
 
+	}
+	
+	public void gotoClearedSuccessPanel(){
+		Success.State newState = new Success.State();
+   		newState.setMessage(Resources.constants.Clear_Success());
+    	
+    	ImportPanel.State choice1 = new ImportPanel.State();
+    	newState.addChoice(ImportPanel.getInstance().getName(), choice1.getFullHistoryToken());
+    	
+    	newState.execute(); 
 	}
 	
 	FileUploadField fufField;
@@ -94,14 +113,14 @@ public class ImportPanel extends BaseFileUploadFormPanel {
 
 	@Override
 	protected void setupPanelLayout() {
-		Button bu = new Button("Clear");
-		bu.setWidth(50);
+		Button bu = new Button(Resources.constants.Clear_MenuName());
+		bu.setWidth(120);
 		bu.addSelectionListener(new SelectionListener<ButtonEvent>() {
 			public void componentSelected(ButtonEvent sender) {
 				final Dialog dialog = new Dialog();
 				dialog.setButtons(Dialog.OKCANCEL);
-				dialog.setHeading("Warning!");
-				dialog.addText("Do you wish to clear all data?");
+				dialog.setHeading(Resources.constants.Clear_Warning());
+				dialog.addText(Resources.constants.Clear_WarningInfo());
 				dialog.setBodyStyle("fontWeight:bold;padding:13px;");
 				dialog.setSize(300, 100);
 				dialog.setHideOnButtonClick(true);
@@ -121,7 +140,7 @@ public class ImportPanel extends BaseFileUploadFormPanel {
 								
 								@Override
 								public void onSuccess(String response) {
-									Info.display("successful", "all data is cleared");
+									gotoClearedSuccessPanel();
 								}
 							});
 							form.submit();
@@ -136,8 +155,9 @@ public class ImportPanel extends BaseFileUploadFormPanel {
 		af.setHideLabel(true);
 
 		MultiField mf = new MultiField();
-		mf.setFieldLabel("Clear all data");
-		mf.setToolTip("Please be careful, all data would be clear upon clicking this button");
+		mf.setFieldLabel(Resources.constants.Clear_Label());
+		mf.setToolTip(Resources.constants.Clear_ToolTip());
+//		mf.setToolTip("Please be careful, all data would be clear upon clicking this button");
 		mf.add(af);
 		
 		formPanel.add(mf, super.tfd());
@@ -145,13 +165,13 @@ public class ImportPanel extends BaseFileUploadFormPanel {
 
 		
 		fufField = new FileUploadField();
-		fufField.setFieldLabel("Select File");
+		fufField.setFieldLabel(Resources.constants.Import_SelectFile());
 		fufField.setName("file");
 		fufField.setAutoValidate(true);
 		formPanel.add(fufField);
 		
-		af = new AdapterField(new Label("Please refer to the exported file format"));
-		af.setFieldLabel("Note");
+		af = new AdapterField(new Label(Resources.constants.Import_NoteInfo()));
+		af.setFieldLabel(Resources.constants.Import_Note());
 		formPanel.add(af, sfd());
 		
 		
@@ -166,7 +186,18 @@ public class ImportPanel extends BaseFileUploadFormPanel {
 
 	@Override
 	public String getName() {
-		return "Import";
+		return Resources.constants.Import_MenuName();
 	}
 
+	@Override
+    public Button getShortCutButton() {
+      Button exportbutton = new Button(Resources.constants.Export_MenuName());
+      exportbutton.addSelectionListener(new SelectionListener<ButtonEvent>() {
+          public void componentSelected(ButtonEvent ce) {
+        	  ExportPanel.State newState = new ExportPanel.State();
+        	  newState.execute();
+          }
+      });
+      return exportbutton;
+    }
 }

@@ -157,7 +157,7 @@ public class CommentListPanel extends ContentWidget {
 	protected void onRender(Element parent, int index) {
 	    super.onRender(parent, index);
 	    Criteria criteria = new Criteria();
-	    criteria.addCondition(new Condition(IComment.PARENT_ID,Condition.EQUALS,""));
+	    criteria.addCondition(new Condition(IComment.PARENT_ID,Condition.EQUALS, null ));
 	    BasePagingLoader loader = new PagingListService().getLoader(ModelNames.COMMENT , criteria);
 
 	    loader.load(0, 10);
@@ -205,7 +205,7 @@ public class CommentListPanel extends ContentWidget {
 		columns.add(smRowSelection.getColumn());
 	    
 		columns.add(new ColumnConfig(CommentForm.USER_NAME, Resources.constants.CommentList_userName(), 120));
-		columns.add(new ColumnConfig(CommentForm.COMMENT_TYPE, Resources.constants.CommentList_commentType(), 40));
+		columns.add(new ColumnConfig(CommentForm.COMMENT_TYPE, Resources.constants.CommentList_commentType(), 80));
 		ColumnConfig objcol = new ColumnConfig(CommentForm.ID_VALUE, Resources.constants.CommentList_idValue(), 150);
 		columns.add(objcol);
 		
@@ -220,6 +220,7 @@ public class CommentListPanel extends ContentWidget {
 		
 		ColumnConfig actcol = new ColumnConfig("Action", Resources.constants
 				.action(),150);
+		
       columns.add(actcol);
       
       ColumnModel cm = new ColumnModel(columns);
@@ -228,7 +229,7 @@ public class CommentListPanel extends ContentWidget {
       grid.setLoadMask(true);
       grid.setBorders(true);
       grid.setSelectionModel(smRowSelection);
-
+      grid.setAutoExpandColumn("Action");
 
       ActionCellRenderer render = new ActionCellRenderer(grid);
       ActionCellRenderer.ActionInfo act = null;     

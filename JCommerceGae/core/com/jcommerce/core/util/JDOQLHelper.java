@@ -127,15 +127,20 @@ public class JDOQLHelper {
             if(ModelObject.class.isAssignableFrom(fieldType)) {
             	paras.add(value);
             } else {
-            try {
-            	Constructor<String> c = fieldType.getConstructor(String.class);
-            	paras.add(c.newInstance(value));
-            } catch (Exception ex) {
-            	// should not happen for simple type...
-            	ex.printStackTrace();
-            	// if happens, need handle case by case
-            	paras.add(value);
-            }
+	            try {
+	            	if( value == null ){
+	            		paras.add(value);
+	            	}
+	            	else {
+		            	Constructor<String> c = fieldType.getConstructor(String.class);
+		            	paras.add(c.newInstance(value));
+	            	}
+	            } catch (Exception ex) {
+	            	// should not happen for simple type...
+	            	ex.printStackTrace();
+	            	// if happens, need handle case by case
+	            	paras.add(value);
+	            }
             }
         
     	} catch(RuntimeException e) {

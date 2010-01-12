@@ -8,12 +8,17 @@ import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -22,30 +27,45 @@ import java.util.zip.ZipOutputStream;
 import javax.jdo.annotations.Persistent;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.BeanUtilsBean;
+import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.beanutils.PropertyUtilsBean;
+import org.apache.commons.beanutils.converters.DateConverter;
 import org.apache.commons.lang.StringUtils;
 
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 import com.jcommerce.core.annotation.IsPK;
 import com.jcommerce.core.model.AdminUser;
 import com.jcommerce.core.model.AreaRegion;
+import com.jcommerce.core.model.Article;
 import com.jcommerce.core.model.ArticleCat;
 import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Brand;
+import com.jcommerce.core.model.Cart;
 import com.jcommerce.core.model.Category;
+import com.jcommerce.core.model.Comment;
 import com.jcommerce.core.model.DSFile;
 import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.GoodsAttr;
 import com.jcommerce.core.model.GoodsGallery;
 import com.jcommerce.core.model.GoodsType;
+import com.jcommerce.core.model.LinkGood;
+import com.jcommerce.core.model.MemberPrice;
 import com.jcommerce.core.model.ModelObject;
+import com.jcommerce.core.model.OrderAction;
+import com.jcommerce.core.model.OrderGoods;
+import com.jcommerce.core.model.OrderInfo;
 import com.jcommerce.core.model.Payment;
 import com.jcommerce.core.model.Region;
 import com.jcommerce.core.model.Shipping;
 import com.jcommerce.core.model.ShippingArea;
 import com.jcommerce.core.model.ShopConfig;
+import com.jcommerce.core.model.User;
+import com.jcommerce.core.model.UserAddress;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.model.IModelObject;
 
@@ -226,7 +246,16 @@ public class DataStoreUtils implements IConstants{
         						}
         					}
         					else {
-        						BeanUtils.setProperty(obj, column, value);
+        						ConvertUtilsBean convertUtils = new ConvertUtilsBean();
+        						DateConverter dateConverter = new DateConverter();
+        						dateConverter.setPattern("yyyy-MM-dd HH:mm:ss");
+        						convertUtils.register(dateConverter,Date.class);
+        						//因为要注册converter,所以不能再使用BeanUtils的静态方法了，必须创建BeanUtilsBean实例
+        						BeanUtilsBean beanUtils = new BeanUtilsBean(convertUtils,new PropertyUtilsBean());
+        						if(StringUtil.isEmpty(value)){
+    								continue;
+    							}
+        						beanUtils.setProperty(obj, column, value);
         					}
     					}
     				}
@@ -242,26 +271,105 @@ public class DataStoreUtils implements IConstants{
 
     }
     
+    public static void allExportDS2Zip (OutputStream out, IDefaultManager manager) {
+    	String[] classes = new String[] { 
+    			AdminUser.class.getName(), 
+    			AreaRegion.class.getName(),
+    			Article.class.getName(),
+    			ArticleCat.class.getName(),
+    			Attribute.class.getName(),
+				Brand.class.getName(),
+				Cart.class.getName(),
+				Category.class.getName(),
+				Comment.class.getName(),
+				Goods.class.getName(), 
+				GoodsAttr.class.getName(), 
+				GoodsGallery.class.getName(),
+				GoodsType.class.getName(),
+				LinkGood.class.getName(),
+				DSFile.class.getName(),
+				MemberPrice.class.getName(),
+				OrderAction.class.getName(),
+				OrderGoods.class.getName(),
+				OrderInfo.class.getName(),
+				Payment.class.getName(), 
+				Region.class.getName(),
+				Shipping.class.getName(),
+				ShippingArea.class.getName(), 
+				ShopConfig.class.getName(),
+				UserAddress.class.getName(),
+//				UserRank.class.getName(),
+				User.class.getName(),
+				
+				
+				};    	
+    	exportDS2Zip(out,manager,classes);
+    }    
     
-    public static void exportDS2Zip (OutputStream out, IDefaultManager manager) {
+    public static void standerdExportDS2Zip (OutputStream out, IDefaultManager manager) {
+    	String[] classes = new String[] { 
+    			AdminUser.class.getName(), 
+    			AreaRegion.class.getName(),
+    			Article.class.getName(),
+    			ArticleCat.class.getName(),
+    			Attribute.class.getName(),
+				Brand.class.getName(),
+				Cart.class.getName(),
+				Category.class.getName(),
+				Comment.class.getName(),
+				Goods.class.getName(), 
+				GoodsAttr.class.getName(), 
+				GoodsGallery.class.getName(),
+				GoodsType.class.getName(),
+				LinkGood.class.getName(),
+				DSFile.class.getName(),
+				MemberPrice.class.getName(),
+				OrderAction.class.getName(),
+				OrderGoods.class.getName(),
+				OrderInfo.class.getName(),
+				Payment.class.getName(), 
+				Region.class.getName(),
+				Shipping.class.getName(),
+				ShippingArea.class.getName(), 
+				ShopConfig.class.getName(),
+				UserAddress.class.getName(),
+//				UserRank.class.getName(),
+				User.class.getName(),
+				
+				
+				};    	
+    	exportDS2Zip(out,manager,classes);
+    }
+    
+    public static void minimumExportDS2Zip (OutputStream out, IDefaultManager manager) {
+    	String[] classes = new String[] { 
+    			Attribute.class.getName(),
+				Brand.class.getName(),
+				Cart.class.getName(),
+				Category.class.getName(),
+				Goods.class.getName(), 
+				GoodsAttr.class.getName(), 
+				GoodsGallery.class.getName(),
+				GoodsType.class.getName(),
+				LinkGood.class.getName(),
+				DSFile.class.getName(),
+				MemberPrice.class.getName(),
+				OrderAction.class.getName(),
+				OrderGoods.class.getName(),
+				OrderInfo.class.getName(),
+				ShopConfig.class.getName(),
+				UserAddress.class.getName(),
+//				UserRank.class.getName(),
+				User.class.getName(),
+				};    	
+    	exportDS2Zip(out,manager,classes);
+    }
+    
+    
+    public static void exportDS2Zip (OutputStream out, IDefaultManager manager ,String[] classes) {
     	
     	try {
 			ZipOutputStream zout = new ZipOutputStream(out);
-
-			String[] classes = new String[] { 
-					Brand.class.getName(),
-					GoodsType.class.getName(),
-					Attribute.class.getName(), 
-					Category.class.getName(), Region.class.getName(),
-					Goods.class.getName(), GoodsGallery.class.getName(),
-					GoodsAttr.class.getName(), DSFile.class.getName(), 
-					AdminUser.class.getName(), 
-					ShopConfig.class.getName()
-					,
-					ArticleCat.class.getName(),
-					Payment.class.getName(), Shipping.class.getName(),
-					ShippingArea.class.getName(), AreaRegion.class.getName()
-					};
 
 			zout.putNextEntry(new ZipEntry("mydata.txt"));
 			
@@ -407,6 +515,9 @@ public class DataStoreUtils implements IConstants{
 						
 						fileIdNameMapping.put(file.getPkId(), tempName);
 						
+					} else if (Date.class.isAssignableFrom(ft)) {
+						SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
+						strValue = formatter.format(value);
 					} else {
 						strValue = value.toString();
 					}
