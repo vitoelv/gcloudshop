@@ -181,7 +181,7 @@ public class LibMain {
 		for(Comment comment: comments) {
 			String cid = comment.getPkId();
 			
-			if( !comment.getParentId().equals("") ){
+			if( comment.getParentId() != null ){
 				pcMap.put(comment.getParentId(),comment);
 				continue;
 			}

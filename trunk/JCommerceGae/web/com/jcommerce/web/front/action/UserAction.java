@@ -216,7 +216,7 @@ public class UserAction extends BaseAction {
 				request.setAttribute("enabledCaptcha", 0);
 				request.setAttribute("rand", new Double(1000000*Math.random()).longValue());
 				
-				request.setAttribute("shopRegClosed", getCachedShopConfig().getString(IShopConfigMeta.CFG_KEY_SHOP_REG_CLOSED));
+				request.setAttribute("shopRegClosed", getCachedShopConfig().getInt(IShopConfigMeta.CFG_KEY_SHOP_REG_CLOSED));
 				return RES_USER_PASSPORT;
 			}
 			else if("check_email".equals(action)){

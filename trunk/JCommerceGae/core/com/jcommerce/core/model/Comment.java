@@ -7,6 +7,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.jcommerce.core.annotation.IsPK;
+
 /**  
  * generated with my extension of middleGen 
  * @author <a href="http://code.google.com/p/gcloudshop/">Leon</a>
@@ -51,6 +53,7 @@ public class Comment extends ModelObject {
   @Persistent
   private java.lang.Long status=0l; 
 
+  @IsPK(myclazz="com.jcommerce.core.model.Comment")
   @Persistent
   private java.lang.String parentId; 
 

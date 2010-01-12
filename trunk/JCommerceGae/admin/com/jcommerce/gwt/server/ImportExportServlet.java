@@ -58,8 +58,6 @@ public class ImportExportServlet extends GWTHttpServlet{
 			}
 			else if("export".equals(action)) {
 				handleExport(request, response);
-				
-				
 			}
 			else if("clear".equals(action)) {
 				handleClear(request, response);
@@ -164,8 +162,18 @@ public class ImportExportServlet extends GWTHttpServlet{
         response.setHeader("Content-Disposition", "Attachment;Filename=\"exportedData.zip\"");
         response.setHeader("Pragma", "public"); 
         response.setHeader("Cache-Control", "must-revalidate");
-		DataStoreUtils.exportDS2Zip(response.getOutputStream(), SpringUtil.getDefaultManager());
-		
+        String exportType = request.getParameter("type");
+        
+        if("all".equals(exportType)) {
+        	DataStoreUtils.allExportDS2Zip(response.getOutputStream(), SpringUtil.getDefaultManager());
+		}
+		else if("standerd".equals(exportType)) {
+			DataStoreUtils.standerdExportDS2Zip(response.getOutputStream(), SpringUtil.getDefaultManager());
+		}
+		else if("minimum".equals(exportType)) {
+			DataStoreUtils.minimumExportDS2Zip(response.getOutputStream(), SpringUtil.getDefaultManager());
+		}
+			
 	}	
 	
 

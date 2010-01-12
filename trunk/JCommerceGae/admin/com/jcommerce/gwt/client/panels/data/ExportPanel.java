@@ -9,6 +9,7 @@ import com.extjs.gxt.ui.client.widget.form.AdapterField;
 import com.extjs.gxt.ui.client.widget.form.MultiField;
 import com.jcommerce.gwt.client.panels.BaseEntityEditPanel;
 import com.jcommerce.gwt.client.panels.Success;
+import com.jcommerce.gwt.client.panels.goods.BrandPanel;
 import com.jcommerce.gwt.client.resources.Resources;
 
 
@@ -16,7 +17,12 @@ public class ExportPanel extends BaseEntityEditPanel{
 	
 	public static interface Constants {
         String Export_MenuName();
-        
+        String Export_Success();
+        String Export_AllExport();
+        String Export_Exporting();
+        String Export_ExportButton();
+        String Export_StanderdExport();
+        String Export_MinimumExport();
     }
     /**
      * Initialize this example.
@@ -62,7 +68,7 @@ public class ExportPanel extends BaseEntityEditPanel{
 	@Override
 	public void gotoSuccessPanel() {
     	Success.State newState = new Success.State();
-   		newState.setMessage("导出成功");
+   		newState.setMessage(Resources.constants.Export_Success());
 
    		ExportPanel.State choice1 = new ExportPanel.State();
     	newState.addChoice(ExportPanel.getInstance().getName(), choice1.getFullHistoryToken());
@@ -78,32 +84,81 @@ public class ExportPanel extends BaseEntityEditPanel{
 	@Override
 	protected void setupPanelLayout() {
 		
-		AdapterField af = new AdapterField(new Label("Currently will export all data supported"));
-		af.setFieldLabel("Note");
-		formPanel.add(af, sfd());
+//		AdapterField af = new AdapterField(new Label("Currently will export all data supported"));
+//		af.setFieldLabel("Note");
+//		formPanel.add(af, sfd());
+//		
+//		Button exportAll = new Button(Resources.constants.Export_ExportButton());
+//		exportAll.setWidth(120);
+//		exportAll.addSelectionListener(new SelectionListener<ButtonEvent>() {
+//			public void componentSelected(ButtonEvent sender) {
+//				   Window w = new Window();        
+//				   w.setHeading(Resources.constants.Export_MenuName());
+//				   w.setModal(false);
+//				   w.setSize(200, 100);
+//				   w.setMaximizable(false);
+//				   w.setToolTip(Resources.constants.Export_Exporting());
+//				   w.setUrl("/admin/imexportService.do?action=export&type=all");
+//				   w.show();
+//				   gotoSuccessPanel();
+//			}
+//		});
+//
+//		af = new AdapterField(exportAll);
+//		af.setHideLabel(true);
+//
+//		MultiField mf = new MultiField();
+//		mf.setFieldLabel(Resources.constants.Export_AllExport());
+//		mf.add(af);
+//		formPanel.add(mf, super.tfd());
 		
-		Button bu = new Button("Export");
-		bu.setWidth(50);
-		bu.addSelectionListener(new SelectionListener<ButtonEvent>() {
+		Button standerdExport = new Button(Resources.constants.Export_ExportButton());
+		standerdExport.setWidth(120);
+		standerdExport.addSelectionListener(new SelectionListener<ButtonEvent>() {
 			public void componentSelected(ButtonEvent sender) {
 				   Window w = new Window();        
-				   w.setHeading("Export");
+				   w.setHeading(Resources.constants.Export_MenuName());
 				   w.setModal(false);
 				   w.setSize(200, 100);
 				   w.setMaximizable(false);
-				   w.setToolTip("Exporting...");
-				   w.setUrl("/admin/imexportService.do?action=export");
+				   w.setToolTip(Resources.constants.Export_Exporting());
+				   w.setUrl("/admin/imexportService.do?action=export&type=standerd");
 				   w.show();
-
+				   gotoSuccessPanel();
                         
 			}
 		});
 
-		af = new AdapterField(bu);
+		AdapterField af = new AdapterField(standerdExport);
 		af.setHideLabel(true);
 
 		MultiField mf = new MultiField();
-		mf.setFieldLabel("Export all data");
+		mf.setFieldLabel(Resources.constants.Export_StanderdExport());
+		mf.add(af);
+		formPanel.add(mf, super.tfd());
+		
+		Button minimumExport = new Button(Resources.constants.Export_ExportButton());
+		minimumExport.setWidth(120);
+		minimumExport.addSelectionListener(new SelectionListener<ButtonEvent>() {
+			public void componentSelected(ButtonEvent sender) {
+				   Window w = new Window();        
+				   w.setHeading(Resources.constants.Export_MenuName());
+				   w.setModal(false);
+				   w.setSize(200, 100);
+				   w.setMaximizable(false);
+				   w.setToolTip(Resources.constants.Export_Exporting());
+				   w.setUrl("/admin/imexportService.do?action=export&type=minimum");
+				   w.show();
+				   
+				   gotoSuccessPanel();
+			}
+		});
+
+		af = new AdapterField(minimumExport);
+		af.setHideLabel(true);
+
+		mf = new MultiField();
+		mf.setFieldLabel(Resources.constants.Export_MinimumExport());
 		mf.add(af);
 		formPanel.add(mf, super.tfd());
 		
@@ -123,9 +178,18 @@ public class ExportPanel extends BaseEntityEditPanel{
 
 	@Override
 	public String getName() {
-		return "Export";
+		return Resources.constants.Export_MenuName();
 	}
 
-	
-	
+	@Override
+    public Button getShortCutButton() {
+      Button importbutton = new Button(Resources.constants.Import_MenuName());
+      importbutton.addSelectionListener(new SelectionListener<ButtonEvent>() {
+          public void componentSelected(ButtonEvent ce) {
+        	  ImportPanel.State newState = new ImportPanel.State();
+        	  newState.execute();
+          }
+      });
+      return importbutton;
+    }
 }

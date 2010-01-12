@@ -44,7 +44,7 @@ public class BrandForm extends BeanObject implements IBrand{
 	public static TextField<String> getSiteField(String fieldTitle) {
 		TextField<String> nameField = new TextField<String>();
 		nameField.setName(SITE_URL);
-		nameField.setMaxLength(10);
+		nameField.setMaxLength(20);
 		nameField.setAutoValidate(true);
 		return nameField;
 	}
