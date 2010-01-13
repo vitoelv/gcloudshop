@@ -147,6 +147,13 @@ public class DataStoreUtils implements IConstants{
 			
 			String newRecord = null;
 			String newline = null;
+			ConvertUtilsBean convertUtils = new ConvertUtilsBean();
+			DateConverter dateConverter = new DateConverter();
+			dateConverter.setPattern("yyyy-MM-dd HH:mm:ss");
+			convertUtils.register(dateConverter,Date.class);
+			//因为要注册converter,所以不能再使用BeanUtils的静态方法了，必须创建BeanUtilsBean实例
+			BeanUtilsBean beanUtils = new BeanUtilsBean(convertUtils,new PropertyUtilsBean());
+			
     		while(true) {
     			newline = reader.readLine();
     			System.out.println("newline: "+newline);
@@ -246,12 +253,6 @@ public class DataStoreUtils implements IConstants{
         						}
         					}
         					else {
-        						ConvertUtilsBean convertUtils = new ConvertUtilsBean();
-        						DateConverter dateConverter = new DateConverter();
-        						dateConverter.setPattern("yyyy-MM-dd HH:mm:ss");
-        						convertUtils.register(dateConverter,Date.class);
-        						//因为要注册converter,所以不能再使用BeanUtils的静态方法了，必须创建BeanUtilsBean实例
-        						BeanUtilsBean beanUtils = new BeanUtilsBean(convertUtils,new PropertyUtilsBean());
         						if(StringUtil.isEmpty(value)){
     								continue;
     							}
