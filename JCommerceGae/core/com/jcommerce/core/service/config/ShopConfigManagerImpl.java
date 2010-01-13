@@ -242,7 +242,7 @@ public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopCo
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), IShopConfigMeta.CFG_KEY_NAME_OF_REGION_2, "省", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_NAME_OF_REGION_2"), null, null));
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), IShopConfigMeta.CFG_KEY_NAME_OF_REGION_3, "市", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_NAME_OF_REGION_3"), null, null));
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), IShopConfigMeta.CFG_KEY_NAME_OF_REGION_4, "区", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_NAME_OF_REGION_4"), null, null));
-		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), IShopConfigMeta.CFG_KEY_PAGE_STYLE, "1", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_PAGE_STYLE"), 
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), IShopConfigMeta.CFG_KEY_PAGE_STYLE, "0", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_PAGE_STYLE"), 
 				new String[][]{new String[]{"0",bundle.getString("CFG_PAGE_STYLE_1")}, new String[]{"1",bundle.getString("CFG_PAGE_STYLE_2")}}, null));
 		defaultShopConfigMap.put(3, metaList);
 		

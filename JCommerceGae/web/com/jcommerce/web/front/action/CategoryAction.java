@@ -262,7 +262,7 @@ public class CategoryAction extends BaseAction {
 		// TODO categoryGetGoods
 		IDefaultManager manager = getDefaultManager();
         int firstRow = (page-1)*size;
-        int maxRow = size;
+        int maxRow = firstRow + size;
         List<Goods> goods = new ArrayList<Goods>();
         
         Criteria criteria = new Criteria();
@@ -308,7 +308,7 @@ public class CategoryAction extends BaseAction {
                 
         for (String cid : children) {
         	cond.setValue(cid);
-        	goods.addAll((List<Goods>)manager.getList(ModelNames.GOODS, criteria,firstRow,maxRow));
+        	goods.addAll((List<Goods>)manager.getList(ModelNames.GOODS, criteria));
 		}
         
         LibCommon.removeDuplicateWithOrder(goods);

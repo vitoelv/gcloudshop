@@ -121,7 +121,7 @@ public class BrandAction extends BaseAction {
         cond1.setValue(brandId);
         c1.addCondition(cond1);
         int firstRow = (page-1)*size;
-        int maxRow = size;
+        int maxRow = firstRow + size;
         List<Goods> list = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1, firstRow, maxRow );
         debug("brandId: "+brandId+", size of goods: "+list.size());
         return list;
