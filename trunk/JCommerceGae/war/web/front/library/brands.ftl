@@ -9,5 +9,5 @@
       </#if>
 
   </#list>
-<div class="brandsMore"><a href="../brand.action"><img src="images/moreBrands.gif" /></a></div>
+<div class="brandsMore"><a href="brand.action"><img src="images/moreBrands.gif" /></a></div>
 </#if>

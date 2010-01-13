@@ -48,7 +48,7 @@
      <div class="blank5"></div>
       <h3 class="border"><span>${lang.allBrand}</span></h3>
      <div id="brandList" class="clearfix">
-     <#list  as >
+     <#list brandList as brandData >
 		  <div class="brandBox">
 			<h4><span>${brandData.brandName}</span>(${brandData.goodsNum})</h4>
 			<#if  brandData.brandLogo??  >
