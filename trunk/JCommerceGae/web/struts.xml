@@ -47,6 +47,7 @@
 		</action>
 		<action name="brand" method="execute" class="brandAction">
 			<result name="success" type="freemarker">/web/front/brand.ftl</result>
+			<result name="brandList" type="freemarker">/web/front/brand_list.ftl</result>
 			<result name="error" type="redirectAction">home</result>
 		</action>
 		<action name="region" method="execute" class="regionAction">

@@ -359,7 +359,7 @@ public class LibMain {
         pager.getSearch().put("price_min", 0);
         pager.getSearch().put("price_max", 0);
         pager.getSearch().put("filter_attr", "");
-        pager.getSearch().put("display", IWebConstants.DISPLAY_LIST);
+        pager.getSearch().put("display", displayType);
         pager.setPage(page);
         pager.setSize(size);
         pager.setSort(sort);
