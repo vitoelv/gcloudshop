@@ -255,6 +255,11 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
         cond1.setOperator(Condition.EQUALS);
         cond1.setValue("true");
         c1.addCondition(cond1);
+        cond1 = new Condition();
+        cond1.setField(IGoods.IS_ON_SALE);
+        cond1.setOperator(Condition.EQUALS);
+        cond1.setValue("true");
+        c1.addCondition(cond1);
         List<Goods> list = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1,0,5);
         return filterGoods(list);
          
@@ -266,7 +271,11 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
         cond1.setOperator(Condition.EQUALS);
         cond1.setValue("true");
         c1.addCondition(cond1);
-        
+        cond1 = new Condition();
+        cond1.setField(IGoods.IS_ON_SALE);
+        cond1.setOperator(Condition.EQUALS);
+        cond1.setValue("true");
+        c1.addCondition(cond1);
         List<Goods> list = (List<Goods>)getDefaultManager().getList(ModelNames.GOODS, c1,0,5);
         return filterGoods(list);
 
@@ -275,6 +284,11 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
         Criteria c1 = new Criteria();
         Condition cond1 = new Condition();
         cond1.setField(IGoods.IS_NEW);
+        cond1.setOperator(Condition.EQUALS);
+        cond1.setValue("true");
+        c1.addCondition(cond1);
+        cond1 = new Condition();
+        cond1.setField(IGoods.IS_ON_SALE);
         cond1.setOperator(Condition.EQUALS);
         cond1.setValue("true");
         c1.addCondition(cond1);

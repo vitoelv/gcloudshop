@@ -1,5 +1,9 @@
 package com.jcommerce.web.front.action;
 
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_ORDER_TYPE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SORT_ORDER_METHOD;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SORT_ORDER_TYPE;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -197,17 +201,17 @@ public class SearchAction extends BaseAction {
         	}
         	String display = (String)request.getParameter("display");
     		if(display == null){
-    			display = DISPLAY_GRID;
+    			display = getCachedShopConfig().getString(CFG_KEY_SHOW_ORDER_TYPE);
     		}
     		getSession().setAttribute("displaySearch", display);
     		
     		String sort = (String)request.getParameter("sort");  //'goods_id', 'shop_price', 'last_update'
     		String order = (String)request.getParameter("order"); // ASC DESC
     		if(sort == null){
-    			sort = "goodsName";
+    			sort = getCachedShopConfig().getString(CFG_KEY_SORT_ORDER_METHOD);
     		}
     		if(order == null){
-    			order = "ASC";
+    			order = getCachedShopConfig().getString(CFG_KEY_SORT_ORDER_TYPE);
     		}
     		
     		String sPage = (String)request.getParameter("page");

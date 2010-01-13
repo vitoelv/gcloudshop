@@ -43,17 +43,17 @@ SOR>Goods:_g0,GoodsType:_gt1,,Goods:_g0|GoodsGallery:_gg5|DSFile:_dsf7,,,,Catego
 
 SOR>Goods:_g1,GoodsType:_gt1,,Goods:_g1|GoodsGallery:_gg1|DSFile:_dsf3,,,,Category:_c001_001,,Nokia97,,22,Brand:_b1,,100,100.0,1111.0,888.8,0.0,0,0,0,,,
 <P> it's just Nokia!!</P>
-,,,,false,,false,false,0,0,0,false,true,true,false,false,,0,0,,1,3<EOR
+,,,,false,,true,false,0,0,0,false,true,true,false,false,,0,0,,1,3<EOR
 
 SOR>Goods:_g2,GoodsType:_gt1,,Goods:_g2|GoodsGallery:_gg3|DSFile:_dsf5,,,,Category:_c001_002,,Moto RAZR V8,,17,Brand:_b2,,100,100.0,100.0,80.0,0.0,0,0,0,,,
 <P>作为K1的升级版本，KRZR K2配备了<STRONG><FONT color=#ff0000 size=3>200万像素的摄像头</FONT></STRONG>，
 同时屏幕方面也上升至QVGA（320×240像素）分辨率的标准，不过这次摩托KRZR K2是一款工作在CDMA 1X网络环境下的机型。</P>
-,,,,false,,false,false,0,0,0,false,true,true,false,false,,0,0,,1,1<EOR
+,,,,false,,true,false,0,0,0,false,true,true,false,false,,0,0,,1,1<EOR
 
 SOR>Goods:_g3,GoodsType:_gt1,,Goods:_g3|GoodsGallery:_gg11|DSFile:_dsf13,,,,Category:_c001_001,,Nokia97,,22,Brand:_b1,,200,200.0,1200.0,800.0,0.0,0,0,0,,,
 <P> 诺基亚N95在设计上采用了与N系同门机型N80相同的滑盖设计，这也是诺基亚少有的滑盖手机，但诺基亚似乎也越来越乐于推出滑盖机型了。 
 	比N80要略微大一些，但是在厚度上则要比N80薄了不少</P>
-,,,,false,,false,false,0,0,0,false,true,true,false,false,,0,0,,1,3<EOR
+,,,,false,,true,false,0,0,0,false,true,true,false,false,,0,0,,1,3<EOR
 
 ::com.jcommerce.core.model.GoodsGallery
 keyName,imageFileId,image,thumb,imgId,goodsId,imgUrl,imgDesc,thumbUrl,imgOriginal
