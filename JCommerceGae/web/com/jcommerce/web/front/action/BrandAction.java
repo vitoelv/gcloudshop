@@ -15,6 +15,7 @@ import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IGoods;
+import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.util.URLConstants;
 import com.jcommerce.web.to.BrandWrapper;
 import com.jcommerce.web.to.GoodsWrapper;
@@ -69,12 +70,15 @@ public class BrandAction extends BaseAction {
 		if(order == null){
 			order = getCachedShopConfig().getString(CFG_KEY_SORT_ORDER_TYPE);
 		}
-		// TODO
+
+		
+		// TODO 分类品牌
 		int recordCount = goodsCountByBrand(brandId, cate);
 		
 		List<Goods> goods = brandGetGoods(brandId, cate, size, page, sort, order);
 		List<GoodsWrapper> gws = WrapperUtil.wrap(goods, GoodsWrapper.class);
 		request.setAttribute("goodsList", gws);
+		
 		
 		List<Category> relatedCate = brandRelatedCat();
 		request.setAttribute("brandCatList", relatedCate); // 相关分类
@@ -102,7 +106,6 @@ public class BrandAction extends BaseAction {
         cond1.setOperator(Condition.EQUALS);
         cond1.setValue(brandId);
         c1.addCondition(cond1);
-        
         
         int count = getDefaultManager().getCount(ModelNames.GOODS, c1);
 		return count;
@@ -138,21 +141,46 @@ public class BrandAction extends BaseAction {
 	        includeCategoryTree(request);
 	        includeHistory(request);
 	        
-	        // TODO maybe this only include goods belong to the brand?
-	        includeRecommendBest(request);
 	        
 	        includeFilterAttr();
 	        includePriceGrade();
-	        includeGoodsList();
 	        
 	        String brandId = request.getParameter("id");
 	        if(StringUtils.isEmpty(brandId)) {
 	        	brandId = request.getParameter("brand");
 	        }
 	        if(StringUtils.isEmpty(brandId)) {
-	        	// sth wrong, maybe goto home
-	        	throw new RuntimeException("brand id is null");
+	        	List<Brand> brands = (List<Brand>)getDefaultManager().getList(ModelNames.BRAND, null);
+	        	Criteria criteria = new Criteria();
+	            Condition cond = new Condition();
+	            cond.setField(IGoods.BRAND_ID);
+	            cond.setOperator(Condition.EQUALS);
+	            List<BrandWrapper> brandInfoList = new ArrayList<BrandWrapper>();
+	            for (Brand brand:brands) {
+	                cond.setValue(brand.getPkId());
+	                criteria.addCondition(cond);
+	                Integer goodsNum = getDefaultManager().getCount(ModelNames.GOODS, criteria);
+	                BrandWrapper bw = new BrandWrapper(brand);
+	                bw.put("goodsNum", goodsNum);
+	                bw.put("brandLogo", URLConstants.SERVLET_BRANDLOGO+brand.getLogoFileId());
+	                brandInfoList.add(bw);
+	                criteria.removeAllCondition();
+	            } 
+	        	
+	        	LibMain.assignUrHere(request, "" , getLangMap(request).getString("allBrand"));
+	        	
+	        	request.setAttribute("pageTitle", getLangMap(request).getString("allBrand"));
+	        	request.setAttribute("brandList", brandInfoList);
+	        	
+	        	
+	        	
+	        	return "brandList";
 	        }
+	     // TODO maybe this only include goods belong to the brand?
+	        includeRecommendBest(request);
+	        
+	        
+	        includeGoodsList();
 	        debug("in [execute]: brandId="+brandId);
 	        
 	        IDefaultManager manager = getDefaultManager();
