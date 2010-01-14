@@ -166,24 +166,24 @@ public class CommentPanel extends ContentWidget {
 	        ipAddressField.setVisible(false);
 	        formPanel.add(ipAddressField);		
 	        
-	        RemoteService.getSpecialService().getAdminUserInfo(new AsyncCallback<Map<String,String>>(){
-
-
-				public void onFailure(Throwable caught) {
-					caught.printStackTrace();
-					Window.alert("ERROR: "+caught.getMessage());
-				}
-
-
-				public void onSuccess(Map<String, String> result) {
-					userNameField.setValue(result.get(IAdminUser.USER_NAME));
-					emailField.setValue(result.get(IAdminUser.EMAIL));
-					ipAddressField.setValue(result.get(IComment.IP_ADDRESS));
-					formPanel.repaint();
-				}
-	        	
-	        });
     	}
+    	RemoteService.getSpecialService().getAdminUserInfo(new AsyncCallback<Map<String,String>>(){
+
+
+			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
+				Window.alert("ERROR: "+caught.getMessage());
+			}
+
+
+			public void onSuccess(Map<String, String> result) {
+				userNameField.setValue(result.get(IAdminUser.USER_NAME));
+				emailField.setValue(result.get(IAdminUser.EMAIL));
+				ipAddressField.setValue(result.get(IComment.IP_ADDRESS));
+				formPanel.repaint();
+			}
+        	
+        });
     	
     	BorderLayoutData formData = new BorderLayoutData(pos, 250);  
     	formData.setMargins(new Margins(5, 0, 5, 0)); 
