@@ -19,7 +19,8 @@
     <menu name="项目情况">
       <item name="项目概况" href="index.html"/>
       <item name="产品特性" href="features.html"/>
-	  <item name="为什么gcShop" href="why.html"/>      
+	  <item name="为什么gcShop" href="why.html"/>
+	  <item name="常见问题" href="faq.html"/>       
       <item name="在线演示" href="demo.html"/>
       <item name="邮件列表" href="mailing-list.html" />
       <item name="联系我们" href="contact.html" />
@@ -33,7 +34,6 @@
     </menu>
     
     <menu name="正在建设">
-      <item name="常见问题" href="faq.html"/>    
 	  <item name="项目新闻" href="news.html"/>
       <item name="资源下载" href="download.html"/>
       <item name="License" href="license.html"/>

@@ -8,16 +8,79 @@
   <part id="general">
     <title>General</title>
 
-    <faq id="whats-foo">
+    <faq id="what">
       <question>
-        Under construction...
+        What is gc-Shop? 
       </question>
       <answer>
-        <p>Under construction...</p>
-
+        <p>gc-Shop is short name for "Google Cloud Shop". 
+        It is a shopping-cart or e-commerce software developed on 
+        Google's Cloud Computing platform: Google App Engine.</p>
+      </answer>
+    </faq>  
+    
+    <faq id="why">
+      <question>      
+	      Why do we need another e-commerce application?
+      </question>
+      <answer>
+        <p>gc-Shop is different. Leveraging technologies and services
+         of Google Cloud Computing, gc-Shop could be shop owner's better choice. </p>
+        
+        <p>Besides the benefit of <a href="http://code.google.com/intl/en/appengine/whyappengine.html">
+        Google App Engine</a>, gc-Shop is based on Google so it will be easier 
+        for us to integrate it with more Google services in the future, e.g. Google Check out, Google Talk, 
+        Google Product Search, Google AdSense, Google AdWords etc. We have more potential to become better.</p>
+        
+        <p>read more about <a href="why.html">why gc-Shop?</a></p>
+      </answer>      
+    </faq>
+    
+	<faq id="how">      
+      <question>      
+	      How to start using gc-Shop?
+      </question>
+      <answer>
+         <p>Just a few simple steps: </p>
+        <li>Apply a free Google App Engine account from <a href="http://appengine.google.com/">here</a>, and create a new applicationID. 
+        You will own a free domain, like MyXXXShop.appspot.com. </li>
+        <li>Get a copy of gc-Shop, and run our install script to deploy it to your Google App Engine account. </li>
+        <li>Access your gc-Shop at MyXXXShop.appspot.com and start creating your goods items and other configuration.</li>
+        <li>Now you could enjoy as a shop Owner!</li>
       </answer>
     </faq>
 
   </part>
+  
+  <part id="Other">
+    <title>Other</title>
 
+    <faq id="HowCouldFind">
+      <question>
+        How could potential clients find my online-shop? 
+      </question>
+      <answer>
+        <p>Need to understand that even though gc-Shop will try to be more search-engine friendly, 
+        	you still have to spend effort to make their online-shops known.</p>
+        <p>For those gc-Shop users who already own a successful online-shop, 
+        what you need to do is just link or redirect the flow from the old online-shop.</p>
+        <p>For those new starter, gc-Shop will add features to integrate with Google Product Search, which will be helpful for clients to find you shop from Google Search Engine.</p>
+        <p>With the power of Google search engine. We have reason to expect Google to provide better search support to Google App Engine in the future.</p>
+      </answer>
+    </faq>  
+    
+    <faq id="whychooseGoogle">
+      <question>      
+	      Why did gc-Shop choose Google as the Cloud Computing platform among many other choices such as Amazon?
+      </question>
+      <answer>
+        <p>Google App Engine is more friendly to starters as either role of application developer and application user.</p>
+        <li>Google provides a flexible billing policy, suite for all size of business.</li>
+        <li>Application on Google App Engine is easier to develop, deploy and manage.</li>
+        <li>Google provides a suite of tools/services which has the potential to be integrated to provide better user experience.</li>
+      </answer>      
+    </faq>
+    
+
+  </part>
 </faqs>

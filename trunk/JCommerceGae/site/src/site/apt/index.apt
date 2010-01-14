@@ -6,7 +6,9 @@ Summary
 
 News
 
-	December 22 2009, gcShop version 0.9 is online. Included most basic functionalities.  
+	January 14 2010, gcShop version 0.8 is online. Added a few administrator functions, and updated site's FAQ.
+
+	December 22 2009, gcShop version 0.7 is online. Included most basic functionalities.  
 
 	November 01 2009, gc-shop.appspot.com is created, deployed the first test version.
 	
@@ -23,6 +25,8 @@ Introduction
 	Read more about {{{features.html} features highlight}}.
 	
 	Read more about {{{why.html} Why gcShop?}}.
+	
+	Read more about {{{faq.html} Frequently Asked Questions}}.
 	
 	Read more about {{{http://code.google.com/intl/en/appengine/whyappengine.html} What is Google cloud computing platform?}}.
 	

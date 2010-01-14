@@ -20,6 +20,7 @@
       <item name="Summary" href="index.html"/>
       <item name="Features" href="features.html"/>
       <item name="Why gcShop" href="why.html"/>
+      <item name="FAQ" href="faq.html"/>
       <item name="Live Demo" href="demo.html"/>
 	  <item name="Mailing List" href="mailing-list.html" />      
       <item name="Contact Us" href="contact.html" />
@@ -39,7 +40,6 @@
     </menu>
     
     <menu name="Under Construction">
-      <item name="FAQ" href="faq.html"/>
       <item name="News" href="news.html"/>
       <item name="Download" href="download.html"/>
       <item name="License" href="license.html"/>
