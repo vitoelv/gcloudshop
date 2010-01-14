@@ -53,14 +53,6 @@ public class LoginAction extends HttpServlet {
     }
     
     private Boolean authenticate(String name, String password,HttpServletRequest request){
-    	// TODO this is fake for demo start from empty data store
-    	if("admin".equals(name) && "admin".equals(password)) {
-    		AdminUser au = new AdminUser();
-    		au.setUserName("I am Admin");
-    		au.setEmail("adminUser@gmail.com");
-    		setAdminUserInfo(request,au);
-    		return true;
-    	}
     	
     	Boolean isExist = false;
     	IDefaultManager manager = (IDefaultManager)SpringUtil.getDefaultManager();
@@ -72,6 +64,18 @@ public class LoginAction extends HttpServlet {
     	if(isExist){
     		setAdminUserInfo(request,(AdminUser)res.get(0));
     	}
+    	else {
+    		// only go to fake if it does not exist.
+			// TODO this is fake for demo start from empty data store
+			if ("admin".equals(name) && "admin".equals(password)) {
+				AdminUser au = new AdminUser();
+				au.setUserName("I am Admin");
+				au.setEmail("adminUser@gmail.com");
+				setAdminUserInfo(request, au);
+				isExist = true;
+			}
+		}
+    	
     	return isExist;
     }
     private void setAdminUserInfo(HttpServletRequest request , AdminUser adminUser){
