@@ -8,12 +8,17 @@ import java.util.Map;
 import org.apache.commons.beanutils.BeanUtils;
 
 import com.jcommerce.core.dao.DAO;
+import com.jcommerce.core.model.OrderGoods;
 import com.jcommerce.core.model.OrderInfo;
 import com.jcommerce.core.model.Payment;
+import com.jcommerce.core.service.Condition;
+import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.payment.IPaymentMetaManager;
 import com.jcommerce.core.service.payment.IPaymentMetaPlugin;
 import com.jcommerce.core.service.payment.PaymentConfigMeta;
 import com.jcommerce.gwt.client.ModelNames;
+import com.jcommerce.gwt.client.model.IGoods;
+import com.jcommerce.gwt.client.model.IOrderGoods;
 import com.jcommerce.gwt.client.model.IPayment;
 import com.jcommerce.gwt.client.model.IPaymentConfigMeta;
 
@@ -51,6 +56,8 @@ public class PaymentMetaManagerImpl implements IPaymentMetaManager{
         metaRepo.put(alipay.getDefaultConfigMeta().getPayCode(), alipay);
         ChinaBank netbank = new ChinaBank();
         metaRepo.put(netbank.getDefaultConfigMeta().getPayCode(), netbank);
+        GoogleCheckout checkout = new GoogleCheckout();
+        metaRepo.put(checkout.getDefaultConfigMeta().getPayCode(), checkout);
     }
     
     
@@ -133,7 +140,16 @@ public class PaymentMetaManagerImpl implements IPaymentMetaManager{
         String code = payment.getPayCode();
         IPaymentMetaPlugin meta = metaRepo.get(code);
         
-        return meta.getCode(order, payment);
+        Criteria criteria = new Criteria();
+        Condition cond = new Condition();
+        cond.setField(IOrderGoods.ORDER_ID);
+        cond.setOperator(Condition.EQUALS);
+        cond.setValue(orderId);
+        criteria.addCondition(cond);
+        
+        List<OrderGoods> orderGoods = dao.getList(ModelNames.ORDERGOODS, criteria);
+        
+        return meta.getCode(order, payment, orderGoods);
     }
     
     public void install(String paymentCode) {

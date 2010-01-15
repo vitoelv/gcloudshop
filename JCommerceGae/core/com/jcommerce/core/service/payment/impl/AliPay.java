@@ -2,8 +2,10 @@ package com.jcommerce.core.service.payment.impl;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.jcommerce.core.model.OrderGoods;
 import com.jcommerce.core.model.OrderInfo;
 import com.jcommerce.core.model.Payment;
 import com.jcommerce.core.service.payment.IPaymentMetaPlugin;
@@ -151,7 +153,7 @@ _input_charset=utf-8
 &sign_type=MD5  
      * @see com.jcommerce.core.service.payment.IPaymentMetaPlugin#getCode(com.jcommerce.core.model.Order, com.jcommerce.core.model.Payment)
      */
-    public String getCode(OrderInfo order, Payment payment) { 
+    public String getCode(OrderInfo order, Payment payment , List<OrderGoods> orderGoods) { 
         PaymentConfigMeta configMeta = deserializeConfig(payment.getPayConfig());
         Map<String, String> values = configMeta.getFieldValues();
         
