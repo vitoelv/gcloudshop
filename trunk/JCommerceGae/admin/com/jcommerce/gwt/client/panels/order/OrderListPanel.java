@@ -65,6 +65,8 @@ public class OrderListPanel  extends ContentWidget{
 		String OrderStatus_complete();
 		String OrderList_deleteSuccessfully();
 		String OrderList_deleteFailure();
+		String OrderList_confirm();
+		String OrderList_remove();
     }
 
 	private static OrderListPanel instance = null;
@@ -152,10 +154,10 @@ public class OrderListPanel  extends ContentWidget{
 	TextBox consignee = new TextBox();
 	ListBox state_list = new ListBox();
 	
-	Button btnConfirm = new Button("确认");
-	Button btnInvalid = new Button("无效");
-	Button btnCancel = new Button("取消");
-	Button btnRemove = new Button("移除");
+	Button btnConfirm = new Button(Resources.constants.OrderList_confirm());
+	Button btnInvalid = new Button(Resources.constants.OrderList_invalid());
+	Button btnCancel = new Button(Resources.constants.OrderList_cancel());
+	Button btnRemove = new Button(Resources.constants.OrderList_remove());
 	
 	@Override
 	protected void onRender(Element parent, int index) {
@@ -451,7 +453,9 @@ public class OrderListPanel  extends ContentWidget{
 	}
 	
 	private void viewOrder(String id){
-		// TODO
+		OrderDetailPanel.State newState = new OrderDetailPanel.State();
+		newState.setPkId(id);
+		newState.execute();
 	}
 	
 }
