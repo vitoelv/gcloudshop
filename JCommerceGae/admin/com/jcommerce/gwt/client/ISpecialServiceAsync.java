@@ -49,5 +49,8 @@ public interface ISpecialServiceAsync {
     public void saveShopConfig(Map<String, BeanObject> formData, AsyncCallback<Boolean> callback);
 
     public void getAdminUserInfo(AsyncCallback<Map<String,String>> callback);
+    
+    public void deserialize(String serializedConfig, AsyncCallback<Map<String,String>> callback);
+    public void calculate(String shippingCode, Double goodsWeight, Double goodsAmount, Map<String, String> configValues, AsyncCallback<Double> callback);
 
 }

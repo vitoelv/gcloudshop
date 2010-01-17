@@ -40,5 +40,6 @@ public interface ModelNames {
     
     public static final String ADMINUSER = "com.jcommerce.core.model.AdminUser";
     public static final String ADMINACTION = "com.jcommerce.core.model.AdminAction";
+	public static final String ORDERACTION = "com.jcommerce.core.model.OrderAction";
 
 }

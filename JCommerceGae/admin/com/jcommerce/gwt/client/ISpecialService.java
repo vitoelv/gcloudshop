@@ -9,6 +9,7 @@ import com.extjs.gxt.ui.client.data.ListLoadConfig;
 import com.extjs.gxt.ui.client.data.ListLoadResult;
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
 import com.extjs.gxt.ui.client.data.PagingLoadResult;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.panels.system.PaymentConfigMetaForm;
@@ -46,6 +47,6 @@ public interface ISpecialService extends RemoteService {
     public SortedMap<Integer, List<BeanObject>> getCombinedShopConfigMetaMap();
     public Boolean saveShopConfig(Map<String, BeanObject> formData);
     public Map<String,String> getAdminUserInfo();
-
-    
+    public Map<String, String> deserialize(String serializedConfig);
+    public double calculate(String shippingCode, Double goodsWeight, Double goodsAmount, Map<String, String> configValues);
 }

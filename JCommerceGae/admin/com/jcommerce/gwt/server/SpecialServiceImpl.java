@@ -45,9 +45,11 @@ import com.jcommerce.core.service.payment.IPaymentMetaManager;
 import com.jcommerce.core.service.payment.PaymentConfigFieldMeta;
 import com.jcommerce.core.service.payment.PaymentConfigMeta;
 import com.jcommerce.core.service.shipping.IShippingMetaManager;
+import com.jcommerce.core.service.shipping.IShippingMetaPlugin;
 import com.jcommerce.core.service.shipping.ShippingAreaFieldMeta;
 import com.jcommerce.core.service.shipping.ShippingAreaMeta;
 import com.jcommerce.core.service.shipping.ShippingConfigMeta;
+import com.jcommerce.core.service.shipping.impl.BaseShippingMetaPlugin;
 import com.jcommerce.core.util.CommonUtil;
 import com.jcommerce.core.util.MyPropertyUtil;
 import com.jcommerce.gwt.client.ISpecialService;
@@ -91,6 +93,9 @@ public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecial
 	}
 	private IShippingMetaManager getShippingMetaManager() {
 		return (IShippingMetaManager)ctx.getBean("ShippingMetaManager");
+	}
+	private BaseShippingMetaPlugin getBaseShippingMetaPlugin() {
+		return (BaseShippingMetaPlugin)ctx.getBean("BaseShippingMetaPlugin");
 	}
 	@Override
 	public void init() {
@@ -598,6 +603,22 @@ public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecial
 			adminInfo.put( IComment.IP_ADDRESS,  (String)session.getAttribute(IAdminConstants.KEY_ADMIN_USERIP));
     		return adminInfo;
 		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+    }
+    public Map<String, String> deserialize(String serializedConfig) {
+    	try {
+    		return getBaseShippingMetaPlugin().deserialize(serializedConfig);
+    	} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		}
+    }
+    public double calculate(String shippingCode, Double goodsWeight, Double goodsAmount, Map<String, String> configValues) {
+    	try {
+    		return getShippingMetaManager().calculate(shippingCode, goodsWeight, goodsAmount, configValues);
+    	} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
