@@ -414,7 +414,7 @@ public class MergeOrderPanel extends ContentWidget {
 														caught.printStackTrace();
 														Window.alert("ERROR: "+caught.getMessage());
 													}
-													@Override
+
 													public void onSuccess(Map<String, String> shippingConfig) {
 
 														if(shippingConfig.containsKey("payFee")){
