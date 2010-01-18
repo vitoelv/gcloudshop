@@ -9,6 +9,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.jcommerce.core.annotation.IsPK;
+
 /**  
  * generated with my extension of middleGen 
  * @author <a href="http://code.google.com/p/gcloudshop/">Leon</a>
@@ -26,6 +28,7 @@ public class OrderGoods extends ModelObject implements Cloneable{
   @Persistent
   private java.lang.String recId; 
 
+  @IsPK(myclazz="com.jcommerce.core.model.OrderInfo")
   @Persistent
   private java.lang.String orderId; 
 
