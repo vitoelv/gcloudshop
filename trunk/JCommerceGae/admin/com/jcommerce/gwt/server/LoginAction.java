@@ -57,8 +57,8 @@ public class LoginAction extends HttpServlet {
     	Boolean isExist = false;
     	IDefaultManager manager = (IDefaultManager)SpringUtil.getDefaultManager();
     	Criteria criteria = new Criteria();
-    	criteria.addCondition(new Condition(IAdminConstants.KEY_ADMIN_USERID,Condition.EQUALS,name));
-    	criteria.addCondition(new Condition(IAdminConstants.KEY_ADMIN_USEREMAIL,Condition.EQUALS,password));
+    	criteria.addCondition(new Condition(IAdminUser.USER_NAME,Condition.EQUALS,name));
+    	criteria.addCondition(new Condition(IAdminUser.PASSWORD,Condition.EQUALS,password));
     	List res = manager.getList(ModelNames.ADMINUSER, criteria);
     	isExist = res.isEmpty()?false:true;
     	if(isExist){
