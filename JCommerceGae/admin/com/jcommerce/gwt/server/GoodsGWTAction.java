@@ -6,6 +6,10 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 
 import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.images.Image;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.Transform;
 import com.jcommerce.core.model.DSFile;
 import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.GoodsAttr;
@@ -111,20 +115,32 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
 	
 	public Goods form2To(Map<String, Object> form) {
 		Goods to = new Goods();
+		ImagesService imagesService = ImagesServiceFactory.getImagesService();
+		
 		
 		DSFile imageFile = null;
 		FileForm fileForm = (FileForm)form.get(IGoods.IMAGE);
+		Image image = null;
+		Transform resize = null;
+		Image newImage = null;
 		if(fileForm!=null) {
 			imageFile = getFile(fileForm);
     		form.put(IGoods.IMAGE, ((FileForm)form.get(IGoods.IMAGE)).getFileName());    			
 		}
 
-//		DSFile thumbFile = null;
-//		fileForm = (FileForm)form.get(IGoods.THUMB);
-//		if(fileForm!=null) {
-//			thumbFile = getFile(fileForm);
-//    		form.put(IGoods.THUMB, ((FileForm)form.get(IGoods.THUMB)).getFileName());
-//		}
+		DSFile thumbFile = null;
+		if(fileForm!=null) {
+			thumbFile = new DSFile();
+			
+			thumbFile.setFileName("thumb"+fileForm.getFileName());
+			thumbFile.setMimeType(fileForm.getMimeType());
+			
+			resize = ImagesServiceFactory.makeResize(100, 100);
+			newImage = imagesService.applyTransform(resize, image);
+			
+			thumbFile.setContent(new Blob(newImage.getImageData()));
+    		form.put(IGoods.GOODS_THUMB,thumbFile.getFileName());
+		}
 		
 		GoodsForm bean = new GoodsForm(Goods.class.getName(), form);
 		MyPropertyUtil.form2To(to, bean.getProperties());
@@ -143,7 +159,7 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
 		}
 		
 		to.setImageFile(imageFile);
-//		to.setThumbFile(thumbFile);
+		to.setThumbFile(thumbFile);
 
 		
 		Set<GoodsGallery> galleries = to.getGalleries();
@@ -165,6 +181,19 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
 					}
 					gallery.setImage(file.getFileName());
 					gallery.setImageFile(file);
+					
+					image = ImagesServiceFactory.makeImage(fileForm.getContent());
+					thumbFile = new DSFile();
+					thumbFile.setFileName("thumb"+fileForm.getFileName());
+					thumbFile.setMimeType(fileForm.getMimeType());
+					
+					resize = ImagesServiceFactory.makeResize(100, 100);
+					newImage = imagesService.applyTransform(resize, image);
+					
+					thumbFile.setContent(new Blob(newImage.getImageData()));
+					
+					gallery.setThumb(thumbFile.getFileName());
+					gallery.setThumbFile(thumbFile);
 					galleries.add(gallery);
 					} catch (Exception ex) {
 						// TODO find out the real cause of NPE

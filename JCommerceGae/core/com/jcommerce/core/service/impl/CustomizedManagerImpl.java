@@ -23,7 +23,6 @@ import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.CustomizedManager;
 import com.jcommerce.core.util.DataStoreUtils;
 import com.jcommerce.core.util.MyPropertyUtil;
-import com.jcommerce.core.util.UUIDHexGenerator;
 import com.jcommerce.core.util.UUIDLongGenerator;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.AttributeForm;
@@ -207,6 +206,13 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 				file.setKeyName(fkn);
 //				file.setId(fid);
 				gallery.setImageFileId(fid);
+				
+				DSFile thumbfile = gallery.getThumbFile();
+				String tfkn = DataStoreUtils.genKeyName(thumbfile);
+				String tfid = KeyFactory.keyToString(new KeyFactory.Builder("Goods",goodskn).addChild(GoodsGallery.class.getSimpleName(), gkn).addChild("DSFile", tfkn).getKey());
+				thumbfile.setKeyName(tfkn);				
+				gallery.setThumbFileId(tfid);
+				
 				gallery.setLongId(UUIDLongGenerator.newUUID());
 				
 			}
@@ -216,7 +222,7 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 				GoodsGallery gallery = (GoodsGallery)galleries.iterator().next();
 				to.setImageFileId(gallery.getImageFileId());
 				// TODO temporary
-				to.setThumbFileId(gallery.getImageFileId());
+				to.setThumbFileId(gallery.getThumbFileId());
 			}
 			
 			Set<GoodsAttr> gts = to.getAttributes();

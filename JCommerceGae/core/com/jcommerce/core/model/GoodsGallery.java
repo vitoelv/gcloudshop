@@ -29,12 +29,35 @@ public class GoodsGallery extends ModelObject {
     @Persistent
     @IsPK(myclazz="com.jcommerce.core.model.DSFile")
 	private String imageFileId;
-//    @Persistent
-//	private DSFile thumbFile;
-//    @Persistent
-//	private String thumbFileId;
+    @Persistent
+	private DSFile thumbFile;
+    @Persistent
+    @IsPK(myclazz="com.jcommerce.core.model.DSFile")
+	private String thumbFileId;
 	@Persistent
 	private String image;
+	public DSFile getThumbFile() {
+		return thumbFile;
+	}
+
+
+	public void setThumbFile(DSFile thumbFile) {
+		this.thumbFile = thumbFile;
+	}
+
+
+	public String getThumbFileId() {
+		return thumbFileId;
+	}
+
+
+	public void setThumbFileId(String thumbFileId) {
+		this.thumbFileId = thumbFileId;
+	}
+
+
+
+
 	@Persistent
 	private String thumb;
 	
