@@ -9,6 +9,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.jcommerce.core.model.AreaRegion;
 import com.jcommerce.core.model.Cart;
 import com.jcommerce.core.model.Constants;
@@ -106,7 +108,7 @@ public class LibOrder {
     	
     	// TODO 折扣  税额 包装费用  贺卡费用 红包 线下红包 
     	String shippingCodFee = null;
-        if( !"".equals(order.getShippingId()) && (total.getRealGoodsCount() > 0 )){
+        if( StringUtils.isNotEmpty(order.getShippingId()) && (total.getRealGoodsCount() > 0 )){
         	List<String> regionIdList = new ArrayList<String>();
         	regionIdList.add( (String)consignee.getCountry() );
         	regionIdList.add( (String)consignee.getProvince() );
@@ -156,7 +158,7 @@ public class LibOrder {
         /* 保存订单信息 */
         session.setAttribute("flowOrder", order);
         
-        if(order.getPayId()!= "" && total.getRealGoodsCount() > 0 ){
+        if( StringUtils.isNotEmpty(order.getPayId()) && total.getRealGoodsCount() > 0 ){
         	total.setPayFee(payFee(order.getPayId(),total.getAmount(),shippingCodFee,manager));
         }
                 
