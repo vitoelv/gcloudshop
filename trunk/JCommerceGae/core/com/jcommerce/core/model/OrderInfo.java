@@ -69,16 +69,16 @@ public class OrderInfo extends ModelObject implements Cloneable{
   private java.lang.String consignee; 
 
   @Persistent
-  private java.lang.Long country=0l; 
+  private java.lang.String country; 
 
   @Persistent
-  private java.lang.Long province=0l; 
+  private java.lang.String province; 
 
   @Persistent
-  private java.lang.Long city=0l; 
+  private java.lang.String city; 
 
   @Persistent
-  private java.lang.Long district=0l; 
+  private java.lang.String district; 
 
   @Persistent
   private java.lang.String address; 
@@ -313,41 +313,41 @@ public class OrderInfo extends ModelObject implements Cloneable{
 
 
 
-  public java.lang.Long getCountry() {
+  public java.lang.String getCountry() {
     return country;
   }
 
-  public void setCountry(java.lang.Long newCountry) {
+  public void setCountry(java.lang.String newCountry) {
     country = newCountry;
   }
 
 
 
-  public java.lang.Long getProvince() {
+  public java.lang.String getProvince() {
     return province;
   }
 
-  public void setProvince(java.lang.Long newProvince) {
+  public void setProvince(java.lang.String newProvince) {
     province = newProvince;
   }
 
 
 
-  public java.lang.Long getCity() {
+  public java.lang.String getCity() {
     return city;
   }
 
-  public void setCity(java.lang.Long newCity) {
+  public void setCity(java.lang.String newCity) {
     city = newCity;
   }
 
 
 
-  public java.lang.Long getDistrict() {
+  public java.lang.String getDistrict() {
     return district;
   }
 
-  public void setDistrict(java.lang.Long newDistrict) {
+  public void setDistrict(java.lang.String newDistrict) {
     district = newDistrict;
   }
 

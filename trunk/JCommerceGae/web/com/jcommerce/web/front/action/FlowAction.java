@@ -716,7 +716,7 @@ public class FlowAction extends BaseAction {
     		LibMain.showMessage(Lang.getInstance().getString("noGoodsInCart"), null, null, "info", true, request);
     		return "message";
     	}
-    	//TODO city 等地址类型错误 应为String 而不是Long
+    	
     	/* 收货人信息 */
     	order.setAddress(consignee.getUserAddress().getAddress());
     	order.setBestTime(consignee.getUserAddress().getBestTime());
@@ -724,10 +724,10 @@ public class FlowAction extends BaseAction {
     	order.setTel(consignee.getUserAddress().getTel());
     	order.setEmail(consignee.getUserAddress().getEmail());
     	order.setSignBuilding(consignee.getUserAddress().getSignBuilding());
-    	//order.setCountry(consignee.getUserAddress().getCountry());
-    	//order.setProvince(consignee.getUserAddress().getProvince());
-    	//order.setCity(consignee.getUserAddress().getCity());
-    	//order.setDistrict(consignee.getUserAddress().getDistrict());
+    	order.setCountry(consignee.getUserAddress().getCountry());
+    	order.setProvince(consignee.getUserAddress().getProvince());
+    	order.setCity(consignee.getUserAddress().getCity());
+    	order.setDistrict(consignee.getUserAddress().getDistrict());
     	order.setConsignee(consignee.getUserAddress().getConsignee());
     	order.setZipcode(consignee.getUserAddress().getZipcode());
     	
