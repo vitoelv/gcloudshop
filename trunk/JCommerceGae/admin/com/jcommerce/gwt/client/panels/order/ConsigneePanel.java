@@ -1,5 +1,6 @@
 package com.jcommerce.gwt.client.panels.order;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,15 +10,20 @@ import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedListener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
+import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.extjs.gxt.ui.client.widget.form.MultiField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.jcommerce.gwt.client.ModelNames;
+import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.GoodsForm;
 import com.jcommerce.gwt.client.form.UserAddressForm;
+import com.jcommerce.gwt.client.model.IOrderGoods;
 import com.jcommerce.gwt.client.model.IOrderInfo;
 import com.jcommerce.gwt.client.model.IRegion;
 import com.jcommerce.gwt.client.model.IUserAddress;
@@ -25,11 +31,14 @@ import com.jcommerce.gwt.client.panels.BaseEntityEditPanel;
 import com.jcommerce.gwt.client.panels.Success;
 import com.jcommerce.gwt.client.panels.goods.CategoryListPanel;
 import com.jcommerce.gwt.client.panels.goods.GoodsPanel;
+import com.jcommerce.gwt.client.panels.order.OrderDetailPanel.State;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.Condition;
 import com.jcommerce.gwt.client.service.Criteria;
+import com.jcommerce.gwt.client.service.DeleteService;
 import com.jcommerce.gwt.client.service.ListService;
 import com.jcommerce.gwt.client.service.ReadService;
+import com.jcommerce.gwt.client.service.RemoteService;
 import com.jcommerce.gwt.client.service.UpdateService;
 import com.jcommerce.gwt.client.util.FormUtils;
 
@@ -113,27 +122,66 @@ public class ConsigneePanel extends BaseEntityEditPanel {
 		formPanel.removeAll();
 		setupPanelLayout();
 		formPanel.layout();
+		
+		btnOk.setVisible(false);
+		btnPre.setVisible(false);
+		btnNext.setVisible(false);
+		if(getCurState().getIsEdit()) {
+			btnOk.setVisible(true);
+		}
+		else {
+			btnPre.setVisible(true);
+			btnNext.setVisible(true);			
+		}
 //		formPanel.repaint();
 	}
 	
 
 	@Override
 	protected void postSuperRefresh() {
-		
-
+		isChange = false;
 	}
+	
+	Button btnOk;
+	Button btnPre;
+	Button btnNext;
+	Button btnCancel;
 	@Override
     protected void afterRender() {
-		super.afterRender();
+//		super.afterRender();
 		//TODO 添加按钮
-//      super.add(formPanel);
-//      
-//      FormLayout fl = new FormLayout();
-//      fl.setLabelWidth(150);
-//      fl.setLabelPad(50);
-//      formPanel.setLayout(fl);
-//      setupPanelLayout();
+      super.add(formPanel);
+      
+      FormLayout fl = new FormLayout();
+      fl.setLabelWidth(150);
+      fl.setLabelPad(50);
+      formPanel.setLayout(fl);
+      setupPanelLayout();
      
+      btnOk = new Button("确定");
+      btnOk.addSelectionListener(selectionListener);
+      btnPre = new Button("上一步", new SelectionListener<ButtonEvent>() {
+		public void componentSelected(ButtonEvent ce) {
+			OrderGoodsPanel.State newState = new OrderGoodsPanel.State();
+			newState.setIsEdit(false);
+			newState.setUserId(getCurState().getUserId());
+			newState.setPkId(getCurState().getOrderId());
+			newState.execute();
+		}
+      });
+      btnNext = new Button("下一步");
+      btnNext.addSelectionListener(selectionListener);
+      btnCancel = new Button("取消", new SelectionListener<ButtonEvent>() {
+		public void componentSelected(ButtonEvent ce) {
+			cancel();
+		}
+      });
+      
+      formPanel.setButtonAlign(HorizontalAlignment.CENTER);
+      formPanel.addButton(btnOk);
+      formPanel.addButton(btnPre);
+      formPanel.addButton(btnNext);
+      formPanel.addButton(btnCancel);
       
 	}
 	ComboBox<BeanObject> uaList;
@@ -449,6 +497,9 @@ public class ConsigneePanel extends BaseEntityEditPanel {
     	Map<String, Object> props = FormUtils.getPropsFromForm(formPanel);
 		return UserAddressForm.validate(props);
 	}
+	
+	boolean isChange = false;
+	boolean isIncrease = false;
 	@Override
     protected void submit() {
 		if(getCurState().getOrderId() == null){
@@ -470,13 +521,75 @@ public class ConsigneePanel extends BaseEntityEditPanel {
 				bean.set(IOrderInfo.SIGN_BUILDING, fSignBuilding.getValue());
 				bean.set(IOrderInfo.BEST_TIME, fBestTime.getValue());
 				new UpdateService().updateBean(getCurState().getOrderId(), bean, new UpdateService.Listener(){
-
 					@Override
 					public void onSuccess(Boolean success) {
-						//TODO 跳转到下一页面
-						gotoSuccessPanel();
-					}
-					
+						if(getCurState().getIsEdit()) {
+							new ReadService().getBean(ModelNames.ORDERINFO, getCurState().getOrderId(), new ReadService.Listener() {
+								public void onSuccess(final BeanObject bean) {
+									new RemoteService().getSpecialService().getOrderFee(getCurState().getPkId(), null, null, new AsyncCallback<Map<String, Object>>() {
+
+										public void onFailure(Throwable caught) {
+											caught.printStackTrace();
+											Window.alert("ERROR: "+caught.getMessage());
+										}
+
+										@Override
+										public void onSuccess(Map<String, Object> result) {
+											if(getCurState().getIsEdit()) {
+												//判断金额是否改变
+												if((Long)bean.get(IOrderInfo.PAY_STATUS) == IOrderInfo.PS_PAYED && (Double)bean.get(IOrderInfo.ORDER_AMOUNT) != (Double)result.get("amount")) {
+													isChange = true;
+													if((Double)bean.get(IOrderInfo.ORDER_AMOUNT) > (Double)result.get("amount"))
+														isIncrease = false;
+													else {
+														isIncrease = true;
+														bean.set(IOrderInfo.PAY_STATUS, IOrderInfo.PS_UNPAYED);
+													}
+												}
+												
+												bean.set(IOrderInfo.ORDER_AMOUNT, result.get("amount"));
+												bean.set(IOrderInfo.SHIPPING_FEE, result.get("shippingFee"));
+												bean.set(IOrderInfo.PAY_FEE, result.get("payFee"));
+											}
+											new UpdateService().updateBean(getCurState().getPkId(), bean, new UpdateService.Listener() {
+												public void onSuccess(Boolean success) {
+													if(!isChange) {
+														OrderDetailPanel.State newState = new OrderDetailPanel.State();
+														newState.setPkId(getCurState().getPkId());
+														newState.execute();
+													}
+													else if(isIncrease) {
+														Success.State newState = new Success.State();
+												    	newState.setMessage(Resources.constants.OrderDetail_orderAmountIncrease());
+												    	OrderDetailPanel.State choice1 = new OrderDetailPanel.State();
+												    	choice1.setPkId(getCurState().getPkId());
+												    	newState.addChoice(OrderDetailPanel.getInstance().getName(), choice1.getFullHistoryToken());
+														newState.execute();
+													}
+													else {
+														Success.State newState = new Success.State();
+												    	newState.setMessage(Resources.constants.OrderDetail_orderAmountDecrease());
+												    	OrderDetailPanel.State choice1 = new OrderDetailPanel.State();
+												    	choice1.setPkId(getCurState().getPkId());
+												    	newState.addChoice(OrderDetailPanel.getInstance().getName(), choice1.getFullHistoryToken());
+														newState.execute();
+													}
+												}
+												
+											});
+										}						
+									});
+								}
+							});
+						}
+						else {
+							OrderShippingPanel.State newState = new OrderShippingPanel.State();
+							newState.setIsEdit(false);
+							newState.setUserId(getCurState().getUserId());
+							newState.setPkId(getCurState().getOrderId());
+							newState.execute();
+						}
+					}					
 				});
 				
 	        }
@@ -485,6 +598,26 @@ public class ConsigneePanel extends BaseEntityEditPanel {
 	        }
 		});
 		
+	}
+	
+	private void cancel() {
+		if(getCurState().getIsEdit()) {
+			OrderDetailPanel.State newState = new OrderDetailPanel.State();
+			newState.setPkId(getCurState().getPkId());
+			newState.execute();
+		}
+		else {
+			//删除订单及订单商品
+			new RemoteService().getSpecialService().deleteOrder(getCurState().getOrderId(), new AsyncCallback<Boolean>(){
+				public void onFailure(Throwable caught) {
+				}
+				@Override
+				public void onSuccess(Boolean result) {
+				}
+			});
+			OrderListPanel.State newState = new OrderListPanel.State();
+			newState.execute();			
+		}
 	}
 
 }

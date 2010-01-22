@@ -1,7 +1,11 @@
 package com.jcommerce.gwt.client.panels.order;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.data.BasePagingLoader;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
@@ -22,9 +26,13 @@ import com.extjs.gxt.ui.client.widget.grid.Grid;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.toolbar.PagingToolBar;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.ext.linker.LinkerOrder.Order;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.Messages;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
@@ -32,13 +40,22 @@ import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.BeanObject;
+import com.jcommerce.gwt.client.model.IAdminUser;
+import com.jcommerce.gwt.client.model.IOrderAction;
+import com.jcommerce.gwt.client.model.IOrderGoods;
 import com.jcommerce.gwt.client.model.IOrderInfo;
+import com.jcommerce.gwt.client.panels.Success;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.Condition;
+import com.jcommerce.gwt.client.service.CreateService;
 import com.jcommerce.gwt.client.service.Criteria;
 import com.jcommerce.gwt.client.service.DeleteService;
+import com.jcommerce.gwt.client.service.ListService;
 import com.jcommerce.gwt.client.service.PagingListService;
+import com.jcommerce.gwt.client.service.ReadService;
+import com.jcommerce.gwt.client.service.RemoteService;
 import com.jcommerce.gwt.client.service.UpdateService;
+import com.jcommerce.gwt.client.service.WaitService;
 import com.jcommerce.gwt.client.util.MyRpcProxy;
 import com.jcommerce.gwt.client.widgets.ActionCellRenderer;
 import com.jcommerce.gwt.client.widgets.ConsigneeCellRenderer;
@@ -69,6 +86,11 @@ public class OrderListPanel  extends ContentWidget{
 		String OrderList_remove();
     }
 
+	public interface Message extends Messages {
+		String OrderList_operateSuccessfully(String orderSn);
+		String OrderList_operateFail(String orderSn);
+	}
+	
 	private static OrderListPanel instance = null;
 	private State curState = new State();
 
@@ -158,6 +180,11 @@ public class OrderListPanel  extends ContentWidget{
 	Button btnInvalid = new Button(Resources.constants.OrderList_invalid());
 	Button btnCancel = new Button(Resources.constants.OrderList_cancel());
 	Button btnRemove = new Button(Resources.constants.OrderList_remove());
+	SelectionListener<ButtonEvent> selectionListener = new SelectionListener<ButtonEvent>() {
+	    public void componentSelected(ButtonEvent sender) {
+	    	operate(sender);
+	    }
+	};
 	
 	@Override
 	protected void onRender(Element parent, int index) {
@@ -175,12 +202,16 @@ public class OrderListPanel  extends ContentWidget{
 		smRowSelection.addSelectionChangedListener(new SelectionChangedListener<BeanObject>() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent<BeanObject> se) {
-				List selection = se.getSelection();
+				orders = new ArrayList<String>();
+				List<BeanObject> selection = se.getSelection();
 				if(selection.size() > 0) {
 					btnConfirm.setEnabled(true);
 					btnInvalid.setEnabled(true);
 					btnCancel.setEnabled(true);
 					btnRemove.setEnabled(true);
+					for(BeanObject bean : selection) {
+						orders.add((String) bean.get(IOrderInfo.PK_ID));
+					}
 				}
 				else {
 					btnConfirm.setEnabled(false);
@@ -214,7 +245,7 @@ public class OrderListPanel  extends ContentWidget{
 		columns.add(shouldPayAmountCol);
 		
 		orderStateCol = new ColumnConfig(IOrderInfo.ORDER_STATUS, Resources.constants.OrderList_state(), 100);
-		orderStateCol.setRenderer(new OrderStateCellRenderer());
+		orderStateCol.setRenderer(new OrderStateCellRenderer(null));
 		columns.add(orderStateCol);
 		
 		ColumnConfig actcol = new ColumnConfig("Action", Resources.constants.OrderList_action(), 100);
@@ -233,11 +264,6 @@ public class OrderListPanel  extends ContentWidget{
 		act.setImage(GWT.getModuleBaseURL()+"icon_edit.gif");
 		act.setAction("viewOrder($pkId)");
 		act.setTooltip(Resources.constants.edit());
-		render.addAction(act);
-		act = new ActionCellRenderer.ActionInfo();		
-		act.setImage(GWT.getModuleBaseURL()+"icon_trash.gif");
-		act.setAction("deleteOrder($pkId)");
-		act.setTooltip(Resources.constants.delete());
 		render.addAction(act);
 
 		actcol.setRenderer(render);
@@ -313,13 +339,16 @@ public class OrderListPanel  extends ContentWidget{
 
 		panel.setButtonAlign(HorizontalAlignment.LEFT);
 		panel.addButton(btnConfirm);
-		panel.addButton(btnInvalid);
-		panel.addButton(btnCancel);
-		panel.addButton(btnRemove);
-		
+		btnConfirm.addSelectionListener(selectionListener);
 		btnConfirm.setEnabled(false);
+		panel.addButton(btnInvalid);
+		btnInvalid.addSelectionListener(selectionListener);
 		btnInvalid.setEnabled(false);
+		panel.addButton(btnCancel);
+		btnCancel.addSelectionListener(selectionListener);
 		btnCancel.setEnabled(false);
+		panel.addButton(btnRemove);	
+		btnRemove.addSelectionListener(selectionListener);	
 		btnRemove.setEnabled(false);
 		
 		add(panel);
@@ -381,6 +410,21 @@ public class OrderListPanel  extends ContentWidget{
 	public void refresh() {
 		refreshOrderList();
 		toolBar.refresh();
+		//获得管理员用户名
+		RemoteService.getSpecialService().getAdminUserInfo(new AsyncCallback<Map<String,String>>(){
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void onSuccess(Map<String, String> result) {
+				adminUserName = result.get(IAdminUser.USER_NAME);
+			}
+		});
+		btnConfirm.setEnabled(false);
+		btnInvalid.setEnabled(false);
+		btnCancel.setEnabled(false);
+		btnRemove.setEnabled(false);
 	}
 	
 	private void refreshOrderList() {
@@ -420,38 +464,186 @@ public class OrderListPanel  extends ContentWidget{
 				listener);
 	}
 	
+	List<String> orders;//要操作的订单列表
+	List<String> fail;//不能执行操作的订单
+	List<String> success = new ArrayList<String>();
+	//订单操作
+	private void operate(ButtonEvent sender) {
+		fail = new ArrayList<String>();
+		success = new ArrayList<String>();
+		operateReady = false;
+		
+		if(sender.getButton().equals(btnConfirm)) {
+			for(String orderId : orders) {
+				confirmOrder(orderId);
+			}
+		} 
+		else if(sender.getButton().equals(btnCancel)) {
+			for(String orderId : orders) {
+				cancelOrder(orderId);
+			}
+		}
+		else if(sender.getButton().equals(btnInvalid)) {
+			for(String orderId : orders) {
+				invalidOrder(orderId);
+			}
+		}
+		else {
+			for(String orderId : orders) {
+				removeOrder(orderId);
+			}
+		}
+		new WaitService(new WaitService.Job() {
+			public boolean isReady() {
+				if(!operateReady) {
+					return false;
+				}
+				else {
+					return true;
+				}
+			}
+			public void run() {
+				gotoSuccessPage();
+			}
+		});
+	}
+	
+	private void gotoSuccessPage() {
+		Success.State newState = new Success.State();
+		if(fail.size() > 0) {
+			String orderSns = "";
+			for(String orderSn : fail) {
+				orderSns = orderSns + orderSn + ",";
+			}
+			newState.setMessage(Resources.messages.OrderList_operateFail(orderSns));
+		}
+		else {
+			String orderSns = "";
+			for(String orderSn : success) {
+				orderSns = orderSns + orderSn + ",";
+			}
+			newState.setMessage(Resources.messages.OrderList_operateSuccessfully(orderSns));
+		}
+    	OrderListPanel.State choice1 = new OrderListPanel.State();
+    	newState.addChoice(OrderListPanel.getInstance().getName(), choice1.getFullHistoryToken());
+		newState.execute();
+	}
+
+	boolean operateReady;
+	private void invalidOrder(final String orderId) {
+		// 状态：已确认&&未付款&&未发货（或配货中） || 未确认
+		new ReadService().getBean(ModelNames.ORDERINFO, orderId, new ReadService.Listener() {
+			public void onSuccess(BeanObject bean) {
+				long orderStatus = bean.get(IOrderInfo.ORDER_STATUS);
+				long payStatus = bean.get(IOrderInfo.PAY_STATUS);
+				long shippingStatus = bean.get(IOrderInfo.SHIPPING_STATUS);
+				if(orderStatus == IOrderInfo.OS_UNCONFIRMED ||
+					(orderStatus == IOrderInfo.OS_CONFIRMED && payStatus == IOrderInfo.PS_UNPAYED && 
+						(IOrderInfo.SS_UNSHIPPED == shippingStatus || IOrderInfo.SS_PREPARING == shippingStatus))) {
+
+					bean.set(IOrderInfo.ORDER_STATUS, IOrderInfo.OS_INVALID);
+					bean.set(IOrderInfo.PAY_STATUS, IOrderInfo.PS_UNPAYED);
+					new UpdateService().updateBean(orderId, bean, null);
+					success.add((String) bean.get(IOrderInfo.ORDER_SN));
+				}
+				else {
+					fail.add((String) bean.get(IOrderInfo.ORDER_SN));
+				}
+				operateReady = true;
+			}
+		});
+	}
+
+	private void removeOrder(final String orderId) {
+		//状态：无效 ||取消
+		new ReadService().getBean(ModelNames.ORDERINFO, orderId, new ReadService.Listener() {
+			public void onSuccess(BeanObject bean) {
+				long orderStatus = bean.get(IOrderInfo.ORDER_STATUS);
+				if(orderStatus == IOrderInfo.OS_INVALID || orderStatus == IOrderInfo.OS_CANCELED) {
+					new RemoteService().getSpecialService().deleteOrder(orderId, new AsyncCallback<Boolean>(){
+						public void onFailure(Throwable caught) {
+						}
+						@Override
+						public void onSuccess(Boolean result) {
+						}
+					});
+					success.add((String) bean.get(IOrderInfo.ORDER_SN));
+				}
+				else {
+					fail.add((String) bean.get(IOrderInfo.ORDER_SN));
+				}
+				operateReady = true;
+			}
+		});
+	}
+
+	private void cancelOrder(final String orderId) {
+		//状态：未确认 || 已确认&&未发货（或配货中）
+		new ReadService().getBean(ModelNames.ORDERINFO, orderId, new ReadService.Listener() {
+			public void onSuccess(BeanObject bean) {
+				long orderStatus = bean.get(IOrderInfo.ORDER_STATUS);
+				long payStatus = bean.get(IOrderInfo.PAY_STATUS);
+				long shippingStatus = bean.get(IOrderInfo.SHIPPING_STATUS);
+				if(orderStatus == IOrderInfo.OS_UNCONFIRMED ||
+					(orderStatus == IOrderInfo.OS_CONFIRMED && 
+						(IOrderInfo.SS_UNSHIPPED == shippingStatus || IOrderInfo.SS_PREPARING == shippingStatus))) {
+					/*标记订单为取消，未付款*/
+					bean.set(IOrderInfo.ORDER_STATUS, IOrderInfo.OS_CANCELED);
+					bean.set(IOrderInfo.PAY_STATUS, IOrderInfo.PS_UNPAYED);
+					bean.set(IOrderInfo.PAY_TIME, 0);
+					bean.set(IOrderInfo.ORDER_AMOUNT, bean.get(IOrderInfo.MONEY_PAID));
+					bean.set(IOrderInfo.MONEY_PAID, 0);
+					new UpdateService().updateBean(orderId, bean, null);
+					success.add((String) bean.get(IOrderInfo.ORDER_SN));
+				}
+				else {
+					fail.add((String) bean.get(IOrderInfo.ORDER_SN));
+				}
+				operateReady = true;
+			}
+		});
+	}
+
+	private void confirmOrder(final String orderId) {
+		//状态：！确认
+		new ReadService().getBean(ModelNames.ORDERINFO, orderId, new ReadService.Listener() {
+			public void onSuccess(BeanObject bean) {
+				long orderStatus = bean.get(IOrderInfo.ORDER_STATUS);
+				if(orderStatus != IOrderInfo.OS_CONFIRMED) {
+					bean.set(IOrderInfo.ORDER_STATUS, IOrderInfo.OS_CONFIRMED);
+					new UpdateService().updateBean(orderId, bean, null);
+					addOrderAction(orderId, bean);
+					success.add((String) bean.get(IOrderInfo.ORDER_SN));
+				}
+				else {
+					fail.add((String) bean.get(IOrderInfo.ORDER_SN));
+				}
+				operateReady = true;
+			}
+		});
+	}
+	
+	String adminUserName;
+	protected void addOrderAction(String orderId, BeanObject orderInfo) {
+		long logTime = new Date().getTime();
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put(IOrderAction.ORDER_ID, orderId);
+		props.put(IOrderAction.ORDER_STATUS, orderInfo.get(IOrderInfo.ORDER_STATUS));
+		props.put(IOrderAction.PAY_STATUS, orderInfo.get(IOrderInfo.PAY_STATUS));
+		props.put(IOrderAction.SHIPPING_STATUS, orderInfo.get(IOrderInfo.SHIPPING_STATUS));
+		props.put(IOrderAction.LOG_TIME, logTime);
+		props.put(IOrderAction.ACTION_USER, adminUserName);
+		
+		BeanObject form = new BeanObject(ModelNames.ORDERACTION, props);
+		new CreateService().createBean(form, null);
+	}
+
 	private native void initJS(OrderListPanel me) /*-{
-	   $wnd.deleteOrder = function (id) {
-	       me.@com.jcommerce.gwt.client.panels.order.OrderListPanel::deleteOrder(Ljava/lang/String;)(id);
-	   };
 	   $wnd.viewOrder = function (id) {
 	       me.@com.jcommerce.gwt.client.panels.order.OrderListPanel::viewOrder(Ljava/lang/String;)(id);
 	   };
 	   }-*/;
 
-	private void deleteOrder(final String id){
-		MessageBox.confirm(Resources.constants.deleteConfirmTitle(), Resources.constants.deleteConfirmContent(), new com.extjs.gxt.ui.client.event.Listener<MessageBoxEvent>() {  
-        	public void handleEvent(MessageBoxEvent ce) {  
-                Button btn = ce.getButtonClicked(); 
-                if ( btn.getItemId().equals("yes")){
-                	new DeleteService().deleteBean(ModelNames.ORDERINFO, id, new DeleteService.Listener() {
-            			public void onSuccess(Boolean success) {
-            	        	if(success) {
-            	        		Info.display(Resources.constants.OperationSuccessful(), Resources.constants.CommentList_deleteSuccessfully());
-            	        	} else {
-            	        		Info.display(Resources.constants.OperationFailure(), Resources.constants.CommentList_deleteFailure());
-            	        	}
-            	    		refresh();
-            	        }
-            	        public void onFailure(Throwable caught) {
-            	        	Info.display(Resources.constants.OperationFailure(), Resources.constants.CommentList_deleteFailure());
-            	        };
-            		});
-                }
-              }  
-            });  
-	}
-	
 	private void viewOrder(String id){
 		OrderDetailPanel.State newState = new OrderDetailPanel.State();
 		newState.setPkId(id);

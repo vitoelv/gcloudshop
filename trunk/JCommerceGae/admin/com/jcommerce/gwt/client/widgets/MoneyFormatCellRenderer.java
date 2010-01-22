@@ -10,16 +10,27 @@ import com.jcommerce.gwt.client.model.IOrderInfo;
 
 public class MoneyFormatCellRenderer implements GridCellRenderer<BeanObject> {
     
-	GridView view;    
+	GridView view;   
+	double money = Double.MIN_VALUE;
 
 	public Object render(BeanObject model, String property, ColumnData config,
 			final int rowIndex, final int colIndex, ListStore<BeanObject> store,
 			Grid<BeanObject> grid) {   
-		if(property.equals("totalAmount")){
-			double totalAmount = (Double)model.get(IOrderInfo.GOODS_AMOUNT)+(Double)model.get(IOrderInfo.PAY_FEE)+(Double)model.get(IOrderInfo.SHIPPING_FEE);
-			return "￥" + totalAmount;
+		if(money != Double.MIN_VALUE) {
+			return "￥" + money;
 		}
-		return "￥" + model.getString(property);
+		else {
+			if(property.equals("totalAmount")){
+				double totalAmount = (Double)model.get(IOrderInfo.GOODS_AMOUNT)+(Double)model.get(IOrderInfo.PAY_FEE)+(Double)model.get(IOrderInfo.SHIPPING_FEE)
+										+ (Double)model.get(IOrderInfo.INSURE_FEE);
+				return "￥" + totalAmount;
+			}
+			return "￥" + model.getString(property);
+		}
+	}
+	
+	public void setMoney(double money) {
+		this.money = money;
 	}
 }
 

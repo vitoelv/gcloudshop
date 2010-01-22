@@ -43,9 +43,14 @@ import com.jcommerce.gwt.client.panels.goods.GoodsTypePanel;
 import com.jcommerce.gwt.client.panels.member.ShippingAddressPanel;
 import com.jcommerce.gwt.client.panels.member.UserListPanel;
 import com.jcommerce.gwt.client.panels.member.UserPanel;
+import com.jcommerce.gwt.client.panels.order.ConsigneePanel;
 import com.jcommerce.gwt.client.panels.order.MergeOrderPanel;
 import com.jcommerce.gwt.client.panels.order.OrderDetailPanel;
+import com.jcommerce.gwt.client.panels.order.OrderFeePanel;
+import com.jcommerce.gwt.client.panels.order.OrderGoodsPanel;
 import com.jcommerce.gwt.client.panels.order.OrderListPanel;
+import com.jcommerce.gwt.client.panels.order.OrderPayPanel;
+import com.jcommerce.gwt.client.panels.order.OrderShippingPanel;
 import com.jcommerce.gwt.client.panels.order.OrderUserPanel;
 import com.jcommerce.gwt.client.panels.order.SearchOrderPanel;
 import com.jcommerce.gwt.client.panels.privilege.AdminListPanel;
@@ -449,6 +454,16 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 				page = RegionPanel.getInstance();
 			} else if (pageClassName.equals(OrderUserPanel.class.getName())) {
 				page = OrderUserPanel.getInstance();
+			} else if (pageClassName.equals(OrderGoodsPanel.class.getName())) {
+				page = OrderGoodsPanel.getInstance();
+			} else if (pageClassName.equals(OrderShippingPanel.class.getName())) {
+				page = OrderShippingPanel.getInstance();
+			}  else if (pageClassName.equals(ConsigneePanel.class.getName())) {
+				page = ConsigneePanel.getInstance();
+			} else if (pageClassName.equals(OrderPayPanel.class.getName())) {
+				page = OrderPayPanel.getInstance();
+			} else if (pageClassName.equals(OrderFeePanel.class.getName())) {
+				page = OrderFeePanel.getInstance();
 			} else if (pageClassName.equals(OrderListPanel.class.getName())) {
 				page = OrderListPanel.getInstance();			
 			} else if (pageClassName.equals(SearchOrderPanel.class.getName())) {

@@ -1,38 +1,22 @@
 package com.jcommerce.gwt.client.panels.member;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
-import com.extjs.gxt.ui.client.store.ListStore;
-import com.extjs.gxt.ui.client.store.Record;
-import com.extjs.gxt.ui.client.store.StoreEvent;
-import com.extjs.gxt.ui.client.store.StoreListener;
 import com.extjs.gxt.ui.client.widget.button.Button;
-import com.extjs.gxt.ui.client.widget.form.ComboBox;
 import com.extjs.gxt.ui.client.widget.form.DateField;
 import com.extjs.gxt.ui.client.widget.form.DateTimePropertyEditor;
-import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.NumberField;
 import com.extjs.gxt.ui.client.widget.form.Radio;
 import com.extjs.gxt.ui.client.widget.form.RadioGroup;
 import com.extjs.gxt.ui.client.widget.form.TextField;
-import com.extjs.gxt.ui.client.widget.form.TimeField;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Widget;
-import com.jcommerce.core.model.UserRank;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BeanObject;
-import com.jcommerce.gwt.client.form.GoodsForm;
 import com.jcommerce.gwt.client.form.UserForm;
-import com.jcommerce.gwt.client.model.IModelObject;
 import com.jcommerce.gwt.client.model.IUser;
-import com.jcommerce.gwt.client.model.IUserRank;
 import com.jcommerce.gwt.client.panels.BaseEntityEditPanel;
 import com.jcommerce.gwt.client.panels.Success;
 import com.jcommerce.gwt.client.resources.Resources;
@@ -323,6 +307,10 @@ public class UserPanel extends BaseEntityEditPanel {
 		Map<String, Object> props = FormUtils.getPropsFromForm(formPanel);
 		Map<String, Object> mapAttribute = obj.getProperties();
 		Date lastTime = (Date) mapAttribute.get("lastTime");
+		//注册时间
+		if(lastTime == null) {
+			lastTime = new Date();
+		}
 		props.put("lastTime", lastTime);
 		
     	BeanObject form = new BeanObject(getEntityClassName(), props);
