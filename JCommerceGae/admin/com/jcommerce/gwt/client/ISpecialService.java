@@ -49,4 +49,11 @@ public interface ISpecialService extends RemoteService {
     public Map<String,String> getAdminUserInfo();
     public Map<String, String> deserialize(String serializedConfig);
     public double calculate(String shippingCode, Double goodsWeight, Double goodsAmount, Map<String, String> configValues);
+    public Map<String, Map<String, String>> getAttributeMap(String id);
+    public Map<String, String> getShippingConfig(String shippingId);
+//    public Map<String, String> getShippingFee(String userId, String shippingId, String orderId);
+//    public Map<String, Object> getPayFee(String payId, String orderId, String userId);
+    public Map<String, Object> getOrderFee(String orderId, String shipping, String payId);
+    public boolean deleteOrder(String orderId);
+    public boolean mergeOrder(String fromId, String toId);
 }

@@ -28,6 +28,7 @@ import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.BeanObject;
+import com.jcommerce.gwt.client.model.IAdminUser;
 import com.jcommerce.gwt.client.model.IAreaRegion;
 import com.jcommerce.gwt.client.model.IGoods;
 import com.jcommerce.gwt.client.model.IOrderGoods;
@@ -59,6 +60,7 @@ public class MergeOrderPanel extends ContentWidget {
         String MergeOrder_differentUsers();
         String MergeOrder_sameOrder();
         String MergeOrder_success();
+        String MergeOrder_fail();
     }
 	public interface MergeOrderMessage extends Messages {
 		String MergeOrder_wrongOrder(String orderSn);
@@ -192,304 +194,20 @@ public class MergeOrderPanel extends ContentWidget {
 	List<String> regionIdList;
 	//合并订单
 	protected void mergeOrder() {
-		long addTime = new Date().getTime();
-		mainOrder.set(IOrderInfo.ADD_TIME, addTime);
-		//mainOrder.set(IOrderInfo.PK_ID, "");
-		double mainOrderAmount = mainOrder.get(IOrderInfo.GOODS_AMOUNT);
-		double subOrderAmount = subOrder.get(IOrderInfo.GOODS_AMOUNT);
-		double totalAmount = mainOrderAmount + subOrderAmount;
-		mainOrder.set(IOrderInfo.GOODS_AMOUNT, totalAmount);
-		
-		getWeightPrice((String)subOrder.get(IOrderInfo.PK_ID), (String)mainOrder.get(IOrderInfo.PK_ID));
-		
-		new WaitService(new WaitService.Job() {
-			public boolean isReady() {
-				if(orderGoods.size() < 2) {
-					return false;
-				}
-				else
-					return true;
+		new RemoteService().getSpecialService().mergeOrder((String)subOrder.get(IOrderInfo.PK_ID), (String)mainOrder.get(IOrderInfo.PK_ID), new AsyncCallback<Boolean>(){
+			public void onFailure(Throwable caught) {
 			}
-
-			public void run() {
-				for(Iterator iterator = orderGoods.iterator(); iterator.hasNext();) {
-					BeanObject orderGood = (BeanObject)iterator.next();
-					String goodsId = orderGood.get(IOrderGoods.GOODS_ID);
-					new ReadService().getBean(ModelNames.GOODS, goodsId, new ReadService.Listener() {
-						public void onSuccess(BeanObject bean) {
-							weight += (Double)bean.get(IGoods.GOODS_WEIGHT);
-						}
-					});					
-					
-					number += (Long)(orderGood.get(IOrderGoods.GOODS_NUMBER));
-					amount += (Double)(orderGood.get(IOrderGoods.GOODS_PRICE)) * (Long)(orderGood.get(IOrderGoods.GOODS_NUMBER));
-				}
-
-				String formatedWeight;
-				Long newWeight = Math.round(weight);
-				if( newWeight > 0 ){
-					if( newWeight < 1 ){
-						formatedWeight = newWeight.intValue() * 1000 + "克";
-					}
-					else{
-						formatedWeight = newWeight.intValue() + "千克";
-					}
-				}
-				else{
-					formatedWeight = "0";
-				}
-				weightPrice.put("weight", new Double(weight));
-				weightPrice.put("number", new Double(number) );
-				weightPrice.put("amount", new Double(amount) );
-				weightPrice.put("formatedWeight", formatedWeight );				
-
-		    	regionIdList = new ArrayList<String>();
-	        	regionIdList.add( String.valueOf(mainOrder.get(IOrderInfo.COUNTRY)) );
-	        	regionIdList.add( String.valueOf(mainOrder.get(IOrderInfo.PROVINCE)) );
-	        	regionIdList.add( String.valueOf(mainOrder.get(IOrderInfo.CITY)) );
-	        	regionIdList.add( String.valueOf(mainOrder.get(IOrderInfo.DISTRICT)));
-	        	
-				if(mainOrder.get(IOrderInfo.SHIPPING_ID) != null) {
-					//shippingAreaInfo((String)mainOrder.get(IOrderInfo.SHIPPING_ID),regionIdList);
-					shippingAreaInfoIsReady = true;					
+			@Override
+			public void onSuccess(Boolean result) {
+				if(result) {
+					Window.alert(Resources.constants.MergeOrder_success());
+					refresh();
 				}
 				else {
-					shippingAreaInfoIsReady = true;
-				}
-				
-				new WaitService(new WaitService.Job() {
-					public boolean isReady() {
-						if(!shippingAreaInfoIsReady) {
-							return false;
-						}
-						else
-							return true;
-					}
-
-					public void run() {
-						shippingAreaInfoIsReady = false;
-						if(mainOrder.get(IOrderInfo.SHIPPING_ID) != null) {
-							// 重新计算配送费用   	
-				        	if(!shippingAreaInfo.isEmpty()){
-				        		RemoteService.getSpecialService().calculate((String)shippingAreaInfo.get("shippingCode"),(Double)weightPrice.get("weight"),(Double)weightPrice.get("amount"),(Map<String, String>)shippingAreaInfo.get("configure"), 
-				        		    new AsyncCallback<Double>(){
-									public void onFailure(Throwable caught) {
-										caught.printStackTrace();
-										Window.alert("ERROR: "+caught.getMessage());
-									}
-									public void onSuccess(Double result) {
-										mainOrder.set(IOrderInfo.SHIPPING_FEE, result);
-									}
-								});
-					        	if( ( (Double)(mainOrder.get(IOrderInfo.INSURE_FEE)) != 0 ) && (Integer.parseInt((String)shippingAreaInfo.get("insure")) > 0 )){
-					        		mainOrder.set(IOrderInfo.INSURE_FEE, shippingInsureFee( (Double)weightPrice.get("amount") , (String)shippingAreaInfo.get("insure")));
-				        		}
-					        	else{
-					        		mainOrder.set(IOrderInfo.INSURE_FEE, 0.0);
-				        		}
-					        	if((Boolean)shippingAreaInfo.get("supportCod")){
-				        			shippingCodFee = ((Double)shippingAreaInfo.get("payFee")).toString();
-				        		}
-				        	}
-						}		
-						
-						// 合并余额、已付款金额
-						mainOrder.set(IOrderInfo.SURPLUS, (Double)(mainOrder.get(IOrderInfo.SURPLUS)) + (Double)(subOrder.get(IOrderInfo.SURPLUS)));
-						mainOrder.set(IOrderInfo.MONEY_PAID, (Double)(mainOrder.get(IOrderInfo.MONEY_PAID)) + (Double)(mainOrder.get(IOrderInfo.MONEY_PAID)));
-						if(mainOrder.get(IOrderInfo.PAY_ID)!= ""){					
-							payFee((String)mainOrder.get(IOrderInfo.PAY_ID), (Double)mainOrder.get(IOrderInfo.GOODS_AMOUNT),shippingCodFee);
-							new WaitService(new WaitService.Job() {
-								public boolean isReady() {
-									if(!payFeeReady) {
-										return false;
-									}
-									else
-										return true;
-								}
-
-								public void run() {
-									payFeeReady = false;
-									mainOrder.set(IOrderInfo.PAY_FEE, payFee);
-
-									mainOrder.set(IOrderInfo.ORDER_AMOUNT, (Double)(mainOrder.get(IOrderInfo.GOODS_AMOUNT)) + (Double)(mainOrder.get(IOrderInfo.SHIPPING_FEE)) 
-											+ (Double)(mainOrder.get(IOrderInfo.INSURE_FEE)) + (Double)(mainOrder.get(IOrderInfo.PAY_FEE))
-											- (Double)(mainOrder.get(IOrderInfo.SURPLUS)) - (Double)(mainOrder.get(IOrderInfo.MONEY_PAID)));
-									System.out.println(mainOrder.get(IOrderInfo.ORDER_AMOUNT));
-									
-									//删除原订单
-									new DeleteService().deleteBean(ModelNames.ORDERINFO, (String)mainOrder.get(IOrderInfo.PK_ID), null);
-									new DeleteService().deleteBean(ModelNames.ORDERINFO, (String)subOrder.get(IOrderInfo.PK_ID), null);
-									new CreateService().createBean(mainOrder, new CreateService.Listener() {
-										public void onSuccess(final String id) {
-											//更新订单商品
-											Criteria criteria = new Criteria();
-											criteria.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, (String)mainOrder.get(IOrderInfo.PK_ID)));
-											final List<BeanObject> orderGoods = new ArrayList<BeanObject>();
-											new ListService().listBeans(ModelNames.ORDERGOODS, criteria, new ListService.Listener() {
-												public void onSuccess(List<BeanObject> beans) {
-													orderGoods.addAll(beans);
-												}
-											});
-											criteria.removeAllConditions();
-											criteria.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, (String)subOrder.get(IOrderInfo.PK_ID)));
-											new ListService().listBeans(ModelNames.ORDERGOODS, criteria, new ListService.Listener() {
-												public void onSuccess(List<BeanObject> beans) {
-													orderGoods.addAll(beans);
-												}
-											});
-											
-											new WaitService(new WaitService.Job() {
-												public boolean isReady() {
-													if(orderGoods.size() < 2) {
-														return false;
-													}
-													else
-														return true;
-												}
-
-												public void run() {
-													for(BeanObject goods : orderGoods) {
-														System.out.println(goods.get(IOrderGoods.ORDER_ID));
-														goods.set(IOrderGoods.ORDER_ID, id);
-														System.out.println(goods.get(IOrderGoods.ORDER_ID));
-														new UpdateService().updateBean((String)goods.get(IOrderGoods.PK_ID), goods, null);
-													}
-													Window.alert(Resources.constants.MergeOrder_success());
-													refresh();
-												}
-											});				
-										}
-									});
-								}
-							});	
-				        }
-					}
-				});				
-			}
-		});
-	}
-
-	private double shippingInsureFee(Double goodsAmount, String insure) {
-		if(insure.indexOf("%") == -1){
-    		return Double.parseDouble(insure);
-    	}
-    	else{
-    		return Math.ceil( Double.parseDouble(insure.substring(0,insure.indexOf("%"))) * goodsAmount / 100 );
-    	}
-	}
-
-	Map<String,Object> shippingAreaInfo = new HashMap<String,Object>();
-	boolean shippingAreaInfoIsReady = false;
-	private void shippingAreaInfo(String shippingId, final List<String> regionIdList) {
-		Criteria criteria = new Criteria();
-		Condition condition = new Condition();		
-
-		condition.setField(IShipping.PK_ID);
-		condition.setOperator(Condition.EQUALS);
-		condition.setValue(shippingId);
-		
-		Condition condition2 = new Condition();		
-
-		condition2.setField(IShipping.ENABLED);
-		condition2.setOperator(Condition.EQUALS);
-		condition2.setValue("true");
-		
-		criteria.addCondition(condition);
-		criteria.addCondition(condition2);
-		new ListService().listBeans(ModelNames.SHIPPING, criteria, new ListService.Listener() {
-			public void onSuccess(List<BeanObject> beans) {
-				if(beans.size() > 0) {
-					final BeanObject shipping = beans.get(0);
-					String[] ids = shipping.getIDs("shippingAreas");
-					new ReadService().getBeans(ModelNames.SHIPPINGAREA, ids, new ReadService.Listener() {
-						public void onSuccess(List<BeanObject> beans) {
-							for(final BeanObject shippingArea : beans) {
-								String[] areaRegionIds = shippingArea.getIDs(IShippingArea.AREA_REGIONS);
-								new ReadService().getBeans(ModelNames.AREAREGION, areaRegionIds, new ReadService.Listener() {
-									public void onSuccess(List<BeanObject> beans) {
-										for(BeanObject areaRegion : beans) {
-											if(regionIdList.contains(areaRegion.get(IAreaRegion.REGION_ID))){
-												RemoteService.getSpecialService().deserialize((String)shippingArea.get(IShippingArea.CONFIGURE), new AsyncCallback<Map<String,String>>(){
-													public void onFailure(Throwable caught) {
-														caught.printStackTrace();
-														Window.alert("ERROR: "+caught.getMessage());
-													}
-
-													public void onSuccess(Map<String, String> shippingConfig) {
-
-														if(shippingConfig.containsKey("payFee")){
-															shippingAreaInfo.put("payFee", shippingConfig.get("payFee"));
-														}
-														else{
-															shippingAreaInfo.put("payFee", new Double(0));
-														}
-														shippingAreaInfo.put("shippingCode", shipping.get(IShipping.SHIPPING_CODE));
-														shippingAreaInfo.put("shippingName", shipping.get(IShipping.SHIPPING_NAME));
-														shippingAreaInfo.put("shippingDesc", shipping.get(IShipping.SHIPPING_DESC));
-														shippingAreaInfo.put("insure", shipping.get(IShipping.INSURE));
-														shippingAreaInfo.put("supportCod", shipping.get(IShipping.SUPPORT_COD));
-														shippingAreaInfo.put("configure", shippingConfig);										
-													}
-												});
-											}
-										}
-										shippingAreaInfoIsReady = true;
-									}
-								});
-							}
-						}
-					});
-				}
-				else {
-					shippingAreaInfoIsReady = true;
+					Window.alert(Resources.constants.MergeOrder_fail());
+					refresh();
 				}
 			}
-		});
-	}
-
-	List<BeanObject> orderGoods = new ArrayList<BeanObject>();
-	Map<String,Object> weightPrice = new HashMap<String,Object>();
-	double weight = 0;
-	double number = 0;
-	double amount = 0;
-	
-	private void getWeightPrice(String mainOrderId, String subOrderId) {
-		/* 获得购物车中商品的总重量 */
-		
-		Criteria criteria = new Criteria();
-		criteria.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, subOrderId));
-		new ListService().listBeans(ModelNames.ORDERGOODS, criteria, new ListService.Listener() {
-			public void onSuccess(List<BeanObject> beans) {
-				orderGoods.addAll(beans);
-			}			
-		});
-		
-		criteria.removeAllConditions();
-		criteria.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, mainOrderId));
-		new ListService().listBeans(ModelNames.ORDERGOODS, criteria, new ListService.Listener() {
-			public void onSuccess(List<BeanObject> beans) {
-				orderGoods.addAll(beans);
-			}			
-		});
-	}
-
-	double payFee = 0;
-	boolean payFeeReady = false;
-	private void payFee(String payId, final double amount, final String codFee) {
-		new ReadService().getBean(ModelNames.PAYMENT, payId, new ReadService.Listener() {
-			public void onSuccess(BeanObject bean) {
-				String rate = ((Boolean)bean.get(IPayment.IS_COD) && (codFee != null )) ? codFee : (String)bean.get(IPayment.PAY_FEE);
-				
-				if(rate.indexOf("%") != -1){
-		    		/* 支付费用是一个比例 */
-		    		double val = Double.parseDouble(rate.substring(0,rate.indexOf("%"))) / 100 ;
-		    		payFee = val > 0 ? amount * val / ( 1 - val ) : 0 ;
-		    	}
-		    	else{
-		    		payFee = Double.parseDouble(rate);
-		    	}
-				payFeeReady = true;
-			}			
 		});
 	}
 	

@@ -1,5 +1,7 @@
 package com.jcommerce.gwt.server;
 
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -12,14 +14,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -32,11 +35,19 @@ import com.extjs.gxt.ui.client.data.PagingLoadConfig;
 import com.extjs.gxt.ui.client.data.PagingLoadResult;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jcommerce.core.model.AreaRegion;
+import com.jcommerce.core.model.Attribute;
+import com.jcommerce.core.model.Constants;
+import com.jcommerce.core.model.Goods;
+import com.jcommerce.core.model.GoodsAttr;
 import com.jcommerce.core.model.GoodsType;
 import com.jcommerce.core.model.ModelObject;
+import com.jcommerce.core.model.OrderGoods;
 import com.jcommerce.core.model.OrderInfo;
+import com.jcommerce.core.model.Payment;
+import com.jcommerce.core.model.Shipping;
 import com.jcommerce.core.model.ShippingArea;
 import com.jcommerce.core.model.ShopConfig;
+import com.jcommerce.core.model.UserAddress;
 import com.jcommerce.core.service.CustomizedManager;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.service.config.IShopConfigManager;
@@ -45,19 +56,24 @@ import com.jcommerce.core.service.payment.IPaymentMetaManager;
 import com.jcommerce.core.service.payment.PaymentConfigFieldMeta;
 import com.jcommerce.core.service.payment.PaymentConfigMeta;
 import com.jcommerce.core.service.shipping.IShippingMetaManager;
-import com.jcommerce.core.service.shipping.IShippingMetaPlugin;
 import com.jcommerce.core.service.shipping.ShippingAreaFieldMeta;
 import com.jcommerce.core.service.shipping.ShippingAreaMeta;
 import com.jcommerce.core.service.shipping.ShippingConfigMeta;
 import com.jcommerce.core.service.shipping.impl.BaseShippingMetaPlugin;
+import com.jcommerce.core.service.shipping.impl.EMS;
 import com.jcommerce.core.util.CommonUtil;
 import com.jcommerce.core.util.MyPropertyUtil;
 import com.jcommerce.gwt.client.ISpecialService;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.model.IAdminUser;
+import com.jcommerce.gwt.client.model.IAttribute;
 import com.jcommerce.gwt.client.model.IComment;
+import com.jcommerce.gwt.client.model.IOrderGoods;
+import com.jcommerce.gwt.client.model.IPayment;
+import com.jcommerce.gwt.client.model.IShipping;
 import com.jcommerce.gwt.client.model.IShippingArea;
+import com.jcommerce.gwt.client.model.IUserAddress;
 import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.gwt.client.panels.system.PaymentConfigFieldMetaForm;
 import com.jcommerce.gwt.client.panels.system.PaymentConfigMetaForm;
@@ -66,6 +82,7 @@ import com.jcommerce.gwt.client.panels.system.ShippingAreaMetaForm;
 import com.jcommerce.gwt.client.panels.system.ShippingConfigMetaForm;
 import com.jcommerce.gwt.client.service.Condition;
 import com.jcommerce.gwt.client.service.Criteria;
+import com.jcommerce.web.util.LibCommon;
 
 public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecialService{
     
@@ -623,5 +640,428 @@ public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecial
 			throw new RuntimeException();
 		}
     }
+    public Map<String, Map<String, String>> getAttributeMap(String id) {
+        IDefaultManager manager = (IDefaultManager)ctx.getBean("DefaultManager");
+        Map<String, Map<String, String>> spe = new HashMap<String, Map<String, String>>();
+        try {
 
+            Goods goods = (Goods) manager.get(ModelNames.GOODS, id);
+            Set<GoodsAttr> gas = goods.getAttributes();            
+            List<Attribute> as = manager.getList(ModelNames.ATTRIBUTE, null);
+    		Map<String, Attribute> asMap = new HashMap<String, Attribute>();
+    		for(Attribute a : as) {
+    			asMap.put(a.getPkId(), a);
+    		}
+    		
+    		for(GoodsAttr ga : gas) {
+    			String aId = ga.getAttrId();
+    			Attribute a = asMap.get(aId);
+    			if(a==null) {
+    				continue;
+    			}
+    			
+    			if(!IAttribute.TYPE_ONLY.equals(a.getAttrType())) {
+    				Map<String, String> value = new HashMap<String, String>();
+    				value.put(ga.getAttrValue(), ga.getAttrPrice());
+    				spe.put(a.getAttrName(), value);
+    			}
+    		}
+    		return spe;
+        	
+        } catch (Exception e) {
+        	e.printStackTrace();
+        	throw new RuntimeException(e);
+        }
+    }
+    public Map<String, String> getShippingConfig(String shippingId) {
+    	IDefaultManager manager = (IDefaultManager)ctx.getBean("DefaultManager");
+    	Map<String, String> shippingConfig = new HashMap<String, String>();
+    	try {
+    		Shipping shipping = (Shipping) manager.get(ModelNames.SHIPPING, shippingId);
+    		for (ShippingArea shippingArea : shipping.getShippingAreas()) {
+    			//shippingConfig = deserialize(shippingArea.getConfigure());
+    			ByteArrayInputStream bis = new ByteArrayInputStream(Base64.decodeBase64(shippingArea.getConfigure().getBytes()));
+                ObjectInputStream ois;
+                ois = new ObjectInputStream(bis);
+                shippingConfig = (Map<String, String>)ois.readObject();
+    		}
+    		return shippingConfig;
+    		
+    	} catch (Exception e) {
+        	e.printStackTrace();
+        	throw new RuntimeException(e);
+        }
+    }
+    
+//    public Map<String, String> getShippingFee(String userId, String shippingId, String orderId) {
+//    	IDefaultManager manager = getDefaultManager();
+//    	Map<String, String> shippingFee = new HashMap<String, String>();
+//    	
+//    	try {
+//    		List<String> regionIdList = getRegionIdList(userId);
+//        	Map<String,Object> shippingInfo = shippingAreaInfo(shippingId,regionIdList,manager);
+//        	
+//        	if(!shippingInfo.isEmpty()){
+//        		Map<String,Object> weightPrice = weightPrice(Constants.CART_GENERAL_GOODS , orderId , manager );
+//        		shippingFee.put("shippingName",(String) shippingInfo.get("shippingName"));
+//        		shippingFee.put("shippingFee", String.valueOf( shippingFee((String)shippingInfo.get("shippingCode"),(String)shippingInfo.get("configure"),(Double)weightPrice.get("weight"),(Double)weightPrice.get("amount"))));
+//        	}
+//    		
+//    	} catch (Exception e) {
+//        	e.printStackTrace();
+//        	throw new RuntimeException(e);
+//        }
+//    	
+//    	return shippingFee;
+//    }
+//    
+//    public Map<String, Object> getPayFee(String payId, String orderId, String userId) {
+//    	IDefaultManager manager = getDefaultManager();
+//    	String shippingCodFee = null;
+//    	
+//    	try {
+//    		OrderInfo order = (OrderInfo) manager.get(ModelNames.ORDERINFO, orderId);
+//    		List<String> regionIdList = getRegionIdList(userId);
+//    		Map<String,Object> shippingInfo = shippingAreaInfo(order.getShippingId(),regionIdList,manager);
+//    		if(!shippingInfo.isEmpty()) {
+//    			if((Boolean)shippingInfo.get("supportCod")){
+//        			shippingCodFee = ((Double)shippingInfo.get("payFee")).toString();
+//        		}
+//    		}
+//    		Map<String, Object> payFee = payFee(payId,order.getGoodsAmount() + order.getShippingFee(),shippingCodFee,manager);
+//        	return payFee;
+//    	} catch (Exception e) {
+//        	e.printStackTrace();
+//        	throw new RuntimeException(e);
+//        }
+//    	
+//    }
+    
+    private Map<String, Object> payFee(String paymentId , double orderAmount , String codFee ,IDefaultManager manager) {
+    	double payFee = 0 ;
+    	Payment payment = paymentInfo( paymentId , manager );
+    	String payName = payment.getPayName();
+    	String rate = (payment.getIsCod() && (codFee != null )) ? codFee : payment.getPayFee();
+    	
+    	if(rate.indexOf("%") != -1){
+    		/* 支付费用是一个比例 */
+    		double val = Double.parseDouble(rate.substring(0,rate.indexOf("%"))) / 100 ;
+    		payFee = val > 0 ? orderAmount * val / ( 1 - val ) : 0 ;
+    	}
+    	else{
+    		payFee = Double.parseDouble(rate);
+    	}
+    	
+    	Map<String, Object> payInfo = new HashMap<String, Object>();
+    	payInfo.put("payFee", payFee);
+    	payInfo.put("payName", payName);
+    	return payInfo;
+	}
+    
+    private Payment paymentInfo(String payId , IDefaultManager manager)
+    {
+    	Criteria criteria = new Criteria();
+		Condition condition = new Condition();		
+		
+		condition.setField(IPayment.PK_ID);
+		condition.setOperator(Condition.EQUALS);
+		condition.setValue(payId);
+		
+		criteria.addCondition(condition);
+		List<Payment> paymentList = manager.getList(ModelNames.PAYMENT, convert(criteria));
+        if( paymentList.size() > 0 ){
+        	return (Payment)paymentList.get(0);
+        }
+        else{
+        	return null;
+        }
+    }
+    
+//	private List<String> getRegionIdList(String userId) {
+//    	IDefaultManager manager = getDefaultManager();
+//    	Criteria c = new Criteria();
+//		c.addCondition(new Condition(IUserAddress.USER_ID, Condition.EQUALS, userId));
+//		List<UserAddress> list = manager.getList(ModelNames.USERADDRESS, convert(c));
+//		UserAddress consignee = null;
+//		if(list.size() > 0)
+//			consignee = list.get(0);
+//		else
+//			consignee = new UserAddress();
+//		
+//		List<String> regionIdList = new ArrayList<String>();
+//    	regionIdList.add( (String)consignee.getCountry());
+//    	regionIdList.add( (String)consignee.getProvince());
+//    	regionIdList.add( (String)consignee.getCity() );
+//    	regionIdList.add( (String)consignee.getDistrict() );
+//    	return regionIdList;
+//    	
+//    }
+    
+    private Double shippingFee( String shippingCode , String configure , double goodsWeight , double goodsAmount ) {
+    	Map<String,String> shippingConfig = EMS.deserialize(configure);
+    	// TODO 根据商品数量算运费
+    	return calculate(shippingCode , goodsWeight , goodsAmount , shippingConfig );
+	}
+	private Map<String, Object> weightPrice(Long cartGeneralGoods, String orderId, IDefaultManager manager) {
+    	
+		Map<String,Object> weightPrice = new HashMap<String,Object>();
+		double weight = 0;
+		double number = 0;
+		double amount = 0;
+    	Criteria criteria = new Criteria();
+    	criteria.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, orderId));
+    	
+    	List<OrderGoods> orderGoods = manager.getList(ModelNames.ORDERGOODS, convert(criteria));
+		for(OrderGoods og : orderGoods) {
+			String goodsId = og.getGoodsId();
+			Goods goods = (Goods) manager.get(ModelNames.GOODS, goodsId);
+			weight += goods.getGoodsWeight() * og.getGoodsNumber();
+			number += og.getGoodsNumber();
+			amount += og.getGoodsPrice() * og.getGoodsNumber();
+		}
+		
+    	weightPrice.put("weight", new Double(weight));
+    	weightPrice.put("number", new Double(number) );
+    	weightPrice.put("amount", new Double(amount) );
+    	
+    	return weightPrice;
+	}
+	public Map<String,Object> shippingAreaInfo(String shippingId, List<String> regionIdList,IDefaultManager manager){
+    	Map<String,Object> shippingAreaInfo = new HashMap<String,Object>();
+		Criteria criteria = new Criteria();
+		Condition condition = new Condition();		
+
+		condition.setField(IShipping.PK_ID);
+		condition.setOperator(Condition.EQUALS);
+		condition.setValue(shippingId);
+		
+		Condition condition2 = new Condition();		
+
+		condition2.setField(IShipping.ENABLED);
+		condition2.setOperator(Condition.EQUALS);
+		condition2.setValue("true");
+		
+		criteria.addCondition(condition);
+		criteria.addCondition(condition2);
+		List<Shipping> list = manager.getList(ModelNames.SHIPPING, convert(criteria));
+		
+		if( 0 < list.size() ){
+			Shipping shipping = (Shipping)list.get(0);
+			for (ShippingArea shippingArea : shipping.getShippingAreas()) {
+				for (AreaRegion areaRegion : shippingArea.getAreaRegions()) {
+					if(regionIdList.contains(areaRegion.getRegionId())){
+						Map<String,String> shippingConfig = BaseShippingMetaPlugin.deserialize(shippingArea.getConfigure());
+						if(shippingConfig.containsKey("payFee")){
+							shippingAreaInfo.put("payFee", shippingConfig.get("payFee"));
+						}
+						else{
+							shippingAreaInfo.put("payFee", new Double(0));
+						}
+						shippingAreaInfo.put("shippingCode", shipping.getShippingCode());
+						shippingAreaInfo.put("shippingName", shipping.getShippingName());
+						shippingAreaInfo.put("shippingDesc", shipping.getShippingDesc());
+						shippingAreaInfo.put("insure", shipping.getInsure());
+						shippingAreaInfo.put("supportCod", shipping.getSupportCod());
+						shippingAreaInfo.put("configure", shippingArea.getConfigure());
+					}
+				};
+			}
+					
+		}
+		return shippingAreaInfo;
+    }
+	
+	public Map<String, Object> getOrderFee(String orderId, String shippingId, String payId) {
+		IDefaultManager manager = getDefaultManager();
+		Map<String, Object> total = new HashMap<String, Object>();
+		total.put("goodsPrice",0.0d);
+		total.put("shippingInsurance",0.0d);
+		total.put("shippingFee",0.0d);
+		total.put("shippingName", "");
+		total.put("payName", "");
+		try {
+			OrderInfo order = (OrderInfo) manager.get(ModelNames.ORDERINFO, orderId);
+			if(shippingId != null)
+				order.setShippingId(shippingId);
+			if(payId != null)
+				order.setPayId(payId);
+			Criteria c = new Criteria();
+			c.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, orderId));
+			List<OrderGoods> orderGoods = manager.getList(ModelNames.ORDERGOODS, convert(c));
+			for(OrderGoods og : orderGoods) {
+				Double goodsPrice = Double.parseDouble(total.get("goodsPrice").toString());
+				total.put("goodsPrice", goodsPrice + og.getGoodsPrice() * og.getGoodsNumber());
+			}
+			
+			String shippingCodFee = null;
+			if(StringUtils.isNotEmpty(order.getShippingId())) {
+				List<String> regionIdList = new ArrayList<String>();
+	        	regionIdList.add( (String)order.getCountry() );
+	        	regionIdList.add( (String)order.getProvince() );
+	        	regionIdList.add( (String)order.getCity() );
+	        	regionIdList.add( (String)order.getDistrict());
+	        	
+	        	Map<String,Object> shippingInfo = shippingAreaInfo(order.getShippingId(),regionIdList,manager);
+	        	if(!shippingInfo.isEmpty()){
+	        		total.put("shippingName", shippingInfo.get("shippingName"));
+	        		Map<String,Object> weightPrice = weightPrice(Constants.CART_GENERAL_GOODS , orderId , manager );
+	        		total.put("shippingFee", shippingFee((String)shippingInfo.get("shippingCode"),(String)shippingInfo.get("configure"),(Double)weightPrice.get("weight"),(Double)weightPrice.get("amount")));
+	        		if( ( order.getInsureFee() != 0 ) && (Integer.parseInt((String)shippingInfo.get("insure")) > 0 )){
+	        			//total.setShippingInsure(shippingInsureFee( (Double)weightPrice.get("amount") , (String)shippingInfo.get("insure")));
+	        			total.put("shippingInsurance", shippingInsureFee( (Double)weightPrice.get("amount") , (String)shippingInfo.get("insure")));
+	        		}
+	        		else{
+	        			total.put("shippingInsurance",0);
+	        		}
+	        		
+	        		if((Boolean)shippingInfo.get("supportCod")){
+	        			shippingCodFee = ((Double)shippingInfo.get("payFee")).toString();
+	        		}
+	        	}
+			}
+        	
+			double moneyPaid = order.getMoneyPaid();
+        	total.put("amount", Double.parseDouble(total.get("goodsPrice").toString()) + Double.parseDouble(total.get("shippingFee").toString()) + Double.parseDouble(total.get("shippingInsurance").toString()) - moneyPaid);
+        	total.put("payFee", 0);
+        	if( StringUtils.isNotEmpty(order.getPayId())){
+        		Map<String, Object> payInfo = payFee(order.getPayId(),(Double)total.get("amount"),shippingCodFee,manager);
+        		total.put("payFee", payInfo.get("payFee"));
+        		total.put("payName", payInfo.get("payName"));
+            }
+        	total.put("amount", (Double)total.get("amount") + Double.parseDouble(total.get("payFee").toString()));
+			return total;
+		} catch (Exception e) {
+        	e.printStackTrace();
+        	throw new RuntimeException(e);
+        }
+	}
+	private double shippingInsureFee(double goodsAmount , String insure) {
+		if(insure.indexOf("%") == -1){
+    		return Double.parseDouble(insure);
+    	}
+    	else{
+    		return Math.ceil( Double.parseDouble(insure.substring(0,insure.indexOf("%"))) * goodsAmount / 100 );
+    	}
+	}
+	
+	public boolean deleteOrder(String orderId) {
+		IDefaultManager manager = getDefaultManager();
+		try {
+			manager.txdelete(ModelNames.ORDERINFO, orderId);
+			Criteria c = new Criteria();
+			c.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, orderId));
+			List<ModelObject> orderGoods = manager.getList(ModelNames.ORDERGOODS, convert(c));
+			manager.txdeleteall(orderGoods);
+			return true;
+		} catch (Exception e) {
+        	e.printStackTrace();
+        	throw new RuntimeException(e);
+        }
+	}
+	
+	//合并订单
+	public boolean mergeOrder(String fromId, String toId) {
+		IDefaultManager manager = getDefaultManager();
+		try {
+			OrderInfo fromOrder = (OrderInfo) manager.get(ModelNames.ORDERINFO, fromId);
+			OrderInfo toOrder = (OrderInfo) manager.get(ModelNames.ORDERINFO, toId);
+			String userId = fromOrder.getUserId();
+			
+			OrderInfo newOrder = (OrderInfo) toOrder.clone();
+			long addTime = new Date().getTime();
+			newOrder.setAddTime(addTime);
+			newOrder.setPkId("");
+			newOrder.setGoodsAmount(newOrder.getGoodsAmount() + fromOrder.getGoodsAmount());
+			
+			String shippingCodFee = null;
+			if(newOrder.getShippingId() != null) {
+				// 重新计算配送费用
+				Map<String,Object> weightPrice = getWeightPrice(fromOrder.getPkId(), toOrder.getPkId(), getDefaultManager());
+				List<String> regionIdList = new ArrayList<String>();
+	        	regionIdList.add( (String)toOrder.getCountry() );
+	        	regionIdList.add( (String)toOrder.getProvince() );
+	        	regionIdList.add( (String)toOrder.getCity() );
+	        	regionIdList.add( (String)toOrder.getDistrict());
+	        	Map<String,Object> shippingInfo = shippingAreaInfo(newOrder.getShippingId(),regionIdList,getDefaultManager());
+	        	if(!shippingInfo.isEmpty()){
+		        	newOrder.setShippingFee(shippingFee((String)shippingInfo.get("shippingCode"),(String)shippingInfo.get("configure"),(Double)weightPrice.get("weight"),(Double)weightPrice.get("amount")));
+		        	if( ( newOrder.getInsureFee() != 0 ) && (Integer.parseInt((String)shippingInfo.get("insure")) > 0 )){
+		        		newOrder.setInsureFee(shippingInsureFee( (Double)weightPrice.get("amount") , (String)shippingInfo.get("insure")));
+	        		}
+		        	else{
+		        		newOrder.setInsureFee(0.0);
+	        		}
+		        	if((Boolean)shippingInfo.get("supportCod")){
+	        			shippingCodFee = ((Double)shippingInfo.get("payFee")).toString();
+	        		}
+	        	}
+			}
+			// 合并余额、已付款金额
+			newOrder.setSurplus(newOrder.getSurplus() + fromOrder.getSurplus());
+			newOrder.setMoneyPaid(newOrder.getMoneyPaid() + newOrder.getMoneyPaid());
+			if(newOrder.getPayId()!= ""){
+				newOrder.setPayFee((Double) payFee(newOrder.getPayId(),newOrder.getGoodsAmount(),shippingCodFee,getDefaultManager()).get("payFee"));
+	        }
+			newOrder.setOrderAmount(newOrder.getGoodsAmount() + newOrder.getShippingFee() + newOrder.getInsureFee() + newOrder.getPayFee()
+					- newOrder.getSurplus() - newOrder.getMoneyPaid());
+			
+			//删除原订单
+			getDefaultManager().txdelete(ModelNames.ORDERINFO, fromId);
+			getDefaultManager().txdelete(ModelNames.ORDERINFO, toId);
+			
+			getDefaultManager().txadd(newOrder);
+			
+			//更新订单商品
+			Criteria criteria = new Criteria();
+			criteria.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, fromId));
+			List<OrderGoods> orderGoods = getDefaultManager().getList(ModelNames.ORDERGOODS, convert(criteria));
+			criteria.removeAllConditions();
+			criteria.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, toId));
+			orderGoods.addAll(getDefaultManager().getList(ModelNames.ORDERGOODS, convert(criteria)));
+			
+			for(OrderGoods goods : orderGoods) {
+				OrderGoods g = (OrderGoods) goods.clone();
+				g.setOrderId(newOrder.getPkId());
+				getDefaultManager().txdelete(ModelNames.ORDERGOODS, goods.getPkId());
+				getDefaultManager().txadd(g);
+				System.out.println(g.getOrderId());
+			}
+			return true;
+		} catch (Exception e) {
+        	return false;
+        }
+	}
+	private Map<String, Object> getWeightPrice(String fromId, String toId, IDefaultManager manager){
+		Map<String,Object> weightPrice = new HashMap<String,Object>();
+    	double weight = 0;
+		double number = 0;
+		double amount = 0;
+		
+		Criteria criteria = new Criteria();
+		criteria.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, fromId));
+		List<OrderGoods> fromGoods = manager.getList(ModelNames.ORDERGOODS, convert(criteria));
+		
+		criteria.removeAllConditions();
+		criteria.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, toId));
+		List<OrderGoods> toGoods = manager.getList(ModelNames.ORDERGOODS, convert(criteria));
+		toGoods.addAll(fromGoods);
+		
+		for(Iterator iterator = toGoods.iterator(); iterator.hasNext();) {
+			OrderGoods orderGoods = (OrderGoods)iterator.next();
+			String goodsId = orderGoods.getGoodsId();
+			Goods goods = (Goods) manager.get(ModelNames.GOODS, goodsId);
+			
+			weight += goods.getGoodsWeight();
+			number += orderGoods.getGoodsNumber();
+			amount += orderGoods.getGoodsPrice() * orderGoods.getGoodsNumber();
+		}
+
+		String formatedWeight  = LibCommon.formatedWeight(weight);
+		weightPrice.put("weight", new Double(weight));
+		weightPrice.put("number", new Double(number) );
+		weightPrice.put("amount", new Double(amount) );
+		weightPrice.put("formatedWeight", formatedWeight );
+    	return weightPrice;
+	}
+	
 }

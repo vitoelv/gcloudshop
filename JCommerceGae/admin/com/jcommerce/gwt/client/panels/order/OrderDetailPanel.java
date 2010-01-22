@@ -10,7 +10,6 @@ import com.extjs.gxt.ui.client.data.BasePagingLoader;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
-import com.extjs.gxt.ui.client.store.Record;
 import com.extjs.gxt.ui.client.store.StoreEvent;
 import com.extjs.gxt.ui.client.store.StoreListener;
 import com.extjs.gxt.ui.client.widget.Component;
@@ -18,32 +17,41 @@ import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
-import com.extjs.gxt.ui.client.widget.grid.CheckBoxSelectionModel;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 import com.extjs.gxt.ui.client.widget.grid.Grid;
+import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.toolbar.PagingToolBar;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.BeanObject;
-import com.jcommerce.gwt.client.model.IComment;
+import com.jcommerce.gwt.client.model.IAdminUser;
 import com.jcommerce.gwt.client.model.IOrderAction;
 import com.jcommerce.gwt.client.model.IOrderGoods;
 import com.jcommerce.gwt.client.model.IOrderInfo;
 import com.jcommerce.gwt.client.model.IRegion;
 import com.jcommerce.gwt.client.model.IUser;
+import com.jcommerce.gwt.client.panels.Success;
+import com.jcommerce.gwt.client.panels.order.OrderFeePanel.State;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.Condition;
+import com.jcommerce.gwt.client.service.CreateService;
 import com.jcommerce.gwt.client.service.Criteria;
+import com.jcommerce.gwt.client.service.DeleteService;
 import com.jcommerce.gwt.client.service.ListService;
 import com.jcommerce.gwt.client.service.PagingListService;
 import com.jcommerce.gwt.client.service.ReadService;
+import com.jcommerce.gwt.client.service.RemoteService;
+import com.jcommerce.gwt.client.service.UpdateService;
 import com.jcommerce.gwt.client.service.WaitService;
 import com.jcommerce.gwt.client.widgets.MyContentPanel;
+import com.jcommerce.gwt.client.widgets.OrderStateCellRenderer;
+import com.jcommerce.gwt.client.widgets.TimeCellRenderer;
 import com.jcommerce.gwt.client.widgets.TotalPriceCellRenderer;
 
 public class OrderDetailPanel  extends ContentWidget{
@@ -96,6 +104,15 @@ public class OrderDetailPanel  extends ContentWidget{
 		String OrderDetail_payStatus();
 		String OrderDetail_shippingStatus();
 		String OrderDetail_actionNote();
+		String OrderDetail_operateSuccessfully();
+		String OrderDetail_invalidOperation();
+		String OrderDetail_orderNotExist();
+		String OrderDetail_modifyWrong();
+		String OrderDetail_anonymousUser();
+		String OrderDetail_orderAmountIncrease();
+		String OrderDetail_orderAmountDecrease();
+		String OrderDetail_refund();
+		String OrderDetail_moneyShouldRefund();
     }
 
 	private static OrderDetailPanel instance = null;
@@ -161,6 +178,9 @@ public class OrderDetailPanel  extends ContentWidget{
 	MyContentPanel goodsPanel = new MyContentPanel();
 	MyContentPanel feePanel = new MyContentPanel();
 	ContentPanel operationPanel = new ContentPanel();
+	Button btnEditFee ;
+	Button btnEditConsignee;
+	Button btnEditGoods;
 	@Override
 	protected void onRender(Element parent, int index) {
 		super.onRender(parent, index);		
@@ -169,15 +189,18 @@ public class OrderDetailPanel  extends ContentWidget{
 		renderBasePanel();
 		add(basePanel);
 		
-		consigneePanel.setHeading(Resources.constants.OrderDetail_consigneeInfo(), Resources.constants.OrderDetail_edit());
+		btnEditConsignee = new Button(Resources.constants.OrderDetail_edit());
+		consigneePanel.setHeading(Resources.constants.OrderDetail_consigneeInfo(), btnEditConsignee);
 		renderConsigneePanel();
 		add(consigneePanel);
 		
-		goodsPanel.setHeading(Resources.constants.OrderDetail_goodsInfo(), Resources.constants.OrderDetail_edit());
+		btnEditGoods = new Button(Resources.constants.OrderDetail_edit());
+		goodsPanel.setHeading(Resources.constants.OrderDetail_goodsInfo(), btnEditGoods);
 		renderGoodsPanel();
 		add(goodsPanel);
 		
-		feePanel.setHeading(Resources.constants.OrderDetail_feeInfo(), Resources.constants.OrderDetail_edit());
+		btnEditFee = new Button(Resources.constants.OrderDetail_edit());
+		feePanel.setHeading(Resources.constants.OrderDetail_feeInfo(), btnEditFee);
 		renderFeePanel();
 		add(feePanel);
 
@@ -196,6 +219,8 @@ public class OrderDetailPanel  extends ContentWidget{
 	Label shippingTimeLabel = new Label("");
 	Label invoiceNoLabel = new Label("");
 	Label refererLabel = new Label("");
+	Button btnEditPay;
+	Button btnEditShipping;
 	
 	private void renderBasePanel() {
 		HorizontalPanel ssPanel = new HorizontalPanel();
@@ -214,6 +239,9 @@ public class OrderDetailPanel  extends ContentWidget{
         
         HorizontalPanel ptPanel = new HorizontalPanel();
         HorizontalPanel payMannerPanel = getPanel(Resources.constants.SearchOrder_payManner(), payMannerLabel);
+        btnEditPay = new Button(Resources.constants.OrderDetail_edit());
+        payMannerPanel.add(btnEditPay);
+        
         HorizontalPanel payTimePanel = getPanel(Resources.constants.OrderDetail_payTime(), payTimeLabel);
         ptPanel.add(payMannerPanel);
         ptPanel.add(payTimePanel);
@@ -221,6 +249,9 @@ public class OrderDetailPanel  extends ContentWidget{
         
         HorizontalPanel stPanel = new HorizontalPanel();
         HorizontalPanel shippingMannerPanel = getPanel(Resources.constants.SearchOrder_shipManner(), shippingMannerLabel);
+        btnEditShipping = new Button(Resources.constants.OrderDetail_edit());
+        shippingMannerPanel.add(btnEditShipping);
+        
         HorizontalPanel shippingTimePanel = getPanel(Resources.constants.OrderDetail_shippingTime(), shippingTimeLabel);
         stPanel.add(shippingMannerPanel);
         stPanel.add(shippingTimePanel);
@@ -282,6 +313,14 @@ public class OrderDetailPanel  extends ContentWidget{
 		
 		BasePagingLoader loader = new PagingListService().getLoader(ModelNames.ORDERGOODS, criteria);	  	
 	    final ListStore<BeanObject> store = new ListStore<BeanObject>(loader);		
+	    store.addStoreListener(new StoreListener<BeanObject>() {
+	    	public void storeDataChanged(StoreEvent<BeanObject> se) {
+	    		List<Component> items = goodsPanel.getItems();
+	    		for (Component item : items) {
+	    			item.repaint();
+	    		}
+	    	}
+	    });
 		goodsToolBar = new PagingToolBar(10);
 		goodsToolBar.bind(loader);
 		
@@ -298,17 +337,19 @@ public class OrderDetailPanel  extends ContentWidget{
 		ColumnConfig colGoodsAttr = new ColumnConfig(IOrderGoods.GOODS_ATTR, Resources.constants.OrderDetail_goodsAttr(), 100);
 		columns.add(colGoodsAttr);
 		
-//		ColumnConfig colTotalPrice = new ColumnConfig("subtotal", Resources.constants.OrderDetail_subTotalPrice(), 100);
-//		colTotalPrice.setRenderer(new TotalPriceCellRenderer());
-//		columns.add(colTotalPrice);
+		ColumnConfig colTotalPrice = new ColumnConfig("subtotal", Resources.constants.OrderDetail_subTotalPrice(), 100);
+		colTotalPrice.setRenderer(new TotalPriceCellRenderer());
+		columns.add(colTotalPrice);
 		
 		ColumnModel cm = new ColumnModel(columns);		
 		Grid<BeanObject> grid = new Grid<BeanObject>(store, cm);
 		grid.setLoadMask(true);
 		grid.setBorders(true);
-		//grid.setAutoExpandColumn("subtotal");
-		goodsPanel.add(grid);
-		goodsPanel.setBottomComponent(goodsToolBar);
+		grid.setAutoExpandColumn("subtotal");
+		grid.setAutoHeight(true);
+		goodsPanel.setFrame(true);
+     	goodsPanel.setLayout(new FitLayout());
+     	goodsPanel.add(grid);
 	}
 
 	private HorizontalPanel getPanel(String label, Label dataLabel) {
@@ -329,6 +370,8 @@ public class OrderDetailPanel  extends ContentWidget{
 	Label moneyPaidLabel = new Label("");
 	Label surplusLabel = new Label("");
 	Label moneyShouldPayLabel = new Label("");
+	Label moneyShouldPayTitle = new Label("");
+	Button btnRefund = new Button(Resources.constants.OrderDetail_refund());
 	private void renderFeePanel() {
 		HorizontalPanel calculateTotalAmountPanel = new HorizontalPanel();
 		calculateTotalAmountPanel.add(new Label(Resources.constants.OrderDetail_goodsAmount() + ":"));
@@ -355,12 +398,13 @@ public class OrderDetailPanel  extends ContentWidget{
 		feePanel.add(calculateOrderAmountPanel);
 		
 		HorizontalPanel orderAmountPanel = new HorizontalPanel();
-		orderAmountPanel.add(new Label("=" + Resources.constants.OrderDetail_moneyShouldPay() + ":"));
+		orderAmountPanel.add(moneyShouldPayTitle);
 		orderAmountPanel.add(moneyShouldPayLabel);
+		orderAmountPanel.add(btnRefund);
 		feePanel.add(orderAmountPanel);
 	}
 	
-	TextArea remarkArea= new TextArea();
+	TextArea remarkArea = new TextArea();
 	HorizontalPanel buttonPanel = new HorizontalPanel();
 	PagingToolBar operationToolBar;	
 	private void renderOperationPanel() {
@@ -398,6 +442,14 @@ public class OrderDetailPanel  extends ContentWidget{
 		
 		BasePagingLoader loader = new PagingListService().getLoader(ModelNames.ORDERACTION, criteria);
 		final ListStore<BeanObject> store = new ListStore<BeanObject>(loader);
+		store.addStoreListener(new StoreListener<BeanObject>() {
+	    	public void storeDataChanged(StoreEvent<BeanObject> se) {
+	    		List<Component> items = operationPanel.getItems();
+	    		for (Component item : items) {
+	    			item.repaint();
+	    		}
+	    	}
+	    });
 		
 		operationToolBar = new PagingToolBar(10);
 		operationToolBar.bind(loader);
@@ -406,14 +458,14 @@ public class OrderDetailPanel  extends ContentWidget{
 		
 		ColumnConfig colActionUser = new ColumnConfig(IOrderAction.ACTION_USER, Resources.constants.OrderDetail_actionUser(), 100);
 		columns.add(colActionUser);
-		ColumnConfig colLogTime = new ColumnConfig(IOrderAction.LOG_TIME, Resources.constants.OrderDetail_logTime(), 100);
+		ColumnConfig colLogTime = new ColumnConfig(IOrderAction.LOG_TIME, Resources.constants.OrderDetail_logTime(), 150);
 		columns.add(colLogTime);
 		ColumnConfig colOrderStatus = new ColumnConfig(IOrderAction.ORDER_STATUS, Resources.constants.OrderDetail_orderStatus(), 100);
 		columns.add(colOrderStatus);
 		ColumnConfig colPayStatus = new ColumnConfig(IOrderAction.PAY_STATUS, Resources.constants.OrderDetail_payStatus(), 100);
 		columns.add(colPayStatus);
-		ColumnConfig colshippingStatus = new ColumnConfig(IOrderAction.SHIPPING_STATUS, Resources.constants.OrderDetail_shippingStatus(), 100);
-		columns.add(colshippingStatus);
+		ColumnConfig colShippingStatus = new ColumnConfig(IOrderAction.SHIPPING_STATUS, Resources.constants.OrderDetail_shippingStatus(), 100);
+		columns.add(colShippingStatus);
 		ColumnConfig colNote = new ColumnConfig(IOrderAction.ACTION_NOTE, Resources.constants.OrderDetail_actionNote(), 100);
 		columns.add(colNote);
 		
@@ -422,6 +474,15 @@ public class OrderDetailPanel  extends ContentWidget{
 		grid.setLoadMask(true);
 		grid.setBorders(true);
 		grid.setAutoExpandColumn(IOrderAction.ACTION_NOTE);
+		grid.setAutoHeight(true);
+		
+		colLogTime.setRenderer(new TimeCellRenderer(grid));
+		colOrderStatus.setRenderer(new OrderStateCellRenderer("os"));
+		colPayStatus.setRenderer(new OrderStateCellRenderer("ps"));
+		colShippingStatus.setRenderer(new OrderStateCellRenderer("ss"));
+		
+		operationPanel.setAnimCollapse(false);
+		operationPanel.setLayout(new FitLayout());
 		operationPanel.add(grid);
 		operationPanel.setBottomComponent(operationToolBar);
 	}
@@ -441,8 +502,197 @@ public class OrderDetailPanel  extends ContentWidget{
 	}
 
 	protected void changeOrderState(ButtonEvent ce) {
-		// TODO Auto-generated method stub
+		Button sourceButton = ce.getButton();
+		final String id = sourceButton.getId();
+		new ReadService().getBean(ModelNames.ORDERINFO, getCurState().getPkId(), new ReadService.Listener() {
+			public void onSuccess(BeanObject orderInfo) {
+				if(orderInfo == null) {
+					Success.State newState = new Success.State();
+			    	newState.setMessage(Resources.constants.OrderDetail_orderNotExist());
+			    	OrderListPanel.State choice1 = new OrderListPanel.State();
+				    newState.addChoice(OrderListPanel.getInstance().getName(), choice1.getFullHistoryToken());
+			    	newState.execute();
+				}
+				else {
+					String orderId = orderInfo.get(IOrderInfo.PK_ID);
+					//取得可操作列表，判断是否可操作
+					getList((Long)orderInfo.get(IOrderInfo.ORDER_STATUS), (Long)orderInfo.get(IOrderInfo.PAY_STATUS), (Long)orderInfo.get(IOrderInfo.SHIPPING_STATUS));
+					getOperableReady = false;
+					if(operableMap.get(id)){					
+						String actionNote = remarkArea.getValue();
+						if(id.equals(Resources.constants.OrderDetail_comfirm())) {
+							orderInfo.set(IOrderInfo.ORDER_STATUS, IOrderInfo.OS_CONFIRMED);
+							addOrderAction(orderId, orderInfo, actionNote);
+						}
+						else if(id.equals(Resources.constants.OrderDetail_cancel())) {
+							/*标记订单为取消，未付款*/
+							orderInfo.set(IOrderInfo.ORDER_STATUS, IOrderInfo.OS_CANCELED);
+							orderInfo.set(IOrderInfo.PAY_STATUS, IOrderInfo.PS_UNPAYED);
+							orderInfo.set(IOrderInfo.PAY_TIME, 0);
+							orderInfo.set(IOrderInfo.ORDER_AMOUNT, orderInfo.get(IOrderInfo.MONEY_PAID));
+							orderInfo.set(IOrderInfo.MONEY_PAID, 0);
+							addOrderAction(orderId, orderInfo, actionNote);
+						}
+						else if(id.equals(Resources.constants.OrderDetail_invalid())) {
+							/* 标记订单为无效、未付款 */
+							orderInfo.set(IOrderInfo.ORDER_STATUS, IOrderInfo.OS_INVALID);
+							orderInfo.set(IOrderInfo.PAY_STATUS, IOrderInfo.PS_UNPAYED);
+							addOrderAction(orderId, orderInfo, actionNote);
+						}
+						else if(id.equals(Resources.constants.OrderDetail_return())) {
+							/* 标记订单为退货、未付款、未发货 */
+							orderInfo.set(IOrderInfo.ORDER_STATUS, IOrderInfo.OS_RETURNED);
+							orderInfo.set(IOrderInfo.SHIPPING_STATUS, IOrderInfo.SS_UNSHIPPED);
+							orderInfo.set(IOrderInfo.INVOICE_NO, "");
+							orderInfo.set(IOrderInfo.PAY_STATUS, IOrderInfo.PS_UNPAYED);
+							orderInfo.set(IOrderInfo.PAY_TIME, 0);
+							orderInfo.set(IOrderInfo.ORDER_AMOUNT, orderInfo.get(IOrderInfo.MONEY_PAID));
+							orderInfo.set(IOrderInfo.MONEY_PAID, 0);
+							addOrderAction(orderId, orderInfo, actionNote);
+						}
+						else if(id.equals(Resources.constants.OrderDetail_pay())) {
+							/* 标记订单为已确认、已付款，更新付款时间和已支付金额*/
+							long time = new Date().getTime();
+							orderInfo.set(IOrderInfo.PAY_STATUS, IOrderInfo.PS_PAYED);
+							orderInfo.set(IOrderInfo.PAY_TIME, time);
+							double moneyPaid = orderInfo.get(IOrderInfo.MONEY_PAID);
+							double orderAmount = orderInfo.get(IOrderInfo.ORDER_AMOUNT);
+							orderInfo.set(IOrderInfo.MONEY_PAID, moneyPaid + orderAmount);
+							orderInfo.set(IOrderInfo.ORDER_AMOUNT, 0);
+							
+							if(!orderInfo.get(IOrderInfo.ORDER_STATUS).equals(IOrderInfo.OS_CONFIRMED)) {
+								orderInfo.set(IOrderInfo.ORDER_STATUS, IOrderInfo.OS_CONFIRMED);
+								orderInfo.set(IOrderInfo.CONFIRM_TIME, time);							
+							}
+							addOrderAction(orderId, orderInfo, actionNote);
+						}
+						else if(id.equals(Resources.constants.OrderDetail_unpay())) {
+							/* 标记订单为未付款，更新付款时间和已付款金额 */
+							orderInfo.set(IOrderInfo.PAY_STATUS, IOrderInfo.PS_UNPAYED);
+							orderInfo.set(IOrderInfo.PAY_TIME, 0);
+							orderInfo.set(IOrderInfo.ORDER_AMOUNT, orderInfo.get(IOrderInfo.MONEY_PAID));
+							orderInfo.set(IOrderInfo.MONEY_PAID, 0);
+							addOrderAction(orderId, orderInfo, actionNote);
+						}
+						else if(id.equals(Resources.constants.OrderDetail_prepare())) {
+							/* 标记订单为已确认，配货中 */
+					        if (!orderInfo.get(IOrderInfo.ORDER_STATUS).equals(IOrderInfo.OS_CONFIRMED))
+					        {
+					        	orderInfo.set(IOrderInfo.ORDER_STATUS, IOrderInfo.OS_CONFIRMED);
+								orderInfo.set(IOrderInfo.CONFIRM_TIME, new Date().getTime());	
+					        }
+							orderInfo.set(IOrderInfo.SHIPPING_STATUS, IOrderInfo.SS_PREPARING);
+							addOrderAction(orderId, orderInfo, actionNote);
+						}
+						else if(id.equals(Resources.constants.OrderDetail_receive())) {
+							orderInfo.set(IOrderInfo.SHIPPING_STATUS, IOrderInfo.SS_RECEIVED);
+							addOrderAction(orderId, orderInfo, actionNote);
+						}
+						else if(id.equals(Resources.constants.OrderDetail_ship())) {
+							orderInfo.set(IOrderInfo.SHIPPING_STATUS, IOrderInfo.SS_SHIPPED);
+							orderInfo.set(IOrderInfo.SHIPPING_TIME, new Date().getTime());
+							//TODO修改订单商品
+//							Criteria c = new Criteria();
+//							c.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, (String) orderInfo.get(IOrderInfo.PK_ID)));
+//							new ListService().listBeans(ModelNames.ORDERGOODS, c, new ListService.Listener() {
+//								public void onSuccess(List<BeanObject> beans) {
+//									
+//								}
+//							});
+							addOrderAction(orderId, orderInfo, actionNote);
+						}
+						else if(id.equals(Resources.constants.OrderDetail_unship())) {
+							/* 标记订单为“未发货”，更新发货时间 */
+							orderInfo.set(IOrderInfo.SHIPPING_STATUS, IOrderInfo.SS_UNSHIPPED);
+							orderInfo.set(IOrderInfo.SHIPPING_TIME, 0);
+							orderInfo.set(IOrderInfo.INVOICE_NO, "");
+							addOrderAction(orderId, orderInfo, actionNote);
+						}
+						else {
+							
+							//删除订单
+							new DeleteService().deleteBean(ModelNames.ORDERINFO, orderId, new DeleteService.Listener() {
+								public void onSuccess(Boolean success) {
+									gotoSuccessPanel(true);
+								}
+							});
+							
+							//删除订单商品
+							Criteria c = new Criteria();
+							c.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, getCurState().getPkId()));
+							new ListService().listBeans(ModelNames.ORDERGOODS, c, new ListService.Listener() {
+								public void onSuccess(List<BeanObject> beans) {
+									List<String> ids = new ArrayList<String>();
+									for(BeanObject bean : beans) {
+										ids.add((String) bean.get(IOrderGoods.PK_ID));
+									}
+									new DeleteService().deleteBeans(ModelNames.ORDERGOODS, ids, null);
+								}
+							});
+							
+							//删除订单操作
+							c.removeAllConditions();
+							c.addCondition(new Condition(IOrderAction.ORDER_ID, Condition.EQUALS, getCurState().getPkId()));
+							new ListService().listBeans(ModelNames.ORDERACTION, c, new ListService.Listener() {
+								public void onSuccess(List<BeanObject> beans) {
+									List<String> ids = new ArrayList<String>();
+									for(BeanObject bean : beans) {
+										ids.add((String) bean.get(IOrderAction.PK_ID));
+									}
+									new DeleteService().deleteBeans(ModelNames.ORDERACTION, ids, null);
+								}
+							});
+						}
+
+						if(!id.equals(Resources.constants.OrderDetail_remove())) {
+							new UpdateService().updateBean((String) orderInfo.get(IOrderInfo.PK_ID), orderInfo, new UpdateService.Listener() {
+								public void onSuccess(Boolean success) {
+									gotoSuccessPanel(false);
+								}
+							});
+						}		
+					}
+					else {
+						Success.State newState = new Success.State();
+				    	newState.setMessage(Resources.constants.OrderDetail_invalidOperation());
+				    	OrderListPanel.State choice1 = new OrderListPanel.State();
+					    newState.addChoice(OrderListPanel.getInstance().getName(), choice1.getFullHistoryToken());
+				    	newState.execute();
+					}
+				}
+			}
+		});
+	}
+	
+	protected void addOrderAction(String orderId, BeanObject orderInfo, String actionNote) {
+		long logTime = new Date().getTime();
+		Map<String, Object> props = new HashMap<String, Object>();
+		props.put(IOrderAction.ORDER_ID, orderId);
+		props.put(IOrderAction.ORDER_STATUS, orderInfo.get(IOrderInfo.ORDER_STATUS));
+		props.put(IOrderAction.PAY_STATUS, orderInfo.get(IOrderInfo.PAY_STATUS));
+		props.put(IOrderAction.SHIPPING_STATUS, orderInfo.get(IOrderInfo.SHIPPING_STATUS));
+		props.put(IOrderAction.ACTION_NOTE, actionNote == null ? "" : actionNote);
+		props.put(IOrderAction.LOG_TIME, logTime);
+		props.put(IOrderAction.ACTION_USER, adminUserName);
 		
+		BeanObject form = new BeanObject(ModelNames.ORDERACTION, props);
+		new CreateService().createBean(form, null);
+	}
+
+	public void gotoSuccessPanel(boolean isDelete) {
+		Success.State newState = new Success.State();
+    	newState.setMessage(Resources.constants.OrderDetail_operateSuccessfully());
+    	
+    	if(isDelete) {
+	    	OrderListPanel.State choice1 = new OrderListPanel.State();
+	    	newState.addChoice(OrderListPanel.getInstance().getName(), choice1.getFullHistoryToken());  
+    	}
+    	else {  	
+	    	OrderDetailPanel.State choice1 = new OrderDetailPanel.State();
+	    	choice1.setPkId(getCurState().getPkId());
+	    	newState.addChoice(OrderDetailPanel.getInstance().getName(), choice1.getFullHistoryToken());	
+    	}
+    	newState.execute();
 	}
 
 	/**
@@ -462,99 +712,118 @@ public class OrderDetailPanel  extends ContentWidget{
 				}
 			}
 			public void run() {
-				initOperableMap();
-				/* 状态：未确认 => 未付款、未发货 */
-				if(orderStatus == IOrderInfo.OS_UNCONFIRMED) {
-					operableMap.put(Resources.constants.OrderDetail_comfirm(), true); // 确认
-					operableMap.put(Resources.constants.OrderDetail_invalid(), true); // 无效
-					operableMap.put(Resources.constants.OrderDetail_cancel(), true); // 取消
-					//不是货到付款
-					operableMap.put(Resources.constants.OrderDetail_pay(), true); // 付款
-				}				
-
-				/* 状态：已确认 */
-				else if(orderStatus == IOrderInfo.OS_CONFIRMED) {
-		            /* 状态：已确认、未付款 */
-			        if (payStatus == IOrderInfo.PS_UNPAYED)
-			        {
-		                /* 状态：已确认、未付款、未发货（或配货中） */
-			            if (IOrderInfo.SS_UNSHIPPED == shippingStatus || IOrderInfo.SS_PREPARING == shippingStatus)
-			            {
-			            	operableMap.put(Resources.constants.OrderDetail_cancel(), true); // 取消
-			            	operableMap.put(Resources.constants.OrderDetail_invalid(), true);  // 无效
-			                
-			                /* 不是货到付款 */
-			            	operableMap.put(Resources.constants.OrderDetail_pay(), true); // 付款
-			            }
-		                /* 状态：已确认、未付款、已发货或已收货 */
-			            else
-			            {
-			            	operableMap.put(Resources.constants.OrderDetail_pay(), true); // 付款
-			                if (IOrderInfo.SS_SHIPPED == shippingStatus)
-			                {
-			                	operableMap.put(Resources.constants.OrderDetail_receive(), true); // 收货确认
-			                }
-			                operableMap.put(Resources.constants.OrderDetail_unship(), true); // 设为未发货
-			                operableMap.put(Resources.constants.OrderDetail_return(), true); // 退货
-			            }
-			        }
-
-		            /* 状态：已确认、已付款和付款中 */
-			        else
-			        {
-		                /* 状态：已确认、已付款和付款中、未发货（配货中） */
-			            if (IOrderInfo.SS_UNSHIPPED == shippingStatus || IOrderInfo.SS_PREPARING == shippingStatus)
-			            {
-			                if (IOrderInfo.SS_UNSHIPPED == shippingStatus)
-			                {
-//			                	operableList.add(Resources.constants.OrderDetail_prepare()); // 配货
-			                	operableMap.put(Resources.constants.OrderDetail_prepare(), true); // 配货
-			                }
-			                operableMap.put(Resources.constants.OrderDetail_ship(), true); // 发货
-			                operableMap.put(Resources.constants.OrderDetail_unpay(), true); // 设为未付款
-			                operableMap.put(Resources.constants.OrderDetail_cancel(), true); // 取消
-			            }
-
-		                /* 状态：已确认、已付款和付款中、已发货或已收货 */
-			            else
-			            {
-			                if (IOrderInfo.SS_SHIPPED == shippingStatus)
-			                {
-			                	operableMap.put(Resources.constants.OrderDetail_receive(), true); // 收货确认
-			                }
-			                operableMap.put(Resources.constants.OrderDetail_unship(), true); // 设为未发货
-			                operableMap.put(Resources.constants.OrderDetail_return(), true); // 退货（包括退款）
-			            }
-			        }
-				}
-
-		        /* 状态：取消 */
-				else if (IOrderInfo.OS_CANCELED == orderStatus) {
-					operableMap.put(Resources.constants.OrderDetail_comfirm(), true);
-					operableMap.put(Resources.constants.OrderDetail_remove(), true);
-			    }
-
-		        /* 状态：无效 */
-			    else if (IOrderInfo.OS_INVALID == orderStatus) {
-			    	operableMap.put(Resources.constants.OrderDetail_comfirm(), true);
-			    	operableMap.put(Resources.constants.OrderDetail_remove(), true);
-			    }
-		        /* 状态：退货 */
-			    else if (IOrderInfo.OS_RETURNED == orderStatus)
-			    {
-			    	operableMap.put(Resources.constants.OrderDetail_comfirm(), true);
-			    }
-				getOperableReady = true;
+				getList(orderStatus, payStatus, shippingStatus);
 			}
 		});
 	}
 
+	protected void getList(long orderStatus, long payStatus,
+			long shippingStatus) {
+		initOperableMap();
+		/* 状态：未确认 => 未付款、未发货 */
+		if(orderStatus == IOrderInfo.OS_UNCONFIRMED) {
+			operableMap.put(Resources.constants.OrderDetail_comfirm(), true); // 确认
+			operableMap.put(Resources.constants.OrderDetail_invalid(), true); // 无效
+			operableMap.put(Resources.constants.OrderDetail_cancel(), true); // 取消
+			//不是货到付款
+			operableMap.put(Resources.constants.OrderDetail_pay(), true); // 付款
+		}				
+
+		/* 状态：已确认 */
+		else if(orderStatus == IOrderInfo.OS_CONFIRMED) {
+            /* 状态：已确认、未付款 */
+	        if (payStatus == IOrderInfo.PS_UNPAYED)
+	        {
+                /* 状态：已确认、未付款、未发货（或配货中） */
+	            if (IOrderInfo.SS_UNSHIPPED == shippingStatus || IOrderInfo.SS_PREPARING == shippingStatus)
+	            {
+	            	operableMap.put(Resources.constants.OrderDetail_cancel(), true); // 取消
+	            	operableMap.put(Resources.constants.OrderDetail_invalid(), true);  // 无效
+	                
+	                /* 不是货到付款 */
+	            	operableMap.put(Resources.constants.OrderDetail_pay(), true); // 付款
+	            }
+                /* 状态：已确认、未付款、已发货或已收货 */
+	            else
+	            {
+	            	operableMap.put(Resources.constants.OrderDetail_pay(), true); // 付款
+	                if (IOrderInfo.SS_SHIPPED == shippingStatus)
+	                {
+	                	operableMap.put(Resources.constants.OrderDetail_receive(), true); // 收货确认
+	                }
+	                operableMap.put(Resources.constants.OrderDetail_unship(), true); // 设为未发货
+	                operableMap.put(Resources.constants.OrderDetail_return(), true); // 退货
+	            }
+	        }
+
+            /* 状态：已确认、已付款和付款中 */
+	        else
+	        {
+                /* 状态：已确认、已付款和付款中、未发货（配货中） */
+	            if (IOrderInfo.SS_UNSHIPPED == shippingStatus || IOrderInfo.SS_PREPARING == shippingStatus)
+	            {
+	                if (IOrderInfo.SS_UNSHIPPED == shippingStatus)
+	                {
+//	                	operableList.add(Resources.constants.OrderDetail_prepare()); // 配货
+	                	operableMap.put(Resources.constants.OrderDetail_prepare(), true); // 配货
+	                }
+	                operableMap.put(Resources.constants.OrderDetail_ship(), true); // 发货
+	                operableMap.put(Resources.constants.OrderDetail_unpay(), true); // 设为未付款
+	                operableMap.put(Resources.constants.OrderDetail_cancel(), true); // 取消
+	            }
+
+                /* 状态：已确认、已付款和付款中、已发货或已收货 */
+	            else
+	            {
+	                if (IOrderInfo.SS_SHIPPED == shippingStatus)
+	                {
+	                	operableMap.put(Resources.constants.OrderDetail_receive(), true); // 收货确认
+	                }
+	                operableMap.put(Resources.constants.OrderDetail_unship(), true); // 设为未发货
+	                operableMap.put(Resources.constants.OrderDetail_return(), true); // 退货（包括退款）
+	            }
+	        }
+		}
+
+        /* 状态：取消 */
+		else if (IOrderInfo.OS_CANCELED == orderStatus) {
+			operableMap.put(Resources.constants.OrderDetail_comfirm(), true);
+			operableMap.put(Resources.constants.OrderDetail_remove(), true);
+	    }
+
+        /* 状态：无效 */
+	    else if (IOrderInfo.OS_INVALID == orderStatus) {
+	    	operableMap.put(Resources.constants.OrderDetail_comfirm(), true);
+	    	operableMap.put(Resources.constants.OrderDetail_remove(), true);
+	    }
+        /* 状态：退货 */
+	    else if (IOrderInfo.OS_RETURNED == orderStatus)
+	    {
+	    	operableMap.put(Resources.constants.OrderDetail_comfirm(), true);
+	    }
+		getOperableReady = true;
+	}
+
+
+	String adminUserName;
 	@Override
 	public void refresh() {
 		getOrderInfo();
 		refreshOperableAction();
 		goodsToolBar.refresh();
 		operationToolBar.refresh();
+		btnRefund.setVisible(false);
+		//获得管理员用户名
+		RemoteService.getSpecialService().getAdminUserInfo(new AsyncCallback<Map<String,String>>(){
+			public void onFailure(Throwable caught) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void onSuccess(Map<String, String> result) {
+				adminUserName = result.get(IAdminUser.USER_NAME);
+			}
+		});
 	}
 
 	private void refreshOperableAction() {
@@ -606,18 +875,112 @@ public class OrderDetailPanel  extends ContentWidget{
 				shippingStatus = bean.get(IOrderInfo.SHIPPING_STATUS);
 				stateLabel.setText(getState(orderStatus, payStatus, shippingStatus));
 				
-				String userId = bean.get(IOrderInfo.USER_ID);
-				new ReadService().getBean(ModelNames.USER, userId, new ReadService.Listener() {
-					public void onSuccess(BeanObject bean) {
-						buyerLabel.setText((String) bean.get(IUser.USER_NAME));
+				final String userId = bean.get(IOrderInfo.USER_ID);
+				btnEditFee.addSelectionListener(new SelectionListener<ButtonEvent>() {
+					public void componentSelected(ButtonEvent ce) {
+						if((Long)bean.get(IOrderInfo.SHIPPING_STATUS) == IOrderInfo.SS_SHIPPED) {
+							gotoFailPage();
+						}
+						else {
+							OrderFeePanel.State newState = new OrderFeePanel.State();
+							newState.setPkId(getCurState().getPkId());
+							newState.setUserId(userId);
+							newState.setIsEdit(true);
+							newState.execute();
+						}
 					}
 				});
+				
+				btnEditPay.addSelectionListener(new SelectionListener<ButtonEvent>() {
+					public void componentSelected(ButtonEvent ce) {
+						if((Long)bean.get(IOrderInfo.SHIPPING_STATUS) == IOrderInfo.SS_SHIPPED) {
+							gotoFailPage();
+						}
+						else {
+							OrderPayPanel.State newState = new OrderPayPanel.State();
+							newState.setPkId(getCurState().getPkId());
+							newState.setIsEdit(true);
+							newState.execute();
+						}
+					}
+				});
+				
+				btnEditShipping.addSelectionListener(new SelectionListener<ButtonEvent>() {
+					public void componentSelected(ButtonEvent ce) {
+						if((Long)bean.get(IOrderInfo.SHIPPING_STATUS) == IOrderInfo.SS_SHIPPED) {
+							gotoFailPage();
+						}
+						else {
+							OrderShippingPanel.State newState = new OrderShippingPanel.State();
+							newState.setPkId(getCurState().getPkId());
+							newState.setIsEdit(true);
+							newState.execute();
+						}
+					}
+				});
+
+				btnEditConsignee.addSelectionListener(new SelectionListener<ButtonEvent>() {
+					public void componentSelected(ButtonEvent ce) {
+						if((Long)bean.get(IOrderInfo.SHIPPING_STATUS) == IOrderInfo.SS_SHIPPED) {
+							gotoFailPage();
+						}
+						else {
+							ConsigneePanel.State newState = new ConsigneePanel.State();
+							newState.setPkId(getCurState().getPkId());
+							newState.setUserId(userId);
+							newState.setIsEdit(true);
+							newState.execute();
+						}
+					}
+				});
+				
+
+				btnEditGoods.addSelectionListener(new SelectionListener<ButtonEvent>() {
+					public void componentSelected(ButtonEvent ce) {
+						if((Long)bean.get(IOrderInfo.SHIPPING_STATUS) == IOrderInfo.SS_SHIPPED) {
+							gotoFailPage();
+						}
+						else {
+							OrderGoodsPanel.State newState = new OrderGoodsPanel.State();
+							newState.setPkId(getCurState().getPkId());
+							newState.setIsEdit(true);
+							newState.execute();
+						}
+					}
+				});
+				
+				btnRefund.addSelectionListener(new SelectionListener<ButtonEvent>() {
+					public void componentSelected(ButtonEvent ce) {
+						double orderAmount = (Double)bean.get(IOrderInfo.ORDER_AMOUNT);
+						double moneyPaid = (Double)bean.get(IOrderInfo.MONEY_PAID);
+						moneyPaid += orderAmount;
+						bean.set(IOrderInfo.MONEY_PAID, moneyPaid);
+						bean.set(IOrderInfo.ORDER_AMOUNT, 0);
+						new UpdateService().updateBean((String)bean.get(IOrderInfo.PK_ID), bean, new UpdateService.Listener() {
+							public void onSuccess(Boolean success) {
+								gotoSuccessPanel(false);
+							}
+							
+						});
+					}
+				});
+				
+				if(userId == null) {
+					buyerLabel.setText(Resources.constants.OrderDetail_anonymousUser());
+				}
+				else {
+					new ReadService().getBean(ModelNames.USER, userId, new ReadService.Listener() {
+						public void onSuccess(BeanObject bean) {
+							buyerLabel.setText((String) bean.get(IUser.USER_NAME));
+						}
+					});
+				}
 				
 				long addTime = bean.get(IOrderInfo.ADD_TIME);				
 				addTimeLabel.setText(formatTime(addTime));
 				
 				payMannerLabel.setText((String) bean.get(IOrderInfo.PAY_NAME));
-				if(payStatus != 2) {
+				if(payStatus != IOrderInfo.PS_PAYED) {
 					payTimeLabel.setText(Resources.constants.OrderStatus_PS_UNPAYED());
 				} else {
 					long payTime = bean.get(IOrderInfo.PAY_TIME);
@@ -625,7 +988,7 @@ public class OrderDetailPanel  extends ContentWidget{
 				}
 				
 				shippingMannerLabel.setText((String) bean.get(IOrderInfo.SHIPPING_NAME));
-				if(shippingStatus != 2 || shippingStatus != 3)  {
+				if(shippingStatus == IOrderInfo.SS_PREPARING || shippingStatus == IOrderInfo.SS_UNSHIPPED)  {
 					shippingTimeLabel.setText(Resources.constants.OrderStatus_SS_UNSHIPPED());
 				} else {
 					long shippingTime = bean.get(IOrderInfo.SHIPPING_TIME);
@@ -634,7 +997,9 @@ public class OrderDetailPanel  extends ContentWidget{
 				
 				invoiceNoLabel.setText((String) bean.get(IOrderInfo.INVOICE_NO));
 				//refererLabel.setText((String) bean.get(IOrderInfo.REFERER));
-				refererLabel.setText(Resources.constants.OrderDetail_selfSite());
+				String referer = (String) (bean.get(IOrderInfo.REFERER) == null ? Resources.constants.OrderDetail_selfSite()
+						: bean.get(IOrderInfo.REFERER));
+				refererLabel.setText(referer);
 				
 				//收货人信息
 				consigneeLabel.setText((String) bean.get(IOrderInfo.CONSIGNEE));
@@ -659,6 +1024,13 @@ public class OrderDetailPanel  extends ContentWidget{
 				moneyPaidLabel.setText("￥" + bean.get(IOrderInfo.MONEY_PAID));
 				surplusLabel.setText("￥" + bean.get(IOrderInfo.SURPLUS));
 				moneyShouldPayLabel.setText("￥" + bean.get(IOrderInfo.ORDER_AMOUNT));
+				if((Double)bean.get(IOrderInfo.ORDER_AMOUNT) < 0) {
+					moneyShouldPayTitle.setText("=" + Resources.constants.OrderDetail_moneyShouldRefund() + ":");
+					btnRefund.setVisible(true);
+				}
+				else {
+					moneyShouldPayTitle.setText("=" + Resources.constants.OrderDetail_moneyShouldPay() + ":");
+				}
 				
 				//查询地址
 				String countryId = bean.get(IOrderInfo.COUNTRY).toString();
@@ -670,10 +1042,10 @@ public class OrderDetailPanel  extends ContentWidget{
 				condition.setField(IRegion.PK_ID);
 				condition.setOperator(Condition.EQUALS);
 				criteria.addCondition(condition);
-				getRegion(countryId);
-				getRegion(provinceId);
-				getRegion(cityId);
-				getRegion(districtId);
+				getRegion("country", countryId);
+				getRegion("province", provinceId);
+				getRegion("city", cityId);
+				getRegion("district", districtId);
 				
 				new WaitService(new WaitService.Job() {
 					public boolean isReady() {
@@ -694,14 +1066,21 @@ public class OrderDetailPanel  extends ContentWidget{
 
 			Criteria criteria;
 			Condition condition;
-			private void getRegion(String id) {
+			private void getRegion(final String region, String id) {
 				if(id != null) {
 					condition.setValue(id);
 					new ListService().listBeans(ModelNames.REGION, criteria, new ListService.Listener() {
 						public void onSuccess(List<BeanObject> beans) {
 							if(beans.size() != 0) {
 								BeanObject bo = beans.get(0);
-								country = bo.get(IRegion.REGION_NAME);
+								if(region.equals("country"))	
+									country = bo.get(IRegion.REGION_NAME);
+								else if(region.equals("province"))
+									province = bo.get(IRegion.REGION_NAME);
+								else if(region.equals("city"))
+									city = bo.get(IRegion.REGION_NAME);
+								else
+									district = bo.get(IRegion.REGION_NAME);
 							}
 							isReady++;
 						}
@@ -712,7 +1091,16 @@ public class OrderDetailPanel  extends ContentWidget{
 			}
 		});
 	}
-
+	
+	protected void gotoFailPage() {
+		Success.State newState = new Success.State();
+    	newState.setMessage(Resources.constants.OrderDetail_modifyWrong());
+    	OrderDetailPanel.State choice1 = new OrderDetailPanel.State();
+    	choice1.setPkId(getCurState().getPkId());
+    	newState.addChoice(OrderDetailPanel.getInstance().getName(), choice1.getFullHistoryToken());
+		newState.execute();
+	}
+	
 	protected String formatTime(long time) {
 		Date dateTime = new Date();
 		dateTime.setTime(time);
@@ -724,52 +1112,53 @@ public class OrderDetailPanel  extends ContentWidget{
 	protected String getState(Long orderStatus, Long payStatus, Long shippingStatus) {
 		String orderStatusStr = null;
 		switch(orderStatus.intValue()) { 
-		case IOrderInfo.OS_CANCELED: 
-			orderStatusStr = Resources.constants.OrderStatus_OS_CANCELED();
-			break;
-		case IOrderInfo.OS_CONFIRMED: 
-			orderStatusStr = Resources.constants.OrderStatus_OS_CONFIRMED();
-			break;
-		case IOrderInfo.OS_INVALID: 
-			orderStatusStr = Resources.constants.OrderStatus_OS_INVALID();
-			break;
-		case IOrderInfo.OS_RETURNED: 
-			orderStatusStr = Resources.constants.OrderStatus_OS_RETURNED();
-			break;
-		case IOrderInfo.OS_UNCONFIRMED: 
-			orderStatusStr = Resources.constants.OrderStatus_OS_UNCONFIRMED();
-			break;
+			case IOrderInfo.OS_CANCELED: 
+				orderStatusStr = Resources.constants.OrderStatus_OS_CANCELED();
+				break;
+			case IOrderInfo.OS_CONFIRMED: 
+				orderStatusStr = Resources.constants.OrderStatus_OS_CONFIRMED();
+				break;
+			case IOrderInfo.OS_INVALID: 
+				orderStatusStr = Resources.constants.OrderStatus_OS_INVALID();
+				break;
+			case IOrderInfo.OS_RETURNED: 
+				orderStatusStr = Resources.constants.OrderStatus_OS_RETURNED();
+				break;
+			case IOrderInfo.OS_UNCONFIRMED: 
+				orderStatusStr = Resources.constants.OrderStatus_OS_UNCONFIRMED();
+				break;
+		}
+	
+		String payStatusStr = null;
+		switch(payStatus.intValue()) {
+			case IOrderInfo.PS_PAYED: 
+				payStatusStr = Resources.constants.OrderStatus_PS_PAYED();
+				break;
+			case IOrderInfo.PS_PAYING: 
+				payStatusStr = Resources.constants.OrderStatus_PS_PAYING();
+				break;
+			case IOrderInfo.PS_UNPAYED:
+				payStatusStr = Resources.constants.OrderStatus_PS_UNPAYED();
+				break;
+		}
+		
+		String shippingStatusStr = null;
+		switch(shippingStatus.intValue()) {
+			case IOrderInfo.SS_PREPARING: 
+				shippingStatusStr = Resources.constants.OrderStatus_SS_PREPARING(); 
+				break;
+			case IOrderInfo.SS_RECEIVED: 
+				shippingStatusStr = Resources.constants.OrderStatus_SS_RECEIVED(); 
+				break;
+			case IOrderInfo.SS_SHIPPED: 
+				shippingStatusStr = Resources.constants.OrderStatus_SS_SHIPPED(); 
+				break;
+			case IOrderInfo.SS_UNSHIPPED: 
+				shippingStatusStr = Resources.constants.OrderStatus_SS_UNSHIPPED(); 
+				break;
+		}
+		
+		return orderStatusStr + "," + payStatusStr + "," + shippingStatusStr;
 	}
 	
-	String payStatusStr = null;
-	switch(payStatus.intValue()) {
-		case IOrderInfo.PS_PAYED: 
-			payStatusStr = Resources.constants.OrderStatus_PS_PAYED();
-			break;
-		case IOrderInfo.PS_PAYING: 
-			payStatusStr = Resources.constants.OrderStatus_PS_PAYING();
-			break;
-		case IOrderInfo.PS_UNPAYED:
-			payStatusStr = Resources.constants.OrderStatus_PS_UNPAYED();
-			break;
-	}
-	
-	String shippingStatusStr = null;
-	switch(shippingStatus.intValue()) {
-		case IOrderInfo.SS_PREPARING: 
-			shippingStatusStr = Resources.constants.OrderStatus_SS_PREPARING(); 
-			break;
-		case IOrderInfo.SS_RECEIVED: 
-			shippingStatusStr = Resources.constants.OrderStatus_SS_RECEIVED(); 
-			break;
-		case IOrderInfo.SS_SHIPPED: 
-			shippingStatusStr = Resources.constants.OrderStatus_SS_SHIPPED(); 
-			break;
-		case IOrderInfo.SS_UNSHIPPED: 
-			shippingStatusStr = Resources.constants.OrderStatus_SS_UNSHIPPED(); 
-			break;
-	}
-	
-	return orderStatusStr + "," + payStatusStr + "," + shippingStatusStr;
-	}
 }

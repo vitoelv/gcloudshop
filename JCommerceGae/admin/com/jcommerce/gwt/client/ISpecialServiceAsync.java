@@ -52,5 +52,12 @@ public interface ISpecialServiceAsync {
     
     public void deserialize(String serializedConfig, AsyncCallback<Map<String,String>> callback);
     public void calculate(String shippingCode, Double goodsWeight, Double goodsAmount, Map<String, String> configValues, AsyncCallback<Double> callback);
+    public void getAttributeMap(String id, AsyncCallback<Map<String, Map<String, String>>> callback);
+    public void getShippingConfig(String shippingId, AsyncCallback<Map<String, String>> callback);
+//    public void getShippingFee(String userId, String shippingId, String orderId, AsyncCallback<Map<String, String>> callback);
+//    public void getPayFee(String payId, String orderId, String userId, AsyncCallback<Map<String, Object>> callback);
+    public void getOrderFee(String orderId, String shipping, String payId, AsyncCallback<Map<String, Object>> callback);
+    public void deleteOrder(String orderId, AsyncCallback<Boolean> callback);
+    public void mergeOrder(String fromId, String toId, AsyncCallback<Boolean> callback);
 
 }

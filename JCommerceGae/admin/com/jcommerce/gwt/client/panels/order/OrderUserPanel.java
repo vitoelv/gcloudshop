@@ -1,6 +1,7 @@
 package com.jcommerce.gwt.client.panels.order;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
@@ -15,14 +16,18 @@ import com.extjs.gxt.ui.client.widget.form.Radio;
 import com.extjs.gxt.ui.client.widget.form.RadioGroup;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.ListBox;
 import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.UserForm;
 import com.jcommerce.gwt.client.model.IOrderInfo;
+import com.jcommerce.gwt.client.model.IUser;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.CreateService;
+import com.jcommerce.gwt.client.service.ListService;
 
 public class OrderUserPanel extends ContentWidget{
 	
@@ -33,6 +38,9 @@ public class OrderUserPanel extends ContentWidget{
 		String OrderUser_search();
 		String OrderUser_next();
 		String OrderUser_cancel();
+		String OrderUser_admin();
+		String OrderUser_select();
+		String OrderUser_selectUser();
 	}
 	
 
@@ -91,6 +99,7 @@ public class OrderUserPanel extends ContentWidget{
 	private static final String SEARCH_FIELD_NAME = "searchCondition";
 	private Button search = null;
 	private ComboBox<UserForm> cbUser = null;
+	private ListBox lbUser = null;
 	private Button next = null;
 	private Button cancel = null;
 	
@@ -109,26 +118,29 @@ public class OrderUserPanel extends ContentWidget{
 		
 		rOtherUser = new Radio();
 		rOtherUser.setName("user");
-		rOtherUser.setBoxLabel(Resources.constants.OrderUser_otherUser());
+		rOtherUser.setBoxLabel(Resources.constants.OrderUser_selectUser());
 		hp.add(rOtherUser);
 		
 		rgroup = new RadioGroup();
 		rgroup.add(rAnonymousUser);
 		rgroup.add(rOtherUser);
+		rgroup.setValue(rAnonymousUser);
 		
-		searchCondition = new TextField<String>();
-		searchCondition.setName(SEARCH_FIELD_NAME);
-		hp.add(searchCondition);
-		
-		search = new Button();
-		search.setText(Resources.constants.OrderUser_search());
-		hp.add(search);
-		
-		cbUser = new ComboBox<UserForm>();
-		ListStore<UserForm> store = new ListStore<UserForm>();
-		cbUser.setStore(store);
-		
-		hp.add(cbUser);
+//		searchCondition = new TextField<String>();
+//		searchCondition.setName(SEARCH_FIELD_NAME);
+//		hp.add(searchCondition);
+//		
+//		search = new Button();
+//		search.setText(Resources.constants.OrderUser_search());
+//		hp.add(search);
+//		
+//		cbUser = new ComboBox<UserForm>();
+//		ListStore<UserForm> store = new ListStore<UserForm>();
+//		cbUser.setStore(store);
+//		
+//		hp.add(cbUser);
+		lbUser = new ListBox();
+		hp.add(lbUser);
 		
 		vp.add(hp);
 		
@@ -164,7 +176,15 @@ public class OrderUserPanel extends ContentWidget{
 	
 	@Override
 	public void refresh() {
-		
+		lbUser.clear();
+		lbUser.addItem(Resources.constants.OrderUser_select(), "0");
+		new ListService().listBeans(ModelNames.USER, new ListService.Listener() {
+			public void onSuccess(List<BeanObject> beans) {
+				for(BeanObject bean : beans) {
+					lbUser.addItem((String)bean.get(IUser.USER_NAME), (String)bean.get(IUser.PK_ID));
+				}
+			}
+		});
 	}
 	
 	private void createNewOrder(){
@@ -173,16 +193,36 @@ public class OrderUserPanel extends ContentWidget{
 		props.put(IOrderInfo.ORDER_STATUS, IOrderInfo.OS_INVALID);
 		props.put(IOrderInfo.SHIPPING_STATUS, IOrderInfo.SS_UNSHIPPED);
 		props.put(IOrderInfo.PAY_STATUS, IOrderInfo.PS_UNPAYED);
+		props.put(IOrderInfo.REFERER, Resources.constants.OrderUser_admin());
+		if(rOtherUser.equals(rgroup.getValue())) {
+			if(lbUser.getSelectedIndex() == 0) {
+				Window.alert(Resources.constants.OrderUser_selectUser());
+			}
+			else {
+				props.put(IOrderInfo.USER_ID, lbUser.getValue(lbUser.getSelectedIndex()));
+				BeanObject form = new BeanObject(ModelNames.ORDERINFO, props);
+				new CreateService().createOrder(form, new CreateService.Listener(){
+					public void onSuccess(String id) {
+						OrderGoodsPanel.State newState = new OrderGoodsPanel.State();
+						newState.setPkId(id);
+						newState.setUserId(lbUser.getValue(lbUser.getSelectedIndex()));
+						newState.setIsEdit(false);
+						newState.execute();
+					}
+				});				
+			}
+		}
+		else {
+			BeanObject form = new BeanObject(ModelNames.ORDERINFO, props);
+			new CreateService().createOrder(form, new CreateService.Listener(){
+				public void onSuccess(String id) {
+					OrderGoodsPanel.State newState = new OrderGoodsPanel.State();
+					newState.setPkId(id);
+					newState.execute();
+				}
+			});	
+		}
 		
-		
-		BeanObject form = new BeanObject(ModelNames.ORDERINFO, props);
-		new CreateService().createOrder(form, new CreateService.Listener(){
-
-			@Override
-			public void onSuccess(String id) {
-				// TODO goto orderGoodsPanel
-
-			}});
 	}
 	
 	private void gotoOrderList(){

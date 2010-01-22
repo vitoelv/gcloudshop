@@ -13,8 +13,10 @@ import com.jcommerce.gwt.client.resources.Resources;
 public class OrderStateCellRenderer implements GridCellRenderer<BeanObject> {
     
 	GridView view;
+	String type = null;
 	
-	public OrderStateCellRenderer() {
+	public OrderStateCellRenderer(String type) {
+		this.type = type;
     }
     
 
@@ -74,7 +76,15 @@ public class OrderStateCellRenderer implements GridCellRenderer<BeanObject> {
 				break;
 		}
 		
-		return orderStatusStr + "," + payStatusStr + "," + shippingStatusStr;
+		if(type == null) {
+			return orderStatusStr + "," + payStatusStr + "," + shippingStatusStr;
+		}
+		else if(type.equals("os"))
+			return orderStatusStr;
+		else if(type.equals("ps"))
+			return payStatusStr;
+		else
+			return shippingStatusStr;
 	}
 }
 
