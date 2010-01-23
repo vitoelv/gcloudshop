@@ -304,7 +304,7 @@ public class OrderPayPanel extends ContentWidget{
 						Window.alert("ERROR: "+caught.getMessage());
 					}
 
-					@Override
+
 					public void onSuccess(Map<String, Object> result) {
 						
 						if(getCurState().getIsEdit()) {
@@ -345,7 +345,7 @@ public class OrderPayPanel extends ContentWidget{
 			new RemoteService().getSpecialService().deleteOrder(getCurState().getPkId(), new AsyncCallback<Boolean>(){
 				public void onFailure(Throwable caught) {
 				}
-				@Override
+
 				public void onSuccess(Boolean result) {
 				}
 			});

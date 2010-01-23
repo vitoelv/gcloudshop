@@ -819,7 +819,7 @@ public class OrderDetailPanel  extends ContentWidget{
 				// TODO Auto-generated method stub
 			}
 
-			@Override
+
 			public void onSuccess(Map<String, String> result) {
 				adminUserName = result.get(IAdminUser.USER_NAME);
 			}
