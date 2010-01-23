@@ -6,7 +6,7 @@
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>gcShop</name>
-  <url>http://gcloudshop.appspot.com</url>
+  <url>http://gc-shop.appspot.com</url>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -24,9 +24,9 @@
         <version>2.0</version>
         <configuration>
           <locales>en,zh_CN</locales>
-          <!--  test only 
+          <!--  test 
           <outputDirectory>${basedir}/../../site</outputDirectory>
-          -->
+          only -->
           <!-- -->
           <outputDirectory>${basedir}/../war/site</outputDirectory>
            
@@ -36,7 +36,7 @@
     </pluginManagement>
   </build>
   <organization>
-	<name>&lt;div &gt;  you are visitor NO. &lt;script language="JavaScript" type="text/javascript" src="http://counter1.fc2.com/counter.php?id=6147805"&gt;&lt;/script&gt;&lt;/div&gt;</name>
+	<name>&lt;div &gt;  Visited: &lt;script language="JavaScript" type="text/javascript" src="http://counter1.fc2.com/counter.php?id=6147805"&gt;&lt;/script&gt;&lt;/div&gt;</name>
 	</organization>
   
 </project>
