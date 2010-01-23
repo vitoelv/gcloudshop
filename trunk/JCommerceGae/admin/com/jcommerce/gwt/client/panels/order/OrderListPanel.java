@@ -416,7 +416,6 @@ public class OrderListPanel  extends ContentWidget{
 				// TODO Auto-generated method stub
 			}
 
-			@Override
 			public void onSuccess(Map<String, String> result) {
 				adminUserName = result.get(IAdminUser.USER_NAME);
 			}
@@ -563,7 +562,7 @@ public class OrderListPanel  extends ContentWidget{
 					new RemoteService().getSpecialService().deleteOrder(orderId, new AsyncCallback<Boolean>(){
 						public void onFailure(Throwable caught) {
 						}
-						@Override
+
 						public void onSuccess(Boolean result) {
 						}
 					});

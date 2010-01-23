@@ -561,7 +561,6 @@ public class OrderGoodsPanel extends ContentWidget{
 						Window.alert("ERROR: "+caught.getMessage());
 					}
 
-					@Override
 					public void onSuccess(Map<String, Object> result) {
 						if(getCurState().getIsEdit()) {
 							bean.set(IOrderInfo.SHIPPING_FEE, result.get("shippingFee"));
@@ -599,7 +598,7 @@ public class OrderGoodsPanel extends ContentWidget{
 			new RemoteService().getSpecialService().deleteOrder(getCurState().getPkId(), new AsyncCallback<Boolean>(){
 				public void onFailure(Throwable caught) {
 				}
-				@Override
+
 				public void onSuccess(Boolean result) {
 				}
 			});
@@ -627,7 +626,6 @@ public class OrderGoodsPanel extends ContentWidget{
 								Window.alert("ERROR: "+caught.getMessage());
 							}
 
-							@Override
 							public void onSuccess(Map<String, Object> result) {
 								bean.set(IOrderInfo.GOODS_AMOUNT, result.get("goodsPrice"));
 								bean.set(IOrderInfo.ORDER_AMOUNT, result.get("amount"));

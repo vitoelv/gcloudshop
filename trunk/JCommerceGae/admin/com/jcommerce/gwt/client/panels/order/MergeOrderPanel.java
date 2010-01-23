@@ -197,7 +197,7 @@ public class MergeOrderPanel extends ContentWidget {
 		new RemoteService().getSpecialService().mergeOrder((String)subOrder.get(IOrderInfo.PK_ID), (String)mainOrder.get(IOrderInfo.PK_ID), new AsyncCallback<Boolean>(){
 			public void onFailure(Throwable caught) {
 			}
-			@Override
+
 			public void onSuccess(Boolean result) {
 				if(result) {
 					Window.alert(Resources.constants.MergeOrder_success());

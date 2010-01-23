@@ -370,7 +370,7 @@ public class OrderFeePanel extends ContentWidget{
 			new RemoteService().getSpecialService().deleteOrder(getCurState().getPkId(), new AsyncCallback<Boolean>(){
 				public void onFailure(Throwable caught) {
 				}
-				@Override
+
 				public void onSuccess(Boolean result) {
 				}
 			});

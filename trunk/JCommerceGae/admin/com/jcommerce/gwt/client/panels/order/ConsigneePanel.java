@@ -533,7 +533,7 @@ public class ConsigneePanel extends BaseEntityEditPanel {
 											Window.alert("ERROR: "+caught.getMessage());
 										}
 
-										@Override
+
 										public void onSuccess(Map<String, Object> result) {
 											if(getCurState().getIsEdit()) {
 												//判断金额是否改变
@@ -611,7 +611,6 @@ public class ConsigneePanel extends BaseEntityEditPanel {
 			new RemoteService().getSpecialService().deleteOrder(getCurState().getOrderId(), new AsyncCallback<Boolean>(){
 				public void onFailure(Throwable caught) {
 				}
-				@Override
 				public void onSuccess(Boolean result) {
 				}
 			});
