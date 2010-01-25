@@ -131,6 +131,7 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
 		DSFile thumbFile = null;
 		if(fileForm!=null) {
 			thumbFile = new DSFile();
+			image = ImagesServiceFactory.makeImage(fileForm.getContent());
 			
 			thumbFile.setFileName("thumb"+fileForm.getFileName());
 			thumbFile.setMimeType(fileForm.getMimeType());
@@ -139,7 +140,7 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
 			newImage = imagesService.applyTransform(resize, image);
 			
 			thumbFile.setContent(new Blob(newImage.getImageData()));
-    		form.put(IGoods.GOODS_THUMB,thumbFile.getFileName());
+    		form.put(IGoods.THUMB,thumbFile.getFileName());
 		}
 		
 		GoodsForm bean = new GoodsForm(Goods.class.getName(), form);
@@ -173,20 +174,29 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
 					// new gallery
 					try {
 					fileForm = (FileForm)attrs.get(IGoodsGallery.IMAGE);
+					if(fileForm == null){
+						continue;
+					}
 					DSFile file = getFile(fileForm);
 					if(StringUtils.isEmpty(file.getFileName())) {
 						// no file uploaded.
 						// this happens when keeping empty in the default upload slot
 						continue;
 					}
+					image = ImagesServiceFactory.makeImage(fileForm.getContent());
+					//TODO load size from shopconfig
+					resize = ImagesServiceFactory.makeResize(400, 400);
+					newImage = imagesService.applyTransform(resize, image);
+					file.setContent(new Blob(newImage.getImageData()));
+					
 					gallery.setImage(file.getFileName());
 					gallery.setImageFile(file);
 					
-					image = ImagesServiceFactory.makeImage(fileForm.getContent());
+					
 					thumbFile = new DSFile();
 					thumbFile.setFileName("thumb"+fileForm.getFileName());
 					thumbFile.setMimeType(fileForm.getMimeType());
-					
+					//TODO load size from shopconfig
 					resize = ImagesServiceFactory.makeResize(100, 100);
 					newImage = imagesService.applyTransform(resize, image);
 					

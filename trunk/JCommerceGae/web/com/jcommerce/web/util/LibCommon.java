@@ -187,13 +187,13 @@ public class LibCommon {
 		for (CategoryWrapper cw : level1) {
 			res.append("<option value='"+cw.getPkId()+"' ");
 			res.append(cw.getPkId().equals(selected) ? "selected='true'" : "");
-			res.append(" >"+StringUtil.repeat("&nbsp", 0) + cw.getString("catName") + "</option>");
+			res.append(" >"+StringUtil.repeat("&nbsp;", 0) + cw.getString("catName") + "</option>");
 			List<CategoryWrapper> level2 = pcMap.get(cw.getPkId());
 			if (level2 != null) {
 				for (CategoryWrapper categoryWrapper : level2) {
 					res.append("<option value='"+categoryWrapper.getPkId()+"' ");
 					res.append(categoryWrapper.getPkId().equals(selected) ? "selected='true'" : "");
-					res.append(" >"+StringUtil.repeat("&nbsp", 4) + categoryWrapper.getString("catName") + "</option>");
+					res.append(" >"+StringUtil.repeat("&nbsp;", 4) + categoryWrapper.getString("catName") + "</option>");
 				}
 			}
 		}

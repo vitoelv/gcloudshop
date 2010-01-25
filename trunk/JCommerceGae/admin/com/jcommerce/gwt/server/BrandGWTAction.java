@@ -5,6 +5,10 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.images.Image;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.Transform;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.DSFile;
 import com.jcommerce.core.service.CustomizedManager;
@@ -139,11 +143,21 @@ public class BrandGWTAction extends BaseGWTHttpAction {
 //		String logoFileId = null;
 		FileForm fileForm = (FileForm)form.get(IBrand.LOGO_FILE);
 		DSFile file = null;
+		Image image = null;
+		Transform resize = null;
+		Image newImage = null;
+		ImagesService imagesService = ImagesServiceFactory.getImagesService();
+		
 		if(fileForm!=null) {
 			file = new DSFile();
-			file.setContent(new Blob(fileForm.getContent()));
+//			file.setContent(new Blob(fileForm.getContent()));
 			file.setFileName(fileForm.getFileName());
 			file.setMimeType(fileForm.getMimeType());
+			
+			image = ImagesServiceFactory.makeImage(fileForm.getContent());
+			resize = ImagesServiceFactory.makeResize(200, 200);
+			newImage = imagesService.applyTransform(resize, image);
+			file.setContent(new Blob(newImage.getImageData()));
 //			logoFileId = manager.txadd(file);
 		}
 		

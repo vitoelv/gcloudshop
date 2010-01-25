@@ -43,6 +43,7 @@ public class Goods extends ModelObject {
     @Persistent
     private String thumbFileId;
     @Persistent
+    @IsPK(myclazz="com.jcommerce.core.model.DSFile")
     private DSFile thumbFile;
 	
 	
