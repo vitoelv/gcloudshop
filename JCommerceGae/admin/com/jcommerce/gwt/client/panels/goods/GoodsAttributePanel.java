@@ -245,6 +245,11 @@ class GoodsAttributePanel  extends TabItem {
                 field.setValueField("value");
                 field.setFieldLabel(name);
                 field.setStore(store);
+                //Set value 
+                BeanObject bo = new BeanObject();
+            	bo.set("value", value);
+            	field.setValue(bo);
+            	
                 field.setEmptyText("Select a value...");   
                 field.setWidth(150);   
                 field.setTypeAhead(true);   

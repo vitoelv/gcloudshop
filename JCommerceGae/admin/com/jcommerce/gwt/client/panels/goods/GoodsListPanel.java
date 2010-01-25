@@ -7,6 +7,7 @@ import java.util.List;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.data.BasePagingLoader;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.MessageBoxEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.store.Record;
@@ -14,6 +15,8 @@ import com.extjs.gxt.ui.client.store.StoreEvent;
 import com.extjs.gxt.ui.client.store.StoreListener;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
+import com.extjs.gxt.ui.client.widget.Info;
+import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.NumberField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
@@ -474,17 +477,40 @@ public class GoodsListPanel extends ContentWidget {
 	   };
 	   }-*/;
 
-	private void deleteGoods(String id, DeleteService.Listener listener) {
-		new DeleteService().deleteBean(ModelNames.GOODS, id, listener);
+	private void deleteGoods(final String id,final DeleteService.Listener listener) {
+		MessageBox.confirm(Resources.constants.deleteConfirmTitle(), Resources.constants.deleteConfirmContent(), new com.extjs.gxt.ui.client.event.Listener<MessageBoxEvent>() {  
+        	public void handleEvent(MessageBoxEvent ce) {  
+                Button btn = ce.getButtonClicked(); 
+                if ( btn.getItemId().equals("yes")){
+                	new DeleteService().deleteBean(ModelNames.GOODS, id, listener);
+                }
+              }  
+            });  
+		
+		
 	}
 
-	private void deleteGoodsAndRefrsh(String id) {
-		new DeleteService().deleteBean(ModelNames.GOODS, id,
-				new DeleteService.Listener() {
-					public void onSuccess(Boolean success) {
-						toolBar.refresh();
-					}
-				});
+	private void deleteGoodsAndRefrsh(final String id) {
+		MessageBox.confirm(Resources.constants.deleteConfirmTitle(), Resources.constants.deleteConfirmContent(), new com.extjs.gxt.ui.client.event.Listener<MessageBoxEvent>() {  
+        	public void handleEvent(MessageBoxEvent ce) {  
+                Button btn = ce.getButtonClicked(); 
+                if ( btn.getItemId().equals("yes")){
+                	new DeleteService().deleteBean(ModelNames.GOODS, id, new DeleteService.Listener() {
+            			public void onSuccess(Boolean success) {
+            	        	if(success) {
+            	        		Info.display(Resources.constants.OperationSuccessful(), Resources.constants.CommentList_deleteSuccessfully());
+            	        	} else {
+            	        		Info.display(Resources.constants.OperationFailure(), Resources.constants.CommentList_deleteFailure());
+            	        	}
+            	    		toolBar.refresh();
+            	        }
+            	        public void onFailure(Throwable caught) {
+            	        	Info.display(Resources.constants.OperationFailure(), Resources.constants.CommentList_deleteFailure());
+            	        };
+            		});
+                }
+              }  
+            });  
 	}
 
 	private void editGoods(String id) {

@@ -37,7 +37,7 @@ public class LoginAction extends HttpServlet {
       String pwd = request.getParameter("userPwd");
       // added
       if(authenticate(username,pwd,request)){
-    	  String adminUrl = "/admin.jsp";
+    	  String adminUrl = "/admin.jsp?gwt.codesvr=192.168.68.75:9997";
     	  String devServer = (String)request.getSession().getAttribute(IAdminConstants.KEY_GWT_DEV_SERVER);
     	  if(StringUtils.isNotBlank(devServer)) {
     		// in dev mode

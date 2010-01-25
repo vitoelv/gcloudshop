@@ -302,6 +302,13 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 					file.setKeyName(fkn);
 					String fid = KeyFactory.keyToString(new KeyFactory.Builder("Goods",goodskn).addChild(GoodsGallery.class.getSimpleName(), gkn).addChild("DSFile", fkn).getKey());
 					gallery.setImageFileId(fid);
+					
+					DSFile thumbfile = gallery.getThumbFile();
+					String tfkn = DataStoreUtils.genKeyName(thumbfile);
+					String tfid = KeyFactory.keyToString(new KeyFactory.Builder("Goods",goodskn).addChild(GoodsGallery.class.getSimpleName(), gkn).addChild("DSFile", tfkn).getKey());
+					thumbfile.setKeyName(tfkn);				
+					gallery.setThumbFileId(tfid);
+					
 					gallery.setLongId(UUIDLongGenerator.newUUID());
 					po.getGalleries().add(gallery);
 				}
@@ -314,6 +321,7 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 			if(galleries.size()>0) {
 				GoodsGallery gallery = (GoodsGallery)(galleries.iterator().next());
 				po.setImageFileId(gallery.getImageFileId());
+				po.setThumbFileId(gallery.getThumbFileId());
 			} else {
 				po.setImageFileId(null);
 			}

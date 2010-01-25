@@ -138,10 +138,10 @@ _input_charset=utf-8
         	buf.append("<input name=\"item_price_" + i + "\" type=\"hidden\" value=\"" + goods.getGoodsPrice() + "\"/>");
         	i++;
         }
-        buf.append("<input name=\"item_name_" + i + "\" type=\"hidden\" value=\"" + order.getShippingName() + "\"/>");
-    	buf.append("<input name=\"item_description_" + i + "\" type=\"hidden\" value=\"" + order.getShippingName() + "\"/>");
-    	buf.append("<input name=\"item_quantity_" + i + "\" type=\"hidden\" value=\"" + 1 + "\"/>");
-    	buf.append("<input name=\"item_price_" + i + "\" type=\"hidden\" value=\"" + order.getShippingFee() + "\"/>");
+//        buf.append("<input name=\"item_name_" + i + "\" type=\"hidden\" value=\"" + order.getShippingName() + "\"/>");
+//    	buf.append("<input name=\"item_description_" + i + "\" type=\"hidden\" value=\"" + order.getShippingName() + "\"/>");
+//    	buf.append("<input name=\"item_quantity_" + i + "\" type=\"hidden\" value=\"" + 1 + "\"/>");
+//    	buf.append("<input name=\"item_price_" + i + "\" type=\"hidden\" value=\"" + order.getShippingFee() + "\"/>");
     	
         buf.append("<input name=\"_charset_\" type=\"hidden\" value=\"utf-8\"/>");
         buf.append("<input type=\"image\" name=\"Google Checkout\" alt=\"Fast checkout through Google\" src=\"http://checkout.google.com/buttons/checkout.gif?merchant_id=726838326316485&w=180&h=46&style=white&variant=text&loc=en_US\" height=\"46\" width=\"180\" />");
