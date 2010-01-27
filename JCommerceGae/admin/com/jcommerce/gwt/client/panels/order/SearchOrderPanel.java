@@ -350,16 +350,15 @@ public class SearchOrderPanel extends ContentWidget {
 		if(telField.getValue() != null)
 			condition.add(IOrderInfo.MOBILE + ":" + telField.getValue());
 		if(phoneField.getValue() != null)
-			condition.add(IOrderInfo.TEL + ":" + phoneField.getValue());
-		
-//		if(countryList.getSelectedIndex() > 0)
-//			condition.add(IOrderInfo.COUNTRY + ":" + countryList.getValue(countryList.getSelectedIndex()));
-//		if(provinceList.getSelectedIndex() > 0)
-//			condition.add(IOrderInfo.PROVINCE + ":" + provinceList.getValue(provinceList.getSelectedIndex()));
-//		if(cityList.getSelectedIndex() > 0)
-//			condition.add(IOrderInfo.CITY + ":" + cityList.getValue(cityList.getSelectedIndex()));
-//		if(districtList.getSelectedIndex() > 0)
-//			condition.add(IOrderInfo.DISTRICT + ":" + districtList.getValue(districtList.getSelectedIndex()));
+			condition.add(IOrderInfo.TEL + ":" + phoneField.getValue());		
+		if(countryList.getSelectedIndex() > 0)
+			condition.add(IOrderInfo.COUNTRY + ":" + countryList.getValue(countryList.getSelectedIndex()));
+		if(provinceList.getSelectedIndex() > 0)
+			condition.add(IOrderInfo.PROVINCE + ":" + provinceList.getValue(provinceList.getSelectedIndex()));
+		if(cityList.getSelectedIndex() > 0)
+			condition.add(IOrderInfo.CITY + ":" + cityList.getValue(cityList.getSelectedIndex()));
+		if(districtList.getSelectedIndex() > 0)
+			condition.add(IOrderInfo.DISTRICT + ":" + districtList.getValue(districtList.getSelectedIndex()));
 		if(payMannerList.getSelectedIndex() > 0)
 			condition.add(IOrderInfo.PAY_ID + ":" + payMannerList.getValue(payMannerList.getSelectedIndex()));
 		if(shipMannerList.getSelectedIndex() > 0)
@@ -371,7 +370,7 @@ public class SearchOrderPanel extends ContentWidget {
 		if(shipStateList.getSelectedIndex() > 0)
 			condition.add(IOrderInfo.SHIPPING_STATUS + ":" + shipStateList.getValue(shipStateList.getSelectedIndex()));
 		
-		//为其实日期加上时间
+		//为日期加上时间
 		if(fromDateField.isDirty()) {
 			Date now = new Date();
 			int hours = now.getHours();

@@ -12,7 +12,6 @@ import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.store.StoreEvent;
 import com.extjs.gxt.ui.client.store.StoreListener;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
-import com.extjs.gxt.ui.client.widget.Html;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.RadioGroup;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
@@ -27,22 +26,17 @@ import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.BeanObject;
-import com.jcommerce.gwt.client.model.IOrderGoods;
 import com.jcommerce.gwt.client.model.IOrderInfo;
-import com.jcommerce.gwt.client.model.IPayment;
 import com.jcommerce.gwt.client.model.IShipping;
 import com.jcommerce.gwt.client.panels.Success;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.Condition;
 import com.jcommerce.gwt.client.service.Criteria;
-import com.jcommerce.gwt.client.service.DeleteService;
-import com.jcommerce.gwt.client.service.ListService;
 import com.jcommerce.gwt.client.service.PagingListService;
 import com.jcommerce.gwt.client.service.ReadService;
 import com.jcommerce.gwt.client.service.RemoteService;
 import com.jcommerce.gwt.client.service.UpdateService;
 import com.jcommerce.gwt.client.service.WaitService;
-import com.jcommerce.gwt.client.widgets.MoneyFormatCellRenderer;
 import com.jcommerce.gwt.client.widgets.RadioCellRenderer;
 import com.jcommerce.gwt.client.widgets.ShippingFeeCellRenderer;
 
@@ -138,7 +132,10 @@ public class OrderShippingPanel extends ContentWidget{
 	Button btnOk;
 	Button btnPre;
 
-	MoneyFormatCellRenderer money;
+//	List<Double> freeMoneyList = new ArrayList<Double>();
+//	List<Double> shippingFeeList = new ArrayList<Double>();
+//	int isReady;
+//	int size;
 	@Override
 	protected void onRender(Element parent, int index) {
 		super.onRender(parent, index);
@@ -151,24 +148,62 @@ public class OrderShippingPanel extends ContentWidget{
     	store.addStoreListener(new StoreListener<BeanObject>() {
 	    	public void storeDataChanged(StoreEvent<BeanObject> se) {
 				List<BeanObject> storeData = (List<BeanObject>)se.getStore().getModels();
+//				freeMoneyList.clear();
+//				shippingFeeList.clear();
+//				isReady = 0;
+//				size = storeData.size() * 2;
 				for (BeanObject object : storeData) {
 					RadioCellRenderer rcr = new RadioCellRenderer(rgShipping);
 					select.setRenderer(rcr);
-//
-//					money = new MoneyFormatCellRenderer();
+
 //					RemoteService.getSpecialService().getShippingConfig((String) object.get(IShipping.PK_ID), new AsyncCallback<Map<String, String>>(){
 //						public void onFailure(Throwable caught) {
 //							caught.printStackTrace();
 //							Window.alert("ERROR: "+caught.getMessage());
 //						}
 //						public void onSuccess(Map<String, String> result) {
-//							double feeMoney = Double.parseDouble(result.get("freeMoney"));
-//							money.setMoney(feeMoney);
-//							colFreeMoney.setRenderer(money);
-//							grid.reconfigure(store, cm);
+//							double freeMoney = Double.parseDouble(result.get("freeMoney"));
+//							freeMoneyList.add(freeMoney);
+//							isReady++;
 //						}
 //					});
-				}				
+//					
+//					RemoteService.getSpecialService().getOrderFee(getCurState().getPkId(), (String) object.get(IShipping.PK_ID), null, new AsyncCallback<Map<String, Object>>(){
+//						public void onFailure(Throwable caught) {
+//							caught.printStackTrace();
+//							Window.alert("ERROR: "+caught.getMessage());
+//						}
+//						@Override
+//						public void onSuccess(Map<String, Object> result) {
+//							double shippingFee = (Double)result.get("shippingFee");
+//							shippingFeeList.add(shippingFee);
+//							isReady++;						
+//						}
+//					});
+				}
+//				new WaitService(new Job() {
+//
+//					@Override
+//					public boolean isReady() {
+//						if(isReady < size)
+//							return false;
+//						else
+//							return true;
+//					}
+//
+//					@Override
+//					public void run() {
+//						isReady = 0;
+//						ShippingFeeCellRenderer money = new ShippingFeeCellRenderer("freeMoney");
+//						ShippingFeeCellRenderer fee = new ShippingFeeCellRenderer("shippingFee");
+//						money.setFreeMoney(freeMoneyList);
+//						colFreeMoney.setRenderer(money);
+//						fee.setShippingFee(shippingFeeList);
+//						colShippingFee.setRenderer(fee);	
+//						grid.reconfigure(store, cm);
+//					}
+//					
+//				});
 	    	}
 	    });
     	
@@ -185,7 +220,7 @@ public class OrderShippingPanel extends ContentWidget{
 		columns.add(colShippingDesc);
 		colShippingFee = new ColumnConfig("shippingFee", Resources.constants.OrderShipping_shippingFee(), 100);
 		columns.add(colShippingFee);
-		colFreeMoney = new ColumnConfig("freeFee", Resources.constants.OrderShipping_freeMoney(), 100);
+		colFreeMoney = new ColumnConfig("freeMoney", Resources.constants.OrderShipping_freeMoney(), 100);
 		columns.add(colFreeMoney);
 		ColumnConfig colInsuranceFee = new ColumnConfig(IShipping.INSURE, Resources.constants.OrderShipping_insurance(), 100);
 		columns.add(colInsuranceFee);
