@@ -9,15 +9,12 @@ import java.util.Map;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.data.BasePagingLoader;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
-import com.extjs.gxt.ui.client.event.MessageBoxEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedListener;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
-import com.extjs.gxt.ui.client.widget.Info;
-import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.grid.CheckBoxSelectionModel;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
@@ -26,12 +23,10 @@ import com.extjs.gxt.ui.client.widget.grid.Grid;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.toolbar.PagingToolBar;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.ext.linker.LinkerOrder.Order;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.Messages;
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
@@ -42,15 +37,12 @@ import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.model.IAdminUser;
 import com.jcommerce.gwt.client.model.IOrderAction;
-import com.jcommerce.gwt.client.model.IOrderGoods;
 import com.jcommerce.gwt.client.model.IOrderInfo;
 import com.jcommerce.gwt.client.panels.Success;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.Condition;
 import com.jcommerce.gwt.client.service.CreateService;
 import com.jcommerce.gwt.client.service.Criteria;
-import com.jcommerce.gwt.client.service.DeleteService;
-import com.jcommerce.gwt.client.service.ListService;
 import com.jcommerce.gwt.client.service.PagingListService;
 import com.jcommerce.gwt.client.service.ReadService;
 import com.jcommerce.gwt.client.service.RemoteService;
@@ -232,7 +224,7 @@ public class OrderListPanel  extends ContentWidget{
 		addTimeCol.setRenderer(tcr);
 		columns.add(addTimeCol);
 		
-		consigneeCol = new ColumnConfig(IOrderInfo.CONSIGNEE, Resources.constants.OrderList_consignee(), 100);
+		consigneeCol = new ColumnConfig(IOrderInfo.CONSIGNEE, Resources.constants.OrderList_consignee(), 200);
 		consigneeCol.setRenderer(new ConsigneeCellRenderer());
 		columns.add(consigneeCol);
 		
@@ -257,7 +249,7 @@ public class OrderListPanel  extends ContentWidget{
 		grid.setLoadMask(true);
 		grid.setBorders(true);
 		grid.setSelectionModel(smRowSelection);
-		grid.setAutoExpandColumn("Action");
+		grid.setAutoExpandColumn(IOrderInfo.ORDER_STATUS);
 	
 		ActionCellRenderer render = new ActionCellRenderer(grid);
 		ActionCellRenderer.ActionInfo act = new ActionCellRenderer.ActionInfo();
@@ -334,7 +326,7 @@ public class OrderListPanel  extends ContentWidget{
 		//        panel.setHeading("Paging Grid");
 		panel.setLayout(new FitLayout());
 		panel.add(grid);
-		panel.setSize(880, 350);
+		panel.setHeight(350);
 		panel.setBottomComponent(toolBar);
 
 		panel.setButtonAlign(HorizontalAlignment.LEFT);

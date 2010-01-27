@@ -69,11 +69,11 @@ import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.model.IAdminUser;
 import com.jcommerce.gwt.client.model.IAttribute;
 import com.jcommerce.gwt.client.model.IComment;
+import com.jcommerce.gwt.client.model.IOrderAction;
 import com.jcommerce.gwt.client.model.IOrderGoods;
 import com.jcommerce.gwt.client.model.IPayment;
 import com.jcommerce.gwt.client.model.IShipping;
 import com.jcommerce.gwt.client.model.IShippingArea;
-import com.jcommerce.gwt.client.model.IUserAddress;
 import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.gwt.client.panels.system.PaymentConfigFieldMetaForm;
 import com.jcommerce.gwt.client.panels.system.PaymentConfigMetaForm;
@@ -693,50 +693,6 @@ public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecial
         }
     }
     
-//    public Map<String, String> getShippingFee(String userId, String shippingId, String orderId) {
-//    	IDefaultManager manager = getDefaultManager();
-//    	Map<String, String> shippingFee = new HashMap<String, String>();
-//    	
-//    	try {
-//    		List<String> regionIdList = getRegionIdList(userId);
-//        	Map<String,Object> shippingInfo = shippingAreaInfo(shippingId,regionIdList,manager);
-//        	
-//        	if(!shippingInfo.isEmpty()){
-//        		Map<String,Object> weightPrice = weightPrice(Constants.CART_GENERAL_GOODS , orderId , manager );
-//        		shippingFee.put("shippingName",(String) shippingInfo.get("shippingName"));
-//        		shippingFee.put("shippingFee", String.valueOf( shippingFee((String)shippingInfo.get("shippingCode"),(String)shippingInfo.get("configure"),(Double)weightPrice.get("weight"),(Double)weightPrice.get("amount"))));
-//        	}
-//    		
-//    	} catch (Exception e) {
-//        	e.printStackTrace();
-//        	throw new RuntimeException(e);
-//        }
-//    	
-//    	return shippingFee;
-//    }
-//    
-//    public Map<String, Object> getPayFee(String payId, String orderId, String userId) {
-//    	IDefaultManager manager = getDefaultManager();
-//    	String shippingCodFee = null;
-//    	
-//    	try {
-//    		OrderInfo order = (OrderInfo) manager.get(ModelNames.ORDERINFO, orderId);
-//    		List<String> regionIdList = getRegionIdList(userId);
-//    		Map<String,Object> shippingInfo = shippingAreaInfo(order.getShippingId(),regionIdList,manager);
-//    		if(!shippingInfo.isEmpty()) {
-//    			if((Boolean)shippingInfo.get("supportCod")){
-//        			shippingCodFee = ((Double)shippingInfo.get("payFee")).toString();
-//        		}
-//    		}
-//    		Map<String, Object> payFee = payFee(payId,order.getGoodsAmount() + order.getShippingFee(),shippingCodFee,manager);
-//        	return payFee;
-//    	} catch (Exception e) {
-//        	e.printStackTrace();
-//        	throw new RuntimeException(e);
-//        }
-//    	
-//    }
-    
     private Map<String, Object> payFee(String paymentId , double orderAmount , String codFee ,IDefaultManager manager) {
     	double payFee = 0 ;
     	Payment payment = paymentInfo( paymentId , manager );
@@ -776,26 +732,6 @@ public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecial
         	return null;
         }
     }
-    
-//	private List<String> getRegionIdList(String userId) {
-//    	IDefaultManager manager = getDefaultManager();
-//    	Criteria c = new Criteria();
-//		c.addCondition(new Condition(IUserAddress.USER_ID, Condition.EQUALS, userId));
-//		List<UserAddress> list = manager.getList(ModelNames.USERADDRESS, convert(c));
-//		UserAddress consignee = null;
-//		if(list.size() > 0)
-//			consignee = list.get(0);
-//		else
-//			consignee = new UserAddress();
-//		
-//		List<String> regionIdList = new ArrayList<String>();
-//    	regionIdList.add( (String)consignee.getCountry());
-//    	regionIdList.add( (String)consignee.getProvince());
-//    	regionIdList.add( (String)consignee.getCity() );
-//    	regionIdList.add( (String)consignee.getDistrict() );
-//    	return regionIdList;
-//    	
-//    }
     
     private Double shippingFee( String shippingCode , String configure , double goodsWeight , double goodsAmount ) {
     	Map<String,String> shippingConfig = EMS.deserialize(configure);
@@ -944,6 +880,7 @@ public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecial
     	}
 	}
 	
+	//删除订单，订单商品，订单操作
 	public boolean deleteOrder(String orderId) {
 		IDefaultManager manager = getDefaultManager();
 		try {
@@ -952,6 +889,11 @@ public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecial
 			c.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, orderId));
 			List<ModelObject> orderGoods = manager.getList(ModelNames.ORDERGOODS, convert(c));
 			manager.txdeleteall(orderGoods);
+			
+			c.removeAllConditions();
+			c.addCondition(new Condition(IOrderAction.ORDER_ID, Condition.EQUALS, orderId));
+			List<ModelObject> orderAction = manager.getList(ModelNames.ORDERACTION, convert(c));
+			manager.txdeleteall(orderAction);
 			return true;
 		} catch (Exception e) {
         	e.printStackTrace();
