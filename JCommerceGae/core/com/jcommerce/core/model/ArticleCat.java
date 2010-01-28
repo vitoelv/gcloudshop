@@ -22,7 +22,7 @@ public class ArticleCat extends ModelObject {
 
     
     // relations
-        
+
     
   // fields
   @Persistent
@@ -30,7 +30,8 @@ public class ArticleCat extends ModelObject {
 
   @Persistent
   private java.lang.String catName; 
-
+  
+  //1-5;2,3,5can't have child,default is 1.2,3,4can't delete.
   @Persistent
   private java.lang.Long catType=0l; 
 

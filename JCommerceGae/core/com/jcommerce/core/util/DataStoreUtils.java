@@ -349,6 +349,8 @@ public class DataStoreUtils implements IConstants{
 				Cart.class.getName(),
 				Category.class.getName(),
 				Goods.class.getName(), 
+				ArticleCat.class.getName(),
+				Article.class.getName(),
 				GoodsAttr.class.getName(), 
 				GoodsGallery.class.getName(),
 				GoodsType.class.getName(),

@@ -65,12 +65,21 @@ public class ActionCellRenderer implements GridCellRenderer<BeanObject> {
             this.tooltip = tooltip;
         }
     }
+    
+    
+    public Boolean filtActs(BeanObject model,ActionInfo act){
+    	return false;
+    }
 
 	public Object render(BeanObject model, String property, ColumnData config,
 			int rowIndex, int colIndex, ListStore<BeanObject> store,
 			Grid<BeanObject> grid) {
+		
         StringBuffer sb = new StringBuffer(); 
         for (ActionInfo act : acts) {
+        	if(filtActs(model,act)){
+        		continue;
+        	}
             sb.append("<a href=\"");
 
             String a = act.getAction();
@@ -101,7 +110,7 @@ public class ActionCellRenderer implements GridCellRenderer<BeanObject> {
             if (act.getText() != null && act.getText().trim().length() > 0) {
                 sb.append(act.getText());
             }
-            sb.append("</a>");
+            sb.append("</a>&nbsp&nbsp");
         }
 //        System.out.println("sb:"+sb);
         return sb.toString();

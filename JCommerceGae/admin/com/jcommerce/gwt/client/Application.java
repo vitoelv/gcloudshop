@@ -184,7 +184,7 @@ public class Application extends Composite implements WindowResizeListener {
     contentWrapper = new LayoutContainer(new FitLayout());
     contentWrapper.setScrollMode(Scroll.AUTOY);
     contentWrapper.setStyleName(DEFAULT_STYLE_NAME+"-content");
-    contentWrapper.setBorders(true);
+  
     contentLayout  = new SimplePanel();
     contentWrapper.add(contentLayout);
 

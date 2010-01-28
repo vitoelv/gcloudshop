@@ -11,6 +11,7 @@ public interface IArticle extends IModelObject {
    // relation
       
   // fields
+  public static final String ARTICLE_CAT_ID = "articleCatId"; 
   public static final String ARTICLE_ID = "articleId"; 
   public static final String CAT_ID = "catId"; 
   public static final String TITLE = "title"; 

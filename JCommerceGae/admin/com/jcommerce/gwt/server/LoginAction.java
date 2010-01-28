@@ -33,23 +33,32 @@ public class LoginAction extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) 
       throws ServletException, IOException {
     	
-      String username = request.getParameter("userName");
-      String pwd = request.getParameter("userPwd");
-      // added
-      if(authenticate(username,pwd,request)){
-    	  String adminUrl = "/admin.jsp";
-    	  String devServer = (String)request.getSession().getAttribute(IAdminConstants.KEY_GWT_DEV_SERVER);
-    	  if(StringUtils.isNotBlank(devServer)) {
-    		// in dev mode
-    		  adminUrl += "?"+IAdminConstants.KEY_GWT_DEV_SERVER+"="+devServer;
-    	  }
-    	  response.sendRedirect(adminUrl);
+      String action = request.getParameter("action");
+      if("login".equals(action)){
+    	  login(request,response);
       }
-      else {
-    	  request.setAttribute("error", "用户名或密码错误");
-    	  request.getRequestDispatcher("/login.jsp").forward(request, response);
-//    	  response.sendRedirect("/login.jsp?error=)
+      else if("logout".equals(action)){
+    	  logout(request,response);
       }
+    }
+    
+    private void login(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException{
+    	String username = request.getParameter("userName");
+        String pwd = request.getParameter("userPwd");
+        if(authenticate(username,pwd,request)){
+      	  String adminUrl = "/admin.jsp";
+      	  String devServer = (String)request.getSession().getAttribute(IAdminConstants.KEY_GWT_DEV_SERVER);
+      	  if(StringUtils.isNotBlank(devServer)) {
+      		// in dev mode
+      		  adminUrl += "?"+IAdminConstants.KEY_GWT_DEV_SERVER+"="+devServer;
+      	  }
+      	  response.sendRedirect(adminUrl);
+        }
+        else {
+      	  request.setAttribute("error", "用户名或密码错误");
+      	  request.getRequestDispatcher("/login.jsp").forward(request, response);
+//      	  response.sendRedirect("/login.jsp?error=)
+        }
     }
     
     private Boolean authenticate(String name, String password,HttpServletRequest request){
@@ -83,6 +92,18 @@ public class LoginAction extends HttpServlet {
     	session.setAttribute(IAdminConstants.KEY_ADMIN_USERID, adminUser.getUserName());
     	session.setAttribute(IAdminConstants.KEY_ADMIN_USEREMAIL, adminUser.getEmail());
     	session.setAttribute(IAdminConstants.KEY_ADMIN_USERIP, request.getRemoteAddr());
+    }
+    
+    public void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+    	String loginURL = "/login.jsp";
+    	
+    	String devServer = (String)request.getSession(false).getAttribute(IAdminConstants.KEY_GWT_DEV_SERVER);
+    	if(StringUtils.isNotBlank(devServer)){
+    		loginURL +="?"+IAdminConstants.KEY_GWT_DEV_SERVER+"="+devServer;
+    	}
+    	request.getSession().invalidate();
+    	response.sendRedirect(loginURL);
+
     }
 
 

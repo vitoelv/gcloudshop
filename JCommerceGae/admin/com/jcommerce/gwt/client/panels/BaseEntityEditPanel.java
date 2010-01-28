@@ -91,6 +91,8 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
         fl.setLabelWidth(150);
         fl.setLabelPad(50);
         formPanel.setLayout(fl);
+        formPanel.setWidth("100%");
+
         setupPanelLayout();
 
       btnNew.setText(Resources.constants.ok());        
@@ -236,7 +238,7 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 	public void populateField(Field field) {
 		Map<String, Object> mapAttribute = obj.getProperties();
 		String name = field.getName();
-		Object value = mapAttribute.get(name);        				
+		Object value = mapAttribute.get(name);
 		log("[populateField]: name:"+name+", value:"+(value==null?"null":value.toString()+", valueclass: "+value.getClass().getName()));
 		populateField(field, value);
 	}

@@ -23,9 +23,12 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jcommerce.gwt.client.Application.ApplicationListener;
+import com.jcommerce.gwt.client.form.GWTHttpDynaForm;
 import com.jcommerce.gwt.client.panels.Success;
 import com.jcommerce.gwt.client.panels.article.ArticleCatListPanel;
 import com.jcommerce.gwt.client.panels.article.ArticleCatPanel;
+import com.jcommerce.gwt.client.panels.article.ArticleListPanel;
+import com.jcommerce.gwt.client.panels.article.ArticlePanel;
 import com.jcommerce.gwt.client.panels.data.ExportPanel;
 import com.jcommerce.gwt.client.panels.data.ImportPanel;
 import com.jcommerce.gwt.client.panels.goods.AttributeListPanel;
@@ -234,7 +237,7 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 		setupMainMenuOption(catOrder, new OrderUserPanel.State(), Resources.images.catWidgets());
 		setupMainMenuOption(catOrder, new SearchOrderPanel.State(), Resources.images.catWidgets());
 		setupMainMenuOption(catOrder, new MergeOrderPanel.State(), Resources.images.catWidgets());
-		
+				
 		TreeItem system = mainMenu.addItem(Resources.constants.categorySystem());
 		setupMainMenuOption(system, new ShopConfigPanel.State(), Resources.images.catWidgets());
 //		setupMainMenuOption(system, new RegionPanel.State(), Resources.images.catWidgets());
@@ -250,6 +253,7 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 
         TreeItem article = mainMenu.addItem(Resources.constants.categoryArticle());
         setupMainMenuOption(article, new ArticleCatListPanel.State(),Resources.images.catWidgets());
+        setupMainMenuOption(article, new ArticleListPanel.State(),Resources.images.catWidgets());
 		
         TreeItem catData = mainMenu.addItem(Resources.constants.categoryData());
         setupMainMenuOption(catData, new ImportPanel.State(), Resources.images.catWidgets());        
@@ -312,7 +316,15 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
         clearButton.setText(Resources.constants.mainCommandClearCache());
         clearButton.addStyleName("cl_button");
         exitButton.setText(Resources.constants.mainCommandExit());
-        exitButton.addStyleName("ex_button");        
+        exitButton.addStyleName("ex_button"); 
+        exitButton.addClickHandler(new ClickHandler(){
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				GWTHttpDynaForm form = new GWTHttpDynaForm();
+				form.setUrl("/adminLogin.do?action=logout");
+				form.submit();
+			}});
         localeWrapper.add(clearButton);
         localeWrapper.add(exitButton);
         vPanel.add(localeWrapper);
@@ -466,7 +478,7 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 				page = OrderFeePanel.getInstance();
 			} else if (pageClassName.equals(OrderListPanel.class.getName())) {
 				page = OrderListPanel.getInstance();			
-			} else if (pageClassName.equals(SearchOrderPanel.class.getName())) {
+		    } else if (pageClassName.equals(SearchOrderPanel.class.getName())) {
 				page = SearchOrderPanel.getInstance();			
 			} else if (pageClassName.equals(MergeOrderPanel.class.getName())) {
 				page = MergeOrderPanel.getInstance();			
@@ -501,14 +513,18 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 			else if(pageClassName.equals(ArticleCatPanel.class.getName())){
 				page = ArticleCatPanel.getInstance();
 			}
+			else if(pageClassName.equals(ArticleListPanel.class.getName())){
+				page = ArticleListPanel.getInstance();
+			}
 			else if(pageClassName.equals(AdminListPanel.class.getName())){
 				page = AdminListPanel.getInstance();
 			}
 			else if(pageClassName.equals(AdminUserPanel.class.getName())){
 				page = AdminUserPanel.getInstance();
 			}
-			
-
+			else if(pageClassName.equals(ArticlePanel.class.getName())){
+				page = ArticlePanel.getInstance();
+			}
 			if (page != null) {
 				pageRegistry.put(pageClassName, page);
 			} else {

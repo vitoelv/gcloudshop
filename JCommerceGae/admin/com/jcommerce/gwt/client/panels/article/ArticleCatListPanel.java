@@ -20,9 +20,11 @@ import com.extjs.gxt.ui.client.widget.grid.CellEditor;
 import com.extjs.gxt.ui.client.widget.grid.CheckBoxSelectionModel;
 import com.extjs.gxt.ui.client.widget.grid.CheckColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
+import com.extjs.gxt.ui.client.widget.grid.ColumnData;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 import com.extjs.gxt.ui.client.widget.grid.EditorGrid;
 import com.extjs.gxt.ui.client.widget.grid.Grid;
+import com.extjs.gxt.ui.client.widget.grid.GridCellRenderer;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.toolbar.PagingToolBar;
 import com.extjs.gxt.ui.client.widget.treegrid.EditorTreeGrid;
@@ -35,6 +37,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
+import com.jcommerce.gwt.client.form.ArticleCatForm;
 import com.jcommerce.gwt.client.form.AttributeForm;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.model.IArticleCat;
@@ -101,7 +104,6 @@ public class ArticleCatListPanel extends ContentWidget{
 	}
 	private void deleteArticleCatAndRefrsh(final String id){
 		new DeleteService().deleteBean(ModelNames.ARTICLE_CAT, id, new DeleteService.Listener(){
-
 			@Override
 			public void onSuccess(Boolean success) {
 				refresh();
@@ -112,12 +114,6 @@ public class ArticleCatListPanel extends ContentWidget{
 	TreeStore<BeanObject> store = new TreeStore<BeanObject>();
 	protected void onRender(Element parent, int index) {
     	super.onRender(parent, index);
-
-        //BasePagingLoader loader = new PagingListService().getLoader(ModelNames.CATEGORY);
-
-        //loader.load(0, 50);
-    	
-        //final ListStore<BeanObject> store = new ListStore<BeanObject>(loader);
 
         store.addStoreListener(new StoreListener<BeanObject>() {
             public void storeUpdate(StoreEvent<BeanObject> se) {
@@ -134,7 +130,34 @@ public class ArticleCatListPanel extends ContentWidget{
         ColumnConfig colName = new ColumnConfig(IArticleCat.CAT_NAME, Resources.constants.ArticleCat_col_name(), 150);
         colName.setRenderer(new TreeGridCellRenderer<BeanObject>());
         columns.add(colName);
-        columns.add(new ColumnConfig(IArticleCat.CAT_TYPE, Resources.constants.ArticleCat_col_type(), 150));
+        ColumnConfig colcatType = new ColumnConfig(IArticleCat.CAT_TYPE, Resources.constants.ArticleCat_col_type(), 150);
+        colcatType.setRenderer(new GridCellRenderer<BeanObject>(){
+
+			@Override
+			public Object render(BeanObject model, String property,
+					ColumnData config, int rowIndex, int colIndex,
+					ListStore store, Grid grid) {
+				String html = "";
+				if(model.getString(IArticleCat.CAT_TYPE).equals("1")){
+					html = "普通分类";
+				}
+				else if(model.getString(IArticleCat.CAT_TYPE).equals("2")){
+					html = "系统分类";
+				}
+				else if(model.getString(IArticleCat.CAT_TYPE).equals("3")){
+					html = "信息分类";
+				}
+				else if(model.getString(IArticleCat.CAT_TYPE).equals("4")){
+					html = "帮助分类";
+				}
+				else if(model.getString(IArticleCat.CAT_TYPE).equals("5")){
+					html = "网店帮助";
+				}
+				return html;
+			}
+        	
+        });
+        columns.add(colcatType);
         
         columns.add(new ColumnConfig(IArticleCat.CAT_DESC, Resources.constants.ArticleCat_col_desc(), 200));        
         columns.add(new ColumnConfig(IArticleCat.SORT_ORDER, Resources.constants.ArticleCat_col_order(), 80));
@@ -156,16 +179,27 @@ public class ArticleCatListPanel extends ContentWidget{
         EditorTreeGrid<BeanObject> grid = new EditorTreeGrid<BeanObject>(store, cm);
         grid.setLoadMask(true);
         grid.setBorders(true);
+        grid.setAutoExpand(true);
         grid.setAutoExpandColumn(IArticleCat.CAT_NAME);
 
 
-        ActionCellRenderer render = new ActionCellRenderer(grid);
+        ActionCellRenderer render = new ActionCellRenderer(grid){
+        	public Boolean filtActs(BeanObject model,ActionCellRenderer.ActionInfo act){
+        		String catType = model.getString(ArticleCatForm.CAT_TYPE);
+        		if((catType.equals("2")||catType.equals("3")||catType.equals("4")) && act.getText().equals(Resources.constants.delete().toString())){
+        			return true;
+        		}
+        		else {
+        			return false;
+        		}
+        	}
+        };
         ActionCellRenderer.ActionInfo act = new ActionCellRenderer.ActionInfo();        
         act.setText(Resources.constants.edit());
         act.setAction("changeArticleCat($pkId)");
         render.addAction(act);
         act = new ActionCellRenderer.ActionInfo();
-        act.setText(" " + Resources.constants.delete());
+        act.setText(Resources.constants.delete());
 		act.setAction("deleteArticleCat($pkId)");
 		act.setTooltip(Resources.constants.GoodsList_action_delete());
 		render.addAction(act);

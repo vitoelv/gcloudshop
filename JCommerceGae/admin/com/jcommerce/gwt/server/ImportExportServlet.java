@@ -111,10 +111,7 @@ public class ImportExportServlet extends GWTHttpServlet{
 						+ " with file name " + item.getName()
 						+ " detected, contentType="
 						+ item.getContentType());
-
 				DataStoreUtils.importDSFromZip(stream, SpringUtil.getDefaultManager());
-				
-				
 			}
 		}
 
@@ -129,7 +126,7 @@ public class ImportExportServlet extends GWTHttpServlet{
 		IDefaultManager manager = SpringUtil.getDefaultManager();
 		String[] modelNames = new String[]{
 				ModelNames.ADMINUSER, ModelNames.ADMINACTION,
-				ModelNames.AREAREGION, ModelNames.ARTICLE_CAT, ModelNames.ATTRIBUTE
+				ModelNames.AREAREGION, ModelNames.ARTICLE_CAT, ModelNames.ARTICLE, ModelNames.ATTRIBUTE
 				, ModelNames.BRAND, ModelNames.CART, ModelNames.CATEGORY
 				, ModelNames.COLLECTGOOD, ModelNames.COMMENT, ModelNames.GOODS
 				, ModelNames.GOODSATTR, ModelNames.GOODSGALLERY, ModelNames.GOODSTYPE
