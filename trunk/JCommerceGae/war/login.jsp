@@ -75,7 +75,7 @@
 		loginForm.submit();
 	}
   }
-  loginAction = "/adminLogin.do";
+  loginAction = "/adminLogin.do?action=login";
   loginForm.action = loginAction;
 </script>
 </body>

@@ -1,10 +1,12 @@
 package com.jcommerce.gwt.client.form;
 
 import com.extjs.gxt.ui.client.widget.form.ComboBox;
+import com.extjs.gxt.ui.client.widget.form.HiddenField;
 import com.extjs.gxt.ui.client.widget.form.NumberField;
 import com.extjs.gxt.ui.client.widget.form.Radio;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.form.TextField.TextFieldMessages;
 import com.jcommerce.gwt.client.model.IArticleCat;
 import com.jcommerce.gwt.client.model.IAttribute;
@@ -30,9 +32,17 @@ public class ArticleCatForm extends BeanObject implements IArticleCat{
 	public static ComboBox<BeanObject> getParentCatField(){
 		ComboBox<BeanObject> field = new ComboBox<BeanObject>();
 		field.setName(PARENT_ID);
+		field.setTriggerAction(TriggerAction.ALL);
 		//field.setReadOnly(true);
 		field.setDisplayField(CAT_NAME);
 		field.setValueField(PK_ID);
+		return field;
+	}
+	
+	public static HiddenField<String> getCatType(){
+		HiddenField<String> field = new HiddenField<String>();
+		field.setName(CAT_TYPE);
+		field.setValue("1");
 		return field;
 	}
 	

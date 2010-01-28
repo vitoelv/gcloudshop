@@ -19,6 +19,16 @@
   		// TODO redirect to a page allowing selection of language. 
 	  	throw new RuntimeException("Go thru login.jsp first, please");
   	} 
+  	
+  	// this is necessary to keep the devserver info to logout correctly
+	String key = com.jcommerce.gwt.server.IAdminConstants.KEY_GWT_DEV_SERVER;
+	String devServer = request.getParameter(key);
+	if(devServer==null || devServer.length()==0) {
+		//devServer = (String)request.getSession().getAttribute(key);
+	} else {
+		// comes from dev_home.jsp (dev mode)
+		request.getSession().setAttribute(key, devServer);
+	}
 	%>
 	
 	<meta name='gwt:property' content='locale=<%=locale%>'">

@@ -9,6 +9,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.jcommerce.core.annotation.IsPK;
+
 /**  
  * generated with my extension of middleGen 
  * @author <a href="http://code.google.com/p/gcloudshop/">Leon</a>
@@ -16,9 +18,18 @@ import javax.jdo.annotations.PrimaryKey;
  
 @PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true") 
 public class Article extends ModelObject {
-   
-    // relations
-        
+	
+  //relation	
+  @Persistent
+  @IsPK(myclazz = "com.jcommerce.core.model.ArticleCat")
+  private String articleCatId;   
+  
+  public String getArticleCatId(){
+	  return articleCatId;
+  }
+  public void setArticleCatId(String newAricleCatId){
+	  this.articleCatId = newAricleCatId;
+  }
     
   // fields
   @Persistent

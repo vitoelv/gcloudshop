@@ -279,9 +279,9 @@ public class GoodsPanel extends BaseFileUploadFormPanel implements Listener<Fiel
 
 //        formPanel.setSize(800, 400);
     	formPanel.setPadding(0);
-//    	formPanel.setFrame(false);
+    	//formPanel.setFrame(false);
     	formPanel.setHeaderVisible(false);
-//    	formPanel.setBodyBorder(false);
+    	formPanel.setBodyBorder(false);
 
 //    	formPanel.setLayout(new FitLayout());
     	
@@ -289,7 +289,7 @@ public class GoodsPanel extends BaseFileUploadFormPanel implements Listener<Fiel
     	
 //        formPanel.setWidth(800);
         TabPanel tabs = new TabPanel();
-        tabs.setWidth(900);
+        //tabs.setWidth(900);
         tabs.setAutoHeight(true);
 //        tabs.setWidth(800);
 //        tabs.setAutoHeight(true);
@@ -428,7 +428,6 @@ public class GoodsPanel extends BaseFileUploadFormPanel implements Listener<Fiel
         fText.setFieldLabel(Resources.constants.Goods_name());
         contentPanelGeneral.add(fText, sfd());
         
-
         fText = GoodsForm.getSnField();
         fText.setMaxLength(20);
         fText.setFieldLabel(Resources.constants.Goods_SN());
