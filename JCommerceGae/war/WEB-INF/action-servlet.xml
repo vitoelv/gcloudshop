@@ -81,6 +81,11 @@
         parent="baseAction" >
 
 	</bean>	
+	<bean name="articleCatAction" scope="prototype"
+        class="com.jcommerce.web.front.action.ArticleCatAction"
+        parent="baseAction" >
+
+	</bean>	
 	
 	<bean name="captchaAction" scope="prototype"
         class="com.jcommerce.web.front.action.CaptchaAction">

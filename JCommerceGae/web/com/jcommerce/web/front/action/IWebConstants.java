@@ -24,6 +24,9 @@ public interface IWebConstants {
 	public static final String APP_BRAND = "brand";
 	public static final String APP_CATEGORY = "category";
 	public static final String APP_GOODS = "goods";
+	public static final String APP_ARTICLE = "article";
+
+	public static final String APP_ARTICLE_CAT = "article_cat";
 	
 
 }

@@ -12,6 +12,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.ServletActionContext;
 
+import com.jcommerce.core.model.Article;
+import com.jcommerce.core.model.ArticleCat;
 import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.GoodsType;
@@ -21,13 +23,17 @@ import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
+import com.jcommerce.gwt.client.model.IArticle;
+import com.jcommerce.gwt.client.model.IArticleCat;
 import com.jcommerce.gwt.client.model.IGoods;
 import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.gwt.client.util.URLConstants;
 import com.jcommerce.web.front.action.helper.Pager;
+import com.jcommerce.web.to.ArticleWrapper;
 import com.jcommerce.web.to.BrandWrapper;
 import com.jcommerce.web.to.GoodsWrapper;
 import com.jcommerce.web.to.WrapperUtil;
+import com.jcommerce.web.util.LibCommon;
 import com.jcommerce.web.util.LibGoods;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
@@ -75,7 +81,38 @@ public class HomeAction extends BaseAction {
     public void includeNewArticle(HttpServletRequest request) {
     	// new_articles.ftl
 //      request.setAttribute("new_articles", articleManager.getArticleList());
-        request.setAttribute("newArticles", new ArrayList());    	
+    	Criteria criteria = new Criteria();
+    	criteria.addCondition(new Condition(IArticleCat.CAT_TYPE,Condition.EQUALS,"1"));
+    	List<ArticleCat> articleCats = getDefaultManager().getList(ModelNames.ARTICLE_CAT, criteria);
+    	List articleList = new ArrayList();
+    	int limit = getCachedShopConfig().getInt(IShopConfigMeta.CFG_KEY_ARTICLE_NUMBER);
+    	Map acMap = new HashMap();
+    	for (ArticleCat ac : articleCats) {
+    		criteria.removeAllCondition();
+    		criteria.addCondition(new Condition(IArticle.IS_OPEN,Condition.EQUALS,"true"));
+    		criteria.addCondition(new Condition(IArticle.ARTICLE_CAT_ID,Condition.EQUALS,ac.getPkId()));
+    		articleList.addAll(getDefaultManager().getList(ModelNames.ARTICLE, criteria, 0, limit));
+    		acMap.put(ac.getPkId(), ac.getCatName());
+    	}
+    	    	
+        List newArticles = new ArrayList();
+    	limit = limit > articleList.size() ? articleList.size() : limit;
+    	for (int i = 0 ; i < limit ; i++){
+    		ArticleWrapper aw = new ArticleWrapper((Article)articleList.get(i));
+    		Map res = new HashMap();
+    		res.put("id", aw.getPkId());
+    		res.put("title", aw.getArticle().getTitle());
+    		res.put("shortTitle", aw.getShortTitle());
+    		
+    		res.put("catName", acMap.get(aw.getArticle().getArticleCatId()));
+    		res.put("addTime", aw.getAddTime());
+    		res.put("url", aw.getUrl());
+    		Map map = new HashMap();
+    		map.put("acid", aw.getArticle().getArticleCatId());
+    		res.put("catUrl", LibCommon.buildUri(IWebConstants.APP_ARTICLE_CAT, map , ""));
+    		newArticles.add(res);
+    	}
+    	request.setAttribute("newArticles", newArticles );    	
     }
 
     public void includeRecommendPromotion(HttpServletRequest request) {

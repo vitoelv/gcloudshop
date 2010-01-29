@@ -92,6 +92,10 @@
 			<result name="success" type="freemarker">/web/front/article.ftl</result>
 			<result name="error" type="redirectAction">home</result>
 		</action>
+		<action name="articleCat" method="execute" class="articleCatAction">
+			<result name="success" type="freemarker">/web/front/article_cat.ftl</result>
+			<result name="error" type="redirectAction">home</result>
+		</action>
 		<action name="captcha" method="execute" class="captchaAction">
 			<result name="success" type="stream" >
 				<param name="contentType">image/JPEG</param>

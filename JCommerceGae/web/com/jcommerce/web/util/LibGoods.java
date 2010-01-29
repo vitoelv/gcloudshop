@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.jcommerce.core.model.ArticleCat;
 import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Category;
 import com.jcommerce.core.model.Goods;
@@ -21,7 +22,7 @@ import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IAttribute;
 import com.jcommerce.gwt.client.model.IGoods;
-import com.jcommerce.gwt.client.resources.GoodsConstants;
+import com.jcommerce.web.to.ArticleCatWrapper;
 import com.jcommerce.web.to.CategoryWrapper;
 import com.jcommerce.web.to.Lang;
 
@@ -83,6 +84,64 @@ public class LibGoods {
 
 		return level1;
 	}
+	
+	/**
+	 * 获得指定分类同级的所有分类以及该分类下的子分类
+	 * 
+	 * @access public
+	 * @param integer
+	 *            $cat_id 分类编号
+	 * @return array
+	 */
+
+	public static List<ArticleCatWrapper> getArticleCategoriesTree(String articleCatId,
+			IDefaultManager manager) {
+
+		String parentId = null;
+		if (articleCatId != null) {
+
+		} else {
+
+		}
+
+		// TODO tree query
+		// we have to do it in memory
+		// index on parentId??
+
+		List<ArticleCat> allCats = (List<ArticleCat>) manager.getList(ModelNames.ARTICLE_CAT, null);
+
+		
+		// child->parent
+//		Map<String, String> cpMap = new HashMap<String, String>();
+		
+		// parent->children
+		Map<String, List<ArticleCatWrapper>> pcMap = new HashMap<String, List<ArticleCatWrapper>>();
+		// 1st round loop
+		for (ArticleCat cat : allCats) {
+//			cpMap.put(cat.getPkId(), cat.getParentId());
+			List<ArticleCatWrapper> children = pcMap.get(cat.getParentId());
+			if (children == null) {
+				children = new ArrayList<ArticleCatWrapper>();
+				pcMap.put(cat.getParentId(), children);
+			}
+			children.add(new ArticleCatWrapper(cat));
+		}
+		
+		List<ArticleCatWrapper> level1 = pcMap.get(parentId);
+		if(level1==null) {
+			// to overcome NPE in case there is no any category at all
+			level1 = new ArrayList<ArticleCatWrapper>();
+		}
+		for (ArticleCatWrapper cw : level1) {
+			List<ArticleCatWrapper> level2 = pcMap.get(cw.getPkId());
+			if (level2 != null) {
+				cw.getChildren().addAll(level2);
+			}
+		}
+
+		return level1;
+	}
+
 
 	/**
 	 * 获得促销商品

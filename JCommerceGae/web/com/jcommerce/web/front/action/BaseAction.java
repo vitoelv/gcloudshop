@@ -321,7 +321,7 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
 	public void includeHelp(HttpServletRequest request) {
 		List<HelpCat> helps = new ArrayList<HelpCat>();
 		List<HelpItem> item = new ArrayList<HelpItem>();
-		item.add(new HelpItem("article.action?id=1", "订购方式", "订购方式"));
+		item.add(new HelpItem("article.action?id=agpnY2xvdWRzaG9wchoLEgdBcnRpY2xlIg1fMzAzMDY4OTY0NjMxDA", "订购方式", "订购方式"));
 		item.add(new HelpItem("article.action?id=1", "购物流程", "购物流程"));
 		item.add(new HelpItem("article.action?id=1", "售后流程", "售后流程"));
 		helps.add(new HelpCat("新手上路", item));

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.ArrayUtils;
 import org.datanucleus.util.StringUtils;
 
+import com.jcommerce.core.model.ArticleCat;
 import com.jcommerce.core.model.Category;
 import com.jcommerce.core.model.CollectGood;
 import com.jcommerce.core.model.Comment;
@@ -45,7 +46,7 @@ public class LibMain {
 	 * @param   integer $cat    分类编号
 	 * @return  array
 	 */
-	public static String[][] getParentCats(String catId) {
+	public static String[][] getParentCats(String catId ) {
 		if(StringUtils.isEmpty(catId)) {
 			return new String[0][];
 		}
@@ -58,6 +59,45 @@ public class LibMain {
 		String currentCatId = catId;
 		while(true) {
 			for(Category row: arr) {
+				if(currentCatId.equals(row.getPkId())) {
+					currentCatId = row.getParentId();
+					
+					String[] cat = new String[]{row.getPkId(), row.getCatName()};
+					cats.add(cat);
+					
+					index++;
+					break;
+				}
+			}
+			
+			if(index==0 || StringUtils.isEmpty(currentCatId)) {
+				break;
+			}
+		}
+		
+		
+		return cats.toArray(new String[0][]);
+	}
+	/**
+	 * 获得指定分类的所有上级分类
+	 *
+	 * @access  public
+	 * @param   integer $cat    分类编号
+	 * @return  array
+	 */
+	public static String[][] getArticleParentCats(String catId ) {
+		if(StringUtils.isEmpty(catId)) {
+			return new String[0][];
+		}
+		
+		List<String[]> cats = new ArrayList<String[]>();
+		
+		List<ArticleCat> arr = SpringUtil.getDefaultManager().getList(ModelNames.ARTICLE_CAT, null);
+		
+		int index = 0;
+		String currentCatId = catId;
+		while(true) {
+			for(ArticleCat row: arr) {
 				if(currentCatId.equals(row.getPkId())) {
 					currentCatId = row.getParentId();
 					
@@ -115,6 +155,17 @@ public class LibMain {
 	            		catArr = getParentCats(cat);
 	            		key = "cid";
 	            		type = "category";
+	            	}else {
+	            		catArr = new String[0][];
+	            	}
+	            }
+	            /* 文章分类或文章*/
+	            if ("articleCat".equals(fileName) || "article".equals(fileName))
+	            {	    		
+	            	if( cat != null ) {
+	            		catArr = getArticleParentCats(cat);
+	            		key = "acid";
+	            		type = "article_cat";
 	            	}else {
 	            		catArr = new String[0][];
 	            	}
@@ -383,8 +434,11 @@ public class LibMain {
         	uriArgs.put("sort", sort);
         	uriArgs.put("order", order);
         	uriArgs.put("display", displayType);
-        	
-        	
+        	        	
+        }
+        else if(IWebConstants.APP_ARTICLE_CAT.equals(app)) {
+        	uriArgs.put("acid", catLongId);
+        	        	
         }
         
         pager.setStyleid(scw.getInt(IShopConfigMeta.CFG_KEY_PAGE_STYLE));

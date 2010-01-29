@@ -81,6 +81,12 @@ public class LibCommon {
     	else if(IWebConstants.APP_GOODS.equals(app)) {
     		buf.append("goods.action?id=").append(uriArgs.get("gid"));
     	}
+    	else if(IWebConstants.APP_ARTICLE.equals(app)) {
+    		buf.append("article.action?id=").append(uriArgs.get("aid"));
+    	}
+    	else if(IWebConstants.APP_ARTICLE_CAT.equals(app)) {
+    		buf.append("articleCat.action?id=").append(uriArgs.get("acid"));
+    	}
     	return buf.toString();
     }
     

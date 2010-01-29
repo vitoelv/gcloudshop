@@ -1,7 +1,8 @@
 package com.jcommerce.web.to;
 
+import java.util.Date;
+
 import com.jcommerce.core.model.Article;
-import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.gwt.client.util.URLConstants;
 
@@ -21,6 +22,17 @@ public class ArticleWrapper extends BaseModelWrapper implements URLConstants{
 	public void setArticle(Article article) {
 		this.article = article;
 	}
-		
+	public String getUrl() {
+		return "article.action?id="+article.getPkId();
+	}
+	public String getShortTitle() {
+		if(article.getTitle().length()>15){
+			return article.getTitle().substring(0, 15) + "..."; 
+		}
+		return article.getTitle();
+	}
+	public String getAddTime(){
+		return new Date(article.getAddTime()).toLocaleString();
+	}
 	
 }
