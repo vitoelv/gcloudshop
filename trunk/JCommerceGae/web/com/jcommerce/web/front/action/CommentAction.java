@@ -1,10 +1,8 @@
 package com.jcommerce.web.front.action;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,9 +19,6 @@ import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.util.LibCommon;
 import com.jcommerce.web.util.LibMain;
 
-import freemarker.template.Configuration;
-import freemarker.template.ObjectWrapper;
-import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 public class CommentAction extends BaseAction {
