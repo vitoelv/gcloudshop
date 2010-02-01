@@ -1,7 +1,7 @@
 <#if  tagNums??  >
 <#list tagList as data>
 <#if  key  !=  appid??  >
-<#if  data.type  ==  "ecshop"  >
+<#if  data.type  ==  "gcshop"  >
      <div class="box">
      <div class="box_1">
       <h3><span class="text">${data.name}</span></h3>
