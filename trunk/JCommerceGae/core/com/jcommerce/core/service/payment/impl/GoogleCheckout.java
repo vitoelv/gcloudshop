@@ -18,7 +18,7 @@ public class GoogleCheckout extends BasePaymentMetaPlugin implements IPaymentMet
     private static final Map<String, PaymentConfigFieldMeta> fieldMetas;
     public static final String KEY = "alipay_key";
     
-    // agent code for ecshop
+    // agent code for gcshop
     public static final String MERCHANT_ID="726838326316485";
     
     @Override

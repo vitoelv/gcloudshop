@@ -24,7 +24,7 @@ public class AliPay extends BasePaymentMetaPlugin implements IPaymentMetaPlugin 
     public static final String ACCOUNT = "alipay_account";
     public static final String KEY = "alipay_key";
     
-    // agent code for ecshop
+    // agent code for gcshop
     public static final String AGENT="C4335319945672464113";
     
     @Override
