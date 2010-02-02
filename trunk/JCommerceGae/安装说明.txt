@@ -1,0 +1,27 @@
+1、首先你要注册你的应用，即开通App Engine功能（http://appengine.google.com/)。记住你的application-id。
+
+2、下载工程之后，你会得到一个app.war，由它解压出来的目录比如为E:\app，需要找到E:\app\war\WEB-
+INF\appengine-web.xml文件，把下面内容中application-id换成你的实际id就可以了：
+<?xml version="1.0" encoding="utf-8"?>
+
+<appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+
+	<application>application-id</application>
+
+	<version>1</version>
+	
+
+</appengine-web-app>
+
+3、现在下载并解压Google-appengine-SDK。( http://code.google.com/intl/en/appengine/downloads.html#Google_App_Engine_SDK_for_Java )
+
+4、用记事本打开Install.cmd文件，把@java换成你的JDK路径，形如:(引号在路径中有空格的时候不能去掉)
+@"C:\Program Files\Java\jdk1.6.0_07\bin\java"
+
+5、修改"D:\appengine-java-sdk-1.3.0\lib\appengine-tools-api.jar"为你下载的google sdk中对应路径。
+
+6、保存退出。
+
+7、运行Install.cmd，接着会提示你输入邮箱名和密码，看见“Success.”就说明成功了。
+
+8、之后访问http://appengine.google.com/就可以看到你的应用列表了。
