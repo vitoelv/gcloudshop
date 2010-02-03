@@ -5,6 +5,7 @@
 package com.jcommerce.gwt.client.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.extjs.gxt.ui.client.data.BaseListLoader;
 import com.extjs.gxt.ui.client.data.ListLoadResult;
@@ -24,7 +25,7 @@ public class ListService extends RemoteService {
     public BaseListLoader getLoader(final String model) {
     	return getLoader(model, null,null);
     }
-    public MyListLoader<ListLoadResult<BeanObject>> getLoader(final String model,  final Criteria criteria, final List<String> wantedFields) {
+    public MyListLoader<ListLoadResult<BeanObject>> getLoader(final String model,  final Criteria criteria, final Map<String,List<String>> wantedFields) {
         if (model == null) {
             throw new RuntimeException("model = null");
         }
@@ -66,13 +67,13 @@ public class ListService extends RemoteService {
         });        
     }
     
-    public void treeListBeans(final String model, Criteria criteria, final Listener listener) {
+    public void treeListBeans(final String model, Criteria criteria,Map<String,List<String>>wantedFields, final Listener listener) {
         if (model == null) {
             throw new RuntimeException("model = null");
         }
         
         final IDefaultServiceAsync service = getDefaultService();
-        service.getList(model, criteria, new AsyncCallback<List<BeanObject>>() {
+        service.getList(model, criteria,wantedFields, new AsyncCallback<List<BeanObject>>() {
             public synchronized void onSuccess(List<BeanObject> result) {
                 if (listener != null) {
                 	if(!result.isEmpty()){

@@ -1,7 +1,9 @@
 package com.jcommerce.gwt.client.panels.article;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.data.ModelData;
@@ -123,7 +125,7 @@ public class ArticleCatListPanel extends ContentWidget{
         
         //toolBar = new PagingToolBar(50);
         //toolBar.bind(loader);
-
+        
         List<ColumnConfig> columns = new ArrayList<ColumnConfig>();
         //CheckBoxSelectionModel<BeanObject> sm = new CheckBoxSelectionModel<BeanObject>();
         //columns.add(sm.getColumn()); 
@@ -231,7 +233,19 @@ public class ArticleCatListPanel extends ContentWidget{
 		newState.execute();
     }
 	 public void refresh(){
-	    	new ListService().treeListBeans(ModelNames.ARTICLE_CAT,null,new ListService.Listener(){
+		    Map<String,List<String>> wantedFields = new HashMap<String,List<String>>();
+	        String model = ModelNames.ARTICLE_CAT;
+	        List<String> fields = new ArrayList<String>();
+	        fields.add(ArticleCatForm.PK_ID);
+	        fields.add(ArticleCatForm.CAT_NAME);
+	        fields.add(ArticleCatForm.CAT_TYPE);
+	        fields.add(ArticleCatForm.CAT_DESC);
+	        fields.add(ArticleCatForm.SHOW_IN_NAV);
+	        fields.add(ArticleCatForm.KEYWORDS);
+	        fields.add(ArticleCatForm.PARENT_ID);
+	        fields.add(ArticleCatForm.TREE_PARENT_ID);
+	        wantedFields.put(model, fields);
+	    	new ListService().treeListBeans(ModelNames.ARTICLE_CAT,null,wantedFields,new ListService.Listener(){
 
 				@Override
 				public void onSuccess(List<BeanObject> beans) {

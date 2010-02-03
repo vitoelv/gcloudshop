@@ -5,6 +5,7 @@
 package com.jcommerce.gwt.client;
 
 import java.util.List;
+import java.util.Map;
 
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
 import com.extjs.gxt.ui.client.data.PagingLoadResult;
@@ -21,7 +22,7 @@ public interface IDefaultServiceAsync {
     
     public void getList(String name, Criteria criteria, AsyncCallback<List<BeanObject>> callback);
     
-    public void getList(String name, Criteria criteria, List<String> wantedFields, AsyncCallback<List<BeanObject>> callback);
+    public void getList(String name, Criteria criteria, Map<String,List<String>> wantedFields, AsyncCallback<List<BeanObject>> callback);
     
     public void getBean(String name, String id, AsyncCallback<BeanObject> callback);
 
@@ -34,7 +35,7 @@ public interface IDefaultServiceAsync {
     
     public void getPagingList(String modelName, Criteria criteria, PagingLoadConfig config, AsyncCallback<PagingLoadResult<BeanObject>> callback);
     
-    public void getPagingList(String modelName, Criteria criteria, List<String> wantedFields, PagingLoadConfig config, AsyncCallback<PagingLoadResult<BeanObject>> callback);
+    public void getPagingList(String modelName, Criteria criteria, Map<String,List<String>> wantedFields, PagingLoadConfig config, AsyncCallback<PagingLoadResult<BeanObject>> callback);
     
 //    public void getGoodsTypeUnit(boolean needAttrNumber, PagingLoadConfig config, AsyncCallback<PagingLoadResult<BeanObject>> callback);
 //    

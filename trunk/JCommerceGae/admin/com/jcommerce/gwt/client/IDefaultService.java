@@ -5,6 +5,7 @@
 package com.jcommerce.gwt.client;
 
 import java.util.List;
+import java.util.Map;
 
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
 import com.extjs.gxt.ui.client.data.PagingLoadResult;
@@ -21,7 +22,7 @@ public interface IDefaultService extends RemoteService {
     
     public List<BeanObject> getList(String bean, Criteria criteria);
     
-    public List<BeanObject> getList(String bean, Criteria criteria, List<String> wantedFields);
+    public List<BeanObject> getList(String bean, Criteria criteria, Map<String,List<String>> wantedFields);
     
     public String newObject(BeanObject obj);
     
@@ -34,7 +35,7 @@ public interface IDefaultService extends RemoteService {
     
     public PagingLoadResult<BeanObject> getPagingList(String modelName, Criteria criteria, PagingLoadConfig config);
 
-    public PagingLoadResult<BeanObject> getPagingList(String modelName, Criteria criteria, List<String> wantedFields, PagingLoadConfig config);
+    public PagingLoadResult<BeanObject> getPagingList(String modelName, Criteria criteria, Map<String,List<String>> wantedFields, PagingLoadConfig config);
     
 //    public PagingLoadResult<BeanObject> getGoodsTypeUnit(boolean needAttrNumber, PagingLoadConfig config);
     

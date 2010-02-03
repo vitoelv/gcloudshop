@@ -127,17 +127,17 @@ public class UserListPanel extends ContentWidget {
 		header.add(txtUserName);
 		header.add(btnSearch);
 		add(header);
-		List<String> wantedFields = new ArrayList<String>();
-		wantedFields.add(UserForm.PK_ID);
-		wantedFields.add(UserForm.USER_NAME);
-		wantedFields.add(UserForm.EMAIL);
-		wantedFields.add(UserForm.USER_MONEY);
-		wantedFields.add(UserForm.FROZEN_MONEY);
-		wantedFields.add(UserForm.RANK_POINTS);
-		wantedFields.add(UserForm.PAY_POINTS);
-		wantedFields.add(UserForm.REG_TIME);
+//		List<String> wantedFields = new ArrayList<String>();
+//		wantedFields.add(UserForm.PK_ID);
+//		wantedFields.add(UserForm.USER_NAME);
+//		wantedFields.add(UserForm.EMAIL);
+//		wantedFields.add(UserForm.USER_MONEY);
+//		wantedFields.add(UserForm.FROZEN_MONEY);
+//		wantedFields.add(UserForm.RANK_POINTS);
+//		wantedFields.add(UserForm.PAY_POINTS);
+//		wantedFields.add(UserForm.REG_TIME);
 		loader = new PagingListService().getLoader(
-		  ModelNames.USER,wantedFields);
+		  ModelNames.USER);
 		final ListStore<BeanObject> store= new ListStore<BeanObject>(loader);
 		store.addStoreListener(new StoreListener<BeanObject>(){
 			public void storeUpdate(StoreEvent<BeanObject> se){
