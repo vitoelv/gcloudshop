@@ -6,10 +6,14 @@ package com.jcommerce.gwt.server;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
+import javax.jdo.annotations.PrimaryKey;
 
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -18,6 +22,7 @@ import com.extjs.gxt.ui.client.data.BasePagingLoadResult;
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
 import com.extjs.gxt.ui.client.data.PagingLoadResult;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.jcommerce.core.annotation.IsPK;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.model.Session;
 import com.jcommerce.core.service.IDefaultManager;
@@ -25,6 +30,7 @@ import com.jcommerce.core.util.MyPropertyUtil;
 import com.jcommerce.gwt.client.IDefaultService;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BeanObject;
+import com.jcommerce.gwt.client.model.IModelObject;
 import com.jcommerce.gwt.client.resources.IShopConstants;
 import com.jcommerce.gwt.client.service.Condition;
 import com.jcommerce.gwt.client.service.Criteria;
@@ -237,21 +243,102 @@ public class DefaultServiceImpl extends RemoteServiceServlet implements IDefault
     	return getList(modelName, criteria, null);
     }
 
-    public List<BeanObject> getList(String modelName, Criteria criteria, List<String> wantedFields) {
+//    public List<BeanObject> getList(String modelName, Criteria criteria, List<String> wantedFields) {
+//        try {
+//        	System.out.println("getList("+modelName);
+//      		
+//        		IDefaultManager manager = getDefaultManager();
+//        		List<ModelObject> rs =  (List<ModelObject>)manager.getList(modelName, convert(criteria));
+//        		List<BeanObject> res = new ArrayList<BeanObject>();
+//        		for(ModelObject obj:rs) {
+//        			Map<String, Object> map = MyPropertyUtil.to2Form(obj,null);
+//        			res.add(new BeanObject(modelName, map));
+//        		}
+//        		return res;
+//        			
+// 
+//
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			throw new RuntimeException(e);
+//		}
+//    }
+    private List<BeanObject> joinModel(String modelName,List<BeanObject> rs,Map<String,List<String>> relationMap) throws SecurityException, ClassNotFoundException{
+    	List<BeanObject> joinedRes = rs;
+    	if(relationMap!=null&&!relationMap.isEmpty()){
+	    	Map<String,Map<String,BeanObject>> relationFields = new HashMap<String,Map<String,BeanObject>>();
+			Field[] fields = Class.forName(modelName).getDeclaredFields();
+	    	for(Field field:fields){
+	    		if(field.getAnnotation(IsPK.class)==null){
+	    			continue;
+	    		}
+	    		else {
+	    		    String relationModelName = field.getAnnotation(IsPK.class).myclazz();
+	    		    List<String> wantedModelFields = null;
+		    		if(relationMap.containsKey(relationModelName)){
+		    			if(relationMap.get(relationModelName)!=null&&!relationMap.get(relationModelName).isEmpty()){
+		    				wantedModelFields = relationMap.get(relationModelName);
+		    			}
+		    			relationMap.get(relationModelName).add(IModelObject.PK_ID);
+		    			Map<String,BeanObject> res = getResMap(relationModelName,null,wantedModelFields);
+		    			relationFields.put(field.getName(), res);
+		    		}
+	    		}
+	    	}
+	    	for(BeanObject bean:rs){
+	    		for(String key:relationFields.keySet()){
+	    			String relationPk = bean.getString(key);
+	    			bean.setValues(relationFields.get(key).get(relationPk).getProperties());
+	    		}
+	    
+	    	}
+    	}
+    	return joinedRes;
+    	
+    }
+    private Map<String,BeanObject> getResMap(String modelName,Criteria criteria,List<String> fields){
+    	try{
+	    	System.out.println("getList("+modelName);
+	    	IDefaultManager manager = getDefaultManager();
+			Map<String,BeanObject> res = new HashMap<String,BeanObject>();
+			List<ModelObject> rs =  (List<ModelObject>)manager.getList(modelName,convert(criteria));
+			for(ModelObject obj:rs){
+				Map<String, Object> map = MyPropertyUtil.to2Form(obj,fields);
+				String pkid = map.get(IModelObject.PK_ID).toString();
+				map.remove(IModelObject.PK_ID);
+				res.put(pkid, new BeanObject(modelName,map));
+			}
+		    return res;
+    	}
+    	catch(Exception e){
+    		e.printStackTrace();
+    		throw new RuntimeException(e);
+    	}
+    	
+    }
+    public List<BeanObject> getList(String modelName, Criteria criteria, Map<String,List<String>> wantedFields){
         try {
         	System.out.println("getList("+modelName);
-      		
-        		IDefaultManager manager = getDefaultManager();
-        		List<ModelObject> rs =  (List<ModelObject>)manager.getList(modelName, convert(criteria));
-        		List<BeanObject> res = new ArrayList<BeanObject>();
-        		for(ModelObject obj:rs) {
-        			Map<String, Object> map = MyPropertyUtil.to2Form(obj,null);
-        			res.add(new BeanObject(modelName, map));
+    		IDefaultManager manager = getDefaultManager();
+    		List<BeanObject> res = new ArrayList<BeanObject>();
+    		List<ModelObject> rs =  (List<ModelObject>)manager.getList(modelName, convert(criteria));
+    		List<String> mainModelFields = null;
+    		if(wantedFields!=null&&!wantedFields.isEmpty()){
+    			if(wantedFields.containsKey(modelName)){
+        			mainModelFields = wantedFields.get(modelName);
+        			wantedFields.remove(modelName);
         		}
-        		return res;
-        			
- 
-
+    		}
+    		
+    		for(ModelObject obj:rs) {
+    			Map<String, Object> map = MyPropertyUtil.to2Form(obj,mainModelFields);
+    			res.add(new BeanObject(modelName, map));
+    		}
+    		if(wantedFields!=null&&!wantedFields.isEmpty()){
+    			res = joinModel(modelName,res,wantedFields);
+    		}
+    		return res;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -267,21 +354,28 @@ public class DefaultServiceImpl extends RemoteServiceServlet implements IDefault
         return getPagingList(modelName, criteria, null, config);        
     }
     
-    public PagingLoadResult<BeanObject> getPagingList(String modelName, Criteria criteria, List<String> wantedFields, PagingLoadConfig plc) {
+    public PagingLoadResult<BeanObject> getPagingList(String modelName, Criteria criteria, Map<String,List<String>> wantedFields, PagingLoadConfig plc) {
         try {
         	System.out.println("getPagingList("+modelName);
 //			return pagingAction.getPagingList(modelName, convert(criteria), wantedFields, config);
         	IDefaultManager manager = getDefaultManager();
 			List<ModelObject> list = new ArrayList<ModelObject>();
 			int totalLength = manager.getList(list, modelName, convert(criteria), plc.getOffset(), plc.getLimit());
-			
 			List<BeanObject> res = new ArrayList<BeanObject>();
+			List<String> mainModelFields = null;
+    		if(wantedFields!=null&&!wantedFields.isEmpty()){
+    			if(wantedFields.containsKey(modelName)){
+    				mainModelFields = wantedFields.get(modelName);
+    				wantedFields.remove(modelName);
+    			}
+    		}
 			for(ModelObject model:list) {
-				res.add(new BeanObject(modelName, MyPropertyUtil.to2Form(model, null)));
+				res.add(new BeanObject(modelName, MyPropertyUtil.to2Form(model, mainModelFields)));
 			}
-			
 			System.out.println("here");
-			
+			if(wantedFields!=null&&!wantedFields.isEmpty()){
+				res = joinModel(modelName,res,wantedFields);
+			}
 			return new BasePagingLoadResult(res, plc.getOffset(), totalLength);
 			
 		} catch (Exception e) {
@@ -326,8 +420,6 @@ public class DefaultServiceImpl extends RemoteServiceServlet implements IDefault
         	e.printStackTrace();
         	throw new RuntimeException(e);
         }
-        
-        
         return res;
     }   
     

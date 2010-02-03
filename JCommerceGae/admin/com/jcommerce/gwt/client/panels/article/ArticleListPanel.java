@@ -1,7 +1,9 @@
 package com.jcommerce.gwt.client.panels.article;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.data.BasePagingLoader;
@@ -34,6 +36,7 @@ import com.google.gwt.user.client.Element;
 import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
+import com.jcommerce.gwt.client.form.ArticleCatForm;
 import com.jcommerce.gwt.client.form.ArticleForm;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.GWTHttpDynaForm;
@@ -136,13 +139,29 @@ public class ArticleListPanel extends ContentWidget implements URLConstants{
 		header.add(btnFind);
 		add(header);
 		
-		List<String> wantedFields = new ArrayList<String>();
-		wantedFields.add(ArticleForm.PK_ID);
-		wantedFields.add(ArticleForm.TITLE);
-		wantedFields.add(ArticleForm.ARTICLE_TYPE);
-		wantedFields.add(ArticleForm.CAT_ID);
-		wantedFields.add(ArticleForm.IS_OPEN);
-		wantedFields.add(ArticleForm.ADD_TIME);
+//		List<String> wantedFields = new ArrayList<String>();
+//		wantedFields.add(ArticleForm.PK_ID);
+//		wantedFields.add(ArticleForm.TITLE);
+//		wantedFields.add(ArticleForm.ARTICLE_TYPE);
+//		wantedFields.add(ArticleForm.CAT_ID);
+//		wantedFields.add(ArticleForm.IS_OPEN);
+//		wantedFields.add(ArticleForm.ADD_TIME);
+		Map<String,List<String>> wantedFields = new HashMap<String,List<String>>();
+		String model = ModelNames.ARTICLE;
+		List<String> fields = new ArrayList<String>();
+		fields.add(ArticleForm.PK_ID);
+		fields.add(ArticleForm.TITLE);
+		fields.add(ArticleForm.ARTICLE_TYPE);
+		fields.add(ArticleForm.ARTICLE_CAT_ID);
+		fields.add(ArticleForm.IS_OPEN);
+		fields.add(ArticleForm.ADD_TIME);
+		wantedFields.put(model, fields);
+		model = ModelNames.ARTICLE_CAT;
+		fields = new ArrayList<String>();
+		fields.add(ArticleCatForm.PK_ID);
+		fields.add(ArticleCatForm.CAT_NAME);
+		wantedFields.put(model, fields);
+		
 		loader = new PagingListService().getLoader(
 		  ModelNames.ARTICLE,wantedFields);
 		final ListStore<BeanObject> store= new ListStore<BeanObject>(loader);
@@ -165,7 +184,7 @@ public class ArticleListPanel extends ContentWidget implements URLConstants{
 		ColumnConfig colname = new ColumnConfig(ArticleForm.TITLE, Resources.constants.Article_coltitle(), 100);
 		colname.setEditor(new CellEditor(new TextField()));
 		columns.add(colname);
-		ColumnConfig colcat = new ColumnConfig(ArticleForm.ARTICLE_CAT_ID, Resources.constants.Article_colarticleCat(),150);
+		ColumnConfig colcat = new ColumnConfig(ArticleCatForm.CAT_NAME, Resources.constants.Article_colarticleCat(),150);
 		columns.add(colcat);
 		ColumnConfig coltype = new ColumnConfig(ArticleForm.ARTICLE_TYPE, Resources.constants.Article_colarticleType(),150);
 		columns.add(coltype);

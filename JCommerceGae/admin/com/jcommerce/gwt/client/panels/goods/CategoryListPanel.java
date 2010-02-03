@@ -16,7 +16,9 @@
 package com.jcommerce.gwt.client.panels.goods;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.data.BasePagingLoader;
@@ -233,7 +235,11 @@ public class CategoryListPanel extends ContentWidget {
 				});
     }
     public void refresh(){
-    	new ListService().treeListBeans(ModelNames.CATEGORY,null,new ListService.Listener(){
+    	Map<String,List<String>> wantedFields = new HashMap<String,List<String>>();
+    	String model = ModelNames.CATEGORY;
+    	List<String> fields = null;
+    	wantedFields.put(model, fields);
+    	new ListService().treeListBeans(ModelNames.CATEGORY,null,wantedFields,new ListService.Listener(){
 
 			@Override
 			public void onSuccess(List<BeanObject> beans) {

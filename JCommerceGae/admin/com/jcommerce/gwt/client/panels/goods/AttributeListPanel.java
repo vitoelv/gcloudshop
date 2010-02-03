@@ -190,7 +190,7 @@ public class AttributeListPanel extends ContentWidget {
         wantedFields.add(AttributeForm.ATTR_VALUES);
         wantedFields.add(AttributeForm.SORT_ORDER);
 		loader = new PagingListService().getLoader(
-				ModelNames.ATTRIBUTE, wantedFields);
+				ModelNames.ATTRIBUTE);
 		
 		final ListStore<BeanObject> store = new ListStore<BeanObject>(loader);
 		store.addStoreListener(new StoreListener<BeanObject>() {

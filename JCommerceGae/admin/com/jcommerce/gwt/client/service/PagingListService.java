@@ -5,6 +5,7 @@
 package com.jcommerce.gwt.client.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.extjs.gxt.ui.client.data.BasePagingLoader;
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
@@ -17,7 +18,7 @@ import com.jcommerce.gwt.client.util.MyRpcProxy;
 
 public class PagingListService extends RemoteService {
 	
-    public BasePagingLoader getLoader(final String model, final List<String> wantedFields) {
+    public BasePagingLoader getLoader(final String model, final Map<String,List<String>> wantedFields) {
 //        if (model == null) {
 //            throw new RuntimeException("model = null");
 //        }
@@ -37,7 +38,7 @@ public class PagingListService extends RemoteService {
     	return getLoader(model, null, wantedFields);
     }
     
-    public BasePagingLoader<PagingLoadResult<BeanObject>> getLoader(final String model,  final Criteria criteria, final List<String> wantedFields) {
+    public BasePagingLoader<PagingLoadResult<BeanObject>> getLoader(final String model,  final Criteria criteria, final Map<String,List<String>> wantedFields) {
         if (model == null) {
             throw new RuntimeException("model = null");
         }
