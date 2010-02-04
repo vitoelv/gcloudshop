@@ -55,6 +55,7 @@ public interface IShopConfigMeta {
 	// shopping_flow
 	public static final String CFG_KEY_CART_CONFIRM = "cart_confirm";
 	public static final String CFG_KEY_ONE_STEP_BUY = "one_step_buy";
+	public static final String CFG_KEY_ANONYMOUS_BUY = "anonymous_buy";
 	public static final String CFG_KEY_SHOW_GOODS_IN_CART = "show_goods_in_cart";
 	public static final String CFG_KEY_SHOW_GOODS_ATTRIBUTE = "show_goods_attribute";
 	

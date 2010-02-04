@@ -113,6 +113,9 @@ public class FlowAction extends BaseAction {
 		Long goodsId = goods.getLong(PARA_GOODS_ID);
 		debug("in [addToCart]: goodsId="+goodsId);
 		
+		//not support other type yet
+		session.setAttribute(KEY_FLOW_TYPE, Constants.CART_GENERAL_GOODS);
+		
 		/* 如果是一步购物，先清空购物车 */
 		if(getCachedShopConfig().getInt(CFG_KEY_ONE_STEP_BUY)==1) {
 			Long flowType = (Long)getSession().getAttribute(KEY_FLOW_TYPE);
@@ -175,7 +178,7 @@ public class FlowAction extends BaseAction {
     	
     	HttpSession session = request.getSession();
 
-		session.setAttribute(KEY_FLOW_TYPE, Constants.CART_GENERAL_GOODS);
+		
 		/* 如果是一步购物，跳到结算中心 */
 		if ( getCachedShopConfig().getInt(CFG_KEY_ONE_STEP_BUY) == 1) {
 			return stepCheckout(request);
@@ -245,7 +248,7 @@ public class FlowAction extends BaseAction {
     private String stepConsignee(HttpServletRequest request, boolean redirectToConsigneeAfterCheck) {
     	if(request.getMethod().equals("GET") || redirectToConsigneeAfterCheck) {
 	    	if(request.getParameter(KEY_DIRECT_SHOPPING) != null) {
-	    		getSession().setAttribute(KEY_DIRECT_SHOPPING, getCachedShopConfig().getInt(CFG_KEY_ONE_STEP_BUY));
+	    		getSession().setAttribute(KEY_DIRECT_SHOPPING, getCachedShopConfig().getInt(IShopConfigMeta.CFG_KEY_ANONYMOUS_BUY));
 	    	}
 	    	
 	    	includeConsignee(request);
@@ -361,7 +364,7 @@ public class FlowAction extends BaseAction {
     		lang.put("flowLoginRegister", list);
     		
     		request.setAttribute("key","");
-    		request.setAttribute("anonymousBuy", 1);
+    		request.setAttribute("anonymousBuy", getCachedShopConfig().getInt(IShopConfigMeta.CFG_KEY_ANONYMOUS_BUY));
     		request.setAttribute("step", "login");
     		return SUCCESS;
     	}
@@ -683,7 +686,7 @@ public class FlowAction extends BaseAction {
     		lang.put("flowLoginRegister", list);
     		
     		request.setAttribute("key","");
-    		request.setAttribute("anonymousBuy", 1);
+    		request.setAttribute("anonymousBuy", getCachedShopConfig().getString(IShopConfigMeta.CFG_KEY_ANONYMOUS_BUY));
     		request.setAttribute("step", "login");
     		return SUCCESS;
     	}
