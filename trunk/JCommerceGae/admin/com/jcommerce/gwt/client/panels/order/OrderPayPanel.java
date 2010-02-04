@@ -46,6 +46,7 @@ import com.jcommerce.gwt.client.widgets.RadioCellRenderer;
 public class OrderPayPanel extends ContentWidget{
 	
 	public static interface Constants {
+		public String OrderPay_title();
 		public String OrderPay_ok();
 		public String OrderPay_cancel();
 		public String OrderPay_next();
@@ -72,7 +73,10 @@ public class OrderPayPanel extends ContentWidget{
 
 	@Override
 	public String getName() {
-		return Resources.constants.OrderUser_title();
+		if(getCurState().getIsEdit())
+			return Resources.constants.OrderPay_title();
+		else
+			return Resources.constants.OrderUser_title();
 	}
 	
 	public static OrderPayPanel getInstance(){
@@ -129,9 +133,9 @@ public class OrderPayPanel extends ContentWidget{
 	protected void onRender(Element parent, int index) {
 		super.onRender(parent, index);
 		
-		Criteria c = new Criteria();
-		c.addCondition(new Condition(IPayment.ENABLED, Condition.EQUALS, "true"));
-		BasePagingLoader loader = new PagingListService().getLoader(ModelNames.PAYMENT, c);
+		//Criteria c = new Criteria();
+		//c.addCondition(new Condition(IPayment.ENABLED, Condition.EQUALS, "true"));
+		BasePagingLoader loader = new PagingListService().getLoader(ModelNames.PAYMENT);
     	final ListStore<BeanObject> store = new ListStore<BeanObject>(loader);			
     	
     	store.addStoreListener(new StoreListener<BeanObject>() {

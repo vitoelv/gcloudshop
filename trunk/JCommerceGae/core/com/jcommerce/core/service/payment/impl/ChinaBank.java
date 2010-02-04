@@ -53,6 +53,7 @@ public class ChinaBank extends BasePaymentMetaPlugin implements IPaymentMetaPlug
         defaultPaymentConfigMeta.setIsCod(false);
         defaultPaymentConfigMeta.setPayDesc("网银在线与中国工商银行、招商银行、中国建设银行、农业银行、民生银行等数十家金融机构达成协议。全面支持全国19家银行的信用卡及借记卡实现网上支付。（网址：http://www.chinabank.com.cn）");
         defaultPaymentConfigMeta.setPayConfig(getDefaultConfig());
+        defaultPaymentConfigMeta.setKeyName("_pay2");
     }
     public PaymentConfigMeta getDefaultConfigMeta() {
     	return defaultPaymentConfigMeta;

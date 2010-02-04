@@ -1,6 +1,7 @@
 package com.jcommerce.gwt.client.panels.order;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,7 @@ import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.model.IOrderInfo;
 import com.jcommerce.gwt.client.model.IShipping;
+import com.jcommerce.gwt.client.model.IShippingArea;
 import com.jcommerce.gwt.client.panels.Success;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.Condition;
@@ -38,11 +40,11 @@ import com.jcommerce.gwt.client.service.RemoteService;
 import com.jcommerce.gwt.client.service.UpdateService;
 import com.jcommerce.gwt.client.service.WaitService;
 import com.jcommerce.gwt.client.widgets.RadioCellRenderer;
-import com.jcommerce.gwt.client.widgets.ShippingFeeCellRenderer;
 
 public class OrderShippingPanel extends ContentWidget{
 	
 	public static interface Constants {
+		public String OrderShipping_title();
 		public String OrderShipping_ok();
 		public String OrderShipping_cancel();
 		public String OrderShipping_next();
@@ -72,7 +74,10 @@ public class OrderShippingPanel extends ContentWidget{
 
 	@Override
 	public String getName() {
-		return Resources.constants.OrderUser_title();
+		if(getCurState().getIsEdit())
+			return Resources.constants.OrderShipping_title();
+		else
+			return Resources.constants.OrderUser_title();
 	}
 	
 	public static OrderShippingPanel getInstance(){
@@ -141,7 +146,7 @@ public class OrderShippingPanel extends ContentWidget{
 		super.onRender(parent, index);
 		
 		Criteria c = new Criteria();
-		c.addCondition(new Condition(IShipping.ENABLED, Condition.EQUALS, "true"));
+		c.addCondition(new Condition(IShipping.ENABLED, Condition.EQUALS, "true"));		
 		BasePagingLoader loader = new PagingListService().getLoader(ModelNames.SHIPPING, c);
     	final ListStore<BeanObject> store = new ListStore<BeanObject>(loader);			
     	

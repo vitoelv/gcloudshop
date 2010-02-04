@@ -218,6 +218,7 @@ public class OrderUserPanel extends ContentWidget{
 				public void onSuccess(String id) {
 					OrderGoodsPanel.State newState = new OrderGoodsPanel.State();
 					newState.setPkId(id);
+					newState.setIsEdit(false);
 					newState.execute();
 				}
 			});	

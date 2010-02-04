@@ -167,6 +167,7 @@ public class PaymentMetaManagerImpl implements IPaymentMetaManager{
             obj.setPayName(plugin.getDefaultConfigMeta().getPayName());
             obj.setIsOnline(plugin.getDefaultConfigMeta().getIsOnline());
             obj.setPayOrder(0l);
+            obj.setKeyName(plugin.getDefaultConfigMeta().getKeyName());
 
             dao.add(obj);
         } catch (RuntimeException e) {
