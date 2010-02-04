@@ -7,20 +7,31 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.DSFile;
+import com.jcommerce.core.model.ShopConfig;
 import com.jcommerce.core.service.IDefaultManager;
 
 
 public class TestMiscDS extends BaseDAOTestCase {
 	@Override
     public String getDbStorePath() {
-//    	return "D:/JCommerce/JCommerceGae/war";
-    	return "D:/JCommerce/JCommerceGae/testdatastore";
+    	return "D:/JCommerce/JCommerceGae/war";
+//    	return "D:/JCommerce/JCommerceGae/testdatastore";
     }
 	
 	@Override
 	public boolean needCleanOnStartup() {
     	return false;
     }
+	
+	public void testQueryShopConfig() {
+		IDefaultManager manager = getDefaultManager();
+		List res = new ArrayList();
+		String className = ShopConfig.class.getName();
+		manager.getList(res, className, null, -1, -1);
+		System.out.println("size: "+res.size());
+		
+		
+	}
 	
 	public void testDeleteBrand() {
 		IDefaultManager manager = getDefaultManager();

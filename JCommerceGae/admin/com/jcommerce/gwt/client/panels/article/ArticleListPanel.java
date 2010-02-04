@@ -189,7 +189,7 @@ public class ArticleListPanel extends ContentWidget implements URLConstants{
 		ColumnConfig coltype = new ColumnConfig(ArticleForm.ARTICLE_TYPE, Resources.constants.Article_colarticleType(),150);
 		columns.add(coltype);
 		coltype.setRenderer(new GridCellRenderer<BeanObject>(){
-			@Override
+
 			public Object render(BeanObject model, String property,
 					ColumnData config, int rowIndex, int colIndex,
 					ListStore<BeanObject> store, Grid<BeanObject> grid) {
