@@ -318,7 +318,6 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
         exitButton.setText(Resources.constants.mainCommandExit());
         exitButton.addStyleName("ex_button"); 
         exitButton.addClickHandler(new ClickHandler(){
-			@Override
 			public void onClick(ClickEvent event) {
 				
 				GWTHttpDynaForm form = new GWTHttpDynaForm();
