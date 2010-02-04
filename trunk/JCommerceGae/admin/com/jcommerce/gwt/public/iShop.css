@@ -36,6 +36,14 @@
   background: #278296;
   
 }
+.Application-content .gwt-Label{
+	margin:0px;
+	padding:3px 2px 3px 2px;
+}
+.Application-content .gwt-ListBox{
+	height:21px;
+}
+
 .Application-links .gwt-HTML{
   font-size: 13px;
   padding: 0 1 0 1;
@@ -143,6 +151,7 @@
   padding-left: 20px;
 }
 .SearchOrderLabel {
-	cursor: pointer
+	cursor: pointer;
+	padding: 3px 4px 3px 4px;
 }
 

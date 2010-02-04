@@ -134,13 +134,13 @@ public class ShippingMetaListPanel extends ContentWidget {
         columns.add(new ColumnConfig(ShippingConfigMetaForm.SHIPPING_DESC, Resources.constants
                 .ShippingMetaList_DESC(), 200));
         columns.add(new ColumnConfig(ShippingConfigMetaForm.INSURE, Resources.constants
-                .ShippingMetaList_INSURE(), 50));
+                .ShippingMetaList_INSURE(), 100));
         columns.add(new ColumnConfig(ShippingConfigMetaForm.SUPPORT_COD, Resources.constants
-                .ShippingMetaList_COD(), 50));
+                .ShippingMetaList_COD(), 100));
         columns.add(new ColumnConfig(ShippingConfigMetaForm.VERSION, Resources.constants
-                .ShippingMetaList_VERSION(), 50));
+                .ShippingMetaList_VERSION(), 100));
         columns.add(new ColumnConfig(ShippingConfigMetaForm.AUTHOR, Resources.constants
-                .ShippingMetaList_AUTHOR(), 50));        
+                .ShippingMetaList_AUTHOR(), 100));        
         ColumnConfig actcol = new ColumnConfig("Action", Resources.constants
                 .ShippingMetaList_ACTION(), 200);
         columns.add(actcol);
@@ -151,6 +151,7 @@ public class ShippingMetaListPanel extends ContentWidget {
         grid.setLoadMask(true);
         grid.setBorders(true);
         grid.setSelectionModel(smRowSelection);
+        grid.setAutoExpandColumn(ShippingConfigMetaForm.SHIPPING_NAME);
         
         ActionCellRenderer render = new ActionCellRenderer(grid);
         actcol.setRenderer(render);
@@ -165,7 +166,7 @@ public class ShippingMetaListPanel extends ContentWidget {
         //        panel.setHeading("Paging Grid");
         panel.setLayout(new FitLayout());
         panel.add(grid);
-        panel.setSize(900, 350);
+        panel.setHeight(350);
 //        panel.setBottomComponent(toolBar);
         
         add(panel);

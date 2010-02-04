@@ -182,7 +182,7 @@ public class UserListPanel extends ContentWidget {
 		colregTime.setRenderer(new TimeCellRenderer());
 		columns.add(colregTime);
 		
-		ColumnConfig colaction = new ColumnConfig("Action", Resources.constants.action(), 100);
+		ColumnConfig colaction = new ColumnConfig("Action", Resources.constants.action(), 160);
 		//colpayPoint.setEditor(new CellEditor(new TextField()));
 		columns.add(colaction);
 		ColumnModel cm = new ColumnModel(columns);
@@ -190,6 +190,7 @@ public class UserListPanel extends ContentWidget {
 		final Grid<BeanObject> grid = new EditorGrid<BeanObject>(store, cm);
 		grid.setLoadMask(true);
 		grid.setBorders(true);
+		grid.setAutoExpandColumn(IUser.USER_NAME);
 		grid.setSelectionModel(smRowSelection);
 		ActionCellRenderer render = new ActionCellRenderer(grid);
 		ActionCellRenderer.ActionInfo act = new ActionCellRenderer.ActionInfo();
@@ -227,7 +228,7 @@ public class UserListPanel extends ContentWidget {
 		//        panel.setHeading("Paging Grid");
 		panel.setLayout(new FitLayout());
 		panel.add(grid);
-		panel.setSize(900, 350);
+		panel.setHeight(350);
 		panel.setBottomComponent(toolBar);
 		panel.setButtonAlign(HorizontalAlignment.CENTER);
 		panel.addButton(new Button("Remove User",
