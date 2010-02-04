@@ -53,7 +53,8 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
 
     		if(StringUtils.isEmpty(to.getPkId())) {
     			// if id is not set, use keyname, otherwise use ID directly, same as attach
-    			to.setKeyName(DataStoreUtils.genKeyName(to));
+    			if(StringUtils.isEmpty(to.getKeyName()))
+    				to.setKeyName(DataStoreUtils.genKeyName(to));
     			to.setLongId(UUIDLongGenerator.newUUID());
     		}
     		

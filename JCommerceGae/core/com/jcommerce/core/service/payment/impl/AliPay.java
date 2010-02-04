@@ -99,6 +99,7 @@ public class AliPay extends BasePaymentMetaPlugin implements IPaymentMetaPlugin 
         defaultPaymentConfigMeta.setIsCod(false);
         defaultPaymentConfigMeta.setPayDesc("支付宝，是支付宝公司针对网上交易而特别推出的安全付款服务.<br/><a href=\"https://www.alipay.com/himalayas/market.htm?type=from_agent_contract&id=C4335319945672464113\" target=\"_blank\"><font color=\"red\">点此申请免费签约接口</font></a><br/><a href=\"https://www.alipay.com/himalayas/market.htm?type=from_agent_contract&id=C4335319945674798119\" target=\"_blank\"><font color=\"red\">点此申请预付费签约接口(600包4.2万、1800包18万交易额度)</font></a>");
         defaultPaymentConfigMeta.setPayConfig(getDefaultConfig());
+        defaultPaymentConfigMeta.setKeyName("_pay1");
     }
     public PaymentConfigMeta getDefaultConfigMeta() {
     	return defaultPaymentConfigMeta;

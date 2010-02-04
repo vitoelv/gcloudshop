@@ -68,7 +68,7 @@ public class OrderFeePanel extends ContentWidget{
 		public String orderFee_userSurplus();
 		public String orderFee_moneyShouldPay();
 		public String orderFee_surplus();
-		
+		public String orderFee_title();
 	}
 	
 	private static OrderFeePanel instance = null;
@@ -87,7 +87,10 @@ public class OrderFeePanel extends ContentWidget{
 
 	@Override
 	public String getName() {
-		return Resources.constants.OrderUser_title();
+		if(getCurState().getIsEdit())
+			return Resources.constants.orderFee_title();
+		else
+			return Resources.constants.OrderUser_title();
 	}
 	
 	public static OrderFeePanel getInstance(){

@@ -489,7 +489,10 @@ public class ConsigneePanel extends BaseEntityEditPanel {
 
 	@Override
 	public String getName() {
-		return Resources.constants.Consignee_title();
+		if(getCurState().getIsEdit())
+			return Resources.constants.Consignee_title();
+		else
+			return Resources.constants.OrderUser_title();
 	}
 	
 	@Override

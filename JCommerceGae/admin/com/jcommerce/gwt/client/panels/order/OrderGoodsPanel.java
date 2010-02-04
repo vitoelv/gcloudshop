@@ -67,6 +67,7 @@ import com.jcommerce.gwt.client.widgets.TotalPriceCellRenderer;
 public class OrderGoodsPanel extends ContentWidget{
 	
 	public static interface Constants {
+		public String OrderGoods_title();
 		public String OrderGoods_selectGoods();
 		public String OrderGoods_ok();
 		public String OrderGoods_cancel();
@@ -109,7 +110,10 @@ public class OrderGoodsPanel extends ContentWidget{
 
 	@Override
 	public String getName() {
-		return Resources.constants.OrderUser_title();
+		if(getCurState().getIsEdit())
+			return Resources.constants.OrderGoods_title();
+		else
+			return Resources.constants.OrderUser_title();
 	}
 	
 	public static OrderGoodsPanel getInstance(){
