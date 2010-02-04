@@ -216,13 +216,13 @@ public class GoodsTypeListPanel extends ContentWidget {
 		col.setEditor(new CellEditor(GoodsTypeForm.getNameField(Resources.constants.GoodsTypeList_ColumnName())));
 		columns.add(col);
 		
-        columns.add(new ColumnConfig(GoodsTypeForm.ATTR_GROUP, Resources.constants.GoodsTypeList_ColumnGroup(), 120));
-        columns.add(new ColumnConfig(GoodsTypeForm.ATTRCOUNT, Resources.constants.GoodsTypeList_ColumnNumber(), 80));
-        CheckColumnConfig ccc1 = new CheckColumnConfig(GoodsTypeForm.ENABLED, Resources.constants.GoodsTypeList_ColumnState(), 80);
+        columns.add(new ColumnConfig(GoodsTypeForm.ATTR_GROUP, Resources.constants.GoodsTypeList_ColumnGroup(), 200));
+        columns.add(new ColumnConfig(GoodsTypeForm.ATTRCOUNT, Resources.constants.GoodsTypeList_ColumnNumber(), 100));
+        CheckColumnConfig ccc1 = new CheckColumnConfig(GoodsTypeForm.ENABLED, Resources.constants.GoodsTypeList_ColumnState(), 100);
         ccc1.setFixed(false);
         columns.add(ccc1);
         ColumnConfig actcol = new ColumnConfig("Action", Resources.constants
-				.action(), 150);
+				.action(), 180);
         columns.add(actcol);
         
         ColumnModel cm = new ColumnModel(columns);
@@ -230,6 +230,7 @@ public class GoodsTypeListPanel extends ContentWidget {
         Grid<BeanObject> grid = new EditorGrid<BeanObject>(store, cm);
         grid.setLoadMask(true);
         grid.setBorders(true);
+        grid.setAutoExpandColumn(GoodsTypeForm.CAT_NAME);
 //        grid.setSelectionModel(smRowSelection);
 //        grid.setAutoExpandColumn("forum");
 
@@ -264,7 +265,7 @@ public class GoodsTypeListPanel extends ContentWidget {
         panel.setHeading("Paging Grid");
         panel.setLayout(new FitLayout());
         panel.add(grid);
-        panel.setSize(800, 350);
+        panel.setHeight(350);
         panel.setBottomComponent(toolBar);
         panel.setButtonAlign(HorizontalAlignment.CENTER);
         
@@ -290,16 +291,27 @@ public class GoodsTypeListPanel extends ContentWidget {
 					}
 				}));
 		
-        panel.addButton(new com.extjs.gxt.ui.client.widget.button.Button(Resources.constants.GoodsTypeList_addNewType(), 
-        		new SelectionListener<ButtonEvent>() {
-        	public void componentSelected(ButtonEvent ce) {
-              	newGoodsType();
-        	}
-        }));
+//        panel.addButton(new Button(Resources.constants.GoodsTypeList_addNewType(), 
+//        		new SelectionListener<ButtonEvent>() {
+//        	public void componentSelected(ButtonEvent ce) {
+//              	newGoodsType();
+//        	}
+//        }));
         
         add(panel);
     }
-    
+    public Button getShortCutButton(){
+    	Button sButton = new Button(Resources.constants.GoodsTypeList_addNewType());
+    	sButton.addSelectionListener(new SelectionListener<ButtonEvent>(){
+
+			@Override
+			public void componentSelected(ButtonEvent ce) {
+				newGoodsType();
+			}
+    		
+    	});
+    	return sButton;
+    }
 	private void update(BeanObject goodsType, UpdateService.Listener listener) {
 		new UpdateService().updateBean(goodsType.getString(IGoodsType.PK_ID), goodsType,
 				listener);

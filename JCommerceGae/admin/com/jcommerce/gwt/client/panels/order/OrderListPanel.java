@@ -15,7 +15,10 @@ import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
+
+
 import com.extjs.gxt.ui.client.widget.button.Button;
+import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.grid.CheckBoxSelectionModel;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
@@ -30,7 +33,7 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.TextBox;
+
 import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
@@ -164,8 +167,8 @@ public class OrderListPanel  extends ContentWidget{
 	ColumnConfig orderStateCol;
 	
 	Button btnFind = new Button(Resources.constants.GoodsList_search());
-	TextBox orderSn = new TextBox();
-	TextBox consignee = new TextBox();
+	TextField<String> orderSn = new TextField<String>();
+	TextField<String> consignee = new TextField<String>();
 	ListBox state_list = new ListBox();
 	
 	Button btnConfirm = new Button(Resources.constants.OrderList_confirm());
@@ -286,8 +289,8 @@ public class OrderListPanel  extends ContentWidget{
 		});
 		
 		Label unConfirmedLabel = new Label(Resources.constants.OrderStatus_OS_UNCONFIRMED());
-		unConfirmedLabel.setWidth("50");
 		unConfirmedLabel.setStyleName("SearchOrderLabel");
+	
 		unConfirmedLabel.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				search(1);
@@ -296,7 +299,6 @@ public class OrderListPanel  extends ContentWidget{
 		header.add(unConfirmedLabel);
 		
 		Label unPayedLabel = new Label(Resources.constants.OrderStatus_PS_UNPAYED());
-		unPayedLabel.setWidth("50");
 		unPayedLabel.setStyleName("SearchOrderLabel");
 		unPayedLabel.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -306,7 +308,6 @@ public class OrderListPanel  extends ContentWidget{
 		header.add(unPayedLabel);
 		
 		Label preparingLabel = new Label(Resources.constants.OrderStatus_SS_PREPARING());
-		preparingLabel.setWidth("50");
 		preparingLabel.setStyleName("SearchOrderLabel");
 		preparingLabel.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {

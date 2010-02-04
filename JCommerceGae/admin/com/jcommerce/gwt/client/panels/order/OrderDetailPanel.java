@@ -15,6 +15,7 @@ import com.extjs.gxt.ui.client.store.StoreListener;
 import com.extjs.gxt.ui.client.widget.Component;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
+import com.extjs.gxt.ui.client.widget.Label;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
@@ -25,7 +26,6 @@ import com.extjs.gxt.ui.client.widget.toolbar.PagingToolBar;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Label;
 import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
@@ -328,13 +328,13 @@ public class OrderDetailPanel  extends ContentWidget{
 		
 		ColumnConfig colGoodsName = new ColumnConfig(IOrderGoods.GOODS_NAME, Resources.constants.Goods_name(), 100);
 		columns.add(colGoodsName);
-		ColumnConfig colGoodsSN = new ColumnConfig(IOrderGoods.GOODS_SN, Resources.constants.Goods_SN(), 100);
+		ColumnConfig colGoodsSN = new ColumnConfig(IOrderGoods.GOODS_SN, Resources.constants.Goods_SN(), 150);
 		columns.add(colGoodsSN);
 		ColumnConfig colGoodsPrice = new ColumnConfig(IOrderGoods.GOODS_PRICE, Resources.constants.OrderDetail_price(), 100);
 		columns.add(colGoodsPrice);
 		ColumnConfig colGoodsNum = new ColumnConfig(IOrderGoods.GOODS_NUMBER, Resources.constants.OrderDetail_goodsNum(), 100);
 		columns.add(colGoodsNum);
-		ColumnConfig colGoodsAttr = new ColumnConfig(IOrderGoods.GOODS_ATTR, Resources.constants.OrderDetail_goodsAttr(), 100);
+		ColumnConfig colGoodsAttr = new ColumnConfig(IOrderGoods.GOODS_ATTR, Resources.constants.OrderDetail_goodsAttr(), 200);
 		columns.add(colGoodsAttr);
 		
 		ColumnConfig colTotalPrice = new ColumnConfig("subtotal", Resources.constants.OrderDetail_subTotalPrice(), 100);
@@ -345,7 +345,7 @@ public class OrderDetailPanel  extends ContentWidget{
 		Grid<BeanObject> grid = new Grid<BeanObject>(store, cm);
 		grid.setLoadMask(true);
 		grid.setBorders(true);
-		grid.setAutoExpandColumn("subtotal");
+		grid.setAutoExpandColumn(IOrderGoods.GOODS_NAME);
 		grid.setAutoHeight(true);
 		goodsPanel.setFrame(true);
      	goodsPanel.setLayout(new FitLayout());
@@ -405,6 +405,7 @@ public class OrderDetailPanel  extends ContentWidget{
 	}
 	
 	TextArea remarkArea = new TextArea();
+
 	HorizontalPanel buttonPanel = new HorizontalPanel();
 	PagingToolBar operationToolBar;	
 	private void renderOperationPanel() {
@@ -413,6 +414,7 @@ public class OrderDetailPanel  extends ContentWidget{
 		remarkLabel.setWidth("100");
 		remarkPanel.add(remarkLabel);
 		remarkArea.setWidth("700");
+		remarkArea.setStyleAttribute("margin", "2 0 0 0");
 		remarkPanel.add(remarkArea);
 		operationPanel.add(remarkPanel);
 		Component a = new Button("");
@@ -474,7 +476,7 @@ public class OrderDetailPanel  extends ContentWidget{
 		grid.setLoadMask(true);
 		grid.setBorders(true);
 		grid.setAutoExpandColumn(IOrderAction.ACTION_NOTE);
-		grid.setAutoHeight(true);
+		//grid.setAutoHeight(true);
 		
 		colLogTime.setRenderer(new TimeCellRenderer(grid));
 		colOrderStatus.setRenderer(new OrderStateCellRenderer("os"));

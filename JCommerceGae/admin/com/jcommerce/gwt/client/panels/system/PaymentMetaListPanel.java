@@ -170,7 +170,7 @@ public class PaymentMetaListPanel extends ContentWidget {
         final CheckBoxSelectionModel<BeanObject> smRowSelection = new CheckBoxSelectionModel<BeanObject>();
         columns.add(smRowSelection.getColumn());
         columns.add(new ColumnConfig(PaymentConfigMetaForm.PK_ID, Resources.constants
-                .PaymentMetaList_ID(), 50));
+                .PaymentMetaList_ID(), 100));
         ColumnConfig col = new ColumnConfig(PaymentConfigMetaForm.PAY_NAME, Resources.constants
                 .PaymentMetaList_NAME(), 100);
         col.setEditor(new CellEditor(new TextField<String>()));
@@ -178,11 +178,11 @@ public class PaymentMetaListPanel extends ContentWidget {
         columns.add(new ColumnConfig(PaymentConfigMetaForm.PAY_DESC, Resources.constants
                 .PaymentMetaList_DESC(), 200));
         columns.add(new ColumnConfig(PaymentConfigMetaForm.PAY_FEE, Resources.constants
-                .PaymentMetaList_PAYFEE(), 50));
+                .PaymentMetaList_PAYFEE(), 100));
         columns.add(new ColumnConfig(PaymentConfigMetaForm.IS_COD, Resources.constants
-                .PaymentMetaList_ISCOD(), 50));
+                .PaymentMetaList_ISCOD(), 100));
         columns.add(new ColumnConfig(PaymentConfigMetaForm.PAY_ORDER, Resources.constants
-                .PaymentMetaList_ORDER(), 50));
+                .PaymentMetaList_ORDER(), 100));
         ColumnConfig actcol = new ColumnConfig("Action", Resources.constants
                 .PaymentMetaList_ACTION(), 100);
         columns.add(actcol);
@@ -193,6 +193,7 @@ public class PaymentMetaListPanel extends ContentWidget {
         grid.setLoadMask(true);
         grid.setBorders(true);
         grid.setSelectionModel(smRowSelection);
+        grid.setAutoExpandColumn(PaymentConfigMetaForm.PAY_DESC);
         
         ActionCellRenderer render = new ActionCellRenderer(grid);
         actcol.setRenderer(render);
@@ -207,7 +208,7 @@ public class PaymentMetaListPanel extends ContentWidget {
         //        panel.setHeading("Paging Grid");
         panel.setLayout(new FitLayout());
         panel.add(grid);
-        panel.setSize(900, 350);
+        panel.setHeight(350);
 //        panel.setBottomComponent(toolBar);
         
         add(panel);

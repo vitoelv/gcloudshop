@@ -7,6 +7,7 @@ import java.util.List;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.data.BasePagingLoader;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
+import com.extjs.gxt.ui.client.event.ComponentEvent;
 import com.extjs.gxt.ui.client.event.MessageBoxEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
@@ -16,6 +17,7 @@ import com.extjs.gxt.ui.client.store.StoreListener;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.Info;
+import com.extjs.gxt.ui.client.widget.Label;
 import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.NumberField;
@@ -32,9 +34,8 @@ import com.extjs.gxt.ui.client.widget.toolbar.PagingToolBar;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.Label;
+
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.TextBox;
 import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
@@ -130,7 +131,7 @@ public class GoodsListPanel extends ContentWidget {
 	ListBox lstCategory = new ListBox();
 	ListBox lstBrand = new ListBox();
 	ListBox lstType = new ListBox();
-	TextBox txtKeyword = new TextBox();
+	TextField<String> txtKeyword = new TextField<String>();
 	Button btnFind = new Button(Resources.constants.GoodsList_search());
 	ListBox lstAction = new ListBox();
 	Button btnAct = new Button(Resources.constants.GoodsList_action_OK());
@@ -229,6 +230,7 @@ public class GoodsListPanel extends ContentWidget {
 		grid.addPlugin(hotsold);
 		grid.addPlugin(bestsold);
 		grid.addPlugin(newadd);
+		grid.setAutoExpandColumn(IGoods.GOODS_NAME);
 
 		ActionCellRenderer render = new ActionCellRenderer(grid);
 		ActionCellRenderer.ActionInfo act = new ActionCellRenderer.ActionInfo();
@@ -251,8 +253,11 @@ public class GoodsListPanel extends ContentWidget {
 		header.add(lstCategory);
 		header.add(lstBrand);
 		header.add(lstType);
-		header.add(new Label("  " + Resources.constants.GoodsList_keyword()));
+		Label keyword = new Label(Resources.constants.GoodsList_keyword());
+		keyword.setStyleAttribute("padding", "3 4 3 4");
+		header.add(keyword);
 		header.add(txtKeyword);
+		btnFind.setStyleAttribute("margin", "0 4 0 4");
 		header.add(btnFind);
 		add(header);
 
@@ -271,7 +276,7 @@ public class GoodsListPanel extends ContentWidget {
 		//        panel.setHeading("Paging Grid");
 		panel.setLayout(new FitLayout());
 		panel.add(grid);
-		panel.setSize(880, 350);
+		panel.setHeight(350);
 		panel.setBottomComponent(toolBar);
 
 		panel.setButtonAlign(HorizontalAlignment.CENTER);
@@ -289,16 +294,16 @@ public class GoodsListPanel extends ContentWidget {
 					}
 				}));
 		
-		panel.addButton(new Button(Resources.constants.GoodsList_add_new(),
-				new SelectionListener<ButtonEvent>() {
-					public void componentSelected(ButtonEvent ce) {
-						
-						GoodsPanel.State newState = new GoodsPanel.State();
-						newState.setIsEdit(false);
-						newState.execute();
-//						JCommerceGae.getInstance().displayGoodsPanel(null);
-					}
-				}));
+//		panel.addButton(new Button(Resources.constants.GoodsList_add_new(),
+//				new SelectionListener<ButtonEvent>() {
+//					public void componentSelected(ButtonEvent ce) {
+//						
+//						GoodsPanel.State newState = new GoodsPanel.State();
+//						newState.setIsEdit(false);
+//						newState.execute();
+////						JCommerceGae.getInstance().displayGoodsPanel(null);
+//					}
+//				}));
 		
 		add(panel);
 
@@ -332,6 +337,20 @@ public class GoodsListPanel extends ContentWidget {
 		add(footer);
 	}
 
+	public Button getShortCutButton(){
+		Button sButton = new Button(Resources.constants.GoodsList_add_new());
+		sButton.addSelectionListener(new SelectionListener<ButtonEvent>(){
+
+			@Override
+			public void componentSelected(ButtonEvent ce) {
+				GoodsPanel.State newState = new GoodsPanel.State();
+				newState.setIsEdit(false);
+				newState.execute();
+			}
+			
+		});
+		return sButton;
+	}
 	private void search() {
 		criteria.removeAllConditions();
 		if (lstBrand.getSelectedIndex() > 0) {
@@ -371,7 +390,7 @@ public class GoodsListPanel extends ContentWidget {
 			criteria.addCondition(cond);
 		}
 
-		String keyword = txtKeyword.getText();
+		String keyword = txtKeyword.getValue();
 		if (keyword != null && keyword.trim().length() > 0) {
 			Condition cond = new Condition();
 			cond.setField(IGoods.KEYWORDS);

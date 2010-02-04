@@ -181,6 +181,7 @@ public class AdminListPanel extends ContentWidget {
       Grid<BeanObject> grid = new Grid<BeanObject>(store, cm);
       grid.setLoadMask(true);
       grid.setBorders(true);
+      grid.setAutoExpandColumn(IAdminUser.USER_NAME);
       //grid.setSelectionModel(sm);
 //      grid.setAutoExpandColumn("forum");
 
@@ -207,7 +208,7 @@ public class AdminListPanel extends ContentWidget {
       panel.setHeading("Paging Grid");
       panel.setLayout(new FitLayout());
       panel.add(grid);
-      panel.setSize(800, 350);
+      panel.setHeight(350);
 //      panel.setSize("100%", "350px");
       panel.setBottomComponent(toolBar);     
       

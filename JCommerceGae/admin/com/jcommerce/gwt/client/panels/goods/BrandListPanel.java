@@ -142,11 +142,11 @@ public class BrandListPanel extends ContentWidget {
         //CheckBoxSelectionModel<BeanObject> sm = new CheckBoxSelectionModel<BeanObject>();
         //columns.add(sm.getColumn());        
         columns.add(new ColumnConfig(IBrand.BRAND_NAME, Resources.constants.NewBrand_name(), 80));
-        columns.add(new ColumnConfig(IBrand.SITE_URL, Resources.constants.NewBrand_site(), 150));
+        columns.add(new ColumnConfig(IBrand.SITE_URL, Resources.constants.NewBrand_site(), 200));
         columns.add(new ColumnConfig(IBrand.BRAND_DESC, Resources.constants.NewBrand_description(), 230));
-        columns.add(new ColumnConfig(IBrand.SORT_ORDER, Resources.constants.NewBrand_order(), 50));
-        columns.add(new CheckColumnConfig(IBrand.IS_SHOW, Resources.constants.NewBrand_showOrNot(), 80));
-        ColumnConfig actcol = new ColumnConfig("Action", Resources.constants.action(), 140);
+        columns.add(new ColumnConfig(IBrand.SORT_ORDER, Resources.constants.NewBrand_order(), 100));
+        columns.add(new CheckColumnConfig(IBrand.IS_SHOW, Resources.constants.NewBrand_showOrNot(), 100));
+        ColumnConfig actcol = new ColumnConfig("Action", Resources.constants.action(), 150);
         columns.add(actcol);
 
 
@@ -156,6 +156,7 @@ public class BrandListPanel extends ContentWidget {
         Grid<BeanObject> grid = new Grid<BeanObject>(store, cm);
         grid.setLoadMask(true);
         grid.setBorders(true);
+        grid.setAutoExpandColumn(IBrand.BRAND_NAME);
         //grid.setSelectionModel(sm);
 //        grid.setAutoExpandColumn("forum");
 
@@ -182,19 +183,19 @@ public class BrandListPanel extends ContentWidget {
         panel.setHeading("Paging Grid");
         panel.setLayout(new FitLayout());
         panel.add(grid);
-        panel.setSize(800, 350);
+        panel.setHeight(350);
 //        panel.setSize("100%", "350px");
         panel.setBottomComponent(toolBar);     
         
         panel.setButtonAlign(HorizontalAlignment.CENTER);
-        btnAdd.addSelectionListener(new SelectionListener<ButtonEvent>() {
-            public void componentSelected(ButtonEvent ce) {
-            	onButtonAddClicked();
-            }
-        });
-        
-
-        panel.addButton(btnAdd);
+//        btnAdd.addSelectionListener(new SelectionListener<ButtonEvent>() {
+//            public void componentSelected(ButtonEvent ce) {
+//            	onButtonAddClicked();
+//            }
+//        });
+//        
+//
+//        panel.addButton(btnAdd);
         
         add(panel);       
     }    

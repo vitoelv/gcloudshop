@@ -189,14 +189,14 @@ public class RegionListPanel extends ContentWidget {
 //		addPanel.addButton(btnNew);
 		mf.add(new AdapterField(btnNew));
 		addPanel.add(mf);
-		addPanel.setWidth(800);
+		//addPanel.setWidth(800);
 		
 		TableLayout tl1 = new TableLayout(3);
 //		tl1.setCellPadding(20);
 //		tl1.setCellSpacing(20);
 		listPanel.setLayout(tl1);
 		
-		listPanel.setWidth(800);
+		//listPanel.setWidth(800);
 		
 		
 //		this.setLayout(new TableLayout(1));

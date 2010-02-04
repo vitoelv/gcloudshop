@@ -31,6 +31,7 @@ import com.extjs.gxt.ui.client.store.StoreEvent;
 import com.extjs.gxt.ui.client.store.StoreListener;
 import com.extjs.gxt.ui.client.store.TreeStore;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
+import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.grid.CheckColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
@@ -40,7 +41,6 @@ import com.extjs.gxt.ui.client.widget.toolbar.PagingToolBar;
 import com.extjs.gxt.ui.client.widget.treegrid.EditorTreeGrid;
 import com.extjs.gxt.ui.client.widget.treegrid.TreeGridCellRenderer;
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ListBox;
 import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.ModelNames;
@@ -137,8 +137,8 @@ public class CategoryListPanel extends ContentWidget {
         ColumnConfig colName = new ColumnConfig(ICategory.CAT_NAME, Resources.constants.Category_name(), 150);
         colName.setRenderer(new TreeGridCellRenderer<BeanObject>());
         columns.add(colName);
-        columns.add(new ColumnConfig(ICategory.MEASURE_UNIT, Resources.constants.Category_unit(), 80));
-        columns.add(new CheckColumnConfig(ICategory.SHOW_IN_NAV, Resources.constants.CategoryList_navigator(), 80) {
+        columns.add(new ColumnConfig(ICategory.MEASURE_UNIT, Resources.constants.Category_unit(), 100));
+        columns.add(new CheckColumnConfig(ICategory.SHOW_IN_NAV, Resources.constants.CategoryList_navigator(), 100) {
         	// TODO: wrap the code for Long type column into a baseclass
         	  protected String getCheckState(ModelData model, String property, int rowIndex,
         		      int colIndex) {
@@ -148,9 +148,9 @@ public class CategoryListPanel extends ContentWidget {
         		    return on;
         		  }
         });
-        columns.add(new CheckColumnConfig(ICategory.IS_SHOW, Resources.constants.Category_showOrNot(), 80));        
-        columns.add(new ColumnConfig(ICategory.GRADE, Resources.constants.CategoryList_priceLevel(), 60));
-        columns.add(new ColumnConfig(ICategory.SORT_ORDER, Resources.constants.Category_order(), 50));        
+        columns.add(new CheckColumnConfig(ICategory.IS_SHOW, Resources.constants.Category_showOrNot(), 100));        
+        columns.add(new ColumnConfig(ICategory.GRADE, Resources.constants.CategoryList_priceLevel(), 100));
+        columns.add(new ColumnConfig(ICategory.SORT_ORDER, Resources.constants.Category_order(), 100));        
         ColumnConfig actcol = new ColumnConfig("Action", Resources.constants.action(), 150);
         columns.add(actcol);
 
@@ -159,6 +159,7 @@ public class CategoryListPanel extends ContentWidget {
         EditorTreeGrid<BeanObject> grid = new EditorTreeGrid<BeanObject>(store, cm);
         grid.setLoadMask(true);
         grid.setBorders(true);
+        grid.setAutoExpandColumn(ICategory.CAT_NAME);
         //grid.setSelectionModel(sm);
 //        grid.setAutoExpandColumn("forum");
 
@@ -184,18 +185,18 @@ public class CategoryListPanel extends ContentWidget {
         panel.setHeading("Paging Grid");
         panel.setLayout(new FitLayout());
         panel.add(grid);
-        panel.setSize(800, 350);
+        panel.setHeight(350);
         panel.setBottomComponent(toolBar);
         
         panel.setButtonAlign(HorizontalAlignment.CENTER);
-        panel.addButton(new com.extjs.gxt.ui.client.widget.button.Button(Resources.constants.Category_title(), new SelectionListener<ButtonEvent>() {
-          public void componentSelected(ButtonEvent ce) {
-//              JCommerceGae.getInstance().displayNewCategory();
-        	  	CategoryPanel.State newState = new CategoryPanel.State();
-				newState.setIsEdit(false);
-				newState.execute();
-          }
-        }));
+//        panel.addButton(new Button(Resources.constants.Category_title(), new SelectionListener<ButtonEvent>() {
+//          public void componentSelected(ButtonEvent ce) {
+////              JCommerceGae.getInstance().displayNewCategory();
+//        	  	CategoryPanel.State newState = new CategoryPanel.State();
+//				newState.setIsEdit(false);
+//				newState.execute();
+//          }
+//        }));
         
         add(panel);        
     }    
@@ -208,7 +209,20 @@ public class CategoryListPanel extends ContentWidget {
 	    me.@com.jcommerce.gwt.client.panels.goods.CategoryListPanel::deleteCategoryAndRefrsh(Ljava/lang/String;)(id);
 	};
     }-*/;
-    
+    public Button getShortCutButton(){
+    	Button sButton = new Button(Resources.constants.Category_title());
+    	sButton.addSelectionListener(new SelectionListener<ButtonEvent>(){
+
+			@Override
+			public void componentSelected(ButtonEvent ce) {
+				CategoryPanel.State newState = new CategoryPanel.State();
+				newState.setIsEdit(false);
+				newState.execute();
+			}
+    		
+    	});
+    	return sButton;
+    }
     private void modifyCategoryAndRefrsh(final String id) {    	
 		CategoryPanel.State newState = new CategoryPanel.State();
 		newState.setIsEdit(true);
