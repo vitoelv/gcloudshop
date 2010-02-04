@@ -49,6 +49,7 @@ import com.jcommerce.gwt.client.service.ReadService;
 import com.jcommerce.gwt.client.service.RemoteService;
 import com.jcommerce.gwt.client.service.UpdateService;
 import com.jcommerce.gwt.client.service.WaitService;
+import com.jcommerce.gwt.client.util.MyRpcProxy;
 import com.jcommerce.gwt.client.widgets.MyContentPanel;
 import com.jcommerce.gwt.client.widgets.OrderStateCellRenderer;
 import com.jcommerce.gwt.client.widgets.TimeCellRenderer;
@@ -306,12 +307,12 @@ public class OrderDetailPanel  extends ContentWidget{
 	
 	
 	PagingToolBar goodsToolBar;	
-	
+	BasePagingLoader loader;
 	private void renderGoodsPanel() {
 		Criteria criteria = new Criteria();
 		criteria.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, getCurState().getPkId()));
 		
-		BasePagingLoader loader = new PagingListService().getLoader(ModelNames.ORDERGOODS, criteria);	  	
+		loader = new PagingListService().getLoader(ModelNames.ORDERGOODS, criteria);	  	
 	    final ListStore<BeanObject> store = new ListStore<BeanObject>(loader);		
 	    store.addStoreListener(new StoreListener<BeanObject>() {
 	    	public void storeDataChanged(StoreEvent<BeanObject> se) {
@@ -812,6 +813,10 @@ public class OrderDetailPanel  extends ContentWidget{
 	public void refresh() {
 		getOrderInfo();
 		refreshOperableAction();
+		MyRpcProxy proxy = (MyRpcProxy)loader.getProxy();
+		Criteria criteria = new Criteria();
+		criteria.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, getCurState().getPkId()));
+		proxy.setCriteria(criteria);
 		goodsToolBar.refresh();
 		operationToolBar.refresh();
 		btnRefund.setVisible(false);

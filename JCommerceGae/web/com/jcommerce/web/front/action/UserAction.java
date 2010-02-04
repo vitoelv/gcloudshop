@@ -205,17 +205,15 @@ public class UserAction extends BaseAction {
 				uw.put("shippedOrder", null);
 				
 				request.setAttribute("info", uw);
-				request.setAttribute("userNotice", getCachedShopConfig().getString(IShopConfigMeta.CFG_KEY_SHOP_NOTICE));
-				//TODO prompt??
+				request.setAttribute("userNotice", getCachedShopConfig().get("userNotice"));
 				request.setAttribute("prompt", new String[0]);
 				includeUserMenu();
 				return RES_USER_CLIPS;
 			}
 			else if("register".equals(action)) {
-				//TODO captcha验证码 应从后台设置
 				request.setAttribute("enabledCaptcha", 0);
 				request.setAttribute("rand", new Double(1000000*Math.random()).longValue());
-				
+
 				request.setAttribute("shopRegClosed", getCachedShopConfig().getInt(IShopConfigMeta.CFG_KEY_SHOP_REG_CLOSED));
 				return RES_USER_PASSPORT;
 			}
@@ -294,7 +292,7 @@ public class UserAction extends BaseAction {
 			/* 收货地址列表界面*/
 			else if("address_list".equals(action) || "addressList".equals(action)) {
 				includeUserMenu();
-				String shopCountry =getCachedShopConfig().getString(IShopConfigMeta.CFG_KEY_SHOP_COUNTRY);
+				String shopCountry = (String)getCachedShopConfig().get(IShopConfigMeta.CFG_KEY_SHOP_COUNTRY);
 				
 				/* 取得国家列表、商店所在国家、商店所在国家的省列表 */
 				request.setAttribute("countryList", LibCommon.getRegion(IRegion.TYPE_COUNTRY, null,getDefaultManager()));
@@ -540,7 +538,7 @@ public class UserAction extends BaseAction {
 				String shippingCodFee = null;
 				if(newOrder.getShippingId() != null) {
 					// 重新计算配送费用
-					Map<String,Object> weightPrice = LibOrder.getWeightPrice(fromOrder.getPackId(), toOrder.getPkId(), getDefaultManager());
+					Map<String,Object> weightPrice = LibOrder.getWeightPrice(fromOrder.getPkId(), toOrder.getPkId(), getDefaultManager());
 					UserAddressWrapper consignee = (UserAddressWrapper)getSession().getAttribute(KEY_FLOW_CONSIGNEE);
 			    	if(consignee == null) {
 			    		 /* 如果不存在，则取得用户的默认收货人信息 */
@@ -579,7 +577,8 @@ public class UserAction extends BaseAction {
 				if(newOrder.getPayId()!= ""){
 					newOrder.setPayFee(LibOrder.payFee(newOrder.getPayId(),newOrder.getGoodsAmount(),shippingCodFee,getDefaultManager()));
 		        }
-				newOrder.setOrderAmount(newOrder.getGoodsAmount() + newOrder.getShippingFee() + newOrder.getInsureFee() + newOrder.getPayFee());
+				newOrder.setOrderAmount(newOrder.getGoodsAmount() + newOrder.getShippingFee() + newOrder.getInsureFee() + newOrder.getPayFee()
+						- newOrder.getSurplus() - newOrder.getMoneyPaid());
 				
 				//删除原订单
 				getDefaultManager().txdelete(ModelNames.ORDERINFO, fromId);
@@ -983,6 +982,8 @@ public class UserAction extends BaseAction {
 	
 	public String register(String username, String password, String email, Map<String, String> other) {
 		User user = new User();
+		//记录上次登录时间为注册时间
+		user.setLastTime(new Date());
 		user.setUserName(username);
 		user.setPassword(password);
 		user.setEmail(email);
