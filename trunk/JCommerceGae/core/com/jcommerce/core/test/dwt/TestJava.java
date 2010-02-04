@@ -2,14 +2,17 @@ package com.jcommerce.core.test.dwt;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
-
 import junit.framework.TestCase;
 
+import org.apache.commons.lang.StringUtils;
+
+import com.jcommerce.core.util.ResourceUtil;
 import com.jcommerce.web.to.Lang;
 
 public class TestJava extends TestCase {
@@ -270,6 +273,22 @@ public class TestJava extends TestCase {
 		
 	}
 	
+	
+	public void testFirstNameLastName() {
+		String pattern = "[a-zA-Z]*[\\s][a-zA-z]*";
+		
+//		String s = "abc def";
+//		String s = "abcdef";
+		String s = "abc  def";
+		boolean matched = s.matches(pattern);
+		
+		System.out.println("matched? "+matched);
+	
+		ResourceBundle rb = ResourceUtil.getShopConfigResource(Locale.ENGLISH);
+		String shopname = rb.getString("shop_name");
+		System.out.println("shopName: "+shopname);
+		
+	}
 	
 	public void testCompileIfTag() {
 		try {

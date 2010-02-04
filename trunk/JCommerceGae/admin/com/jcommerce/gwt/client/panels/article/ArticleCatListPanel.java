@@ -135,7 +135,7 @@ public class ArticleCatListPanel extends ContentWidget{
         ColumnConfig colcatType = new ColumnConfig(IArticleCat.CAT_TYPE, Resources.constants.ArticleCat_col_type(), 150);
         colcatType.setRenderer(new GridCellRenderer<BeanObject>(){
 
-			@Override
+
 			public Object render(BeanObject model, String property,
 					ColumnData config, int rowIndex, int colIndex,
 					ListStore store, Grid grid) {
