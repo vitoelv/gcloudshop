@@ -307,13 +307,13 @@ public class OrderDetailPanel  extends ContentWidget{
 	
 	
 	PagingToolBar goodsToolBar;	
-	BasePagingLoader loader;
+	BasePagingLoader goodsLoader;
 	private void renderGoodsPanel() {
 		Criteria criteria = new Criteria();
 		criteria.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, getCurState().getPkId()));
 		
-		loader = new PagingListService().getLoader(ModelNames.ORDERGOODS, criteria);	  	
-	    final ListStore<BeanObject> store = new ListStore<BeanObject>(loader);		
+		goodsLoader = new PagingListService().getLoader(ModelNames.ORDERGOODS, criteria);	  	
+	    final ListStore<BeanObject> store = new ListStore<BeanObject>(goodsLoader);		
 	    store.addStoreListener(new StoreListener<BeanObject>() {
 	    	public void storeDataChanged(StoreEvent<BeanObject> se) {
 	    		List<Component> items = goodsPanel.getItems();
@@ -323,7 +323,7 @@ public class OrderDetailPanel  extends ContentWidget{
 	    	}
 	    });
 		goodsToolBar = new PagingToolBar(10);
-		goodsToolBar.bind(loader);
+		goodsToolBar.bind(goodsLoader);
 		
 		List<ColumnConfig> columns = new ArrayList<ColumnConfig>();
 		
@@ -409,6 +409,7 @@ public class OrderDetailPanel  extends ContentWidget{
 
 	HorizontalPanel buttonPanel = new HorizontalPanel();
 	PagingToolBar operationToolBar;	
+	BasePagingLoader operationLoader;
 	private void renderOperationPanel() {
 		HorizontalPanel remarkPanel = new HorizontalPanel();
 		Label remarkLabel = new Label(Resources.constants.OrderDetail_operationRemark());
@@ -443,8 +444,8 @@ public class OrderDetailPanel  extends ContentWidget{
 		Criteria criteria = new Criteria();
 		criteria.addCondition(new Condition(IOrderAction.ORDER_ID, Condition.EQUALS, getCurState().getPkId()));
 		
-		BasePagingLoader loader = new PagingListService().getLoader(ModelNames.ORDERACTION, criteria);
-		final ListStore<BeanObject> store = new ListStore<BeanObject>(loader);
+		operationLoader = new PagingListService().getLoader(ModelNames.ORDERACTION, criteria);
+		final ListStore<BeanObject> store = new ListStore<BeanObject>(operationLoader);
 		store.addStoreListener(new StoreListener<BeanObject>() {
 	    	public void storeDataChanged(StoreEvent<BeanObject> se) {
 	    		List<Component> items = operationPanel.getItems();
@@ -455,7 +456,7 @@ public class OrderDetailPanel  extends ContentWidget{
 	    });
 		
 		operationToolBar = new PagingToolBar(10);
-		operationToolBar.bind(loader);
+		operationToolBar.bind(operationLoader);
 		
 		List<ColumnConfig> columns = new ArrayList<ColumnConfig>();
 		
@@ -477,7 +478,7 @@ public class OrderDetailPanel  extends ContentWidget{
 		grid.setLoadMask(true);
 		grid.setBorders(true);
 		grid.setAutoExpandColumn(IOrderAction.ACTION_NOTE);
-		//grid.setAutoHeight(true);
+		grid.setAutoHeight(true);
 		
 		colLogTime.setRenderer(new TimeCellRenderer(grid));
 		colOrderStatus.setRenderer(new OrderStateCellRenderer("os"));
@@ -813,11 +814,16 @@ public class OrderDetailPanel  extends ContentWidget{
 	public void refresh() {
 		getOrderInfo();
 		refreshOperableAction();
-		MyRpcProxy proxy = (MyRpcProxy)loader.getProxy();
+		MyRpcProxy goodsProxy = (MyRpcProxy)goodsLoader.getProxy();
 		Criteria criteria = new Criteria();
 		criteria.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, getCurState().getPkId()));
-		proxy.setCriteria(criteria);
+		goodsProxy.setCriteria(criteria);
 		goodsToolBar.refresh();
+		
+		MyRpcProxy operationProxy = (MyRpcProxy)operationLoader.getProxy();
+		criteria.removeAllConditions();
+		criteria.addCondition(new Condition(IOrderAction.ORDER_ID, Condition.EQUALS, getCurState().getPkId()));
+		operationProxy.setCriteria(criteria);
 		operationToolBar.refresh();
 		btnRefund.setVisible(false);
 		//获得管理员用户名
