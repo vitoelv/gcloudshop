@@ -7,20 +7,21 @@ Steps needed to join the community and start contribute
 
 = Details =
 
-  所需软件： 
-  * Eclipse3.4 GAE bundle. refer to http://code.google.com/intl/zh-CN/appengine/docs/java/tools/eclipse.html 
-  * Eclipse3 SVN Client plugin: 例如 subclipse. refer to http://subclipse.tigris.org/servlets/ProjectProcess?pageID=p4wYuA 
-  * JDK1.5+： 配置环境变量JAVA_HOME和PATH 
+  Softwares required: 
+  * Eclipse3.4 GAE bundle: refer to http://code.google.com/intl/zh-CN/appengine/docs/java/tools/eclipse.html 
+  * Eclipse3 SVN Client plugin: For example, subclipse. refer to http://subclipse.tigris.org/servlets/ProjectProcess?pageID=p4wYuA 
+  * JDK1.5+: Setup environment variables: JAVA_HOME and PATH 
 
 
 
-  配置开发环境过程： 
-  * Eclipse 的encoding设置为UTF-8 
-  * （如果希望check-in权限）注册code.google.com账户并告诉我，会将你加入项目 
-  * logon code.google.com, 读相关说明在 http://code.google.com/p/gcloudshop/source/checkout ， 在http://code.google.com/hosting/settings 找到你的 Generated Password. 
-  * 用SVN Client 连接URL https://gcloudshop.googlecode.com/svn/trunk/ 用户名为你的code.google.com账户，密码为刚才看到的Generated Password, check out 所有文件。假设目标目录（建议使用这个目标目录，为统一开发环境）为 D:/Jcommerce, 则会下载到 D:/Jcommerce/JCommerceGAE 目录（不要使用默认的建立一个新project选项，而是导入已有的project文件，见下）
-
-  * 在Eclipse中导入existing project 从目录D:/Jcommerce/JCommerceGAE下
-  * 在Eclipse User Library界面中导入 /JCommerceGAE/import2Eclipse.userlibraries （如未使用推荐目录，则导入前可能需要用文本编辑器编辑这个文件），并将其中定义的两个user library加入到project build path中
-  * 编译本project，并运行（选择 run as WebApplication，并选择index.html作为首页）
-  * 如果运行时出现datanucleus enhancer问题，则可能需要clean并rebuild整个project即可解决
+  Steps of development environment setup:
+  * Access source code: register and logon code.google.com, access http://code.google.com/p/gcloudshop/source/checkout, (read the instruction) find your "Generated Password" at http://code.google.com/hosting/settings.
+  * (Optional) if check-in permission is desired: tell us your code.google.com account via email to yongli21cn@gmail.com, you will be added to contributor list.
+	* Download source code: Use SVN Client, connect to URL https://gcloudshop.googlecode.com/svn/trunk/ , username is your code.google.com account, password is the "Generated Password", check out all files. Suppose your destination local directory is (suggest use this directory as there are hardcodes in some unittesting and enviroment settings) D:/Jcommerce, then the files will be downloaded to D:/Jcommerce/JCommerceGAE folder (DO NOT use the default "check out and create a new project" option. You should just check out the files, and import the existing project files afterwards, see below)  
+  * Eclipse 's encoding: set as UTF-8
+  * Import project: In Eclipse, select "Import existing project" from folder D:/Jcommerce/JCommerceGAE
+  * Import user library: In Eclipse, select User Library and import /JCommerceGAE/import2Eclipse.userlibraries (If your local directory is different than D:/Jcommerce, you may need edit the paths in the library file before importing it), and add the two user libraries inside into "project build path"
+  * Compile and run: Compile the project, and run (select "run as WebApplication"). And you can access index.html or dev_home.html as start point. 
+  * Problem solving: If encountered datanucleus enhancer related errors during running, you may need clean and rebuild the entire project, most of the time the problem will be solved.
+  
+  
