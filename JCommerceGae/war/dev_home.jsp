@@ -17,7 +17,8 @@
 <p><a href="/login.jsp?gwt.codesvr=<%=devServer%>&locale=en">Goto administration login page (en)...</a></p>
 <p><a href="/admin_zh.html?gwt.codesvr=<%=devServer%>">Goto administration (zh) homepage (skip login)...</a></p>
 <p><a href="/admin.html?gwt.codesvr=<%=devServer%>">Goto administration (en) homepage (skip login)...</a></p>
-<p><a href="/web/front/home.action">Goto public homepage...</a></p>
+<p><a href="/web/front/home.action?weblocale=zh_CN">Goto public homepage(zh)...</a></p>
+<p><a href="/web/front/home.action?weblocale=en_US">Goto public homepage(en)...</a></p>
 <p><a href="/_ah/admin">Goto DataViewer on Dev Server...</a></p>
 </body>
 </html>

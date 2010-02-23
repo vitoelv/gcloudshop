@@ -40,8 +40,8 @@
 <#include "library/category_tree.ftl">
 <#include "library/top10.ftl">
 <#include "library/promotion_info.ftl">
-<#include "library/auction.ftl">
-<#include "library/group_buy.ftl">
+<!--#include "library/auction.ftl"-->
+<!--#include "library/group_buy.ftl"-->
 <#include "library/order_query.ftl">
 <#include "library/invoice_query.ftl">
 <#include "library/vote_list.ftl">

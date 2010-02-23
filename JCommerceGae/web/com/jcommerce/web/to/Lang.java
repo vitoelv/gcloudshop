@@ -14,15 +14,35 @@ import com.jcommerce.core.util.Utf8ResourceBundle;
 
 public class Lang extends BaseWrapper {
 	
+	private static ThreadLocal<Locale> threadLocal = new ThreadLocal<Locale>();
+	
+	public static void setCurrentLocale(Locale locale) {
+		threadLocal.set(locale);
+	}
+	public static Locale getCurrentLocale() {
+		Locale currentLocale = threadLocal.get();
+		if(currentLocale==null) {
+			currentLocale = Locale.CHINA; 
+		}
+		return currentLocale;
+	}
+	
 	public static Lang getInstance() {
+		
+		Locale locale = getCurrentLocale();
+		Lang instance = instances.get(locale);
 		// TODO not thread-safe
 		if(instance==null) {
-			instance = new Lang();
+			instance = new Lang(locale);
+			synchronized(instances) {
+				instances.put(locale, instance);
+			}
 		}
 		return instance;
 	}
 	
-	private static Lang instance;
+	private static Map<Locale, Lang> instances = new HashMap<Locale, Lang>();
+	
 	
 	
 	
@@ -52,12 +72,9 @@ public class Lang extends BaseWrapper {
 	}
 	
 	
-	private Lang() {
-		// TODO switch locale
-		Locale locale = Locale.CHINESE;
+	private Lang(Locale locale) {
 		loadFromBundel("com.jcommerce.web.resource.lang", locale);
 		loadFromBundel("com.jcommerce.web.resource.lang-changed", locale);
-
 	}
 	
 	private void loadFromBundel(String bundleName, Locale locale) {
@@ -136,5 +153,7 @@ public class Lang extends BaseWrapper {
 		}
 		
 	}
+
+
 
 }

@@ -5,6 +5,7 @@ public interface IWebConstants {
 	public static final String ENC = "UTF-8";
 	
 
+	public static final String KEY_LOCALE = "weblocale";
 	
 	public static final String KEY_USER_ID = "user_id";
 	public static final String KEY_USER_NAME = "user_name";
