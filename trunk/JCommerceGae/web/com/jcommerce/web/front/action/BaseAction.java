@@ -172,17 +172,59 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
         request.setAttribute("feedUrl", "feedUrl");
 	}
 	public Lang getLangMap(HttpServletRequest request) {
+		// default
+		String locale = Locale.CHINESE.toString();  
+		String reqLocale = (String)request.getParameter(KEY_LOCALE);
+		debug("reqLocale: "+reqLocale);
+		if(reqLocale!=null) {
+			locale = reqLocale;
+		}else {
+			String sessionLocale = (String)request.getSession().getAttribute(KEY_LOCALE);
+			debug("sessionLocale: "+sessionLocale);
+			if(sessionLocale!=null) {
+				locale = sessionLocale;
+			}
+		}
+		Locale loc = null;
+		try {
+			loc = parseLocale(locale);
+		} catch (Exception ex) {
+			// invalid locale string. should avoid
+			ex.printStackTrace();
+		}
+		
+		// remember the choice
+		request.getSession().setAttribute(KEY_LOCALE, locale);
+		
+		Lang.setCurrentLocale(loc);
 		Lang lang = (Lang)request.getAttribute("lang");
 		if(lang == null) {
 			lang = Lang.getInstance();
 			request.setAttribute("lang", lang);
 		}
-        
 		return lang;
 	}
+
+	private Locale parseLocale (String str) {
+		Locale res = null;
+		str = str.trim();
+		String[] tokens = StringUtils.split(str, '_');
+		String lang=null, country=null;
+		if(tokens.length==1) {
+			lang = tokens[0];
+			res = new Locale(lang);
+		}
+		else if(tokens.length==2) {
+			lang = tokens[0];
+			country = tokens[1];
+			res = new Locale(lang, country);
+		}
+		
+		return res;
+	}
+	
     public void includePromotionInfo(HttpServletRequest request) {
     	// promotion_info.ftl
-    	
         request.setAttribute("promotionInfo", new ArrayList());
     }
 
@@ -481,11 +523,12 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
 		Object obj = getSession().getAttribute("WW_TRANS_I18N_LOCALE");
 		debug("locale: "+obj);
 		
+	  getLangMap(request);
       setPageMeta(request);
       includeHelp(request);
       includeUrHere();
       includePageFooter(request);
-      getLangMap(request);
+      
       includePageHeader(request);
       setSessionUser(request);
       

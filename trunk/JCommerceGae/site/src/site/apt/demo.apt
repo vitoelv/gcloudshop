@@ -10,7 +10,7 @@ Live Demo
    
    <<Since Google App Engine is still in beta preview status, sometimes it is not stable yet. If you experienced broken service, you may need try again after a short period.>>
    
-   {{{../web/front/home.action} Public portal home page}}:
+   {{{../web/front/home.action?weblocale=en_US} Public portal home page}}:
    
    		* For public user to browse and buy goods.
    		
