@@ -7,6 +7,9 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
+import org.compass.annotations.Searchable;
+import org.compass.annotations.SearchableProperty;
+
 import com.jcommerce.core.annotation.IsPK;
 
 /**  
@@ -15,6 +18,7 @@ import com.jcommerce.core.annotation.IsPK;
  */
  
 @PersistenceCapable(identityType = IdentityType.APPLICATION , detachable="true") 
+@Searchable(alias = "goods")
 public class Goods extends ModelObject {
 
 
@@ -229,7 +233,7 @@ public void setGoodsTypeId(String goodsTypeId) {
   }
 
 
-
+  @SearchableProperty(name = "catId")
   public java.lang.String getCatId() {
     return catId;
   }
@@ -240,6 +244,7 @@ public void setGoodsTypeId(String goodsTypeId) {
 
 
 
+  @SearchableProperty(name = "SN")
   public java.lang.String getGoodsSn() {
     return goodsSn;
   }
@@ -250,6 +255,7 @@ public void setGoodsTypeId(String goodsTypeId) {
 
 
 
+  @SearchableProperty(name = "name")
   public java.lang.String getGoodsName() {
     return goodsName;
   }
@@ -380,6 +386,7 @@ public void setGoodsTypeId(String goodsTypeId) {
 
 
 
+  @SearchableProperty(name = "keywords")
   public java.lang.String getKeywords() {
     return keywords;
   }
@@ -390,6 +397,7 @@ public void setGoodsTypeId(String goodsTypeId) {
 
 
 
+  @SearchableProperty(name = "brief")
   public java.lang.String getGoodsBrief() {
     return goodsBrief;
   }
@@ -400,6 +408,7 @@ public void setGoodsTypeId(String goodsTypeId) {
 
 
 
+  @SearchableProperty(name = "description")
   public java.lang.String getGoodsDesc() {
     return goodsDesc;
   }
@@ -590,6 +599,7 @@ public void setGoodsTypeId(String goodsTypeId) {
 
 
 
+  @SearchableProperty(name = "sellerNote")
   public java.lang.String getSellerNote() {
     return sellerNote;
   }

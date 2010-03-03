@@ -65,6 +65,7 @@ var process_request = "${lang.processRequest}";
       ${categoryList}
     </select>
    <input name="keywords" type="text" id="keyword" value="${searchKeywords}" class="B_input" style="width:110px;"/>
+   <input name="act" type="hidden" value="compassSearch"/>
    <input name="imageField" type="submit" value="" class="go" style="cursor:pointer;" />
    <a href="search.action?act=advanced_search">${lang.advancedSearch}</a>
    </form>

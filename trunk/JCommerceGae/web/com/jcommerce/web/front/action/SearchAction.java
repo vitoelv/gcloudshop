@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,8 +17,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.compass.core.Compass;
+import org.compass.core.CompassHit;
+import org.compass.core.CompassHits;
+import org.compass.core.CompassSession;
 
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
+import com.jcommerce.core.dao.impl.PMF;
 import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.GoodsAttr;
@@ -97,6 +103,72 @@ public class SearchAction extends BaseAction {
         	
         	action = "form";
 //        	request.setAttribute("useStorage", ((ShopConfig)request.getAttribute("cfg")).getStoreRange());
+        	
+        }else if(act.equals("compassSearch")) {
+        	String keywords = request.getParameter("keywords") != null ? request.getParameter("keywords").trim() : "";
+        	String category = request.getParameter("category") != null ? request.getParameter("category").trim() : "0";
+        	if(!category.equals("0"))
+        		keywords = keywords + " " + category;
+        	Compass compass = PMF.getCompass();
+        	CompassSession session = compass.openSession();        	
+        	CompassHits hits = session.find(keywords);
+        	List<String> ids = new ArrayList<String>();
+        	
+        	for(Iterator i = hits.iterator(); i.hasNext();) {
+        		CompassHit hit = (CompassHit) i.next();
+        		String goodsId = ((Goods) hit.getData()).getPkId();
+        		ids.add(goodsId);
+        	}
+        	List<Goods> goodsList = getDefaultManager().getListByIds(ModelNames.GOODS, ids);
+        	session.close();
+        	
+        	String intromode = request.getParameter("intro") != null ? request.getParameter("intro").trim() : "";
+    		String urHere = "";
+    		
+    		if(!StringUtil.isEmpty(intromode)){
+    			if(intromode.equals("best")){
+            		urHere = Lang.getInstance().getString("bestGoods");
+    			}
+    			else if(intromode.equals("new")){
+            		urHere = Lang.getInstance().getString("newGoods");
+    			}
+    			else if(intromode.equals("hot")){
+            		urHere = Lang.getInstance().getString("hotGoods");
+    			}
+    			else if(intromode.equals("promotion")){
+            		urHere = Lang.getInstance().getString("promotionGoods");
+    			}
+    			else{
+    				intromode = "";
+    			}
+    		}
+    		else{
+    			intromode = "";
+    		}
+    		
+    		if(StringUtil.isEmpty(urHere)){
+    			urHere = Lang.getInstance().getString("searchGoods");
+    		}
+    		
+    		String sSize = getCachedShopConfig().getString(IShopConfigMeta.CFG_KEY_PAGE_SIZE);
+    		int size = (sSize!=null && Integer.valueOf(sSize)>0) ? Integer.valueOf(sSize) : 10; 
+    		Map<String,Object> search = new HashMap<String,Object>();
+    		search.put("keywords", keywords);
+    		search.put("act", "compassSearch");
+    		String sPage = (String)request.getParameter("page");
+    		int page = (sPage!=null && Integer.valueOf(sPage)>0) ? Integer.valueOf(sPage) : 1;
+    		Pager pager = LibMain.getPager("search.action", search, hits.length(), page, size, getCachedShopConfig());
+    		String display = (String)request.getParameter("display");
+    		if(display == null){
+    			display = getCachedShopConfig().getString(CFG_KEY_SHOW_ORDER_TYPE);
+    		}
+    		getSession().setAttribute("displaySearch", display);
+    		pager.setDisplay(display);
+    		
+    		LibMain.assignUrHere(request, "", urHere);
+    		request.setAttribute("pager", pager);
+    		request.setAttribute("intromode", intromode);
+        	request.setAttribute("goodsList", WrapperUtil.wrap(goodsList, GoodsWrapper.class));
         	
         }else{
         	String keywords = request.getParameter("keywords") != null ? request.getParameter("keywords").trim() : "";
@@ -379,6 +451,14 @@ public class SearchAction extends BaseAction {
         return  Action.SUCCESS;
     }
    
+    public Map<String, String> getUrhereIntro() {
+    	Map<String, String> info = new HashMap<String, String>();
+    	
+    	
+    	
+    	return info;
+    }
+    
     public Map<String,Object> getSearchableAttributes(Long catId){
     	Map<String,Object> attributes = new HashMap<String,Object>();
     	Criteria criteria = new Criteria();

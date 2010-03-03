@@ -468,7 +468,8 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
     	StringBuffer buf = new StringBuffer();
     	int i=1;
     	for(Category category:list) {
-    		buf.append("<option value=\"").append(i).append("\" >").append(category.getCatName()).append("</option>").append("\r\n");
+    		String catId = category.getPkId();
+    		buf.append("<option value=\"").append(catId).append("\" >").append(category.getCatName()).append("</option>").append("\r\n");
     		i++;
     	}
     	return buf.toString();

@@ -10,6 +10,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import org.compass.annotations.SearchableId;
+
 import com.jcommerce.gwt.client.util.URLConstants;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION) 
@@ -38,6 +40,7 @@ public abstract class ModelObject implements Serializable, URLConstants {
 
 
 
+    @SearchableId
 	public String getPkId() {
 		return pkId;
 	}
