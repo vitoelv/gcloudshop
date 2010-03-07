@@ -29,59 +29,44 @@ public class MyPagingListService extends RemoteService {
          * This class is just an attempt to use DataReader to convert data.
          * It works well, however, we decide not to adopt this way in our application.
          */
-        final ISpecialServiceAsync service = getSpecialService();
-        MyProxy<ListLoadResult> proxy = new MyProxy<ListLoadResult>() {
-            public void load(Object loadConfig, AsyncCallback<ListLoadResult> callback) {
-                service.getMyPaymentMetaList((ListLoadConfig)loadConfig, callback);
-            }
-        };
         
-        // convert from ListLoadResult<Map<String, Object>> to ListLoadResult<BeanObject>
-        DataReader<ListLoadResult> reader = new DataReader<ListLoadResult>() {
-
-            public ListLoadResult<BeanObject> read(Object loadConfig, Object data) {
-                System.out.println("my reader: "+data.getClass().getName());
-                List<BeanObject> destdatas = new ArrayList<BeanObject>();
-                ListLoadResult<Map<String, Object>> casteddata = (ListLoadResult)data;
-                List<Map<String, Object>> origdatas = casteddata.getData();
-                for(Map<String, Object> origdata:origdatas) {
-                    destdatas.add(new BeanObject(ModelNames.PAYMENT_META, origdata));
-                }
-                
-                ListLoadResult<BeanObject> res = new BaseListLoadResult<BeanObject>(destdatas);
-                return res;
-            }
-
-
-
-            
-        };
-        // loader
-        BaseListLoader loader = new BaseListLoader<ListLoadResult>(proxy, reader);
-        loader.setRemoteSort(true);
-
-        return loader;
-    }
-
-//    public BasePagingLoader getLoader(final String model, final Criteria criteria) {
-//        if (model == null) {
-//            throw new RuntimeException("model = null");
-//        }
-//        
-//        final IDefaultServiceAsync service = getService();
-//        MyProxy proxy = new MyProxy() {
-//            public void load(Object loadConfig, AsyncCallback callback) {
-//                service.getPagingList(model, criteria, (PagingLoadConfig) loadConfig, callback);
+        // to bypass a compile error when build with ant
+        //     [javac] D:\JCommerce\JCommerceGae\admin\com\jcommerce\gwt\client\panels\MyPagingListService.java:60: 
+        //      type parameter com.extjs.gxt.ui.client.data.ListLoadResult is not within its bound
+        
+//        final ISpecialServiceAsync service = getSpecialService();
+//        MyProxy<ListLoadResult> proxy = new MyProxy<ListLoadResult>() {
+//            public void load(Object loadConfig, AsyncCallback<ListLoadResult> callback) {
+//                service.getMyPaymentMetaList((ListLoadConfig)loadConfig, callback);
 //            }
 //        };
-//        proxy.setCriteria(criteria);
 //        
-//        // loader
-//        BasePagingLoader loader = new BasePagingLoader<PagingLoadConfig, PagingLoadResult<BeanObject>>(proxy);
-//        loader.setRemoteSort(true);
+//        // convert from ListLoadResult<Map<String, Object>> to ListLoadResult<BeanObject>
+//        DataReader<ListLoadResult> reader = new DataReader<ListLoadResult>() {
 //
+//            public ListLoadResult<BeanObject> read(Object loadConfig, Object data) {
+//                System.out.println("my reader: "+data.getClass().getName());
+//                List<BeanObject> destdatas = new ArrayList<BeanObject>();
+//                ListLoadResult<Map<String, Object>> casteddata = (ListLoadResult)data;
+//                List<Map<String, Object>> origdatas = casteddata.getData();
+//                for(Map<String, Object> origdata:origdatas) {
+//                    destdatas.add(new BeanObject(ModelNames.PAYMENT_META, origdata));
+//                }
+//                
+//                ListLoadResult<BeanObject> res = new BaseListLoadResult<BeanObject>(destdatas);
+//                return res;
+//            }
+//  
+//        };
+//        // loader
+//        BaseListLoader loader = new BaseListLoader<ListLoadResult>(proxy, reader);
+//        loader.setRemoteSort(true);
 //        return loader;
-//    }
+        
+        return null;
+    }
+
+
     
     public abstract class MyProxy<D> extends RpcProxy<D> {
         Criteria criteria = null;

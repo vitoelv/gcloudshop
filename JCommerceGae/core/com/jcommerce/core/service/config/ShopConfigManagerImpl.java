@@ -1,6 +1,50 @@
 package com.jcommerce.core.service.config;
 
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.*;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_ANONYMOUS_BUY;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_ARTICLE_NUMBER;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_CART_CONFIRM;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_COLLECTION_NUMBER;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_COMMENTS_NUMBER;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_COMMENT_CHECK;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_HISTORY_NUMBER;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_INTEGRAL_NAME;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_NAME_OF_REGION_1;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_NAME_OF_REGION_2;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_NAME_OF_REGION_3;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_NAME_OF_REGION_4;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_ONE_STEP_BUY;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_PAGE_SIZE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_PAGE_STYLE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_ADDRESS;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_COPYRIGHT;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_COUNTRY;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_DESC;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_KEYWORDS;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_MSN;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_NAME;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_NOTICE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_POSTCODE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_QQ;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_REG_CLOSED;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_SERVICE_EMAIL;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_SERVICE_PHONE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_SKYPE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_TITLE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_WW;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_YM;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_GOODSWEIGHT;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_GOODS_ATTRIBUTE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_GOODS_IN_CART;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_MARKETPRICE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_ORDER_TYPE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SORT_ORDER_METHOD;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SORT_ORDER_TYPE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_TIME_FORMAT;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_USER_NOTICE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_TYPE_OPTIONS;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_TYPE_SELECT;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_TYPE_TEXT;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_TYPE_TEXTAREA;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,28 +61,16 @@ import com.jcommerce.core.model.ShopConfig;
 import com.jcommerce.core.service.impl.DefaultManagerImpl;
 import com.jcommerce.core.util.ResourceUtil;
 import com.jcommerce.gwt.client.ModelNames;
-import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.web.to.ShopConfigWrapper;
 
 public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopConfigManager {
 
 
-	private static Locale parseLocale(String locale) {
-		if(StringUtils.isBlank(locale)) {
-			locale = "zh"; // by default
-		}
-		try {
-			Locale loc = new Locale(locale);
-			return loc;
-		} catch (Exception ex) {
-			return Locale.CHINESE;
-		}
-		
-	}
+
 	
 	public SortedMap<Integer, List<ShopConfigMeta>> getCombinedShopConfigMetaMap(String locale) {
 //		SortedMap<Integer, List<ShopConfigMeta>> res = new TreeMap<Integer, List<ShopConfigMeta>>();
-		SortedMap<Integer, List<ShopConfigMeta>> defaultShopConfigMap = getDefaultShopConfigMap(parseLocale(locale));
+		SortedMap<Integer, List<ShopConfigMeta>> defaultShopConfigMap = getDefaultShopConfigMap(ResourceUtil.parseLocale(locale));
 		try {
 			List<ShopConfig> scs = getList(ModelNames.SHOPCONFIG, null);
 			Map<String, ShopConfig> values = new HashMap<String, ShopConfig>();
@@ -125,23 +157,29 @@ public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopCo
 	}
 
 
+	private static SortedMap<Integer, List<ShopConfigMeta>> defaultShopConfigMap;
 	
-	private static final SortedMap<Integer, List<ShopConfigMeta>> defaultShopConfigMap_en;
-	private static final SortedMap<Integer, List<ShopConfigMeta>> defaultShopConfigMap_zh;
+//	private static final SortedMap<Integer, List<ShopConfigMeta>> defaultShopConfigMap_en;
+//	private static final SortedMap<Integer, List<ShopConfigMeta>> defaultShopConfigMap_zh;
 	
 	static {
 		// TODO support two languages at this time
-		defaultShopConfigMap_en = initDefaultShopConfigMap(Locale.ENGLISH);
-		defaultShopConfigMap_zh = initDefaultShopConfigMap(Locale.CHINESE);
+//		defaultShopConfigMap_en = initDefaultShopConfigMap(Locale.ENGLISH);
+//		defaultShopConfigMap_zh = initDefaultShopConfigMap(Locale.CHINESE);
 	}
 	
 	public static SortedMap<Integer, List<ShopConfigMeta>> getDefaultShopConfigMap(Locale locale) {
-		if(locale.equals(Locale.ENGLISH)) {
-			return defaultShopConfigMap_en;
+//		if(locale.equals(Locale.ENGLISH)) {
+//			return defaultShopConfigMap_en;
+//		}
+//		else {
+//			return defaultShopConfigMap_zh;
+//		}
+		if(defaultShopConfigMap==null) {
+			defaultShopConfigMap = initDefaultShopConfigMap(locale);
 		}
-		else {
-			return defaultShopConfigMap_zh;
-		}
+		return defaultShopConfigMap;
+		
 	}
 	
 	public static SortedMap<Integer, List<ShopConfigMeta>> initDefaultShopConfigMap(Locale locale) {
@@ -188,7 +226,7 @@ public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopCo
 
 		
 		metaList = new ArrayList<ShopConfigMeta>();
-		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_BASIC"), CFG_KEY_COMMENT_CHECK, "1", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_COMMENT_CHECK"), new String[][]{new String[]{"1",bundle.getString("Yes")}, new String[]{"0",bundle.getString("No")}}, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_BASIC"), CFG_KEY_COMMENT_CHECK, "0", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_COMMENT_CHECK"), new String[][]{new String[]{"1",bundle.getString("Yes")}, new String[]{"0",bundle.getString("No")}}, null));
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_BASIC"), CFG_KEY_INTEGRAL_NAME, "积分", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_INTEGRAL_NAME"), null,  bundle.getString("CFG_KEY_INTEGRAL_NAME_NOTICE")));
 		defaultShopConfigMap.put(2, metaList);
 		

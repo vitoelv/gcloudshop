@@ -24,6 +24,9 @@
       <item name="在线演示" href="demo.html"/>
       <item name="邮件列表" href="mailing-list.html" />
       <item name="联系我们" href="contact.html" />
+	  <item name="资源下载" href="download.html"/>
+      <item name="授权许可" href="license.html"/>	        
+	  <item name="项目新闻" href="news.html"/>
     </menu>
     
 
@@ -34,9 +37,6 @@
     </menu>
     
     <menu name="正在建设">
-	  <item name="项目新闻" href="news.html"/>
-      <item name="资源下载" href="download.html"/>
-      <item name="License" href="license.html"/>
       <item name="讨论讨论" href="discussion.html" />      
       <!-- item name="开发者" href="developer.html" /-->
     </menu>

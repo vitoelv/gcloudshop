@@ -37,7 +37,7 @@ public class ShippingConfigMetaForm extends BeanObject implements IShipping, ISh
 		set(SUPPORT_COD, supportCod);
 	}
 	public boolean getSupportCod() {
-		return get(SUPPORT_COD);
+		return (Boolean)get(SUPPORT_COD);
 	}
 	public void setAuthor(String author) {
 		set(AUTHOR, author);
@@ -61,7 +61,7 @@ public class ShippingConfigMetaForm extends BeanObject implements IShipping, ISh
 		set(INSTALL, install);
 	}
 	public boolean getInstall() {
-		return get(INSTALL);
+		return (Boolean)get(INSTALL);
 	}
 	public void setShippingPrint(String shippingPrint) {
 		set(SHIPPING_PRINT, shippingPrint);

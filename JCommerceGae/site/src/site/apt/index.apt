@@ -4,15 +4,12 @@ Summary
    ---
    ---
 
-News
+Latest News
 
-	February 03 2010, gcShop version 0.81 is online. Improved Order Management and added Article Management, and updated site's "Contact us".
-	
-	January 14 2010, gcShop version 0.8 is online. Added a few administrator functions, and updated site's FAQ.
+	March 05 2010, gcShop 0.8.0 build 6 is online. Added downloadable binary package. Added apache-ant script. Improved g18n support. Added English bundle for public portal. Upgraded to Google AppEngine Java 1.3.1
 
-	December 22 2009, gcShop version 0.7 is online. Included most basic functionalities.  
+	February 03 2010, gcShop 0.8.0 build 1 is online. Improved Order Management and added Article Management, and updated site's "Contact us".
 
-	November 01 2009, gc-shop.appspot.com is created, deployed the first test version.
 	
 Introduction	 
 

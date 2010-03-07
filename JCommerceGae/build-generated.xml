@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="JCommerceGae">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../Program Files/Google/eclipse-jee-ganymede-SR2-win32/eclipse"/>
+    <property name="JCommerceGaeTestBox.location" value="../JCommerceGaeTestBox"/>
+    <property name="junit.output.dir" value="junit"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.5"/>
+    <property name="source" value="1.5"/>
+    <path id="GWT SDK [GWT (2) - 2.0.2].libraryclasspath">
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.gwt.eclipse.sdkbundle.2.0.2_2.0.2.v201002121411/gwt-2.0.2/gwt-user.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.gwt.eclipse.sdkbundle.2.0.2_2.0.2.v201002121411/gwt-2.0.2/gwt-dev.jar"/>
+    </path>
+    <path id="App Engine SDK Impl pkg.userclasspath">
+        <pathelement location="../../Program Files/Google/eclipse-jee-ganymede-SR2-win32/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.2.8.v200912040616/appengine-java-sdk-1.2.8/lib/impl/appengine-api-stubs.jar"/>
+        <pathelement location="../../Program Files/Google/eclipse-jee-ganymede-SR2-win32/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.2.8.v200912040616/appengine-java-sdk-1.2.8/lib/impl/appengine-local-runtime.jar"/>
+    </path>
+    <path id="mylib.userclasspath">
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/antlr-2.7.6.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/aopalliance.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/c3p0-0.8.4.5.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/commons-chain-1.1.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/commons-codec-1.3.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/commons-collections-3.1.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/commons-digester-1.8.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/commons-logging.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/commons-validator-1.3.1.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/dom4j-1.6.1.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/ehcache-0.7.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/freemarker.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/gxt.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/spring.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/junit.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/commons-fileupload-1.2.1.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/commons-io-1.3.2.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/ognl-2.6.11.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/struts2-core-2.1.6.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/xwork-2.1.2.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/struts-core-1.3.10.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/struts-extras-1.3.10.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/commons-lang-2.4.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/jakarta-oro-2.0.8.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/htmlentities.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/litetext.jar"/>
+        <pathelement location="../../JCommerceGae/war/WEB-INF/lib/commons-beanutils-1.8.2.jar"/>
+    </path>
+    <path id="App Engine SDK [App Engine (2) - 1.3.1].libraryclasspath">
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/shared/appengine-local-runtime-shared.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/shared/geronimo-el_1.0_spec-1.0.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/shared/geronimo-jsp_2.1_spec-1.0.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/shared/geronimo-servlet_2.5_spec-1.2.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/shared/jsp/repackaged-appengine-ant-1.6.5.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/shared/jsp/repackaged-appengine-ant-launcher-1.6.5.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/shared/jsp/repackaged-appengine-commons-el-1.0.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/shared/jsp/repackaged-appengine-commons-logging-1.1.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/shared/jsp/repackaged-appengine-jasper-compiler-5.0.28.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/shared/jsp/repackaged-appengine-jasper-runtime-5.0.28.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/user/appengine-api-1.0-sdk-1.3.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/user/appengine-api-labs-1.3.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/user/appengine-jsr107cache-1.3.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/user/jsr107cache-1.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/user/orm/datanucleus-appengine-1.0.5.final.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/user/orm/datanucleus-core-1.1.5.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/user/orm/datanucleus-jpa-1.1.5.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/user/orm/geronimo-jpa_3.0_spec-1.1.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/user/orm/geronimo-jta_1.1_spec-1.1.1.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/user/orm/jdo2-api-2.3-eb.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/com.google.appengine.eclipse.sdkbundle.1.3.1_1.3.1.v201002101412/appengine-java-sdk-1.3.1/lib/appengine-tools-api.jar"/>
+    </path>
+    <path id="JCommerceGae.classpath">
+        <pathelement location="war/WEB-INF/classes"/>
+        <path refid="GWT SDK [GWT (2) - 2.0.2].libraryclasspath"/>
+        <path refid="App Engine SDK Impl pkg.userclasspath"/>
+        <path refid="mylib.userclasspath"/>
+        <path refid="App Engine SDK [App Engine (2) - 1.3.1].libraryclasspath"/>
+        <pathelement location="../../Program Files/Google/eclipse-jee-ganymede-SR2-win32/eclipse/plugins/com.google.appengine.eclipse.sdkbundle_1.2.8.v200912040616/appengine-java-sdk-1.2.8/lib/agent/appengine-agent.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="war/WEB-INF/classes"/>
+        <copy includeemptydirs="false" todir="war/WEB-INF/classes">
+            <fileset dir="admin" excludes="**/*.launch, **/*.java"/>
+        </copy>
+        <copy includeemptydirs="false" todir="war/WEB-INF/classes">
+            <fileset dir="patch" excludes="**/*.launch, **/*.java"/>
+        </copy>
+        <copy includeemptydirs="false" todir="war/WEB-INF/classes">
+            <fileset dir="core" excludes="**/*.launch, **/*.java"/>
+        </copy>
+        <copy includeemptydirs="false" todir="war/WEB-INF/classes">
+            <fileset dir="web" excludes="**/*.launch, **/*.java"/>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="war/WEB-INF/classes"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="war/WEB-INF/classes" source="${source}" target="${target}">
+            <src path="admin"/>
+            <exclude name="com/jcommerce/gwt/server/PagingListAction.java"/>
+            <exclude name="com/jcommerce/gwt/client/widgets/ChoicePanel.java"/>
+            <exclude name="com/jcommerce/gwt/client/widgets/ColumnPanel.java"/>
+            <exclude name="com/jcommerce/gwt/client/widgets/DateWidget.java"/>
+            <exclude name="com/jcommerce/gwt/client/widgets/FileUploader.java"/>
+            <exclude name="com/jcommerce/gwt/client/widgets/MultiValueSelector.java"/>
+            <exclude name="com/jcommerce/gwt/client/widgets/ValueSelector.java"/>
+            <exclude name="com/jcommerce/gwt/client/panels/goods/GalleryPanel.java"/>
+            <exclude name="com/jcommerce/gwt/client/panels/goods/GalleryPanel2.java"/>
+            <exclude name="com/jcommerce/gwt/client/panels/goods/GalleryPanel3.java"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </javac>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="war/WEB-INF/classes" source="${source}" target="${target}">
+            <src path="patch"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </javac>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="war/WEB-INF/classes" source="${source}" target="${target}">
+            <src path="core"/>
+            <exclude name="com/jcommerce/core/action/"/>
+            <exclude name="com/jcommerce/core/module/IModule.java"/>
+            <exclude name="com/jcommerce/core/module/ModuleLoader.java"/>
+            <exclude name="com/jcommerce/core/module/payment/"/>
+            <exclude name="com/jcommerce/core/module/shipping/"/>
+            <exclude name="com/jcommerce/core/util/SendMail.java"/>
+            <exclude name="src/"/>
+            <exclude name="com/jcommerce/core/test/dataStore/"/>
+            <exclude name="com/jcommerce/core/test/dwt/TestJarkataORO.java"/>
+            <exclude name="com/jcommerce/core/test/case11/"/>
+            <exclude name="com/jcommerce/core/test/TestZipImExport.java"/>
+            <exclude name="com/jcommerce/core/module/DynamicClassLoader.java"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </javac>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="war/WEB-INF/classes" source="${source}" target="${target}">
+            <src path="web"/>
+            <exclude name="com/jcommerce/web/action/PaymentRespondAction.java"/>
+            <exclude name="com/jcommerce/web/action/JspInitAction.java"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects">
+        <ant antfile="${JCommerceGaeTestBox.location}/build-generated.xml" inheritAll="false" target="clean"/>
+        <ant antfile="${JCommerceGaeTestBox.location}/build-generated.xml" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+    </target>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="LiveDSHelper.testInitialDS (2)">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.local.LiveDSHelper" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="Test3.test1">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case3.Test3" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestBulkLoader.testLoadAndUnload">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case1.TestBulkLoader" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestBulkLoader2.testLoad">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case2.TestBulkLoader2" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestCasesWithArchors.testAdd">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case6.TestCasesWithArchors" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestCasesWithKeyNameAndRedundentId.testAdd">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case7.TestCasesWithKeyNameAndRedundentId" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestCasesWithKeyNameAndRedundentId.testAdd2">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case7.TestCasesWithKeyNameAndRedundentId" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestCasesWithKeyNameAndRedundentId.testAdd3">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case7.TestCasesWithKeyNameAndRedundentId" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestDWTConverter.testCompileForEachStart">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestDWTConverter" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestDWTConverter.testCompileIfTag">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestDWTConverter" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestDWTConverter.testConvertFragment">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestDWTConverter" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestDWTConverter.testGetPara">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestDWTConverter" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestDWTConverter.testRegexSelect">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestDWTConverter" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestDWTConverter.testReplaceVars">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestDWTConverter" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestDWTConverter.testSelect">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestDWTConverter" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestFreeMarker.testRender">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.web.test.TestFreeMarker" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestGoods.testAddGoods">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case9.TestGoods" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="Testi18n.testCurrency">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.web.test.Testi18n" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestInheritance.testLoad">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case12.TestInheritance" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestInheritance.testLoad2">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case12.TestInheritance" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestInheritance.testLoad21">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case12.TestInheritance" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestInheritance.testLoad3">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case12.TestInheritance" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestInheritance.testLoadBrand">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case12.TestInheritance" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestInheritance.testLoadBrand2">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case12.TestInheritance" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestInheritance.testReadLiveBrand">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case12.TestInheritance" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestInheritance.testReadTest21">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case12.TestInheritance" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestInheritance.testReadTestBrand">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case12.TestInheritance" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestInheritence.testAdd">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case9.TestInheritence" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestInheritence.testRandom">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case9.TestInheritence" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJarkataORO.testConvert">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJarkataORO" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJarkataORO.testConvertORO">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJarkataORO" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJarkataORO.testConvertORO2">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJarkataORO" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJava.test111">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJava" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJava.test222">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJava" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJava.test333">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJava" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJava.test444">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJava" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJava.test555">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJava" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJava.test666">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJava" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJava.test777">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJava" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJava.test888">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJava" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJava.testCompileForEachStart">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJava" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJava.testCompileIfTag">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJava" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJava.testConvert">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJava" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJava.testConvertMultiLine">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJava" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJava.testConvertMultiLine2">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJava" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJava.testExtractResource">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJava" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJava.testFindLang">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJava" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJava.testFirstNameLastName">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJava" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJava.testLang">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJava" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJava.testRegexSelect">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJava" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJava.testSelect">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.dwt.TestJava" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJDO.testAddGtAndAttrReverse">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case1.TestJDO" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJDO.testAddPersonAndAddressReverse">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case1.TestJDO" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestJDO.testAddPersonWithSetString">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case1.TestJDO" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestLibCommon.testCatList">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.web.TestLibCommon" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestLibGoods.test2">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.web.TestLibGoods" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestLibGoods.testGetCategoriesTree">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.web.TestLibGoods" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestLongId.testLoad">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case8.TestLongId" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestManager.testAddGtAndAttrReverse">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case1.TestManager" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestManagerImpl.testAddGoods">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.TestManagerImpl" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestMisc.testAnnotation">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.TestMisc" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestMisc.testGenKeyName">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.TestMisc" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestMisc.testLang">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.web.TestMisc" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestMiscDS.testExtractKey">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.TestMiscDS" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestMiscDS.testQueryShopConfig">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.TestMiscDS" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestMultiParents.testAdd">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case4.TestMultiParents" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestMultiParents.testAdd2">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case4.TestMultiParents" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestMultiParents2.testAdd (1)">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case5.TestMultiParents2" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestMultiParents2.testAdd2 (1)">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case5.TestMultiParents2" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestMultiParents2.testAdd3">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case5.TestMultiParents2" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestMultiParents2.testAddTwoFieldofSameChildKind">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case5.TestMultiParents2" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestMultiParents2.testDeleteBothUniDirectionParents">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case5.TestMultiParents2" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestMultiParents2.testDeleteBothUnOwnedParents">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case5.TestMultiParents2" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestMultiParents2.testDeleteChild">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case5.TestMultiParents2" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestMultiParents2.testDeleteChild51">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case5.TestMultiParents2" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestMultiParents2.testQuery">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case5.TestMultiParents2" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestMultiParents2.testReplaceChildAutoDeleteOld">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case5.TestMultiParents2" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestPrintfFormat.testPrintString">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.web.TestPrintfFormat" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestSearchWithInandOr.testDeleteAll">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case11.TestSearchWithInandOr" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestSearchWithInandOr.testSearchWithOr">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case11.TestSearchWithInandOr" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="TestSelfRelated.testCascadeDelete">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="com.jcommerce.core.test.case10.TestSelfRelated" todir="${junit.output.dir}"/>
+            <classpath refid="JCommerceGae.classpath"/>
+        </junit>
+    </target>
+    <target name="junitreport">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
+    </target>
+</project>

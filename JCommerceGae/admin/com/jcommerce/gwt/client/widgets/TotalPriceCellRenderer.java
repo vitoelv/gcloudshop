@@ -22,7 +22,7 @@ public class TotalPriceCellRenderer implements GridCellRenderer<BeanObject> {
 			int rowIndex, int colIndex, ListStore<BeanObject> store,
 			Grid<BeanObject> grid) {
 		Double price = model.get(IOrderGoods.GOODS_PRICE);
-		long num = model.get(IOrderGoods.GOODS_NUMBER);
+		Long num = model.get(IOrderGoods.GOODS_NUMBER);
 		return price * num;
 	}
 }
