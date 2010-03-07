@@ -24,9 +24,9 @@
         <version>2.0</version>
         <configuration>
           <locales>en,zh_CN</locales>
-          <!--  test 
+          <!--  test only 
           <outputDirectory>${basedir}/../../site</outputDirectory>
-          only -->
+          -->
           <!-- -->
           <outputDirectory>${basedir}/../war/site</outputDirectory>
            

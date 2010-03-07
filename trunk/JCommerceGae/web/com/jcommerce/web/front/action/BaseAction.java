@@ -41,6 +41,7 @@ import com.jcommerce.core.service.config.IShopConfigManager;
 import com.jcommerce.core.service.payment.IPaymentMetaManager;
 import com.jcommerce.core.service.shipping.IShippingMetaManager;
 import com.jcommerce.core.util.IConstants;
+import com.jcommerce.core.util.ResourceUtil;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.IGoods;
 import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
@@ -187,7 +188,7 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
 		}
 		Locale loc = null;
 		try {
-			loc = parseLocale(locale);
+			loc = ResourceUtil.parseLocale(locale);
 		} catch (Exception ex) {
 			// invalid locale string. should avoid
 			ex.printStackTrace();
@@ -205,23 +206,7 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
 		return lang;
 	}
 
-	private Locale parseLocale (String str) {
-		Locale res = null;
-		str = str.trim();
-		String[] tokens = StringUtils.split(str, '_');
-		String lang=null, country=null;
-		if(tokens.length==1) {
-			lang = tokens[0];
-			res = new Locale(lang);
-		}
-		else if(tokens.length==2) {
-			lang = tokens[0];
-			country = tokens[1];
-			res = new Locale(lang, country);
-		}
-		
-		return res;
-	}
+
 	
     public void includePromotionInfo(HttpServletRequest request) {
     	// promotion_info.ftl
@@ -593,10 +578,10 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
 //	}
 	
 	public ShopConfigWrapper getCachedShopConfig() {
-		String locale = (String)getSession().getAttribute("locale");
-		if(locale == null){
-			locale = getRequest().getLocale().toString();
-		}
+		String locale = (String)getSession().getAttribute(KEY_LOCALE);
+//		if(locale == null){
+//			locale = getRequest().getLocale().toString();
+//		}
 		return getShopConfigManager().getCachedShopConfig(locale);
 	}
 	

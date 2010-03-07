@@ -559,8 +559,8 @@ public class OrderDetailPanel  extends ContentWidget{
 							long time = new Date().getTime();
 							orderInfo.set(IOrderInfo.PAY_STATUS, IOrderInfo.PS_PAYED);
 							orderInfo.set(IOrderInfo.PAY_TIME, time);
-							double moneyPaid = orderInfo.get(IOrderInfo.MONEY_PAID);
-							double orderAmount = orderInfo.get(IOrderInfo.ORDER_AMOUNT);
+							Double moneyPaid = orderInfo.get(IOrderInfo.MONEY_PAID);
+							Double orderAmount = orderInfo.get(IOrderInfo.ORDER_AMOUNT);
 							orderInfo.set(IOrderInfo.MONEY_PAID, moneyPaid + orderAmount);
 							orderInfo.set(IOrderInfo.ORDER_AMOUNT, 0);
 							
@@ -867,17 +867,17 @@ public class OrderDetailPanel  extends ContentWidget{
 	String city = "";
 	String district = "";
 	int isReady = 0;
-	long orderStatus;
-	long payStatus;
-	long shippingStatus;
+	Long orderStatus;
+	Long payStatus;
+	Long shippingStatus;
 	
 	private void getOrderInfo() {
 		String pkId = getCurState().getPkId();
 		Criteria criteria = new Criteria();
 		criteria.addCondition(new Condition(IOrderInfo.PK_ID, Condition.EQUALS, pkId));
-		orderStatus = -1;
-		payStatus = -1;
-		shippingStatus = -1;
+		orderStatus = -1l;
+		payStatus = -1l;
+		shippingStatus = -1l;
 		new ReadService().getBean(ModelNames.ORDERINFO, pkId, new ReadService.Listener() {
 			public void onSuccess(final BeanObject bean) {
 				//基本信息
@@ -989,14 +989,14 @@ public class OrderDetailPanel  extends ContentWidget{
 					});
 				}
 				
-				long addTime = bean.get(IOrderInfo.ADD_TIME);				
+				Long addTime = bean.get(IOrderInfo.ADD_TIME);				
 				addTimeLabel.setText(formatTime(addTime));
 				
 				payMannerLabel.setText((String) bean.get(IOrderInfo.PAY_NAME));
 				if(payStatus != IOrderInfo.PS_PAYED) {
 					payTimeLabel.setText(Resources.constants.OrderStatus_PS_UNPAYED());
 				} else {
-					long payTime = bean.get(IOrderInfo.PAY_TIME);
+					Long payTime = bean.get(IOrderInfo.PAY_TIME);
 					payTimeLabel.setText(formatTime(payTime));
 				}
 				
@@ -1004,7 +1004,7 @@ public class OrderDetailPanel  extends ContentWidget{
 				if(shippingStatus == IOrderInfo.SS_PREPARING || shippingStatus == IOrderInfo.SS_UNSHIPPED)  {
 					shippingTimeLabel.setText(Resources.constants.OrderStatus_SS_UNSHIPPED());
 				} else {
-					long shippingTime = bean.get(IOrderInfo.SHIPPING_TIME);
+					Long shippingTime = bean.get(IOrderInfo.SHIPPING_TIME);
 					shippingTimeLabel.setText(formatTime(shippingTime));
 				}
 				
@@ -1024,10 +1024,10 @@ public class OrderDetailPanel  extends ContentWidget{
 				bestTimeLabel.setText((String) bean.get(IOrderInfo.BEST_TIME));
 				
 				//费用信息
-				double goodsAmount = bean.get(IOrderInfo.GOODS_AMOUNT);
-				double shippingFee = bean.get(IOrderInfo.SHIPPING_FEE);
-				double insuranceFee = bean.get(IOrderInfo.INSURE_FEE);
-				double payFee = bean.get(IOrderInfo.PAY_FEE);
+				Double goodsAmount = bean.get(IOrderInfo.GOODS_AMOUNT);
+				Double shippingFee = bean.get(IOrderInfo.SHIPPING_FEE);
+				Double insuranceFee = bean.get(IOrderInfo.INSURE_FEE);
+				Double payFee = bean.get(IOrderInfo.PAY_FEE);
 				double orderAmount = goodsAmount + shippingFee + insuranceFee + payFee;
 				goodsAmountLabel.setText("￥" + goodsAmount);
 				shippingFeeLabel.setText("￥" + shippingFee);

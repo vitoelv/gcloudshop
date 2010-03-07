@@ -1,20 +1,446 @@
-<project name="Guestbook" default="datanucleusenhance">
-  <import file="ant-macros.xml" />
-  <target name="datanucleusenhance" depends=""
-      description="Performs JDO enhancement on compiled data classes.">
-    <!--enhance_war war="war" /-->
-    <enhance failonerror="true" >
-        <classpath>
-          <pathelement path="${appengine.tools.classpath}"/>
-          <pathelement path="war/WEB-INF/classes"/>
-          <fileset dir="war/WEB-INF/lib" includes="*.jar"/>
-        </classpath>
-        <fileset dir="war/WEB-INF/classes">
-	        <include name="com/jcommerce/core/model/*.class"/>
-	        <include name="com/jcommerce/core/test/*.class"/>
-        </fileset>
-    </enhance>    
-  </target>
+<project name="gcshop" default="usage" basedir=".">
+	<import file="ant-macros.xml" />
+
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+	
+    <property name="prod.SPEC_VERSION" value="0.8.0"/>
+    <property name="prod.RELEASE_VERSION" value="0.8"/>
+    <property name="prod.PATCH_LEVEL" value="0"/>
+	
+    <property name="gwt.sdk" location="D:/JCommerce/gwt-2.0.3" />
+	<property name="GAE_HOME" value="D:/JCommerce/appengine-java-sdk-1.3.1" />
+	<property name="DEBUG" value="true" />
+	<property name="output-path" value="./build" />
+	<property name="output-base-path" value="${output-path}/war" />
+
+	
+	<property name="release-site-path" value="release/war-site" />
+	<property name="release-base-path" value="release/war" />
+
+	
+	<if>
+		<!-- In env.PROD build, property "build.number" is set as env.BUILDNO by release group on each label build time-->
+		<isset property="build.number"/>
+		<!-- Else ant task <buildnumber> is used locally that increments each time in file "build.number"-->
+		<else>
+			<buildnumber file="build.number.${prod.RELEASE_VERSION}.${prod.PATCH_LEVEL}"/>
+		</else>
+	</if>
+	<property name="build-number-tag" value="${build.number}"/>
+	<echo>
+            BUILDNO="${build.number}"
+		
+    </echo>
+	<echo>
+            Manifest Specification-Version: "${prod.SPEC_VERSION}"
+            Manifest Implementation-Version: "${prod.RELEASE_VERSION}.${prod.PATCH_LEVEL}.${build-number-tag}"
+    </echo>
+	
+	<path id="gcshop.classpath">
+		<fileset dir="war/WEB-INF/lib">
+			<include name="**/*.jar" />
+			<exclude name="**/datanucleus*.jar" />
+		</fileset>
+		<fileset dir="${GAE_HOME}/lib">
+			<include name="*.jar" />
+			<include name="agent/**/*.jar" />
+			<include name="impl/**/*.jar" />
+			<include name="shared/**/*.jar" />
+			<include name="testing/**/*.jar" />
+			<include name="tools/*.jar" />
+			<include name="tools/jsp/*.jar" />
+			<include name="tools/orm/*.jar" />
+			<include name="user/*.jar" />
+		</fileset>
+	</path>
+
+	<path id="install.classpath">
+		<fileset dir="${GAE_HOME}/lib">
+			<include name="appengine-tools-api.jar" />
+		</fileset>
+	</path>
+
+	<target name="usage">
+
+		<echo message="" />
+		<echo message="gcshop build script" />
+		<echo message="-----------------------------------------" />
+		<echo message="" />
+		<echo message="Among the available targets are:" />
+		<echo message="" />
+		<echo message="compile    --> build and enhance classes only" />
+		<echo message="" />
+		
+		<echo message="create-demo-en  --> prepare deployment for English version demo" />		
+		<echo message="create-demo-zh  --> prepare deployment for Chinese version demo" />
+		<echo message="create-site  --> prepare deployment for home site" />
+		<echo message="create-all  --> prepare deployments for all" />
+		<echo message=""/>
+		
+		<echo message="install-demo-en  --> prepare and install English version demo" />
+		<echo message="install-demo-zh  --> prepare and install Chinese version demo" />
+		<echo message="install-site  --> prepare and install home site" />		
+		<echo message=""/>
+		
+		<echo message="zip-release-en  --> create release of English version" />
+		<echo message="zip-release-zh  --> create release of Chinese version" />
+		<echo message="zip-release-all  --> create release of all version" />
+		<echo message="" />
+
+	</target>
+
+	<target name="create-all" depends="create-site, create-demo-en, create-demo-zh" description="prepare deployments for all">
+		<echo>Starting prepare deployments for all...</echo>
+	</target>
+	
+	
+	<target name="genSite">
+		<mvn pom="site/pom.xml" mavenHome="D:/resource/apache-maven-2.2.1">
+			<arg value="site" />
+		</mvn>
+	</target>
+
+	<target name="clean-gcshop" description="Removes generated class files">
+		<delete dir="${output-base-path}" />
+		<mkdir dir="${output-base-path}" />
+		<mkdir dir="${output-base-path}/WEB-INF/classes" />
+	</target>
+
+	<target name="build-en" depends="gwtc">
+		  <antcall target="build-i11n">
+		    <param name="locale" value="en"/>
+		  </antcall> 
+	</target>
+	
+	<target name="build-zh" depends="gwtc">
+		  <antcall target="build-i11n">
+		    <param name="locale" value="zh"/>
+		  </antcall> 
+	</target>	
+	
+	<target name="build-i11n" >
+		<echo>debug:: to build localized bundle for locale: [${locale}]</echo>
+		<delete dir="${output-base-path}-${locale}" />
+		<mkdir dir="${output-base-path}-${locale}" />		
+		
+		<copy todir="${output-base-path}-${locale}/WEB-INF/classes/com/jcommerce/web/resource">
+			<fileset dir="web/com/jcommerce/web/resource">
+				<include name="*_${locale}.*" />
+			</fileset>
+		</copy>
+		<copy todir="${output-base-path}-${locale}/WEB-INF/classes/com/jcommerce/gwt/client/resources">
+			<fileset dir="admin/com/jcommerce/gwt/client/resources">
+				<include name="*.gif" />
+				<include name="*.png" />
+				<include name="*_${locale}.properties" />
+			</fileset>
+		</copy>
+		<copy todir="${output-base-path}-${locale}/WEB-INF/classes/com/jcommerce/core/resource">
+			<fileset dir="core/com/jcommerce/core/resource">
+				<include name="*_${locale}.*" />
+			</fileset>
+		</copy>		
+		
+		<copy todir="${output-base-path}-${locale}/">
+			<fileset dir="war-${locale}">
+				<include name="**/*.*" />
+				<exclude name="**/.svn" />
+			</fileset>
+		</copy>		
+	</target>
+
+	
+	<target name="compile" depends="clean-gcshop">
+		<echo>Starting Compile gcshop files ...</echo>
+
+		<javac encoding="UTF-8" destdir="${output-base-path}/WEB-INF/classes" debug="${DEBUG}" source="1.5" target="1.5" fork="true" memorymaximumsize="512m">
+			<src path="admin" />
+			<src path="web" />
+			<src path="core" />
+			<src path="patch" />
+			<exclude name="com/jcommerce/core/test/**" />
+			<exclude name="**/.svn/**" />
+			<classpath refid="gcshop.classpath" />
+		</javac>
+		<copy file="admin/META-INF/jdoconfig.xml" tofile="${output-base-path}/WEB-INF/classes/META-INF/jdoconfig.xml" />
+		<copy todir="${output-base-path}/WEB-INF/classes">
+			<fileset dir="web">
+				<include name="*.*" />
+			</fileset>
+		</copy>
+		
+		<antcall target="datanucleusenhance" />
+		
+		<jar destfile="${output-base-path}/gcshop.jar" manifestencoding="ISO8859_1" update="true">
+			<fileset dir="${output-base-path}/WEB-INF/classes">
+				<include name="**/*" />
+				<!-- patches have to be .class -->
+				<exclude name="freemarker/**/*" />
+			</fileset>
+			<manifest>
+				<attribute name="Specification-Title" value="gcShop" />
+				<attribute name="Specification-Version" value="${prod.SPEC_VERSION}" />
+				<attribute name="Implementation-Title" value="gcShop" />
+				<attribute name="Implementation-Version" value="${prod.RELEASE_VERSION}.${prod.PATCH_LEVEL}.${build-number-tag}" />
+			</manifest>
+		</jar>
+		
+	</target>
+
+	<target name="create-site" depends="" description="prepare deployment for home site">
+		<echo>Starting create gcshop site  ...</echo>
+
+		<delete dir="${release-site-path}/war" />
+		<mkdir dir="${release-site-path}/war" />
+
+		<copy todir="${release-site-path}/war">
+			<fileset dir="war">
+				<include name="index.html" />
+				<include name="favicon.ico" />
+				<include name="site/**/*.*" />
+				<exclude name="**/.svn" />
+			</fileset>
+		</copy>
+		<copy file="war/WEB-INF/web.site.xml" tofile="${release-site-path}/war/WEB-INF/web.xml" />
+		<copy file="war/WEB-INF/appengine-web.site.xml" tofile="${release-site-path}/war/WEB-INF/appengine-web.xml" />
+		
+	</target>
+
+	<target name="install-site" depends="create-site" description="install release zips">
+		<echo>Starting install gcshop site  ...</echo>
+		<java classname="com.google.appengine.tools.admin.AppCfg" fork="true" dir="${release-site-path}" classpathref="install.classpath">
+
+			<arg value="--enable_jar_splitting" />
+			<arg value="update" />
+			<arg value="war" />
+		</java>
+	</target>
+
+	<target name="zip-release-all" depends="zip-release-zh, zip-release-en"  description="create release of all version">
+		
+	</target>
+	
+	<target name="zip-release-zh" depends=""  description="create release of Chinese version">
+		  <antcall target="zip-release-i11n">
+		    <param name="locale" value="zh"/>
+		  </antcall> 
+	</target>	
+	<target name="zip-release-en" depends=""  description="create release of English version">
+		  <antcall target="zip-release-i11n">
+		    <param name="locale" value="en"/>
+		  </antcall> 
+	</target>
+	
+	<target name="zip-release-i11n" depends=""  description="Generate release zips">
+		<echo>Starting create gcshop site release with localized bundle [${locale}] ...</echo>
+		
+		<echo file="${release-base-path}-${locale}/version.txt">gcshop version: ${prod.RELEASE_VERSION}.${prod.PATCH_LEVEL}, build: ${build-number-tag}</echo>
+		<delete file="release/gc-shop-${locale}.${prod.RELEASE_VERSION}.${prod.PATCH_LEVEL}.zip"/>
+        <zip zipfile="release/gc-shop-${locale}.${prod.RELEASE_VERSION}.${prod.PATCH_LEVEL}.zip">
+        	<fileset dir="${release-base-path}-${locale}">
+        		<include name="war/**/*"/>
+        		<include name="licence.txt"/>
+        		<include name="version.txt"/>
+        		<include name="install.cmd"/>
+        		<include name="*-${locale}.txt"/>
+        	</fileset>
+        </zip>
+		
+	</target>
+	
+	
+	<target name="install-demo-en" depends="create-demo-en" description="install English version demo">
+		<echo>Starting install gcshop demo English version  ...</echo>
+		<java classname="com.google.appengine.tools.admin.AppCfg" fork="true" dir="${release-base-path}-${locale}" classpathref="install.classpath">
+			<arg value="--enable_jar_splitting" />
+			<arg value="update" />
+			<arg value="war" />
+		</java>
+	</target>
+
+	<target name="install-demo-zh" depends="create-demo-zh" description="install Chinese version demo">
+		<echo>Starting install gcshop demo English version  ...</echo>
+		<java classname="com.google.appengine.tools.admin.AppCfg" fork="true" dir="${release-base-path}-${locale}" classpathref="install.classpath">
+
+			<arg value="--enable_jar_splitting" />
+			<arg value="update" />
+			<arg value="war" />
+		</java>
+	</target>	
+	
+	<target name="create-demo-en" depends="build-en"  description="prepare deployment for English version demo">
+		  <antcall target="create-demo-i11n">
+		    <param name="locale" value="en"/>
+		  </antcall> 		
+	</target>
+	<target name="create-demo-zh" depends="build-zh"  description="prepare deployment for Chinese version demo">
+		  <antcall target="create-demo-i11n">
+		    <param name="locale" value="zh"/>
+		  </antcall> 		
+	</target>	
+	
+	<target name="create-demo-en-nogwtc" depends="compile"  description="prepare deployment for English version demo">
+		<delete dir="${output-base-path}/admin" />
+		<mkdir dir="${output-base-path}/admin" />
+		<copy todir="${output-base-path}/admin">
+			<fileset dir="war/admin">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>		
+		  <antcall target="build-i11n">
+		    <param name="locale" value="en"/>
+		  </antcall>		  
+		<antcall target="create-demo-i11n">
+		    <param name="locale" value="en"/>
+		  </antcall> 		
+	</target>
+	<target name="create-demo-zh-nogwtc" depends="compile"  description="prepare deployment for Chinese version demo">
+		<delete dir="${output-base-path}/admin" />
+		<mkdir dir="${output-base-path}/admin" />
+		<copy todir="${output-base-path}/admin">
+			<fileset dir="war/admin">
+				<include name="**/*.*" />
+			</fileset>
+		</copy>		
+		  <antcall target="build-i11n">
+		    <param name="locale" value="zh"/>
+		  </antcall>		
+		  <antcall target="create-demo-i11n">
+		    <param name="locale" value="zh"/>
+		  </antcall> 		
+	</target>
+	
+	<target name="create-demo-i11n"  description="Generate release zips">
+		<echo>Starting create gcshop site release with localized bundle [${locale}] ...</echo>
+
+		<delete dir="${release-base-path}-${locale}" />
+		<mkdir dir="${release-base-path}-${locale}/war" />
+
+
+		
+		<!-- copy compiled GWT files -->
+		<copy todir="${release-base-path}-${locale}/war/admin">
+			<fileset dir="${output-base-path}/admin">
+				<include name="**/*.*" />
+				<exclude name="**/.svn" />
+			</fileset>   
+		</copy>
+				
+		<copy file="war/WEB-INF/web.xml" tofile="${release-base-path}-${locale}/war/WEB-INF/web.xml" />
+		<copy file="war/WEB-INF/action-servlet.xml" tofile="${release-base-path}-${locale}/war/WEB-INF/action-servlet.xml" />
+		<copy file="war/WEB-INF/applicationContext.xml" tofile="${release-base-path}-${locale}/war/WEB-INF/applicationContext.xml" />
+		<copy file="war/WEB-INF/cron.xml" tofile="${release-base-path}-${locale}/war/WEB-INF/cron.xml" />
+		<copy file="war/WEB-INF/logging.properties" tofile="${release-base-path}-${locale}/war/WEB-INF/logging.properties" />
+		<copy file="war/favicon.ico" tofile="${release-base-path}-${locale}/war/favicon.ico" />
+		<copy file="war/admin.jsp" tofile="${release-base-path}-${locale}/war/admin.jsp" />
+		
+		
+		<copy file="war/WEB-INF/appengine-web-${locale}.xml" tofile="${release-base-path}-${locale}/war/WEB-INF/appengine-web.xml" />
+		<copy file="war/index-${locale}.html" tofile="${release-base-path}-${locale}/war/index.html" />
+		<copy file="war/login-${locale}.jsp" tofile="${release-base-path}-${locale}/war/login.jsp" />
+		<copy file="war/underConstruction-${locale}.html" tofile="${release-base-path}-${locale}/war/underConstruction.html" />
+
+		
+		<!-- copy static files -->
+		<copy todir="${release-base-path}-${locale}/war/web">
+			<fileset dir="war/web">
+				<include name="**/*.*" />
+				<exclude name="**/.svn" />
+			</fileset>   
+		</copy>
+		
+
+		
+		<!-- copy GWT/GXT resources files -->
+		<copy todir="${release-base-path}-${locale}/war/resources">
+			<fileset dir="war/resources">
+				<include name="**/*.*" />
+				<exclude name="**/.svn" />
+			</fileset>   
+		</copy>		
+		
+		<!-- copy libs -->
+		<copy todir="${release-base-path}-${locale}/war/WEB-INF/lib">
+			<fileset dir="war/WEB-INF/lib">
+				<include name="**/*.*" />
+				<exclude name="**/.svn" />
+			</fileset>   
+		</copy>
+		
+		<!-- copy built classes -->
+		<copy todir="${release-base-path}-${locale}/war/WEB-INF/lib">
+			<fileset dir="${output-base-path}">
+				<include name="gcshop.jar" />
+			</fileset>   
+		</copy>
+		<copy todir="${release-base-path}-${locale}/war/WEB-INF/classes">
+			<fileset dir="${output-base-path}/WEB-INF/classes">
+				<include name="freemarker/**/*.*" />
+			</fileset>   
+		</copy>
+		
+		<!-- copy i11n bundles -->
+		<copy todir="${release-base-path}-${locale}/war">
+			<fileset dir="${output-base-path}-${locale}">
+				<include name="**/*.*" />
+				<exclude name="**/.svn" />
+			</fileset>
+		</copy>		
+		
+		<!-- copy install scripts, readme, and release notes -->
+		<copy todir="${release-base-path}-${locale}">
+			<fileset dir=".">
+				<include name="install-${locale}.txt" />
+				<include name="install.cmd" />
+			</fileset>
+		</copy>
+		
+	</target>
+
+	  <!-- Arguments to gwtc and devmode targets -->
+	  <property name="gwt.args" value=" -war ${output-base-path} " />
+	  <path id="gwtc.class.path">
+	    <pathelement location="${output-base-path}/WEB-INF/classes"/>
+	    <pathelement location="${gwt.sdk}/gwt-user.jar"/>
+	    <fileset dir="${gwt.sdk}" includes="gwt-dev*.jar"/>
+	    <!-- Add any additional non-server libs (such as JUnit) -->
+	    <fileset dir="war/WEB-INF/lib" includes="**/*.jar"/>
+	  </path>
+	
+	<target name="gwtc" depends="compile" description="GWT compile to JavaScript (must call compile first)">
+		<echo>Starting compiling GWT module...</echo>
+
+		<delete dir="${output-base-path}/admin" />
+		<mkdir dir="${output-base-path}/admin" />
+		
+	    <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+	      <classpath>
+	        <pathelement location="admin"/>
+	        <path refid="gwtc.class.path"/>
+	      </classpath>
+	      <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
+	      <jvmarg value="-Xmx256M"/>
+	      <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
+	      <arg line="${gwt.args}"/>
+	      <arg value="com.jcommerce.gwt.JCommerceGae"/>
+	    </java>
+	  </target>
+	
+	
+	<target name="datanucleusenhance" depends="" description="Performs JDO enhancement on compiled data classes.">
+		<!--enhance_war war="war" /-->
+		<enhance failonerror="true">
+			<classpath>
+				<pathelement path="${appengine.tools.classpath}" />
+				<pathelement path="war/WEB-INF/classes" />
+				<fileset dir="war/WEB-INF/lib" includes="*.jar" />
+			</classpath>
+			<fileset dir="${output-path}/war/WEB-INF/classes">
+				<include name="com/jcommerce/core/model/*.class" />
+				<include name="com/jcommerce/core/test/*.class" />
+			</fileset>
+		</enhance>
+	</target>
 
 
 </project>

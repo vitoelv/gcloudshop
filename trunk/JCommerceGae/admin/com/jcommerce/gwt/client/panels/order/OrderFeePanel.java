@@ -267,13 +267,13 @@ public class OrderFeePanel extends ContentWidget{
 		new ReadService().getBean(ModelNames.ORDERINFO, orderId, new ReadService.Listener() {
 			public void onSuccess(BeanObject bean) {
 				order = bean;
-				double goodsAmount = order.get(IOrderInfo.GOODS_AMOUNT);
-				double shippingFee = order.get(IOrderInfo.SHIPPING_FEE);
-				double insurance = order.get(IOrderInfo.INSURE_FEE);
-				double payFee = order.get(IOrderInfo.PAY_FEE);
-				double moneyPaid = order.get(IOrderInfo.MONEY_PAID);
-				double surplus = order.get(IOrderInfo.SURPLUS);
-				double orderAmount = order.get(IOrderInfo.ORDER_AMOUNT);
+				Double goodsAmount = order.get(IOrderInfo.GOODS_AMOUNT);
+				Double shippingFee = order.get(IOrderInfo.SHIPPING_FEE);
+				Double insurance = order.get(IOrderInfo.INSURE_FEE);
+				Double payFee = order.get(IOrderInfo.PAY_FEE);
+				Double moneyPaid = order.get(IOrderInfo.MONEY_PAID);
+				Double surplus = order.get(IOrderInfo.SURPLUS);
+				Double orderAmount = order.get(IOrderInfo.ORDER_AMOUNT);
 				double totalAmount = goodsAmount + shippingFee + payFee + insurance;
 				goodsAmountLabel.setText("￥" + goodsAmount);
 				totalAmountLabel.setText("￥" + totalAmount);
@@ -292,7 +292,7 @@ public class OrderFeePanel extends ContentWidget{
 				public void onSuccess(BeanObject bean) {
 					user = bean;
 					surplusField.setVisible(true);
-					double surplus = bean.get(IUser.USER_MONEY);
+					Double surplus = bean.get(IUser.USER_MONEY);
 					surplusLabel.setText(Resources.constants.orderFee_surplus() + ":" + surplus);
 				}
 			});
@@ -310,7 +310,7 @@ public class OrderFeePanel extends ContentWidget{
 		final double insurance = getDoubleValue(insuranceField);
 		final double shippingFee = getDoubleValue(shippingFeeField);
 		final double payFee = getDoubleValue(payFeeField);
-		final double moneyPaid = order.get(IOrderInfo.MONEY_PAID);
+		final Double moneyPaid = order.get(IOrderInfo.MONEY_PAID);
 		double surplus = 0;
 		if(userId != null) {
 			surplus = getDoubleValue(surplusField);
@@ -325,7 +325,7 @@ public class OrderFeePanel extends ContentWidget{
 				new UpdateService().updateBean(userId, user, null);
 			}
 		}				
-		double goodsAmount = order.get(IOrderInfo.GOODS_AMOUNT);
+		Double goodsAmount = order.get(IOrderInfo.GOODS_AMOUNT);
 		double orderAmount = goodsAmount + shippingFee + insurance + payFee - surplus - moneyPaid;
 		
 		if(getCurState().getIsEdit()) {

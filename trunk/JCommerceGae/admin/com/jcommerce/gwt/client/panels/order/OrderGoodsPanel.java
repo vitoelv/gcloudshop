@@ -433,12 +433,12 @@ public class OrderGoodsPanel extends ContentWidget{
 					}
 				});
 				
-				double marketPrice = bean.get(IGoods.MARKET_PRICE);
-				double shopPrice = bean.get(IGoods.SHOP_PRICE);
-				double promotePrice = bean.get(IGoods.PROMOTE_PRICE);
+				Double marketPrice = bean.get(IGoods.MARKET_PRICE);
+				Double shopPrice = bean.get(IGoods.SHOP_PRICE);
+				Double promotePrice = bean.get(IGoods.PROMOTE_PRICE);
 				Boolean isPromote = bean.get(IGoods.IS_PROMOTE);
-				long start = bean.get(IGoods.PROMOTE_START_DATE);
-				long end = bean.get(IGoods.PROMOTE_END_DATE);
+				Long start = bean.get(IGoods.PROMOTE_START_DATE);
+				Long end = bean.get(IGoods.PROMOTE_END_DATE);
 				rdMarketPrice.setBoxLabel(Resources.messages.OrderGoods_marketPrice(marketPrice));
 				rdMarketPrice.setValueAttribute(String.valueOf(marketPrice));
 				//是否促销

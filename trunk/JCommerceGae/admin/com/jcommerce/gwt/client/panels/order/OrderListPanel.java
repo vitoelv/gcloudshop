@@ -526,9 +526,9 @@ public class OrderListPanel  extends ContentWidget{
 		// 状态：已确认&&未付款&&未发货（或配货中） || 未确认
 		new ReadService().getBean(ModelNames.ORDERINFO, orderId, new ReadService.Listener() {
 			public void onSuccess(BeanObject bean) {
-				long orderStatus = bean.get(IOrderInfo.ORDER_STATUS);
-				long payStatus = bean.get(IOrderInfo.PAY_STATUS);
-				long shippingStatus = bean.get(IOrderInfo.SHIPPING_STATUS);
+				Long orderStatus = bean.get(IOrderInfo.ORDER_STATUS);
+				Long payStatus = bean.get(IOrderInfo.PAY_STATUS);
+				Long shippingStatus = bean.get(IOrderInfo.SHIPPING_STATUS);
 				if(orderStatus == IOrderInfo.OS_UNCONFIRMED ||
 					(orderStatus == IOrderInfo.OS_CONFIRMED && payStatus == IOrderInfo.PS_UNPAYED && 
 						(IOrderInfo.SS_UNSHIPPED == shippingStatus || IOrderInfo.SS_PREPARING == shippingStatus))) {
@@ -550,7 +550,7 @@ public class OrderListPanel  extends ContentWidget{
 		//状态：无效 ||取消
 		new ReadService().getBean(ModelNames.ORDERINFO, orderId, new ReadService.Listener() {
 			public void onSuccess(BeanObject bean) {
-				long orderStatus = bean.get(IOrderInfo.ORDER_STATUS);
+				Long orderStatus = bean.get(IOrderInfo.ORDER_STATUS);
 				if(orderStatus == IOrderInfo.OS_INVALID || orderStatus == IOrderInfo.OS_CANCELED) {
 					new RemoteService().getSpecialService().deleteOrder(orderId, new AsyncCallback<Boolean>(){
 						public void onFailure(Throwable caught) {
@@ -573,9 +573,9 @@ public class OrderListPanel  extends ContentWidget{
 		//状态：未确认 || 已确认&&未发货（或配货中）
 		new ReadService().getBean(ModelNames.ORDERINFO, orderId, new ReadService.Listener() {
 			public void onSuccess(BeanObject bean) {
-				long orderStatus = bean.get(IOrderInfo.ORDER_STATUS);
-				long payStatus = bean.get(IOrderInfo.PAY_STATUS);
-				long shippingStatus = bean.get(IOrderInfo.SHIPPING_STATUS);
+				Long orderStatus = bean.get(IOrderInfo.ORDER_STATUS);
+				Long payStatus = bean.get(IOrderInfo.PAY_STATUS);
+				Long shippingStatus = bean.get(IOrderInfo.SHIPPING_STATUS);
 				if(orderStatus == IOrderInfo.OS_UNCONFIRMED ||
 					(orderStatus == IOrderInfo.OS_CONFIRMED && 
 						(IOrderInfo.SS_UNSHIPPED == shippingStatus || IOrderInfo.SS_PREPARING == shippingStatus))) {
@@ -600,7 +600,7 @@ public class OrderListPanel  extends ContentWidget{
 		//状态：！确认
 		new ReadService().getBean(ModelNames.ORDERINFO, orderId, new ReadService.Listener() {
 			public void onSuccess(BeanObject bean) {
-				long orderStatus = bean.get(IOrderInfo.ORDER_STATUS);
+				Long orderStatus = bean.get(IOrderInfo.ORDER_STATUS);
 				if(orderStatus != IOrderInfo.OS_CONFIRMED) {
 					bean.set(IOrderInfo.ORDER_STATUS, IOrderInfo.OS_CONFIRMED);
 					new UpdateService().updateBean(orderId, bean, null);

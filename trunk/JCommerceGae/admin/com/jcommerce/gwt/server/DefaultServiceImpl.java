@@ -4,16 +4,11 @@
 
 package com.jcommerce.gwt.server;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-
-import javax.jdo.annotations.PrimaryKey;
 
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -57,15 +52,7 @@ public class DefaultServiceImpl extends RemoteServiceServlet implements IDefault
 		
 		springContext = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		
-        Properties beanProps = new Properties();
-        InputStream is = getClass().getResourceAsStream("beans.properties");
-        try {
-            beanProps.load(is);
-            is.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
+
         //clear session log
         IDefaultManager defaultManager = (IDefaultManager)springContext.getBean("DefaultManager");
 //      defaultManager.txdeleteall(defaultManager.getList(ModelNames.SESSION, null));

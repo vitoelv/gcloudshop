@@ -136,7 +136,7 @@ public class LibMain {
 		String fileName = WebUtils.getActionName(request);
 		
 		/* 初始化“页面标题”和“当前位置” */
-	    String pageTitle = SpringUtil.getShopConfigManager().getCachedShopConfig((String)request.getSession().getAttribute("locale")).getString(CFG_KEY_SHOP_TITLE) + "- Powered by GCShop";
+	    String pageTitle = SpringUtil.getShopConfigManager().getCachedShopConfig((String)request.getSession().getAttribute(IWebConstants.KEY_LOCALE)).getString(CFG_KEY_SHOP_TITLE) + "- Powered by GCShop";
 	    String urHere = "<a href=\"/web/front/home.action\">"+Lang.getInstance().getString("home") + "</a>";
 	    
 	    

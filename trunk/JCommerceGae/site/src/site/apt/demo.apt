@@ -10,13 +10,13 @@ Live Demo
    
    <<Since Google App Engine is still in beta preview status, sometimes it is not stable yet. If you experienced broken service, you may need try again after a short period.>>
    
-   {{{../web/front/home.action?weblocale=en_US} Public portal home page}}:
+   {{{http://gc-shop-en.appspot.com} Public portal home page}}:
    
    		* For public user to browse and buy goods.
    		
    		* Public user can choose to register and login, or start to use as an anonymous user.
    
-   {{{../login.jsp?locale=en} Administrator portal home page}}.
+   {{{http://gc-shop-en.appspot.com/login.jsp} Administrator portal home page}}.
    	
    		* For the shop owner to manage the shop.
    		
