@@ -1,5 +1,6 @@
 package com.jcommerce.web.to;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -154,5 +155,14 @@ public class UserWrapper extends BaseModelWrapper {
 	}
 	public Long getIntegral() {
 		return getUser().getPayPoints();
+	}
+	public String getBirthday(){
+		if(getUser().getBirthday() == null){
+			return "";
+		}
+		else{
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			return dateFormat.format(getUser().getBirthday());
+		}
 	}
 }

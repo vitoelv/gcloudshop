@@ -107,7 +107,7 @@ public class GoodsAction extends BaseAction {
         gw.put("commentRank", rank);
 	    
 	    
-	    request.setAttribute("rankPrices", new String[0]);
+	    request.setAttribute("rankPrices", new HashMap());
 	        
 	    /*修改,获得商品相册*/
 	    Condition galleryCondition = new Condition("goods",Condition.EQUALS,goodsId);
@@ -167,7 +167,7 @@ public class GoodsAction extends BaseAction {
 	    		viewHistory.remove(viewHistory.keySet().toArray()[0]);
 	    	}
 	    }
-	    
+	    request.setAttribute("rand", "");
 
         return SUCCESS;
         

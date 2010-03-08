@@ -154,6 +154,7 @@ public class LibOrder {
         }
         
         total.setSurplus( order.getSurplus() );
+        total.setIntegral(order.getIntegral().intValue());
         
         /* 保存订单信息 */
         session.setAttribute("flowOrder", order);

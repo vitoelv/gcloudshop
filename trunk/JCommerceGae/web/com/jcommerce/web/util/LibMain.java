@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.ArrayUtils;
 import org.datanucleus.util.StringUtils;
 
+import com.jcommerce.core.model.Article;
 import com.jcommerce.core.model.ArticleCat;
 import com.jcommerce.core.model.Category;
 import com.jcommerce.core.model.CollectGood;
@@ -346,9 +347,15 @@ public class LibMain {
 		List<CommentWrapper> commentListWrapper = WrapperUtil.wrap(commentList, CommentWrapper.class);
 		for(Iterator iterator = commentListWrapper.iterator(); iterator.hasNext();) {
 			CommentWrapper commentWrapper = (CommentWrapper) iterator.next();
-			String goodsId = commentWrapper.getComment().getIdValue();
-			Goods goods = (Goods) manager.get(ModelNames.GOODS, goodsId);
-			commentWrapper.put("cmtName", goods.getGoodsName());
+			if(commentWrapper.getComment().getCommentType() == 0){
+				String goodsId = commentWrapper.getComment().getIdValue();
+				Goods goods = (Goods) manager.get(ModelNames.GOODS, goodsId);
+				commentWrapper.put("cmtName", goods.getGoodsName());
+			}else{
+				String articleId = commentWrapper.getComment().getIdValue();
+				Article article = (Article) manager.get(ModelNames.ARTICLE, articleId);
+				commentWrapper.put("cmtName", article.getTitle());
+			}
 			
 			String id = commentWrapper.getComment().getPkId();
 			criteria.removeAllCondition();

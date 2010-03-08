@@ -35,6 +35,7 @@ import com.jcommerce.web.to.GoodsWrapper;
 import com.jcommerce.web.to.WrapperUtil;
 import com.jcommerce.web.util.LibCommon;
 import com.jcommerce.web.util.LibGoods;
+import com.jcommerce.web.util.LibMain;
 import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionContext;
 
@@ -272,6 +273,7 @@ public class HomeAction extends BaseAction {
         includePromotionInfo(request);
         includeRecommendPromotion(request);
         
+        LibMain.assignUrHere(request, "", "");
 //        //Cart Info.....
 //        cartInfoShow(request);
         return  Action.SUCCESS;
