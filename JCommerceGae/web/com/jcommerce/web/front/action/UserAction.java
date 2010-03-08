@@ -3,6 +3,7 @@ package com.jcommerce.web.front.action;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.StringBufferInputStream;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -86,7 +87,11 @@ public class UserAction extends BaseAction {
 	private String password;
 	private String email;
 	private String captcha;
-	
+	private String old_password;
+	private String new_password;
+	private String comfirm_password;
+	private Long sex;
+	private String birthday;
 
 	private Map<String, String> other;
 	private String action;
@@ -128,7 +133,9 @@ public class UserAction extends BaseAction {
 			s = new String[] {
 					"register", "login", "profile", "order_list", "order_detail", "address_list", "collection_list",
 					"message_list", "tag_list", "get_password", "reset_password", "booking_list", "add_booking", "account_raply",
-					"account_deposit", "account_log", "account_detail", "act_account", "pay", "default", "bonus", "group_buy", "group_buy_detail", "affiliate", "comment_list","validate_email","track_packages", "transform_points"
+					"account_deposit", "account_log", "account_detail", "act_account", "pay", "default", "bonus", "group_buy", 
+					"group_buy_detail", "affiliate", "comment_list","validate_email","track_packages", "transform_points",
+					"act_edit_profile"
 			};
 			
 			List<String> uiArr = Arrays.asList(s);
@@ -159,6 +166,8 @@ public class UserAction extends BaseAction {
 			// solution: see this.toString()
 //			request.setAttribute("action", action);
 			
+			request.setAttribute("shopRegClosed", getCachedShopConfig().getInt(IShopConfigMeta.CFG_KEY_SHOP_REG_CLOSED));
+			request.setAttribute("backAct", backAct);
 			
 			if("default".equals(action)) {
 				
@@ -214,7 +223,7 @@ public class UserAction extends BaseAction {
 				request.setAttribute("enabledCaptcha", 0);
 				request.setAttribute("rand", new Double(1000000*Math.random()).longValue());
 
-				request.setAttribute("shopRegClosed", getCachedShopConfig().getInt(IShopConfigMeta.CFG_KEY_SHOP_REG_CLOSED));
+				request.setAttribute("backAct", backAct);
 				return RES_USER_PASSPORT;
 			}
 			else if("check_email".equals(action)){
@@ -254,6 +263,16 @@ public class UserAction extends BaseAction {
 
 			}
 			else if("act_register".equals(action) || "actRegister".equals(action)) {
+				if(getCaptcha() == null){
+					String error = register(getUsername(), getPassword(), getEmail(), other );
+					if(error == null) {
+						return LibMain.showMessage( new PrintfFormat(Lang.getInstance().getString("registerSuccess")).sprintf(getUsername()), Lang.getInstance().getString("profileLnk"), 
+								"user.action", "info", true, request);
+					} else {
+						return LibMain.showMessage(error, Lang.getInstance().getString("signUp"), 
+								"user.action", "info", true, request);
+					}
+				}
 				if(getCaptcha().toLowerCase().equals(((String)getSession().getAttribute("captcha")).toLowerCase())){
 					String error = register(getUsername(), getPassword(), getEmail(), other );
 					if(error == null) {
@@ -284,6 +303,50 @@ public class UserAction extends BaseAction {
 				return RES_USER_TRANSACTION;
 				
 			} 
+			else if("act_edit_profile".equals(action)) {
+				
+				if( !email.equals(getSession().getAttribute(KEY_USER_EMAIL)) ){
+					Criteria criteria = new Criteria();
+					criteria.addCondition(new Condition(IUser.EMAIL,Condition.EQUALS,email));
+					if(getDefaultManager().getList(ModelNames.USER, criteria).size() > 0 ){
+						return LibMain.showMessage(Lang.getInstance().getString("emailExists"), null, 
+								"user.action?act=profile", "info", true, request);
+					}
+				}
+				
+				
+				User user = (User)getDefaultManager().get(ModelNames.USER, (String)getSession().getAttribute(KEY_USER_ID));
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				user.setBirthday(dateFormat.parse(birthday));
+				user.setSex(sex);
+				user.setMsn(other.get("msn"));
+				user.setQq(other.get("qq"));
+				user.setOfficePhone(other.get("office_phone"));
+				user.setHomePhone(other.get("home_phone"));
+				user.setMobilePhone(other.get("mobile_phone"));
+				getDefaultManager().txupdate(user);
+				return LibMain.showMessage(Lang.getInstance().getString("editProfileSuccess"), null, 
+						"user.action?act=profile", "info", true, request);
+				
+			} 
+			else if("act_edit_password".equals(action)) {
+			
+				Criteria criteria = new Criteria();
+				criteria.addCondition(new Condition(IUser.PK_ID,Condition.EQUALS,(String)getSession().getAttribute(KEY_USER_ID)));
+				criteria.addCondition(new Condition(IUser.PASSWORD,Condition.EQUALS,old_password));
+				List userList = getDefaultManager().getList(ModelNames.USER, criteria);
+				if( userList.size() > 0 ){
+					User user = (User)userList.get(0);
+					user.setPassword(new_password);
+					getDefaultManager().txupdate(user);
+					return LibMain.showMessage(Lang.getInstance().getString("editPasswordSuccess"), null, 
+							"user.action?act=default", "info", true, request);
+				}
+				else{
+					return LibMain.showMessage(Lang.getInstance().getString("editPasswordFailure"), null, 
+							"user.action?act=default", "info", true, request);
+				}
+			}
 			else if("order_list".equals(action) || "orderList".equals(action)){
 				getOrderList(request, userId);
 				includeUserMenu();
@@ -758,7 +821,7 @@ public class UserAction extends BaseAction {
 				LibTransaction.getUserOrders(userId, pager.getSize(), pager.getStart(), getDefaultManager()));
 		
 		//获得可合并订单
-		List<String> mergeOrder = new ArrayList<String>();
+		Map<String,String> mergeOrder = new HashMap<String,String>();
     	
     	//可合并订单的条件，未付款&&未配送&&(未确认||已确认)
     	criteria.removeAllCondition();
@@ -779,7 +842,7 @@ public class UserAction extends BaseAction {
     	
     	for(Iterator iterator = orders.iterator(); iterator.hasNext();) {
     		OrderInfo order = (OrderInfo) iterator.next();
-    		mergeOrder.add(order.getOrderSn());
+    		mergeOrder.put(order.getOrderSn(),order.getOrderSn());
     	}
 		request.setAttribute("merge", mergeOrder);		
 	}
@@ -987,7 +1050,11 @@ public class UserAction extends BaseAction {
 		user.setUserName(username);
 		user.setPassword(password);
 		user.setEmail(email);
-		int length = other.size();
+		int length = 0 ;
+		if(other != null){
+			length = other.size();
+		}
+		 
 		// TODO wrap it and return error code
 		String error = null;
 		try {
@@ -1164,5 +1231,43 @@ public class UserAction extends BaseAction {
 
 	public InputStream getReturnToCart() {
 		return returnToCart;
+	}
+	public String getOld_password() {
+		return old_password;
+	}
+
+	public void setOld_password(String old_password) {
+		this.old_password = old_password;
+	}
+
+	public String getNew_password() {
+		return new_password;
+	}
+
+	public void setNew_password(String new_password) {
+		this.new_password = new_password;
+	}
+
+	public String getComfirm_password() {
+		return comfirm_password;
+	}
+
+	public void setComfirm_password(String comfirm_password) {
+		this.comfirm_password = comfirm_password;
+	}
+	public Long getSex() {
+		return sex;
+	}
+
+	public void setSex(Long sex) {
+		this.sex = sex;
+	}
+
+	public String getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
 	}
 }

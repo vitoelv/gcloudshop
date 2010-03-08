@@ -195,7 +195,7 @@ public class SearchAction extends BaseAction {
         		/* 将提交数据重新赋值 */
         		for (Map<String,Object> val : (List<Map<String,Object>>)attributes.get("attr")) {
 					if(request.getParameter("attr["+val.get("id")+"]") != null){
-						if((Integer)val.get("type") == 2){
+						if((Long)val.get("type") == 2){
 							Map<String,String> map = new HashMap<String,String>();
 							map.put("from", request.getParameter("attr["+val.get("id")+"][from]") != null ? request.getParameter("attr["+val.get("id")+"][from]").trim() : "");
 							map.put("to", request.getParameter("attr["+val.get("id")+"][to]") != null ? request.getParameter("attr["+val.get("id")+"][to]").trim() : "");
@@ -204,7 +204,10 @@ public class SearchAction extends BaseAction {
 						else{
 							val.put("value", request.getParameter("attr["+val.get("id")+"]") != null ? request.getParameter("attr["+val.get("id")+"]").trim() : "");
 						}
-					}					
+					}
+					else{
+						val.put("value", request.getParameter("attr["+val.get("id")+"]") != null ? request.getParameter("attr["+val.get("id")+"]").trim() : "");
+					}
 				}
         		if(scDs != 0){
         			request.setAttribute("scck", "checked");
@@ -472,13 +475,13 @@ public class SearchAction extends BaseAction {
         
     	List<GoodsType> goodsTypes = (List<GoodsType>)getDefaultManager().getList(ModelNames.GOODSTYPE,criteria);
 
-    		Map<String,Object> cate = new HashMap<String,Object>();
+    		Map<Long,Object> cate = new HashMap<Long,Object>();
     		for (GoodsType goodsType : goodsTypes) {
 				for (Attribute attr : goodsType.getAttributes()) {
 					if(attr.getAttrIndex()<= 0){
 						continue;
 					}
-					cate.put(goodsType.getPkId(), goodsType.getCatName());
+					cate.put(goodsType.getLongId(), goodsType.getCatName());
 				}
     		}
     		attributes.put("cate", cate);
@@ -514,7 +517,7 @@ public class SearchAction extends BaseAction {
 						Map<String,Object> attrArray = new HashMap<String,Object>();
 						attrArray.put("id", attr.getPkId());
 						attrArray.put("attr", attr.getAttrName());
-						attrArray.put("option", attrValues);
+						attrArray.put("options", attrValues);
 						attrArray.put("type", 3);
 						attrList.add(attrArray);
 					}
@@ -560,11 +563,11 @@ public class SearchAction extends BaseAction {
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
-    int brand;
-    public void setBrand(int brand) {
+    String brand;
+    public void setBrand(String brand) {
         this.brand = brand;
     }
-    public int getBrand() {
+    public String getBrand() {
         return this.brand;
     }
     int priceMax;

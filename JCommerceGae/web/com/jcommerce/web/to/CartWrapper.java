@@ -36,8 +36,11 @@ public class CartWrapper extends BaseModelWrapper {
 	}
 	
 	public String getParentId() {
-		System.out.println(getCart().getParentId()+"+++++++++++++++++++++++++++++++++++++++");
 		return getCart().getParentId();
+	}
+	
+	public Boolean getIsGift() {
+		return getCart().getIsGift();
 	}
 	
 	public String getFormatedGoodsPrice() {	

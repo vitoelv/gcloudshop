@@ -9,7 +9,11 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.antlr.runtime.*;
+import org.antlr.runtime.tree.*;
 import org.apache.commons.lang.StringUtils;
+
+
 
 public class DWTConverter {
 	public static interface RegexReplaceCallback {
@@ -18,6 +22,7 @@ public class DWTConverter {
 	
 	// temporarily, only store "item" (PHP) or "as"(freemaker)
 	public Stack<String> foreachStack=new Stack<String>();
+	public Stack<String> foreachListStack=new Stack<String>();
 	private String _foreachmark;
 	
 	private String fileName;
@@ -26,7 +31,9 @@ public class DWTConverter {
 		
 
 		this.fileName = fileName;
-		
+		if(fileName.equals("promotion_info.lbi")){
+			
+		}
 		String res = null;
 		
 		res = preCompile(source, fileName);
@@ -248,16 +255,42 @@ public class DWTConverter {
 		
 		StringBuffer buf = new StringBuffer();
 		if(elseif) {
-			buf.append("<#elseif ");
+			buf.append("<#elseif ( ");
 		}else {
-			buf.append("<#if ");
+			buf.append("<#if ( ");
 		}
+		StringBuffer sb = new StringBuffer();
 		
+		//this need antlrworks-1.3.1.jar
+		CharStream input = new ANTLRStringStream(tag);
+        Expr lexer = new Expr (input);
+        Token lexerToken;
+        while ((lexerToken = lexer.nextToken())!=Token.EOF_TOKEN) {
+        	if(lexerToken.getType() != Expr.WS ){
+        		if(lexerToken.getText().equals("$smarty.session.user_id")){
+        			while((lexerToken = lexer.nextToken())!=Token.EOF_TOKEN) {
+        				if(lexerToken.getType() == Expr.WS ){
+        					continue;
+        				}
+        				if(lexerToken.getText().equals("gt")||lexerToken.getType() == Expr.GT){
+        					continue;
+        				}
+        				sb.append("user_id");
+        				break;
+        			}
+        		}
+        		else {
+        			sb.append(lexerToken.getText()).append(",");
+        		}        		
+        	
+        	}
+        }			
+		sb.deleteCharAt(sb.length()-1);
 		
-		
-//		String[] tokens = StringUtils.splitPreserveAllTokens(tag);
-		String[] tokens = StringUtils.split(tag);
+
+		String[] tokens = StringUtils.split(sb.toString(),",");
 		int size = tokens.length;
+		
 		String[] convertedTokens = new String[size];
 		for(int i=0;i<size;i++) {
 			String token = tokens[i];
@@ -351,7 +384,7 @@ public class DWTConverter {
 					withLogical = withLogical | Pattern.compile(regex).matcher(convertedTokens[i-1]).matches();
 				}
 				if(i!=size-1) {
-					String regex = ">|>=|==|!=|<|<=";
+					String regex = ">|>=|==|!=|<|<=|%";
 					withLogical = withLogical | Pattern.compile(regex).matcher(convertedTokens[i+1]).matches();
 				}
 				{
@@ -366,9 +399,14 @@ public class DWTConverter {
 				}
 				token = temp;
 			}
-			buf.append(" ").append(token).append(" ");
+			if(token.equals("!")){
+				buf.append(token);
+			}
+			else {
+				buf.append(token).append(" ");
+			}
 		}
-		buf.append(" >");
+		buf.append(" ) >");
 		
 		
 		res = buf.toString();
@@ -428,29 +466,50 @@ public class DWTConverter {
 		// to make it simpler
 		// however getpara does not always work in case from = xxx
 		Map<String, String> paras = getPara(tag);
+		
 		String listItem = StringUtils.replace(paras.get("from"), "$", "");
 		String valueItem = StringUtils.replace(paras.get("item"), "$", "");
 		String keyItem = StringUtils.replace(paras.get("key"), "$", "");
 		
+		//for handle foreach from=$province_list.$sn item=province		
+		boolean flag = false;
+		if(paras.get("from").contains(".$sn")){
+			flag = true;
+			listItem = StringUtils.replace(paras.get("from"), ".$sn", "[sn]").replace("$", "");
+		}
 		
 		if(keyItem!=null) {
 			// it's iterating a map or hashtable
+			if(listItem.contains("list")){
+				res = new StringBuffer("<#list ").append(listItem).append(" as ").append(valueItem).append(">")
+				.append(" <#assign ").append(keyItem).append(" = ").append(valueItem).append("_index >")
+				.toString();
+			}
+			else{
+				
+			
 			res = new StringBuffer("<#list ").append(listItem).append("?keys as ").append(keyItem)
 				.append("> <#assign ").append(valueItem).append(" = ").append(listItem).append(".get(").append(keyItem).append(")>")
 				.toString();	
+			}
 		}
 		else {
+			
 			// just an list or array
-			res = new StringBuffer("<#list ").append(listItem).append(" as ").append(valueItem).append(">")
-				.append(" <#assign sn = ").append(valueItem).append("_index >")
-				.toString();
+			res = new StringBuffer("<#list ").append(listItem).append(" as ").append(valueItem).append(">").toString();
+//			if( !flag ){
+//				res = new StringBuffer(res).append(" <#assign sn = ").append(valueItem).append("_index >").toString();
+//			}
+				
 			
 			
 		}
 		
 		debug("in [compileForEachStart]: res="+res+", key="+keyItem);
-		
+		valueItem = replacePhpVars(valueItem);
 		foreachStack.push(valueItem);
+		listItem = replacePhpVars(listItem);
+		foreachListStack.push(listItem);
 		
 		return res;
 	}
@@ -470,7 +529,8 @@ public class DWTConverter {
 		}
 		else if(tag.charAt(0)=='$') {// 变量
 //			res = "\\${"+tag.substring(1)+"}";
-			res = tag;
+//			res = tag;
+			res = "$"+tag.replaceAll("\\$", "");
 		}
 		else if(tag.charAt(0)=='/') { // 结束 tag
 			tag = tag.substring(1);
@@ -483,6 +543,7 @@ public class DWTConverter {
 					res = "</#list>";
 				}
 				foreachStack.pop();
+				foreachListStack.pop();
 			} else if("literal".equals(tag)) {
 				res = "";
 			
@@ -530,7 +591,33 @@ public class DWTConverter {
 			}
 			else if("html_select_date".equals(tag_sel)) {
 				// TODO: html_select_date CLAUSE 
-				res = "TODO: html_select_date CLAUSE";
+				StringBuffer sb = new StringBuffer(
+						"<link type=\"text/css\" rel=\"stylesheet\" href=\"calendar/css/jscal2.css\" />\n" +
+						"<link type=\"text/css\" rel=\"stylesheet\" href=\"calendar/css/border-radius.css\" />\n" +
+						"<script src=\"calendar/jscal2.js\"></script>\n" +
+						"<script src=\"calendar/lang/cn.js\"></script>\n" +
+						"<script src=\"calendar/lang/en.js\"></script>\n" );
+				
+				String[] strs = StringUtils.split(tag);
+				String prefix = "calendar-inputField";
+				String time = "";
+				for(String str :strs){
+					if(str.startsWith("prefix")){
+						prefix = str.substring(7, str.length());
+						
+					}
+					else if(str.startsWith("time")){
+						time = str.substring(5,str.length());
+					}
+				}
+				sb.append("<input id=\""+prefix+"\" name=\""+prefix+"\" type=\"text\" readonly=\"readonly\" value=\""+time+"\" class=\"inputBg\"/>\n" +
+				"<button id=\"calendar-trigger\" type=\"button\">...</button>\n" +
+				"<script>Calendar.setup({\n" +
+				"trigger    : \"calendar-trigger\", \n" +
+				"inputField : \""+prefix+"\"\n" +
+				" });" +
+				"</script>\n");
+				res = sb.toString();
 			}
 			else if("html_radios".equals(tag_sel)) {
 				// TODO: html_radios CLAUSE
@@ -561,11 +648,13 @@ public class DWTConverter {
 		// TODO insert is difficult
 		String name = para.get("name");
 		if(para.get("name").equals("cart_info")) {
-			res = "TODO cart info";
+//			res = "TODO cart info";
+			res = "${insert_cart_info}";
 		} else if(para.get("name").equals("query_info")){
-			res = "TODO query info";
+			res = "${queryInfo}";
 		} else if(para.get("name").equals("history")){
-			res = "TODO history";
+//			res = "TODO history";
+			res = "${historyList}";
 		} else if(para.get("name").contains("comments")){
 			//TODO {insert name='comments' type=$type id=$id}
 //			 currently <#include "commentstype.ftl">
@@ -595,7 +684,13 @@ public class DWTConverter {
 			String selected = paras.get("selected")==null? "" : paras.get("selected").replace("$", "");
 			res.append("<#list ").append(mapName).append("?keys as key>").append("\r\n");
 			res.append("<#assign val = ").append(mapName).append(".get(key)>").append("\r\n");
-			res.append("<option value=\"${key}\" <#if ").append(selected).append(" == key>selected</#if> >${val}</option>").append("\r\n");
+//			res.append("<option value=\"${key}\" <#if ").append(selected).append(" == key>selected</#if> >${val}</option>").append("\r\n");
+			res.append("<option value=\"${key}\" ");
+			if(selected.equals("")){
+				res.append(" >${val}</option>").append("\r\n");
+			}else{
+				res.append("<#if ").append(selected).append(" == key>selected</#if> >${val}</option>").append("\r\n");
+			}
 			res.append("</#list>").append("\r\n");
 		} else if (paras.get("output") != null) {
 			// TODO　 htmlOptions with output
@@ -617,7 +712,7 @@ public class DWTConverter {
 		}
 		else {
 			
-		String regex = "\\$([a-zA-Z0-9_\\.]+)\\s*?";
+		String regex = "\\$([a-zA-Z0-9_\\.\\[\\]]+)\\s*?";
 //		String regex = "\\$(\\S+)\\s*?";
 		// replace single $ with blank
 		// however keep ${
@@ -631,7 +726,7 @@ public class DWTConverter {
 		res = replacePhpVars(res);
 		debug("in [replaceVars] after[replacePhpVars]: res = "+res);
 		
-		res2 = res.replace("|escape:html", "?html");
+		res2 = res.replace("}|escape:html", "?html}");
 		// TODO escape URL
 		res2 = res2.replace("|escape:url", "");
 		// TODO what does it mean in DWT?
@@ -640,6 +735,8 @@ public class DWTConverter {
 		// TODO what does it mean?
 		res2 = res2.replace(":u8Url", "");
 		
+		res2 = res2.replace(":decodeUrl", "");
+		res2 = res2.replace("|nl2br", "");
 		// TODO 
 //		${cfg.goodsattrStyle|default:1};
 		res2 = res2.replace("|default:0", "");
@@ -664,6 +761,64 @@ public class DWTConverter {
 			}
 		}, res2);
 		
+		regex = "smarty\\.foreach\\.(?:\\S*?)\\.last\\?\\?";
+		res3 = preg_replace(regex, new RegexReplaceCallback() {
+			public String execute(String... groups) {
+				if(!foreachStack.empty()) {
+					return foreachListStack.peek()+"?last??";
+				}else {
+					return "TODO: sth wrong here";
+				}
+			}
+		}, res3);
+		
+		regex = "smarty\\.foreach\\.(?:\\S*?)\\.first\\?\\?";
+		res3 = preg_replace(regex, new RegexReplaceCallback() {
+			public String execute(String... groups) {
+				if(!foreachStack.empty()) {
+					return foreachListStack.peek()+"?first";
+				}else {
+					return "TODO: sth wrong here";
+				}
+			}
+		}, res3);
+		
+		regex = "smarty\\.foreach\\.(?:\\S*?)\\.index";
+		res3 = preg_replace(regex, new RegexReplaceCallback() {
+			public String execute(String... groups) {
+				if(!foreachStack.empty()) {
+					return foreachStack.peek()+"_index";
+				}else {
+					return "TODO: sth wrong here";
+				}
+			}
+		}, res3);
+		
+		regex = "smarty\\.foreach\\.(?:\\S*?)\\.total";
+		res3 = preg_replace(regex, new RegexReplaceCallback() {
+			public String execute(String... groups) {
+				
+				if(!foreachStack.empty()) {
+					return foreachListStack.peek()+"?size";
+				}else {
+					return "TODO: sth wrong here";
+				}
+			}
+		}, res3);
+		
+		
+		regex = "smarty\\.foreach\\.(?:\\S*?)\\.iteration";
+		res3 = preg_replace(regex, new RegexReplaceCallback() {
+			public String execute(String... groups) {
+				//TODO 
+				System.out.println(groups);
+				if(!foreachStack.empty()) {
+					return "("+foreachStack.peek()+"_index + 1 )";
+				}else {
+					return "TODO: sth wrong here";
+				}
+			}
+		}, res3);
 
 		regex = "empty\\s*?\\(\\s*?([^\\)]*?)\\)";
 		res3 = preg_replace(regex, new RegexReplaceCallback() {
@@ -689,6 +844,11 @@ public class DWTConverter {
 //				return groups[0]+groups[1].toUpperCase();
 			}
 		}, res);
+		if(res2.indexOf("Index") > 0 ){
+			String str = res2.substring(0,res2.indexOf("Index"));
+			res2 = str + res.substring(res.indexOf("_index"));
+
+		}
 		return res2;
 	}
 	public String explode(String s) {

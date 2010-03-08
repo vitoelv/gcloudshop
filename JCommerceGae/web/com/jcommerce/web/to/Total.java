@@ -295,7 +295,9 @@ public class Total extends BaseWrapper{
 		this.willGetBonus = willGetBonus;
 	}
 
-
+	public String getWillGetIntegral(){
+		return this.integral+"";
+	}
 
 
 

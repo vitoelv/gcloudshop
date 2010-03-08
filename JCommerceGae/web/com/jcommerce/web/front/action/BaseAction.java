@@ -168,6 +168,8 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
         }else{
         	request.setAttribute("skype", new String[0]);
         }
+        request.setAttribute("ecsUsername", "ecsUsername");
+        request.setAttribute("ecsCssPath", "style.css");
         request.setAttribute("ecsVersion", "1.0");
         request.setAttribute("licensed", "licensed");
         request.setAttribute("feedUrl", "feedUrl");
@@ -210,14 +212,14 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
 	
     public void includePromotionInfo(HttpServletRequest request) {
     	// promotion_info.ftl
-        request.setAttribute("promotionInfo", new ArrayList());
+//        request.setAttribute("promotionInfo", new HashMap());
     }
 
 
 	public void includeCart() {
 		String res = LibInsert.insertCartInfo(getDefaultManager(), getRequest());
 		// TODO need convert insert clause to a variable during transform to .ftl
-		getRequest().setAttribute("insert_cart_info", res);
+		getRequest().setAttribute("insertCartInfo", res);
 	}
 	public void includeCategoryTree(HttpServletRequest request) {
 
@@ -516,6 +518,7 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
       includePageFooter(request);
       
       includePageHeader(request);
+      includeCart();
       setSessionUser(request);
       
       // just empty
@@ -523,6 +526,7 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
       request.setAttribute("cfg", shopConfig);
       // TODO
       request.setAttribute("shopName", shopConfig.get(CFG_KEY_SHOP_NAME));
+      request.setAttribute("pointsName", shopConfig.get(IShopConfigMeta.CFG_KEY_INTEGRAL_NAME));
       
 //      setShowMarketplace(request);
       	assignSmartyGlobal();

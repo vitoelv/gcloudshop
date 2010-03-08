@@ -26,8 +26,8 @@ public class TestDWTConverter extends TestCase {
 	
 	public void testConvert() {
 
-		String sBaseDir = "D:/JCommerce/ECShop_V2.6.1_UTF8_build1208/upload/themes/default";
-		String sDestDir = "D:/JCommerce/ECShop_V2.6.1_UTF8_build1208/upload/themes/freemarker";
+		String sBaseDir = "D:/JCommerce/ECShop_V2.6.1_UTF8_build1208/upload/themes/olomo";
+		String sDestDir = "D:/JCommerce/ECShop_V2.6.1_UTF8_build1208/upload/themes/freemarker-olomo2";
 		
 		
 		testConvertDir(sBaseDir, sDestDir);
@@ -138,6 +138,11 @@ public class TestDWTConverter extends TestCase {
 				if(fileName.endsWith(".dwt") || fileName.endsWith(".lbi")) {
 					String destFileName = fileName.replace("dwt", "ftl");
 					destFileName = destFileName.replace("lbi", "ftl");
+					
+					if(destFileName.equals("help.ftl")){
+						System.out.println("222");
+					}
+					
 					String source = IOUtils.toString(new FileInputStream(file), ENC);
 					String out = new DWTConverter().convert(source, fileName);
 					
