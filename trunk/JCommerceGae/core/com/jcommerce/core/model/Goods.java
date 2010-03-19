@@ -10,6 +10,7 @@ import javax.jdo.annotations.Persistent;
 import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableProperty;
 
+import com.google.appengine.api.datastore.Blob;
 import com.jcommerce.core.annotation.IsPK;
 
 /**  
@@ -150,7 +151,7 @@ public void setGoodsTypeId(String goodsTypeId) {
   private java.lang.String goodsBrief; 
 
   @Persistent
-  private java.lang.String goodsDesc; 
+  private Blob goodsDesc; 
 
   @Persistent
   private java.lang.String goodsThumb; 
@@ -408,14 +409,31 @@ public void setGoodsTypeId(String goodsTypeId) {
 
 
 
+//  @SearchableProperty(name = "description")
+//  public java.lang.String getGoodsDesc() {
+//    return goodsDesc;
+//  }
+//
+//  public void setGoodsDesc(java.lang.String newGoodsDesc) {
+//    goodsDesc = newGoodsDesc;
+//  }
   @SearchableProperty(name = "description")
-  public java.lang.String getGoodsDesc() {
-    return goodsDesc;
+  public String getGoodsDesc() {
+	  if(goodsDesc == null)
+		  return null;
+	  else {
+		   String desc = new String(goodsDesc.getBytes());
+		   System.out.println(desc);
+		   return desc;
+	  }
+//	  return goodsDesc;
   }
 
-  public void setGoodsDesc(java.lang.String newGoodsDesc) {
-    goodsDesc = newGoodsDesc;
+  public void setGoodsDesc(String newGoodsDesc) {
+    //goodsDesc = newGoodsDesc;
+	goodsDesc = new Blob(newGoodsDesc.getBytes());
   }
+
 
 
 
