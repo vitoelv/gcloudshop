@@ -45,6 +45,7 @@
     <menu name="Under Construction">
 
       <item name="Discussion" href="discussion.html" />
+      <item name="Comments" href="comments.html" /> 
       <!-- item name="Developer" href="developer.html" /-->      
     </menu>
     
