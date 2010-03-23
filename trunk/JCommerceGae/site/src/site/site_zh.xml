@@ -38,6 +38,7 @@
     
     <menu name="正在建设">
       <item name="讨论讨论" href="discussion.html" />      
+      <item name="留言板" href="comments.html" />   
       <!-- item name="开发者" href="developer.html" /-->
     </menu>
 	<!--
