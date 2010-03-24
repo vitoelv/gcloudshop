@@ -40,8 +40,8 @@
 <#include "library/category_tree.ftl">
 <#include "library/top10.ftl">
 <#include "library/promotion_info.ftl">
-<!--#include "library/auction.ftl"-->
-<!--#include "library/group_buy.ftl"-->
+<#include "library/auction.ftl">
+<#include "library/group_buy.ftl">
 <#include "library/order_query.ftl">
 <#include "library/invoice_query.ftl">
 <#include "library/vote_list.ftl">
@@ -60,7 +60,7 @@
         var swf_width=484;
         var swf_height=200;
         </script>
-        <script type="text/javascript" src="data/flashdata/default/cycle_image.js"></script>
+        <script type="text/javascript" src="data/flashdata/${flashTheme}/cycle_image.js"></script>
        </div>
        <!--news-->
        <div id="mallNews" class="f_r">
@@ -108,14 +108,14 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<#if  imgLinks??  ||  txtLinks??  >
+<#if ( imgLinks?? || txtLinks??  ) >
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
     <#list imgLinks as link>
     <a href="${link.url}" target="_blank" title="${link.name}"><img src="${link.logo}" alt="${link.name}" border="0" /></a>
     </#list>
-    <#if  txtLinks??  >
+    <#if ( txtLinks??  ) >
     <#list txtLinks as link>
     [<a href="${link.url}" target="_blank" title="${link.name}">${link.name}</a>]
     </#list>

@@ -5,7 +5,7 @@
 <meta name="Keywords" content="${keywords}" />
 <meta name="Description" content="${description}" />
 <meta name="Description" content="${description}" />
-<#if  autoRedirect??  >
+<#if ( autoRedirect??  ) >
 <meta http-equiv="refresh" content="3;URL=${message.href}" />
 </#if>
 <!-- TemplateBeginEditable name="doctitle" -->
@@ -35,7 +35,11 @@
       <!-- 分类 -->
       <select name="cat_id"><option value="0">${lang.allCategory}</option>${catList}</select>
       <!-- 品牌 -->
-      <select name="brand_id"><option value="0">${lang.allBrand}</option>TODO: htmlOptions CLAUSE</select>
+      <select name="brand_id"><option value="0">${lang.allBrand}</option><#list brandList?keys as key>
+<#assign val = brandList.get(key)>
+<option value="${key}"  >${val}</option>
+</#list>
+</select>
       <!-- 关键字 -->
       ${lang.keywords} <input type="text" name="keyword" class="inputBg"/>
       <!-- 搜索 -->
@@ -57,14 +61,14 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<#if  imgLinks??  ||  txtLinks??  >
+<#if ( imgLinks?? || txtLinks??  ) >
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
     <#list imgLinks as link>
     <a href="${link.url}" target="_blank" title="${link.name}"><img src="${link.logo}" alt="${link.name}" border="0" /></a>
     </#list>
-    <#if  txtLinks??  >
+    <#if ( txtLinks??  ) >
     <#list txtLinks as link>
     [<a href="${link.url}" target="_blank" title="${link.name}">${link.name}</a>] 
     </#list>

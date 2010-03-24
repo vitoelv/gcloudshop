@@ -1,4 +1,4 @@
-<#if  pictures??  >
+<#if ( pictures??  ) >
  <div class="clearfix">
       <span onmouseover="moveLeft()" onmousedown="clickLeft()" onmouseup="moveLeft()" onmouseout="scrollStop()"></span>
       <div class="gallery">
@@ -6,7 +6,7 @@
           <div id="demo1" style="float:left">
             <ul>
              <#list pictures as picture>
-            <li><a href="gallery.action?id=${id}&amp;img=${picture.imgId}" target="_blank"><img src="<#if  picture.thumbUrl??  >${picture.thumbUrl}<#else>${picture.imgUrl}</#if>" alt="${goods.goodsName}" class="B_blue" /></a>
+            <li><a href="gallery.action?id=${id}&amp;img=${picture.imgId}" target="_blank"><img src="<#if ( picture.thumbUrl??  ) >${picture.thumbUrl}<#else>${picture.imgUrl}</#if>" alt="${goods.goodsName}" class="B_blue" /></a>
             </li>
             </#list>
             </ul>

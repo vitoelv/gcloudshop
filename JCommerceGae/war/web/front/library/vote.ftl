@@ -1,4 +1,4 @@
-<#if  vote??  >
+<#if ( vote??  ) >
 <script type="text/javascript" src="js/transport.js"></script>
 
 
@@ -14,7 +14,7 @@
      </#list>
      <#list vote as title>
           <#list title.options as item>
-            <#if  title.canMulti  ==  0  >
+            <#if ( title.canMulti == 0  ) >
             <input type="checkbox" name="option_id" value="${item.optionId}" />
             ${item.optionName} (${item.percent}%)<br />
             <#else>
@@ -34,7 +34,7 @@
 </div>
 <div class="blank5"></div>
 <script type="text/javascript">
-{literal}
+
 /**
  * 处理用户的投票
  */

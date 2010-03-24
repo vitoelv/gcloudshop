@@ -1,4 +1,4 @@
-<#if  auctionList??  >
+<#if ( auctionList??  ) >
 <div class="box">
  <div class="box_1">
   <h3><span>${lang.auctionGoods}</span><a href="auction.action"><img src="images/more.gif"></a></h3>

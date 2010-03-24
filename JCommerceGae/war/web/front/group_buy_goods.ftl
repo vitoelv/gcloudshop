@@ -16,7 +16,7 @@
 <script type="text/javascript" src="js/lefttime.js"></script>
 
 <script type="text/javascript">
-  <#list lang.jsLanguages as item>
+  <#list lang.jsLanguages?keys as key> <#assign item = lang.jsLanguages.get(key)>
     var ${key} = "${item}";
   </#list>
 </script>
@@ -63,13 +63,13 @@
       </li>
       <li style="width:555px; line-height:23px;">
        ${lang.gbGoodsName} <font class="f5">${goods.goodsName?html}</font><br>
-      <#if  cfg.showGoodssn??  &&  0  >
+      <#if ( cfg.showGoodssn?? && 0  ) >
       ${lang.goodsSn} ${goods.goodsSn}<br>
       </#if>
-      <#if  cfg.goods.brandName??  &&  showBrand??  &&  0  >
+      <#if ( cfg.goods.brandName?? && showBrand?? && 0  ) >
       ${lang.goodsBrand} ${goods.brandName}<br>
       </#if>
-      <#if  cfg.showGoodsweight??  &&  0  >
+      <#if ( cfg.showGoodsweight?? && 0  ) >
       ${lang.goodsWeight} ${goods.goodsWeight}<br>
       </#if>
       ${lang.actTime}：${groupBuy.formatedStartDate} -- ${groupBuy.formatedEndDate}<br>
@@ -86,32 +86,32 @@
         </tr>
         </#list>
       </table>
-      <#if  groupBuy.deposit  >  0  >
+      <#if ( groupBuy.deposit > 0  ) >
       ${lang.gbDeposit} ${groupBuy.formatedDeposit}<br />
       </#if>
 
-      <#if  groupBuy.restrictAmount  >  0  >
+      <#if ( groupBuy.restrictAmount > 0  ) >
       ${lang.gbRestrictAmount} ${groupBuy.restrictAmount}<br />
       </#if>
 
-      <#if  groupBuy.giftIntegral  >  0  >
+      <#if ( groupBuy.giftIntegral > 0  ) >
       ${lang.gbGiftIntegral} ${groupBuy.giftIntegral}<br />
       </#if>
 
-      <#if  groupBuy.status  ==  0  >
+      <#if ( groupBuy.status == 0  ) >
       ${lang.gbsPreStart}
-      <#elseif  groupBuy.status  ==  1  >
+      <#elseif ( groupBuy.status == 1  ) >
       <font class="f4">${lang.gbsUnderWay}
       <span id="leftTime">${lang.pleaseWaiting}</span></font><br />
       ${lang.gbCurPrice} ${groupBuy.formatedCurPrice}<br />
       ${lang.gbValidGoods} ${groupBuy.validGoods}<br />
-      <#elseif  groupBuy.status  ==  2  >
+      <#elseif ( groupBuy.status == 2  ) >
       ${lang.gbsFinished} ${lang.gbCurPrice} ${groupBuy.formatedCurPrice} ${lang.gbValidGoods} ${groupBuy.validGoods}
-      <#elseif  groupBuy.status  ==  3  >
+      <#elseif ( groupBuy.status == 3  ) >
       ${lang.gbsSucceed}
       ${lang.gbFinalPrice} ${groupBuy.formatedTransPrice}<br />
       ${lang.gbFinalAmount} ${groupBuy.transAmount}
-      <#elseif  groupBuy.status  ==  4  >
+      <#elseif ( groupBuy.status == 4  ) >
       ${lang.gbsFail}
       </#if>
       </li>
@@ -126,19 +126,19 @@
     <div class="boxCenterList">
     <form action="group_buy.action?act=buy" method="post" name="ECS_FORMBUY" id="ECS_FORMBUY">
            <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
-              <#list specification as spec>
+              <#list specification?keys as specKey> <#assign spec = specification.get(specKey)>
               <tr>
                 <td width="22%" bgcolor="#FFFFFF">${spec.name}</td>
                 <td width="78%" bgcolor="#FFFFFF">
-                    <#if  cfg.goodsattrStyle  ==  1  >
-                    <#list spec.values as value>
+                    <#if ( cfg.goodsattrStyle == 1  ) >
+                    <#list spec.values?keys as key> <#assign value = spec.values.get(key)>
                     <label for="spec_value_${value.id}">
-                    <input type="radio" name="spec_${specKey}" value="${value.id}" id="spec_value_${value.id}" <#if  key  ==  0  >checked</#if> />
+                    <input type="radio" name="spec_${specKey}" value="${value.id}" id="spec_value_${value.id}" <#if ( key == 0  ) >checked</#if> />
                     ${value.label} </label>
                     </#list>
                   <#else>
                     <select name="spec_${specKey}" style="border:1px solid #ccc;">
-                    <#list spec.values as value>
+                    <#list spec.values?keys as key> <#assign value = spec.values.get(key)>
                     <option label="${value.label}" value="${value.id}">${value.label} </option>
                     </#list>
                     </select>
@@ -146,7 +146,7 @@
                 </td>
               </tr>
               </#list>
-              <#if  smarty.session.userId  >  0  >
+              <#if ( userId??  ) >
               <tr>
                 <td bgcolor="#FFFFFF"><strong>${lang.number}:</strong></td>
                 <td bgcolor="#FFFFFF">
@@ -190,14 +190,14 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<#if  imgLinks??  ||  txtLinks??  >
+<#if ( imgLinks?? || txtLinks??  ) >
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
     <#list imgLinks as link>
     <a href="${link.url}" target="_blank" title="${link.name}"><img src="${link.logo}" alt="${link.name}" border="0" /></a>
     </#list>
-    <#if  txtLinks??  >
+    <#if ( txtLinks??  ) >
     <#list txtLinks as link>
     [<a href="${link.url}" target="_blank" title="${link.name}">${link.name}</a>]
     </#list>
@@ -211,12 +211,12 @@
 <#include "library/page_footer.ftl">
 </body>
 <script type="text/javascript">
-var gmt_end_time = "${groupBuy.gmtEndDate|default:0}";
-<#list lang.goodsJs as item>
+var gmt_end_time = "${groupBuy.gmtEndDate}";
+<#list lang.goodsJs?keys as key> <#assign item = lang.goodsJs.get(key)>
 var ${key} = "${item}";
 </#list>
 var now_time = ${nowTime};
-{literal}
+
 
 onload = function()
 {

@@ -5,7 +5,7 @@
 <meta name="Keywords" content="${keywords}" />
 <meta name="Description" content="${description}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>${pageTitle}-${step}</title>
+<title>${pageTitle}</title>
 <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="icon" href="animated_favicon.gif" type="image/gif" />
@@ -26,7 +26,7 @@
 <!--当前位置 end-->
 <div class="blank"></div>
 <div class="block">
-    <#if  step  ==  "cart"  >
+    <#if ( step == "cart"  ) >
   <!-- 购物车内容 -->
   <div class="flowBox">
     <h6><span>${lang.goodsList}</span></h6>
@@ -34,10 +34,10 @@
            <table width="99%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
             <tr>
               <th bgcolor="#ffffff">${lang.goodsName}</th>
-							<#if  showGoodsAttribute  ==  1  >
+							<#if ( showGoodsAttribute == 1  ) >
               <th bgcolor="#ffffff">${lang.goodsAttr}</th>
               </#if>
-              <#if  showMarketprice??  >
+              <#if ( showMarketprice??  ) >
               <th bgcolor="#ffffff">${lang.marketPrices}</th>
               </#if>
               <th bgcolor="#ffffff">${lang.shopPrices}</th>
@@ -48,34 +48,34 @@
             <#list goodsList as goods>
             <tr>
               <td bgcolor="#ffffff" align="center">
-                <#if  goods.goodsId?? >
-                <#if  showGoodsThumb  ==  1  >
+                <#if ( goods.goodsId??  ) >
+                <#if ( showGoodsThumb == 1  ) >
                   <a href="goods.action?id=${goods.goodsId}" target="_blank" class="f6">${goods.goodsName}</a>
-                <#elseif  showGoodsThumb  ==  2  >
+                <#elseif ( showGoodsThumb == 2  ) >
                   <a href="goods.action?id=${goods.goodsId}" target="_blank"><img src="${goods.goodsThumb}" border="0" title="${goods.goodsName?html}" /></a>
                 <#else>
                   <a href="goods.action?id=${goods.goodsId}" target="_blank"><img src="${goods.goodsThumb}" border="0" title="${goods.goodsName?html}" /></a><br />
                   <a href="goods.action?id=${goods.goodsId}" target="_blank" class="f6">${goods.goodsName}</a>
                 </#if>
-                <#if  goods.parentId??  >
+                <#if ( goods.parentId??  ) >
                 <span style="color:#FF0000">（${lang.accessories}）</span>
                 </#if>
-                <#if  goods.isGift  >
+                <#if ( goods.isGift > 0  ) >
                 <span style="color:#FF0000">（${lang.largess}）</span>
                 </#if>
               <#else>
               ${goods.goodsName}
               </#if>
                 </td>
-							<#if  showGoodsAttribute  ==  1  >	
+							<#if ( showGoodsAttribute == 1  ) >	
               <td bgcolor="#ffffff">${goods.goodsAttr}</td>
 							</#if>
-              <#if  showMarketprice??  >
+              <#if ( showMarketprice??  ) >
               <td align="right" bgcolor="#ffffff">${goods.marketPrice}</td>
               </#if>
               <td align="right" bgcolor="#ffffff">${goods.goodsPrice}</td>
               <td align="right" bgcolor="#ffffff">
-                <#if  goods.goodsId??  &&  !goods.isGift  &&  !goods.parentId??  >
+                <#if ( goods.goodsId?? && goods.isGift == 0 && !goods.parentId??  ) >
                 <input type="text" name="goods_number[${goods.recId}]" id="goods_number_${goods.recId}" value="${goods.goodsNumber}" size="4" class="inputBg" style="text-align:center " />
                 <#else>
                 ${goods.goodsNumber}
@@ -84,7 +84,7 @@
               <td align="right" bgcolor="#ffffff">${goods.subtotal}</td>
               <td align="center" bgcolor="#ffffff">
                 <a href="javascript:if (confirm('${lang.dropGoodsConfirm}')) location.href='flow.action?step=drop_goods&amp;id=${goods.recId}'; " class="f6">${lang.drop}</a>
-                <#if  userId?? >
+                <#if ( userId??  ) >
                 <a href="javascript:if (confirm('${lang.dropGoodsConfirm}')) location.href='flow.action?step=drop_to_collect&amp;id=${goods.recId}'; " class="f6">${lang.dropToCollect}</a>
                 </#if>            </td>
             </tr>
@@ -93,8 +93,8 @@
           <table width="99%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
             <tr>
               <td bgcolor="#ffffff">
-              <#if  (discount  >  0)  >${yourDiscount}<br /></#if>
-              ${shoppingMoney}<#if  showMarketprice??  >，${marketPriceDesc}</#if>
+              <#if ( discount > 0  ) >${yourDiscount}<br /></#if>
+              ${shoppingMoney}<#if ( showMarketprice??  ) >，${marketPriceDesc}</#if>
               </td>
               <td align="right" bgcolor="#ffffff">
                 <input type="button" value="${lang.clearCart}" class="bnt_blue_1" onclick="location.href='flow.action?step=clear'" />
@@ -110,7 +110,7 @@
             <td bgcolor="#ffffff" align="right"><a href="flow.action?step=checkout"><img src="images/checkout.gif" alt="checkout" /></a></td>
           </tr>
         </table>
-       <#if  userId??  >
+       <#if ( userId??  ) >
        <script type="text/javascript" src="js/transport.js"></script>
 
        <script type="text/javascript" charset="utf-8">
@@ -160,7 +160,7 @@
 	<div class="blank"></div>
   </#if>
   
-  <#if  collectionGoods??  >
+  <#if ( collectionGoods??  ) >
   <div class="flowBox">
     <h6><span>我的收藏</span></h6>
     <table width="99%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
@@ -176,7 +176,7 @@
 	<div class="blank5"></div>
   </#if>
   
-  <#if  favourableList??  >
+  <#if ( favourableList??  ) >
   <div class="block">
     <div class="flowBox">
     <h6><span>优惠活动</span></h6>
@@ -204,14 +204,14 @@
               <td align="right" bgcolor="#ffffff">${lang.favourableType}</td>
               <td bgcolor="#ffffff">
                 <span class="STYLE1">${favourable.actTypeDesc}</span>
-                <#if  favourable.actType  ==  0  >
+                <#if ( favourable.actType == 0  ) >
                 <#list favourable.gift as gift><br />
                   <input type="checkbox" value="${gift.id}" name="gift[]" />
                   <a href="goods.action?id=${gift.id}" target="_blank" class="f6">${gift.name}</a> [${gift.formatedPrice}]
                 </#list>
               </#if>          </td>
             </tr>
-            <#if  favourable.available??  >
+            <#if ( favourable.available??  ) >
             <tr>
               <td align="right" bgcolor="#ffffff">&nbsp;</td>
               <td align="center" bgcolor="#ffffff"><input type="image" src="images/bnt_cat.gif" alt="Add to cart"  border="0" /></td>
@@ -227,19 +227,18 @@
   </#if>
 
 
-        <#if  step  ==  "consignee"  >
+        <#if ( step == "consignee"  ) >
         <!-- 开始收货人信息填写界面 -->
         <script type="text/javascript" src="js/region.js"></script>
 <script type="text/javascript" src="js/utils.js"></script>
 
         <script type="text/javascript">
           region.isAdmin = false;
+          <#list lang.flowJs?keys as key> <#assign item = lang.flowJs.get(key)>
+          var ${key} = "${item}";
+          </#list>
 
-<#list lang.flowJs?keys as key>
-<#assign item = lang.flowJs.get(key)>
-var ${key} = "${item}";
-</#list>
-
+          
           onload = function() {
             if (!document.all)
             {
@@ -249,30 +248,29 @@ var ${key} = "${item}";
           
         </script>
         <!-- 如果有收货地址，循环显示用户的收获地址 -->
-        <!-- #list consigneeList?keys as sn --> <!--#assign consignee = consigneeList[sn]--> 
-        <#list consigneeList as consignee> <#assign sn = consignee_index> 
+        <#list consigneeList as consignee> <#assign sn = consignee_index >
         <form action="flow.action" method="post" name="theForm" id="theForm" onsubmit="return checkConsignee(this)">
-        <#include "library/consignee.ftl">
+        <#include "Library/consignee.ftl">
         </form>
         </#list>
         </#if>
 
-        <#if  step  ==  "checkout"  >
+        <#if ( step == "checkout"  ) >
         <form action="flow.action" method="post" name="theForm" id="theForm" onsubmit="return checkOrderForm(this)">
         <script type="text/javascript">
         var flow_no_payment = "${lang.flowNoPayment}";
         var flow_no_shipping = "${lang.flowNoShipping}";
         </script>
         <div class="flowBox">
-        <h6><span>${lang.goodsList}</span><#if  allowEditCart??  ><a href="flow.action" class="f6">${lang.modify}</a></#if></h6>
+        <h6><span>${lang.goodsList}</span><#if ( allowEditCart??  ) ><a href="flow.action" class="f6">${lang.modify}</a></#if></h6>
         <table width="99%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
             <tr>
               <th bgcolor="#ffffff">${lang.goodsName}</th>
               <th bgcolor="#ffffff">${lang.goodsAttr}</th>
-              <#if  showMarketprice??  >
+              <#if ( showMarketprice??  ) >
               <th bgcolor="#ffffff">${lang.marketPrices}</th>
               </#if>
-              <th bgcolor="#ffffff"><#if  gbDeposit??  >${lang.deposit}<#else>${lang.shopPrices}</#if></th>
+              <th bgcolor="#ffffff"><#if ( gbDeposit??  ) >${lang.deposit}<#else>${lang.shopPrices}</#if></th>
               <th bgcolor="#ffffff">${lang.number}</th>
               <th bgcolor="#ffffff">${lang.subtotal}</th>
             </tr>
@@ -280,14 +278,14 @@ var ${key} = "${item}";
             <tr>
               <td bgcolor="#ffffff">
               <a href="goods.action?id=${goods.goodsId}" target="_blank" class="f6">${goods.goodsName}</a>
-                <#if  (goods.parentId??)  >
+                <#if ( goods.parentId??  ) >
                 <span style="color:#FF0000">（${lang.accessories}）</span>
-                <#elseif  goods.isGift  >
+                <#elseif ( goods.isGift > 0  ) >
                 <span style="color:#FF0000">（${lang.largess}）</span>
                 </#if>
               </td>
               <td bgcolor="#ffffff">${goods.goodsAttr}</td>
-              <#if  showMarketprice??  >
+              <#if ( showMarketprice??  ) >
               <td align="right" bgcolor="#ffffff">${goods.formatedMarketPrice}</td>
               </#if>
               <td bgcolor="#ffffff" align="right">${goods.formatedGoodsPrice}</td>
@@ -295,11 +293,11 @@ var ${key} = "${item}";
               <td bgcolor="#ffffff" align="right">${goods.formatedSubtotal}</td>
             </tr>
             </#list>
-            <#if  !gbDeposit??  >
+            <#if ( gbDeposit??  ) >
             <tr>
               <td bgcolor="#ffffff" colspan="7">
-              <#if  discount??  >${yourDiscount}<br /></#if>
-              ${shoppingMoney}<#if  showMarketprice??  >，${marketPriceDesc}</#if>
+              <#if ( discount > 0  ) >${yourDiscount}<br /></#if>
+              ${shoppingMoney}<#if ( showMarketprice??  ) >，${marketPriceDesc}</#if>
               </td>
             </tr>
             </#if>
@@ -315,7 +313,7 @@ var ${key} = "${item}";
               <td bgcolor="#ffffff">${lang.emailAddress}:</td>
               <td bgcolor="#ffffff">${consignee.email}</td>
             </tr>
-            <#if  (total.realGoodsCount  >  0)  >
+            <#if ( total.realGoodsCount > 0  ) >
             <tr>
               <td bgcolor="#ffffff">${lang.detailedAddress}:</td>
               <td bgcolor="#ffffff">${consignee.address} </td>
@@ -329,7 +327,7 @@ var ${key} = "${item}";
               <td bgcolor="#ffffff">${lang.backupPhone}:</td>
               <td bgcolor="#ffffff">${consignee.mobile}</td>
             </tr>
-             <#if  (total.realGoodsCount  >  0)  >
+             <#if ( total.realGoodsCount > 0  ) >
             <tr>
               <td bgcolor="#ffffff">${lang.signBuilding}:</td>
               <td bgcolor="#ffffff">${consignee.signBuilding} </td>
@@ -340,7 +338,7 @@ var ${key} = "${item}";
           </table>
       </div>
      <div class="blank"></div>
-    <#if  total.realGoodsCount  !=  0  >
+    <#if ( total.realGoodsCount != 0  ) >
     <div class="flowBox">
     <h6><span>${lang.shippingMethod}</span></h6>
     <table width="99%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd" id="shippingTable">
@@ -354,18 +352,18 @@ var ${key} = "${item}";
             </tr>
             <#list shippingList as shipping>
             <tr>
-              <td bgcolor="#ffffff" valign="top"><input name="shipping" type="radio" value="${shipping.shippingId}" <#if  order.shippingId  ==  shipping.shippingId  >checked="true"</#if> supportCod="${shipping.supportCod}" insure="${shipping.insure}" onclick="selectShipping(this)" />
+              <td bgcolor="#ffffff" valign="top"><input name="shipping" type="radio" value="${shipping.shippingId}" <#if ( order.shippingId == shipping.shippingId  ) >checked="true"</#if> supportCod="${shipping.supportCod}" insure="${shipping.insure}" onclick="selectShipping(this)" />
               </td>
               <td bgcolor="#ffffff" valign="top"><strong>${shipping.shippingName}</strong></td>
               <td bgcolor="#ffffff" valign="top">${shipping.shippingDesc}</td>
               <td bgcolor="#ffffff" align="right" valign="top">${shipping.formatShippingFee}</td>
               <td bgcolor="#ffffff" align="right" valign="top">${shipping.freeMoney}</td>
-              <td bgcolor="#ffffff" align="right" valign="top"><#if  shipping.insure  !=  "0"  >${shipping.insureFormated}<#else>${lang.notSupportInsure}</#if></td>
+              <td bgcolor="#ffffff" align="right" valign="top"><#if ( shipping.insure != "0"  ) >${shipping.insureFormated}<#else>${lang.notSupportInsure}</#if></td>
             </tr>
             </#list>
             <tr>
               <td colspan="6" bgcolor="#ffffff" align="right"><label for="ECS_NEEDINSURE">
-                <input name="need_insure" id="ECS_NEEDINSURE" type="checkbox"  onclick="selectInsure(this.checked)" value="1" <#if  order.needInsure??  >checked="true"</#if> <#if  insureDisabled??  >disabled="true"</#if>  />
+                <input name="need_insure" id="ECS_NEEDINSURE" type="checkbox"  onclick="selectInsure(this.checked)" value="1" <#if ( order.needInsure??  ) >checked="true"</#if> <#if ( insureDisabled??  ) >disabled="true"</#if>  />
                 ${lang.needInsure} </label></td>
             </tr>
           </table>
@@ -386,7 +384,7 @@ var ${key} = "${item}";
             <#list paymentList as payment>
             <!-- 循环支付方式 -->
             <tr>
-              <td valign="top" bgcolor="#ffffff"><input type="radio" name="payment" value="${payment.payId}" <#if  order.payId  ==  payment.payId  >checked</#if> isCod="${payment.isCod?string("yes", "no")}" onclick="selectPayment(this)" <#if  codDisabled??  &&  payment.isCod  >disabled="true"</#if>/></td>
+              <td valign="top" bgcolor="#ffffff"><input type="radio" name="payment" value="${payment.payId}" <#if ( order.payId == payment.payId  ) >checked</#if> isCod="${payment.isCod?string("yes", "no")}" onclick="selectPayment(this)" <#if ( codDisabled?? && payment.isCod  ) >disabled="true"</#if>/></td>
               <td valign="top" bgcolor="#ffffff"><strong>${payment.payName}</strong></td>
               <td valign="top" bgcolor="#ffffff">${payment.payDesc}</td>
               <td align="right" bgcolor="#ffffff" valign="top">${payment.formatPayFee}</td>
@@ -395,7 +393,7 @@ var ${key} = "${item}";
           </table>
     </div>
     <div class="blank"></div>
-          <#if  packList??  >
+          <#if ( packList??  ) >
           <div class="flowBox">
           <h6><span>${lang.goodsPackage}</span></h6>
           <table width="99%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd" id="packTable">
@@ -407,7 +405,7 @@ var ${key} = "${item}";
               <th scope="col" bgcolor="#ffffff">${lang.img}</th>
             </tr>
             <tr>
-              <td valign="top" bgcolor="#ffffff"><input type="radio" name="pack" value="0" <#if  order.packId  ==  0  >checked="true"</#if> onclick="selectPack(this)" /></td>
+              <td valign="top" bgcolor="#ffffff"><input type="radio" name="pack" value="0" <#if ( order.packId == 0  ) >checked="true"</#if> onclick="selectPack(this)" /></td>
               <td valign="top" bgcolor="#ffffff"><strong>${lang.noPack}</strong></td>
               <td valign="top" bgcolor="#ffffff">&nbsp;</td>
               <td valign="top" bgcolor="#ffffff">&nbsp;</td>
@@ -415,13 +413,13 @@ var ${key} = "${item}";
             </tr>
             <#list packList as pack>
             <tr>
-              <td valign="top" bgcolor="#ffffff"><input type="radio" name="pack" value="${pack.packId}" <#if  order.packId  ==  pack.packId??  >checked="true"</#if> onclick="selectPack(this)" />
+              <td valign="top" bgcolor="#ffffff"><input type="radio" name="pack" value="${pack.packId}" <#if ( order.packId == pack.packId  ) >checked="true"</#if> onclick="selectPack(this)" />
               </td>
               <td valign="top" bgcolor="#ffffff"><strong>${pack.packName}</strong></td>
               <td valign="top" bgcolor="#ffffff" align="right">${pack.formatPackFee}</td>
               <td valign="top" bgcolor="#ffffff" align="right">${pack.formatFreeMoney}</td>
               <td valign="top" bgcolor="#ffffff" align="center">
-                  <#if  pack.packImg??  >
+                  <#if ( pack.packImg??  ) >
                   <a href="data/packimg/${pack.packImg}" target="_blank" class="f6">${lang.view}</a>
                   <#else>
                   ${lang.no}
@@ -434,7 +432,7 @@ var ${key} = "${item}";
 			 <div class="blank"></div>
           </#if>
         
-          <#if  cardList??  >
+          <#if ( cardList??  ) >
           <div class="flowBox">
           <h6><span>${lang.goodsCard}</span></h6>
           <table width="99%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd" id="cardTable">
@@ -446,7 +444,7 @@ var ${key} = "${item}";
               <th bgcolor="#ffffff" scope="col">${lang.img}</th>
             </tr>
             <tr>
-              <td bgcolor="#ffffff" valign="top"><input type="radio" name="card" value="0" <#if  order.cardId  ==  0  >checked="true"</#if> onclick="selectCard(this)" /></td>
+              <td bgcolor="#ffffff" valign="top"><input type="radio" name="card" value="0" <#if ( order.cardId == 0  ) >checked="true"</#if> onclick="selectCard(this)" /></td>
               <td bgcolor="#ffffff" valign="top"><strong>${lang.noCard}</strong></td>
               <td bgcolor="#ffffff" valign="top">&nbsp;</td>
               <td bgcolor="#ffffff" valign="top">&nbsp;</td>
@@ -454,13 +452,13 @@ var ${key} = "${item}";
             </tr>
             <#list cardList as card>
             <tr>
-              <td valign="top" bgcolor="#ffffff"><input type="radio" name="card" value="${card.cardId}" <#if  order.cardId  ==  card.cardId??  >checked="true"</#if> onclick="selectCard(this)"  />
+              <td valign="top" bgcolor="#ffffff"><input type="radio" name="card" value="${card.cardId}" <#if ( order.cardId == card.cardId  ) >checked="true"</#if> onclick="selectCard(this)"  />
               </td>
               <td valign="top" bgcolor="#ffffff"><strong>${card.cardName}</strong></td>
               <td valign="top" align="right" bgcolor="#ffffff">${card.formatCardFee}</td>
               <td valign="top" align="right" bgcolor="#ffffff">${card.formatFreeMoney}</td>
               <td valign="top" align="center" bgcolor="#ffffff">
-                  <#if  card.cardImg??  >
+                  <#if ( card.cardImg??  ) >
                   <a href="data/cardimg/${card.cardImg}" target="_blank" class="f6">${lang.view}</a>
                   <#else>
                   ${lang.no}
@@ -481,29 +479,29 @@ var ${key} = "${item}";
       <div class="flowBox">
     <h6><span>${lang.otherInfo}</span></h6>
       <table width="99%" align="center" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
-            <#if  allowUseSurplus??  >
+            <#if ( allowUseSurplus??  ) >
             <tr>
               <td width="20%" bgcolor="#ffffff"><strong>${lang.useSurplus}: </strong></td>
-              <td bgcolor="#ffffff"><input name="surplus" type="text" class="inputBg" id="ECS_SURPLUS" size="10" value="${order.surplus}" onblur="changeSurplus(this.value)" <#if  disableSurplus??  >disabled="disabled"</#if> />
+              <td bgcolor="#ffffff"><input name="surplus" type="text" class="inputBg" id="ECS_SURPLUS" size="10" value="${order.surplus}" onblur="changeSurplus(this.value)" <#if ( disableSurplus??  ) >disabled="disabled"</#if> />
               ${lang.yourSurplus}${yourSurplus} <span id="ECS_SURPLUS_NOTICE" class="notice"></span></td>
             </tr>
             </#if>
-            <#if  allowUseIntegral??  >
+            <#if ( allowUseIntegral??  ) >
             <tr>
               <td bgcolor="#ffffff"><strong>${lang.useIntegral}</strong></td>
               <td bgcolor="#ffffff"><input name="integral" type="text" class="input" id="ECS_INTEGRAL" onblur="changeIntegral(this.value)" value="${order.integral}" size="10" />
               ${lang.canUseIntegral}:${yourIntegral} ${pointsName}，${lang.noworderCanIntegral}${orderMaxIntegral}  ${pointsName}. <span id="ECS_INTEGRAL_NOTICE" class="notice"></span></td>
             </tr>
             </#if>
-            <#if  allowUseBonus??  >
+            <#if ( allowUseBonus??  ) >
             <tr>
               <td bgcolor="#ffffff"><strong>${lang.useBonus}:</strong></td>
               <td bgcolor="#ffffff">
                 ${lang.selectBonus}
                 <select name="bonus" onchange="changeBonus(this.value)" id="ECS_BONUS" style="border:1px solid #ccc;">
-                  <option value="0" <#if  order.bonusId  ==  0  >selected</#if>>${lang.pleaseSelect}</option>
+                  <option value="0" <#if ( order.bonusId == 0  ) >selected</#if>>${lang.pleaseSelect}</option>
                   <#list bonusList as bonus>
-                  <option value="${bonus.bonusId}" <#if  order.bonusId  ==  bonus.bonusId??  >selected</#if>>${bonus.typeName}[${bonus.bonusMoneyFormated}]</option>
+                  <option value="${bonus.bonusId}" <#if ( order.bonusId == bonus.bonusId  ) >selected</#if>>${bonus.typeName}[${bonus.bonusMoneyFormated}]</option>
                   </#list>
                 </select>
 
@@ -513,23 +511,27 @@ var ${key} = "${item}";
               </td>
             </tr>
             </#if>
-            <#if  invContentList??  >
+            <#if ( invContentList??  ) >
             <tr>
               <td bgcolor="#ffffff"><strong>${lang.invoice}:</strong>
-                <input name="need_inv" type="checkbox"  class="input" id="ECS_NEEDINV" onclick="changeNeedInv()" value="1" <#if  order.needInv??  >checked="true"</#if> />
+                <input name="need_inv" type="checkbox"  class="input" id="ECS_NEEDINV" onclick="changeNeedInv()" value="1" <#if ( order.needInv??  ) >checked="true"</#if> />
               </td>
               <td bgcolor="#ffffff">
-                <#if  invTypeList??  >
+                <#if ( invTypeList??  ) >
                 ${lang.invoiceType}
-                <select name="inv_type" id="ECS_INVTYPE" <#if  order.needInv  !=  1  >disabled="true"</#if> onchange="changeNeedInv()" style="border:1px solid #ccc;">
-                TODO: htmlOptions CLAUSE</select>
+                <select name="inv_type" id="ECS_INVTYPE" <#if ( order.needInv != 1  ) >disabled="true"</#if> onchange="changeNeedInv()" style="border:1px solid #ccc;">
+                <#list invTypeList?keys as key>
+<#assign val = invTypeList.get(key)>
+<option value="${key}" <#if order.invType == key>selected</#if> >${val}</option>
+</#list>
+</select>
                 </#if>
                 ${lang.invoiceTitle}
-                <input name="inv_payee" type="text"  class="input" id="ECS_INVPAYEE" size="20" <#if  !order.needInv??  >disabled="true"</#if> value="${order.invPayee}" onblur="changeNeedInv()" />
+                <input name="inv_payee" type="text"  class="input" id="ECS_INVPAYEE" size="20" <#if ( !order.needInv  ) >disabled="true"</#if> value="${order.invPayee}" onblur="changeNeedInv()" />
                 ${lang.invoiceContent}
-              <select name="inv_content" id="ECS_INVCONTENT" <#if  order.needInv  !=  1  >disabled="true"</#if>  onchange="changeNeedInv()" style="border:1px solid #ccc;">
+              <select name="inv_content" id="ECS_INVCONTENT" <#if ( order.needInv != 1  ) >disabled="true"</#if>  onchange="changeNeedInv()" style="border:1px solid #ccc;">
 
-                TODO: htmlOptions CLAUSE
+                TODO htmlOptions with output
 
                 </select></td>
             </tr>
@@ -538,12 +540,12 @@ var ${key} = "${item}";
               <td valign="top" bgcolor="#ffffff"><strong>${lang.orderPostscript}:</strong></td>
               <td bgcolor="#ffffff"><textarea name="postscript" cols="80" rows="3" id="postscript" style="border:1px solid #ccc;">${order.postscript}</textarea></td>
             </tr>
-            <#if  howOosList??  >
+            <#if ( howOosList??  ) >
             <tr>
               <td bgcolor="#ffffff"><strong>${lang.bookingProcess}:</strong></td>
-              <td bgcolor="#ffffff"><#list how_oos_list as how_oos_name>
+              <td bgcolor="#ffffff"><#list howOosList as howOosName> <#assign howOosId = howOosName_index >
                 <label>
-                <input name="how_oos" type="radio" value="${howOosId}" <#if  order.howOos  ==  howOosId??  >checked</#if> onclick="changeOOS(this)" />
+                <input name="how_oos" type="radio" value="${howOosId}" <#if ( order.howOos == howOosId  ) >checked</#if> onclick="changeOOS(this)" />
                 ${howOosName}</label>
                 </#list>
               </td>
@@ -554,7 +556,7 @@ var ${key} = "${item}";
     <div class="blank"></div>
     <div class="flowBox">
     <h6><span>${lang.feeTotal}</span></h6>
-          <#include "library/order_total.ftl">
+          <#include "Library/order_total.ftl">
            <div align="center" style="margin:8px auto;">
             <input type="image" src="images/bnt_subOrder.gif" />
             <input type="hidden" name="step" value="done" />
@@ -563,41 +565,41 @@ var ${key} = "${item}";
     </form>
         </#if>
 
-        <#if  step  ==  "done"  >
+        <#if ( step == "done"  ) >
         <!-- 订单提交成功 -->
         <div class="flowBox" style="margin:30px auto 70px auto;">
          <h6 style="text-align:center; height:30px; line-height:30px;">${lang.rememberOrderNumber}: <font style="color:red">${order.orderSn}</font></h6>
           <table width="99%" align="center" border="0" cellpadding="15" cellspacing="0" bgcolor="#fff" style="border:1px solid #ddd; margin:20px auto;" >
             <tr>
               <td align="center" bgcolor="#FFFFFF">
-              <#if  order.shippingName??  >${lang.selectShipping}: <strong>${order.shippingName}</strong>，</#if>${lang.selectPayment}: <strong>${order.payName}</strong>。${lang.orderAmount}: <strong>${total.amountFormated}</strong>
+              <#if ( order.shippingName??  ) >${lang.selectShipping}: <strong>${order.shippingName}</strong>，</#if>${lang.selectPayment}: <strong>${order.payName}</strong>。${lang.orderAmount}: <strong>${total.amountFormated}</strong>
               </td>
             </tr>
             <tr>
               <td align="center" bgcolor="#FFFFFF">${order.payDesc}</td>
             </tr>
-            <#if  payOnline??  >
+            <#if ( payOnline??  ) >
             <!-- 如果是线上支付则显示支付按钮 -->
             <tr>
               <td align="center" bgcolor="#FFFFFF">${payOnline}</td>
             </tr>
             </#if>
           </table>
-          <#if  virtualCard??  >
+          <#if ( virtualCard??  ) >
           <div style="text-align:center;overflow:hidden;border:1px solid #E2C822;background:#FFF9D7;margin:10px;padding:10px 50px 30px;">
           <#list virtualCard as vgoods>
             <h3 style="color:#2359B1; font-size:12px;">${vgoods.goodsName}</h3>
             <#list vgoods.info as card>
               <ul style="list-style:none;padding:0;margin:0;clear:both">
-              <#if  card.cardSn??  >
+              <#if ( card.cardSn??  ) >
               <li style="margin-right:50px;float:left;">
               <strong>${lang.cardSn}:</strong><span style="color:red;">${card.cardSn}</span>
               </li></#if>
-              <#if  card.cardPassword??  >
+              <#if ( card.cardPassword??  ) >
               <li style="margin-right:50px;float:left;">
               <strong>${lang.cardPassword}:</strong><span style="color:red;">${card.cardPassword}</span>
               </li></#if>
-              <#if  card.endDate??  >
+              <#if ( card.endDate??  ) >
               <li style="float:left;">
               <strong>${lang.endDate}:</strong>${card.endDate}
               </li></#if>
@@ -609,7 +611,7 @@ var ${key} = "${item}";
           <p style="text-align:center; margin-bottom:20px;">${orderSubmitBack}</p>
         </div>
         </#if>
-        <#if  step  ==  "login"  >
+        <#if ( step == "login"  ) >
         <script type="text/javascript" src="js/utils.js"></script>
 
         <script type="text/javascript">
@@ -688,7 +690,7 @@ var ${key} = "${item}";
                     <td bgcolor="#ffffff"><div align="right"><strong>${lang.password}</strong></div></td>
                     <td bgcolor="#ffffff"><input name="password" class="inputBg" type="password" id="password" /></td>
                   </tr>
-                  <#if  enabledLoginCaptcha??  >
+                  <#if ( enabledLoginCaptcha??  ) >
                   <tr>
                     <td bgcolor="#ffffff"><div align="right"><strong>${lang.commentCaptcha}:</strong></div></td>
                     <td bgcolor="#ffffff"><input type="text" size="8" name="captcha" class="inputBg" />
@@ -701,7 +703,7 @@ var ${key} = "${item}";
                   <tr>
                     <td bgcolor="#ffffff" colspan="2"><div align="center">
                         <input type="submit" class="bnt_blue" name="login" value="${lang.forthwithLogin}" />
-                        <#if  anonymousBuy  ==  1  >
+                        <#if ( anonymousBuy == 1  ) >
                         <input type="button" class="bnt_blue_2" value="${lang.directShopping}" onclick="location.href='flow.action?step=consignee&amp;direct_shopping=1'" />
                         </#if>
                         <input name="act" type="hidden" value="signin" />
@@ -731,7 +733,7 @@ var ${key} = "${item}";
                     <td bgcolor="#ffffff"><div align="right"><strong>${lang.confirmPassword}</strong></div></td>
                     <td bgcolor="#ffffff"><input name="confirm_password" class="inputBg" type="password" id="confirm_password" /></td>
                   </tr>
-                  <#if  enabledRegisterCaptcha??  >
+                  <#if ( enabledRegisterCaptcha??  ) >
                   <tr>
                     <td bgcolor="#ffffff"><div align="right"><strong>${lang.commentCaptcha}:</strong></div></td>
                     <td bgcolor="#ffffff"><input type="text" size="8" name="captcha" class="inputBg" />
@@ -748,7 +750,7 @@ var ${key} = "${item}";
               </form>
               </td>
           </tr>
-          <#if  needRechooseGift??  >
+          <#if ( needRechooseGift??  ) >
           <tr>
             <td colspan="2" align="center" style="border-top:1px #ccc solid; padding:5px; color:red;">${lang.giftRemainder}</td>
           </tr>
@@ -774,14 +776,14 @@ var ${key} = "${item}";
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<#if  imgLinks??  ||  txtLinks??  >
+<#if ( imgLinks?? || txtLinks??  ) >
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
     <#list imgLinks as link>
     <a href="${link.url}" target="_blank" title="${link.name}"><img src="${link.logo}" alt="${link.name}" border="0" /></a>
     </#list>
-    <#if  txtLinks??  >
+    <#if ( txtLinks??  ) >
     <#list txtLinks as link>
     [<a href="${link.url}" target="_blank" title="${link.name}">${link.name}</a>]
     </#list>

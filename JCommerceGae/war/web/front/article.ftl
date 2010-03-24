@@ -48,19 +48,19 @@
          <div class="tc" style="padding:8px;">
          <font class="f5 f6">${article.title?html}</font><br /><font class="f3">${article.author?html} / ${article.addTime}</font>
          </div>
-         <#if  article.content??  >
+         <#if ( article.content??  ) >
           ${article.content}
          </#if>
-         <#if  article.openType  ==  2  ||  article.openType  ==  1  ><br />
+         <#if ( article.openType == 2 || article.openType == 1  ) ><br />
          <div><a href="${article.fileUrl}" target="_blank">${lang.relativeFile}</a></div>
           </#if>
          <div style="padding:8px; margin-top:15px; text-align:left; border-top:1px solid #ccc;">
          <!-- 上一篇文章 -->
-          <#if  nextArticle??  >
+          <#if ( nextArticle??  ) >
             ${lang.nextArticle}:<a href="${nextArticle.url}" class="f6">${nextArticle.title}</a><br />
           </#if>
           <!-- 下一篇文章 -->
-          <#if  prevArticle??  >
+          <#if ( prevArticle??  ) >
             ${lang.prevArticle}:<a href="${prevArticle.url}" class="f6">${prevArticle.title}</a>
           </#if>
          </div>
@@ -85,14 +85,14 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<#if  imgLinks??  ||  txtLinks??  >
+<#if ( imgLinks?? || txtLinks??  ) >
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
     <#list imgLinks as link>
     <a href="${link.url}" target="_blank" title="${link.name}"><img src="${link.logo}" alt="${link.name}" border="0" /></a>
     </#list>
-    <#if  txtLinks??  >
+    <#if ( txtLinks??  ) >
     <#list txtLinks as link>
     [<a href="${link.url}" target="_blank" title="${link.name}">${link.name}</a>]
     </#list>

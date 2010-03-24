@@ -30,16 +30,16 @@
     <h3><span>${lang.allTags}</span></h3>
     <div class="boxCenterList RelaArticle">
       <p class="f_red" style="text-decoration:none;">&nbsp;&nbsp; ${lang.tagCloudDesc} &nbsp;&nbsp;</p>
-    <#if  tags??  >
+    <#if ( tags??  ) >
           <#list tags as tag>
           <span style="font-size:${tag.size}; line-height:36px;"> <a href="${tag.url}" style="color:${tag.color}">
-          <#if  tag.bold??  >
+          <#if ( tag.bold??  ) >
           <b>${tag.tagWords?html}</b>
           <#else>
           ${tag.tagWords?html}
           </#if>
           </a>
-          <#if  tagsFrom  ==  'user'  >
+          <#if ( tagsFrom == 'user'  ) >
           <a href="user.action?act=act_del_tag&amp;tag_words=${tag.tagWords}&amp;uid=${tag.userId}" title="${lang.drop}"> <img src="images/drop.gif" alt="${lang.drop}" /> </a>&nbsp;&nbsp;
           </#if>
           </span>
@@ -63,14 +63,14 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<#if  imgLinks??  ||  txtLinks??  >
+<#if ( imgLinks?? || txtLinks??  ) >
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
     <#list imgLinks as link>
     <a href="${link.url}" target="_blank" title="${link.name}"><img src="${link.logo}" alt="${link.name}" border="0" /></a>
     </#list>
-    <#if  txtLinks??  >
+    <#if ( txtLinks??  ) >
     <#list txtLinks as link>
     [<a href="${link.url}" target="_blank" title="${link.name}">${link.name}</a>]
     </#list>

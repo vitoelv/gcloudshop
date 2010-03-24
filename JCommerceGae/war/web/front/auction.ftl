@@ -15,7 +15,7 @@
 <script type="text/javascript" src="js/lefttime.js"></script>
 
 <script type="text/javascript">
-  <#list lang.jsLanguages as item>
+  <#list lang.jsLanguages?keys as key> <#assign item = lang.jsLanguages.get(key)>
     var ${key} = "${item}";
   </#list>
 </script>
@@ -67,15 +67,15 @@
       起止时间：${auction.startTime} -- ${auction.endTime}<br>
       ${lang.auStartPrice}：${auction.formatedStartPrice}<br>
       ${lang.auAmplitude}：${auction.formatedAmplitude}<br>
-      <#if  auction.endPrice  >  0  >
+      <#if ( auction.endPrice > 0  ) >
       ${lang.auEndPrice}：${auction.formatedEndPrice}<br>
       </#if>
-      <#if  auction.deposit  >  0  >
+      <#if ( auction.deposit > 0  ) >
       ${lang.auDeposit}：${auction.formatedDeposit}<br>
       </#if>
-      <#if  auction.statusNo  ==  0  >
+      <#if ( auction.statusNo == 0  ) >
       ${lang.auPreStart}
-      <#elseif  auction.statusNo  ==  1  >
+      <#elseif ( auction.statusNo == 1  ) >
       <font class="f4">${lang.auUnderWay}<span id="leftTime">${lang.pleaseWaiting}</span></font><br />
       ${lang.auIWantBid}：
       <input name="price" type="text" class="inputBg" id="price" size="8" />
@@ -83,7 +83,7 @@
       <input name="act" type="hidden" value="bid" />
       <input name="id" type="hidden" value="${auction.actId}" /><br />
       <#else>
-      <#if  auction.isWinner??  >
+      <#if ( auction.isWinner??  ) >
       <span class="f_red">${lang.auIsWinner}</span><br />
       <input name="buy" type="submit" class="bnt_blue_1" value="${lang.buttonBuy}" />
       <input name="act" type="hidden" value="buy" />
@@ -103,7 +103,7 @@
    <div class="box_1">
     <h3><span>${lang.activityIntro}</span></h3>
     <div class="boxCenterList">
-    ${auction.actDesc?html|nl2br}
+    ${auction.actDesc?html}
     </div>
    </div>
   </div>
@@ -124,7 +124,7 @@
         <td align="center" bgcolor="#ffffff">${log.userName}</td>
         <td align="center" bgcolor="#ffffff">${log.formatedBidPrice}</td>
         <td align="center" bgcolor="#ffffff">${log.bidTime}</td>
-        <td align="center" bgcolor="#ffffff"><#if  smarty.foreach.feBidLog.first??  > ${lang.auBidOk}<#else>&nbsp;</#if></td>
+        <td align="center" bgcolor="#ffffff"><#if ( auctionLog?first  ) > ${lang.auBidOk}<#else>&nbsp;</#if></td>
       </tr>
     
     <tr>
@@ -150,14 +150,14 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<#if  imgLinks??  ||  txtLinks??  >
+<#if ( imgLinks?? || txtLinks??  ) >
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
     <#list imgLinks as link>
     <a href="${link.url}" target="_blank" title="${link.name}"><img src="${link.logo}" alt="${link.name}" border="0" /></a>
     </#list>
-    <#if  txtLinks??  >
+    <#if ( txtLinks??  ) >
     <#list txtLinks as link>
     [<a href="${link.url}" target="_blank" title="${link.name}">${link.name}</a>]
     </#list>
@@ -171,12 +171,12 @@
 <#include "library/page_footer.ftl">
 </body>
 <script type="text/javascript">
-var gmt_end_time = "${auction.gmtEndTime|default:0}";
-<#list lang.goodsJs as item>
+var gmt_end_time = "${auction.gmtEndTime}";
+<#list lang.goodsJs?keys as key> <#assign item = lang.goodsJs.get(key)>
 var ${key} = "${item}";
 var now_time = ${nowTime};
 </#list>
-{literal}
+
 
 onload = function()
 {

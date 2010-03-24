@@ -4,13 +4,13 @@
       <h3><span class="text">${lang.userComment}</span>(${lang.total}<font class="f1">${pager.recordCount}</font>${lang.userCommentNum})</h3>
       <div class="boxCenterList clearfix" style="height:1%;">
        <ul class="comments">
-       <#if  comments??  >
+       <#if ( comments??  ) >
        <#list comments as comment>
         <li class="word">
-        <font class="f2"><#if  comment.username??  >${comment.username?html}<#else>${lang.anonymous}</#if></font> <font class="f3">( ${comment.addTime} )</font><br />
+        <font class="f2"><#if ( comment.username??  ) >${comment.username?html}<#else>${lang.anonymous}</#if></font> <font class="f3">( ${comment.addTime} )</font><br />
         <img src="images/stars${comment.rank}.gif" alt="${comment.commentRank}" />
         <p>${comment.content}</p>
-				<#if  comment.reContent??  >
+				<#if ( comment.reContent??  ) >
         <p><font class="f1">${lang.adminUsername}</font>${comment.reContent}</p>
 				</#if>
         </li>
@@ -22,10 +22,10 @@
        <!--翻页 start-->
        <div id="pagebar" class="f_r">
         <form name="selectPageForm" action="${smarty.server.PHP_SELF}" method="get">
-        <#if  pager.styleid  ==  0  >
+        <#if ( pager.styleid == 0  ) >
         <div id="pager">
           ${lang.pager_1}${pager.recordCount}${lang.pager_2}${lang.pager_3}${pager.pageCount}${lang.pager_4} <span> <a href="${pager.pageFirst}">${lang.pageFirst}</a> <a href="${pager.pagePrev}">${lang.pagePrev}</a> <a href="${pager.pageNext}">${lang.pageNext}</a> <a href="${pager.pageLast}">${lang.pageLast}</a> </span>
-						<#list pager.search?keys as key> <#assign item = pager.search.get(key)>
+            <#list pager.search?keys as key> <#assign item = pager.search.get(key)>
             <input type="hidden" name="${key}" value="${item}" />
             </#list>
         </div>
@@ -34,19 +34,19 @@
         <!--翻页 start-->
          <div id="pager" class="pagebar">
           <span class="f_l f6" style="margin-right:10px;">${lang.total} <b>${pager.recordCount}</b> ${lang.userCommentNum}</span>
-          <#if  pager.pageFirst??  ><a href="${pager.pageFirst}">1 ...</a></#if>
-          <#if  pager.pagePrev??  ><a class="prev" href="${pager.pagePrev}">${lang.pagePrev}</a></#if>
+          <#if ( pager.pageFirst??  ) ><a href="${pager.pageFirst}">1 ...</a></#if>
+          <#if ( pager.pagePrev??  ) ><a class="prev" href="${pager.pagePrev}">${lang.pagePrev}</a></#if>
           <#list pager.pageNumber?keys as key> <#assign item = pager.pageNumber.get(key)>
-                <#if  pager.page  ==  key  >
+                <#if ( pager.page == key  ) >
                 <span class="page_now">${key}</span>
                 <#else>
                 <a href="${item}">[${key}]</a>
                 </#if>
             </#list>
 
-          <#if  pager.pageNext??  ><a class="next" href="${pager.pageNext}">${lang.pageNext}</a></#if>
-          <#if  pager.pageLast??  ><a class="last" href="${pager.pageLast}">...${pager.pageCount}</a></#if>
-          <#if  pager.pageKbd??  >
+          <#if ( pager.pageNext??  ) ><a class="next" href="${pager.pageNext}">${lang.pageNext}</a></#if>
+          <#if ( pager.pageLast??  ) ><a class="last" href="${pager.pageLast}">...${pager.pageCount}</a></#if>
+          <#if ( pager.pageKbd??  ) >
             <#list pager.search?keys as key> <#assign item = pager.search.get(key)>
             <input type="hidden" name="${key}" value="${item}" />
             </#list>
@@ -76,7 +76,7 @@
        <table width="710" border="0" cellspacing="5" cellpadding="0">
         <tr>
           <td width="64" align="right">${lang.username}：</td>
-          <td width="631"<#if  !enabledCaptcha  ></#if>><#if  smarty.session.userName??  >${smarty.session.userName}<#else>${lang.anonymous}</#if></td>
+          <td width="631"<#if ( !enabledCaptcha  ) ></#if>><#if ( smarty.session.userName??  ) >${smarty.session.userName}<#else>${lang.anonymous}</#if></td>
         </tr>
         <tr>
           <td align="right">E-mail：</td>
@@ -104,7 +104,7 @@
         </tr>
         <tr>
           <td colspan="2">
-          <#if  enabledCaptcha  >
+          <#if ( enabledCaptcha??  ) >
           <div style="padding-left:15px; text-align:left; float:left;">
           ${lang.commentCaptcha}：<input type="text" name="captcha"  class="inputBorder" style="width:50px; margin-left:5px;"/>
           <img src="captcha.action?${rand}" alt="captcha" onClick="this.src='captcha.action?'+Math.random()" class="captcha">
@@ -183,7 +183,6 @@ function submitComment(frm)
       alert(captcha_not_null);
       return false;
    }
-
 
    Ajax.call('comment.action', 'cmt=' + cmt.toJSONString(), commentResponse, 'POST', 'JSON');
    return false;

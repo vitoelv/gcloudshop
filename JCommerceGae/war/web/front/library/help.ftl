@@ -1,4 +1,4 @@
-<#if  helps??  >
+<#if ( helps??  ) >
 <#list helps as helpCat>
 <dl>
   <dt>${helpCat.catName}</dt>

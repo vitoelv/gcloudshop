@@ -38,7 +38,7 @@
       <td width="200" bgcolor="#ffffff">${val.startTime}</td>
       <th bgcolor="#ffffff">${lang.labelMaxAmount}</th>
       <td bgcolor="#ffffff">
-        <#if  val.maxAmount  >  0  >
+        <#if ( val.maxAmount > 0  ) >
         ${val.maxAmount}
         <#else>
         ${lang.nolimit}
@@ -55,7 +55,7 @@
       <th bgcolor="#ffffff">${lang.labelActRange}</th>
       <td bgcolor="#ffffff">
         ${val.actRange}
-        <#if  val.actRange  !=  lang.farAll??  >
+        <#if ( val.actRange != lang.farAll  ) >
         :<br />
         <#list val.actRangeExt as ext>
         <a href="${val.program}${ext.id}" taget="_blank" class="f6"><span class="f_user_info"><u>${ext.name}</u></span></a>
@@ -72,10 +72,10 @@
     <tr>
       <th bgcolor="#ffffff">${lang.labelActType}</th>
       <td colspan="3" bgcolor="#ffffff">
-        ${val.actType}<#if  val.actType  !=  lang.fatGoods??  >${val.actTypeExt}</#if>
+        ${val.actType}<#if ( val.actType != lang.fatGoods  ) >${val.actTypeExt}</#if>
       </td>
     </tr>
-    <#if  val.gift??  >
+    <#if ( val.gift??  ) >
     <tr>
       <td colspan="4" bgcolor="#ffffff">
       <#list val.gift as goods>
@@ -88,7 +88,7 @@
         </tr>
         <tr>
           <td align="center">
-            <#if  goods.price  >  0  >
+            <#if ( goods.price > 0  ) >
             ${goods.price}${lang.unitYuan}
             <#else>
             ${lang.forFree}
@@ -116,14 +116,14 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<#if  imgLinks??  ||  txtLinks??  >
+<#if ( imgLinks?? || txtLinks??  ) >
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
     <#list imgLinks as link>
     <a href="${link.url}" target="_blank" title="${link.name}"><img src="${link.logo}" alt="${link.name}" border="0" /></a>
     </#list>
-    <#if  txtLinks??  >
+    <#if ( txtLinks??  ) >
     <#list txtLinks as link>
     [<a href="${link.url}" target="_blank" title="${link.name}">${link.name}</a>]
     </#list>

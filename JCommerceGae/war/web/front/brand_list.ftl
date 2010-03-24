@@ -48,10 +48,10 @@
      <div class="blank5"></div>
       <h3 class="border"><span>${lang.allBrand}</span></h3>
      <div id="brandList" class="clearfix">
-     <#list brandList as brandData >
+     <#list brandList as brandData>
 		  <div class="brandBox">
 			<h4><span>${brandData.brandName}</span>(${brandData.goodsNum})</h4>
-			<#if  brandData.brandLogo??  >
+			<#if ( brandData.brandLogo??  ) >
 			  <div class="brandLogo">
         <a href="${brandData.url}"><img src="data/brandlogo/${brandData.brandLogo}" alt="${brandData.brandName?html} (${brandData.goodsNum})" /></a>
 				</div>
@@ -78,14 +78,14 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<#if  imgLinks??  ||  txtLinks??  >
+<#if ( imgLinks?? || txtLinks??  ) >
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
    <#list imgLinks as link>
     <a href="${link.url}" target="_blank" title="${link.name}"><img src="${link.logo}" alt="${link.name}" border="0" /></a>
     </#list>
-    <#if  txtLinks??  >
+    <#if ( txtLinks??  ) >
     <#list txtLinks as link>
     [<a href="${link.url}" target="_blank" title="${link.name}">${link.name}</a>]
     </#list>

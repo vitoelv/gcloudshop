@@ -7,7 +7,7 @@
       <div class="goodsItem">
            <a href="${goods.url}"><img src="${goods.thumb}" alt="${goods.name?html}" class="goodsimg" /></a><br />
            <p><a href="${goods.url}" title="${goods.name?html}">${goods.shortName?html}</a></p>
-            <#if  goods.promotePrice  !=  ""  >
+            <#if ( goods.promotePrice != ""  ) >
             <font class="shop_s">${goods.promotePrice}</font>
             <#else>
             <font class="shop_s">${goods.shopPrice}</font>

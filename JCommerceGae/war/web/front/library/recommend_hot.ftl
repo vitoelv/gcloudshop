@@ -1,9 +1,9 @@
-<#if  hotGoods??  >
-<#if  catRecSign  !=  1  >
+<#if ( hotGoods??  ) >
+<#if ( catRecSign != 1  ) >
 <div class="box">
 <div class="box_2 centerPadd">
   <div class="itemTit Hot" id="itemHot">
-      <#if  catRec[3]??  >
+      <#if ( catRec[3]??  ) >
       <h2><a href="javascript:void(0)" onclick="change_tab_style('itemHot', 'h2', this);get_cat_recommend(3, 0);">${lang.allGoods}</a></h2>
       <#list catRec[3] as recData>
       <h2 class="h2bg"><a href="javascript:void(0)" onclick="change_tab_style('itemHot', 'h2', this);get_cat_recommend(3, ${recData.catId})">${recData.catName}</a></h2>
@@ -18,7 +18,7 @@
            <a href="${goods.url}"><img src="${goods.thumb}" alt="${goods.name?html}" class="goodsimg" /></a><br />
            <p><a href="${goods.url}" title="${goods.name?html}">${goods.shortStyleName}</a></p>
            <font class="f1">
-           <#if  goods.promotePrice  !=  ""  >
+           <#if ( goods.promotePrice != ""  ) >
           ${goods.promotePrice}
           <#else>
           ${goods.shopPrice}
@@ -27,7 +27,7 @@
         </div>
   </#list>
   <div class="more"><a href="search.action?intro=hot"><img src="images/more.gif" /></a></div>
-  <#if  catRecSign  !=  1  >
+  <#if ( catRecSign != 1  ) >
   </div>
 </div>
 </div>

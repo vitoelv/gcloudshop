@@ -16,7 +16,7 @@
         </p>
                 <script type="text/javascript">
                 //<![CDATA[
-                {literal}
+                
                 /**
                  * 用户添加标记的处理函数
                  */

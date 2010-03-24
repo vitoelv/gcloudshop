@@ -27,7 +27,7 @@
 </div>
 <!--当前位置 end-->
 <div class="blank"></div>
-<#if  cartGoods??  >
+<#if ( cartGoods??  ) >
 <!-- 批发商品购物车 -->
 <div class="block">
   <h5><span>${lang.wholesaleGoodsCart}</span></h5>
@@ -41,7 +41,7 @@
             <th bgcolor="#ffffff">${lang.wsSubtotal}</th>
             <th bgcolor="#ffffff">${lang.handle}</th>
           </tr>
-          <#list  as >
+          <#list cartGoods?keys as key> <#assign goods = cartGoods.get(key)>
           <tr>
             <td bgcolor="#ffffff" align="center"><a href="${goods.goodsUrl}" target="_blank" class="f6">${goods.goodsName}</a></td>
             <td bgcolor="#ffffff" align="center">${goods.goodsAttr}</td>
@@ -69,7 +69,7 @@
 </div>
 <div class="blank5"></div>
 </#if>
-<#if  wholesaleList??  >
+<#if ( wholesaleList??  ) >
 <div class="block">
   <h5><span>${lang.wholesaleGoodsList}</span><a href="wholesale.action?act=price_list" class="f6">${lang.wsPriceList}</a></h5>
   <div class="blank"></div>
@@ -88,7 +88,7 @@
               <td bgcolor="#ffffff">
 
                 <table width="100%" border="0" align="center">
-                  <#list wholesale.goodsAttr as propertyGroup>
+                  <#list wholesale.goodsAttr?keys as key> <#assign propertyGroup = wholesale.goodsAttr.get(key)>
                   <#list propertyGroup as property>
                   <tr>
                     <td nowrap="true" style="border-bottom:2px solid #ccc;">${property.name?html}</td>
@@ -101,7 +101,7 @@
 
               <td bgcolor="#ffffff">
                <table width="100%" border="0" align="center" cellspacing="1" bgcolor="#547289">
-                <#list  as >
+                <#list wholesale.priceLadder?keys as key> <#assign attrPrice = wholesale.priceLadder.get(key)>
                   <tr>
                     <td align="left" nowrap="true" bgcolor="#ffffff" style="padding:5px;">${lang.number}:${key}</td>
                     <td bgcolor="#ffffff" style="padding:5px;">${lang.ladderPrice}:${attrPrice}</td>
@@ -135,14 +135,14 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<#if  imgLinks??  ||  txtLinks??  >
+<#if ( imgLinks?? || txtLinks??  ) >
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
     <#list imgLinks as link>
     <a href="${link.url}" target="_blank" title="${link.name}"><img src="${link.logo}" alt="${link.name}" border="0" /></a>
     </#list>
-    <#if  txtLinks??  >
+    <#if ( txtLinks??  ) >
     <#list txtLinks as link>
     [<a href="${link.url}" target="_blank" title="${link.name}">${link.name}</a>]
     </#list>

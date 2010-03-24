@@ -5,7 +5,7 @@
 <meta name="Keywords" content="${keywords}" />
 <meta name="Description" content="${description}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>${pageTitle}-${action}</title>
+<title>${pageTitle}</title>
 <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="icon" href="animated_favicon.gif" type="image/gif" />
@@ -27,7 +27,7 @@
 <!--当前位置 end-->
 <div class="blank"></div>
 <!--#登录界面 start-->
-<#if  action  ==  'login'  >
+<#if ( action == 'login'  ) >
 <div class="usBox clearfix">
   <div class="usBox_1 f_l">
    <div class="logtitle"></div>
@@ -44,7 +44,7 @@
             <a href="user.action?act=get_password" class="f3">${lang.getPassword}</a>
             </td>
           </tr>
-          <#if  enabledCaptcha??  >
+          <#if ( enabledCaptcha??  ) >
           <tr>
             <td align="right">${lang.commentCaptcha}</td>
             <td><input type="text" size="8" name="captcha" class="inputBg" />
@@ -78,8 +78,8 @@
 <!--#登录界面 end-->
 
 <!--*会员注册界面 start-->
-    <#if  action  ==  'register'  >
-    <#if  shopRegClosed  ==  1  >
+    <#if ( action == 'register'  ) >
+    <#if ( shopRegClosed == 1  ) >
     <div class="usBox">
       <div class="usBox_2 clearfix">
         <div class="f1 f5" align="center">${lang.shopRegisterClosed}</div>
@@ -164,7 +164,7 @@
           <input name="other[mobile_phone]" type="text" size="25" class="inputBg" />
            </td>
         </tr>
-      <#if  enabledCaptcha??  >
+      <#if ( enabledCaptcha??  ) >
       <tr>
       <td align="right">${lang.commentCaptcha}</td>
       <td><input type="text" size="8" name="captcha" class="inputBg" />
@@ -203,14 +203,13 @@
 <!--#会员注册界面 end-->
 
 <!--*找回密码界面 -->
-    <#if  action  ==  'getPassword'  >
+    <#if ( action == 'getPassword'  ) >
     <script type="text/javascript" src="js/utils.js"></script>
 
     <script type="text/javascript">
-		<#list lang.passwordJs?keys as key>
-		<#assign item = lang.passwordJs.get(key)>
-		var ${key} = "${item}";
-		</#list> 
+    <#list lang.passwordJs?keys as key> <#assign item = lang.passwordJs.get(key)>
+      var ${key} = "${item}";
+    </#list>
     </script>
 <div class="usBox">
   <div class="usBox_2 clearfix">
@@ -242,12 +241,11 @@
 </div>
 </#if>
 
-<#if  action  ==  'resetPassword'  >
+<#if ( action == 'resetPassword'  ) >
     <script type="text/javascript">
-		<#list lang.passwordJs?keys as key>
-		<#assign item = lang.passwordJs.get(key)>
-		var ${key} = "${item}";
-		</#list>    
+    <#list lang.passwordJs?keys as key> <#assign item = lang.passwordJs.get(key)>
+      var ${key} = "${item}";
+    </#list>
     </script>
 <div class="usBox">
   <div class="usBox_2 clearfix">
@@ -282,8 +280,7 @@
 </body>
 <script type="text/javascript">
 var process_request = "${lang.processRequest}";
-<#list lang.passportJs?keys as key>
-<#assign item = lang.passportJs.get(key)>
+<#list lang.passportJs?keys as key> <#assign item = lang.passportJs.get(key)>
 var ${key} = "${item}";
 </#list>
 var username_exist = "${lang.usernameExist}";

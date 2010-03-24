@@ -1,5 +1,5 @@
 <div id="append_parent"></div>
-<#if  userInfo??  >
+<#if ( userInfo??  ) >
 <font style="position:relative; top:10px;">
 ${lang.hello}，<font class="f4_b">${userInfo.username}</font>, ${lang.welcomeReturn}！
 <a href="user.action">${lang.userCenter}</a>|

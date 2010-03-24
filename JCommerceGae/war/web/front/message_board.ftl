@@ -5,7 +5,7 @@
 <meta name="Keywords" content="${keywords}" />
 <meta name="Description" content="${description}" />
 <meta name="Description" content="${description}" />
-<#if  autoRedirect??  >
+<#if ( autoRedirect??  ) >
 <meta http-equiv="refresh" content="3;URL=${message.href}" />
 </#if>
 <!-- TemplateBeginEditable name="doctitle" -->
@@ -59,7 +59,7 @@
               <tr>
                 <td align="right">${lang.username}</td>
                 <td>
-                <#if  smarty.session.userName??  >
+                <#if ( smarty.session.userName??  ) >
                 <font class="f4_b">${username}</font><label for="anonymous" style="margin-left:8px;"><input type="checkbox" name="anonymous" value="1" id="anonymous" />${lang.messageAnonymous}</label>
                 <#else>
                 <input name="user_name" class="inputBg" type="text" size="15" value="${lang.anonymous}" />
@@ -87,7 +87,7 @@
                 <td align="right">${lang.messageTitle}</td>
                 <td><input name="msg_title" type="text" class="inputBg" size="30" /></td>
               </tr>
-            <#if  enabledCaptcha??  >
+            <#if ( enabledCaptcha??  ) >
               <tr>
                 <td align="right">${lang.commentCaptcha}</td>
                 <td><input type="text" size="8" name="captcha"  class="inputBg" />
@@ -107,10 +107,10 @@
             </table>
           </form>
         <script type="text/javascript">
-        <#list lang.messageBoardJs as item>
+        <#list lang.messageBoardJs?keys as key> <#assign item = lang.messageBoardJs.get(key)>
         var ${key} = "${item}";
         </#list>
-        {literal}
+        
         /**
          * 提交评论信息
         */
@@ -168,14 +168,14 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<#if  imgLinks??  ||  txtLinks??  >
+<#if ( imgLinks?? || txtLinks??  ) >
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
     <#list imgLinks as link>
     <a href="${link.url}" target="_blank" title="${link.name}"><img src="${link.logo}" alt="${link.name}" border="0" /></a>
     </#list>
-    <#if  txtLinks??  >
+    <#if ( txtLinks??  ) >
     <#list txtLinks as link>
     [<a href="${link.url}" target="_blank" title="${link.name}">${link.name}</a>] 
     </#list>
