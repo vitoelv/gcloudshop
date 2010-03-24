@@ -39,8 +39,13 @@ public class CartWrapper extends BaseModelWrapper {
 		return getCart().getParentId();
 	}
 	
-	public Boolean getIsGift() {
-		return getCart().getIsGift();
+	public int getIsGift() {
+		if(getCart().getIsGift()){
+			return 1;
+		}
+		else{
+			return 0;
+		}
 	}
 	
 	public String getFormatedGoodsPrice() {	
