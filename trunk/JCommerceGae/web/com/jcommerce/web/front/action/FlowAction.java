@@ -651,7 +651,7 @@ public class FlowAction extends BaseAction {
      	Lang lang = Lang.getInstance();             	       
 
 		map.put("lang", lang);
-		map.put("config", getSession().getAttribute("cfg"));
+		map.put("config", getRequest().getAttribute("cfg"));
 		map.put("total", total);
 		map.put("userId", getSession().getAttribute(KEY_USER_ID));
 		    	

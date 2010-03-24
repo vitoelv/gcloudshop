@@ -417,8 +417,40 @@ public class LibCommon {
 		Template t = cfg.getTemplate(templateName);
 		StringWriter stringWriter = new StringWriter();
      	t.process(map, stringWriter);
-     	return stringWriter.toString();
+     	return QBchange(stringWriter.toString());
 		
 	}
+	/**   
+     * 全角转半角   
+     * @param QJstr   
+     * @return   
+     */   
+    public static final String QBchange(String QJstr) {    
+        String outStr = "";    
+        String Tstr = "";    
+        byte[] b = null;    
+   
+        for (int i = 0; i < QJstr.length(); i++) {    
+            try {    
+                Tstr = QJstr.substring(i, i + 1);    
+                b = Tstr.getBytes("unicode");    
+            } catch (java.io.UnsupportedEncodingException e) {    
+                e.printStackTrace();    
+            }    
+   
+            if (b[3] == -1) {    
+                b[2] = (byte) (b[2] + 32);    
+                b[3] = 0;    
+                try {    
+                    outStr = outStr + new String(b, "unicode");    
+                } catch (java.io.UnsupportedEncodingException e) {    
+                    e.printStackTrace();    
+                }    
+            } else   
+                outStr = outStr + Tstr;    
+        }    
+   
+        return outStr;    
+    }    
 	
 }

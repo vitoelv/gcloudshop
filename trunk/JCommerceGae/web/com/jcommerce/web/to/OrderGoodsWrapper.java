@@ -21,4 +21,12 @@ public class OrderGoodsWrapper extends BaseModelWrapper {
 	public String getParentId() {
 		return getOrderGoods().getParentId();
 	}
+	public int getIsGift() {
+		if(getOrderGoods().getIsGift()){
+			return 1;
+		}
+		else{
+			return 0;
+		}
+	}
 }
