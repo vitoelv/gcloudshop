@@ -1,1 +1,1 @@
-<#include "adsid.ftl">
+<#include "ads.ftl">

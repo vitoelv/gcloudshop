@@ -5,7 +5,7 @@
 <meta name="Keywords" content="${keywords}" />
 <meta name="Description" content="${description}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>${pageTitle}-${action}</title>
+<title>${pageTitle}</title>
 <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="icon" href="animated_favicon.gif" type="image/gif" />
@@ -44,14 +44,14 @@
      <div class="box_1">
       <div class="userCenterBox boxCenterList clearfix" style="_height:1%;">
          <!-- *用户中心默认显示页面 start-->
-         <#if  action  ==  'default'  >
+         <#if ( action == 'default'  ) >
           <font class="f5"><b class="f4">${info.username}</b> ${lang.welcomeTo} ${info.shopName}！</font><br />
           <div class="blank"></div>
           ${lang.lastTime}: ${info.lastTime}<br />
           <div class="blank5"></div>
           ${rankName} ${nextRankName}<br />
           <div class="blank5"></div>
-           <#if  info.isValidate  ==  0  >
+           <#if ( info.isValidate == 0  ) >
           ${lang.notValidated} <a href="javascript:sendHashMail()" style="color:#006bd0;">${lang.resendHashMail}</a><br />
            </#if>
            <div style="margin:5px 0; border:1px solid #d5f1ff;padding:10px 20px; background-color:#f7fcff;">
@@ -62,7 +62,7 @@
           <h5><span>${lang.yourAccount}</span></h5>
           <div class="blank"></div>
           ${lang.yourSurplus}:<a href="user.action?act=account_log" style="color:#006bd0;">${info.surplus}</a><br />
-          <#if  (info.creditLine  >  0)  >
+          <#if ( info.creditLine > 0  ) >
           ${lang.creditLine}:${info.formatedCreditLine}<br />
           </#if>
           ${lang.yourBonus}:<a href="user.action?act=bonus" style="color:#006bd0;">${info.bonus}</a><br />
@@ -75,7 +75,7 @@
           ${item.text}<br />
           </#list>
           ${lang.lastMonthOrder}${info.orderCount}${lang.orderUnit}<br />
-          <#if  info.shippedOrder??  >
+          <#if ( info.shippedOrder??  ) >
           ${lang.pleaseReceived}<br />
           <#list info.shippedOrder as item>
           <a href="user.action?act=order_detail&order_id=${item.orderId}" style="color:#006bd0;">${item.orderSn}</a>
@@ -85,10 +85,10 @@
          </#if>
          <!-- #用户中心默认显示页面 end-->
          <!-- *我的留言 start-->
-         <#if  action  ==  'messageList'  >
+         <#if ( action == 'messageList'  ) >
           <h5><span>${lang.labelMessage}</span></h5>
           <div class="blank"></div>
-           <#list messageList as message>
+           <#list messageList as message> <#assign key = message_index >
           <div class="f_l">
           <b>${message.msgType}:</b>&nbsp;&nbsp;<font class="f4">${message.msgTitle}</font> (${message.msgTime})
           </div>
@@ -97,19 +97,19 @@
           </div>
           <div class="msgBottomBorder">
           ${message.msgContent}
-           <#if  message.messageImg??  >
+           <#if ( message.messageImg??  ) >
            <div align="right">
            <a href="data/feedbackimg/${message.messageImg}" target="_bank" class="f6">${lang.viewUploadFile}</a>
            </div>
            </#if>
            <br />
-           <#if  message.reMsgContent??  >
+           <#if ( message.reMsgContent??  ) >
            <a href="mailto:${message.reUserEmail}" class="f6">${lang.shopmanReply}</a> (${message.reMsgTime})<br />
            ${message.reMsgContent}
            </#if>
           </div>
           </#list>
-          <#if  messageList??  >
+          <#if ( messageList??  ) >
           <div class="f_r">
           <#include "library/pages.ftl">
           </div>
@@ -117,7 +117,7 @@
           <div class="blank"></div>
           <form action="user.action" method="post" enctype="multipart/form-data" name="formMsg" onSubmit="return submitMsg()">
                   <table width="100%" border="0" cellpadding="3">
-                    <#if  orderInfo??  >
+                    <#if ( orderInfo??  ) >
                     <tr>
                       <td align="right">${lang.orderNumber}</td>
                       <td>
@@ -171,25 +171,25 @@
          </#if>
          <!--#我的留言 end-->
          <!-- *我的评论 start-->
-          <#if  action  ==  'commentList'  >
+          <#if ( action == 'commentList'  ) >
           <h5><span>${lang.labelComment}</span></h5>
           <div class="blank"></div>
           <#list commentList as comment>
           <div class="f_l">
-          <b><#if  comment.commentType  ==  '0'  >${lang.goodsComment}<#else>${lang.articleComment}</#if>: </b><font class="f4">${comment.cmtName}</font>&nbsp;&nbsp;(${comment.formatedAddTime})
+          <b><#if ( comment.commentType == '0'  ) >${lang.goodsComment}<#else>${lang.articleComment}</#if>: </b><font class="f4">${comment.cmtName}</font>&nbsp;&nbsp;(${comment.formatedAddTime})
           </div>
           <div class="f_r">
           <a href="user.action?act=del_cmt&amp;id=${comment.commentId}" title="${lang.drop}" onclick="if (!confirm('${lang.confirmRemoveMsg}')) return false;" class="f6">${lang.drop}</a>
           </div>
           <div class="msgBottomBorder">
           ${comment.content}<br />
-          <#if  comment.replyContent??  >
+          <#if ( comment.replyContent??  ) >
           <b>${lang.replyComment}：</b><br />
           ${comment.replyContent}
            </#if>
           </div>
           </#list>
-          <#if  commentList??  >
+          <#if ( commentList??  ) >
           <#include "library/pages.ftl">
           <#else>
           ${lang.noComments}
@@ -197,10 +197,10 @@
           </#if>
     <!--#我的评论 end-->
     <!--#我的标签 start-->
-    <#if  action  ==  'tagList'  >
+    <#if ( action == 'tagList'  ) >
     <h5><span>${lang.labelTag}</span></h5>
     <div class="blank"></div>
-     <#if  tags??  >
+     <#if ( tags??  ) >
     <#list tags as tag>
     <a href="search.action?keywords=${tag.tagWords}" class="f6">${tag.tagWords?html}</a> <a href="user.action?act=act_del_tag&amp;tag_words=${tag.tagWords}" onclick="if (!confirm('${lang.confirmDropTag}')) return false;" title="${lang.drop}"><img src="images/drop.gif" alt="${lang.drop}" /></a>&nbsp;&nbsp;
     </#list>
@@ -210,7 +210,7 @@
     </#if>
     <!--#我的标签 end-->
     <!--*收藏商品列表页面 start-->
-    <#if  action  ==  'collectionList'  >
+    <#if ( action == 'collectionList'  ) >
   <script type="text/javascript" src="js/transport.js"></script>
 <script type="text/javascript" src="js/utils.js"></script>
 
@@ -225,13 +225,13 @@
       <#list goodsList as goods>
       <tr>
         <td bgcolor="#ffffff"><a href="${goods.url}" class="f6">${goods.goodsName?html}</a></td>
-        <td bgcolor="#ffffff"><#if  goods.promotePrice  !=  ""  >
+        <td bgcolor="#ffffff"><#if ( goods.promotePrice != ""  ) >
           ${lang.promotePrice}<span class="goods-price">${goods.promotePrice}</span>
           <#else>
           ${lang.shopPrice}<span class="goods-price">${goods.shopPrice}</span>
           </#if>        </td>
         <td align="center" bgcolor="#ffffff">
-          <#if  goods.isAttention??  >
+          <#if ( goods.isAttention??  ) >
           <a href="javascript:if (confirm('${lang.delAttention}')) location.href='user.action?act=del_attention&rec_id=${goods.recId}'" class="f6">${lang.noAttention}</a>
           <#else>
           <a href="javascript:if (confirm('${lang.addToAttention}')) location.href='user.action?act=add_to_attention&rec_id=${goods.recId}'" class="f6">${lang.attention}</a>
@@ -244,11 +244,7 @@
     <#include "library/pages.ftl">
      <div class="blank5"></div>
 
-    
-  </#if>
-    <!--#收藏商品列表页面 end-->
-    <!--*缺货登记列表页面 start-->
-    <#if  action  ==  'bookingList'  >
+    </#if><#if ( action == 'bookingList'  ) >
     <h5><span>${lang.labelBooking}</span></h5>
     <div class="blank"></div>
      <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
@@ -272,11 +268,11 @@
     </#if>
     <div class="blank5"></div>
    <!--#缺货登记列表页面 -->
-  <#if  action  ==  'addBooking'  >
+  <#if ( action == 'addBooking'  ) >
     <script type="text/javascript" src="js/utils.js"></script>
 
     <script type="text/javascript">
-    <#list lang.bookingJs as item>
+    <#list lang.bookingJs?keys as key> <#assign item = lang.bookingJs.get(key)>
     var ${key} = "${item}";
     </#list>
     </script>
@@ -323,13 +319,13 @@
      </form>
     </#if>
     <!-- *我的推荐 -->
-    <#if  affiliate.on  ==  1  >
-     <#if  action  ==  'affiliate'  >
-      <#if  !goodsid??  ||  goodsid??  ==  0  >
+    <#if ( affiliate.on == 1  ) >
+     <#if ( action == 'affiliate'  ) >
+      <#if ( !goodsid || goodsid == 0  ) >
       <h5><span>${lang.affiliateDetail}</span></h5>
       <div class="blank"></div>
      ${affiliateIntro}
-    <#if  affiliate.config.separateBy  ==  0  >
+    <#if ( affiliate.config.separateBy == 0  ) >
     <!-- 下线人数、分成 -->
     <div class="blank"></div>
     <h5><span><a name="myrecommend">${lang.affiliateMember}</a></span></h5>
@@ -341,8 +337,7 @@
       <td bgcolor="#ffffff">${lang.levelPoint}</td>
       <td bgcolor="#ffffff">${lang.levelMoney}</td>
     </tr>
-    <#list affdb.keys as level>
-    <#assign val=affdb.get(level)>
+    <#list affdb?keys as level> <#assign val = affdb.get(level)>
     <tr align="center">
       <td bgcolor="#ffffff">${level}</td>
       <td bgcolor="#ffffff">${val.num}</td>
@@ -373,20 +368,24 @@
       <td bgcolor="#ffffff">${val.orderSn}</td>
       <td bgcolor="#ffffff">${val.money}</td>
       <td bgcolor="#ffffff">${val.point}</td>
-      <td bgcolor="#ffffff"><#if  val.separateType  ==  1  ||  val.separateType  ==  0  >${lang.affiliateType.val.separateType}<#else>${lang.affiliateType.affiliateType}</#if></td>
+      <td bgcolor="#ffffff"><#if ( val.separateType == 1 || val.separateType == 0  ) >${lang.affiliateType.val.separateType}<#else>${lang.affiliateType.affiliateType}</#if></td>
       <td bgcolor="#ffffff">${lang.affiliateStats[val.isSeparate]}</td>
     </tr>
     
 <tr><td colspan="5" align="center" bgcolor="#ffffff">${lang.noRecords}</td>
 </tr>
     </#list>
-    <#if  logdb??  >
+    <#if ( logdb??  ) >
     <tr>
     <td colspan="5" bgcolor="#ffffff">
  <form action="${smarty.server.PHP_SELF}" method="get">
   <div id="pager"> ${lang.pager_1}${pager.recordCount}${lang.pager_2}${lang.pager_3}${pager.pageCount}${lang.pager_4} <span> <a href="${pager.pageFirst}">${lang.pageFirst}</a> <a href="${pager.pagePrev}">${lang.pagePrev}</a> <a href="${pager.pageNext}">${lang.pageNext}</a> <a href="${pager.pageLast}">${lang.pageLast}</a> </span>
     <select name="page" id="page" onchange="selectPage(this)">
-    TODO: htmlOptions CLAUSE
+    <#list pager.array?keys as key>
+<#assign val = pager.array.get(key)>
+<option value="${key}" <#if pager.page == key>selected</#if> >${val}</option>
+</#list>
+
     </select>
     <input type="hidden" name="act" value="affiliate" />
   </div>
@@ -397,7 +396,13 @@
   </table>
  <script type="text/javascript" language="JavaScript">
 <!--
-{literal}
+
+function selectPage(sel)
+{
+  sel.form.submit();
+}
+
+//-->
 </script>
 <!-- /我的推荐清单 -->
 <div class="blank"></div>
@@ -438,8 +443,8 @@
     <tr align="center">
       <td bgcolor="#ffffff" class="types"><script src="${shopurl}affiliate.action?charset=${ecsCharset}&gid=${goodsid}&u=${userid}&type=${val}"></script></td>
       <td bgcolor="#ffffff">javascript ${lang.affiliateCodetype}<br>
-        <textarea cols=30 rows=2 id="txt${smarty.foreach.types.iteration}" style="border:1px solid #ccc;"><script src="${shopurl}affiliate.action?charset=${ecsCharset}&gid=${goodsid}&u=${userid}&type=${val}"></script></textarea>[<a href="#" title="Copy To Clipboard" onClick="Javascript:copyToClipboard(document.getElementById('txt${smarty.foreach.types.iteration}').value);alert('${lang.copyToClipboard}');"  class="f6">^</a>]
-<br>iframe ${lang.affiliateCodetype}<br><textarea cols=30 rows=2 id="txt${smarty.foreach.types.iteration}_iframe"  style="border:1px solid #ccc;"><iframe width="250" height="270" src="${shopurl}affiliate.action?charset=${ecsCharset}&gid=${goodsid}&u=${userid}&type=${val}&display_mode=iframe" frameborder="0" scrolling="no"></iframe></textarea>[<a href="#" title="Copy To Clipboard" onClick="Javascript:copyToClipboard(document.getElementById('txt${smarty.foreach.types.iteration}_iframe').value);alert('${lang.copyToClipboard}');" class="f6">^</a>]</td>
+        <textarea cols=30 rows=2 id="txt${(val_index + 1 )}" style="border:1px solid #ccc;"><script src="${shopurl}affiliate.action?charset=${ecsCharset}&gid=${goodsid}&u=${userid}&type=${val}"></script></textarea>[<a href="#" title="Copy To Clipboard" onClick="Javascript:copyToClipboard(document.getElementById('txt${(val_index + 1 )}').value);alert('${lang.copyToClipboard}');"  class="f6">^</a>]
+<br>iframe ${lang.affiliateCodetype}<br><textarea cols=30 rows=2 id="txt${(val_index + 1 )}_iframe"  style="border:1px solid #ccc;"><iframe width="250" height="270" src="${shopurl}affiliate.action?charset=${ecsCharset}&gid=${goodsid}&u=${userid}&type=${val}&display_mode=iframe" frameborder="0" scrolling="no"></iframe></textarea>[<a href="#" title="Copy To Clipboard" onClick="Javascript:copyToClipboard(document.getElementById('txt${(val_index + 1 )}_iframe').value);alert('${lang.copyToClipboard}');" class="f6">^</a>]</td>
     </tr>
     </#list>
   </table>
@@ -503,8 +508,7 @@ copyToClipboard = function(txt)
 <#include "library/page_footer.ftl">
 </body>
 <script type="text/javascript">
-<#list lang.clipsJs?keys as key>
-<#assign item = lang.clipsJs.get(key)>
+<#list lang.clipsJs?keys as key> <#assign item = lang.clipsJs.get(key)>
 var ${key} = "${item}";
 </#list>
 </script>

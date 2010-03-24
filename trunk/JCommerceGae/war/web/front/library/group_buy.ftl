@@ -1,4 +1,4 @@
-<#if  groupBuyGoods??  >
+<#if ( groupBuyGoods??  ) >
 <div class="box">
  <div class="box_1">
   <h3><span>${lang.groupBuyGoods}</span><a href="group_buy.action"><img src="images/more.gif"></a></h3>

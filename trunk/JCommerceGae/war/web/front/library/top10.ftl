@@ -4,7 +4,7 @@
   <div class="top10List">
    <ul>
     <#list topGoods as goods>
-    <li><img src="../images/top_${smarty.foreach.topGoods.iteration}.gif" /> <a href="${goods.url}" title="${goods.name?html}">${goods.shortName}</a></li>
+    <li><img src="images/top_${(goods_index + 1 )}.gif" /> <a href="${goods.url}" title="${goods.name?html}">${goods.shortName}</a></li>
     </#list>
    </ul>
   </div>

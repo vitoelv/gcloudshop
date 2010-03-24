@@ -72,7 +72,7 @@ function reg(str){
    <div id="goodsInfo" class="clearfix">
      <!--商品图片和相册 start-->
      <div class="imgInfo">
-     <#if  pictures??  >
+     <#if ( pictures??  ) >
      <a href="javascript:;" onclick="window.open('gallery.action?id=${goods.goodsId}'); return false;">
       <img src="${goods.goodsImg}" alt="${goods.goodsName?html}"/>
      </a>
@@ -92,17 +92,17 @@ function reg(str){
      <form action="javascript:addToCart(${goods.goodsId})" method="post" name="ECS_FORMBUY" id="ECS_FORMBUY" >
       <p>${goods.goodsStyleName}</p>
       <ul>
-       <#if  promotion??  >
+       <#if ( promotion??  ) >
       <li class="padd">
-      <#list promotion as item>
+      <#list promotion?keys as key> <#assign item = promotion.get(key)>
       ${lang.activity}
-      <#if  item.type  ==  "snatch"  >
+      <#if ( item.type == "snatch"  ) >
       <a href="snatch.action" title="${lang.snatch}" style="font-weight:100; color:#006bcd; text-decoration:none;">[${lang.snatch}]</a>
-      <#elseif  item.type  ==  "groupBuy"  >
+      <#elseif ( item.type == "groupBuy"  ) >
       <a href="group_buy.action" title="${lang.groupBuy}" style="font-weight:100; color:#006bcd; text-decoration:none;">[${lang.groupBuy}]</a>
-      <#elseif  item.type  ==  "auction"  >
+      <#elseif ( item.type == "auction"  ) >
       <a href="auction.action" title="${lang.auction}" style="font-weight:100; color:#006bcd; text-decoration:none;">[${lang.auction}]</a>
-      <#elseif  item.type  ==  "favourable"  >
+      <#elseif ( item.type == "favourable"  ) >
       <a href="activity.action" title="${lang.favourable}" style="font-weight:100; color:#006bcd; text-decoration:none;">[${lang.favourable}]</a>
       </#if>
       <a href="${item.url}" title="${lang.item.type} ${item.actName}${item.time}" style="font-weight:100; color:#006bcd;">${item.actName}</a><br />
@@ -111,13 +111,13 @@ function reg(str){
       </#if>
       <li class="clearfix">
        <dd>
-       <#if  cfg.showGoodssn??  >
+       <#if ( cfg.showGoodssn??  ) >
        <strong>${lang.goodsSn}</strong>${goods.goodsSn}
        </#if>
        </dd>
        <dd class="ddR">
-       <#if  cfg.showGoodsnumber??  >
-        <#if  goods.goodsNumber  ==  0  >
+       <#if ( goods.goodsNumber > 0 && cfg.showGoodsnumber??  ) >
+        <#if ( goods.goodsNumber == 0  ) >
           <strong>${lang.goodsNumber}</strong>
           <font color='red'>${lang.stockUp}</font>
         <#else>
@@ -129,19 +129,19 @@ function reg(str){
       </li>
       <li class="clearfix">
        <dd>
-       <#if  goods.goodsBrand  !=  ""  &&  cfg.showBrand??  >
+       <#if ( goods.goodsBrand != "" && cfg.showBrand??  ) >
        <strong>${lang.goodsBrand}</strong><a href="${goods.goodsBrandUrl}" >${goods.goodsBrand}</a>
        </#if>
        </dd>
        <dd class="ddR">
-       <#if  cfg.showGoodsweight??  >
+       <#if ( cfg.showGoodsweight??  ) >
        <strong>${lang.goodsWeight}</strong>${goods.goodsWeight}
        </#if>
        </dd>
       </li>
       <li class="clearfix">
        <dd>
-       <#if  cfg.showAddtime??  >
+       <#if ( cfg.showAddtime??  ) >
       <strong>${lang.addTime}</strong>${goods.addTime}
       </#if>
        </dd>
@@ -152,12 +152,12 @@ function reg(str){
       </li>
       <li class="clearfix">
        <dd class="ddL">
-       <#if  cfg.showMarketprice??  >
+       <#if ( cfg.showMarketprice??  ) >
        <strong>${lang.marketPrice}</strong><font class="market">${goods.marketPrice}</font><br />
        </#if>
        <!--本店售价-->
        <strong>${lang.shopPrice}</strong><font class="shop" id="ECS_SHOPPRICE">${goods.shopPriceFormated}</font><br />
-       <#list rankPrices as rankPrice>
+       <#list rankPrices?keys as key> <#assign rankPrice = rankPrices.get(key)>
        <strong>${rankPrice.rankName}：</strong><font class="shop" id="ECS_RANKPRICE_${key}">${rankPrice.price}</font><br />
        </#list>
        </dd>
@@ -166,7 +166,7 @@ function reg(str){
       <img src="images/stars${goods.commentRank}.gif" alt="comment rank ${goods.commentRank}" />
        </dd>
       </li>
-      <#if  goods.isPromote??  &&  goods.gmtEndTime??  >
+      <#if ( goods.isPromote?? && goods.gmtEndTime??  ) >
       <script type="text/javascript" src="js/lefttime.js"></script>
 
       <li class="padd loop" style="margin-bottom:5px; border-bottom:1px dashed #ccc;">
@@ -180,12 +180,12 @@ function reg(str){
        <strong>${lang.amount}：</strong><font id="ECS_GOODS_AMOUNT" class="shop"></font>
        </dd>
        <dd class="ddR">
-       <#if  (goods.giveIntegral  >  0)  >
+       <#if ( goods.giveIntegral > 0  ) >
         <strong>${lang.goodsGiveIntegral}</strong><font class="f4">${goods.giveIntegral} ${pointsName}</font>
         </#if>
        </dd>
       </li>
-      <#if  goods.bonusMoney??  >
+      <#if ( goods.bonusMoney??  ) >
       <li class="padd loop" style="margin-bottom:5px; border-bottom:1px dashed #ccc;">
       <strong>${lang.goodsBonus}</strong><font class="shop">${goods.bonusMoney}</font><br />
       </li>
@@ -196,38 +196,37 @@ function reg(str){
         <input name="number" type="text" id="number" value="1" size="4" onblur="changePrice()" style="border:1px solid #ccc; "/>
        </dd>
        <dd class="ddR">
-       <#if  (goods.integral  >  0)  >
+       <#if ( goods.integral > 0  ) >
        <strong>${lang.goodsIntegral}</strong><font class="f4">${goods.integral} ${pointsName}</font>
        </#if>
        </dd>
       </li>
       
-      <#list specification?keys as specKey>
-      <#assign spec = specification.get(specKey)>
+      <#list specification?keys as specKey> <#assign spec = specification.get(specKey)>
       <li class="padd loop">
       <strong>${spec.name}:</strong><br />
         
-                    <#if  spec.attrType  ==  1  >
-                      <#if  cfg.goodsattrStyle  ==  1  >
-                        <#list spec.values as value>
+                    <#if ( spec.attrType == 1  ) >
+                      <#if ( cfg.goodsattrStyle == 1  ) >
+                        <#list spec.values?keys as key> <#assign value = spec.values.get(key)>
                         <label for="spec_value_${value.id}">
-                        <input type="radio" name="spec_${specKey}" value="${value.id}" id="spec_value_${value.id}" <#if  key  ==  0  >checked</#if> onclick="changePrice()" />
-                        ${value.label} [<#if  value.price  gt  0  >${lang.plus}<#elseif  value.price  lt  0  >${lang.minus}</#if> ${value.formatPrice}] </label><br />
+                        <input type="radio" name="spec_${specKey}" value="${value.id}" id="spec_value_${value.id}" <#if ( key == 0  ) >checked</#if> onclick="changePrice()" />
+                        ${value.label} [<#if ( value.price > 0  ) >${lang.plus}<#elseif ( value.price < 0  ) >${lang.minus}</#if> ${value.formatPrice}|abs] </label><br />
                         </#list>
                         <input type="hidden" name="spec_list" value="${key}" />
                         <#else>
                         <select name="spec_${specKey}" onchange="changePrice()">
-                          <#list spec.values as value>
-                          <option label="${value.label}" value="${value.id}">${value.label} <#if  value.price  gt  0  >${lang.plus}<#elseif  value.price  lt  0  >${lang.minus}</#if><#if  value.price  !=  0  >${value.formatPrice}</#if></option>
+                          <#list spec.values?keys as key> <#assign value = spec.values.get(key)>
+                          <option label="${value.label}" value="${value.id}">${value.label} <#if ( value.price > 0  ) >${lang.plus}<#elseif ( value.price < 0  ) >${lang.minus}</#if><#if ( value.price != 0  ) >${value.formatPrice}</#if></option>
                           </#list>
                         </select>
                         <input type="hidden" name="spec_list" value="${key}" />
                       </#if>
                     <#else>
-                      <#list spec.values as value>
+                      <#list spec.values?keys as key> <#assign value = spec.values.get(key)>
                       <label for="spec_value_${value.id}">
                       <input type="checkbox" name="spec_${specKey}" value="${value.id}" id="spec_value_${value.id}" onclick="changePrice()" />
-                      ${value.label} [<#if  value.price  gt  0  >${lang.plus}<#elseif  value.price  lt  0  >${lang.minus}</#if> ${value.formatPrice}] </label><br />
+                      ${value.label} [<#if ( value.price > 0  ) >${lang.plus}<#elseif ( value.price < 0  ) >${lang.minus}</#if> ${value.formatPrice}|abs] </label><br />
                       </#list>
                       <input type="hidden" name="spec_list" value="${key}" />
                     </#if>
@@ -237,7 +236,7 @@ function reg(str){
       <li class="padd">
       <a href="javascript:addToCart(${goods.goodsId})"><img src="images/bnt_cat.gif" /></a>
       <a href="javascript:collect(${goods.goodsId})"><img src="images/bnt_colles.gif" /></a>
-      <#if  affiliate.on??  >
+      <#if ( affiliate.on??  ) >
       <a href="user.action?act=affiliate&goodsid=${goods.goodsId}" style="position:relative;left:10px; bottom:15px;">将此商品推荐给朋友</a>
       </#if>
       </li>
@@ -266,8 +265,7 @@ function reg(str){
 
      <blockquote>
       <table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#dddddd">
-        <#list properties?keys as key>
-        <#assign propertyGroup = properties.get(key)>
+        <#list properties?keys as key> <#assign propertyGroup = properties.get(key)>
         <tr>
           <th colspan="2" bgcolor="#FFFFFF">${key}</th>
         </tr>
@@ -311,14 +309,14 @@ function reg(str){
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<#if  imgLinks??  ||  txtLinks??  >
+<#if ( imgLinks?? || txtLinks??  ) >
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
     <#list imgLinks as link>
     <a href="${link.url}" target="_blank" title="${link.name}"><img src="${link.logo}" alt="${link.name}" border="0" /></a>
     </#list>
-    <#if  txtLinks??  >
+    <#if ( txtLinks??  ) >
     <#list txtLinks as link>
     [<a href="${link.url}" target="_blank" title="${link.name}">${link.name}</a>]
     </#list>
@@ -340,6 +338,7 @@ var ${key} = "${item}";
 </#list>
 var goodsId = ${goodsId};
 var now_time = ${nowTime};
+
 
 onload = function(){
   changePrice();

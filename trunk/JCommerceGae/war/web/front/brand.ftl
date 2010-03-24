@@ -51,20 +51,20 @@
         <tr>
           <td bgcolor="#ffffff" width="200" align="center" valign="middle">
           <div style="width:200px; overflow:hidden;">
-          <#if  brand.brandLogo??  >
+          <#if ( brand.brandLogo??  ) >
             <img src="data/brandlogo/${brand.brandLogo}" />
             </#if>
           </div>
           </td>
           <td bgcolor="#ffffff">
           ${brand.brandDesc}<br />
-            <#if  brand.siteUrl??  >
+            <#if ( brand.siteUrl??  ) >
             ${lang.officialSite} <a href="${brand.siteUrl}" target="_blank" class="f6">${brand.siteUrl}</a><br />
             </#if>
             ${lang.brandCategory}<br />
             <div class="brandCategoryA">
               <#list brandCatList as cat>
-            <a href="${cat.url}" class="f6">${cat.catName?html} <#if  cat.goodsCount??  >(${cat.goodsCount})</#if></a>
+            <a href="${cat.url}" class="f6">${cat.catName?html} <#if ( cat.goodsCount??  ) >(${cat.goodsCount})</#if></a>
               </#list>
             </div>  
          </td>
@@ -97,14 +97,14 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<#if  imgLinks??  ||  txtLinks??  >
+<#if ( imgLinks?? || txtLinks??  ) >
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
     <#list imgLinks as link>
     <a href="${link.url}" target="_blank" title="${link.name}"><img src="${link.logo}" alt="${link.name}" border="0" /></a>
     </#list>
-    <#if  txtLinks??  >
+    <#if ( txtLinks??  ) >
     <#list txtLinks as link>
     [<a href="${link.url}" target="_blank" title="${link.name}">${link.name}</a>] 
     </#list>

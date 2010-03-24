@@ -12,7 +12,7 @@
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="icon" href="animated_favicon.gif" type="image/gif" />
 <link href="style.css" rel="stylesheet" type="text/css" />
-<#if  topic.css  !=  ''  >
+<#if ( topic.css != ''  ) >
 <style type="text/css">
   ${topic.css}
 </style>
@@ -35,7 +35,7 @@
   <h5><span>${topic.title}</span></h5>
   <div class="blank"></div>
    ${topic.intro}<br /><br />
-    <#list sortGoodsArr as sort>
+    <#list sortGoodsArr?keys as sortName> <#assign sort = sortGoodsArr.get(sortName)>
     <div class="box">
     <div class="box_1 clearfix">
     <h3><span>${sortName}</span></h3>
@@ -45,7 +45,7 @@
        <a href="${goods.url}"><img src="${goods.goodsThumb}" alt="${goods.name?html}" class="goodsimg" /></a><br />
        <p><a href="${goods.url}" title="${goods.name?html}">${goods.shortStyleName}</a></p>
        <font class="f1">
-       <#if  goods.promotePrice  !=  ""  >
+       <#if ( goods.promotePrice != ""  ) >
       ${goods.promotePrice}
       <#else>
       ${goods.shopPrice}
@@ -62,14 +62,14 @@
 <div class="blank5"></div>
 
 <!--友情链接 start-->
-<#if  imgLinks??  ||  txtLinks??  >
+<#if ( imgLinks?? || txtLinks??  ) >
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
     <#list imgLinks as link>
     <a href="${link.url}" target="_blank" title="${link.name}"><img src="${link.logo}" alt="${link.name}" border="0" /></a>
     </#list>
-    <#if  txtLinks??  >
+    <#if ( txtLinks??  ) >
     <#list txtLinks as link>
     [<a href="${link.url}" target="_blank" title="${link.name}">${link.name}</a>] 
     </#list>

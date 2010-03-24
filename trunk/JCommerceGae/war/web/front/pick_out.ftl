@@ -16,7 +16,7 @@
 <script type="text/javascript" src="js/lefttime.js"></script>
 
 <script type="text/javascript">
-  <#list lang.jsLanguages as item>
+  <#list lang.jsLanguages?keys as key> <#assign item = lang.jsLanguages.get(key)>
     var ${key} = "${item}";
   </#list>
 </script>
@@ -100,7 +100,7 @@
            <a href="javascript:addToCart(${goods.id})"><img src="images/bnt_buy.gif" /></a> <a href="javascript:collect(${goods.id})"><img src="images/bnt_coll.gif" /></a>
            <p><a href="${goods.url}" title="${goods.name?html}">${goods.shortStyleName}</a></p>
            <font class="f1">
-           <#if  goods.promotePrice  !=  ""  >
+           <#if ( goods.promotePrice != ""  ) >
           ${goods.promotePrice}
           <#else>
           ${goods.shopPrice}
@@ -108,7 +108,7 @@
            </font>
         </div>
      </#list>
-     <#if  count  >  5  >
+     <#if ( count > 5  ) >
      <div class="more f_r" style="clear:both;"><a href="${url}"><img src="images/more.gif" /></a></div>
      </#if>
     </div>
@@ -130,14 +130,14 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<#if  imgLinks??  ||  txtLinks??  >
+<#if ( imgLinks?? || txtLinks??  ) >
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
     <#list imgLinks as link>
     <a href="${link.url}" target="_blank" title="${link.name}"><img src="${link.logo}" alt="${link.name}" border="0" /></a>
     </#list>
-    <#if  txtLinks??  >
+    <#if ( txtLinks??  ) >
     <#list txtLinks as link>
     [<a href="${link.url}" target="_blank" title="${link.name}">${link.name}</a>]
     </#list>
@@ -151,11 +151,11 @@
 <#include "library/page_footer.ftl">
 </body>
 <script type="text/javascript">
-var gmt_end_time = "${groupBuy.gmtEndDate|default:0}";
-<#list lang.goodsJs as item>
+var gmt_end_time = "${groupBuy.gmtEndDate}";
+<#list lang.goodsJs?keys as key> <#assign item = lang.goodsJs.get(key)>
 var ${key} = "${item}";
 </#list>
-{literal}
+
 
 onload = function()
 {

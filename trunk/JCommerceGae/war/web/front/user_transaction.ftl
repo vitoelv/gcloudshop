@@ -5,7 +5,7 @@
 <meta name="Keywords" content="${keywords}" />
 <meta name="Description" content="${description}" />
 <!-- TemplateBeginEditable name="doctitle" -->
-<title>${pageTitle}-${action}</title>
+<title>${pageTitle}</title>
 <!-- TemplateEndEditable --><!-- TemplateBeginEditable name="head" --><!-- TemplateEndEditable -->
 <link rel="shortcut icon" href="favicon.ico" />
 <link rel="icon" href="animated_favicon.gif" type="image/gif" />
@@ -43,15 +43,13 @@
      <div class="box_1">
       <div class="userCenterBox boxCenterList clearfix" style="_height:1%;">
          <!-- 用户信息界面 start-->
-         <#if  action  ==  'profile'  >
+         <#if ( action == 'profile'  ) >
          <script type="text/javascript" src="js/utils.js"></script>
 
         <script type="text/javascript">
-        <#list lang.profileJs?keys as key>
-				<#assign item = lang.profileJs.get(key)>
-					var ${key} = "${item}";
-				</#list>
-
+          <#list lang.profileJs?keys as key> <#assign item = lang.profileJs.get(key)>
+            var ${key} = "${item}";
+          </#list>
         </script>
       <h5><span>${lang.profile}</span></h5>
       <div class="blank"></div>
@@ -59,15 +57,26 @@
       <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
                 <tr>
                   <td width="28%" align="right" bgcolor="#FFFFFF">${lang.birthday}： </td>
-                  <td width="72%" align="left" bgcolor="#FFFFFF"> TODO: htmlSelectDate CLAUSE </td>
+                  <td width="72%" align="left" bgcolor="#FFFFFF"> <link type="text/css" rel="stylesheet" href="calendar/css/jscal2.css" />
+<link type="text/css" rel="stylesheet" href="calendar/css/border-radius.css" />
+<script src="calendar/jscal2.js"></script>
+<script src="calendar/lang/cn.js"></script>
+<script src="calendar/lang/en.js"></script>
+<input id="birthday" name="birthday" type="text" readonly="readonly" value="${profile.birthday}" class="inputBg"/>
+<button id="calendar-trigger" type="button">...</button>
+<script>Calendar.setup({
+trigger    : "calendar-trigger", 
+inputField : "birthday"
+ });</script>
+ </td>
                 </tr>
                 <tr>
                   <td width="28%" align="right" bgcolor="#FFFFFF">${lang.sex}： </td>
-                  <td width="72%" align="left" bgcolor="#FFFFFF"><input type="radio" name="sex" value="0" <#if  profile.sex==0  >checked="checked"</#if> />
+                  <td width="72%" align="left" bgcolor="#FFFFFF"><input type="radio" name="sex" value="0" <#if ( profile.sex == 0  ) >checked="checked"</#if> />
                     ${lang.secrecy}&nbsp;&nbsp;
-                    <input type="radio" name="sex" value="1" <#if  profile.sex==1  >checked="checked"</#if> />
+                    <input type="radio" name="sex" value="1" <#if ( profile.sex == 1  ) >checked="checked"</#if> />
                     ${lang.male}&nbsp;&nbsp;
-                    <input type="radio" name="sex" value="2" <#if  profile.sex==2  >checked="checked"</#if> />
+                    <input type="radio" name="sex" value="2" <#if ( profile.sex == 2  ) >checked="checked"</#if> />
                   ${lang.female}&nbsp;&nbsp; </td>
                 </tr>
                 <tr>
@@ -76,27 +85,27 @@
                 </tr>
                 <tr>
                   <td width="28%" align="right" bgcolor="#FFFFFF">${lang.otherMsn}：</td>
-                  <td width="72%" align="left" bgcolor="#FFFFFF"><input name="other[msn]" type="text" value="${profile.msn}" class="inputBg" />
+                  <td width="72%" align="left" bgcolor="#FFFFFF"><input name="other['msn']" type="text" value="${profile.msn}" class="inputBg" />
                   </td>
                 </tr>
                 <tr>
                   <td width="28%" align="right" bgcolor="#FFFFFF">${lang.otherQq}：</td>
-                  <td width="72%" align="left" bgcolor="#FFFFFF"><input name="other[qq]" type="text" value="${profile.qq}" class="inputBg" />
+                  <td width="72%" align="left" bgcolor="#FFFFFF"><input name="other['qq']" type="text" value="${profile.qq}" class="inputBg" />
                   </td>
                 </tr>
                 <tr>
                   <td width="28%" align="right" bgcolor="#FFFFFF">${lang.otherOfficePhone}：</td>
-                  <td width="72%" align="left" bgcolor="#FFFFFF"><input name="other[office_phone]" type="text" value="${profile.officePhone}" class="inputBg" />
+                  <td width="72%" align="left" bgcolor="#FFFFFF"><input name="other['office_phone']" type="text" value="${profile.officePhone}" class="inputBg" />
                   </td>
                 </tr>
                 <tr>
                   <td width="28%" align="right" bgcolor="#FFFFFF">${lang.otherHomePhone}：</td>
-                  <td width="72%" align="left" bgcolor="#FFFFFF"><input name="other[home_phone]" type="text" value="${profile.homePhone}" class="inputBg" />
+                  <td width="72%" align="left" bgcolor="#FFFFFF"><input name="other['home_phone']" type="text" value="${profile.homePhone}" class="inputBg" />
                   </td>
                 </tr>
                 <tr>
                   <td width="28%" align="right" bgcolor="#FFFFFF">${lang.otherMobilePhone}：</td>
-                  <td width="72%" align="left" bgcolor="#FFFFFF"><input name="other[mobile_phone]" type="text" value="${profile.mobilePhone}" class="inputBg" />
+                  <td width="72%" align="left" bgcolor="#FFFFFF"><input name="other['mobile_phone']" type="text" value="${profile.mobilePhone}" class="inputBg" />
                   </td>
                 </tr>
                 <tr>
@@ -129,9 +138,9 @@
     </form>
      </#if>
      <!--#用户信息界面 end-->
-     <#if  action  ==  'bonus'  >
+     <#if ( action == 'bonus'  ) >
       <script type="text/javascript">
-        <#list lang.profileJs as item>
+        <#list lang.profileJs?keys as key> <#assign item = lang.profileJs.get(key)>
           var ${key} = "${item}";
         </#list>
       </script>
@@ -146,10 +155,10 @@
           <th align="center" bgcolor="#FFFFFF">${lang.bonusEndDate}</th>
           <th align="center" bgcolor="#FFFFFF">${lang.bonusStatus}</th>
         </tr>
-        <#if  bonus??  >
+        <#if ( bonus??  ) >
         <#list bonus as item>
         <tr>
-          <td align="center" bgcolor="#FFFFFF">${item.bonusSn}</td>
+          <td align="center" bgcolor="#FFFFFF">${item.bonusSn}|default:N/A</td>
           <td align="center" bgcolor="#FFFFFF">${item.typeName}</td>
           <td align="center" bgcolor="#FFFFFF">${item.typeMoney}</td>
           <td align="center" bgcolor="#FFFFFF">${item.minGoodsAmount}</td>
@@ -179,7 +188,7 @@
     </#if>
    <!--用户红包结束-->
       <!--#订单列表界面 start-->
-       <#if  action  ==  'orderList'  >
+       <#if ( action == 'orderList'  ) >
        <h5><span>${lang.labelOrder}</span></h5>
        <div class="blank"></div>
        <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
@@ -217,18 +226,22 @@
               <td width="12%" align="left" bgcolor="#ffffff"><select name="to_order">
               <option value="0">${lang.select}</option>
 
-                  <#list merge as m>
-                  	  <option value="${m}">${m}</option>
-                  </#list>
+                  <#list merge?keys as key>
+<#assign val = merge.get(key)>
+<option value="${key}"  >${val}</option>
+</#list>
+
 
                 </select></td>
               <td width="19%" align="right" bgcolor="#ffffff">${lang.secondOrder}:</td>
               <td width="11%" align="left" bgcolor="#ffffff"><select name="from_order">
               <option value="0">${lang.select}</option>
 
-                  <#list merge as m>
-                  	  <option value="${m}">${m}</option>
-                  </#list>
+                  <#list merge?keys as key>
+<#assign val = merge.get(key)>
+<option value="${key}"  >${val}</option>
+</#list>
+
 
                 </select></td>
               <td width="36%" bgcolor="#ffffff">&nbsp;<input name="act" value="merge_order" type="hidden" />
@@ -243,7 +256,7 @@
        </#if>
       <!--#订单列表界面 end-->
        <!--#包裹状态查询界面 start-->
-      <#if  action  ==  'trackPackages'  >
+      <#if ( action == 'trackPackages'  ) >
         <h5><span>${lang.labelTrackPackages}</span></h5>
         <div class="blank"></div>
         <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd" id="order_table">
@@ -273,14 +286,14 @@
       </#if>
     <!--#包裹状态查询界面 end-->
      <!-- ==========订单详情页面,包括：订单状态，商品列表，费用总计，收货人信息，支付方式，其它信息========== -->
-      <#if  action  ==  'orderDetail'  >
+      <#if ( action == "orderDetail"  ) >
         <h5><span>${lang.orderStatus}</span></h5>
         <div class="blank"></div>
          <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
         <tr>
           <td width="15%" align="right" bgcolor="#ffffff">${lang.detailOrderSn}：</td>
           <td align="left" bgcolor="#ffffff">${order.orderSn}
-          <#if  order.extensionCode  ==  "groupBuy"  ><a href="./group_buy.action?act=view&id=${order.extensionId}"><strong>${lang.orderIsGroupBuy}</strong></a></#if>  <a href="user.action?act=message_list&order_id=${order.orderId}" class="f6">[${lang.businessMessage}]</a></td>
+          <#if ( order.extensionCode == "groupBuy"  ) ><a href="./group_buy.action?act=view&id=${order.extensionId}"><strong>${lang.orderIsGroupBuy}</strong></a></#if>  <a href="user.action?act=message_list&order_id=${order.orderId}" class="f6">[${lang.businessMessage}]</a></td>
         </tr>
         <tr>
           <td align="right" bgcolor="#ffffff">${lang.detailOrderStatus}：</td>
@@ -288,34 +301,34 @@
         </tr>
         <tr>
           <td align="right" bgcolor="#ffffff">${lang.detailPayStatus}：</td>
-          <td align="left" bgcolor="#ffffff">${order.payStatus}&nbsp;&nbsp;&nbsp;&nbsp;<#if  (order.orderAmount  >  0)  >${order.payOnline}</#if>${order.payTime}</td>
+          <td align="left" bgcolor="#ffffff">${order.payStatus}&nbsp;&nbsp;&nbsp;&nbsp;<#if ( order.orderAmount > 0  ) >${order.payOnline}</#if>${order.payTime}</td>
         </tr>
         <tr>
           <td align="right" bgcolor="#ffffff">${lang.detailShippingStatus}：</td>
           <td align="left" bgcolor="#ffffff">${order.shippingStatus}&nbsp;&nbsp;&nbsp;&nbsp;${order.shippingTime}</td>
         </tr>
-        <#if  order.invoiceNo??  >
+        <#if ( order.invoiceNo??  ) >
         <tr>
           <td align="right" bgcolor="#ffffff">${lang.consignment}：</td>
           <td align="left" bgcolor="#ffffff">${order.invoiceNo}</td>
         </tr>
         </#if>
-        <#if  order.toBuyer??  >
+        <#if ( order.toBuyer??  ) >
         <tr>
           <td align="right" bgcolor="#ffffff">${lang.detailToBuyer}：</td>
           <td align="left" bgcolor="#ffffff">${order.toBuyer}</td>
         </tr>
         </#if>
 
-        <#if  virtualCard??  >
+        <#if ( virtualCard??  ) >
         <tr>
           <td align="right" bgcolor="#ffffff">${lang.virtualCardInfo}：</td>
           <td colspan="3" align="left" bgcolor="#ffffff">
           <#list virtualCard as vgoods>
             <#list vgoods.info as card>
-              <#if  card.cardSn??  >${lang.cardSn}:<span style="color:red;">${card.cardSn}</span></#if>
-              <#if  card.cardPassword??  >${lang.cardPassword}:<span style="color:red;">${card.cardPassword}</span></#if>
-              <#if  card.endDate??  >${lang.endDate}:${card.endDate}</#if><br />
+              <#if ( card.cardSn??  ) >${lang.cardSn}:<span style="color:red;">${card.cardSn}</span></#if>
+              <#if ( card.cardPassword??  ) >${lang.cardPassword}:<span style="color:red;">${card.cardPassword}</span></#if>
+              <#if ( card.endDate??  ) >${lang.endDate}:${card.endDate}</#if><br />
             </#list>
           </#list>
           </td>
@@ -324,8 +337,8 @@
       </table>
         <div class="blank"></div>
         <h5><span>${lang.goodsList}</span>
-        <#if  allowToCart??  >
-        <a href="javascript:;" onclick="returnToCart('${order.orderId}')" class="f6">${lang.returnToCart}</a>
+        <#if ( allowToCart??  ) >
+        <a href="javascript:;" onclick="returnToCart(${order.orderId})" class="f6">${lang.returnToCart}</a>
         </#if>
         </h5>
         <div class="blank"></div>
@@ -333,21 +346,21 @@
           <tr>
             <th width="23%" align="center" bgcolor="#ffffff">${lang.goodsName}</th>
             <th width="29%" align="center" bgcolor="#ffffff">${lang.goodsAttr}</th>
-            <!--<th>${lang.marketPrice}</th>-->
-            <th width="26%" align="center" bgcolor="#ffffff">${lang.goodsPrice}<#if  order.extensionCode  ==  "groupBuy"  >${lang.gbDeposit}</#if></th>
+            ${lang.marketPrice}</th>-->
+            <th width="26%" align="center" bgcolor="#ffffff">${lang.goodsPrice}<#if ( order.extensionCode == "groupBuy"  ) >${lang.gbDeposit}</#if></th>
             <th width="9%" align="center" bgcolor="#ffffff">${lang.number}</th>
             <th width="20%" align="center" bgcolor="#ffffff">${lang.subtotal}</th>
           </tr>
           <#list goodsList as goods>
           <tr>
             <td bgcolor="#ffffff"><a href="goods.action?id=${goods.goodsId}" target="_blank" class="f6">${goods.goodsName}</a>
-              <#if  goods.parentId??  >
+              <#if ( goods.parentId??  ) >
               <span style="color:#FF0000">（${lang.accessories}）</span>
-              <#elseif  goods.isGift  >
+              <#elseif ( goods.isGift > 0  ) >
               <span style="color:#FF0000">（${lang.largess}）</span>
               </#if></td>
             <td align="left" bgcolor="#ffffff">${goods.goodsAttr}</td>
-            <!--<td align="right">${goods.marketPrice}</td>-->
+            ${goods.marketPrice}</td>-->
             <td align="right" bgcolor="#ffffff">${goods.goodsPrice}</td>
             <td align="center" bgcolor="#ffffff">${goods.goodsNumber}</td>
             <td align="right" bgcolor="#ffffff">${goods.subtotal}</td>
@@ -355,7 +368,7 @@
           </#list>
           <tr>
             <td colspan="8" bgcolor="#ffffff" align="right">
-            ${lang.shoppingMoney}<#if  order.extensionCode  ==  "groupBuy"  >${lang.gbDeposit}</#if>: ${order.formatedGoodsAmount}
+            ${lang.shoppingMoney}<#if ( order.extensionCode == "groupBuy"  ) >${lang.gbDeposit}</#if>: ${order.formatedGoodsAmount}
             </td>
           </tr>
         </table>
@@ -365,50 +378,50 @@
          <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
           <tr>
             <td align="right" bgcolor="#ffffff">
-                ${lang.goodsAllPrice}<#if  order.extensionCode  ==  "groupBuy"  >${lang.gbDeposit}</#if>: ${order.formatedGoodsAmount}
-              <#if  (order.discount  >  0)  >
+                ${lang.goodsAllPrice}<#if ( order.extensionCode == "groupBuy"  ) >${lang.gbDeposit}</#if>: ${order.formatedGoodsAmount}
+              <#if ( order.discount > 0  ) >
               - ${lang.discount}: ${order.formatedDiscount}
               </#if>
-              <#if  (order.tax  >  0)  >
+              <#if ( order.tax > 0  ) >
               + ${lang.tax}: ${order.formatedTax}
               </#if>
-              <#if  (order.shippingFee  >  0)  >
+              <#if ( order.shippingFee > 0  ) >
               + ${lang.shippingFee}: ${order.formatedShippingFee}
               </#if>
-              <#if  (order.insureFee  >  0)  >
+              <#if ( order.insureFee > 0  ) >
               + ${lang.insureFee}: ${order.formatedInsureFee}
               </#if>
-              <#if  (order.payFee  >  0)  >
+              <#if ( order.payFee > 0  ) >
               + ${lang.payFee}: ${order.formatedPayFee}
               </#if>
-              <#if  (order.packFee  >  0)  >
+              <#if ( order.packFee > 0  ) >
               + ${lang.packFee}: ${order.formatedPackFee}
               </#if>
-              <#if  (order.cardFee  >  0)  >
+              <#if ( order.cardFee > 0  ) >
               + ${lang.cardFee}: ${order.formatedCardFee}
               </#if>        </td>
           </tr>
           <tr>
             <td align="right" bgcolor="#ffffff">
-              <#if  (order.moneyPaid  >  0)  >
+              <#if ( order.moneyPaid > 0  ) >
               - ${lang.orderMoneyPaid}: ${order.formatedMoneyPaid}
               </#if>
-              <#if  (order.surplus  >  0)  >
+              <#if ( order.surplus > 0  ) >
               - ${lang.useSurplus}: ${order.formatedSurplus}
               </#if>
-              <#if  (order.integralMoney  >  0)  >
+              <#if ( order.integralMoney > 0  ) >
               - ${lang.useIntegral}: ${order.formatedIntegralMoney}
               </#if>
-              <#if  (order.bonus  >  0)  >
+              <#if ( order.bonus > 0  ) >
               - ${lang.useBonus}: ${order.formatedBonus}
               </#if>        </td>
           </tr>
           <tr>
             <td align="right" bgcolor="#ffffff">${lang.orderAmount}: ${order.formatedOrderAmount}
-            <#if  order.extensionCode  ==  "groupBuy"  ><br />
+            <#if ( order.extensionCode == "groupBuy"  ) ><br />
             ${lang.noticeGbOrderAmount}</#if></td>
           </tr>
-            <#if  allowEditSurplus??  >
+            <#if ( allowEditSurplus??  ) >
           <tr>
             <td align="right" bgcolor="#ffffff">
       <form action="user.action" method="post" name="formFee" id="formFee">${lang.useMoreSurplus}:
@@ -423,7 +436,7 @@
          <div class="blank"></div>
         <h5><span>${lang.consigneeInfo}</span></h5>
         <div class="blank"></div>
-         <#if  (order.allowUpdateAddress  >  0)  >
+         <#if ( order.allowUpdateAddress > 0  ) >
           <form action="user.action" method="post" name="formAddress" id="formAddress">
            <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
               <tr>
@@ -434,7 +447,7 @@
                 <td width="35%" align="left" bgcolor="#ffffff"><input name="email" type="text"  class="inputBg" value="${order.email}" size="25" />
                 </td>
               </tr>
-              <#if  order.existRealGoods??  >
+              <#if ( order.existRealGoods??  ) >
               <!-- 只有虚拟商品处理-->
               <tr>
                 <td align="right" bgcolor="#ffffff">${lang.detailedAddress}： </td>
@@ -449,7 +462,7 @@
                 <td align="right" bgcolor="#ffffff">${lang.backupPhone}：</td>
                 <td align="left" bgcolor="#ffffff"><input name="mobile" type="text"  class="inputBg" value="${order.mobile}" size="25" /></td>
               </tr>
-              <#if  order.existRealGoods??  >
+              <#if ( order.existRealGoods??  ) >
               <!-- 只有虚拟商品处理-->
               <tr>
                 <td align="right" bgcolor="#ffffff">${lang.signBuilding}：</td>
@@ -476,11 +489,11 @@
               <td width="15%" align="right" bgcolor="#ffffff" >${lang.emailAddress}：</td>
               <td width="35%" align="left" bgcolor="#ffffff">${order.email}</td>
             </tr>
-            <#if  order.existRealGoods??  >
+            <#if ( order.existRealGoods??  ) >
             <tr>
               <td align="right" bgcolor="#ffffff">${lang.detailedAddress}：</td>
               <td colspan="3" align="left" bgcolor="#ffffff">${order.address}
-                <#if  order.zipcode??  >
+                <#if ( order.zipcode??  ) >
                 [${lang.postalcode}: ${order.zipcode}]
                 </#if></td>
             </tr>
@@ -491,7 +504,7 @@
               <td align="right" bgcolor="#ffffff">${lang.backupPhone}：</td>
               <td align="left" bgcolor="#ffffff">${order.mobile}</td>
             </tr>
-            <#if  order.existRealGoods??  >
+            <#if ( order.existRealGoods??  ) >
             <tr>
               <td align="right" bgcolor="#ffffff" >${lang.signBuilding}：</td>
               <td align="left" bgcolor="#ffffff">${order.signBuilding} </td>
@@ -513,7 +526,7 @@
                 </tr>
                   <tr>
                   <td bgcolor="#ffffff" align="right">
-                  <#if  paymentList??  >
+                  <#if ( paymentList??  ) >
               <form name="payment" method="post" action="user.action">
               ${lang.changePayment}:
               <select name="pay_id">
@@ -535,7 +548,7 @@
         <h5><span>${lang.otherInfo}</span></h5>
         <div class="blank"></div>
         <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
-          <#if  order.shippingId??  >
+          <#if ( order.shippingId??  ) >
           <tr>
             <td width="15%" align="right" bgcolor="#ffffff">${lang.shipping}：</td>
             <td colspan="3" width="85%" align="left" bgcolor="#ffffff">${order.shippingName}</td>
@@ -546,37 +559,37 @@
             <td width="15%" align="right" bgcolor="#ffffff">${lang.payment}：</td>
             <td colspan="3" align="left" bgcolor="#ffffff">${order.payName}</td>
           </tr>
-          <#if  (order.insureFee  >  0)  >
+          <#if ( order.insureFee > 0  ) >
           </#if>
-          <#if  order.packName??  >
+          <#if ( order.packName??  ) >
           <tr>
             <td width="15%" align="right" bgcolor="#ffffff">${lang.usePack}：</td>
             <td colspan="3" align="left" bgcolor="#ffffff">${order.packName}</td>
           </tr>
           </#if>
-          <#if  order.cardName??  >
+          <#if ( order.cardName??  ) >
           <tr>
             <td width="15%" align="right" bgcolor="#ffffff">${lang.useCard}：</td>
             <td colspan="3" align="left" bgcolor="#ffffff">${order.cardName}</td>
           </tr>
           </#if>
-          <#if  order.cardMessage??  >
+          <#if ( order.cardMessage??  ) >
           <tr>
             <td width="15%" align="right" bgcolor="#ffffff">${lang.blessNote}：</td>
             <td colspan="3" align="left" bgcolor="#ffffff">${order.cardMessage}</td>
           </tr>
           </#if>
-          <#if  (order.surplus  >  0)  >
+          <#if ( order.surplus > 0  ) >
           </#if>
-          <#if  (order.integral  >  0)  >
+          <#if ( order.integral > 0  ) >
           <tr>
             <td width="15%" align="right" bgcolor="#ffffff">${lang.useIntegral}：</td>
             <td colspan="3" align="left" bgcolor="#ffffff">${order.integral}</td>
           </tr>
           </#if>
-          <#if  (order.bonus  >  0)  >
+          <#if ( order.bonus > 0  ) >
           </#if>
-          <#if  order.invPayee??  &&  order.invContent??  >
+          <#if ( order.invPayee?? && order.invContent??  ) >
           <tr>
             <td width="15%" align="right" bgcolor="#ffffff">${lang.invoiceTitle}：</td>
             <td width="36%" align="left" bgcolor="#ffffff">${order.invPayee}</td>
@@ -584,7 +597,7 @@
             <td width="25%" align="left" bgcolor="#ffffff">${order.invContent}</td>
           </tr>
           </#if>
-          <#if  order.postscript??  >
+          <#if ( order.postscript??  ) >
           <tr>
             <td width="15%" align="right" bgcolor="#ffffff">${lang.orderPostscript}：</td>
             <td colspan="3" align="left" bgcolor="#ffffff">${order.postscript}</td>
@@ -598,13 +611,11 @@
       </#if>
     <!--#订单详情页 end-->
     <!--#会员余额 start-->
-      <#if  action  ==  "accountRaply"  ||  action  ==  "accountLog"  ||  action  ==  "accountDeposit"  ||  action  ==  "accountDetail"  >
+      <#if ( action == "accountRaply" || action == "accountLog" || action == "accountDeposit" || action == "accountDetail"  ) >
         <script type="text/javascript">
-
-<#list lang.accountJs?keys as key>
-<#assign item = lang.accountJs.get(key)>
-var ${key} = "${item}";
-</#list>          
+          <#list lang.accountJs?keys as key> <#assign item = lang.accountJs.get(key)>
+            var ${key} = "${item}";
+          </#list>
         </script>
         <h5><span>${lang.userBalance}</span></h5>
         <div class="blank"></div>
@@ -614,7 +625,7 @@ var ${key} = "${item}";
           </tr>
         </table>
         </#if>
-        <#if  action  ==  "accountRaply"  >
+        <#if ( action == "accountRaply"  ) >
         <form name="formSurplus" method="post" action="user.action" onSubmit="return submitSurplus()">
         <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
           <tr>
@@ -637,7 +648,7 @@ var ${key} = "${item}";
         </table>
         </form>
         </#if>
-        <#if  action  ==  "accountDeposit"  >
+        <#if ( action == "accountDeposit"  ) >
         <form name="formSurplus" method="post" action="user.action" onSubmit="return submitSurplus()">
         <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
             <tr>
@@ -678,7 +689,7 @@ var ${key} = "${item}";
           </table>
         </form>
         </#if>
-        <#if  action  ==  "actAccount"  >
+        <#if ( action == "actAccount"  ) >
         <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
           <tr>
             <td width="25%" align="right" bgcolor="#ffffff">${lang.surplusAmount}</td>
@@ -701,7 +712,7 @@ var ${key} = "${item}";
           </tr>
         </table>
         </#if>
-       <#if  action  ==  "accountDetail"  >
+       <#if ( action == "accountDetail"  ) >
         <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
           <tr align="center">
             <td bgcolor="#ffffff">${lang.processTime}</td>
@@ -723,7 +734,7 @@ var ${key} = "${item}";
         </table>
         <#include "library/pages.ftl">
         </#if>
-        <#if  action  ==  "accountLog"  >
+        <#if ( action == "accountLog"  ) >
         <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
           <tr align="center">
             <td bgcolor="#ffffff">${lang.processTime}</td>
@@ -743,7 +754,7 @@ var ${key} = "${item}";
             <td align="left" bgcolor="#ffffff">${item.shortAdminNote}</td>
             <td align="center" bgcolor="#ffffff">${item.payStatus}</td>
             <td align="right" bgcolor="#ffffff">${item.handle}
-              <#if  (item.isPaid  ==  0  &&  item.processType??  ==  1)  ||  item.handle??  >
+              <#if ( ( item.isPaid == 0 && item.processType == 1 ) || item.handle??  ) >
               <a href="user.action?act=cancel&id=${item.id}" onclick="if (!confirm('${lang.confirmRemoveAccount}')) return false;">${lang.isCancel}</a>
               </#if>
 							</td>
@@ -757,7 +768,7 @@ var ${key} = "${item}";
       </#if>
       <!--#会员余额 end-->
       <!--#收货地址页面 -->
-      <#if  action  ==  'addressList'  >
+      <#if ( action == 'addressList'  ) >
         <h5><span>${lang.consigneeInfo}</span></h5>
         <div class="blank"></div>
          
@@ -771,7 +782,7 @@ var ${key} = "${item}";
               <#list lang.flowJs?keys as key> <#assign item = lang.flowJs.get(key)>
               var ${key} = "${item}";
               </#list>
-              {literal}
+              
               onload = function() {
                 if (!document.all)
                 {
@@ -780,8 +791,7 @@ var ${key} = "${item}";
               }
               
             </script>
-            <#list consigneeList as consignee>
-            <#assign sn = consignee_index >
+            <#list consigneeList as consignee> <#assign sn = consignee_index >
             <form action="user.action" method="post" name="theForm" onsubmit="return checkConsignee(this)">
               <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
                 <tr>
@@ -789,25 +799,25 @@ var ${key} = "${item}";
                   <td colspan="3" align="left" bgcolor="#ffffff"><select name="country" id="selCountries_${sn}" onchange="region.changed(this, 1, 'selProvinces_${sn}')">
                       <option value="0">${lang.pleaseSelect}${nameOfRegion[0]}</option>
                       <#list countryList as country>
-                      <option value="${country.regionId}" <#if  consignee.country  ==  country.regionId  >selected</#if>>${country.regionName}</option>
+                      <option value="${country.regionId}" <#if ( consignee.country == country.regionId  ) >selected</#if>>${country.regionName}</option>
                       </#list>
                     </select>
                     <select name="province" id="selProvinces_${sn}" onchange="region.changed(this, 2, 'selCities_${sn}')">
                       <option value="0">${lang.pleaseSelect}${nameOfRegion[1]}</option>
                       <#list provinceList[sn] as province>
-                      <option value="${province.regionId}" <#if  consignee.province  ==  province.regionId  >selected</#if>>${province.regionName}</option>
+                      <option value="${province.regionId}" <#if ( consignee.province == province.regionId  ) >selected</#if>>${province.regionName}</option>
                       </#list>
                     </select>
                     <select name="city" id="selCities_${sn}" onchange="region.changed(this, 3, 'selDistricts_${sn}')">
                       <option value="0">${lang.pleaseSelect}${nameOfRegion[2]}</option>
                       <#list cityList[sn] as city>
-                      <option value="${city.regionId}" <#if  consignee.city  ==  city.regionId >selected</#if>>${city.regionName}</option>
+                      <option value="${city.regionId}" <#if ( consignee.city == city.regionId  ) >selected</#if>>${city.regionName}</option>
                       </#list>
                     </select>
-                    <select name="district" id="selDistricts_${sn}" <#if  !districtList.sn??  >style="display:none"</#if>>
+                    <select name="district" id="selDistricts_${sn}" <#if ( !districtList. sn??  ) >style="display:none"</#if>>
                       <option value="0">${lang.pleaseSelect}${nameOfRegion[3]}</option>
                       <#list districtList[sn] as district>
-                      <option value="${district.regionId}" <#if  consignee.district  ==  district.regionId  >selected</#if>>${district.regionName}</option>
+                      <option value="${district.regionId}" <#if ( consignee.district == district.regionId  ) >selected</#if>>${district.regionName}</option>
                       </#list>
                     </select>
                   ${lang.requireField} </td>
@@ -842,7 +852,7 @@ var ${key} = "${item}";
                 </tr>
                 <tr>
                   <td align="right" bgcolor="#ffffff">&nbsp;</td>
-                  <td colspan="3" align="center" bgcolor="#ffffff"><#if  consignee.consignee??  &&  consignee.email??  >
+                  <td colspan="3" align="center" bgcolor="#ffffff"><#if ( consignee.consignee?? && consignee.email??  ) >
                     <input type="submit" name="submit" class="bnt_blue_1" value="${lang.confirmEdit}" />
                     <input name="button" type="button" class="bnt_blue"  onclick="if (confirm('${lang.confirmDropAddress}'))location.href='user.action?act=drop_consignee&id=${consignee.addressId}'" value="${lang.drop}" />
                     <#else>
@@ -858,10 +868,10 @@ var ${key} = "${item}";
       </#if>
     <!--#收货地址添加页面 -->
       <!--* 积分兑换-->
-       <#if  action  ==  'transformPoints'  >
+       <#if ( action == 'transformPoints'  ) >
        <h5><span>${lang.transformPoints}</span></h5>
 			 <div class="blank"></div>
-       <#if  exchangeType  ==  'ucenter'  >
+       <#if ( exchangeType == 'ucenter'  ) >
         <form action="user.action" method="post" name="transForm" onsubmit="return calcredit();">
        <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
 			    <tr>
@@ -879,7 +889,11 @@ var ${key} = "${item}";
             <th align="right" bgcolor="#FFFFFF"><label for="amount">${lang.exchangeAmount}:</label></th>
             <td bgcolor="#FFFFFF"><input size="15" name="amount" id="amount" value="0" onkeyup="calcredit();" type="text" />
                 <select name="fromcredits" id="fromcredits" onchange="calcredit();">
-                  TODO: htmlOptions CLAUSE
+                  <#list lang.exchangePoints?keys as key>
+<#assign val = lang.exchangePoints.get(key)>
+<option value="${key}" <#if selectedOrg == key>selected</#if> >${val}</option>
+</#list>
+
                 </select>
             </td>
           </tr>
@@ -887,7 +901,11 @@ var ${key} = "${item}";
             <th align="right" bgcolor="#FFFFFF"><label for="desamount">${lang.exchangeDesamount}:</label></th>
             <td bgcolor="#FFFFFF"><input type="text" name="desamount" id="desamount" disabled="disabled" value="0" size="15" />
               <select name="tocredits" id="tocredits" onchange="calcredit();">
-                TODO: htmlOptions CLAUSE
+                <#list toCreditsOptions?keys as key>
+<#assign val = toCreditsOptions.get(key)>
+<option value="${key}" <#if selectedDst == key>selected</#if> >${val}</option>
+</#list>
+
               </select>
             </td>
           </tr>
@@ -900,12 +918,12 @@ var ${key} = "${item}";
   </table>
         </form>
        <script type="text/javascript">
-        <#list lang.exchangeJs as langJs>
+        <#list lang.exchangeJs?keys as key> <#assign langJs = lang.exchangeJs.get(key)>
         var ${key} = '${langJs}';
         </#list>
 
         var out_exchange_allow = new Array();
-        <#list outExchangeAllow as ratio>
+        <#list outExchangeAllow?keys as key> <#assign ratio = outExchangeAllow.get(key)>
         out_exchange_allow['${key}'] = '${ratio}';
         </#list>
 
@@ -994,7 +1012,7 @@ var ${key} = "${item}";
           <tr>
             <td>
               <select name="rule_index" onchange="changeRule()">
-                <#list ruleList as rule>
+                <#list ruleList as rule> <#assign key = rule_index >
                 <option value="${key}">${rule.from}->${rule.to}</option>
                 </#list>
               </select>
@@ -1013,7 +1031,7 @@ var ${key} = "${item}";
           //<![CDATA[
             var rule_list = new Object();
             var invalid_input = '${lang.invalidInput}';
-            <#list ruleList as rule>
+            <#list ruleList as rule> <#assign key = rule_index >
             rule_list['${key}'] = '${rule.rate}';
             </#list>
             function calPoints()
@@ -1067,6 +1085,5 @@ var ${key} = "${item}";
 <#list lang.clipsJs?keys as key> <#assign item = lang.clipsJs.get(key)>
 var ${key} = "${item}";
 </#list>
-
 </script>
 </html>

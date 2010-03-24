@@ -3,7 +3,7 @@
   <h3><span>&nbsp;</span></h3>
   <div class="boxCenterList">
     ${info}<br>
-    <#if  member??  >
+    <#if ( member??  ) >
     <#list member as val>
       ${val.userName} 
     </#list>

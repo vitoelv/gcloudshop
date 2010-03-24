@@ -45,7 +45,7 @@
         <ul class="clearfix">
         <#list snatchList as item>
         <li><a href="${item.url}">${item.snatchName}</a>&nbsp;&nbsp;
-          <#if  item.overtime??  >
+          <#if ( item.overtime??  ) >
           (${lang.end})
           </#if>
         </li>
@@ -78,7 +78,7 @@
      ${lang.shopPrice} <font class="shop">${goods.formatedShopPrice}</font><br />
      ${lang.marketPrice} <font class="market">${goods.formatedMarketPrice}</font> <br />
      ${lang.residualTime} <font color="red"><span id="leftTime">${lang.pleaseWaiting}</span></font><br />
-     ${lang.activityDesc}：<br />${goods.desc?html|nl2br}
+     ${lang.activityDesc}：<br />${goods.desc?html}
       </li>
       </ul>
     </div>
@@ -93,7 +93,7 @@
     ${lang.priceExtent}${goods.formatedStartPrice} - ${goods.formatedEndPrice} <br />
     ${lang.userToUseUp}${goods.costPoints} ${pointsName}<br />
     ${lang.snatchVictoryDesc}<br />
-    <#if  goods.maxPrice  !=  0  >    ${lang.priceLessVictory}${goods.formatedMaxPrice}，${lang.priceThanVictory}${goods.formatedMaxPrice}，${lang.orCan}${goods.formatedMaxPrice}${lang.shoppingProduct}。
+    <#if ( goods.maxPrice != 0  ) >    ${lang.priceLessVictory}${goods.formatedMaxPrice}，${lang.priceThanVictory}${goods.formatedMaxPrice}，${lang.orCan}${goods.formatedMaxPrice}${lang.shoppingProduct}。
     <#else>
     ${lang.victoryPriceProduct}
     </#if>
@@ -119,14 +119,14 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<#if  imgLinks??  ||  txtLinks??  >
+<#if ( imgLinks?? || txtLinks??  ) >
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
     <#list imgLinks as link>
     <a href="${link.url}" target="_blank" title="${link.name}"><img src="${link.logo}" alt="${link.name}" border="0" /></a>
     </#list>
-    <#if  txtLinks??  >
+    <#if ( txtLinks??  ) >
     <#list txtLinks as link>
     [<a href="${link.url}" target="_blank" title="${link.name}">${link.name}</a>]
     </#list>
@@ -140,15 +140,15 @@
 <#include "library/page_footer.ftl">
 </body>
 <script type="text/javascript">
-var gmt_end_time = ${goods.gmtEndTime|default:0};
+var gmt_end_time = ${goods.gmtEndTime};
 var id = ${id};
-<#list lang.snatchJs as item>
+<#list lang.snatchJs?keys as key> <#assign item = lang.snatchJs.get(key)>
 var ${key} = "${item}";
 </#list>
-<#list lang.goodsJs as item>
+<#list lang.goodsJs?keys as key> <#assign item = lang.goodsJs.get(key)>
 var ${key} = "${item}";
 </#list>
-{literal}
+
 
 onload = function()
 {

@@ -2,7 +2,7 @@
  <div class="box_1">
   <h3>
   <span><a href="${articlesCat.url}">${articlesCat.name?html}</a></span>
-  <a href="${articlesCat.url}"><img src="../images/more.gif" alt="more" /></a>
+  <a href="${articlesCat.url}"><img src="images/more.gif" alt="more" /></a>
   </h3>
   <div class="boxCenterList RelaArticle">
   <#list articles as article>

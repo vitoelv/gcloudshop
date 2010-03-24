@@ -52,7 +52,7 @@
    <div class="box_1">
     <h3><span>${lang.auctionGoods}</span></h3>
     <div class="boxCenterList">
-      <#if  auctionList??  >
+      <#if ( auctionList??  ) >
       <#list auctionList as auction>
       <ul class="group clearfix">
       <li style="margin-right:8px; text-align:center;">
@@ -61,15 +61,15 @@
       <li style="width:555px; line-height:23px;">
       ${lang.goodsName}：<a href="${auction.url}" class="f5">${auction.goodsName?html}</a><br />
       ${lang.actStatus}：
-    <#if  auction.statusNo  ==  0  >
+    <#if ( auction.statusNo == 0  ) >
             ${lang.auPreStart}<br>
-            <#elseif  auction.statusNo  ==  1  >
+            <#elseif ( auction.statusNo == 1  ) >
             ${lang.auUnderWay_1}<br>
             <#else>
             ${lang.auFinished}<br>
             </#if>
     ${lang.auStartPrice}：${auction.formatedStartPrice}<br>
-    <#if  auction.endPrice  >  0  >
+    <#if ( auction.endPrice > 0  ) >
     ${lang.auEndPrice}：${auction.formatedEndPrice}
           </#if>
       </li>
@@ -98,14 +98,14 @@
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<#if  imgLinks??  ||  txtLinks??  >
+<#if ( imgLinks?? || txtLinks??  ) >
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
     <#list imgLinks as link>
     <a href="${link.url}" target="_blank" title="${link.name}"><img src="${link.logo}" alt="${link.name}" border="0" /></a>
     </#list>
-    <#if  txtLinks??  >
+    <#if ( txtLinks??  ) >
     <#list txtLinks as link>
     [<a href="${link.url}" target="_blank" title="${link.name}">${link.name}</a>]
     </#list>

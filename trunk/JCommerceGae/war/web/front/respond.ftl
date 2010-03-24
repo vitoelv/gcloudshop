@@ -23,16 +23,16 @@ p a{color:#006acd; text-decoration:underline;}
       <h3><span>${lang.systemInfo}</span></h3>
       <div style="padding:30px 0; text-align:center;">
         <p style="font-size: 14px; font-weight:bold; color: red;">${message}</p>
-        <#if  virtualCard??  >
+        <#if ( virtualCard??  ) >
         <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
         <#list virtualCard as vgoods>
           <#list vgoods.info as card>
             <tr>
             <td bgcolor="#FFFFFF">${vgoods.goodsName}</td>
             <td bgcolor="#FFFFFF">
-            <#if  card.cardSn??  ><strong>${lang.cardSn}:</strong>${card.cardSn}</#if>
-            <#if  card.cardPassword??  ><strong>${lang.cardPassword}:</strong>${card.cardPassword}</#if>
-            <#if  card.endDate??  ><strong>${lang.endDate}:</strong>${card.endDate}</#if>
+            <#if ( card.cardSn??  ) ><strong>${lang.cardSn}:</strong>${card.cardSn}</#if>
+            <#if ( card.cardPassword??  ) ><strong>${lang.cardPassword}:</strong>${card.cardPassword}</#if>
+            <#if ( card.endDate??  ) ><strong>${lang.endDate}:</strong>${card.endDate}</#if>
             </td>
             </tr>
           </#list>

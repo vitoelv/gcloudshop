@@ -1,4 +1,4 @@
-<#if  myprice.isEnd  ==  false  >
+<#if ( myprice.isEnd == false  ) >
 <div class="box">
    <div class="box_1">
     <h3><span>${lang.meBid}</span></h3>
@@ -21,7 +21,7 @@
     <div class="boxCenterList">
     <#list myprice.bidPrice as item>
       ${item.price}
-      <#if  item.isOnly??  >
+      <#if ( item.isOnly??  ) >
       (${lang.onlyPrice})
       </#if>
       <br>
@@ -37,7 +37,7 @@
    <div class="box_1">
     <h3><span>${lang.viewSnatchResult}</span></h3>
     <div class="boxCenterList">
-<#if  result??  >
+<#if ( result??  ) >
 <form name="buy" action="snatch.action" method="get">
 <table width="100%" border="0" cellpadding="5" cellspacing="1" bgcolor="#dddddd">
   <tr>
@@ -51,7 +51,7 @@
   <tr>
     <td bgcolor="#FFFFFF">${lang.priceBid}</td>
     <td bgcolor="#FFFFFF">${result.formatedBidPrice} &nbsp;&nbsp;
-    <#if  result.orderCount  ==  0  &&  result.userId??  ==  smarty.session.userId??  >
+    <#if ( result.orderCount == 0 && result.userId ==  ) >
       <input type="submit" name="bug" class="bnt_blue_1" title="${lang.buttonBuy}" />
     </#if>
     </td>

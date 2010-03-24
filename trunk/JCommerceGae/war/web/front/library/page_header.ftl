@@ -11,11 +11,11 @@ var process_request = "${lang.processRequest}";
 
    <font id="ECS_MEMBERZONE"><#include "member_info.ftl"> </font>
    </li>
-	 <#if  navigatorList.top??  >
+	 <#if ( navigatorList.top??  ) >
    <li id="topNav" class="clearfix">
     <#list navigatorList.top as nav>
-            <a href="${nav.url}" <#if  nav.opennew  ==  1  > target="_blank" </#if>>${nav.name}</a>
-            <#if  nav_has_next  >
+            <a href="${nav.url}" <#if ( nav.opennew == 1  ) > target="_blank" </#if>>${nav.name}</a>
+            <#if ( nav_has_next  ) >
              |
             </#if>
     </#list>
@@ -27,15 +27,16 @@ var process_request = "${lang.processRequest}";
 </div>
 <div  class="blank"></div>
 <div id="mainNav" class="clearfix">
-  <a href="home.action"<#if  navigatorList.config.index  ==  1  > class="cur"</#if>>${lang.home}<span></span></a>
+  <a href="home.action"<#if ( navigatorList.config.index == 1  ) > class="cur"</#if>>${lang.home}<span></span></a>
   <#list navigatorList.middle as nav>
-  <a href="${nav.url}" <#if  nav.opennew  ==  1  >target="_blank" </#if> <#if  nav.active  ==  1  > class="cur"</#if>>${nav.name}<span></span></a>
+  <a href="${nav.url}" <#if ( nav.opennew == 1  ) >target="_blank" </#if> <#if ( nav.active == 1  ) > class="cur"</#if>>${nav.name}<span></span></a>
  </#list>
 </div>
 <!--search start-->
 <div id="search"  class="clearfix">
   <div class="keys f_l">
    <script type="text/javascript">
+    
     <!--
     function checkSearchForm()
     {
@@ -52,7 +53,7 @@ var process_request = "${lang.processRequest}";
     -->
     
     </script>
-    <#if  searchkeywords??  >
+    <#if ( searchkeywords??  ) >
    ${lang.hotSearch} ：
    <#list searchkeywords as val>
    <a href="search.action?keywords=${val}">${val}</a>
@@ -65,7 +66,6 @@ var process_request = "${lang.processRequest}";
       ${categoryList}
     </select>
    <input name="keywords" type="text" id="keyword" value="${searchKeywords}" class="B_input" style="width:110px;"/>
-   <input name="act" type="hidden" value="compassSearch"/>
    <input name="imageField" type="submit" value="" class="go" style="cursor:pointer;" />
    <a href="search.action?act=advanced_search">${lang.advancedSearch}</a>
    </form>

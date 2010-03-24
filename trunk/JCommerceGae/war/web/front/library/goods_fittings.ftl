@@ -1,4 +1,4 @@
-<#if  fittings??  >
+<#if ( fittings??  ) >
 <div class="box">
  <div class="box_1">
   <h3><span>${lang.accessoriesReleate}</span></h3>

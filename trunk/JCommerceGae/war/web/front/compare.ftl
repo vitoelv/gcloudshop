@@ -46,7 +46,7 @@ function remove(id, url)
               <tr>
                 <th width="120" align="center" bgcolor="#ffffff">${lang.goodsName}</th>
                 <#list goodsList as goods>
-                <td align="center" bgcolor="#ffffff" <#if  smarty.foreach.goodsList.total  >  3  >width="200"<#else></#if>> ${goods.goodsName}</td>
+                <td align="center" bgcolor="#ffffff" <#if ( goodsList?size > 3  ) >width="200"<#else></#if>> ${goods.goodsName}</td>
                 </#list>
               </tr>
               <tr>
@@ -55,7 +55,7 @@ function remove(id, url)
                 <td  align="center" bgcolor="#ffffff" style="padding:5px;"><a href="${goods.url}"><img src="${goods.goodsThumb}" alt="${goods.goodsName}" class="ent_img" /></a></td>
                 </#list>
               </tr>
-              <#if  smarty.foreach.goodsList.total  >  2  >
+              <#if ( TODO: sth wrong here > 2  ) >
               <tr>
                 <td bgcolor="#ffffff">&nbsp;</td>
                 <#list goodsList as goods>
@@ -82,13 +82,13 @@ function remove(id, url)
                 <td bgcolor="#ffffff">&nbsp;&nbsp;${goods.goodsWeight}</td>
                 </#list>
               </tr>
-              <#list attribute as val>
+              <#list attribute?keys as key> <#assign val = attribute.get(key)>
               <tr>
                 <th align="left" bgcolor="#ffffff">&nbsp;&nbsp;${val}</th>
                 <#list goodsList as goods>
                 <td bgcolor="#ffffff">&nbsp;&nbsp;
-                  <#list goods.properties as property>
-                  <#if  k  ==  key??  >
+                  <#list goods.properties?keys as k> <#assign property = goods.properties.get(k)>
+                  <#if ( k == key  ) >
                   ${property.value}
                   </#if>
                   </#list>                </td>
@@ -128,14 +128,14 @@ function remove(id, url)
 <div class="blank"></div>
 <!--帮助-->
 <!--友情链接 start-->
-<#if  imgLinks??  ||  txtLinks??  >
+<#if ( imgLinks?? || txtLinks??  ) >
 <div id="bottomNav" class="box">
  <div class="box_1">
   <div class="links clearfix">
     <#list imgLinks as link>
     <a href="${link.url}" target="_blank" title="${link.name}"><img src="${link.logo}" alt="${link.name}" border="0" /></a>
     </#list>
-    <#if  txtLinks??  >
+    <#if ( txtLinks??  ) >
     <#list txtLinks as link>
     [<a href="${link.url}" target="_blank" title="${link.name}">${link.name}</a>]
     </#list>

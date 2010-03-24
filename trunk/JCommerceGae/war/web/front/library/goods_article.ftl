@@ -1,4 +1,4 @@
-<#if  goodsArticleList??  >
+<#if ( goodsArticleList??  ) >
 <div class="box">
  <div class="box_1">
   <h3><span>${lang.articleReleate}</span></h3>

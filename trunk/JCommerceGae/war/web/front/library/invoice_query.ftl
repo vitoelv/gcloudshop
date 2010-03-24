@@ -1,4 +1,4 @@
-<#if  invoiceList??  >
+<#if ( invoiceList??  ) >
 <div class="box">
  <div class="box_1">
   <h3><span>${lang.shippingQuery}</span></h3>
