@@ -213,10 +213,10 @@ public class GoodsForm extends BeanObject implements IGoods {
 				if(super.validateValue(value) == false) {
 					return false;
 				}
-				if(value!=null && value.length()>500) {
-					markInvalid("Size of content must be less than 500 words.");
-					return false;
-				}
+//				if(value!=null && value.length()>500) {
+//					markInvalid("Size of content must be less than 500 words.");
+//					return false;
+//				}
 				return true;
 			}			
 		};
