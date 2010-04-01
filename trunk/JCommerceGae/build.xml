@@ -8,7 +8,7 @@
     <property name="prod.PATCH_LEVEL" value="0"/>
 	
     <property name="gwt.sdk" location="D:/JCommerce/gwt-2.0.3" />
-	<property name="GAE_HOME" value="D:/JCommerce/appengine-java-sdk-1.3.1" />
+	<property name="GAE_HOME" value="D:/JCommerce/appengine-java-sdk-1.3.2" />
 	<property name="DEBUG" value="true" />
 	<property name="output-path" value="./build" />
 	<property name="output-base-path" value="${output-path}/war" />
@@ -80,6 +80,7 @@
 		<echo message="install-demo-en  --> prepare and install English version demo" />
 		<echo message="install-demo-zh  --> prepare and install Chinese version demo" />
 		<echo message="install-site  --> prepare and install home site" />		
+		<echo message="install-site-only  --> install pre-created home site" />
 		<echo message=""/>
 		
 		<echo message="zip-release-en  --> create release of English version" />
@@ -206,16 +207,21 @@
 		
 	</target>
 
-	<target name="install-site" depends="create-site" description="install release zips">
+	<target name="install-site" depends="create-site, install-site-only" description="install release zips">
+
+	</target>
+
+	<target name="install-site-only" description="install site from created war under release">
 		<echo>Starting install gcshop site  ...</echo>
 		<java classname="com.google.appengine.tools.admin.AppCfg" fork="true" dir="${release-site-path}" classpathref="install.classpath">
 
 			<arg value="--enable_jar_splitting" />
+			<arg value="--email=yongli21cn@gmail.com" />
 			<arg value="update" />
 			<arg value="war" />
-		</java>
+		</java>		
 	</target>
-
+	
 	<target name="zip-release-all" depends="zip-release-zh, zip-release-en"  description="create release of all version">
 		
 	</target>
