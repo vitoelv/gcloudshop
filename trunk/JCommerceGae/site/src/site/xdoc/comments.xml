@@ -16,10 +16,11 @@
     <section name="Comments">
 
      
-      <p> <!-- Include the Google Friend Connect javascript library. -->
+      <p> 
+<!-- Include the Google Friend Connect javascript library. -->
 <script type="text/javascript" src="http://www.google.com/friendconnect/script/friendconnect.js"></script>
 <!-- Define the div tag where the gadget will be inserted. -->
-<div id="div-2746202435823652779" style="width:800px;border:1px solid #cccccc;"></div>
+<div id="div-4811817894213050065" style="width:800px;border:1px solid #cccccc;"></div>
 <!-- Render the gadget into a div. -->
 <script type="text/javascript">
 var skin = {};
@@ -34,17 +35,17 @@ skin['CONTENT_TEXT_COLOR'] = '#333333';
 skin['CONTENT_SECONDARY_LINK_COLOR'] = '#7777cc';
 skin['CONTENT_SECONDARY_TEXT_COLOR'] = '#666666';
 skin['CONTENT_HEADLINE_COLOR'] = '#333333';
-skin['DEFAULT_COMMENT_TEXT'] = '- \u5728\u6b64\u5904\u6dfb\u52a0\u8bc4\u8bba -';
-skin['HEADER_TEXT'] = '\u8bc4\u8bba';
+skin['DEFAULT_COMMENT_TEXT'] = '- add your comment here -';
+skin['HEADER_TEXT'] = 'Comments';
 skin['POSTS_PER_PAGE'] = '5';
 google.friendconnect.container.setParentUrl('/' /* location of rpc_relay.html and canvas.html */);
 google.friendconnect.container.renderWallGadget(
- { id: 'div-2746202435823652779',
-   site: '09811469972169524589',
-   'view-params':{'disableMinMax':'true','scope':'SITE','features':'video,comment','startMaximized':'true'}
+ { id: 'div-4811817894213050065',
+   site: '06420635440333458243',
+   'view-params':{'disableMinMax':'true','scope':'SITE','allowAnonymousPost':'true','features':'comment','startMaximized':'true'}
  },
   skin);
-</script>
+</script>      
 </p>
 
 
