@@ -5,7 +5,7 @@
   <bannerLeft>
     <name>gcShop</name>
     <src>images/logo_165_100.gif</src>
-    <href>http://gcloudshop.appspot.com/</href>
+    <href>http://gc-shop.appspot.com/</href>
   </bannerLeft>
   <bannerRight>
   	<name>gcShop</name>
@@ -22,13 +22,17 @@
       <item name="Why gcShop" href="why.html"/>
       <item name="FAQ" href="faq.html"/>
       <item name="Live Demo" href="demo.html"/>
-	  <item name="Mailing List" href="mailing-list.html" />      
-      <item name="Contact Us" href="contact.html" />
       <item name="Download" href="download.html"/>
       <item name="License" href="license.html"/>      
-      <item name="News" href="news.html"/>      
+            
     </menu>
-
+	
+	<menu name="Community">
+	    <item name="Contact Us" href="contact.html" />
+      	<item name="Comments" href="comments.html" />	      
+	    <item name="Mailing List" href="mailing-list.html" />
+	    <item name="News" href="news.html"/>
+	</menu>
     <!--     
     <menu name="Live Demo">
 
@@ -45,7 +49,7 @@
     <menu name="Under Construction">
 
       <item name="Discussion" href="discussion.html" />
-      <item name="Comments" href="comments.html" /> 
+ 
       <!-- item name="Developer" href="developer.html" /-->      
     </menu>
     

@@ -5,7 +5,7 @@
   <bannerLeft>
     <name>gcShop--基于Google App Engine的独立网店系统</name>
     <src>../images/logo_165_100.gif</src>
-    <href>http://gcloudshop.appspot.com/</href>
+    <href>http://gc-shop.appspot.com/</href>
   </bannerLeft>
   <bannerRight>
   	<name>gcShop</name>
@@ -22,14 +22,16 @@
 	  <item name="为什么gcShop" href="why.html"/>
 	  <item name="常见问题" href="faq.html"/>       
       <item name="在线演示" href="demo.html"/>
-      <item name="邮件列表" href="mailing-list.html" />
-      <item name="联系我们" href="contact.html" />
 	  <item name="资源下载" href="download.html"/>
-      <item name="授权许可" href="license.html"/>	        
-	  <item name="项目新闻" href="news.html"/>
+      <item name="授权许可" href="license.html"/>
     </menu>
     
-
+    <menu name="社区交流">
+      <item name="联系我们" href="contact.html" />
+      <item name="留言板" href="comments.html" />              
+      <item name="邮件列表" href="mailing-list.html" />
+	  <item name="项目新闻" href="news.html"/>
+	</menu>
     
     <menu name="寻求合作">
       <item name="技术合作" href="coop-technology.html"/>
@@ -38,7 +40,7 @@
     
     <menu name="正在建设">
       <item name="讨论讨论" href="discussion.html" />      
-      <item name="留言板" href="comments.html" />   
+         
       <!-- item name="开发者" href="developer.html" /-->
     </menu>
 	<!--
