@@ -224,4 +224,9 @@ public class GoodsForm extends BeanObject implements IGoods {
 		field.setAutoValidate(true);
 		return field;
 	}
+	public static HiddenField<String> getGoogleBaseDataIdField() {
+		HiddenField<String> googleBaseDataIdField = new HiddenField<String>();
+		googleBaseDataIdField.setName(GOOGLE_BASE_DATA_ID);
+		return googleBaseDataIdField;
+	}
 }

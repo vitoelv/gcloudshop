@@ -22,6 +22,7 @@ import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.CustomizedManager;
 import com.jcommerce.core.util.DataStoreUtils;
+import com.jcommerce.core.util.GoogleBaseUtil;
 import com.jcommerce.core.util.MyPropertyUtil;
 import com.jcommerce.core.util.UUIDLongGenerator;
 import com.jcommerce.gwt.client.ModelNames;
@@ -236,6 +237,12 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 			
 			String res = txattach(to);
 			
+			GoogleBaseUtil gbUtil = new GoogleBaseUtil();
+			 String token = gbUtil.authenticate();
+			 gbUtil.buildDataItem(to);
+			 String gbdid = gbUtil.postItem(token);
+			 to.setGoogleBaseDataId(gbdid);
+			
 			
 			// verify,  debug only 
 			for(GoodsGallery gallery:galleries) {
@@ -254,6 +261,7 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 			super.getList(t1, ModelNames.GOODSGALLERY, criteria, -1, -1);
 			System.out.println("size: "+t1.size());
 			
+			res = txattach(to);
 			
 			return res;
     	}catch (Exception e) {
@@ -336,8 +344,14 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 				po.getAttributes().add(gt);
 			}
 			
-			
+			System.out.println("System.out.println(updateResponse);");
 			txattach(po);
+			
+			GoogleBaseUtil gbUtil = new GoogleBaseUtil();
+			String token = gbUtil.authenticate();
+			gbUtil.buildDataItem(po);
+			String updateResponse = gbUtil.updateItem( token , po.getGoogleBaseDataId());
+			System.out.println(updateResponse);
 			
 			return true;
     	}catch (Exception e) {

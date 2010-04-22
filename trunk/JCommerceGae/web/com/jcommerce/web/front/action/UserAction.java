@@ -917,11 +917,25 @@ public class UserAction extends BaseAction {
 	        /*
 	         * 在线支付按钮
 	         */
-	        // TODO 支付方式信息
+			Payment paymentInfo = LibOrder.paymentInfo( ow.getOrderInfo().getPayId() , getDefaultManager());
+
+	        //无效支付方式
+	        if (paymentInfo == null)
+	        {
+	        	ow.put("payOnline", "");
+	        }
+	        else
+	        {
+	            //取得支付信息，生成支付代码
+	            if(ow.getOrderInfo().getOrderAmount()>0) {
+            		String payOnline = getPaymentMetaManager().getCode(ow.getOrderInfo().getPkId(), paymentInfo.getPkId());
+            		debug("payOnline: "+payOnline);
+            		ow.put("payDesc", paymentInfo.getPayDesc());
+            		ow.put("payOnline", payOnline);
+	            	
+	            }
+	        }
 			
-			//无效支付方式
-			// if ($payment_info === false)
-			ow.put("payOnline", "");
 			
 		}
 		else {

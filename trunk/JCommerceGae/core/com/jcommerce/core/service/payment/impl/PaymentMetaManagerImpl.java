@@ -58,6 +58,8 @@ public class PaymentMetaManagerImpl implements IPaymentMetaManager{
         metaRepo.put(netbank.getDefaultConfigMeta().getPayCode(), netbank);
         GoogleCheckout checkout = new GoogleCheckout();
         metaRepo.put(checkout.getDefaultConfigMeta().getPayCode(), checkout);
+        Authorizenet authorizenet = new Authorizenet();
+        metaRepo.put(authorizenet.getDefaultConfigMeta().getPayCode(), authorizenet);
     }
     
     

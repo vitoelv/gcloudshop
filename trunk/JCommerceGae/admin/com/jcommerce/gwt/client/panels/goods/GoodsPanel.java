@@ -118,6 +118,7 @@ public class GoodsPanel extends BaseFileUploadFormPanel implements Listener<Fiel
     DateField dfPromoteEndDate;
     
     HiddenField<String> idField;
+    HiddenField<String> googleBaseDataIdField;
     GalleryPanel4 contentPanelGallery;
     GoodsAttributePanel contentPanelAttrs;
     
@@ -422,6 +423,9 @@ public class GoodsPanel extends BaseFileUploadFormPanel implements Listener<Fiel
         
 		idField = GoodsForm.getIdField();
         contentPanelGeneral.add(idField);
+        
+        googleBaseDataIdField = GoodsForm.getGoogleBaseDataIdField();
+        contentPanelGeneral.add(googleBaseDataIdField);
         
         TextField<String> fText = GoodsForm.getNameField(Resources.constants.Goods_name());
         fText.setMaxLength(20);

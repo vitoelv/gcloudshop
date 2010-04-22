@@ -413,44 +413,45 @@ public class LibCommon {
 		// refer to Freemarker manuual chapter: Bean wrapper
 		cfg.setObjectWrapper(ObjectWrapper.BEANS_WRAPPER);
 		
+		//TODO
     	cfg.setDirectoryForTemplateLoading(new File("D:/Jcommerce/JCommerceGae/war/web/front/library"));  
-		Template t = cfg.getTemplate(templateName);
+		Template t = cfg.getTemplate(templateName,"UTF-8");
 		StringWriter stringWriter = new StringWriter();
      	t.process(map, stringWriter);
-     	return QBchange(stringWriter.toString());
+     	return stringWriter.toString();
 		
 	}
-	/**   
-     * 全角转半角   
-     * @param QJstr   
-     * @return   
-     */   
-    public static final String QBchange(String QJstr) {    
-        String outStr = "";    
-        String Tstr = "";    
-        byte[] b = null;    
-   
-        for (int i = 0; i < QJstr.length(); i++) {    
-            try {    
-                Tstr = QJstr.substring(i, i + 1);    
-                b = Tstr.getBytes("unicode");    
-            } catch (java.io.UnsupportedEncodingException e) {    
-                e.printStackTrace();    
-            }    
-   
-            if (b[3] == -1) {    
-                b[2] = (byte) (b[2] + 32);    
-                b[3] = 0;    
-                try {    
-                    outStr = outStr + new String(b, "unicode");    
-                } catch (java.io.UnsupportedEncodingException e) {    
-                    e.printStackTrace();    
-                }    
-            } else   
-                outStr = outStr + Tstr;    
-        }    
-   
-        return outStr;    
-    }    
+//	/**   
+//     * 全角转半角   
+//     * @param QJstr   
+//     * @return   
+//     */   
+//    public static final String QBchange(String QJstr) {    
+//        String outStr = "";    
+//        String Tstr = "";    
+//        byte[] b = null;    
+//   
+//        for (int i = 0; i < QJstr.length(); i++) {    
+//            try {    
+//                Tstr = QJstr.substring(i, i + 1);    
+//                b = Tstr.getBytes("unicode");    
+//            } catch (java.io.UnsupportedEncodingException e) {    
+//                e.printStackTrace();    
+//            }    
+//   
+//            if (b[3] == -1) {    
+//                b[2] = (byte) (b[2] + 32);    
+//                b[3] = 0;    
+//                try {    
+//                    outStr = outStr + new String(b, "unicode");    
+//                } catch (java.io.UnsupportedEncodingException e) {    
+//                    e.printStackTrace();    
+//                }    
+//            } else   
+//                outStr = outStr + Tstr;    
+//        }    
+//   
+//        return outStr;    
+//    }    
 	
 }

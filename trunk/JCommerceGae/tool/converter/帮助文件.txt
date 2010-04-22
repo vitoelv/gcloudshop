@@ -1,0 +1,4 @@
+1.使用记事本打开setup.bat，用你原模板路径和转换后模板输出路径替换"SourceTemplateDir"和"DestTempleteDir"  。
+2.保存退出。
+3.双击运行setup.bat。
+4.用转换后的模板文件替换JcommerceGae/war/web/front里的文件即可。
