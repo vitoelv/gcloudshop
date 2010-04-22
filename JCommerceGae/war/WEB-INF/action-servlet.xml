@@ -59,7 +59,9 @@
 	<bean name="userAction" scope="prototype"
         class="com.jcommerce.web.front.action.UserAction"
         parent="baseAction" >
-
+		<property name="paymentMetaManager">
+			<ref bean="PaymentMetaManager"/>
+		</property>	
 	</bean>	
 	<bean name="messageAction" scope="prototype"
         class="com.jcommerce.web.front.action.MessageAction"

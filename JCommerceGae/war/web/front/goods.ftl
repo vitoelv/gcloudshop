@@ -208,7 +208,7 @@ function reg(str){
         
                     <#if ( spec.attrType == 1  ) >
                       <#if ( cfg.goodsattrStyle == 1  ) >
-                        <#list spec.values?keys as key> <#assign value = spec.values.get(key)>
+                        <#list spec.values as value> <#assign key = value_index>
                         <label for="spec_value_${value.id}">
                         <input type="radio" name="spec_${specKey}" value="${value.id}" id="spec_value_${value.id}" <#if ( key == 0  ) >checked</#if> onclick="changePrice()" />
                         ${value.label} [<#if ( value.price > 0  ) >${lang.plus}<#elseif ( value.price < 0  ) >${lang.minus}</#if> ${value.formatPrice}|abs] </label><br />
@@ -216,14 +216,14 @@ function reg(str){
                         <input type="hidden" name="spec_list" value="${key}" />
                         <#else>
                         <select name="spec_${specKey}" onchange="changePrice()">
-                          <#list spec.values?keys as key> <#assign value = spec.values.get(key)>
+                          <#list spec.values as value> <#assign key = value_index>
                           <option label="${value.label}" value="${value.id}">${value.label} <#if ( value.price > 0  ) >${lang.plus}<#elseif ( value.price < 0  ) >${lang.minus}</#if><#if ( value.price != 0  ) >${value.formatPrice}</#if></option>
                           </#list>
                         </select>
                         <input type="hidden" name="spec_list" value="${key}" />
                       </#if>
                     <#else>
-                      <#list spec.values?keys as key> <#assign value = spec.values.get(key)>
+                      <#list spec.values as value> <#assign key = value_index>
                       <label for="spec_value_${value.id}">
                       <input type="checkbox" name="spec_${specKey}" value="${value.id}" id="spec_value_${value.id}" onclick="changePrice()" />
                       ${value.label} [<#if ( value.price > 0  ) >${lang.plus}<#elseif ( value.price < 0  ) >${lang.minus}</#if> ${value.formatPrice}|abs] </label><br />

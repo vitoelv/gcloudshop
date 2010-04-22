@@ -50,10 +50,19 @@ public class Goods extends ModelObject {
     @Persistent
     @IsPK(myclazz="com.jcommerce.core.model.DSFile")
     private DSFile thumbFile;
+    @Persistent
+    private String googleBaseDataId;
 	
 	
-	
-    public Set<GoodsAttr> getAttributes() {
+    public String getGoogleBaseDataId() {
+		return googleBaseDataId;
+	}
+
+	public void setGoogleBaseDataId(String googleBaseDataId) {
+		this.googleBaseDataId = googleBaseDataId;
+	}
+
+	public Set<GoodsAttr> getAttributes() {
 		return attributes;
 	}
 

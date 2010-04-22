@@ -125,6 +125,7 @@ public class GoodsAction extends BaseAction {
 	    GoodsPropertiesResult result = LibGoods.getGoodsProperties(goodsId, manager); // 获得商品的规格和属性
 	    request.setAttribute("properties", result.getPro());
 	    request.setAttribute("specification", result.getSpe());
+	    request.setAttribute("spec", result.getSpe());
 	    request.setAttribute("key", 0);
 	    includeComment(IComment.TYPE_GOODS, goodsId);
 	       

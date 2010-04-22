@@ -654,6 +654,7 @@ public class FlowAction extends BaseAction {
 		map.put("config", getRequest().getAttribute("cfg"));
 		map.put("total", total);
 		map.put("userId", getSession().getAttribute(KEY_USER_ID));
+		map.put("pointsName", getCachedShopConfig().get(IShopConfigMeta.CFG_KEY_INTEGRAL_NAME));
 		    	
     	return LibCommon.getTempleteContent( map, "order_total.ftl");
     }

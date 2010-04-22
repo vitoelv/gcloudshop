@@ -59,6 +59,6 @@ public interface IGoods extends IModelObject {
   public static final String SELLER_NOTE = "sellerNote"; 
   public static final String GIVE_INTEGRAL = "giveIntegral"; 
   public static final String RANK_INTEGRAL = "rankIntegral"; 
-
+  public static final String GOOGLE_BASE_DATA_ID = "googleBaseDataId";
 
 }
