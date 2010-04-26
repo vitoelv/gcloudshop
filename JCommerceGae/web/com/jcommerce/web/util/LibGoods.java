@@ -244,7 +244,7 @@ public class LibGoods {
 				v.setId(ga.getLongId()+"");
 				v.setLabel(ga.getAttrValue());
 				if(ga.getAttrPrice() != null)
-					v.setPrice(Math.abs(Double.parseDouble(ga.getAttrPrice())));
+					v.setPrice(Double.parseDouble(ga.getAttrPrice()));
 				values.add(v);
 				spe.setValues(values);
 				
@@ -347,7 +347,7 @@ public class LibGoods {
 			this.price = price;
 		}
 		public String getFormatPrice() {
-			return WebFormatUtils.priceFormat(getPrice());
+			return WebFormatUtils.priceFormat(Math.abs(getPrice()));
 		}
 		public void setFormatPrice(String formatPrice) {
 			this.formatPrice = formatPrice;

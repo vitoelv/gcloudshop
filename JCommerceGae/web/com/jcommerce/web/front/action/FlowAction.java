@@ -1099,7 +1099,11 @@ public class FlowAction extends BaseAction {
 		Criteria criteria = new Criteria();
 		criteria.addCondition(condition);
 		List<ModelObject> carts = getDefaultManager().getList(ModelNames.CART, criteria);
-		getDefaultManager().txdeleteall(carts);
+		for(Iterator i = carts.iterator(); i.hasNext(); ) {
+			Cart cart = (Cart) i.next();
+			getDefaultManager().txdelete(cart);
+		}
+		//getDefaultManager().txdeleteall(carts);
 		return stepCart(request);
 	}
 

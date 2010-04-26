@@ -36,6 +36,7 @@ import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.AttributeForm;
 import com.jcommerce.gwt.client.form.BeanObject;
+import com.jcommerce.gwt.client.model.IGoodsAttr;
 import com.jcommerce.gwt.client.model.IGoodsType;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.Condition;
@@ -369,6 +370,21 @@ public class AttributeListPanel extends ContentWidget {
 						toolBar.refresh();
 					}
 				});
+		Criteria criteria = new Criteria();
+		criteria.addCondition(new Condition(IGoodsAttr.ATTR_ID, Condition.EQUALS, id));
+		new ListService().listBeans(ModelNames.GOODSATTR, criteria, new ListService.Listener(){
+
+			@Override
+			public void onSuccess(List<BeanObject> beans) {
+				List<String> ids = new ArrayList<String>();
+				for(Iterator i = beans.iterator(); i.hasNext();) {
+					BeanObject bean = (BeanObject) i.next();
+					ids.add(bean.getString(IGoodsAttr.PK_ID));
+				}
+				new DeleteService().deleteBeans(ModelNames.GOODSATTR, ids, null);				
+			}
+			
+		});
 	}
 	private void deleteAttributesAndRefresh(List<BeanObject> selected) {
 		List<String> ids = new ArrayList<String>();

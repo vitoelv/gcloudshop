@@ -1,5 +1,11 @@
 package com.jcommerce.gwt.server;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -220,16 +226,42 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
 
 		Set<GoodsAttr> goodsAttributes = to.getAttributes();
 		Map<String, Map<String, Object>> nestedGoodsAttributeForms = (Map<String, Map<String, Object>>)form.get(IGoods.ATTRIBUTES);
+		List<Map<String, String>> attrList = new ArrayList<Map<String, String>>();
 		if(nestedGoodsAttributeForms!=null) {
 			for(Map<String, Object> attrs : nestedGoodsAttributeForms.values()) {
-				GoodsAttr ga = new GoodsAttr();
-				ga.setAttrId((String)attrs.get(IGoodsAttr.ATTR_ID));
-				ga.setAttrValue((String)attrs.get(IGoodsAttr.ATTR_VALUE));
-				goodsAttributes.add(ga);
+				String id = (String) attrs.get(IGoodsAttr.ATTR_ID);
+				String[] ids = id.split(":");
+				String attrId = (String) ids[0];
+				String goodsId = (String) ids[1];
+				Map<String, String>attrMap = new HashMap<String, String>();
+				attrMap.put(attrId, (String)attrs.get(IGoodsAttr.ATTR_VALUE));
+				
+				if(!attrList.contains(attrMap)) {
+					GoodsAttr ga = new GoodsAttr();
+					ga.setAttrId(attrId);
+					ga.setAttrValue((String)attrs.get(IGoodsAttr.ATTR_VALUE));
+					String price = (String) attrs.get(IGoodsAttr.ATTR_PRICE);
+					price = price.equals("") ? "0" : price;
+					ga.setAttrPrice(price);
+					ga.setGoodsId(goodsId);
+					goodsAttributes.add(ga);
+					attrList.add(attrMap);
+				}
 			}
 		}
 		
-		
+		Set<GoodsAttr> deleteAttr = new HashSet<GoodsAttr>();
+		for(Iterator i = goodsAttributes.iterator() ; i.hasNext();) {
+			GoodsAttr goodsAttr = (GoodsAttr) i.next();
+			String attrId = goodsAttr.getAttrId();
+			String value = goodsAttr.getAttrValue();
+			Map<String, String> attrMap = new HashMap<String, String>();
+			attrMap.put(attrId, value);
+			if(!attrList.contains(attrMap)) {
+				deleteAttr.add(goodsAttr);
+			}
+		}
+		goodsAttributes.removeAll(deleteAttr);	
 
 		return to;
 	}
