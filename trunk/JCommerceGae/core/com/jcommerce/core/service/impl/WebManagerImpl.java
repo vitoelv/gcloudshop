@@ -1,5 +1,6 @@
 package com.jcommerce.core.service.impl;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -53,13 +54,12 @@ public class WebManagerImpl extends DefaultManagerImpl implements IWebManager {
 	    		cart.setGoodsSn(goods.getGoodsSn());
 	    		cart.setRecType(Constants.CART_GENERAL_GOODS);
 	    		cart.setGoodsNumber(num);
-	    		cart.setGoodsPrice(goods.getShopPrice());
-	    		cart.setMarketPrice(goods.getMarketPrice());
 	    		cart.setGoodsName(goods.getGoodsName());
 	    		cart.setGoodsWeight(goods.getGoodsWeight());
 	    		
-	    		//获得商品规格
+	    		//获得商品规格及价格
 	    		String goodsSpec = "";
+	    		double goodsSpecPrice = 0.0;
 	    		for(Iterator iterator = spec.iterator();iterator.hasNext();) {
 	    			long goodsAttrId = Long.parseLong((String) iterator.next());
 	    			
@@ -77,7 +77,23 @@ public class WebManagerImpl extends DefaultManagerImpl implements IWebManager {
 	    			else {
 	    				goodsSpec += attrName + ":" + attrValue + "[" + attrPrice + "]" + "<br>";
 	    			}
+	    			goodsSpecPrice += Double.parseDouble(attrPrice);
 	    		}
+	    		
+	    		//判断是否促销
+	    		Long promoteEndTime = goods.getPromoteEndDate();
+	    		Long promoteStartTime = goods.getPromoteStartDate();
+	    		Long nowTime = new Date().getTime();
+	        	double shopPrice = 0;
+	    		if(nowTime > promoteEndTime || nowTime < promoteStartTime) {
+	    			shopPrice = goods.getShopPrice();
+	    		}
+	    		else {
+	    			shopPrice = goods.getPromotePrice();
+	    		}	
+	    		
+	    		cart.setGoodsPrice(shopPrice + goodsSpecPrice);
+	    		cart.setMarketPrice(goods.getMarketPrice() + goodsSpecPrice);	    		
 	    		cart.setGoodsAttrId(goodsSpecId);
 	    		cart.setGoodsAttr(goodsSpec);
 	    		

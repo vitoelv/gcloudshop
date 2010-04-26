@@ -208,10 +208,10 @@ function reg(str){
         
                     <#if ( spec.attrType == 1  ) >
                       <#if ( cfg.goodsattrStyle == 1  ) >
-                        <#list spec.values as value> <#assign key = value_index>
+                        <#list spec.values as value>
                         <label for="spec_value_${value.id}">
                         <input type="radio" name="spec_${specKey}" value="${value.id}" id="spec_value_${value.id}" <#if ( key == 0  ) >checked</#if> onclick="changePrice()" />
-                        ${value.label} [<#if ( value.price > 0  ) >${lang.plus}<#elseif ( value.price < 0  ) >${lang.minus}</#if> ${value.formatPrice}|abs] </label><br />
+                        ${value.label} [<#if ( value.price gt 0  ) >${lang.plus}<#elseif ( value.price lt 0  ) >${lang.minus}</#if> ${value.formatPrice}] </label><br />
                         </#list>
                         <input type="hidden" name="spec_list" value="${key}" />
                         <#else>
@@ -223,10 +223,10 @@ function reg(str){
                         <input type="hidden" name="spec_list" value="${key}" />
                       </#if>
                     <#else>
-                      <#list spec.values as value> <#assign key = value_index>
+                      <#list spec.values as value>
                       <label for="spec_value_${value.id}">
                       <input type="checkbox" name="spec_${specKey}" value="${value.id}" id="spec_value_${value.id}" onclick="changePrice()" />
-                      ${value.label} [<#if ( value.price > 0  ) >${lang.plus}<#elseif ( value.price < 0  ) >${lang.minus}</#if> ${value.formatPrice}|abs] </label><br />
+                      ${value.label} [<#if ( value.price gt 0  ) >${lang.plus}<#elseif ( value.price lt 0  ) >${lang.minus}</#if> ${value.formatPrice}] </label><br />
                       </#list>
                       <input type="hidden" name="spec_list" value="${key}" />
                     </#if>
