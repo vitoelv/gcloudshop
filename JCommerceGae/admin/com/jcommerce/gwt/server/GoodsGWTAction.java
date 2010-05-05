@@ -2,6 +2,7 @@ package com.jcommerce.gwt.server;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -46,6 +47,7 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
     	try {
     		
     		Goods to = form2To(form);
+    		to.setAddTime(new Date().getTime());
     		res = cm.addGoods(to);
 
     		
@@ -67,6 +69,7 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
 
     		
     		Goods to = form2To(form);
+    		to.setLastUpdate(new Date().getTime());
         	cm.updateGoods(to);
 
     		
