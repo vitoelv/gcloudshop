@@ -76,12 +76,18 @@ public interface IShopConfigMeta {
 	public static final String CFG_KEY_COLLECTION_NUMBER = "collection_number";
 	public static final String CFG_KEY_PAGE_STYLE = "page_style";
 	
+	//google product search
+	public static final String CFG_KEY_GOOGLE_ACCOUNT = "google_account";
+	public static final String CFG_KEY_GOOGLE_PASSWORD = "google_password";
+	public static final String CFG_KEY_GOOGLE_DEVELOPER_KEY = "developer_key";
+	public static final String CFG_KEY_GOOGLE_WEBSITEPATH = "web_site_path";
+	
 	
 	public static final String CFG_TYPE_SELECT = "select";
 	public static final String CFG_TYPE_TEXT = "text";
 	public static final String CFG_TYPE_TEXTAREA = "textArea";
 	public static final String CFG_TYPE_OPTIONS = "options";
-	
+	public static final String CFG_TYPE_PASSWORD = "password";
 	
 	
 }

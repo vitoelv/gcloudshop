@@ -60,6 +60,8 @@ public class PaymentMetaManagerImpl implements IPaymentMetaManager{
         metaRepo.put(checkout.getDefaultConfigMeta().getPayCode(), checkout);
         Authorizenet authorizenet = new Authorizenet();
         metaRepo.put(authorizenet.getDefaultConfigMeta().getPayCode(), authorizenet);
+        Paypal paypal = new Paypal();
+        metaRepo.put(paypal.getDefaultConfigMeta().getPayCode(), paypal);
     }
     
     

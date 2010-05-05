@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,7 +15,8 @@ import java.util.Calendar;
 import java.util.StringTokenizer;
 
 import com.jcommerce.core.model.Goods;
-import com.jcommerce.gwt.client.util.URLConstants;
+import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
+import com.jcommerce.web.to.ShopConfigWrapper;
 
 /**
  *  Add a new item to Google Base using the Google Base data API server.
@@ -31,7 +31,7 @@ public class GoogleBaseUtil {
    * Insert here the developer key obtained for an "installed application" at
    * http://code.google.com/apis/base/signup.html
    */
-  private static final String DEVELOPER_KEY = "ABQIAAAAdum_4yYDkId337SD8heFChQeIQHYpA6H9kmimIu2ECi1AyhB0xQelDpqayXYHPdu9okteNGwcvBoZQ";
+  private String DEVELOPER_KEY = "";
   
   /**
    * The data item we are going to insert, in XML/Atom format.
@@ -52,24 +52,20 @@ public class GoogleBaseUtil {
    * Fill in your Google account email here. 
    * The account should already be set up for Google Base.
    */
-  private static final String EMAIL = "jcommerce.test@gmail.com";
+  private String EMAIL = "";
   
   /**
    * Fill in your Google account password here.
    */
-  private static final String PASSWORD = "jcommercetest";
+  private String PASSWORD = "";
   
-  /**
-   * The main method constructs a <code>InsertExample</code> instance, obtains an 
-   * authorization token and posts a new item to Google Base.
-   */
-  public static void main(String[] args) throws MalformedURLException, IOException {
-    GoogleBaseUtil insertExample = new GoogleBaseUtil();
-    String token = insertExample.authenticate();
-    System.out.println("Obtained authorization token: " + token);
-    insertExample.postItem(token);
-  }
 
+  public GoogleBaseUtil(ShopConfigWrapper scw){
+	  EMAIL = scw.getString(IShopConfigMeta.CFG_KEY_GOOGLE_ACCOUNT);
+	  PASSWORD = scw.getString(IShopConfigMeta.CFG_KEY_GOOGLE_PASSWORD);
+	  DEVELOPER_KEY = scw.getString(IShopConfigMeta.CFG_KEY_GOOGLE_DEVELOPER_KEY);
+	  webSitePath = scw.getString(IShopConfigMeta.CFG_KEY_GOOGLE_WEBSITEPATH);
+  }
 
   /**
    * Retrieves the authentication token for the provided set of credentials.
@@ -149,7 +145,7 @@ public class GoogleBaseUtil {
     StringBuilder content = new StringBuilder();
     content.append("Email=").append(URLEncoder.encode(EMAIL, "UTF-8"));
     content.append("&Passwd=").append(URLEncoder.encode(PASSWORD, "UTF-8"));
-    content.append("&source=").append(URLEncoder.encode("Google Base data API example", "UTF-8"));
+    content.append("&source=").append(URLEncoder.encode("GCSHOP", "UTF-8"));
     content.append("&service=").append(URLEncoder.encode("gbase", "UTF-8"));
 
     OutputStream outputStream = urlConnection.getOutputStream();
@@ -212,14 +208,14 @@ public class GoogleBaseUtil {
 			  "<updated>" + sdf.format(new Date(goods.getLastUpdate())) + "</updated>\n" +
 			  		"<title type=\'text\'>" + goods.getGoodsName() + "</title>\n" );
 	  if(goods.getIsPromote()){
-		  sb.append("<g:expiration_date type='dateTime'> " + sdf.format(new Date(goods.getPromoteEndDate())) + "</g:expiration_date>");
+//		  sb.append("<g:expiration_date type='dateTime'> " + sdf.format(new Date(goods.getPromoteEndDate())) + "</g:expiration_date>");
 		  sb.append("  <g:price>" + goods.getPromotePrice() + "</g:price>\n" );
 	  }
 	  else{
-		  Calendar calendar = Calendar.getInstance();
-		  calendar.setTime(new Date(goods.getAddTime()));
-		  calendar.add(Calendar.YEAR,1);  
-		  sb.append("<g:expiration_date type='dateTime'> " + sdf.format(calendar.getTime()) + "</g:expiration_date>");
+//		  Calendar calendar = Calendar.getInstance();
+//		  calendar.setTime(new Date(goods.getAddTime()));
+//		  calendar.add(Calendar.MONTH,1);  
+//		  sb.append("<g:expiration_date type='dateTime'> " + sdf.format(calendar.getTime()) + "</g:expiration_date>");
 		  sb.append("  <g:price>" + goods.getShopPrice() + "</g:price>\n" );
 	  }
 	  if( goods.getGalleries().size() > 0 ){

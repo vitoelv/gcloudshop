@@ -224,6 +224,10 @@ public class ShopConfigPanel extends BaseEntityEditPanel {
     	    				choiceStore.add(new SimpleOptionData(text, val));
     	    			}
     	    		}
+    	    		else if(IShopConfigMeta.CFG_TYPE_PASSWORD.equals(type)) {
+    	    			fValue = new TextField<String>();
+    	    			((TextField)fValue).setPassword(true);
+    	    		}
     	    		
     	    		if(fValue!=null) {
     	    			fValue.setFieldLabel(label);
