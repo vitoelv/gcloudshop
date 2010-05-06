@@ -328,11 +328,12 @@ public class SearchAction extends BaseAction {
             		cond.setField(IGoods.PROMOTE_PRICE);
             		cond.setOperator(Condition.GREATERTHAN);
             		cond.setValue("0");
-            		criteria.addCondition(cond);
+//            		TODO Only one inequality filter per query is supported.
+//            		criteria.addCondition(cond);
             		
             		cond = new Condition();
-            		cond.setField(IGoods.PROMOTE_START_DATE);
-            		cond.setOperator(Condition.LESSTHAN);
+            		cond.setField(IGoods.PROMOTE_END_DATE);
+            		cond.setOperator(Condition.GREATERTHAN);
             		cond.setValue((new Date()).toString());
             		criteria.addCondition(cond);
             		urHere = Lang.getInstance().getString("promotionGoods");
