@@ -2,6 +2,7 @@ package com.jcommerce.core.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
@@ -21,6 +22,8 @@ import com.jcommerce.core.model.ShippingArea;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.CustomizedManager;
+import com.jcommerce.core.service.config.IShopConfigManager;
+import com.jcommerce.core.service.config.ShopConfigManagerImpl;
 import com.jcommerce.core.util.DataStoreUtils;
 import com.jcommerce.core.util.GoogleBaseUtil;
 import com.jcommerce.core.util.MyPropertyUtil;
@@ -30,6 +33,8 @@ import com.jcommerce.gwt.client.form.AttributeForm;
 import com.jcommerce.gwt.client.model.IAreaRegion;
 import com.jcommerce.gwt.client.model.IGoodsGallery;
 import com.jcommerce.gwt.client.model.IShippingArea;
+import com.jcommerce.web.to.ShopConfigWrapper;
+import com.jcommerce.web.util.SpringUtil;
 
 public class CustomizedManagerImpl extends DefaultManagerImpl implements CustomizedManager {
 
@@ -233,11 +238,10 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 				gt.setKeyName(gkn);
 //				gt.setId(gid);
 				gt.setLongId(UUIDLongGenerator.newUUID());
-			}			
-			
+			}
 			String res = txattach(to);
 			
-			GoogleBaseUtil gbUtil = new GoogleBaseUtil();
+			GoogleBaseUtil gbUtil = new GoogleBaseUtil(SpringUtil.getShopConfigManager().getCachedShopConfig("en"));
 			 String token = gbUtil.authenticate();
 			 gbUtil.buildDataItem(to);
 			 String gbdid = gbUtil.postItem(token);
@@ -347,7 +351,7 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 			System.out.println("System.out.println(updateResponse);");
 			txattach(po);
 			
-			GoogleBaseUtil gbUtil = new GoogleBaseUtil();
+			GoogleBaseUtil gbUtil = new GoogleBaseUtil(SpringUtil.getShopConfigManager().getCachedShopConfig("en"));
 			String token = gbUtil.authenticate();
 			gbUtil.buildDataItem(po);
 			String updateResponse = gbUtil.updateItem( token , po.getGoogleBaseDataId());
