@@ -1118,7 +1118,7 @@ public class FlowAction extends BaseAction {
 			Criteria criteria = new Criteria();
 			criteria.addCondition(new Condition(ICart.PARENT_ID,Condition.EQUALS,goodsId));
 			List<ModelObject> deleteCart = (List<ModelObject>) getDefaultManager().getList(ModelNames.CART, criteria);
-			getDefaultManager().txdeleteall(deleteCart);
+			getDefaultManager().deleteall(deleteCart);
 		}
 		getDefaultManager().txdelete(ModelNames.CART, recId);
 		return stepCart(request);

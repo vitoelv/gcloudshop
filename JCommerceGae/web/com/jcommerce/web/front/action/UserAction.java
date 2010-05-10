@@ -1035,7 +1035,7 @@ public class UserAction extends BaseAction {
 		Criteria criteria = new Criteria();
 		criteria.addCondition(condition);
 		List<ModelObject> carts = getDefaultManager().getList(ModelNames.CART, criteria);
-		getDefaultManager().txdeleteall(carts);
+		getDefaultManager().deleteall(carts);
 		getSession().invalidate();
 		
 	}
