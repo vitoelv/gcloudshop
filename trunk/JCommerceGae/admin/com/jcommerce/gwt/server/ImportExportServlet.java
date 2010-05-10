@@ -140,7 +140,7 @@ public class ImportExportServlet extends GWTHttpServlet{
 		for(String modelName : modelNames) {
 			try {
 				List<ModelObject> models = manager.getList(modelName, null);
-				manager.txdeleteall(models);
+				manager.deleteall(models);
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}

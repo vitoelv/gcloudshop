@@ -41,7 +41,7 @@ public interface IDefaultManager {
 	public boolean txupdate (ModelObject to);
 	public boolean txdelete (String modelName, String id);
 	public boolean txdelete (ModelObject po);
-	public void txdeleteall (Collection<ModelObject> objs);
+	public void deleteall (Collection<ModelObject> objs);
 	
 	
 

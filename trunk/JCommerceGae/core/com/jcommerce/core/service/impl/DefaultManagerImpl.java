@@ -69,7 +69,7 @@ public class DefaultManagerImpl implements IDefaultManager {
     	boolean res = getDao().delete(modelName, id);
     	return res;
     }
-    public void txdeleteall (Collection<ModelObject> objs) {
+    public void deleteall (Collection<ModelObject> objs) {
     	getDao().deleteAll(objs);
     }
     

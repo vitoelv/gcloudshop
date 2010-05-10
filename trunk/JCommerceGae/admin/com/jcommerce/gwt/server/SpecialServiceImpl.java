@@ -888,12 +888,12 @@ public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecial
 			Criteria c = new Criteria();
 			c.addCondition(new Condition(IOrderGoods.ORDER_ID, Condition.EQUALS, orderId));
 			List<ModelObject> orderGoods = manager.getList(ModelNames.ORDERGOODS, convert(c));
-			manager.txdeleteall(orderGoods);
+			manager.deleteall(orderGoods);
 			
 			c.removeAllConditions();
 			c.addCondition(new Condition(IOrderAction.ORDER_ID, Condition.EQUALS, orderId));
 			List<ModelObject> orderAction = manager.getList(ModelNames.ORDERACTION, convert(c));
-			manager.txdeleteall(orderAction);
+			manager.deleteall(orderAction);
 			return true;
 		} catch (Exception e) {
         	e.printStackTrace();
