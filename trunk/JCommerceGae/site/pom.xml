@@ -28,7 +28,7 @@
           <outputDirectory>${basedir}/../../site</outputDirectory>
           -->
           <!-- -->
-          <outputDirectory>${basedir}/../war/site</outputDirectory>
+          <outputDirectory>${basedir}/../war/site1</outputDirectory>
            
         </configuration>
       </plugin>
@@ -36,7 +36,7 @@
     </pluginManagement>
   </build>
   <organization>
-	<name>&lt;div &gt;  Visited: &lt;script language="JavaScript" type="text/javascript" src="http://counter1.fc2.com/counter.php?id=6147805"&gt;&lt;/script&gt;&lt;/div&gt;</name>
+	<name>&lt;div &gt;  Visited: &lt;script language="JavaScript" type="text/javascript" src="http://cnqhjl.com/tj/CFCount/cf.asp?username=jcommerce"&gt;&lt;/script&gt;&lt;/div&gt;</name>
 	</organization>
   
 </project>
