@@ -113,6 +113,15 @@ public class TestMisc extends TestCase {
 			f = Category.class.getDeclaredField("parentId");
 			isPK = f.getAnnotation(IsPK.class);
 			System.out.println("isPK = "+isPK);
+			
+			f = Category.class.getDeclaredField("test");
+			isPK = f.getAnnotation(IsPK.class);
+			System.out.println("isPK = "+isPK);
+			
+			Annotation[] anns = f.getDeclaredAnnotations();
+			for(Annotation ann : anns) {
+				System.out.println("name: "+ann);
+			}
 		
 		} catch (Exception ex) {
 			ex.printStackTrace();
