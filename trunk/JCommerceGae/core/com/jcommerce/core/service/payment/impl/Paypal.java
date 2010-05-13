@@ -30,9 +30,10 @@ public class Paypal extends BasePaymentMetaPlugin implements IPaymentMetaPlugin 
     }
     static {
         defaultConfigValues = new HashMap<String, String>();
-        defaultConfigValues.put(PAY_NAME, "");
+        defaultConfigValues.put(PAY_NAME, "PayPal");
         defaultConfigValues.put(ACCOUNT, "jcommerce.test@gmail.com");
-        defaultConfigValues.put(ACCOUNT, "Pay Now!");
+        defaultConfigValues.put(BUTTON_TEXT, "Pay Now!");
+        defaultConfigValues.put(CURRENCY, "USD");
         
         fieldMetas = new HashMap<String, PaymentConfigFieldMeta>();
         

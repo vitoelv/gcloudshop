@@ -89,8 +89,8 @@ public class EMS extends BaseShippingMetaPlugin implements IShippingMetaPlugin {
 			}
 			else {
 				double fee = baseFee;
-				if(goodsWeight>0.5) {
-					fee += Math.ceil((goodsWeight-0.5)/0.5)*stepFee;
+				if(goodsWeight>500) {
+					fee += Math.ceil((goodsWeight-500)/500)*stepFee;
 				}
 				return fee;
 			}
