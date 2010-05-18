@@ -8,6 +8,9 @@ public class Message extends BaseWrapper{
 	String type;
 	
 	
+	public String getBackUrl() {
+		return href;
+	}
 	public String getContent() {
 		return content;
 	}
@@ -33,7 +36,9 @@ public class Message extends BaseWrapper{
 		this.type = type;
 	}
 	
-	
+	public Object getUrlInfo(){
+		return null;
+	}
 	
 	
 
