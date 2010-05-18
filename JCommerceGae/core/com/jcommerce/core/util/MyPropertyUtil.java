@@ -3,6 +3,8 @@ package com.jcommerce.core.util;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,6 +18,7 @@ import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 
+import com.google.appengine.api.datastore.Blob;
 import com.jcommerce.core.model.DSFile;
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.gwt.client.model.IModelObject;
@@ -183,9 +186,15 @@ public class MyPropertyUtil {
 	}
 	
     public static void form2To(ModelObject dest, Map<String, Object> orig) {
+
     	debug("form2To-- props:"+orig);
         
         try {
+        	boolean isGoods = false;
+	        if(dest instanceof com.jcommerce.core.model.Goods){
+	        	isGoods = true;
+	        }
+        	
         HashMap<String, Object> _props = new HashMap<String, Object>(); 
 //        Field[] fields = dest.getClass().getDeclaredFields();
 		PropertyDescriptor srcDescriptors[] = BeanUtilsBean.getInstance()
@@ -247,7 +256,14 @@ public class MyPropertyUtil {
 //                                set.add(mo);
 //                            }
                         	col = (Collection)PropertyUtils.getProperty(dest, fn);
-                        	col.add(value);
+                        	String val = (String)value;
+                        	if(((String)val).indexOf(",")>0) {
+                				String[] values = ConvertUtil.split(val, ",");
+                				col.addAll(Arrays.asList(values));
+                			} else {
+                				col.add(value);
+                			}  
+                        	
                         } else if (value instanceof Collection) {
                         	
                             Collection c = (Collection)value;
@@ -269,7 +285,14 @@ public class MyPropertyUtil {
                 }
 //                _props.put(fn, col);
             } else {
-                _props.put(fn, value);
+//            	if(fn.equals("goodsDesc")){
+//            		byte[] bt = ((String)value).getBytes("ISO-8859-1");
+//            		System.out.println(new String(bt,"ISO-8859-1"));
+//            		System.out.println(new String(new Blob(bt).getBytes(),"UTF-8"));
+//            		_props.put(fn, new Blob(value.toString().getBytes()));
+//            	}else{
+            		_props.put(fn, value);
+//            	}
             }
         }
         

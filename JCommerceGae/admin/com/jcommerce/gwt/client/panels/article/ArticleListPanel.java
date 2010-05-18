@@ -182,7 +182,7 @@ public class ArticleListPanel extends ContentWidget implements URLConstants{
 		final CheckBoxSelectionModel<BeanObject> smRowSelection = new CheckBoxSelectionModel<BeanObject>();
 		columns.add(smRowSelection.getColumn());
 		ColumnConfig colname = new ColumnConfig(ArticleForm.TITLE, Resources.constants.Article_coltitle(), 100);
-		colname.setEditor(new CellEditor(new TextField()));
+		colname.setEditor(new CellEditor(ArticleForm.getNameField(Resources.constants.Article_coltitle())));
 		columns.add(colname);
 		ColumnConfig colcat = new ColumnConfig(ArticleCatForm.CAT_NAME, Resources.constants.Article_colarticleCat(),150);
 		columns.add(colcat);

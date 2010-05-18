@@ -40,6 +40,7 @@ import com.jcommerce.gwt.client.ContentWidget;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.BeanObject;
+import com.jcommerce.gwt.client.form.GoodsForm;
 import com.jcommerce.gwt.client.model.IBrand;
 import com.jcommerce.gwt.client.model.ICategory;
 import com.jcommerce.gwt.client.model.IGoods;
@@ -187,16 +188,16 @@ public class GoodsListPanel extends ContentWidget {
 		
 		ColumnConfig col = new ColumnConfig(IGoods.GOODS_NAME, Resources.constants
 				.Goods_name(), 100);
-		col.setEditor(new CellEditor(new TextField()));
+		col.setEditor(new CellEditor(GoodsForm.getNameField(Resources.constants.Goods_name())));
 		columns.add(col);
 		col = new ColumnConfig(IGoods.GOODS_SN, Resources.constants.Goods_SN(), 100);
-		col.setEditor(new CellEditor(new TextField()));
+		col.setEditor(new CellEditor(GoodsForm.getSnField()));
 		columns.add(col);
 		col = new ColumnConfig(IGoods.SHOP_PRICE, Resources.constants
 				.Goods_shopPrice(), 80);
 		col.setAlignment(HorizontalAlignment.RIGHT);
 		col.setNumberFormat(NumberFormat.getCurrencyFormat());
-		col.setEditor(new CellEditor(new NumberField()));
+		col.setEditor(new CellEditor(GoodsForm.getShopPriceField()));
 		columns.add(col);
 		CheckColumnConfig onsale = new CheckColumnConfig(IGoods.IS_ON_SALE,
 				Resources.constants.Goods_onSale(), 80);
@@ -213,7 +214,8 @@ public class GoodsListPanel extends ContentWidget {
 		col = new ColumnConfig(IGoods.GOODS_NUMBER, Resources.constants
 				.Goods_number(), 80);
 		col.setAlignment(HorizontalAlignment.RIGHT);
-		col.setEditor(new CellEditor(new NumberField()));
+		col.setEditor(new CellEditor(GoodsForm.getNumberField(Resources.constants
+				.Goods_number())));
 		columns.add(col);
 		ColumnConfig actcol = new ColumnConfig("Action", Resources.constants
 				.GoodsList_action(), 100);
