@@ -129,14 +129,14 @@ public class GWTHttpServlet extends HttpServlet {
 								+ " with value " + val + " detected.");
 
 						// TODO escape of "," ??
-						if(val.indexOf(",")>0) {
-							String[] values = ConvertUtil.split(val, ",");
-//							form.put(name, Arrays.asList(values));
-							value = Arrays.asList(values);
-						} else {
+//						if(val.indexOf(",")>0) {
+//							String[] values = ConvertUtil.split(val, ",");
+////							form.put(name, Arrays.asList(values));
+//							value = Arrays.asList(values);
+//						} else {
 //							form.put(name, val);
 							value = val;
-						}
+//						}
 
 					} else {
 						debug("File field " + name

@@ -161,29 +161,28 @@ public class UserListPanel extends ContentWidget {
 		columns.add(smRowSelection.getColumn());
 
 		ColumnConfig colname = new ColumnConfig(IUser.USER_NAME, Resources.constants.UserList_colUserName(), 100);
-		//colname.setEditor(new CellEditor(new TextField()));
+		//colname.setEditor(new CellEditor(UserForm.getNameField()));
 		columns.add(colname);
 		ColumnConfig colemail = new ColumnConfig(IUser.EMAIL, Resources.constants.UserList_colUserEmail(),150);
-		colemail. setEditor(new CellEditor(new TextField()));
+		colemail. setEditor(new CellEditor(UserForm.getEmailField(Resources.constants.UserList_colUserEmail())));
 		columns.add(colemail);
 		ColumnConfig coluserMoney = new ColumnConfig(IUser.USER_MONEY, Resources.constants.UserList_colUserMoney(), 100);
-		//coluserMoney.setEditor(new CellEditor(new TextField()));
+		//coluserMoney.setEditor(new CellEditor(UserForm.getUserMoneyField()));
 		columns.add(coluserMoney);
 		ColumnConfig colfrozenMoney = new ColumnConfig(IUser.FROZEN_MONEY, Resources.constants.UserList_colFrozenMoney(), 100);
-		//colfrozenMoney.setEditor(new CellEditor(new TextField()));
+		//colfrozenMoney.setEditor(new CellEditor(UserForm.()));
 		columns.add(colfrozenMoney);
 		ColumnConfig colrankPoint = new ColumnConfig(IUser.RANK_POINTS, Resources.constants.UserList_colRankPoint(), 100);
-		//coluserMoney.setEditor(new CellEditor(new TextField()));
+		//coluserMoney.setEditor(new CellEditor(UserForm.()));
 		columns.add(colrankPoint);
 		ColumnConfig colpayPoint = new ColumnConfig(IUser.PAY_POINTS, Resources.constants.UserList_colPayPoint(), 100);
-		//colpayPoint.setEditor(new CellEditor(new TextField()));
+		//colpayPoint.setEditor(new CellEditor(UserForm.()));
 		columns.add(colpayPoint);
 		ColumnConfig colregTime = new ColumnConfig(IUser.REG_TIME, Resources.constants.UserList_colRegTime(), 100);
 		colregTime.setRenderer(new TimeCellRenderer());
 		columns.add(colregTime);
 		
 		ColumnConfig colaction = new ColumnConfig("Action", Resources.constants.action(), 160);
-		//colpayPoint.setEditor(new CellEditor(new TextField()));
 		columns.add(colaction);
 		ColumnModel cm = new ColumnModel(columns);
 
