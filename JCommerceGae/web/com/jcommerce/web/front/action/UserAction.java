@@ -257,6 +257,7 @@ public class UserAction extends BaseAction {
 					}
 				}
 				else {
+					backAct = "login";
 					return LibMain.showMessage(Lang.getInstance().getString("loginFailure"), Lang.getInstance().getString("reloginLnk"), 
 							url, "error", false, request);
 				}
