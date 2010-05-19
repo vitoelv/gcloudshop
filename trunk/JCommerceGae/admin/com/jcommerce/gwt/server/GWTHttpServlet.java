@@ -125,19 +125,8 @@ public class GWTHttpServlet extends HttpServlet {
 					Object value = null;
 					if (item.isFormField()) {
 						String val = Streams.asString(stream, "UTF-8");
-						debug("Form field " + name
-								+ " with value " + val + " detected.");
-
-						// TODO escape of "," ??
-//						if(val.indexOf(",")>0) {
-//							String[] values = ConvertUtil.split(val, ",");
-////							form.put(name, Arrays.asList(values));
-//							value = Arrays.asList(values);
-//						} else {
-//							form.put(name, val);
-							value = val;
-//						}
-
+						debug("Form field " + name + " with value " + val + " detected.");
+						value = val;
 					} else {
 						debug("File field " + name
 								+ " with file name " + item.getName()

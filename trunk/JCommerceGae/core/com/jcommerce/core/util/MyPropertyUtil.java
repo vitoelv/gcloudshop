@@ -190,13 +190,9 @@ public class MyPropertyUtil {
     	debug("form2To-- props:"+orig);
         
         try {
-        	boolean isGoods = false;
-	        if(dest instanceof com.jcommerce.core.model.Goods){
-	        	isGoods = true;
-	        }
-        	
+       	
         HashMap<String, Object> _props = new HashMap<String, Object>(); 
-//        Field[] fields = dest.getClass().getDeclaredFields();
+
 		PropertyDescriptor srcDescriptors[] = BeanUtilsBean.getInstance()
 			.getPropertyUtils().getPropertyDescriptors(dest);
 		
@@ -207,9 +203,7 @@ public class MyPropertyUtil {
 			}
 			Class type = pd.getPropertyType();
             
-//            Field field = fields[i];
-//            String fn = field.getName();
-//            Class type = field.getType(); 
+
             debug("fn:"+fn+" type:"+type);
             if (!orig.containsKey(fn)) {
                 continue;
@@ -249,15 +243,12 @@ public class MyPropertyUtil {
             		else {
 //                      String bean = config.getItemType(obj.getModelName(), fn);
                         if (value instanceof String) {
-                            // the value is ID1,ID2,...,IDn
-//                            String[] ids = ((String)value).split(",");
-//                            for (int j = 0; j < ids.length; j++) {
-//                                ModelObject mo = getModelObject(bean, ids[j]);
-//                                set.add(mo);
-//                            }
                         	col = (Collection)PropertyUtils.getProperty(dest, fn);
                         	String val = (String)value;
                         	if(((String)val).indexOf(",")>0) {
+                        		// for properties like Goods.categoryIds which is internally list of String, 
+                        		// and submitted in the format of comma-separated string 
+                        		// TODO escape ","
                 				String[] values = ConvertUtil.split(val, ",");
                 				col.addAll(Arrays.asList(values));
                 			} else {
@@ -285,14 +276,7 @@ public class MyPropertyUtil {
                 }
 //                _props.put(fn, col);
             } else {
-//            	if(fn.equals("goodsDesc")){
-//            		byte[] bt = ((String)value).getBytes("ISO-8859-1");
-//            		System.out.println(new String(bt,"ISO-8859-1"));
-//            		System.out.println(new String(new Blob(bt).getBytes(),"UTF-8"));
-//            		_props.put(fn, new Blob(value.toString().getBytes()));
-//            	}else{
-            		_props.put(fn, value);
-//            	}
+           		_props.put(fn, value);
             }
         }
         
