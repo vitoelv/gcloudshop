@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project name="Maven">
   <publishDate position="right"/>
   
@@ -13,7 +13,7 @@
   </bannerRight>
   <body>
     <links>
-      <item name="Chinese" href="./zh/index.html" />
+      <item name="中文版" href="./zh/index.html" />
     </links>
 
     <menu name="Project">

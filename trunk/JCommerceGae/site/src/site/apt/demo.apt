@@ -8,8 +8,6 @@ Live Demo
 
    This is a live demo running on Google App Engine's server. Had already implemented many basic functionalities like goods browsing and shopping-cart. Latest development progress will be continuously updated.   
    
-   <<Since Google App Engine is still in beta preview status, sometimes it is not stable yet. If you experienced broken service, you may need try again after a short period.>>
-   
    {{{http://gc-shop-en.appspot.com} Public portal home page}}:
    
    		* For public user to browse and buy goods.

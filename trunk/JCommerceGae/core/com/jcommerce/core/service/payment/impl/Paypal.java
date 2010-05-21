@@ -41,18 +41,6 @@ public class Paypal extends BasePaymentMetaPlugin implements IPaymentMetaPlugin 
         Map<String, String> options = null;
         
        
-//        m = new PaymentConfigFieldMeta();
-//        m.setLable("支付方式名称");
-//        m.setOptions(null);
-//        m.setTip(null);
-//        fieldMetas.put(PAY_NAME, m);
-//        
-//        m = new PaymentConfigFieldMeta();
-//        m.setLable("支付方式描述");
-//        m.setOptions(null);
-//        m.setTip(null);
-//        fieldMetas.put(PAY_DESC, m);
-        
         m = new PaymentConfigFieldMeta();
         m.setLable("Paypal Account");
         m.setOptions(null);
@@ -87,7 +75,7 @@ public class Paypal extends BasePaymentMetaPlugin implements IPaymentMetaPlugin 
         defaultPaymentConfigMeta.setPayFee("0");
         defaultPaymentConfigMeta.setIsOnline(true);
         defaultPaymentConfigMeta.setIsCod(false);
-        defaultPaymentConfigMeta.setPayDesc("PayPal 是在线付款解决方案的全球领导者，在全世界有超过七千一百六十万个帐户用户。PayPal 可在 56 个市场以 7 种货币（加元、欧元、英镑、美元、日元、澳元、港元）使用。（网址：http://www.paypal.com）");
+        defaultPaymentConfigMeta.setPayDesc("PayPal (http://www.paypal.com) test account");
         defaultPaymentConfigMeta.setPayConfig(getDefaultConfig());
         defaultPaymentConfigMeta.setKeyName("_pay5");
     }

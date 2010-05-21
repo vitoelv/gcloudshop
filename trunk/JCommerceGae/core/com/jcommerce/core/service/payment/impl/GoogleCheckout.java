@@ -46,8 +46,9 @@ public class GoogleCheckout extends BasePaymentMetaPlugin implements IPaymentMet
         defaultPaymentConfigMeta.setPayFee("2.2%");
         defaultPaymentConfigMeta.setIsOnline(true);
         defaultPaymentConfigMeta.setIsCod(false);
-        defaultPaymentConfigMeta.setPayDesc("Google 好好找， Google Checkout 輕鬆購！");
+        defaultPaymentConfigMeta.setPayDesc("Google Checkout test account");
         defaultPaymentConfigMeta.setPayConfig(getDefaultConfig());
+        defaultPaymentConfigMeta.setKeyName("_pay3");
     }
     public PaymentConfigMeta getDefaultConfigMeta() {
     	return defaultPaymentConfigMeta;
@@ -56,77 +57,10 @@ public class GoogleCheckout extends BasePaymentMetaPlugin implements IPaymentMet
         super();
     }
 
-//    public String getCode() {
-//        return "AlyPay";
-//    }
-//
-//    public String getName() {
-//        return "支付宝";
-//    }
-//    // 支付手续费
-//    public String getPayFee() {
-//        return "10";
-//    }
-//    
-//    // 在线支付
-//    public Boolean isOnline() {
-//        return true;
-//    }
-//    // 货到付款
-//    public Boolean isCod() {
-//        return false;
-//    }
-//
-//    public String getDescription() {
-//        return "支付宝，是支付宝公司针对网上交易而特别推出的安全付款服务.<br/><a href=\"https://www.alipay.com/himalayas/market.htm?type=from_agent_contract&id=C4335319945672464113\" target=\"_blank\"><font color=\"red\">点此申请免费签约接口</font></a><br/><a href=\"https://www.alipay.com/himalayas/market.htm?type=from_agent_contract&id=C4335319945674798119\" target=\"_blank\"><font color=\"red\">点此申请预付费签约接口(600包4.2万、1800包18万交易额度)</font></a>";
-//    }
-
-    /*
-     *  (non-Javadoc)
-_input_charset=utf-8
-&agent=C4335319945672464113
-&logistics_fee=0
-&logistics_payment=BUYER_PAY_AFTER_RECEIVE
-&logistics_type=EXPRESS
-&notify_url=http%3A%2F%2Fqbd.maifou.net%2Frespond.php%3Fcode%3Dalipay
-&out_trade_no=200812193564311
-&partner=2088002230861529
-&payment_type=1
-&price=352.80
-&quantity=1
-&return_url=http%3A%2F%2Fqbd.maifou.net%2Frespond.php%3Fcode%3Dalipay
-&seller_email=hyj_0105%40163.com
-&service=create_direct_pay_by_user
-&subject=2008121935643
-&sign=86056fb8587d94947d89abb4d0c5a29b
-&sign_type=MD5  
-     * @see com.jcommerce.core.service.payment.IPaymentMetaPlugin#getCode(com.jcommerce.core.model.Order, com.jcommerce.core.model.Payment)
-     */
     public String getCode(OrderInfo order, Payment payment , List<OrderGoods> orderGoods) { 
         PaymentConfigMeta configMeta = deserializeConfig(payment.getPayConfig());
         Map<String, String> values = configMeta.getFieldValues();
-        
-        
-        
-//        String service = "";
-//        boolean isOrder = true;
-//        if (isOrder) {
-//            /* 检查订单是否全部为虚拟商品 */
-//            boolean allvirtual = false;
-//            if (!allvirtual) {
-//                /* 订单中存在实体商品 */
-//                service = "1".equals(values.get(REAL_METHOD)) ? "create_direct_pay_by_user"
-//                        : "trade_create_by_buyer";
-//            } else {
-//                /* 订单中全部为虚拟商品 */
-//                service = "1".equals(values.get(VIRTUAL_METHOD)) ? "create_direct_pay_by_user"
-//                        : "create_digital_goods_trade_p";
-//            }
-//        } else {
-//            /* 非订单方式，按照虚拟商品处理 */
-//            service = "1".equals(values.get(VIRTUAL_METHOD)) ? "create_direct_pay_by_user"
-//                    : "create_digital_goods_trade_p";
-//        }
+
         StringBuffer buf = new StringBuffer();
         buf.append("<form method=\"POST\" action=\"https://checkout.google.com/api/checkout/v2/checkoutForm/Merchant/"+MERCHANT_ID+"\" accept-charset=\"utf-8\">");
         int i = 1;
