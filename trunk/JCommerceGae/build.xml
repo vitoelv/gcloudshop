@@ -77,8 +77,8 @@
 		<echo message="create-all  --> prepare deployments for all" />
 		<echo message=""/>
 		
-		<echo message="install-demo-en  --> prepare and install English version demo" />
-		<echo message="install-demo-zh  --> prepare and install Chinese version demo" />
+		<echo message="install-demo-en  --> install English version demo (must create first)" />
+		<echo message="install-demo-zh  --> install Chinese version demo (must create first)" />
 		<echo message="install-site  --> prepare and install home site" />		
 		<echo message="install-site-only  --> install pre-created home site" />
 		<echo message=""/>
@@ -255,8 +255,19 @@
 	</target>
 	
 	
-	<target name="install-demo-en" depends="create-demo-en" description="install English version demo">
-		<echo>Starting install gcshop demo English version  ...</echo>
+	<target name="install-demo-en" depends="" description="install English version demo">
+		<echo>Starting install gcshop demo English version (must run create-demo-en first) ...</echo>
+		  <antcall target="install-demo">
+		    <param name="locale" value="en"/>
+		  </antcall>
+	</target>
+	<target name="install-demo-zh" depends="" description="install Chinese version demo">
+		<echo>Starting install gcshop demo Chinese version (must run create-demo-zh first) ...</echo>
+		  <antcall target="install-demo">
+		    <param name="locale" value="zh"/>
+		  </antcall>
+	</target>		
+	<target name="install-demo" depends="" description="">
 		<java classname="com.google.appengine.tools.admin.AppCfg" fork="true" dir="${release-base-path}-${locale}" classpathref="install.classpath">
 			<arg value="--enable_jar_splitting" />
 			<arg value="update" />
@@ -264,15 +275,6 @@
 		</java>
 	</target>
 
-	<target name="install-demo-zh" depends="create-demo-zh" description="install Chinese version demo">
-		<echo>Starting install gcshop demo English version  ...</echo>
-		<java classname="com.google.appengine.tools.admin.AppCfg" fork="true" dir="${release-base-path}-${locale}" classpathref="install.classpath">
-
-			<arg value="--enable_jar_splitting" />
-			<arg value="update" />
-			<arg value="war" />
-		</java>
-	</target>	
 	
 	<target name="create-demo-en" depends="build-en"  description="prepare deployment for English version demo">
 		  <antcall target="create-demo-i11n">
