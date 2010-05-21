@@ -223,7 +223,7 @@ public class DataStoreUtils implements IConstants{
     				// won't work in case ,, occur in the sequence
 //    				values = StringUtils.split(newline, SEP_COLUMNS_VALUES);
     				if(columns.length!=values.length) {
-    					System.out.println("skipping line: "+newRecord+
+    					System.out.println("[WARNING!]: skipping line: "+newRecord+
     							", value length: "+values.length+
     							", column length: "+columns.length);
     					continue;

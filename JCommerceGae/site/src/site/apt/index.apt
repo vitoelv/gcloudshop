@@ -6,6 +6,8 @@ Summary
 
 Latest News
 
+	May 12 2010, gcShop 0.9.0 build 1 is online. Added support of PayPal, authorize.net and Google checkout. Added support of full-text search. Added support of Google Product Search. Upgraded to Google AppEngine Java 1.3.3
+	
 	March 05 2010, gcShop 0.8.0 build 6 is online. Added downloadable binary package. Added apache-ant script. Improved g18n support. Added English bundle for public portal. Upgraded to Google AppEngine Java 1.3.1
 
 	February 03 2010, gcShop 0.8.0 build 1 is online. Improved Order Management and added Article Management, and updated site's "Contact us".

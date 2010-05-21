@@ -10,7 +10,7 @@ Features
 
    * Open source and free Java-based application, running on Google cloud computing platform: Google App Engine.
    
-   * Support flexible way of Goods and Order configuration and processing, fulfilling your requirement.
+   * Support flexible way of goods and order configuration and processing, fulfilling your requirement.
    
    * Template-based web user interface, easy to customize. (using designer-friendly Dreamweaver Template Template (.dwt))
    
@@ -18,5 +18,11 @@ Features
    
    * Provide data backup and migration tools.
    
-   * Support add-on to interact with different payment and shipping solution provider.
+   * Support add-on to interact with different payment and shipping solution provider. (e.g. Google Checkout, PayPal, Authorize.Net etc.)
+   
+   * Support to automatically submit goods information to Google Product Search upon updating.
+   
+   * Support full-text search on goods information
+   
+   
    

@@ -78,21 +78,21 @@ public class Authorizenet extends BasePaymentMetaPlugin implements IPaymentMetaP
         fieldMetas.put(TRANSACTION_KEY, m);
         
         m = new PaymentConfigFieldMeta();
-        m.setLable("选择支付环境");
+        m.setLable("Please choose payment environment");
         options = new HashMap<String, String>();
         options.put("https://test.authorize.net/gateway/transact.dll", "live environment");
         options.put("https://secure.authorize.net/gateway/transact.dll", "test environment");
         m.setOptions(options);
-        m.setTip("您可以选择支付时采用的环境，不过这和Authorize.Net的帐号类型有关，具体情况请咨询Authorize.Net");
+        m.setTip("You can choose the payment environment, but this depends on the type of your Authorize.Net Account. For detail please consult Authorize.Net");
         fieldMetas.put(URL, m);
         
         m = new PaymentConfigFieldMeta();
-        m.setLable("是否使用测试模式");
+        m.setLable("Use test mode");
         options = new HashMap<String, String>();
         options.put("true", "Test Mode open");
         options.put("false", "Test Mode close");
         m.setOptions(options);
-        m.setTip("只有使用真实账户时才可选择打开test mode，默认为close，具体情况请咨询Authorize.Net");
+        m.setTip("Only real account could choose to enable test mode. It is by default disabled. For detail please consult Authorize.Net");
         fieldMetas.put(TEST_MODE, m);
         
         
@@ -120,53 +120,12 @@ public class Authorizenet extends BasePaymentMetaPlugin implements IPaymentMetaP
         super();
     }
 
-//    public String getCode() {
-//        return "AlyPay";
-//    }
-//
-//    public String getName() {
-//        return "支付宝";
-//    }
-//    // 支付手续费
-//    public String getPayFee() {
-//        return "10";
-//    }
-//    
-//    // 在线支付
-//    public Boolean isOnline() {
-//        return true;
-//    }
-//    // 货到付款
-//    public Boolean isCod() {
-//        return false;
-//    }
-//
+
     public static String getDescription() {
-        return "The Authorize.Net Payment Gateway can help you accept credit card and electronic check payments quickly and affordably.\n"+
-        "More than 284,000 merchants trust us for payment processing and online fraud prevention solutions.";
+        return "Global payment solution. see http://www.authorize.net/\r\nThis is test account";
     }
 
-    /*
-     *  (non-Javadoc)
-_input_charset=utf-8
-&agent=C4335319945672464113
-&logistics_fee=0
-&logistics_payment=BUYER_PAY_AFTER_RECEIVE
-&logistics_type=EXPRESS
-&notify_url=http%3A%2F%2Fqbd.maifou.net%2Frespond.php%3Fcode%3Dalipay
-&out_trade_no=200812193564311
-&partner=2088002230861529
-&payment_type=1
-&price=352.80
-&quantity=1
-&return_url=http%3A%2F%2Fqbd.maifou.net%2Frespond.php%3Fcode%3Dalipay
-&seller_email=hyj_0105%40163.com
-&service=create_direct_pay_by_user
-&subject=2008121935643
-&sign=86056fb8587d94947d89abb4d0c5a29b
-&sign_type=MD5  
-     * @see com.jcommerce.core.service.payment.IPaymentMetaPlugin#getCode(com.jcommerce.core.model.Order, com.jcommerce.core.model.Payment)
-     */
+
     public String getCode(OrderInfo order, Payment payment , List<OrderGoods> orderGoods) { 
         PaymentConfigMeta configMeta = deserializeConfig(payment.getPayConfig());
         Map<String, String> values = configMeta.getFieldValues();
