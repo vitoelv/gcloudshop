@@ -9,10 +9,9 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.*;
-import org.apache.commons.lang.StringUtils;
-
 
 
 public class DWTConverter {
@@ -31,15 +30,20 @@ public class DWTConverter {
 		
 
 		this.fileName = fileName;
-		if(fileName.equals("promotion_info.lbi")){
-			
-		}
+		
 		String res = null;
 		
 		res = preCompile(source, fileName);
 		
 		res = regexSelect(res);
 
+		return res;
+	}
+	
+	public String replaceHref( String tag ){
+		
+		debug("in [select]: tag="+tag);
+		String res = tag.replace("../", "");
 		return res;
 	}
 	
@@ -56,6 +60,57 @@ public class DWTConverter {
 				return select(groups[0]);
 			}
 		}, source, Pattern.MULTILINE);
+		
+		regex = "(href=\"[.]{2}/\\w+[.]action)";
+		
+		res = preg_replace(regex, new RegexReplaceCallback() {
+			public String execute(String... groups) {
+				return replaceHref(groups[0]);
+			}
+		}, res, Pattern.DOTALL);
+		
+		if(fileName.equals("flow.dwt")){
+			res = res.replace("${payment.isCod}", "${payment.isCod?string(\"yes\", \"no\")}");
+			res = res.replace("payment.isCod == \"1\"", "payment.isCod");
+			res = res.replace("href=\"./\"", "href=\"home.action\"");
+		}
+		else if(fileName.equals("user_transaction.dwt")){
+			res = res.replace("${lang.exchangePoints.1}", "${lang.exchangePoints[1]}");
+			res = res.replace("${lang.exchangePoints.0}", "${lang.exchangePoints[0]}");
+			res = res.replace("other[msn]", "other['msn']");
+			res = res.replace("other[qq]", "other['qq']");
+			res = res.replace("other[office_phone]", "other['office_phone']");
+			res = res.replace("other[home_phone]", "other['home_phone']");
+			res = res.replace("other[mobile_phone]", "other['mobile_phone']");
+		}
+		else if( fileName.equals("user_clips.dwt")){
+			int affiliateStart = res.indexOf("<h5><span>${lang.labelAffiliate}");
+			int affiliateEnd = res.indexOf("<#if ( action == 'bookingList'");
+			if(affiliateStart > 0 && affiliateEnd > 0 ){
+				res = res.substring(0,affiliateStart) + "</#if>" + res.substring(affiliateEnd);
+			}
+		}
+		else if( fileName.equals("user_menu.lbi")){
+			String[] strs = res.split("</a>");
+			StringBuffer sb = new StringBuffer(res.substring(0,	res.indexOf("<a")));
+			
+			for (String string : strs) {
+				if(string.contains("default")||string.contains("profile")||
+						string.contains("orderList")||string.contains("addressList")||
+						string.contains("collectionList")||string.contains("affiliate")||
+						string.contains("commentList")||string.contains("trackPackages")||
+						string.contains("logout")){
+					sb.append(string.substring(string.indexOf("<a"))).append("</a>");
+				}
+			}
+			sb.append(res.substring(res.lastIndexOf("</a>") + 4 ));
+			res = sb.toString();
+		}
+		else if(fileName.equals("page_header.lbi")){
+			res = res.replace("</form>", "<input name=\"act\" type=\"hidden\" value=\"compassSearch\" /></form>");
+		}
+		res = res.replaceAll("index.action", "home.action");
+		res = res.replaceAll("../images", "images");
 		
 		return res;
 		
@@ -260,35 +315,75 @@ public class DWTConverter {
 			buf.append("<#if ( ");
 		}
 		StringBuffer sb = new StringBuffer();
-		
-		//this need antlrworks-1.3.1.jar
 		CharStream input = new ANTLRStringStream(tag);
         Expr lexer = new Expr (input);
         Token lexerToken;
         while ((lexerToken = lexer.nextToken())!=Token.EOF_TOKEN) {
         	if(lexerToken.getType() != Expr.WS ){
-        		if(lexerToken.getText().equals("$smarty.session.user_id")){
+        		if( lexerToken.getText().equals("$smarty.session.user_id") ){
         			while((lexerToken = lexer.nextToken())!=Token.EOF_TOKEN) {
+        				boolean flag = false;
         				if(lexerToken.getType() == Expr.WS ){
         					continue;
         				}
         				if(lexerToken.getText().equals("gt")||lexerToken.getType() == Expr.GT){
+        					flag = true;
         					continue;
         				}
-        				sb.append("user_id");
+//        				sb.append("$session[\"user_id\"],");
+        				sb.append("$user_id");
+//        				if( flag ){
+//        					sb.append("??");
+//        				}
+        				sb.append(",");
         				break;
         			}
         		}
         		else {
         			sb.append(lexerToken.getText()).append(",");
-        		}        		
-        	
+        		}          	
         	}
-        }			
+        }
+        
 		sb.deleteCharAt(sb.length()-1);
 		
-
-		String[] tokens = StringUtils.split(sb.toString(),",");
+		String str = sb.toString();
+		
+		//goodsnumber ！="" 改为 != 0
+		if(fileName.equals("goods.dwt")){
+			str = str.replace("$goods.goods_number,neq,\"\"", "$goods.goods_number,gt,0");
+		}
+		else if(fileName.equals("flow.dwt")){
+			str = str.replace("$goods.goods_id,gt,0", "$goods.goods_id");
+			str = str.replace("$goods.parent_id,gt,0", "$goods.parent_id");
+			str = str.replace("$goods.parent_id,>,0", "$goods.parent_id");
+			str = str.replace("$goods.parent_id,eq,0", "!$goods.parent_id??");
+			str = str.replace("!,$gb_deposit", "$gb_deposit");
+			str = str.replace("$shipping.insure,neq,0", "$shipping.insure,neq,\"0\"");
+			if(elseif){
+				str = str.replace("$goods.is_gift", "$goods.is_gift,>,0");
+			}
+		}
+//		else if(fileName.equals("user_passport.dwt")){
+//			str = str.replace("$shop_reg_closed,eq,1", "$shop_reg_closed,eq,\"1\"");
+//		}
+		else if(fileName.equals("user_clips.dwt")){
+			str = str.replace("==,=", "==");
+		}
+		else if(fileName.equals("user_transaction.dwt")){
+			str = str.replace("$action,eq,order_detail", "$action,eq,\"order_detail\"");
+			str = str.replace("$goods.parent_id,>,0", "$goods.parent_id");
+			str = str.replace("$order.shipping_id,>,0", "$order.shipping_id");
+			str = str.replace("$goods.is_gift", "$goods.is_gift,>,0");
+		}
+		else if(fileName.equals("consignee.lbi")){
+			str = str.replace("$consignee.address_id,gt,0", "$consignee.address_id");
+		}
+						
+//		String[] tokens = StringUtils.splitPreserveAllTokens(tag);
+		String[] tokens = StringUtils.split(str,",");
+				
+		
 		int size = tokens.length;
 		
 		String[] convertedTokens = new String[size];
@@ -380,7 +475,7 @@ public class DWTConverter {
 				boolean withLogical = false;
 				if(i!=0) {
 					withLogical = withLogical | "!".equals(convertedTokens[i-1]);
-					String regex = ">|>=|==|!=|<|<=";
+					String regex = ">|>=|==|!=|<|<=|%";
 					withLogical = withLogical | Pattern.compile(regex).matcher(convertedTokens[i-1]).matches();
 				}
 				if(i!=size-1) {
@@ -480,7 +575,7 @@ public class DWTConverter {
 		
 		if(keyItem!=null) {
 			// it's iterating a map or hashtable
-			if(listItem.contains("list")){
+			if(listItem.contains("list") || listItem.equals("spec.values")){
 				res = new StringBuffer("<#list ").append(listItem).append(" as ").append(valueItem).append(">")
 				.append(" <#assign ").append(keyItem).append(" = ").append(valueItem).append("_index >")
 				.toString();
@@ -503,6 +598,9 @@ public class DWTConverter {
 				
 			
 			
+		}
+		if(listItem.equals("lang.flow_login_register")){
+			res = "<#list lang.flowLoginRegister as item>";
 		}
 		
 		debug("in [compileForEachStart]: res="+res+", key="+keyItem);

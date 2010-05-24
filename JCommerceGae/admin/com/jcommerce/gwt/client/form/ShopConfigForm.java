@@ -19,7 +19,7 @@ public class ShopConfigForm extends BeanObject implements IShopConfig {
 	public static TextField<String> getNameField(String fieldTitle){
 		TextField<String> nameField = new TextField<String>();
 		nameField.setName(NAME);
-		nameField.setMaxLength(10);
+		nameField.setMaxLength(30);
 		nameField.setAllowBlank(false);
 		TextField<String>.TextFieldMessages tfm = nameField.new TextFieldMessages();
 		tfm.setBlankText(Resources.messages.blankText(fieldTitle));

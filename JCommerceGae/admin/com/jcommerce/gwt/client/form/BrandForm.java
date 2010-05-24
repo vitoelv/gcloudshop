@@ -32,7 +32,7 @@ public class BrandForm extends BeanObject implements IBrand{
 	public static TextField<String> getNameField(String fieldTitle) {
 		TextField<String> nameField = new TextField<String>();
 		nameField.setName(BRAND_NAME);
-		nameField.setMaxLength(10);
+		nameField.setMaxLength(50);
 		nameField.setAutoValidate(true);
 		nameField.setAllowBlank(false);
 		TextField<String>.TextFieldMessages tfm = nameField.new TextFieldMessages();
@@ -44,7 +44,7 @@ public class BrandForm extends BeanObject implements IBrand{
 	public static TextField<String> getSiteField(String fieldTitle) {
 		TextField<String> nameField = new TextField<String>();
 		nameField.setName(SITE_URL);
-		nameField.setMaxLength(20);
+		nameField.setMaxLength(100);
 		nameField.setAutoValidate(true);
 		return nameField;
 	}

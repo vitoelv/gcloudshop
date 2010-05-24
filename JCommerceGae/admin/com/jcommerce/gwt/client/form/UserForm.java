@@ -16,7 +16,7 @@ public class UserForm  extends BeanObject implements IUser{
 	public static TextField<String> getNameField(String fieldTitle) {
 		TextField<String> field = new TextField<String>();
 		field.setName(USER_NAME);
-		field.setMaxLength(10);
+		field.setMaxLength(30);
 		field.setAutoValidate(true);
 		field.setAllowBlank(false);
 		TextField<String>.TextFieldMessages tfm = field.new TextFieldMessages();
@@ -80,7 +80,6 @@ public class UserForm  extends BeanObject implements IUser{
 		field.setName(OFFICE_PHONE);
 		field.setRegex("^[0-9]*$");
 		TextField<String>.TextFieldMessages tfm = field.new TextFieldMessages();
-	//	tfm.setRegexText("电话号码只能为数字");
 		tfm.setRegexText(Resources.constants.User_wrongphone());
 		field.setMessages(tfm);
 		return field;
@@ -91,7 +90,6 @@ public class UserForm  extends BeanObject implements IUser{
 		field.setName(HOME_PHONE);
 		field.setRegex("^[0-9]*$");
 		TextField<String>.TextFieldMessages tfm = field.new TextFieldMessages();
-//		tfm.setRegexText("电话号码只能为数字");
 		tfm.setRegexText(Resources.constants.User_wrongphone());
 		field.setMessages(tfm);
 		return field;
@@ -102,7 +100,6 @@ public class UserForm  extends BeanObject implements IUser{
 		field.setName(MOBILE_PHONE);
 		field.setRegex("^[0-9]*$");
 		TextField<String>.TextFieldMessages tfm = field.new TextFieldMessages();
-//		tfm.setRegexText("电话号码只能为数字");
 		tfm.setRegexText(Resources.constants.User_wrongphone());
 		field.setMessages(tfm);
 		return field;
