@@ -21,7 +21,7 @@ public class UserAddressForm  extends BeanObject implements IUserAddress{
 	public static TextField<String> getConsigneeField(String fieldTitle) {
 		TextField<String> field = new TextField<String>();
 		field.setName(CONSIGNEE);
-		field.setMaxLength(10);
+		field.setMaxLength(30);
 		field.setAutoValidate(true);
 		field.setAllowBlank(false);
 		TextField<String>.TextFieldMessages tfm = field.new TextFieldMessages();

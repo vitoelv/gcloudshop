@@ -28,7 +28,7 @@ public class GoodsTypeForm extends BeanObject implements IGoodsType {
 	public static TextField<String> getNameField(String fieldTitle) {
 		TextField<String> nameField = new TextField<String>();
 		nameField.setName(CAT_NAME);
-		nameField.setMaxLength(10);
+		nameField.setMaxLength(50);
 		nameField.setAutoValidate(true);
 		nameField.setAllowBlank(false);
 		TextField<String>.TextFieldMessages tfm = nameField.new TextFieldMessages();

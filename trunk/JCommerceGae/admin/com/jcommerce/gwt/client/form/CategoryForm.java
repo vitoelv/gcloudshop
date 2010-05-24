@@ -20,7 +20,7 @@ public class CategoryForm extends BeanObject implements ICategory {
 	public static TextField<String> getNameField(String fieldTitle) {
 		TextField<String> field = new TextField<String>();
 		field.setName(CAT_NAME);
-		field.setMaxLength(10);
+		field.setMaxLength(50);
 		field.setAutoValidate(true);
 		field.setAllowBlank(false);
 		TextField<String>.TextFieldMessages tfm = field.new TextFieldMessages();

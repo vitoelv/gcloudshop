@@ -38,6 +38,7 @@ import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
+import com.jcommerce.core.annotation.IsBlobText;
 import com.jcommerce.core.annotation.IsPK;
 import com.jcommerce.core.model.AdminUser;
 import com.jcommerce.core.model.AreaRegion;
@@ -219,6 +220,10 @@ public class DataStoreUtils implements IConstants{
     				Class clazz = Class.forName(className);
     				ModelObject obj = (ModelObject)clazz.newInstance();
     				
+    				if(className.equals("com.jcommerce.core.model.Goods")){
+    					System.out.println("in com.jcommerce.core.model.Goods");
+    				}
+    				
     				values = ConvertUtil.split(newRecord, SEP_COLUMNS_VALUES);
     				// won't work in case ,, occur in the sequence
 //    				values = StringUtils.split(newline, SEP_COLUMNS_VALUES);
@@ -237,6 +242,7 @@ public class DataStoreUtils implements IConstants{
     					else {
         					Field f = clazz.getDeclaredField(column);
         					Annotation isPK = f.getAnnotation(IsPK.class);
+        					Annotation isBlobText = f.getAnnotation(IsBlobText.class);
         					if(isPK!=null) {
         						// expect a pk value, need convert from keyName->pk
         						if(StringUtils.isEmpty(value)) {
@@ -247,10 +253,16 @@ public class DataStoreUtils implements IConstants{
         						}
         					}
         					else if(Blob.class.isAssignableFrom(f.getType())) {
-        						if(StringUtils.isNotEmpty(value)){
-        							// keyName always go first, so pkId is generated already
-        							fileNameIdMapping.put(value, obj.getPkId());
+        						if( isBlobText != null ){
+        							BeanUtils.setProperty(obj, column, value);
+        						} else {
+        							
+        							if(StringUtils.isNotEmpty(value)){
+            							// keyName always go first, so pkId is generated already
+            							fileNameIdMapping.put(value, obj.getPkId());
+            						}
         						}
+        						
         					}
         					else {
         						if(StringUtil.isEmpty(value)){

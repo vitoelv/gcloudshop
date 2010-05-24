@@ -13,12 +13,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import junit.framework.TestCase;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-public class TestDWTConverter extends TestCase {
+public class TestDWTConverter {
 
 //	Set<String> langKeys = new HashSet<String>();
 	Map<String, Object> values = new HashMap<String, Object>();
@@ -26,8 +25,8 @@ public class TestDWTConverter extends TestCase {
 	
 	public void testConvert() {
 
-		String sBaseDir = "D:/JCommerce/ECShop_V2.6.1_UTF8_build1208/upload/themes/olomo";
-		String sDestDir = "D:/JCommerce/ECShop_V2.6.1_UTF8_build1208/upload/themes/freemarker-olomo2";
+		String sBaseDir = "D:/JCommerce/ECShop_V2.6.1_UTF8_build1208/upload/themes/default";
+		String sDestDir = "D:/JCommerce/ECShop_V2.6.1_UTF8_build1208/upload/themes/freemarker-default";
 		
 		
 		testConvertDir(sBaseDir, sDestDir);
@@ -83,8 +82,8 @@ public class TestDWTConverter extends TestCase {
 		}
 		try {
 			// this is not allowed in GAE
-//			IOUtils.write(buf.toString(), new FileOutputStream(new File(
-//					sDestPropertyDir, langFn)), "UTF-8");
+			IOUtils.write(buf.toString(), new FileOutputStream(new File(
+			sDestPropertyDir, langFn)), "UTF-8");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -139,7 +138,7 @@ public class TestDWTConverter extends TestCase {
 					String destFileName = fileName.replace("dwt", "ftl");
 					destFileName = destFileName.replace("lbi", "ftl");
 					
-					if(destFileName.equals("help.ftl")){
+					if(destFileName.equals("consignee.ftl")){
 						System.out.println("222");
 					}
 					
@@ -150,7 +149,7 @@ public class TestDWTConverter extends TestCase {
 //					langKeys.addAll(new DWTConverter().findLangKeys(out));
 					
 					// this is not allowed in GAE
-//					IOUtils.write(out, new FileOutputStream(new File(sDestDir, destFileName)), ENC);
+					IOUtils.write(out, new FileOutputStream(new File(sDestDir, destFileName)), ENC);
 				}
 				else {
 					FileUtils.copyFile(file, new File(sDestDir, fileName));
@@ -164,5 +163,9 @@ public class TestDWTConverter extends TestCase {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
+	}
+	
+	public static void main(String[] args){
+		new TestDWTConverter().testConvertDir(args[0] , args[1]);
 	}
 }

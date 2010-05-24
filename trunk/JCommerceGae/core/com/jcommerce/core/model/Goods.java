@@ -1,5 +1,6 @@
 package com.jcommerce.core.model;
 
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,6 +12,7 @@ import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableProperty;
 
 import com.google.appengine.api.datastore.Blob;
+import com.jcommerce.core.annotation.IsBlobText;
 import com.jcommerce.core.annotation.IsPK;
 
 /**  
@@ -159,6 +161,7 @@ public void setGoodsTypeId(String goodsTypeId) {
   @Persistent
   private java.lang.String goodsBrief; 
 
+  @IsBlobText
   @Persistent
   private Blob goodsDesc; 
 
@@ -440,7 +443,7 @@ public void setGoodsTypeId(String goodsTypeId) {
 
   public void setGoodsDesc(String newGoodsDesc) {
     //goodsDesc = newGoodsDesc;
-	goodsDesc = new Blob(newGoodsDesc.getBytes());
+	goodsDesc = new Blob(newGoodsDesc.getBytes(Charset.forName("UTF-8")));
   }
 
 
