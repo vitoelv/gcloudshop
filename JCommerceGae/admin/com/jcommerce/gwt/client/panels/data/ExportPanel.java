@@ -21,7 +21,7 @@ public class ExportPanel extends BaseEntityEditPanel{
         String Export_AllExport();
         String Export_Exporting();
         String Export_ExportButton();
-        String Export_StanderdExport();
+        String Export_StandardExport();
         String Export_MinimumExport();
     }
     /**
