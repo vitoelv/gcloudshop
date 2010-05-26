@@ -82,8 +82,8 @@ public class TestDWTConverter {
 		}
 		try {
 			// this is not allowed in GAE
-			IOUtils.write(buf.toString(), new FileOutputStream(new File(
-			sDestPropertyDir, langFn)), "UTF-8");
+//			IOUtils.write(buf.toString(), new FileOutputStream(new File(
+//			sDestPropertyDir, langFn)), "UTF-8");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -149,7 +149,7 @@ public class TestDWTConverter {
 //					langKeys.addAll(new DWTConverter().findLangKeys(out));
 					
 					// this is not allowed in GAE
-					IOUtils.write(out, new FileOutputStream(new File(sDestDir, destFileName)), ENC);
+//					IOUtils.write(out, new FileOutputStream(new File(sDestDir, destFileName)), ENC);
 				}
 				else {
 					FileUtils.copyFile(file, new File(sDestDir, fileName));

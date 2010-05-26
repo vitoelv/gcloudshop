@@ -133,7 +133,7 @@ public class ExportPanel extends BaseEntityEditPanel{
 		af.setHideLabel(true);
 
 		MultiField mf = new MultiField();
-		mf.setFieldLabel(Resources.constants.Export_StanderdExport());
+		mf.setFieldLabel(Resources.constants.Export_StandardExport());
 		mf.add(af);
 		formPanel.add(mf, super.tfd());
 		

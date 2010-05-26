@@ -434,7 +434,7 @@ public void setGoodsTypeId(String goodsTypeId) {
 	  if(goodsDesc == null)
 		  return null;
 	  else {
-		   String desc = new String(goodsDesc.getBytes());
+		   String desc = new String(goodsDesc.getBytes(),Charset.forName("UTF-8"));
 		   System.out.println(desc);
 		   return desc;
 	  }
