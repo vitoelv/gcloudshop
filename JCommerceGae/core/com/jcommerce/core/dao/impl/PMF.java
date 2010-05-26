@@ -1,5 +1,7 @@
 package com.jcommerce.core.dao.impl;
 
+import java.util.Date;
+
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManagerFactory;
 
@@ -26,9 +28,11 @@ public final class PMF {
 
 		compassGps = new SingleCompassGps(compass);
 		compassGps.addGpsDevice(new Jdo2GpsDevice("appenine", pmfInstance));
-		compassGps.start(); 
-
-		compassGps.index();
+//		compassGps.start(); 
+//
+//		compassGps.index();
+//		
+//		compassGps.stop();
 	}
 	
     private PMF() {}
@@ -40,4 +44,5 @@ public final class PMF {
 	public static Compass getCompass(){
 		return compass;
 	}
+
 }
