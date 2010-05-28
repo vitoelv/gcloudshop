@@ -135,6 +135,17 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     
+    <servlet>
+        <servlet-name>CompassIndexBuilder</servlet-name>
+        <servlet-class>com.jcommerce.gwt.server.CompassIndexBuilder</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>CompassIndexBuilder</servlet-name>
+        <url-pattern>/compassIndexBuilder.do</url-pattern>
+    </servlet-mapping>
+    
     <servlet-mapping>
         <servlet-name>MyServlet</servlet-name>
         <url-pattern>/myServlet.do</url-pattern>
