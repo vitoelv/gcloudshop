@@ -11,6 +11,7 @@ import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.i18n.client.Messages;
@@ -282,14 +283,25 @@ public class MergeOrderPanel extends ContentWidget {
 						for (Iterator<BeanObject> it = result.iterator(); it.hasNext();) {
 							final BeanObject order = it.next();
 							String userId = order.getString(IOrderInfo.USER_ID);
-							new ReadService().getBean(ModelNames.USER, userId, new ReadService.Listener() {
-								public void onSuccess(BeanObject bean) {
-									mainOrderList.addItem(order.getString(IOrderInfo.ORDER_SN) + "[" + bean.get(IUser.USER_NAME) + "]",
-											order.getString(IOrderInfo.ORDER_SN));
-									subOrderList.addItem(order.getString(IOrderInfo.ORDER_SN) + "[" + bean.get(IUser.USER_NAME) + "]",
-											order.getString(IOrderInfo.ORDER_SN));
-								}
-							});
+							
+							
+							if(userId == null){
+								userId = "AnonymousUser";
+								mainOrderList.addItem(order.getString(IOrderInfo.ORDER_SN) + "[" + userId + "]",
+										order.getString(IOrderInfo.ORDER_SN));
+								subOrderList.addItem(order.getString(IOrderInfo.ORDER_SN) + "[" + userId + "]",
+										order.getString(IOrderInfo.ORDER_SN));
+								
+							}else{	
+								new ReadService().getBean(ModelNames.USER, userId, new ReadService.Listener() {
+									public void onSuccess(BeanObject bean) {
+										mainOrderList.addItem(order.getString(IOrderInfo.ORDER_SN) + "[" + bean.get(IUser.USER_NAME) + "]",
+												order.getString(IOrderInfo.ORDER_SN));
+										subOrderList.addItem(order.getString(IOrderInfo.ORDER_SN) + "[" + bean.get(IUser.USER_NAME) + "]",
+												order.getString(IOrderInfo.ORDER_SN));
+									}
+								});
+							}
 						}
 					}
 				});	
