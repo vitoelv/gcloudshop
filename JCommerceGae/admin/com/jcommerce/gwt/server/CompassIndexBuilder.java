@@ -1,4 +1,4 @@
-﻿package com.jcommerce.gwt.server;
+package com.jcommerce.gwt.server;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
