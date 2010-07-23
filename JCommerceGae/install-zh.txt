@@ -21,5 +21,13 @@
 6、保存退出。
 
 7、运行Install.cmd，接着会提示你输入邮箱名和密码，看见“Success.”就说明成功了。
+NOTE: there is a problem (could be an potential bug of GAE), that the console will just hung after showing the line: 
+     [java] 35% Scanned 1500 files.
+     [java] 36% Initiating update.
+and not showing the email address and password prompt. 
+
+Workaround is, at this stage you could just input your emailaddress and password (both followed by an "Enter")
+Then the progress will continue.
+
 
 8、之后访问http://appengine.google.com/就可以看到你的应用列表了。
