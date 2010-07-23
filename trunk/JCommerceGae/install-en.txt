@@ -18,6 +18,14 @@ Download owr project and edit the "war\WEB-INF\appengine-web.xml" file, then cha
 5.Save the changes and Quit.
 
 6.Run Install.cmd file, and according to the prompt input your email address and password. Then you will see the ¡°Success.¡± info when it has completed.
+NOTE: there is a problem (could be an potential bug of GAE), that the console will just hung after showing the line: 
+     [java] 35% Scanned 1500 files.
+     [java] 36% Initiating update.
+and not showing the email address and password prompt. 
+
+Workaround is, at this stage you could just input your emailaddress and password (both followed by an "Enter")
+Then the progress will continue.
+
 
 7.You can now see your application running on App Engine. If you set up a free appspot.com domain name, the URL for your website begins with your application ID:
 
