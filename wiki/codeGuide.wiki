@@ -1,0 +1,14 @@
+#This is a simple guide to read and understand the code structure.
+
+= Introduction =
+
+Overall architecture: 
+
+  */core: This includes codes for DAO/Model layer, main business logic to handling the data, and some common utils. We used GAE datastore's JDO API in the back. And we developed a generic DAO layer to handle CURD of most simple entities, while using customized DAO to handle special entities.
+
+  */admin: This includes codes for administrator GUI's View and Controller layer. We used GWT+GXT(an extension of GWT) as client side, and GWT's RPC servlet+plain Servlet as server side. HTML Post and GWT-RPC are main communication mechanisms. 
+
+  */web:   This includes codes for public GUI's view and controller layer. We used freemarker+plain javascript as client side, and struts2 as server side. HTML Post and Json are main communication mechanisms.
+
+  In general we used spring3 to manage all the beans.
+
