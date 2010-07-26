@@ -1,5 +1,5 @@
+#summary This is a simple guide to read and understand the code structure.
 #labels Phase-Implementation
-#This is a simple guide to read and understand the code structure.
 
 = Introduction =
 
