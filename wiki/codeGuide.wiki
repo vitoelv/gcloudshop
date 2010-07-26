@@ -2,7 +2,7 @@
 
 = Introduction =
 
-Overall architecture: 
+You will see three source code folders: 
 
   *//core: This includes codes for DAO/Model layer, main business logic to handling the data, and some common utils. We used GAE datastore's JDO API in the back. And we developed a generic DAO layer to handle CURD of most simple entities, while using customized DAO to handle special entities.
 
