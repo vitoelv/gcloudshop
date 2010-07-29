@@ -1,23 +1,20 @@
 1.Registering the Application
 You create and manage App Engine web applications from the App Engine Administration Console, at the following URL:
-
 https://appengine.google.com/
-
 Sign in to App Engine using your Google account. If you do not have a Google account, you can create a Google account with an email address and password.
-
 To create a new application, click the "Create an Application" button. Follow the instructions to register an application ID, a name unique to this application. If you elect to use the free appspot.com domain name, the full URL for the application will be http://application-id.appspot.com/. You can also purchase a top-level domain name for your app, or use one that you have already registered.
 
-Download owr project and edit the "war\WEB-INF\appengine-web.xml" file, then change the value of the <application> element to be your registered application ID.
+2. Suppose the gcshop release package (the zip) was unzipped to folder E:\app, then edit the "E:\app\war\WEB-INF\appengine-web.xml" file, change the value of the <application> element to your registered application ID.
 
-2.Download the App Engine Java SDK ( http://code.google.com/intl/en/appengine/downloads.html#Google_App_Engine_SDK_for_Java ). Unpack the archive in a convenient location on your hard drive.
+3. Download the App Engine Java SDK ( http://code.google.com/intl/en/appengine/downloads.html#Google_App_Engine_SDK_for_Java ). Unpack the archive in a convenient location on your hard drive.
 
-3.Edit the Install.cmd file in project directory , and replace JAVA_HOME with your JDK path.
+4.Edit the Install.cmd file in project directory , and replace JAVA_HOME with your JDK path.
 
-4.Replace the value of GAE_HOME with correspond path to your google-appengine-sdk directory .
+5.Replace the value of GAE_HOME with correspond path to your google-appengine-sdk directory .
 
-5.Save the changes and Quit.
+6.Save the changes and Quit.
 
-6.Run Install.cmd file, and according to the prompt input your email address and password. Then you will see the ¡°Success.¡± info when it has completed.
+7.Run Install.cmd file, and according to the prompt input your email address and password. Then you will see the ï¿½ï¿½Success.ï¿½ï¿½ info when it has completed.
 NOTE: there is a problem (could be an potential bug of GAE), that the console will just hung after showing the line: 
      [java] 35% Scanned 1500 files.
      [java] 36% Initiating update.
@@ -26,7 +23,10 @@ and not showing the email address and password prompt.
 Workaround is, at this stage you could just input your emailaddress and password (both followed by an "Enter")
 Then the progress will continue.
 
+8. You can now see your application running on App Engine. You can logon http://appengine.google.com/ for some backend administration tasks.
 
-7.You can now see your application running on App Engine. If you set up a free appspot.com domain name, the URL for your website begins with your application ID:
+9. If you set up a free appspot.com domain name, the URL for your website begins with your application ID:
+http://{your-application-id}.appspot.com/  this is homepage for public users 
+http://{your-application-id}.appspot.com/login.jsp this is home page for administrators. By default you could logon with "admin" as both username and password.
 
-http://application-id.appspot.com/
+10. When you run for the first time, you could fill the datastore with some prepared testing data. Logon as administrator, choose Data Management->Import, in the "Select File" field, choose the local file E:\app\liveDSData.zip, and submit.   

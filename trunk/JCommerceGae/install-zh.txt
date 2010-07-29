@@ -1,15 +1,10 @@
 ﻿1、首先你要注册你的应用，即开通App Engine功能（http://appengine.google.com/)。记住你的application-id。
 
-2、下载工程之后，你会得到一个app.war，由它解压出来的目录比如为E:\app，需要找到E:\app\war\WEB-INF\appengine-web.xml文件，把下面内容中application-id换成你的实际id就可以了：
+2、发布包zip解压出来的目录比如为E:\app，需要找到E:\app\war\WEB-INF\appengine-web.xml文件，把下面内容中application-id换成你的实际id就可以了：
 <?xml version="1.0" encoding="utf-8"?>
-
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
-
 	<application>application-id</application>
-
 	<version>1</version>
-	
-
 </appengine-web-app>
 
 3、现在下载并解压Google-appengine-SDK。( http://code.google.com/intl/en/appengine/downloads.html#Google_App_Engine_SDK_for_Java )
@@ -31,3 +26,9 @@ Then the progress will continue.
 
 
 8、之后访问http://appengine.google.com/就可以看到你的应用列表了。
+
+9、
+http://{your-application-id}.appspot.com/login.jsp 访问后台管理界面，缺省用户名和密码是 admin/admin
+http://{your-application-id}.appspot.com/          访问前台购物界面
+
+10、第一次运行时，可以上传预先准备好的一些测试数据，在管理界面中，选取数据维护->数据导入，在选择文件一栏中点击并选取本地解压目录下的E:\app\liveDSData.zip，并提交

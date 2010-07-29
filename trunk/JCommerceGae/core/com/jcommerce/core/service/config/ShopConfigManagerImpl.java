@@ -1,6 +1,65 @@
 package com.jcommerce.core.service.config;
 
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.*;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_ANONYMOUS_BUY;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_ARTICLE_NUMBER;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_CART_CONFIRM;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_COLLECTION_NUMBER;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_COMMENTS_NUMBER;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_COMMENT_CHECK;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_DEFAULT_ADMIN_DISABLED;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_GOOGLE_ACCOUNT;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_GOOGLE_DEVELOPER_KEY;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_GOOGLE_PASSWORD;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_GOOGLE_WEBSITEPATH;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_HISTORY_NUMBER;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_INTEGRAL_NAME;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_NAME_OF_REGION_1;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_NAME_OF_REGION_2;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_NAME_OF_REGION_3;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_NAME_OF_REGION_4;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_ONE_STEP_BUY;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_PAGE_SIZE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_PAGE_STYLE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_ADDRESS;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_COPYRIGHT;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_COUNTRY;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_DESC;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_KEYWORDS;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_MSN;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_NAME;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_NOTICE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_POSTCODE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_QQ;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_REG_CLOSED;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_SERVICE_EMAIL;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_SERVICE_PHONE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_SKYPE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_TITLE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_WW;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_YM;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_GOODSWEIGHT;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_GOODS_ATTRIBUTE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_GOODS_IN_CART;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_MARKETPRICE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_ORDER_TYPE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SORT_ORDER_METHOD;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SORT_ORDER_TYPE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_TIME_FORMAT;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_USER_NOTICE;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_TYPE_OPTIONS;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_TYPE_PASSWORD;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_TYPE_SELECT;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_TYPE_TEXT;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_TYPE_TEXTAREA;
+import com.jcommerce.core.model.AdminUser;
+import com.jcommerce.core.model.ShopConfig;
+import com.jcommerce.core.service.Condition;
+import com.jcommerce.core.service.Criteria;
+import com.jcommerce.core.service.impl.DefaultManagerImpl;
+import com.jcommerce.core.util.ResourceUtil;
+import com.jcommerce.gwt.client.ModelNames;
+import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
+import com.jcommerce.web.to.ShopConfigWrapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,12 +71,6 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
-
-import com.jcommerce.core.model.ShopConfig;
-import com.jcommerce.core.service.impl.DefaultManagerImpl;
-import com.jcommerce.core.util.ResourceUtil;
-import com.jcommerce.gwt.client.ModelNames;
-import com.jcommerce.web.to.ShopConfigWrapper;
 
 public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopConfigManager {
 
@@ -81,6 +134,32 @@ public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopCo
 		}
 		
 	}
+	
+	
+	public Boolean isDefaultAdminEnabled() {
+	        try {
+	            Boolean res = true;
+	            
+	            // this is the default value, same as the default value of ShopConfigMeta
+	            String isDisabled = "0";
+	            Criteria c = new Criteria();
+	            c.addCondition(new Condition(IShopConfigMeta.CODE, Condition.EQUALS, IShopConfigMeta.CFG_KEY_DEFAULT_ADMIN_DISABLED));
+	            List<ShopConfig> scs = getList(ModelNames.SHOPCONFIG, c);
+	            if (scs.size() > 0) {
+	                isDisabled = scs.get(0).getValue();
+	            }
+	            
+	            List<AdminUser> users = getList(ModelNames.ADMIN_USER, null);
+	            res = !("1".equals(isDisabled) && users.size()>0);
+	            
+	            return res;
+	            
+	            
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            throw new RuntimeException();
+	        }
+	    }
 	
 	public boolean isCacheValid=false;
 	public ShopConfigWrapper cachedScw = new ShopConfigWrapper();
@@ -152,6 +231,8 @@ public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopCo
 		
 		// TODO use and i18n of tip string (last parameter of ShopConfigMeta)
 		metaList = new ArrayList<ShopConfigMeta>();
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_DEFAULT_ADMIN_DISABLED, "0", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_DEFAULT_ADMIN_DISABLED"), new String[][]{new String[]{"1",bundle.getString("Yes")}, new String[]{"0",bundle.getString("No")}}, bundle.getString("CFG_KEY_DEFAULT_ADMIN_DISABLED_TIP")));
+		
 //		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_NAME,	"gCouldShop", CFG_TYPE_TEXT, "商店名称", null, null));
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_NAME,	"gCouldShop", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_SHOP_NAME"), null, null));
 //		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_TITLE, "gCouldShop 演示站", CFG_TYPE_TEXT, "商店标题", null, "商店的标题将显示在浏览器的标题栏"));		
