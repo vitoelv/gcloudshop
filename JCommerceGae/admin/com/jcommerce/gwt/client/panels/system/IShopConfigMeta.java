@@ -43,6 +43,7 @@ public interface IShopConfigMeta {
 	public static final String CFG_KEY_SHOP_SERVICE_EMAIL = "service_email";
 	public static final String CFG_KEY_USER_NOTICE = "user_notice";
 	public static final String CFG_KEY_SHOP_REG_CLOSED = "shop_reg_closed";
+	public static final String CFG_KEY_DEFAULT_ADMIN_DISABLED = "shop_default_admin_disabled";
 	
 	//basic
 	public static final String CFG_KEY_COMMENT_CHECK = "comment_check";

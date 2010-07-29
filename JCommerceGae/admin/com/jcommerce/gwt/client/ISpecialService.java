@@ -44,6 +44,8 @@ public interface ISpecialService extends RemoteService {
     public ListLoadResult<BeanObject> getShippingAreaWithRegionNames(String shippingId, ListLoadConfig pgc);
     public Boolean saveShippingArea(BeanObject shippingArea);
     
+    public Boolean isDefaultAdminEnabled();
+    
     public SortedMap<Integer, List<BeanObject>> getCombinedShopConfigMetaMap();
     public Boolean saveShopConfig(Map<String, BeanObject> formData);
     public Map<String,String> getAdminUserInfo();
@@ -56,4 +58,6 @@ public interface ISpecialService extends RemoteService {
     public Map<String, Object> getOrderFee(String orderId, String shipping, String payId);
     public boolean deleteOrder(String orderId);
     public boolean mergeOrder(String fromId, String toId);
+    
+    
 }

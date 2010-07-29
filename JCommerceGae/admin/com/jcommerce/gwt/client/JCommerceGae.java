@@ -1,8 +1,5 @@
 package com.jcommerce.gwt.client;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -24,6 +21,7 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jcommerce.gwt.client.Application.ApplicationListener;
 import com.jcommerce.gwt.client.form.GWTHttpDynaForm;
+import com.jcommerce.gwt.client.panels.DashBoardPanel;
 import com.jcommerce.gwt.client.panels.Success;
 import com.jcommerce.gwt.client.panels.article.ArticleCatListPanel;
 import com.jcommerce.gwt.client.panels.article.ArticleCatPanel;
@@ -69,6 +67,9 @@ import com.jcommerce.gwt.client.panels.system.ShippingTemplatePanel;
 import com.jcommerce.gwt.client.panels.system.ShopConfigPanel;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.RemoteService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -187,7 +188,10 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 			History.newItem(initToken);
 		} else {
 			// Use the first token available
-			TreeItem firstItem = app.getMainMenu().getItem(0).getChild(0);
+		        // TreeItem firstItem = app.getMainMenu().getItem(0).getChild(0);
+		        
+		        // showing dashboard by default
+		        TreeItem firstItem = app.getMainMenu().getItem(0);
 			PageState state = itemStates.get(firstItem);
 			if (state != null)
 				state.execute();
@@ -222,8 +226,16 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
      */
     private void setupMainMenu() {
         Tree mainMenu = app.getMainMenu();      
+        // Map the item to its history token and content widget
+        PageState state = new DashBoardPanel.State();
+        TreeItem option = mainMenu.addItem(Resources.images.catWidgets().getHTML() + " "
+                                         + "DashBoard");
+        itemStates.put(option, state);
+        pageClassItems.put(state.getPageClassName(), option);
+        
         
         TreeItem catGoods = mainMenu.addItem(Resources.constants.categoryGoods());
+        
         setupMainMenuOption(catGoods, new GoodsListPanel.State(), Resources.images.catWidgets());
         setupMainMenuOption(catGoods, new GoodsPanel.State(), Resources.images.catWidgets());   
         setupMainMenuOption(catGoods, new CategoryListPanel.State(), Resources.images.catWidgets());
@@ -477,7 +489,7 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 				page = OrderFeePanel.getInstance();
 			} else if (pageClassName.equals(OrderListPanel.class.getName())) {
 				page = OrderListPanel.getInstance();			
-		    } else if (pageClassName.equals(SearchOrderPanel.class.getName())) {
+		        } else if (pageClassName.equals(SearchOrderPanel.class.getName())) {
 				page = SearchOrderPanel.getInstance();			
 			} else if (pageClassName.equals(MergeOrderPanel.class.getName())) {
 				page = MergeOrderPanel.getInstance();			
@@ -524,6 +536,9 @@ public class JCommerceGae implements EntryPoint, GWT.UncaughtExceptionHandler, A
 			else if(pageClassName.equals(ArticlePanel.class.getName())){
 				page = ArticlePanel.getInstance();
 			}
+			else if(pageClassName.equals(DashBoardPanel.class.getName())){
+                            page = DashBoardPanel.getInstance();
+                        }
 			if (page != null) {
 				pageRegistry.put(pageClassName, page);
 			} else {

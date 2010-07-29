@@ -1,32 +1,5 @@
 package com.jcommerce.gwt.server;
 
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-
 import com.extjs.gxt.ui.client.data.BaseListLoadResult;
 import com.extjs.gxt.ui.client.data.BasePagingLoadResult;
 import com.extjs.gxt.ui.client.data.ListLoadConfig;
@@ -34,6 +7,7 @@ import com.extjs.gxt.ui.client.data.ListLoadResult;
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
 import com.extjs.gxt.ui.client.data.PagingLoadResult;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.jcommerce.core.model.AdminUser;
 import com.jcommerce.core.model.AreaRegion;
 import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Constants;
@@ -47,7 +21,6 @@ import com.jcommerce.core.model.Payment;
 import com.jcommerce.core.model.Shipping;
 import com.jcommerce.core.model.ShippingArea;
 import com.jcommerce.core.model.ShopConfig;
-import com.jcommerce.core.model.UserAddress;
 import com.jcommerce.core.service.CustomizedManager;
 import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.core.service.config.IShopConfigManager;
@@ -83,6 +56,33 @@ import com.jcommerce.gwt.client.panels.system.ShippingConfigMetaForm;
 import com.jcommerce.gwt.client.service.Condition;
 import com.jcommerce.gwt.client.service.Criteria;
 import com.jcommerce.web.util.LibCommon;
+
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecialService{
     
@@ -552,6 +552,12 @@ public class SpecialServiceImpl extends RemoteServiceServlet implements ISpecial
     		e.printStackTrace();
     		throw new RuntimeException();    
     	}
+    }
+    
+    
+    public Boolean isDefaultAdminEnabled() {
+        Boolean res = getShopConfigManager().isDefaultAdminEnabled();
+        return res;
     }
     
     public SortedMap<Integer, List<BeanObject>> getCombinedShopConfigMetaMap() {

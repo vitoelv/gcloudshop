@@ -1,5 +1,15 @@
 package com.jcommerce.gwt.server;
 
+import com.jcommerce.core.model.AdminUser;
+import com.jcommerce.core.service.Condition;
+import com.jcommerce.core.service.Criteria;
+import com.jcommerce.core.service.IDefaultManager;
+import com.jcommerce.gwt.client.ModelNames;
+import com.jcommerce.gwt.client.model.IAdminUser;
+import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
+import com.jcommerce.web.to.ShopConfigWrapper;
+import com.jcommerce.web.util.SpringUtil;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -11,15 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
-
-import com.jcommerce.core.model.AdminUser;
-import com.jcommerce.core.service.Condition;
-import com.jcommerce.core.service.Criteria;
-import com.jcommerce.core.service.IDefaultManager;
-import com.jcommerce.gwt.client.ModelNames;
-import com.jcommerce.gwt.client.model.IAdminUser;
-import com.jcommerce.gwt.client.model.IComment;
-import com.jcommerce.web.util.SpringUtil;
 
 public class LoginAction extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
@@ -61,31 +62,34 @@ public class LoginAction extends HttpServlet {
         }
     }
     
-    private Boolean authenticate(String name, String password,HttpServletRequest request){
-    	
-    	Boolean isExist = false;
-    	IDefaultManager manager = (IDefaultManager)SpringUtil.getDefaultManager();
-    	Criteria criteria = new Criteria();
-    	criteria.addCondition(new Condition(IAdminUser.USER_NAME,Condition.EQUALS,name));
-    	criteria.addCondition(new Condition(IAdminUser.PASSWORD,Condition.EQUALS,password));
-    	List res = manager.getList(ModelNames.ADMINUSER, criteria);
-    	isExist = res.isEmpty()?false:true;
-    	if(isExist){
-    		setAdminUserInfo(request,(AdminUser)res.get(0));
-    	}
-    	else {
-    		// only go to fake if it does not exist.
-			// TODO this is fake for demo start from empty data store
-			if ("admin".equals(name) && "admin".equals(password)) {
-				AdminUser au = new AdminUser();
-				au.setUserName("I am Admin");
-				au.setEmail("adminUser@gmail.com");
-				setAdminUserInfo(request, au);
-				isExist = true;
-			}
-		}
-    	
-    	return isExist;
+    private Boolean authenticate(String name, String password, HttpServletRequest request) {
+        Boolean passed = false;
+        
+        boolean isDefaultEnabled = SpringUtil.getShopConfigManager().isDefaultAdminEnabled();
+        if (isDefaultEnabled && "admin".equals(name) && "admin".equals(password)) {
+            // default admin enabled
+            // TODO this is fake for demo start from empty data store
+            AdminUser au = new AdminUser();
+            au.setUserName("Default Administrator");
+            au.setEmail("adminUser@gmail.com");
+            setAdminUserInfo(request, au);
+            passed = true;
+
+            return passed;
+        }
+        
+        
+        IDefaultManager manager = (IDefaultManager)SpringUtil.getDefaultManager();
+        Criteria criteria = new Criteria();
+        criteria.addCondition(new Condition(IAdminUser.USER_NAME, Condition.EQUALS, name));
+        criteria.addCondition(new Condition(IAdminUser.PASSWORD, Condition.EQUALS, password));
+        List res = manager.getList(ModelNames.ADMINUSER, criteria);
+        passed = res.isEmpty() ? false : true;
+        if (passed) {
+            setAdminUserInfo(request, (AdminUser)res.get(0));
+        } 
+
+        return passed;
     }
     private void setAdminUserInfo(HttpServletRequest request , AdminUser adminUser){
     	HttpSession session = request.getSession();
