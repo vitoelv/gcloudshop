@@ -4,15 +4,6 @@
 
 package com.jcommerce.gwt.server;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-
 import com.extjs.gxt.ui.client.data.BasePagingLoadResult;
 import com.extjs.gxt.ui.client.data.PagingLoadConfig;
 import com.extjs.gxt.ui.client.data.PagingLoadResult;
@@ -29,6 +20,15 @@ import com.jcommerce.gwt.client.model.IModelObject;
 import com.jcommerce.gwt.client.resources.IShopConstants;
 import com.jcommerce.gwt.client.service.Condition;
 import com.jcommerce.gwt.client.service.Criteria;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class DefaultServiceImpl extends RemoteServiceServlet implements IDefaultService {
 
@@ -221,7 +221,17 @@ public class DefaultServiceImpl extends RemoteServiceServlet implements IDefault
 			throw new RuntimeException(e);
 		}
     }
-
+    public Integer getCount(String modelName, Criteria criteria) {
+        try {
+            System.out.println("getCount("+modelName);
+            IDefaultManager manager = getDefaultManager();
+            Integer res = manager.getCount(modelName, convert(criteria));
+            return res;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
     public List<BeanObject> getList(String modelName) {        
         return getList(modelName, null, null);
     }

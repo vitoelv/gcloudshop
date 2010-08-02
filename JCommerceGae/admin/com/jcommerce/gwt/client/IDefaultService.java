@@ -17,7 +17,7 @@ public interface IDefaultService extends RemoteService {
     public BeanObject getBean(String bean, String id);
     
     public List<BeanObject> getBeans(String bean, String[] ids);
-    
+    public Integer getCount(String modelName, Criteria criteria);
     public List<BeanObject> getList(String bean);
     
     public List<BeanObject> getList(String bean, Criteria criteria);

@@ -15,7 +15,9 @@ import com.jcommerce.gwt.client.service.Criteria;
 
 public interface IDefaultServiceAsync {
     public void updateObject(String id, BeanObject args, AsyncCallback<Boolean> callback);
-
+    
+    public void getCount(String modelName, Criteria criteria, AsyncCallback<Integer> callback);
+    
     public void newObject(BeanObject args, AsyncCallback<String> callback);
     
     public void getList(String name, AsyncCallback<List<BeanObject>> callback);
