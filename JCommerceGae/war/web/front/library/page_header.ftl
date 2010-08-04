@@ -1,4 +1,4 @@
-<script type="text/javascript">
+﻿<script type="text/javascript">
 var process_request = "${lang.processRequest}";
 </script>
 <div class="block clearfix">
@@ -67,6 +67,7 @@ var process_request = "${lang.processRequest}";
     </select>
    <input name="keywords" type="text" id="keyword" value="${searchKeywords}" class="B_input" style="width:110px;"/>
    <input name="imageField" type="submit" value="" class="go" style="cursor:pointer;" />
+   <input name="act" type="hidden" value="compassSearch"  />
    <a href="search.action?act=advanced_search">${lang.advancedSearch}</a>
    </form>
 </div>
