@@ -1,0 +1,1 @@
+Extract the rar file to a directory and copy the directory's files to Jcommerce\war\web\front , then repalce original files.

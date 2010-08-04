@@ -1,0 +1,1 @@
+将模板rar解压缩后，替换JcommerceGae/war/web/front里的相应文件即可。
