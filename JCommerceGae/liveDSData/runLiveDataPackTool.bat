@@ -7,6 +7,9 @@ echo create a folder (e.g. "bigger"), then copy your customized files (mydata.tx
 set rootPath=D:/JCommerce/JCommerceGae/liveDSData/bigger
 set outFileName=data.zip
 
+echo generating %outFileName% from folder %rootPath% ... 
+
 java LiveDataPackTool %rootPath% %outFileName% 
+
 
 pause
