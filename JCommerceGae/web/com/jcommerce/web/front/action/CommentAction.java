@@ -1,5 +1,15 @@
 package com.jcommerce.web.front.action;
 
+
+import com.jcommerce.core.model.Comment;
+import com.jcommerce.gwt.client.model.IComment;
+import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
+import com.jcommerce.web.to.Lang;
+import com.jcommerce.web.util.LibCommon;
+import com.jcommerce.web.util.LibMain;
+import com.opensymphony.xwork2.inject.Inject;
+import freemarker.template.TemplateException;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,22 +19,18 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.struts2.views.freemarker.FreemarkerManager;
 import org.datanucleus.util.StringUtils;
 import org.json.JSONObject;
-
-import com.jcommerce.core.model.Comment;
-import com.jcommerce.gwt.client.model.IComment;
-import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
-import com.jcommerce.web.to.Lang;
-import com.jcommerce.web.util.LibCommon;
-import com.jcommerce.web.util.LibMain;
-
-import freemarker.template.TemplateException;
 
 public class CommentAction extends BaseAction {
 	public void debug(String s) {
 		System.out.println(" in [InputStream]: "+s );
 	}
+	
+	FreemarkerManager freemarkerManager;
+	
+
 	
     private InputStream jsonRes;
 
@@ -178,9 +184,20 @@ public class CommentAction extends BaseAction {
         session.put("email",  email==null? "" : email);
         smarty.put("session", session);
         map.put("smarty", smarty);
-		
-        return LibCommon.getTempleteContent( map, "comments_list.ftl");
+        
+        map.put("rand", new Double(1000000*Math.random()).longValue());
+        
+        return LibCommon.getTempleteContent(getFreemarkerManager(), map, "comments_list.ftl");
 	}
+
+    public FreemarkerManager getFreemarkerManager() {
+        return freemarkerManager;
+    }
+    
+    @Inject
+    public void setFreemarkerManager(FreemarkerManager freemarkerManager) {
+        this.freemarkerManager = freemarkerManager;
+    }
 
 		
 }

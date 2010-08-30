@@ -1,26 +1,8 @@
 package com.jcommerce.web.front.action;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.struts2.ServletActionContext;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_CART_CONFIRM;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_ONE_STEP_BUY;
+import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_GOODS_IN_CART;
 import com.jcommerce.core.model.AreaRegion;
 import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.Cart;
@@ -62,11 +44,30 @@ import com.jcommerce.web.util.LibOrder;
 import com.jcommerce.web.util.LibTransaction;
 import com.jcommerce.web.util.PrintfFormat;
 import com.opensymphony.xwork2.ActionContext;
-
+import com.opensymphony.xwork2.inject.Inject;
 import freemarker.template.TemplateException;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_ONE_STEP_BUY;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_CART_CONFIRM;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_GOODS_IN_CART;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.views.freemarker.FreemarkerManager;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class FlowAction extends BaseAction {
 	public void debug(String s) {
@@ -97,6 +98,16 @@ public class FlowAction extends BaseAction {
     private String shipping; 
     private String payment;
 
+    private FreemarkerManager freemarkerManager;
+    
+    public FreemarkerManager getFreemarkerManager() {
+        return freemarkerManager;
+    }
+    
+    @Inject
+    public void setFreemarkerManager(FreemarkerManager freemarkerManager) {
+        this.freemarkerManager = freemarkerManager;
+    }
 
     
     private String stepAddToCart(HttpServletRequest request) throws JSONException{
@@ -655,8 +666,11 @@ public class FlowAction extends BaseAction {
 		map.put("total", total);
 		map.put("userId", getSession().getAttribute(KEY_USER_ID));
 		map.put("pointsName", getCachedShopConfig().get(IShopConfigMeta.CFG_KEY_INTEGRAL_NAME));
-		    	
-    	return LibCommon.getTempleteContent( map, "order_total.ftl");
+		
+		// need this?? commentAction need this
+		map.put("rand", new Double(1000000*Math.random()).longValue());
+		
+    	return LibCommon.getTempleteContent(getFreemarkerManager(), map, "order_total.ftl");
     }
     
     private String stepDone(HttpServletRequest request) {
