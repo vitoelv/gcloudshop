@@ -1,16 +1,5 @@
 package com.jcommerce.web.util;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.appengine.repackaged.com.google.common.base.StringUtil;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.Category;
@@ -25,11 +14,24 @@ import com.jcommerce.web.to.CategoryWrapper;
 import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.RegionWrapper;
 import com.jcommerce.web.to.WrapperUtil;
-
 import freemarker.template.Configuration;
 import freemarker.template.ObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.views.freemarker.FreemarkerManager;
 
 public class LibCommon {
 
@@ -400,22 +402,28 @@ public class LibCommon {
 		}
 	}
 	
-	public static String getTempleteContent( Map map , String templateName) throws IOException, TemplateException {
+	public static String getTempleteContent(FreemarkerManager fmMgr, Map map , String templateName) throws IOException, TemplateException {
 		//根据数据将ftl转化为html，并以String类型返回
-        Configuration cfg = new Configuration();
-
-        // TODO: 
-        // as shown in TestFreeMarker, it's not perfect that the ?keys will return method names also, need refer to how spring freemarker plugin do the render
-        // NOTE: however in runtime it works ok !!
+//        Configuration cfg = new Configuration();
+//        // TODO: 
+//        // as shown in TestFreeMarker, it's not perfect that the ?keys will return method names also, need refer to how spring freemarker plugin do the render
+//        // NOTE: however in runtime it works ok !!
+//        
+//        // refer to JAVADOC: Configuration.isClassicCompatible()
+//        cfg.setClassicCompatible(true);
+//        // refer to Freemarker manuual chapter: Bean wrapper
+//        cfg.setObjectWrapper(ObjectWrapper.BEANS_WRAPPER);
+//        
+//        //TODO
+//        cfg.setDirectoryForTemplateLoading(new File("D:/Jcommerce/JCommerceGae/war/web/front/library"));  
         
-		// refer to JAVADOC: Configuration.isClassicCompatible()
-		cfg.setClassicCompatible(true);
-		// refer to Freemarker manuual chapter: Bean wrapper
-		cfg.setObjectWrapper(ObjectWrapper.BEANS_WRAPPER);
-		
-		//TODO
-    	cfg.setDirectoryForTemplateLoading(new File("D:/Jcommerce/JCommerceGae/war/web/front/library"));  
-		Template t = cfg.getTemplate(templateName,"UTF-8");
+        
+	    
+	    
+	    Configuration cfg = fmMgr.getConfiguration(ServletActionContext.getServletContext());
+
+
+		Template t = cfg.getTemplate("/web/front/library/"+templateName,"UTF-8");
 		StringWriter stringWriter = new StringWriter();
      	t.process(map, stringWriter);
      	return stringWriter.toString();
