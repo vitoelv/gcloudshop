@@ -220,7 +220,7 @@ public class LibMain {
 		c.addCondition(new Condition(IComment.ID_VALUE, Condition.EQUALS, id));
 		c.addCondition(new Condition(IComment.COMMENT_TYPE, Condition.EQUALS, type.toString()));
 		c.addCondition(new Condition(IComment.STATUS, Condition.EQUALS, IComment.STATUS_ACTIVE.toString()));
-		
+		int count = manager.getCount(ModelNames.COMMENT, c);
 		int size = scw.getInt(IShopConfigMeta.CFG_KEY_COMMENTS_NUMBER);
 		if(size<0) {
 			size = 5;
@@ -270,7 +270,6 @@ public class LibMain {
 			}
 		}
 		
-		int count = arr.size();
 		
 		int pageCount = (int) (count > 0 ? (Math.ceil((double)count / size)) : 1);
 		
