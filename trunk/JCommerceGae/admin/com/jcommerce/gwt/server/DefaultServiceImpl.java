@@ -54,11 +54,11 @@ public class DefaultServiceImpl extends RemoteServiceServlet implements IDefault
 		
 
         //clear session log
-        IDefaultManager defaultManager = (IDefaultManager)springContext.getBean("DefaultManager");
-//      defaultManager.txdeleteall(defaultManager.getList(ModelNames.SESSION, null));
-        for (Object ele : defaultManager.getList(ModelNames.SESSION, null)) {
-			defaultManager.txdelete(ModelNames.SESSION, ((Session)ele).getPkId());
-		}
+		// this won't work as expected, as instances are starting all the time and will delete session records unexpectedly
+//        IDefaultManager defaultManager = (IDefaultManager)springContext.getBean("DefaultManager");
+//        for (Object ele : defaultManager.getList(ModelNames.SESSION, null)) {
+//			defaultManager.txdelete(ModelNames.SESSION, ((Session)ele).getPkId());
+//		}
         
 //      regionManager = (RegionManager)ctx.getBean("RegionManager");
 //      goodsTypeManager = (GoodsTypeManager)ctx.getBean("GoodsTypeManager");
