@@ -233,12 +233,10 @@ public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopCo
 		metaList = new ArrayList<ShopConfigMeta>();
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_DEFAULT_ADMIN_DISABLED, "0", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_DEFAULT_ADMIN_DISABLED"), new String[][]{new String[]{"1",bundle.getString("Yes")}, new String[]{"0",bundle.getString("No")}}, bundle.getString("CFG_KEY_DEFAULT_ADMIN_DISABLED_TIP")));
 		
-//		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_NAME,	"gCouldShop", CFG_TYPE_TEXT, "商店名称", null, null));
-		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_NAME,	"gCouldShop", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_SHOP_NAME"), null, null));
-//		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_TITLE, "gCouldShop 演示站", CFG_TYPE_TEXT, "商店标题", null, "商店的标题将显示在浏览器的标题栏"));		
-		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_TITLE, "gCouldShop 演示站", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_SHOP_TITLE"), null, bundle.getString("CFG_KEY_SHOP_TITLE_NOTICE")));
-		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_DESC, "gCouldShop 演示站", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_SHOP_DESC"), null, null));
-		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_KEYWORDS, "gCouldShop 演示站", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_SHOP_KEYWORDS"), null, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_NAME,	"GCSHOP", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_SHOP_NAME"), null, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_TITLE, bundle.getString("CFG_KEY_SHOP_TITLE_DEFAULT"), CFG_TYPE_TEXT, bundle.getString("CFG_KEY_SHOP_TITLE"), null, bundle.getString("CFG_KEY_SHOP_TITLE_NOTICE")));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_DESC, bundle.getString("CFG_KEY_SHOP_DESC_DEFAULT"), CFG_TYPE_TEXT, bundle.getString("CFG_KEY_SHOP_DESC"), null, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_KEYWORDS, bundle.getString("CFG_KEY_SHOP_KEYWORDS_DEFAULT"), CFG_TYPE_TEXT, bundle.getString("CFG_KEY_SHOP_KEYWORDS"), null, null));
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_COUNTRY, "1", CFG_TYPE_OPTIONS, bundle.getString("CFG_KEY_SHOP_COUNTRY"), 
 				new String[][]{new String[]{"1",bundle.getString("CFG_KEY_SHOP_COUNTRY_CHINA")}, new String[]{"2",bundle.getString("CFG_KEY_SHOP_COUNTRY_AMERICA")}}, null));
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_ADDRESS, "", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_SHOP_ADDRESS"), null , null));
@@ -251,12 +249,11 @@ public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopCo
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_SERVICE_EMAIL, "", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_SHOP_SERVICE_EMAIL"), null, null));	
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_SERVICE_PHONE, "", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_SHOP_SERVICE_PHONE"), null, null));	
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_USER_NOTICE, 
-				"用户中心公告！"	, CFG_TYPE_TEXTAREA, bundle.getString("CFG_KEY_USER_NOTICE"), null, bundle.getString("CFG_KEY_USER_NOTICE_NOTICE")));
+		        bundle.getString("CFG_KEY_USER_NOTICE_NOTICE_DEFAULT")	, CFG_TYPE_TEXTAREA, bundle.getString("CFG_KEY_USER_NOTICE"), null, bundle.getString("CFG_KEY_USER_NOTICE_NOTICE")));
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_NOTICE, 
-				"欢迎光临手机网,我们的宗旨：诚信经营、服务客户！<MARQUEE onmouseover=this.stop() onmouseout=this.start() scrollAmount=3><U><FONT color=red><P>咨询电话010-10124444  010-21252454 8465544</P></FONT></U></MARQUEE>"
+		        bundle.getString("CFG_KEY_SHOP_NOTICE_DEFAULT")
 				, CFG_TYPE_TEXTAREA, bundle.getString("CFG_KEY_SHOP_NOTICE"), null, bundle.getString("CFG_KEY_SHOP_NOTICE_NOTICE")));
-//		metaList.add(new ShopConfigMeta(CFG_GROUP_SHOP_INFO, CFG_KEY_SHOP_COUNTRY, "", CFG_TYPE_OPTIONS, "所在国家", null, null));
-		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_COPYRIGHT, "Copyright © 2008-2009 GCSHOP 版权所有，并保留所有权利。", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_SHOP_COPYRIGHT"), null, null));	
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_COPYRIGHT, bundle.getString("CFG_KEY_SHOP_COPYRIGHT_DEFAULT"), CFG_TYPE_TEXT, bundle.getString("CFG_KEY_SHOP_COPYRIGHT"), null, null));	
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_SHOP_INFO"), CFG_KEY_SHOP_REG_CLOSED, "0", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_SHOP_REG_CLOSED"), new String[][]{new String[]{"1",bundle.getString("Yes")}, new String[]{"0",bundle.getString("No")}}, null));
 		
 		defaultShopConfigMap.put(1, metaList);
@@ -264,7 +261,7 @@ public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopCo
 		
 		metaList = new ArrayList<ShopConfigMeta>();
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_BASIC"), CFG_KEY_COMMENT_CHECK, "0", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_COMMENT_CHECK"), new String[][]{new String[]{"1",bundle.getString("Yes")}, new String[]{"0",bundle.getString("No")}}, null));
-		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_BASIC"), CFG_KEY_INTEGRAL_NAME, "积分", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_INTEGRAL_NAME"), null,  bundle.getString("CFG_KEY_INTEGRAL_NAME_NOTICE")));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_BASIC"), CFG_KEY_INTEGRAL_NAME, bundle.getString("CFG_KEY_INTEGRAL_NAME_DEFAULT"), CFG_TYPE_TEXT, bundle.getString("CFG_KEY_INTEGRAL_NAME"), null,  bundle.getString("CFG_KEY_INTEGRAL_NAME_NOTICE")));
 		defaultShopConfigMap.put(2, metaList);
 		
 		metaList = new ArrayList<ShopConfigMeta>();
@@ -280,10 +277,10 @@ public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopCo
 				new String[][]{new String[]{"DESC",bundle.getString("CFG_SORT_DESC")}, new String[]{"ASC",bundle.getString("CFG_SORT_ASC")}}, null));
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), CFG_KEY_SHOW_ORDER_TYPE, "grid", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_SORT_ORDER_TYPE"), 
 				new String[][]{new String[]{"list",bundle.getString("CFG_SHOW_LIST")}, new String[]{"grid",bundle.getString("CFG_SHOW_GRID")}, new String[]{"text",bundle.getString("CFG_SHOW_TEXT")}}, null));
-		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), CFG_KEY_NAME_OF_REGION_1, "国家", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_NAME_OF_REGION_1"), null, null));
-		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), CFG_KEY_NAME_OF_REGION_2, "省", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_NAME_OF_REGION_2"), null, null));
-		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), CFG_KEY_NAME_OF_REGION_3, "市", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_NAME_OF_REGION_3"), null, null));
-		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), CFG_KEY_NAME_OF_REGION_4, "区", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_NAME_OF_REGION_4"), null, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), CFG_KEY_NAME_OF_REGION_1, bundle.getString("CFG_KEY_NAME_OF_REGION_1_DEFAULT"), CFG_TYPE_TEXT, bundle.getString("CFG_KEY_NAME_OF_REGION_1"), null, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), CFG_KEY_NAME_OF_REGION_2, bundle.getString("CFG_KEY_NAME_OF_REGION_2_DEFAULT"), CFG_TYPE_TEXT, bundle.getString("CFG_KEY_NAME_OF_REGION_2"), null, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), CFG_KEY_NAME_OF_REGION_3, bundle.getString("CFG_KEY_NAME_OF_REGION_3_DEFAULT"), CFG_TYPE_TEXT, bundle.getString("CFG_KEY_NAME_OF_REGION_3"), null, null));
+		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), CFG_KEY_NAME_OF_REGION_4, bundle.getString("CFG_KEY_NAME_OF_REGION_4_DEFAULT"), CFG_TYPE_TEXT, bundle.getString("CFG_KEY_NAME_OF_REGION_4"), null, null));
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_DISPLAY"), CFG_KEY_PAGE_STYLE, "0", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_PAGE_STYLE"), 
 				new String[][]{new String[]{"0",bundle.getString("CFG_PAGE_STYLE_1")}, new String[]{"1",bundle.getString("CFG_PAGE_STYLE_2")}}, null));
 		defaultShopConfigMap.put(3, metaList);
