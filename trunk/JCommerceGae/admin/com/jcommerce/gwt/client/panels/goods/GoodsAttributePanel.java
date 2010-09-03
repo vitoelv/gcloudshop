@@ -65,15 +65,13 @@ class GoodsAttributePanel extends TabItem {
 
 		goodsTypeList = new ListStore<BeanObject>();
 		fListTypes = GoodsForm.getGoodsTypeIdField();
-		fListTypes.setDisplayField(IGoodsType.CAT_NAME);
-		fListTypes.setValueField(IGoodsType.PK_ID);
 
 		fListTypes.setFieldLabel(Resources.constants.NewGoods_type());
 		fListTypes.setStore(goodsTypeList);
 
 		fListTypes.setEmptyText("Select a Type...");
 		fListTypes.setWidth(150);
-		fListTypes.setTypeAhead(true);
+//		fListTypes.setTypeAhead(true);
 		fListTypes.setTriggerAction(TriggerAction.ALL);
 		add(fListTypes, goodsPanel.sfd());
 

@@ -75,6 +75,7 @@ public class GoodsListPanel extends ContentWidget {
 		String GoodsList_action_unset_hot();
 		String GoodsList_action_set_best();
 		String GoodsList_action_unset_best();
+        String GoodsList_all();
 	    String Goods_name();
 	    String Goods_SN();
 	    String Goods_brand();
@@ -337,6 +338,13 @@ public class GoodsListPanel extends ContentWidget {
 		footer.add(lstAction);
 		footer.add(btnAct);
 		add(footer);
+		
+        
+		lstType.addItem(Resources.constants.GoodsList_all(), "");
+		lstType.addItem(Resources.constants.Goods_newAdded(), "new");
+        lstType.addItem(Resources.constants.Goods_bestSold(), "best");
+        lstType.addItem(Resources.constants.Goods_hotsold(), "hot");
+        
 	}
 
 	public Button getShortCutButton(){
@@ -354,22 +362,29 @@ public class GoodsListPanel extends ContentWidget {
 		return sButton;
 	}
 	private void search() {
+	    
+	    // criteria object is passed to store, so should not new another object 
 		criteria.removeAllConditions();
 		if (lstBrand.getSelectedIndex() > 0) {
 			String brand = lstBrand.getValue(lstBrand.getSelectedIndex());
-			Condition cond = new Condition();
-			cond.setField(IGoods.BRAND_ID);
-			cond.setOperator(Condition.EQUALS);
-			cond.setValue(brand);
-			criteria.addCondition(cond);
+			if(!"".equals(brand)) {
+			    Condition cond = new Condition();
+			    cond.setField(IGoods.BRAND_ID);
+			    cond.setOperator(Condition.EQUALS);
+			    cond.setValue(brand);
+			    criteria.addCondition(cond);
+			}
 		}
 		if (lstCategory.getSelectedIndex() > 0) {
 			String cat = lstCategory.getValue(lstCategory.getSelectedIndex());
-			Condition cond = new Condition();
-			cond.setField(IGoods.CATEGORY_IDS);
-			cond.setOperator(Condition.CONTAINS);
-			cond.setValue(cat);
-			criteria.addCondition(cond);
+			if(!"".equals(cat)) {
+			    Condition cond = new Condition();
+			    cond.setField(IGoods.CATEGORY_IDS);
+			    // search is special for Collections field. see gae doc
+			    cond.setOperator(Condition.EQUALS);
+			    cond.setValue(cat);
+			    criteria.addCondition(cond);
+			}
 		}
 		String type = lstType.getValue(lstType.getSelectedIndex());
 		if ("new".equals(type)) {
@@ -396,7 +411,8 @@ public class GoodsListPanel extends ContentWidget {
 		if (keyword != null && keyword.trim().length() > 0) {
 			Condition cond = new Condition();
 			cond.setField(IGoods.KEYWORDS);
-			cond.setOperator(Condition.CONTAINS);
+			// TODO change keyworks to collection
+			cond.setOperator(Condition.EQUALS);
 			cond.setValue(keyword.trim());
 			criteria.addCondition(cond);
 		}
@@ -587,52 +603,49 @@ public class GoodsListPanel extends ContentWidget {
 	}
 
 	public void refresh() {
-		System.out.println("refresh GoodsList...");
-		lstBrand.addItem(Resources.constants.GoodsList_all_brand(), "all");
-		new ListService().listBeans(ModelNames.BRAND,
-				new ListService.Listener() {
-					public synchronized void onSuccess(List<BeanObject> result) {
-						for (Iterator<BeanObject> it = result.iterator(); it
-								.hasNext();) {
-							BeanObject brand = it.next();
-							lstBrand.addItem(brand.getString(IBrand.BRAND_NAME),
-									brand.getString(IBrand.PK_ID));
-						}
-					}
-				});
+	    
+        System.out.println("refresh GoodsList...");
+        new ListService().listBeans(ModelNames.BRAND, new ListService.Listener() {
+            public synchronized void onSuccess(List<BeanObject> result) {
+                lstBrand.clear();
+                lstBrand.addItem(Resources.constants.GoodsList_all_brand(), "");                
+                for (Iterator<BeanObject> it = result.iterator(); it.hasNext();) {
+                    BeanObject brand = it.next();
+                    lstBrand.addItem(brand.getString(IBrand.BRAND_NAME), brand.getString(IBrand.PK_ID));
+                }
+            }
+        });
 
-		lstCategory
-				.addItem(Resources.constants.GoodsList_all_category(), "all");
-		new ListService().listBeans(ModelNames.CATEGORY,
-				new ListService.Listener() {
-					public void onSuccess(List<BeanObject> result) {
-						List<String> pids = new ArrayList<String>();
-						for (Iterator<BeanObject> it = result.iterator(); it
-								.hasNext();) {
-							BeanObject cat = it.next();
-							String name = cat.getString(ICategory.CAT_NAME);
-							String id = cat.getString(ICategory.PK_ID);
-//							String _pid = cat.getString(ICategory.PARENT);
-							String _pid = cat.getString(ICategory.PARENT_ID);
-							if (_pid == null) {
-								pids.clear();
-							} else if (!pids.contains(_pid)) {
-								pids.add(_pid);
-							}
-							int level = pids.indexOf(_pid) + 1;
-							for (int i = 0; i < level; i++) {
-								name = "  " + name;
-							}
-							lstCategory.addItem(name, id);
-						}
-					}
-				});
+        
+        new ListService().listBeans(ModelNames.CATEGORY, new ListService.Listener() {
+            public void onSuccess(List<BeanObject> result) {
+                lstCategory.clear();
+                lstCategory.addItem(Resources.constants.GoodsList_all_category(), "");
+                List<String> pids = new ArrayList<String>();
+                for (Iterator<BeanObject> it = result.iterator(); it.hasNext();) {
+                    BeanObject cat = it.next();
+                    String name = cat.getString(ICategory.CAT_NAME);
+                    String id = cat.getString(ICategory.PK_ID);
+                    // String _pid = cat.getString(ICategory.PARENT);
+                    String _pid = cat.getString(ICategory.PARENT_ID);
+                    if (_pid == null) {
+                        pids.clear();
+                    } else if (!pids.contains(_pid)) {
+                        pids.add(_pid);
+                    }
+                    int level = pids.indexOf(_pid) + 1;
+                    for (int i = 0; i < level; i++) {
+                        name = "  " + name;
+                    }
+                    lstCategory.addItem(name, id);
+                }
+            }
+        });
 
-		lstType.addItem(Resources.constants.Goods_newAdded(), "new");
-		lstType.addItem(Resources.constants.Goods_bestSold(), "best");
-		lstType.addItem(Resources.constants.Goods_hotsold(), "hot");		
-		
-		toolBar.refresh();
-	}
+
+        toolBar.refresh();
+    }
+
+
 
 }
