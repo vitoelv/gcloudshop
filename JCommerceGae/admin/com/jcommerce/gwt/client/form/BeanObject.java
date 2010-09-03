@@ -1,11 +1,11 @@
 package com.jcommerce.gwt.client.form;
 
+import com.extjs.gxt.ui.client.data.BaseTreeModel;
+import com.jcommerce.gwt.client.ValidationException;
+
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Map;
-
-import com.extjs.gxt.ui.client.data.BaseTreeModel;
-import com.jcommerce.gwt.client.ValidationException;
 
 
 public class BeanObject extends BaseTreeModel implements
@@ -15,7 +15,11 @@ public class BeanObject extends BaseTreeModel implements
     
     public BeanObject() {
     }
-
+    
+    public BeanObject(BeanObject bean) {
+        setValues(bean.getProperties());
+    }
+    
     public BeanObject(String modelName) {
         this.modelName = modelName;
     }
