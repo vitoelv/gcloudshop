@@ -16,8 +16,8 @@
 	#inner1 { MARGIN-RIGHT: auto; MARGIN-LEFT: auto; border:5px solid #CDDEEE; height:207px; width:394px; top:120px;position:relative;} 
 	#inner2 { border:1px solid #348BDA;height:205px; width:392px;} 
 	#title{height:38px;width:100%;}
-	#form {height:207px;width:100%;background:url(resources/images/login_bg.gif) repeat-x 0 0;text-align:left;}
-	#button {border:0px;width:50px;background:url(resources/images/loginBtn.png) no-repeat 0 0;width:50px;height:18px;padding-top:-1px;font-size:11px;font-family:Arial}
+	#form {height:207px;width:100%;background:url(gxt/images/login_bg.gif) repeat-x 0 0;text-align:left;}
+	#button {border:0px;width:50px;background:url(gxt/images/loginBtn.png) no-repeat 0 0;width:50px;height:18px;padding-top:-1px;font-size:11px;font-family:Arial}
 	#button:focus {border:0px;width:50px;background:url(resources/images/loginBtnFocus.png) no-repeat 0 0;}
 	form {padding-top:40px;padding-left:98px}
 	.label {font-size:11px; color:#FFFFFF; font-family:Arial;margin-bottom:4px;font-weight:bold}

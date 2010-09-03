@@ -20,5 +20,7 @@
 <p><a href="/web/front/home.action?weblocale=zh_CN">Goto public homepage(zh)...</a></p>
 <p><a href="/web/front/home.action?weblocale=en_US">Goto public homepage(en)...</a></p>
 <p><a href="/_ah/admin">Goto DataViewer on Dev Server...</a></p>
+<p><a href="/compassIndexBuilder.do">Triggering CompassIndexBuilder...</a></p>
+<p><a href="/web/front/perfTest.action?step=goods">Goto test page...</a></p>
 </body>
 </html>
