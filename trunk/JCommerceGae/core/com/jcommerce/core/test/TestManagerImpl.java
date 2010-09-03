@@ -49,6 +49,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
     	try {
     		
     		IDefaultManager manager = getDefaultManager();
+    		
     		Map<String, Object> props1 = new HashMap<String, Object>();
     		props1.put(GoodsTypeForm.CAT_NAME, "abcde");
     		
