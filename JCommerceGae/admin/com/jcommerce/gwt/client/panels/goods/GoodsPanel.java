@@ -15,16 +15,9 @@
  */
 package com.jcommerce.gwt.client.panels.goods;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.FieldEvent;
-import com.extjs.gxt.ui.client.event.FormEvent;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedListener;
@@ -42,7 +35,6 @@ import com.extjs.gxt.ui.client.widget.form.DateField;
 import com.extjs.gxt.ui.client.widget.form.DateTimePropertyEditor;
 import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.FileUploadField;
-import com.extjs.gxt.ui.client.widget.form.FormPanel;
 import com.extjs.gxt.ui.client.widget.form.HiddenField;
 import com.extjs.gxt.ui.client.widget.form.HtmlEditor;
 import com.extjs.gxt.ui.client.widget.form.LabelField;
@@ -52,7 +44,6 @@ import com.extjs.gxt.ui.client.widget.form.NumberField;
 import com.extjs.gxt.ui.client.widget.form.TextField;
 import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
-import com.google.gwt.user.client.Window;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.BrandForm;
@@ -68,6 +59,12 @@ import com.jcommerce.gwt.client.service.CreateService;
 import com.jcommerce.gwt.client.service.ListService;
 import com.jcommerce.gwt.client.util.FormUtils;
 import com.jcommerce.gwt.client.util.GWTFormatUtils;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class GoodsPanel extends BaseFileUploadFormPanel implements Listener<FieldEvent>{
     
@@ -100,9 +97,10 @@ public class GoodsPanel extends BaseFileUploadFormPanel implements Listener<Fiel
     ListStore<BeanObject> brandList;
     ComboBox<BeanObject> fListBrand;
     
-    ListStore<BeanObject> categoryList;
+    ListStore<BeanObject> categoryList1;
     ComboBox<BeanObject> cbListCategory;
-    ListField<BeanObject> lfListCategory;
+//  ListStore<BeanObject> categoryList2;    
+//    ListField<BeanObject> lfListCategory;
     
     
     AdapterField fBrandNameAd;
@@ -383,8 +381,15 @@ public class GoodsPanel extends BaseFileUploadFormPanel implements Listener<Fiel
         box.setBoxLabel(Resources.constants.NewGoods_onSaleOrNot());
         contentPanelOther.add(box, sfd());
 		
-		
+
+        TextField tf = GoodsForm.getKeywordsField();
+        tf.setFieldLabel("keywords");
+        tf.setToolTip("use comma to seperate more keywords");
+        contentPanelOther.add(tf, lfd());
+        
         tabs.add(contentPanelOther);
+        
+
 	}
 	
 	public FormLayout getFormLayout() {
@@ -441,32 +446,25 @@ public class GoodsPanel extends BaseFileUploadFormPanel implements Listener<Fiel
         
         
         // category and extended categories
-        categoryList = new ListStore<BeanObject>();
+        categoryList1 = new ListStore<BeanObject>();
         
         cbListCategory = GoodsForm.getCatIdField();
         cbListCategory.setFieldLabel(Resources.constants.Goods_category());
-        cbListCategory.setStore(categoryList);
-        cbListCategory.setEmptyText("");
+        cbListCategory.setStore(categoryList1);
+        cbListCategory.setEmptyText("Select a category...");
         cbListCategory.setWidth(150);
+//        cbListCategory.setTypeAhead(true);
+        cbListCategory.setTriggerAction(TriggerAction.ALL);
         contentPanelGeneral.add(cbListCategory);
         
         
-        lfListCategory = GoodsForm.getCategoryIdsField();
-        lfListCategory.setFieldLabel(Resources.constants.Goods_category_extended());
-        
-        lfListCategory.setStore(categoryList);
-        lfListCategory.setEmptyText("Select one or more Categories...");   
-        lfListCategory.setWidth(150);   
-        lfListCategory.addSelectionChangedListener(new SelectionChangedListener<BeanObject>() {
-        	// TODO however this won't work
-			@Override
-			public void selectionChanged(SelectionChangedEvent<BeanObject> se) {
-				Info.display("ah-oh", "CLICKED");
-				
-			}
-        	
-        });
-        contentPanelGeneral.add(lfListCategory);
+//        lfListCategory = GoodsForm.getCategoryIdsField();
+//        lfListCategory.setFieldLabel(Resources.constants.Goods_category_extended());
+//        categoryList2 = new ListStore<BeanObject>();
+//        lfListCategory.setStore(categoryList2);
+//        lfListCategory.setEmptyText("Select one or more Categories...");   
+//        lfListCategory.setWidth(150);   
+//        contentPanelGeneral.add(lfListCategory);
         
         
         brandList = new ListStore<BeanObject>();
@@ -559,20 +557,21 @@ public class GoodsPanel extends BaseFileUploadFormPanel implements Listener<Fiel
         nfMarketPrice.setFieldLabel(Resources.constants.Goods_marketPrice());
         contentPanelGeneral.add(nfMarketPrice, sfd()); 
         
-        NumberField fNum = GoodsForm.getGiveIntegralField();
-        fNum.setFieldLabel("？"+Resources.constants.Goods_giveIntegral());
-        fNum.setToolTip(Resources.constants.NewGoods_tipGiveIntegral());
-        contentPanelGeneral.add(fNum, sfd()); 
-        
-        fNum = GoodsForm.getRankIntegralField();
-        fNum.setFieldLabel("？"+Resources.constants.Goods_rankIntegral());
-        fNum.setToolTip(Resources.constants.NewGoods_tipRankIntegral());
-        contentPanelGeneral.add(fNum, sfd()); 
-        
-        fNum = GoodsForm.getRankIntegralField();
-        fNum.setFieldLabel("？"+Resources.constants.Goods_integral());
-        fNum.setToolTip(Resources.constants.NewGoods_tipIntegral());
-        contentPanelGeneral.add(fNum, sfd()); 
+        // TODO to be added later
+//        NumberField fNum = GoodsForm.getGiveIntegralField();
+//        fNum.setFieldLabel("?"+Resources.constants.Goods_giveIntegral());
+//        fNum.setToolTip(Resources.constants.NewGoods_tipGiveIntegral());
+//        contentPanelGeneral.add(fNum, sfd()); 
+//        
+//        fNum = GoodsForm.getRankIntegralField();
+//        fNum.setFieldLabel("?"+Resources.constants.Goods_rankIntegral());
+//        fNum.setToolTip(Resources.constants.NewGoods_tipRankIntegral());
+//        contentPanelGeneral.add(fNum, sfd()); 
+//        
+//        fNum = GoodsForm.getRankIntegralField();
+//        fNum.setFieldLabel("?"+Resources.constants.Goods_integral());
+//        fNum.setToolTip(Resources.constants.NewGoods_tipIntegral());
+//        contentPanelGeneral.add(fNum, sfd()); 
         
 //        MultiField mfPromote = new MultiField();
 //        mfPromote.setFieldLabel("促销");
@@ -638,10 +637,20 @@ public class GoodsPanel extends BaseFileUploadFormPanel implements Listener<Fiel
 		new ListService().listBeans(ModelNames.CATEGORY, new ListService.Listener() {
 			@Override
 			public void onSuccess(List<BeanObject> beans) {
-		    	categoryList.removeAll();
-				categoryList.add(beans);
-				populateField(cbListCategory);
-				populateField(lfListCategory);
+
+		    	categoryList1.removeAll();
+				categoryList1.add(beans);
+                populateField(cbListCategory);
+
+                // clone it to avoid 
+//                List<BeanObject> newBeans = new ArrayList<BeanObject>();
+//                for(BeanObject bean : beans) {
+//                    BeanObject newBean = new BeanObject(bean);
+//                    newBeans.add(newBean);
+//                }
+//                categoryList2.removeAll();
+//                categoryList2.add(newBeans);
+//				populateField(lfListCategory);
 			}
 		});
 		

@@ -54,7 +54,9 @@ public class Goods extends ModelObject {
     private DSFile thumbFile;
     @Persistent
     private String googleBaseDataId;
-	
+    
+    @Persistent
+    private Set<String> keywords = new HashSet<String>(); 	
 	
     public String getGoogleBaseDataId() {
 		return googleBaseDataId;
@@ -155,8 +157,7 @@ public void setGoodsTypeId(String goodsTypeId) {
   @Persistent
   private java.lang.Long warnNumber=0l; 
 
-  @Persistent
-  private java.lang.String keywords; 
+
 
   @Persistent
   private java.lang.String goodsBrief; 
@@ -399,14 +400,10 @@ public void setGoodsTypeId(String goodsTypeId) {
 
 
 
-  @SearchableProperty(name = "keywords")
-  public java.lang.String getKeywords() {
-    return keywords;
-  }
 
-  public void setKeywords(java.lang.String newKeywords) {
-    keywords = newKeywords;
-  }
+  
+  
+
 
 
 
@@ -705,5 +702,14 @@ public void setGoodsTypeId(String goodsTypeId) {
 	public void setThumbFile(DSFile thumbFile) {
 		this.thumbFile = thumbFile;
 	}
+
+	@SearchableProperty(name = "keywords")
+    public Set<String> getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(Set<String> keywords) {
+        this.keywords = keywords;
+    }
 
 }

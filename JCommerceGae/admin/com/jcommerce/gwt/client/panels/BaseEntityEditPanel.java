@@ -1,11 +1,5 @@
 package com.jcommerce.gwt.client.panels;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
@@ -30,7 +24,6 @@ import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.google.gwt.user.client.Window;
 import com.jcommerce.gwt.client.ContentWidget;
-import com.jcommerce.gwt.client.Logger;
 import com.jcommerce.gwt.client.PageState;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.SimpleOptionData;
@@ -41,6 +34,12 @@ import com.jcommerce.gwt.client.service.ReadService;
 import com.jcommerce.gwt.client.service.UpdateService;
 import com.jcommerce.gwt.client.util.FormUtils;
 import com.jcommerce.gwt.client.widgets.SimpleStaticComboBox;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 
 public abstract class BaseEntityEditPanel extends ContentWidget  {
@@ -321,8 +320,22 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 					df.setValue((Date)value);
 				}				
 			} else if(field instanceof TextField || field instanceof TextArea || field instanceof HtmlEditor) {
-				field.setOriginalValue(value);
-				field.setValue(value);
+			    // This is for fields like Goods:keywords
+			    Object res = value;
+			    if(value==null) {
+			        // leave it null
+			    }else {
+			        // collection
+			        String temp = value.toString();
+			        if(temp.contains("[") && temp.contains("]")) {
+			            temp = temp.substring(1, temp.length()-1);
+			            res = temp;
+			        }else {
+			            // leave it as original value (could be number)
+			        }
+			    }
+				field.setOriginalValue(res);
+				field.setValue(res);
 			} else if (field instanceof CheckBox) {
 				((CheckBox)field).setValue((Boolean)value);
 
