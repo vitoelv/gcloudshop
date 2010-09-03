@@ -4,6 +4,18 @@
 
 package com.jcommerce.core.dao.impl;
 
+import com.jcommerce.core.dao.DAO;
+import com.jcommerce.core.model.Goods;
+import com.jcommerce.core.model.GoodsType;
+import com.jcommerce.core.model.ModelObject;
+import com.jcommerce.core.service.Condition;
+import com.jcommerce.core.service.Criteria;
+import com.jcommerce.core.util.DataStoreUtils;
+import com.jcommerce.core.util.JDOQLHelper;
+import com.jcommerce.core.util.MyPropertyUtil;
+import com.jcommerce.core.util.UUIDLongGenerator;
+import com.jcommerce.gwt.client.model.IModelObject;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -23,23 +35,15 @@ import org.springframework.orm.jdo.JdoObjectRetrievalFailureException;
 import org.springframework.orm.jdo.JdoTemplate;
 import org.springframework.orm.jdo.support.JdoDaoSupport;
 
-import com.jcommerce.core.dao.DAO;
-import com.jcommerce.core.model.Goods;
-import com.jcommerce.core.model.GoodsType;
-import com.jcommerce.core.model.ModelObject;
-import com.jcommerce.core.service.Condition;
-import com.jcommerce.core.service.Criteria;
-import com.jcommerce.core.util.DataStoreUtils;
-import com.jcommerce.core.util.JDOQLHelper;
-import com.jcommerce.core.util.MyPropertyUtil;
-import com.jcommerce.core.util.UUIDLongGenerator;
-import com.jcommerce.gwt.client.model.IModelObject;
-
 public class DAOImpl extends JdoDaoSupport implements DAO {
 	private static final Logger log = Logger.getLogger(DAOImpl.class.getName());
     
     public DAOImpl() {
     	setPersistenceManagerFactory(PMF.get());
+    }
+    
+    public void trace(String s) {
+        log.warning(s);
     }
     
     public String add(ModelObject to) {
@@ -57,8 +61,11 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
     				to.setKeyName(DataStoreUtils.genKeyName(to));
     			to.setLongId(UUIDLongGenerator.newUUID());
     		}
-    		
+    		long start = System.currentTimeMillis();
+    		String modelName = to.getClass().getSimpleName();
 			getJdoTemplate().makePersistent(to);
+			long end = System.currentTimeMillis();
+			trace("cost ["+(end-start)+"] to addObj: modelName="+modelName);
 			id = to.getPkId();
 			
 		} catch (Exception e) {
@@ -82,7 +89,11 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
     			// this is mainly used in import util
     			to.setLongId(UUIDLongGenerator.newUUID());
     		}
+            long start = System.currentTimeMillis();
+            String modelName = to.getClass().getSimpleName();
 			getJdoTemplate().makePersistent(to);
+	        long end = System.currentTimeMillis();
+	        trace("cost ["+(end-start)+"] to attachObj: modelName="+modelName);
 			id = to.getPkId();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -117,11 +128,12 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
     		JdoTemplate jdoTemplate =getJdoTemplate();
     		
     		Object obj = (Object)jdoTemplate.getObjectById(Class.forName(modelName), id);
-
+    		long start = System.currentTimeMillis();
     		if(obj!=null) {
     			jdoTemplate.deletePersistent(obj);
     		}
-
+    		long end = System.currentTimeMillis();
+    		trace("cost ["+(end-start)+"] to deleteById: modelName="+modelName);
 			return true;
     	} catch (JDOObjectNotFoundException e) {
     		return true;
@@ -142,8 +154,11 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
         }
     	try {
     		JdoTemplate jdoTemplate =getJdoTemplate();
+    		String modelName = obj.getClass().getSimpleName();
+    		long start = System.currentTimeMillis();
     		jdoTemplate.deletePersistent(obj);
-			
+    		long end = System.currentTimeMillis();
+    		trace("cost ["+(end-start)+"] to deleteByObj: modelName="+modelName);
 //			res = String.valueOf(obj.getPkId());
 			return true;
 		} catch (Exception e) {
@@ -162,17 +177,16 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
 			ModelObject obj = (ModelObject)jdoTemplate.getObjectById(Class.forName(modelName), id);
 			
 			// TODO these are temporary solution to avoid session-closed issue in TestCases
-			if(obj instanceof GoodsType) {
-				GoodsType gt = (GoodsType)obj;
-				Set set = gt.getAttributes();
-				log.info("size: "+set.size());
-			}
-			if(obj instanceof Goods) {
-				Goods g = (Goods)obj;
-				Set set = g.getCategoryIds();
-				log.info("size: "+(set==null? "null":set.size()));
-				
-			}
+//			if(obj instanceof GoodsType) {
+//				GoodsType gt = (GoodsType)obj;
+//				Set set = gt.getAttributes();
+//				log.info("size: "+set.size());
+//			}
+//			if(obj instanceof Goods) {
+//				Goods g = (Goods)obj;
+//				Set set = g.getCategoryIds();
+//				log.info("size: "+(set==null? "null":set.size()));
+//			}
 			
     		return obj;
 		} catch (org.springframework.orm.ObjectRetrievalFailureException e) {
@@ -255,13 +269,17 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
 					try {
 						List<Object> paras = new ArrayList<Object>();
 						String jdoql = JDOQLHelper.getJdoql(modelName, criteria, paras);
+						long start = System.currentTimeMillis();
 						query = pm.newQuery(jdoql);
 
 						if(firstRow>=0 && maxRow>=0) {
 							query.setRange(firstRow, firstRow+maxRow);
 						}
 						result = (List)query.executeWithArray(paras.toArray());
-						// 	do some further stuff with the result list
+						long end = System.currentTimeMillis();
+						trace("query cost ["+(end-start)+"] on JDOQL: "+jdoql.toString());
+						
+//					    do some further stuff with the result list
 						return result;
 					} catch (JDOException e) {
 						throw e;
@@ -273,12 +291,12 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
                 }
             });
 
-        	Iterator it = res.iterator();
-        	if(it.hasNext()) {
-        		ModelObject mo = (ModelObject)it.next();
-        		log.info("id: "+mo.getPkId());
-        	}
-//            System.out.println("res.size: "+res.size());
+        	
+//        	Iterator it = res.iterator();
+//        	if(it.hasNext()) {
+//        		ModelObject mo = (ModelObject)it.next();
+//        		log.info("id: "+mo.getPkId());
+//        	}
             return res;
         
         } catch (Exception ex) {
@@ -316,9 +334,13 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
 					try {
 						List<Object> paras = new ArrayList<Object>();
 						String jdoql = JDOQLHelper.getJdoql(modelName, criteria, paras);
+						long start = System.currentTimeMillis();
 						query = pm.newQuery(jdoql);
 						query.setResult(" count(this)");
 						Integer result = (Integer)query.executeWithArray(paras.toArray());
+						
+	                    long end = System.currentTimeMillis();
+	                    trace("count cost ["+(end-start)+"] on JDOQL: "+jdoql.toString());
 	                    // do some further stuff with the result list
 	                    return result;
 	                    

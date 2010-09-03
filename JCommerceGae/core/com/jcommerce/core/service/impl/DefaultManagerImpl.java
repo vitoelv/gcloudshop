@@ -228,7 +228,7 @@ public class DefaultManagerImpl implements IDefaultManager {
     
     public void debug(String s) {
     	
-    	log.info("DefaultManagerImpl: "+s);
+    	log.finer("DefaultManagerImpl: "+s);
     }
     
     private static final Logger log = Logger.getLogger(DefaultManagerImpl.class.getName());
