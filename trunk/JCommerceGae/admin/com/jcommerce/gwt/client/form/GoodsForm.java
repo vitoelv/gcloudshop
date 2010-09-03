@@ -63,7 +63,7 @@ public class GoodsForm extends BeanObject implements IGoods {
 		field.setName(BRAND_ID);
 		field.setDisplayField(IBrand.BRAND_NAME);
         field.setValueField(IBrand.PK_ID);
-        field.setAllowBlank(false);
+        field.setEditable(false);
 		return field;
 	}
 	
@@ -72,6 +72,7 @@ public class GoodsForm extends BeanObject implements IGoods {
 		field.setName(GOODS_TYPE_ID);
 		field.setDisplayField(IGoodsType.CAT_NAME);
         field.setValueField(IGoodsType.PK_ID);
+        field.setEditable(false);
 		return field;
 	}
 	
@@ -81,6 +82,7 @@ public class GoodsForm extends BeanObject implements IGoods {
 		field.setDisplayField(ICategory.CAT_NAME);
         field.setValueField(ICategory.PK_ID);
         field.setAllowBlank(false);
+        field.setEditable(false);
 		return field;
 	}
 	public static ListField<BeanObject> getCategoryIdsField() {
@@ -95,7 +97,11 @@ public class GoodsForm extends BeanObject implements IGoods {
 		field.setName(GOODS_SN);
 		return field;
 	}
-	
+	public static TextField<String> getKeywordsField() {
+        TextField<String> field = new TextField<String>();
+        field.setName(KEYWORDS);
+        return field;
+    }
 	public static NumberField getShopPriceField() {
 		NumberField field = new NumberField();
 		field.setName(SHOP_PRICE);
