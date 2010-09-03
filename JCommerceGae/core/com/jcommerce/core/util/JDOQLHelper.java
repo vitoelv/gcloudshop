@@ -1,15 +1,16 @@
 package com.jcommerce.core.util;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.jcommerce.core.model.ModelObject;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.Order;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.util.Collection;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class JDOQLHelper {
 	private static final Logger log = Logger.getLogger(JDOQLHelper.class.getName());
@@ -22,7 +23,7 @@ public class JDOQLHelper {
 				jdoql.append(getWhereClause(className, criteria, paras));
 			}
 			
-			log.info("JDOQL: "+jdoql.toString());
+			
 			return jdoql.toString();
 			
 		} catch (Exception e) {
@@ -58,6 +59,10 @@ public class JDOQLHelper {
                 addCondtion(hql, paraDeclares,paras, cond, className);
             }
         }
+
+        
+        hql.append(paraDeclares);
+        
         if (criteria != null && criteria.getOrders().size() > 0) {
             hql.append(" order by ");
             
@@ -68,7 +73,8 @@ public class JDOQLHelper {
                     hql.append(", ");
                 }
                 first = false;
-                hql.append(className).append("."+order.getField());
+//                hql.append(className).append("."+order.getField());
+                hql.append(order.getField());
                 if (order.isAscend()) {
                     hql.append(" asc");
                 } else {
@@ -76,8 +82,6 @@ public class JDOQLHelper {
                 }
             }
         }
-        
-        hql.append(paraDeclares);
         return hql.toString();
     }
 //    public String getWhereClause(Criteria criteria) {
@@ -101,17 +105,28 @@ public class JDOQLHelper {
     			field = ModelObject.class.getDeclaredField(name);
     		}
 			
-			Class fieldType = field.getType();
 
+			Class fieldType = field.getType();
+			if (Collection.class.isAssignableFrom(fieldType)) {
+	            
+			    boolean isCollectionOfModel = MyPropertyUtil.isFieldCollectionOfModel(field);
+	            if(isCollectionOfModel) {
+	                throw new RuntimeException("do not support query on collection of models");
+	            }
+	            
+                // search is sepecial for collection of simple types. see gae doc
+                fieldType = MyPropertyUtil.getGenericTypeForCollectionField(field);
+			}
+			    
             hql.append(" ").append(cond.getField());
 
             int op = cond.getOperator();
             if (op == Condition.LIKE) {
 //                hql.append(" LIKE '%").append(cond.getValue()).append("%'");
-            	throw new RuntimeException("no support!!!");
+            	throw new RuntimeException("no support for operation ["+op+"]!!!");
             } else if (op == Condition.CONTAINS) {
 //                hql.append(cond.getValue()).append(" member of ").append(objName).append("."+cond.getField());
-            	throw new RuntimeException("no support!!!");
+            	throw new RuntimeException("no support for operation ["+op+"]!!!");
             } else if (op == Condition.GREATERTHAN) {
             	hql.append(" >= ");
             } else if (op == Condition.LESSTHAN) {
@@ -132,8 +147,8 @@ public class JDOQLHelper {
 	            		paras.add(value);
 	            	}
 	            	else {
-		            	Constructor<String> c = fieldType.getConstructor(String.class);
-		            	paras.add(c.newInstance(value));
+                        Constructor<String> c = fieldType.getConstructor(String.class);
+                        paras.add(c.newInstance(value));	            	    
 	            	}
 	            } catch (Exception ex) {
 	            	// should not happen for simple type...
