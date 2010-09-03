@@ -1,26 +1,82 @@
 package com.jcommerce.core.test;
 
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.jcommerce.core.dao.impl.PMF;
+import com.jcommerce.core.model.Brand;
+import com.jcommerce.core.model.Comment;
+import com.jcommerce.core.model.DSFile;
+import com.jcommerce.core.model.ShopConfig;
+import com.jcommerce.core.service.Condition;
+import com.jcommerce.core.service.Criteria;
+import com.jcommerce.core.service.IDefaultManager;
+import com.jcommerce.core.service.Order;
+import com.jcommerce.gwt.client.ModelNames;
+import com.jcommerce.gwt.client.model.IComment;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.jcommerce.core.model.Brand;
-import com.jcommerce.core.model.DSFile;
-import com.jcommerce.core.model.ShopConfig;
-import com.jcommerce.core.service.IDefaultManager;
+import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 
 
 public class TestMiscDS extends BaseDAOTestCase {
 	@Override
     public String getDbStorePath() {
     	return "D:/JCommerce/JCommerceGae/war";
+//    	return "D:/JCommerce/test/abc.bin";
 //    	return "D:/JCommerce/JCommerceGae/testdatastore";
     }
 	
 	@Override
 	public boolean needCleanOnStartup() {
     	return false;
+    }
+	
+	
+	public void testQueryWithOrder() {
+        PersistenceManager pm = PMF.get().getPersistenceManager();
+        try {
+            
+            String id = "agpnY2xvdWRzaG9wcg4LEgVHb29kcyIDX2cwDA";
+                
+            String jdoql = "select from com.jcommerce.core.model.Comment"+
+                " where  idValue == idValueParam "
+                
+                +" parameters  java.lang.String idValueParam "
+            +" order by addTime desc ";
+            Query query = pm.newQuery(jdoql);
+            List<Object> paras = new ArrayList<Object>();
+            paras.add(id);
+            List result = (List)query.executeWithArray(paras.toArray());
+            
+            System.out.println("size of result: "+result.size());
+            
+            for(Object o : result) {
+                Comment comment = (Comment)o;
+                System.out.println("content="+comment.getContent()+", addTime="+comment.getAddTime());
+            }
+            
+            IDefaultManager manager = getDefaultManager();
+            Criteria c = new Criteria();
+            c.addCondition(new Condition(IComment.ID_VALUE, Condition.EQUALS, id));
+            c.addOrder(new Order(IComment.ADD_TIME, Order.DESCEND));
+            int page = 1, size=5;
+            List<Comment> comments = manager.getList(ModelNames.COMMENT, c, (page-1)*size, size);
+
+            System.out.println("size of result: "+result.size());
+            for(Object o : comments) {
+                Comment comment = (Comment)o;
+                System.out.println("content="+comment.getContent()+", addTime="+comment.getAddTime());
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            assertTrue(false);
+        } finally {
+            pm.close();
+        }
     }
 	
 	public void testQueryShopConfig() {
