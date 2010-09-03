@@ -126,22 +126,34 @@ public class MyPropertyUtil {
     
     public static boolean isFieldCollectionOfModel(Field field) {
     	boolean res = true;
-    	try {
-			
-			String type = field.getGenericType().toString();
-			String paraType = type.substring(type.indexOf('<')+1, type.indexOf('>'));
-			debug("paraType="+paraType);
-			if(ModelObject.class.isAssignableFrom(Class.forName(paraType))) {
-				res = true;
-			} else {
-				res = false;
-			}
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return res;
+
+        Class clazz = getGenericTypeForCollectionField(field);
+        if (clazz == null) {
+            throw new RuntimeException("sth wrong");
+        }
+        if (ModelObject.class.isAssignableFrom(clazz)) {
+            res = true;
+        } else {
+            res = false;
+        }
+
+        return res;
     	
+    }
+    
+    
+    public static Class getGenericTypeForCollectionField(Field field) {
+        Class res = null;
+        try {
+            
+            String type = field.getGenericType().toString();
+            String paraType = type.substring(type.indexOf('<')+1, type.indexOf('>'));
+            debug("paraType="+paraType);
+            res = Class.forName(paraType);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return res;
     }
     
     // to be used in DAOImpl.update only
@@ -244,13 +256,21 @@ public class MyPropertyUtil {
 //                      String bean = config.getItemType(obj.getModelName(), fn);
                         if (value instanceof String) {
                         	col = (Collection)PropertyUtils.getProperty(dest, fn);
+                        	// clear first before adding new values
+                        	col.clear();
                         	String val = (String)value;
                         	if(((String)val).indexOf(",")>0) {
                         		// for properties like Goods.categoryIds which is internally list of String, 
-                        		// and submitted in the format of comma-separated string 
-                        		// TODO escape ","
+                        		// and submitted in the format of comma-separated string
+                        	    
+                        	    // Goods.keywords
+                        		// TODO escape "," which is separator 
                 				String[] values = ConvertUtil.split(val, ",");
-                				col.addAll(Arrays.asList(values));
+                				for(String v:values) {
+                				    // neglect white spaces
+                				    col.add(v.trim());
+                				}
+                				
                 			} else {
                 				col.add(value);
                 			}  
