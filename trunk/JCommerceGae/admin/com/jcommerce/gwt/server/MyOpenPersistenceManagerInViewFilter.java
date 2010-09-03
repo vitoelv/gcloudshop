@@ -31,8 +31,7 @@ public class MyOpenPersistenceManagerInViewFilter extends
 			HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		
-		// TODO Auto-generated method stub
-		log.info("=================== in MyOpenPersistenceManagerInViewFilter =================== ");
+//		log.finer("=================== in MyOpenPersistenceManagerInViewFilter =================== ");
 		super.doFilterInternal(request, response, filterChain);
 		
 	}

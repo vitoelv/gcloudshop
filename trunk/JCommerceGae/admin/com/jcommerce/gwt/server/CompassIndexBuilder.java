@@ -1,20 +1,14 @@
 package com.jcommerce.gwt.server;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import com.jcommerce.core.dao.impl.PMF;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang.StringUtils;
-
-import com.jcommerce.core.dao.impl.PMF;
 
 public class CompassIndexBuilder extends HttpServlet {
 	private static final Logger log = Logger.getLogger(CompassIndexBuilder.class.getName());
@@ -36,7 +30,9 @@ public class CompassIndexBuilder extends HttpServlet {
             long costTime = System.currentTimeMillis() - beginTime;
             log.info("compss index finished.");
             log.info("costed " + costTime + " milliseconds");
-			
+            
+                String respText = "index built successfully within "+costTime+" msec";
+			resp.getOutputStream().write(respText.getBytes());
 		} catch (Exception ex) {
 			log.warning("exception thrown: "+ex.getMessage());
 			throw new RuntimeException(ex);

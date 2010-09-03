@@ -91,6 +91,7 @@ public class DataStoreUtils implements IConstants{
 					continue;
 				} else {
 					// my data
+				        // txt must go first
 					if (entryName.endsWith(".txt")) {
 						fileNameIdMapping = DataStoreUtils.importDSData(zin,manager);
 					} else {
