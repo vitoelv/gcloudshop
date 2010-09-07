@@ -41,18 +41,16 @@ public class DynaImageServlet extends HttpServlet {
 	
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	log.info("==========================DynaImageServlet doGet()==================================");
+    	//log.info("==========================DynaImageServlet doGet()==================================");
         try {
             IDefaultManager manager = getDefaultManager();
             
             String fileId = request.getParameter("fileId");
-            log.info("fileId: "+fileId);
+            log.finer("fileId: "+fileId);
 //            if(StringUtils.isNotEmpty(fileId) && !fileId.equals("null") ) {
             	writeImage(response, manager, fileId);
             	return;
 //            }
-            
-            
             
             // test purpose only
 //            List<Brand> res = new ArrayList<Brand>();
@@ -84,7 +82,7 @@ public class DynaImageServlet extends HttpServlet {
 	private void writeImage(HttpServletResponse response,
 			IDefaultManager manager, String logoFileId) throws IOException {
 		DSFile dsFile = (DSFile)manager.get(DSFile.class.getName(), logoFileId);
-		log.info("dsFile: "+dsFile);
+		log.finer("dsFile: "+dsFile);
 		response.setHeader("Content-Type", "image/gif");
 		if( dsFile == null ){
 			 InputStream is = this.getClass().getResourceAsStream("noPicture.gif");  

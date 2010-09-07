@@ -1,24 +1,5 @@
 package com.jcommerce.web.front.action;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.StringBufferInputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-import org.json.JSONObject;
-
 import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.CollectGood;
 import com.jcommerce.core.model.Goods;
@@ -62,6 +43,25 @@ import com.jcommerce.web.util.LibTransaction;
 import com.jcommerce.web.util.PrintfFormat;
 import com.jcommerce.web.util.SpringUtil;
 import com.jcommerce.web.util.WebFormatUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.StringBufferInputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.json.JSONObject;
 
 
 public class UserAction extends BaseAction {
@@ -214,15 +214,16 @@ public class UserAction extends BaseAction {
 				uw.put("shippedOrder", null);
 				
 				request.setAttribute("info", uw);
-				request.setAttribute("userNotice", getCachedShopConfig().get("userNotice"));
+				request.setAttribute("userNotice", getCachedShopConfig().get(IShopConfigMeta.CFG_KEY_USER_NOTICE));
 				request.setAttribute("prompt", new String[0]);
 				includeUserMenu();
 				return RES_USER_CLIPS;
 			}
 			else if("register".equals(action)) {
 				request.setAttribute("enabledCaptcha", 0);
-				request.setAttribute("rand", new Double(1000000*Math.random()).longValue());
-
+//				request.setAttribute("rand", new Double(1000000*Math.random()).longValue());
+				request.setAttribute("rand", "");
+				
 				request.setAttribute("backAct", backAct);
 				return RES_USER_PASSPORT;
 			}

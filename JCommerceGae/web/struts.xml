@@ -6,15 +6,24 @@
 <struts>
     <constant name="struts.objectFactory" value="spring" />
     <constant name="struts.devMode" value="true" />
+
     <include file="example.xml"/>
 	<package name="shop" namespace="/web" extends="struts-default">
+	    <result-types>
+    		<result-type name="ftl" class="myFreeMarkerResult"> 
+    		</result-type>
+    	</result-types>
 	   	<global-results>
       		<!-- result name="message" type="redirectAction">message</result-->
       		<result name="message" type="freemarker">/web/front/message.ftl</result>
    		</global-results>
 	
 		<action name="home" method="execute" class="homeAction">
-			<result name="success" type="freemarker">/web/front/index.ftl</result>
+			<result name="success" type="ftl">/web/front/index.ftl</result>
+		</action>
+		
+		<action name="perfTest" method="execute" class="perfTestAction">
+			<result name="success" type="freemarker">/web/front/test.ftl</result>
 		</action>
 		
 		<action name="goods" method="execute" class="goodsAction">

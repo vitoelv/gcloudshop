@@ -234,6 +234,7 @@ public class SearchAction extends BaseAction {
         	if(!StringUtil.isEmpty(keywords)){
         		cond = new Condition();
         		cond.setField(IGoods.GOODS_NAME);
+        		cond.setField(IGoods.KEYWORDS);
         		cond.setOperator(Condition.EQUALS);
         		cond.setValue(keywords);
         		criteria.addCondition(cond);        		

@@ -1,0 +1,12 @@
+<datastore-indexes>
+
+    <!-- Used 4 times in query history -->
+    <datastore-index kind="Comment" ancestor="false" source="auto">
+        <property name="commentType" direction="asc"/>
+        <property name="idValue" direction="asc"/>
+        <property name="status" direction="asc"/>
+        <property name="addTime" direction="desc"/>
+    </datastore-index>
+
+</datastore-indexes>
+

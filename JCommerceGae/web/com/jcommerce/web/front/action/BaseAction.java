@@ -82,7 +82,7 @@ public abstract class BaseAction extends ActionSupport implements IPageConstants
 		this.historyList = historyList;
 	}
 	public void debug(String s) {
-		log.info(" in [BaseAction]: "+s );
+		log.finer(" in [BaseAction]: "+s );
 	}
 	@Override
     public String getText(String s) {

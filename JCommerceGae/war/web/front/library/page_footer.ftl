@@ -60,7 +60,7 @@
   ${lang.icpNumber}:<a href="http://www.miibeian.gov.cn/" target="_blank">${icpNumber}</a><br />
   </#if>
   ${queryInfo}<br />
-  <a href="http://www.ecshop.com" target="_blank" style=" font-family:Verdana; font-size:11px;">Powered by <strong><span style="color: #3366FF">ECShop</span> <span style="color: #FF9966">${ecsVersion}</span></strong></a> ${licensed}<br />
+  <a href="http://gc-shop.appspot.com" target="_blank" style=" font-family:Verdana; font-size:11px;">Powered by <strong><span style="color: #3366FF">GCSHOP</span> <span style="color: #FF9966">${ecsVersion}</span></strong></a> ${licensed}<br />
     <#if ( statsCode??  ) >
     <div align="left">${statsCode}</div>
     </#if>

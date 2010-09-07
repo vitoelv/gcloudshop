@@ -20,7 +20,7 @@ public class ShopConfigWrapper extends BaseWrapper {
 		this.put("showGoodsnumber", "true");
 		this.put("showBrand", "true");
 
-		this.put("showAddtime", "true");
+		this.put("showAddtime", "false");
 		this.put("showGoodsnumber", "true");
 		this.put("showGoodsnumber", "true");
 		this.put("showGoodsnumber", "true");

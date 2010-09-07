@@ -1,18 +1,6 @@
 package com.jcommerce.web.util;
 
 import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_TITLE;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.ArrayUtils;
-import org.datanucleus.util.StringUtils;
-
 import com.jcommerce.core.model.Article;
 import com.jcommerce.core.model.ArticleCat;
 import com.jcommerce.core.model.Category;
@@ -23,6 +11,7 @@ import com.jcommerce.core.model.User;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
 import com.jcommerce.core.service.IDefaultManager;
+import com.jcommerce.core.service.Order;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.ICollectGood;
 import com.jcommerce.gwt.client.model.IComment;
@@ -36,6 +25,17 @@ import com.jcommerce.web.to.Message;
 import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.to.UserWrapper;
 import com.jcommerce.web.to.WrapperUtil;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.ArrayUtils;
+import org.datanucleus.util.StringUtils;
 
 public class LibMain {
 	
@@ -206,7 +206,7 @@ public class LibMain {
 	
 	
 	/**
-	 * 查询评论内容
+	 * query list of comments
 	 *
 	 * @access  public
 	 * @params  integer     $id
@@ -215,33 +215,37 @@ public class LibMain {
 	 * @return  array
 	 */
 	public static Map<String, Object> assignComment(String id, Long type, int page, IDefaultManager manager, ShopConfigWrapper scw) {
-		/* 取得评论列表 */
+		
 		Criteria c = new Criteria();
 		c.addCondition(new Condition(IComment.ID_VALUE, Condition.EQUALS, id));
 		c.addCondition(new Condition(IComment.COMMENT_TYPE, Condition.EQUALS, type.toString()));
 		c.addCondition(new Condition(IComment.STATUS, Condition.EQUALS, IComment.STATUS_ACTIVE.toString()));
+		c.addOrder(new Order(IComment.ADD_TIME, Order.DESCEND));
 		int count = manager.getCount(ModelNames.COMMENT, c);
 		int size = scw.getInt(IShopConfigMeta.CFG_KEY_COMMENTS_NUMBER);
 		if(size<0) {
 			size = 5;
 		}
 		
-		Map<String, CommentWrapper> arr = new HashMap<String, CommentWrapper>();
+		// we need a map for fast search, and need a list for keeping the order (order by addTime in the jdo query)
+		Map<String, CommentWrapper> wrapperMap = new HashMap<String, CommentWrapper>();
+		List<CommentWrapper> wrapperList = new ArrayList<CommentWrapper>();
+		
 		Map<String,Comment> pcMap = new HashMap<String,Comment>();
 		List<Comment> comments = manager.getList(ModelNames.COMMENT, c, (page-1)*size, size);
 		
 		for(Comment comment: comments) {
 			String cid = comment.getPkId();
-			
 			if( comment.getParentId() != null ){
 				pcMap.put(comment.getParentId(),comment);
 				continue;
 			}
 			
-			CommentWrapper commentWrapper = arr.get(cid);
+			CommentWrapper commentWrapper = wrapperMap.get(cid);
 			if(commentWrapper == null) {
 				commentWrapper = new CommentWrapper(comment);
-				arr.put(cid, commentWrapper);
+				wrapperMap.put(cid, commentWrapper);
+				wrapperList.add(commentWrapper);
 			}
 			commentWrapper.put("id", cid);
 			commentWrapper.put("email", comment.getEmail());
@@ -256,11 +260,12 @@ public class LibMain {
 			commentWrapper.put("addTime", addTime);
 			commentWrapper.put("reContent", null);
 			
+			
 		}
 		
 		/* 取得已有回复的评论 */
 		for(String pid : pcMap.keySet() ){
-			CommentWrapper cw = arr.get(pid);
+			CommentWrapper cw = wrapperMap.get(pid);
 			Comment pcw = pcMap.get(pid);
 			if( cw != null ){
 				cw.put("reContent", pcw.getContent());
@@ -286,7 +291,7 @@ public class LibMain {
 		pager.setPageLast(page < pageCount ? "javascript:gotoPage("+(pageCount)+",'"+id+"',"+type+")" : "javascript:;");
 		
 		Map<String, Object> cmt = new HashMap<String, Object>();
-		cmt.put("comments",arr.values());
+		cmt.put("comments",wrapperList);
 		cmt.put("pager", pager);
 		
 		return cmt;

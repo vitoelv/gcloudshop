@@ -1,6 +1,9 @@
 package com.jcommerce.web.filter;
 
+import com.jcommerce.web.util.WebUtils;
+
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,8 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-
-import com.jcommerce.web.util.WebUtils;
 
 public class UnderConstructionFilter implements Filter {
 	
@@ -39,7 +40,9 @@ public class UnderConstructionFilter implements Filter {
 		
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		HttpServletResponse httpResponse = (HttpServletResponse) response;
-
+		
+		Long startTime = System.currentTimeMillis();
+		
 		String actionName = WebUtils.getActionName(httpRequest);
 		log.info("actionName="+actionName);
 		if(allowedActions.contains(actionName)) {
@@ -51,6 +54,20 @@ public class UnderConstructionFilter implements Filter {
 			httpResponse.sendRedirect("/underConstruction_zh.html");
 //			request.getRequestDispatcher("/underConstruction.jsp").forward(request, response);
 		}
+		
+		Long endTime = System.currentTimeMillis();
+		String warn = "==============req="+(endTime-startTime)+", s="+startTime+", e="+endTime+"<br>\r\n";
+		
+		String perfStats = (String) request.getAttribute("perfStats");
+        perfStats += warn;
+        request.setAttribute("perfStats", perfStats);
+
+        log.warning(perfStats);
+        
+//      httpRequest.getSession().setAttribute("perfStats", perfStats);        
+//        httpResponse.sendRedirect("/perfStats.jsp");
+		
+		
 	}
 
 	public void init(FilterConfig filterConfig) throws ServletException {
