@@ -35,9 +35,9 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/ognl-2.6.11.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-test-2.5.6.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/spring.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/struts2-core-2.1.6.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/struts2-core-2.1.6.jar" sourcepath="D:/resource/struts-2.1.6-all/struts-2.1.6/src/core/src/main/java"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/struts2-spring-plugin-2.1.6.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/xwork-2.1.2.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/xwork-2.1.2.jar" sourcepath="D:/resource/xwork-2.1.2/src/java"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/litetext.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/htmlentities.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
