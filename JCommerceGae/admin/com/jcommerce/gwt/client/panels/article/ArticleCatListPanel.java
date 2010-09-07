@@ -59,6 +59,12 @@ public class ArticleCatListPanel extends ContentWidget{
 		String ArticleCat_col_showInNav();
 		String ArticleCat_sbtn_add();
 		String ArticleCat_title();
+		
+		String ArticleCat_general();
+		String ArticleCat_system();
+		String ArticleCat_info();
+		String ArticleCat_help();
+		String ArticleCat_shophelp();
 	}
 	
 	private ArticleCatListPanel(){
@@ -133,27 +139,27 @@ public class ArticleCatListPanel extends ContentWidget{
         colName.setRenderer(new TreeGridCellRenderer<BeanObject>());
         columns.add(colName);
         ColumnConfig colcatType = new ColumnConfig(IArticleCat.CAT_TYPE, Resources.constants.ArticleCat_col_type(), 150);
+        
         colcatType.setRenderer(new GridCellRenderer<BeanObject>(){
-
-
+            
 			public Object render(BeanObject model, String property,
 					ColumnData config, int rowIndex, int colIndex,
 					ListStore store, Grid grid) {
 				String html = "";
 				if(model.getString(IArticleCat.CAT_TYPE).equals("1")){
-					html = "普通分类";
+					html = Resources.constants.ArticleCat_general();
 				}
 				else if(model.getString(IArticleCat.CAT_TYPE).equals("2")){
-					html = "系统分类";
+					html = Resources.constants.ArticleCat_system();
 				}
 				else if(model.getString(IArticleCat.CAT_TYPE).equals("3")){
-					html = "信息分类";
+					html = Resources.constants.ArticleCat_info();
 				}
 				else if(model.getString(IArticleCat.CAT_TYPE).equals("4")){
-					html = "帮助分类";
+					html = Resources.constants.ArticleCat_help();
 				}
 				else if(model.getString(IArticleCat.CAT_TYPE).equals("5")){
-					html = "网店帮助";
+					html = Resources.constants.ArticleCat_shophelp();
 				}
 				return html;
 			}

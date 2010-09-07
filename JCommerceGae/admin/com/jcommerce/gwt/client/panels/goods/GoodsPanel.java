@@ -120,6 +120,7 @@ public class GoodsPanel extends BaseFileUploadFormPanel implements Listener<Fiel
     GalleryPanel4 contentPanelGallery;
     GoodsAttributePanel contentPanelAttrs;
     
+    HtmlEditor fDesc;
     
     // leon to integrate with history-based page navigation mechanism. 
     // State should contain all info needed to render this page.
@@ -410,10 +411,10 @@ public class GoodsPanel extends BaseFileUploadFormPanel implements Listener<Fiel
         contentPanelDetail.setLayout(fl);
         
         // Create the text area and toolbar
-        HtmlEditor area = GoodsForm.getDescField(); 
-        area.setHideLabel(true);
-        area.setHeight(300);
-        contentPanelDetail.add(area, lfd());
+        fDesc = GoodsForm.getDescField(); 
+        fDesc.setHideLabel(true);
+        fDesc.setHeight(300);
+        contentPanelDetail.add(fDesc, lfd());
 
         tabs.add(contentPanelDetail);
 	}
@@ -458,6 +459,7 @@ public class GoodsPanel extends BaseFileUploadFormPanel implements Listener<Fiel
         contentPanelGeneral.add(cbListCategory);
         
         
+        // TODO for now, hide support of adding multiple categories
 //        lfListCategory = GoodsForm.getCategoryIdsField();
 //        lfListCategory.setFieldLabel(Resources.constants.Goods_category_extended());
 //        categoryList2 = new ListStore<BeanObject>();
@@ -720,6 +722,8 @@ public class GoodsPanel extends BaseFileUploadFormPanel implements Listener<Fiel
     		formPanel.add(field);
     		
     	}
+    	
+    	String s = fDesc.getValue();
     	
     	formPanel.submit();
 

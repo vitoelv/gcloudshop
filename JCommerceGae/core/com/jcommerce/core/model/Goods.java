@@ -1,5 +1,9 @@
 package com.jcommerce.core.model;
 
+import com.google.appengine.api.datastore.Blob;
+import com.jcommerce.core.annotation.IsBlobText;
+import com.jcommerce.core.annotation.IsPK;
+
 import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,10 +14,6 @@ import javax.jdo.annotations.Persistent;
 
 import org.compass.annotations.Searchable;
 import org.compass.annotations.SearchableProperty;
-
-import com.google.appengine.api.datastore.Blob;
-import com.jcommerce.core.annotation.IsBlobText;
-import com.jcommerce.core.annotation.IsPK;
 
 /**  
  * generated with my extension of middleGen 
@@ -35,9 +35,11 @@ public class Goods extends ModelObject {
     @Persistent
     @IsPK(myclazz="com.jcommerce.core.model.GoodsType")
     private String goodsTypeId;
-    // uni-direction owned
-    @Persistent
+
+    // uni-direction owned ??
+    @Persistent(mappedBy="goods")
     private Set<GoodsAttr> attributes = new HashSet<GoodsAttr>();
+    
 	@Persistent
 	private String image;
     @Persistent
@@ -440,7 +442,13 @@ public void setGoodsTypeId(String goodsTypeId) {
 
   public void setGoodsDesc(String newGoodsDesc) {
     //goodsDesc = newGoodsDesc;
-	goodsDesc = new Blob(newGoodsDesc.getBytes(Charset.forName("UTF-8")));
+      if(newGoodsDesc==null) {
+          
+          // TODO a bug on GUI cause submit null value for HtmlEditor
+          // goodsDesc = null;
+      }else {
+          goodsDesc = new Blob(newGoodsDesc.getBytes(Charset.forName("UTF-8")));
+      }
   }
 
 

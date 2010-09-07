@@ -40,6 +40,8 @@ public class ArticlePanel extends BaseEntityEditPanel{
 		String Article_flcategory();
 		String Article_flisOpen();
 		String Article_fltype();
+		String Article_fltypeNormal();
+		String Article_fltypeTop();
 		String Article_flauthor();
 		String Article_flemail();
 		String Article_flkeyword();
@@ -182,7 +184,7 @@ public class ArticlePanel extends BaseEntityEditPanel{
 		TabItem content = new TabItem();
 		content.setStyleAttribute("padding", "10");
 		tabs.add(content);
-		content.setText(Resources.constants.Article_tabgeneral());
+		content.setText(Resources.constants.Article_tabcontent());
 		FormLayout fl = getFormLayout();
 		fl.setHideLabels(true);
 		content.setLayout(fl);

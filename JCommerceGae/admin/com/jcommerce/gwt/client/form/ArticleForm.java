@@ -61,12 +61,12 @@ public class ArticleForm extends BeanObject implements IArticle{
 		MyRadioGroup field = new  MyRadioGroup();
 		Radio yes = new Radio();
 		yes.setValueAttribute("true");
-		yes.setBoxLabel("置顶");
+		yes.setBoxLabel(Resources.constants.Article_fltypeTop());
 		field.add(yes);
 		Radio no = new Radio();
 		no.setValue(true);
 		no.setValueAttribute("false");
-		no.setBoxLabel("普通");
+		no.setBoxLabel(Resources.constants.Article_fltypeNormal());
 		field.add(no);
 		field.setName(ARTICLE_TYPE);
 		return field;

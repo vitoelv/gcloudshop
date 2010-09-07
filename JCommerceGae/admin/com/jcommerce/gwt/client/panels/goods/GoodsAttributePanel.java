@@ -141,7 +141,7 @@ class GoodsAttributePanel extends TabItem {
 			return;
 		}
 		Criteria criteria = new Criteria();
-		criteria.addCondition(new Condition(IGoodsAttr.GOODS_ID, Condition.EQUALS,
+		criteria.addCondition(new Condition(IGoodsAttr.GOODS, Condition.EQUALS,
 				goodsId));
 		new ListService().listBeans(ModelNames.GOODSATTR,criteria,
 				new ListService.Listener() {
@@ -154,6 +154,9 @@ class GoodsAttributePanel extends TabItem {
 	}
 
 	private void updateType(final String newGtId) {
+	    // TODO need resolve: This will be triggered twice, once by populateFields called by GoodsPanel, 
+	    // once by refreshing of goodsType list logic in this page
+	    
 		// TODO is there better solution for concurrent call-back handling?
 		if (!goodsTypeListReady || !goodsAttributesReady) {
 			return;

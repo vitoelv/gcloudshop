@@ -1,7 +1,5 @@
 package com.jcommerce.gwt.client.panels.goods;
 
-import java.util.List;
-
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
@@ -11,16 +9,18 @@ import com.extjs.gxt.ui.client.widget.form.NumberField;
 import com.extjs.gxt.ui.client.widget.form.Radio;
 import com.extjs.gxt.ui.client.widget.form.RadioGroup;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.form.BeanObject;
 import com.jcommerce.gwt.client.form.CategoryForm;
 import com.jcommerce.gwt.client.model.ICategory;
 import com.jcommerce.gwt.client.panels.BaseEntityEditPanel;
 import com.jcommerce.gwt.client.panels.Success;
-import com.jcommerce.gwt.client.panels.BaseEntityEditPanel.State;
 import com.jcommerce.gwt.client.resources.Resources;
 import com.jcommerce.gwt.client.service.ListService;
 import com.jcommerce.gwt.client.widgets.MyRadioGroup;
+
+import java.util.List;
 
 /**
  * Example file.
@@ -129,6 +129,7 @@ public class CategoryPanel extends BaseEntityEditPanel {
         fParentId.setFieldLabel(Resources.constants.Category_parentCategory());
         fParentId.setStore(categoryList);
         fParentId.setEmptyText(Resources.constants.Category_topCategory());
+        fParentId.setTriggerAction(TriggerAction.ALL);
         formPanel.add(fParentId, sfd());
         
         fText = CategoryForm.getMeasureUnitField();
