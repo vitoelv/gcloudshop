@@ -7,8 +7,9 @@
     <property name="prod.RELEASE_VERSION" value="0.9"/>
     <property name="prod.PATCH_LEVEL" value="0"/>
 	
-    <property name="gwt.sdk" location="D:/JCommerce/gwt-2.0.3" />
-	<property name="GAE_HOME" value="D:/JCommerce/appengine-java-sdk-1.3.5" />
+    <property name="gwt.sdk" location="D:/JCommerce/gwt-gxt/gwt-2.0.4" />
+	<property name="gxt-resources" value="gxt" />
+	<property name="GAE_HOME" value="D:/JCommerce/appengine-java-sdk-1.3.7" />
 	<property name="DEBUG" value="true" />
 	<property name="output-path" value="./build" />
 	<property name="output-base-path" value="${output-path}/war" />
@@ -163,7 +164,7 @@
 			<exclude name="**/.svn/**" />
 			<classpath refid="gcshop.classpath" />
 		</javac>
-		<copy file="admin/META-INF/jdoconfig.xml" tofile="${output-base-path}/WEB-INF/classes/META-INF/jdoconfig.xml" />
+		
 		<copy todir="${output-base-path}/WEB-INF/classes">
 			<fileset dir="web">
 				<include name="*.*" />
@@ -177,6 +178,7 @@
 				<include name="**/*" />
 				<!-- patches have to be .class -->
 				<exclude name="freemarker/**/*" />
+				<exclude name="*.*" />
 			</fileset>
 			<manifest>
 				<attribute name="Specification-Title" value="gcShop" />
@@ -363,8 +365,8 @@
 
 		
 		<!-- copy GWT/GXT resources files -->
-		<copy todir="${release-base-path}-${locale}/war/resources">
-			<fileset dir="war/resources">
+		<copy todir="${release-base-path}-${locale}/war/${gxt-resources}">
+			<fileset dir="war/${gxt-resources}">
 				<include name="**/*.*" />
 				<exclude name="**/.svn" />
 			</fileset>   
@@ -384,9 +386,21 @@
 				<include name="gcshop.jar" />
 			</fileset>   
 		</copy>
+		
+		<!-- copy freemarker patch classes -->
 		<copy todir="${release-base-path}-${locale}/war/WEB-INF/classes">
 			<fileset dir="${output-base-path}/WEB-INF/classes">
 				<include name="freemarker/**/*.*" />
+			</fileset>   
+		</copy>
+		
+		<!-- copy jdo configuration -->
+		<copy file="admin/META-INF/jdoconfig.xml" tofile="${release-base-path}-${locale}/war/WEB-INF/classes/META-INF/jdoconfig.xml" />
+		
+		<!-- copy struts configuration-->
+		<copy todir="${release-base-path}-${locale}/war/WEB-INF/classes">
+			<fileset dir="${output-base-path}/WEB-INF/classes">
+				<include name="*.*" />
 			</fileset>   
 		</copy>
 		
