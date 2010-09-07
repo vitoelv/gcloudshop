@@ -272,6 +272,7 @@ public class DAOImpl extends JdoDaoSupport implements DAO {
 						long start = System.currentTimeMillis();
 						query = pm.newQuery(jdoql);
 
+						
 						if(firstRow>=0 && maxRow>=0) {
 							query.setRange(firstRow, firstRow+maxRow);
 						}

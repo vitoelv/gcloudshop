@@ -13,6 +13,7 @@ import com.extjs.gxt.ui.client.widget.form.Field;
 import com.extjs.gxt.ui.client.widget.form.Radio;
 import com.extjs.gxt.ui.client.widget.form.TextArea;
 import com.extjs.gxt.ui.client.widget.form.TextField;
+import com.extjs.gxt.ui.client.widget.form.ComboBox.TriggerAction;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -223,6 +224,8 @@ public class ShopConfigPanel extends BaseEntityEditPanel {
     	    				String val = option[0];
     	    				choiceStore.add(new SimpleOptionData(text, val));
     	    			}
+    	    			((SimpleStaticComboBox)fValue).setEditable(false);
+    	    			((SimpleStaticComboBox)fValue).setTriggerAction(TriggerAction.ALL);
     	    		}
     	    		else if(IShopConfigMeta.CFG_TYPE_PASSWORD.equals(type)) {
     	    			fValue = new TextField<String>();

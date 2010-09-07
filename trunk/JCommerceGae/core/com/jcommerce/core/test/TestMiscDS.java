@@ -6,6 +6,8 @@ import com.jcommerce.core.dao.impl.PMF;
 import com.jcommerce.core.model.Brand;
 import com.jcommerce.core.model.Comment;
 import com.jcommerce.core.model.DSFile;
+import com.jcommerce.core.model.Goods;
+import com.jcommerce.core.model.GoodsAttr;
 import com.jcommerce.core.model.ShopConfig;
 import com.jcommerce.core.service.Condition;
 import com.jcommerce.core.service.Criteria;
@@ -88,6 +90,92 @@ public class TestMiscDS extends BaseDAOTestCase {
 		
 		
 	}
+	
+	public void testQueryGoodsAttr() {
+	    
+//	    String gtId = "agpnY2xvdWRzaG9wchMLEglHb29kc1R5cGUiBF9ndDEM";
+//	    Criteria criteria = new Criteria();
+//        Condition cond = new Condition();
+//        cond.setField(AttributeForm.GOODS_TYPE);
+//        cond.setOperator(Condition.EQUALS);
+//        cond.setValue(gtId);
+//        criteria.addCondition(cond);    
+//        IDefaultManager manager = getDefaultManager();
+//        List list = manager.getList(ModelNames.ATTRIBUTE, criteria);
+//        
+//        System.out.println("size: "+list.size());
+//        
+//        String s = ((Attribute)list.get(0)).getGoodsType().getPkId();
+//        System.out.println("gtId="+s);
+        
+        
+	    try {
+	    String goodsId = "agpnY2xvdWRzaG9wcg4LEgVHb29kcyIDX2cwDA";
+	       Criteria criteria = new Criteria();
+//	        criteria.addCondition(new Condition(IGoodsAttr.GOODS, Condition.EQUALS,goodsId));
+	        IDefaultManager manager = getDefaultManager();
+	        List list = manager.getList(ModelNames.GOODSATTR, criteria);
+	        
+	        System.out.println("size: "+list.size());
+	        for(Object o : list) {
+	            GoodsAttr ga = (GoodsAttr)o;
+	            Goods goods = ga.getGoods();
+	            String gid = goods==null? "null" : goods.getPkId();
+	            
+	            System.out.println("ga="+ga.getKeyName()+", gtId="+gid);
+	        }
+	        
+	        
+	    } catch (Exception ex) {
+	        ex.printStackTrace();
+	    }
+	    
+//        try {
+//            String goodsId = "agpnY2xvdWRzaG9wcg4LEgVHb29kcyIDX2cwDA";
+//               Criteria criteria = new Criteria();
+////              criteria.addCondition(new Condition(IGoodsAttr.GOODS, Condition.EQUALS,goodsId));
+//                IDefaultManager manager = getDefaultManager();
+//                List list = manager.getList(ModelNames.GOODSGALLERY, criteria);
+//                
+//                System.out.println("size: "+list.size());
+//                for(Object o : list) {
+//                    GoodsGallery ga = (GoodsGallery)o;
+//                    Goods goods = ga.getGoods();
+//                    String gid = goods==null? "null" : goods.getPkId();
+//                    
+//                    System.out.println("ga="+ga.getKeyName()+", gtId="+gid);
+//                }
+//                
+//                
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }	    
+	    
+//	        PersistenceManager pm = PMF.get().getPersistenceManager();
+//	        try {
+//	            String goodsId = "agpnY2xvdWRzaG9wcg4LEgVHb29kcyIDX2cwDA";   
+//	            String jdoql = "SELECT FROM com.jcommerce.core.model.GoodsAttr"+
+//                " WHERE goods == goodsParam "
+//                
+//                +" parameters  com.jcommerce.core.model.Goods goodsParam ";
+//	            
+//	            Query query = pm.newQuery(jdoql);
+//	            List<Object> paras = new ArrayList<Object>();
+//	            paras.add(goodsId);
+//	            List result = (List)query.executeWithArray(paras.toArray());
+//	            
+//	            System.out.println("size of result: "+result.size());
+//	        }catch (Exception e) {
+//	            e.printStackTrace();
+//	            assertTrue(false);
+//	        } finally {
+//	            pm.close();
+//	        }
+	    
+	    
+	}
+	
+	
 	
 	public void testDeleteBrand() {
 		IDefaultManager manager = getDefaultManager();

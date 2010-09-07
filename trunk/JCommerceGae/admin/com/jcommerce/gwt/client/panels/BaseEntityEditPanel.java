@@ -320,6 +320,11 @@ public abstract class BaseEntityEditPanel extends ContentWidget  {
 					df.setValue((Date)value);
 				}				
 			} else if(field instanceof TextField || field instanceof TextArea || field instanceof HtmlEditor) {
+			    
+			    if(field instanceof HtmlEditor) {
+			        // to trace only
+			        int i=1;
+			    }
 			    // This is for fields like Goods:keywords
 			    Object res = value;
 			    if(value==null) {

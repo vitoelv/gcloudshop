@@ -12,7 +12,7 @@ public interface IGoodsAttr extends IModelObject {
 	public static final String GOODS = "goods";
   // fields
   public static final String GOODS_ATTR_ID = "goodsAttrId"; 
-  public static final String GOODS_ID = "goodsId"; 
+//  public static final String GOODS_ID = "goodsId"; 
   public static final String ATTR_ID = "attrId"; 
   public static final String ATTR_VALUE = "attrValue"; 
   public static final String ATTR_PRICE = "attrPrice"; 

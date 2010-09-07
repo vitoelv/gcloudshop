@@ -34,6 +34,7 @@ public class CategoryForm extends BeanObject implements ICategory {
 		field.setName(PARENT_ID);
 		field.setDisplayField(CAT_NAME);
         field.setValueField(PK_ID);
+        field.setEditable(false);
 		return field;
 	}
 	public static TextField<String> getMeasureUnitField() {

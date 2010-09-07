@@ -226,8 +226,10 @@ public class RegionListPanel extends ContentWidget {
 		String id = region.getString(IRegion.PK_ID);
 		String name = region.getString(IRegion.REGION_NAME);
 		StringBuffer html = new StringBuffer();
-		html.append("<a href=\"javascript: onManageClicked('").append(id).append("', '").append(name).append("');\">管理</a>")
-			.append(" | <a href=\"javascript: onDeleteClicked('").append(id).append("');\">删除</a>");
+		html.append("<a href=\"javascript: onManageClicked('").append(id).append("', '")
+		    .append(name).append("');\">").append(Resources.constants.RegionList_manage()).append("</a>")
+			.append(" | <a href=\"javascript: onDeleteClicked('").append(id)
+			.append("');\">").append(Resources.constants.delete()).append("</a>");
 		TableData td = new TableData();
 		td.setWidth("30%");
 		HorizontalPanel cellContent = new HorizontalPanel();
