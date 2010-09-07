@@ -58,7 +58,8 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
     	return StringUtils.defaultIfEmpty(getGoods().getGoodsNameStyle(), getGoods().getGoodsName());
     }
     public String getMeasureUnit() {
-    	return "TODO measureUnit";
+        // TODO
+    	return "";
     	
     }
     public String getGoodsBrandUrl() {
@@ -70,7 +71,8 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
     }
     
     public String getBonusMoney() {
-    	return "TODO bonus Money";
+        // TODO
+    	return null;
     }
     
     public String getThumb() {
@@ -108,7 +110,7 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
 //    	return String.valueOf(getGoods().getPromotePrice());
 //    }
     public String getType(){
-    	return goods.getGoodsTypeId();
+    	return goods.getGoodsTypeId()==null?"":goods.getGoodsTypeId();
     }
     
     public String getShortName(){

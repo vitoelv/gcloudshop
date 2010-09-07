@@ -1,10 +1,5 @@
 package com.jcommerce.web.util;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
 import com.google.gwt.user.client.Random;
 import com.jcommerce.core.model.Cart;
 import com.jcommerce.core.model.Constants;
@@ -17,7 +12,16 @@ import com.jcommerce.web.front.action.IWebConstants;
 import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.ShopConfigWrapper;
 
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+
+import javax.servlet.http.HttpServletRequest;
+
 public class LibInsert {
+    
+    private static final Logger log = Logger.getLogger(LibInsert.class.getName());
+    
 	/**
 	 * 调用评论信息
 	 *
@@ -86,9 +90,17 @@ public class LibInsert {
 		Long queryEndTime = System.currentTimeMillis();
 		Lang lang = Lang.getInstance();
 		String queryInfo = new PrintfFormat(lang.getString("queryInfo")).sprintf((queryEndTime-queryStartTime)/1000.0);
+		String warn = "===============query="+(queryEndTime-queryStartTime)+", s="+queryStartTime+", e="+queryEndTime+"<br>\r\n";
+		String perfStats = (String)request.getAttribute("perfStats");
+		perfStats+=warn;
+		request.setAttribute("perfStats", perfStats);
+//		log.warning(perfStats);
 		
-		int onlineCount = manager.getCount("com.jcommerce.core.model.Session", null);
+//		int onlineCount = manager.getCount("com.jcommerce.core.model.Session", null);
+		int onlineCount=0;
 		String onlineInfo = new PrintfFormat(lang.getString("onlineInfo")).sprintf(onlineCount+"");
 		request.setAttribute("queryInfo",queryInfo+onlineInfo);
+		
+		
 	}
 }

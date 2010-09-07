@@ -17,8 +17,19 @@
 			<ref bean="ShopConfigManager"/>
 		</property>
 	</bean>
+	
+	<bean name="perfTestAction" scope="prototype"
+        class="com.jcommerce.web.test.PerfTestAction"
+        parent="baseAction" >
 
+	</bean>
+	
+	<bean name="myFreeMarkerResult" scope="prototype"
+        class="com.jcommerce.web.test.MyFreeMarkerResult"
+        >
 
+	</bean>
+	
 	<bean name="homeAction" scope="prototype"
         class="com.jcommerce.web.front.action.HomeAction"
         parent="baseAction" >
@@ -76,7 +87,6 @@
 	<bean name="commentAction" scope="prototype"
         class="com.jcommerce.web.front.action.CommentAction"
         parent="baseAction" >
-
 	</bean>	
 	<bean name="articleAction" scope="prototype"
         class="com.jcommerce.web.front.action.ArticleAction"

@@ -667,8 +667,7 @@ public class FlowAction extends BaseAction {
 		map.put("userId", getSession().getAttribute(KEY_USER_ID));
 		map.put("pointsName", getCachedShopConfig().get(IShopConfigMeta.CFG_KEY_INTEGRAL_NAME));
 		
-		// need this?? commentAction need this
-		map.put("rand", new Double(1000000*Math.random()).longValue());
+
 		
     	return LibCommon.getTempleteContent(getFreemarkerManager(), map, "order_total.ftl");
     }

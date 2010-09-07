@@ -185,7 +185,7 @@ public class CommentAction extends BaseAction {
         smarty.put("session", session);
         map.put("smarty", smarty);
         
-        map.put("rand", new Double(1000000*Math.random()).longValue());
+        map.put("rand", "");
         
         return LibCommon.getTempleteContent(getFreemarkerManager(), map, "comments_list.ftl");
 	}

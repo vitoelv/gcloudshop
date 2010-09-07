@@ -195,7 +195,7 @@ public class HomeAction extends BaseAction {
         request.setAttribute("topGoods", topList);    	
     }
     protected void initParameters(HttpServletRequest request) {
-        request.setAttribute("flashTheme", "flash");
+        request.setAttribute("flashTheme", "default");
         // TODO shopNotice
         request.setAttribute("shopNotice", getCachedShopConfig().getString(IShopConfigMeta.CFG_KEY_SHOP_NOTICE));
         
@@ -233,7 +233,9 @@ public class HomeAction extends BaseAction {
             log.debug("entering 'home' method...");
         }
         debug("in execute");
-        testOpenPMInView();
+        
+//        testOpenPMInView();
+        
         
         HttpServletRequest request = getRequest();        
         
