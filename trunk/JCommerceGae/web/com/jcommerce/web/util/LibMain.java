@@ -6,6 +6,7 @@ import com.jcommerce.core.model.ArticleCat;
 import com.jcommerce.core.model.Category;
 import com.jcommerce.core.model.CollectGood;
 import com.jcommerce.core.model.Comment;
+import com.jcommerce.core.model.Feedback;
 import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.User;
 import com.jcommerce.core.service.Condition;
@@ -15,18 +16,22 @@ import com.jcommerce.core.service.Order;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.ICollectGood;
 import com.jcommerce.gwt.client.model.IComment;
+import com.jcommerce.gwt.client.model.IFeedback;
 import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.web.front.action.IWebConstants;
 import com.jcommerce.web.front.action.helper.Pager;
 import com.jcommerce.web.to.CollectGoodWrapper;
 import com.jcommerce.web.to.CommentWrapper;
+import com.jcommerce.web.to.FeedbackWrapper;
 import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.Message;
 import com.jcommerce.web.to.ShopConfigWrapper;
 import com.jcommerce.web.to.UserWrapper;
 import com.jcommerce.web.to.WrapperUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -381,6 +386,78 @@ public class LibMain {
 		cmt.put("commentList",commentListWrapper);
 		cmt.put("pager", pager);
 		return cmt;
+	}
+	
+	/*
+	 * 获得用户留言列表
+	 */
+	
+	public static Map<String, Object> assignUserMsgList(String userId, String orderId, int page, IDefaultManager manager, ShopConfigWrapper scw) {
+		
+		Criteria getCountCriteria = new Criteria();
+		Criteria getMsgCriteria = new Criteria();
+		getCountCriteria.addCondition(new Condition(IFeedback.PARENT_ID, Condition.EQUALS, null));
+		getMsgCriteria.addCondition(new Condition(IFeedback.PARENT_ID, Condition.EQUALS, null));
+		
+		/* 获取用户留言的数量 */
+	    if (orderId == null){
+	    	getCountCriteria.addCondition(new Condition(IFeedback.USER_ID, Condition.EQUALS, userId));
+	    	getCountCriteria.addCondition(new Condition(IFeedback.ORDER_ID, Condition.EQUALS, null));
+	    	getMsgCriteria.addCondition(new Condition(IFeedback.USER_ID, Condition.EQUALS, userId));
+	    	getMsgCriteria.addCondition(new Condition(IFeedback.ORDER_ID, Condition.EQUALS, null));
+	    }
+	    else{
+	    	getCountCriteria.addCondition(new Condition(IFeedback.ORDER_ID, Condition.EQUALS, orderId));
+	    	getMsgCriteria.addCondition(new Condition(IFeedback.ORDER_ID, Condition.EQUALS, orderId));
+	    }
+	    
+		int recordCount = manager.getCount(ModelNames.FEEDBACK, getCountCriteria);
+		int size = 5;
+		List<Feedback> feedbackList = manager.getList(ModelNames.FEEDBACK, getMsgCriteria,(page-1)*size, size);
+		List<FeedbackWrapper> feedbackWrapper = new ArrayList<FeedbackWrapper>();
+		
+		for(Iterator iterator = feedbackList.iterator(); iterator.hasNext();) {
+			Feedback feedback = (Feedback) iterator.next();
+			FeedbackWrapper wrapper = new FeedbackWrapper(feedback);
+			
+			/* 取得留言的回复 */
+			String parentId = feedback.getPkId();
+			Criteria criteria = new Criteria();
+			criteria.addCondition(new Condition(IFeedback.PARENT_ID, Condition.EQUALS, parentId));
+			List<Feedback> replyFeedbackList = manager.getList(ModelNames.FEEDBACK, criteria);
+			if(replyFeedbackList.size() > 0) {
+				Feedback reply = replyFeedbackList.get(0);
+				String email = reply.getUserEmail();
+				String userName = reply.getUserName();
+				String content = reply.getMsgContent();
+				Long time = reply.getMsgTime();
+				Date msgDate = new Date(time);
+				SimpleDateFormat dateFormat=new SimpleDateFormat ("yyyy-MM-dd HH:mm:ss");
+			    String msgTime = dateFormat.format(msgDate);
+				
+				wrapper.put("reMsgContent", content);
+				wrapper.put("reUserEmail", email);
+				wrapper.put("reMsgTime", msgTime);
+			} else {
+				wrapper.put("reMsgContent", null);
+				wrapper.put("reUserEmail", null);
+				wrapper.put("reMsgTime", null);
+			}
+			wrapper.put("messageImg", null);
+			wrapper.put("orderId", orderId == null ? "" : orderId);
+			feedbackWrapper.add(wrapper);
+		}
+		
+		Map<String, Object> messageList = new HashMap<String, Object>();
+		Map<String, Object> search = new HashMap<String, Object>();
+        search.put("act", "message_list");
+        if(orderId != null)
+        	search.put("order_id", orderId);
+		Pager pager = getPager("", search, recordCount, page, size, scw);
+		
+		messageList.put("messageList",feedbackWrapper);
+		messageList.put("pager", pager);
+		return messageList;
 	}
 	
 	

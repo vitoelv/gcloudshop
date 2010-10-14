@@ -93,7 +93,7 @@
           <b>${message.msgType}:</b>&nbsp;&nbsp;<font class="f4">${message.msgTitle}</font> (${message.msgTime})
           </div>
           <div class="f_r">
-          <a href="user.action?act=del_msg&amp;id=${key}&amp;order_id=${message.orderId}" title="${lang.drop}" onclick="if (!confirm('${lang.confirmRemoveMsg}')) return false;" class="f6">${lang.drop}</a>
+          <a href="user.action?act=del_msg&amp;id=${message.pkId}&amp;order_id=${message.orderId}" title="${lang.drop}" onclick="if (!confirm('${lang.confirmRemoveMsg}')) return false;" class="f6">${lang.drop}</a>
           </div>
           <div class="msgBottomBorder">
           ${message.msgContent}
@@ -115,7 +115,7 @@
           </div>
           </#if>
           <div class="blank"></div>
-          <form action="user.action" method="post" enctype="multipart/form-data" name="formMsg" onSubmit="return submitMsg()">
+          <form action="user.action" method="post" name="formMsg" onSubmit="return submitMsg()">
                   <table width="100%" border="0" cellpadding="3">
                     <#if ( orderInfo??  ) >
                     <tr>

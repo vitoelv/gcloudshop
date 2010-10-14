@@ -9,7 +9,11 @@ package com.jcommerce.gwt.client.model;
 public interface IFeedback extends IModelObject {
    
    // relation
-      
+	public static final int TYPE_LEAVEWORD = 0; // 留言
+    public static final int TYPE_COMPLAINT = 1; // 投诉
+    public static final int TYPE_ASK = 2; // 询问
+    public static final int TYPE_AFTERMARKET = 3; // 售后
+    public static final int TYPE_BUY = 4; // 求购  
   // fields
   public static final String MSG_ID = "msgId"; 
   public static final String PARENT_ID = "parentId"; 
