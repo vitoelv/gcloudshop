@@ -1,7 +1,34 @@
 package com.jcommerce.web.front.action;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.StringBufferInputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.json.JSONObject;
+
 import com.jcommerce.core.model.Attribute;
 import com.jcommerce.core.model.CollectGood;
+import com.jcommerce.core.model.Feedback;
 import com.jcommerce.core.model.Goods;
 import com.jcommerce.core.model.GoodsAttr;
 import com.jcommerce.core.model.ModelObject;
@@ -17,6 +44,7 @@ import com.jcommerce.core.service.IDefaultManager;
 import com.jcommerce.gwt.client.ModelNames;
 import com.jcommerce.gwt.client.model.ICart;
 import com.jcommerce.gwt.client.model.ICollectGood;
+import com.jcommerce.gwt.client.model.IFeedback;
 import com.jcommerce.gwt.client.model.IOrderGoods;
 import com.jcommerce.gwt.client.model.IOrderInfo;
 import com.jcommerce.gwt.client.model.IRegion;
@@ -29,6 +57,7 @@ import com.jcommerce.web.front.action.helper.Pager;
 import com.jcommerce.web.to.Affiliate;
 import com.jcommerce.web.to.CollectGoodWrapper;
 import com.jcommerce.web.to.CommentWrapper;
+import com.jcommerce.web.to.FeedbackWrapper;
 import com.jcommerce.web.to.Lang;
 import com.jcommerce.web.to.OrderGoodsWrapper;
 import com.jcommerce.web.to.OrderInfoWrapper;
@@ -40,28 +69,10 @@ import com.jcommerce.web.util.LibCommon;
 import com.jcommerce.web.util.LibMain;
 import com.jcommerce.web.util.LibOrder;
 import com.jcommerce.web.util.LibTransaction;
+import com.jcommerce.web.util.MyAuthenticator;
 import com.jcommerce.web.util.PrintfFormat;
 import com.jcommerce.web.util.SpringUtil;
 import com.jcommerce.web.util.WebFormatUtils;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.StringBufferInputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-import org.json.JSONObject;
 
 
 public class UserAction extends BaseAction {
@@ -449,6 +460,152 @@ public class UserAction extends BaseAction {
 				}
 				
 			}
+			
+			/*
+			 * 找回密码链接
+			 */
+			else if("get_password".equals(action)) {
+				return "get_password";
+			}
+			
+			
+			/*
+			 * 找回密码操作
+			 */
+			else if("send_pwd_email".equals(action)) {
+				String userName = request.getParameter("user_name");
+				String email = request.getParameter("email");
+				Criteria c = new Criteria();
+				c.addCondition(new Condition(IUser.USER_NAME, Condition.EQUALS, userName));
+				c.addCondition(new Condition(IUser.EMAIL, Condition.EQUALS, email));
+				List<User> users = getDefaultManager().getList(ModelNames.USER, c);
+				
+				if(users.size() == 0) {
+					LibMain.showMessage(Lang.getInstance().getString("noGoodsInCart"), null, null, "info", true, request);
+		    		return "message";
+				}
+				else {
+					User user = users.get(0);
+					
+					Properties props = new Properties();
+				    props.put("mail.smtp.host", "smtp.sina.com");
+				    props.put("mail.smtp.port", "25");    
+				    props.put("mail.from", "tianyinlq@sina.com");
+				    props.put("mail.smtp.auth", "true");
+				    
+				    MyAuthenticator au = new MyAuthenticator("tianyinlq","j987jkkm"); 
+				    Session session = Session.getDefaultInstance(props, au);
+				    session.setDebug(true);
+				
+				    try {
+				        Message msg = new MimeMessage(session);
+				        msg.setFrom(new InternetAddress("tianyinlq@sina.com"));
+				        msg.setRecipient(Message.RecipientType.TO,
+				        		new InternetAddress(email));
+				        msg.setSubject("GCShop找回密码邮件");
+				        msg.setSentDate(new Date());
+				        msg.setText("您的用户名：" + user.getUserName() + "\n" +
+				        		"密码：" + user.getPassword() + "\n");
+				        Transport.send(msg);
+				        
+				        LibMain.showMessage("您的密码已发往邮箱" + email, "返回首页", "home.action", "info", true, request);
+				        return "message";
+				    } catch (MessagingException mex) {
+				    	LibMain.showMessage("邮件发送出错", null, null, "info", true, request);
+			    		return "message";
+				    }
+				    
+				}
+			}
+			
+			/*
+			 * 用户留言
+			 */
+			else if("message_list".equals(action)) {
+				String orderId = request.getParameter("order_id");
+				int page = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
+				
+				Map<String, Object> userMsg = LibMain.assignUserMsgList(userId, orderId, page, getDefaultManager(), getCachedShopConfig());		
+				List<FeedbackWrapper> userMsgList = (List<FeedbackWrapper>) userMsg.get("messageList");
+				Pager pager = (Pager) userMsg.get("pager");
+				
+				request.setAttribute("messageList", userMsgList);
+				request.setAttribute("pager", pager);
+				
+				if(orderId != null) {
+					OrderInfo order = (OrderInfo) getDefaultManager().get(ModelNames.ORDERINFO, orderId);
+					OrderInfoWrapper wrapper = new OrderInfoWrapper(order);
+					wrapper.put("url", "user.action?act=order_detail&order_id=" + order.getPkId());
+					request.setAttribute("orderInfo", wrapper);
+				}
+				
+				includeUserMenu();
+				return RES_USER_CLIPS;
+			}
+			
+			/*
+			 * 添加用户留言
+			 */
+			else if("act_add_message".equals(action)) {
+				String title = request.getParameter("msg_title");
+				String content = request.getParameter("msg_content");
+				String orderId = request.getParameter("order_id");
+				String x = request.getParameter("message_img");
+				long msgType = request.getParameter("msg_type") == null ? 0 : Long.parseLong(request.getParameter("msg_type"));
+				
+				User user = (User) getDefaultManager().get(ModelNames.USER, userId);
+				String userName = user.getUserName();
+				String email = user.getEmail();
+				Long msgTime = new Date().getTime();
+				
+				Feedback feedback = new Feedback();
+				feedback.setMsgTime(msgTime);
+				feedback.setMsgTitle(title);
+				feedback.setMsgContent(content);
+				feedback.setMsgTime(msgTime);
+				feedback.setOrderId(orderId);
+				feedback.setMsgType(msgType);
+				feedback.setUserId(userId);
+				feedback.setUserEmail(email);
+				feedback.setUserName(userName);
+				
+				getDefaultManager().txadd(feedback);
+				
+				if(orderId == null)
+					return LibMain.showMessage("发表留言成功", "返回留言列表", "user.action?act=message_list", "info", true, request);
+				else
+
+					return LibMain.showMessage("发表留言成功", "返回留言列表", "user.action?act=message_list&order_id=" + orderId, "info", true, request);
+			}
+			
+			/*
+			 * 删除用户留言
+			 */
+			else if("del_msg".equals(action)) {
+				String msgId = request.getParameter("id");
+				String orderId = request.getParameter("order_id");				
+				Feedback feedback = (Feedback) getDefaultManager().get(ModelNames.FEEDBACK, msgId);
+				
+				if(feedback.getUserId().equals(userId)) {
+					getDefaultManager().txdelete(ModelNames.FEEDBACK, msgId);
+				}
+				
+				//删除回复
+				Criteria criteria = new Criteria();
+				criteria.addCondition(new Condition(IFeedback.PARENT_ID, Condition.EQUALS, msgId));
+				List replys = getDefaultManager().getList(ModelNames.FEEDBACK, criteria);
+				for(Iterator i = replys.iterator(); i.hasNext();) {
+					Feedback reply = (Feedback) i.next();
+					getDefaultManager().txdelete(reply);
+				}
+				
+				if(orderId.equals(""))
+					return LibMain.showMessage("删除留言成功", "返回留言列表", "user.action?act=message_list", "info", true, request);
+				else
+
+					return LibMain.showMessage("删除留言成功", "返回留言列表", "user.action?act=message_list&order_id=" + orderId, "info", true, request);
+			}
+			
 			else if("order_detail".equals(action) || "orderDetail".equals(action)) {
 				
 				includeUserMenu();
