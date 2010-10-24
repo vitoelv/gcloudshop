@@ -8,6 +8,7 @@ import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.jdo.annotations.Element;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -28,6 +29,7 @@ public class Goods extends ModelObject {
     
     // relations
     @Persistent(mappedBy="goods")
+    @Element(dependent = "true")
     private Set<GoodsGallery> galleries = new HashSet<GoodsGallery>();
     @Persistent
     private Set<String>categoryIds = new HashSet<String>();
@@ -38,6 +40,7 @@ public class Goods extends ModelObject {
 
     // uni-direction owned ??
     @Persistent(mappedBy="goods")
+    @Element(dependent = "true")
     private Set<GoodsAttr> attributes = new HashSet<GoodsAttr>();
     
 	@Persistent
@@ -49,10 +52,12 @@ public class Goods extends ModelObject {
     private DSFile imageFile;
 	@Persistent
 	private String thumb;
-    @Persistent
-    private String thumbFileId;
+	
     @Persistent
     @IsPK(myclazz="com.jcommerce.core.model.DSFile")
+    private String thumbFileId;
+    
+    @Persistent
     private DSFile thumbFile;
     @Persistent
     private String googleBaseDataId;

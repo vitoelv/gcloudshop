@@ -473,7 +473,7 @@ public class TestManagerImpl extends BaseDAOTestCase {
     	goods.getGalleries().add(g);
     	
     	CustomizedManager cm = getCustomizedManager();
-    	cm.addGoods(goods);
+    	cm.addGoods(goods, "en");
     	
     	
         Criteria c1 = new Criteria();

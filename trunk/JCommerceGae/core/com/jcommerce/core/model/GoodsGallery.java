@@ -22,15 +22,19 @@ public class GoodsGallery extends ModelObject {
 
     
     // relations
-    	@Persistent
-	private Goods goods;
     @Persistent
+	private Goods goods;
+    
+    @Persistent(dependent = "true")
 	private DSFile imageFile;
+    
     @Persistent
     @IsPK(myclazz="com.jcommerce.core.model.DSFile")
 	private String imageFileId;
-    @Persistent
+    
+    @Persistent(dependent = "true")
 	private DSFile thumbFile;
+    
     @Persistent
     @IsPK(myclazz="com.jcommerce.core.model.DSFile")
 	private String thumbFileId;

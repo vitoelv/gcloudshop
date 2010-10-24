@@ -51,7 +51,7 @@ public class UnderConstructionFilter implements Filter {
 		else {
 			log.warning("redirecting to under construction...");
 //			httpResponse.setCharacterEncoding("UTF-8");
-			httpResponse.sendRedirect("/underConstruction_zh.html");
+			httpResponse.sendRedirect("/underConstruction.html");
 //			request.getRequestDispatcher("/underConstruction.jsp").forward(request, response);
 		}
 		

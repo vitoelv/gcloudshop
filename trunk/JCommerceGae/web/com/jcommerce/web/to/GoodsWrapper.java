@@ -46,7 +46,8 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
     	return getGoods().getGoodsName();
     }
     public String getGoodsImg() {
-    	return SERVLET_IMAGE+getGoods().getImageFileId();
+//    	return SERVLET_IMAGE+getGoods().getImageFileId();
+        return SERVLET_IMAGE+getGoods().getThumbFileId();
     }
     public String getUrl() {
     	return ACTION_GOODS+getGoods().getPkId();    	
@@ -76,10 +77,10 @@ public class GoodsWrapper extends BaseModelWrapper implements URLConstants{
     }
     
     public String getThumb() {
-    	return SERVLET_IMAGE+getGoods().getImageFileId();
+    	return SERVLET_IMAGE+getGoods().getThumbFileId();
     }
     public String getGoodsThumb() {
-    	return SERVLET_IMAGE+getGoods().getImageFileId();
+    	return SERVLET_IMAGE+getGoods().getThumbFileId();
     }
     
     public String getPromotePrice() {

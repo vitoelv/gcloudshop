@@ -508,6 +508,10 @@ public class DataStoreUtils implements IConstants{
 					IsPK isPK = field.getAnnotation(IsPK.class);
 					if (isPK != null) {
 						// convert PK->keyName
+					    if(StringUtils.isBlank((String)value)) {
+					        // this is an optional relationship ID
+					        strValue = "";
+					    } else {
 						ModelObject target = manager.get(isPK.myclazz(),
 								(String) value);
 						if(target!=null) {
@@ -518,6 +522,7 @@ public class DataStoreUtils implements IConstants{
 						}else {
 							System.out.println("failed to find a target of IsPk(class="+isPK.myclazz()+") field");
 						}
+					    }
 					} else if (Collection.class.isAssignableFrom(ft)) {
 						strValue = Arrays.toString(((Collection) value)
 								.toArray());

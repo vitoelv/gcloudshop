@@ -1,17 +1,5 @@
 package com.jcommerce.gwt.server;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.images.Image;
 import com.google.appengine.api.images.ImagesService;
@@ -29,7 +17,21 @@ import com.jcommerce.gwt.client.form.GoodsForm;
 import com.jcommerce.gwt.client.model.IGoods;
 import com.jcommerce.gwt.client.model.IGoodsAttr;
 import com.jcommerce.gwt.client.model.IGoodsGallery;
+import com.jcommerce.gwt.client.panels.system.IShopConfigMeta;
 import com.jcommerce.gwt.server.util.ServerFormatUtil;
+import com.jcommerce.web.to.ShopConfigWrapper;
+import com.jcommerce.web.util.SpringUtil;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
 
 public class GoodsGWTAction extends BaseGWTHttpAction {
 	
@@ -48,7 +50,7 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
     		
     		Goods to = form2To(form);
     		to.setAddTime(new Date().getTime());
-    		res = cm.addGoods(to);
+    		res = cm.addGoods(to, getLocale());
 
     		
     	} catch (Exception ex) {
@@ -70,7 +72,7 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
     		
     		Goods to = form2To(form);
     		to.setLastUpdate(new Date().getTime());
-        	cm.updateGoods(to);
+        	cm.updateGoods(to, getLocale());
 
     		
     	} catch (Exception ex) {
@@ -126,6 +128,21 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
 		Goods to = new Goods();
 		ImagesService imagesService = ImagesServiceFactory.getImagesService();
 		
+		ShopConfigWrapper scw = SpringUtil.getShopConfigManager().getCachedShopConfig(getLocale());
+		String thumbSizeStr = scw.getString(IShopConfigMeta.CFG_KEY_GOODS_THUMB_SIZE);
+		if(StringUtils.isEmpty(thumbSizeStr)) {
+		    thumbSizeStr = "200,200"; //default
+		}
+		int thumbWidth=200, thumbHeight=200;
+		try {
+		    String[] ss = StringUtils.split(thumbSizeStr, ",");
+		    thumbWidth = Integer.valueOf(ss[0].trim());
+		    thumbHeight = Integer.valueOf(ss[1].trim());
+		} catch (Exception ex) {
+		    throw new RuntimeException("shopconfig: [CFG_KEY_GOODS_THUMB_SIZE] format is incorrect, value=["+thumbSizeStr+"]");
+		}
+		 
+		
 		
 		DSFile imageFile = null;
 		FileForm fileForm = (FileForm)form.get(IGoods.IMAGE);
@@ -137,6 +154,7 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
     		form.put(IGoods.IMAGE, ((FileForm)form.get(IGoods.IMAGE)).getFileName());    			
 		}
 
+
 		DSFile thumbFile = null;
 		if(fileForm!=null) {
 			thumbFile = new DSFile();
@@ -145,7 +163,10 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
 			thumbFile.setFileName("thumb"+fileForm.getFileName());
 			thumbFile.setMimeType(fileForm.getMimeType());
 			
-			resize = ImagesServiceFactory.makeResize(100, 100);
+			resize = ImagesServiceFactory.makeResize(thumbWidth, thumbHeight);
+			
+			// always convert to png? 
+			//, ImagesService.OutputEncoding.PNG
 			newImage = imagesService.applyTransform(resize, image);
 			
 			thumbFile.setContent(new Blob(newImage.getImageData()));
@@ -194,6 +215,7 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
 					}
 					image = ImagesServiceFactory.makeImage(fileForm.getContent());
 					//TODO load size from shopconfig
+					// currently not using this Image field. instead using the Thumb
 					resize = ImagesServiceFactory.makeResize(400, 400);
 					newImage = imagesService.applyTransform(resize, image);
 					file.setContent(new Blob(newImage.getImageData()));
@@ -206,7 +228,7 @@ public class GoodsGWTAction extends BaseGWTHttpAction {
 					thumbFile.setFileName("thumb"+fileForm.getFileName());
 					thumbFile.setMimeType(fileForm.getMimeType());
 					//TODO load size from shopconfig
-					resize = ImagesServiceFactory.makeResize(100, 100);
+					resize = ImagesServiceFactory.makeResize(thumbWidth, thumbHeight);
 					newImage = imagesService.applyTransform(resize, image);
 					
 					thumbFile.setContent(new Blob(newImage.getImageData()));

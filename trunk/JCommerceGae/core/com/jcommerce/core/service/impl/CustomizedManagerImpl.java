@@ -185,8 +185,18 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 			throw new RuntimeException(e);
 		}
     }
-    public String addGoods(Goods to) {
+    
+    private String genGoodsSn() {
+        return "Item-"+String.valueOf(System.nanoTime()%1000000);
+    }
+    
+    public String addGoods(Goods to, String locale) {
     	try {
+    	    // auto-generate goodsSn if not given 
+    	    if(StringUtils.isEmpty(to.getGoodsSn())) {
+    	        to.setGoodsSn(genGoodsSn());
+    	    }
+    	    
     		String goodskn = DataStoreUtils.genKeyName(to);
     		to.setKeyName(goodskn);
     		// TODO need overcome the checkbox issue
@@ -241,31 +251,36 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 			}
 			String res = txattach(to);
 			
-			GoogleBaseUtil gbUtil = new GoogleBaseUtil(SpringUtil.getShopConfigManager().getCachedShopConfig("en"));
-			 String token = gbUtil.authenticate();
-			 gbUtil.buildDataItem(to);
-			 String gbdid = gbUtil.postItem(token);
-			 to.setGoogleBaseDataId(gbdid);
-			
+	         // TODO Datastore commit and this submission are not transactional (and could not be)
+            try {
+                GoogleBaseUtil gbUtil = new GoogleBaseUtil(SpringUtil.getShopConfigManager().getCachedShopConfig(locale));
+                String token = gbUtil.authenticate();
+                gbUtil.buildDataItem(to);
+                String gbdid = gbUtil.postItem(token);
+                to.setGoogleBaseDataId(gbdid);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                // ignore the exception? 
+                // TODO or showing some msg on GUI saying that DS save succeeded but GoogleData failed.
+            }
 			
 			// verify,  debug only 
-			for(GoodsGallery gallery:galleries) {
-				System.out.println("galleryId: "+gallery.getPkId());
-			}
-			String goodsId = to.getPkId();
-			System.out.println("goodsId="+goodsId);
-			
-			Criteria criteria = new Criteria();
-			Condition cond = new Condition();
-			cond.setField(IGoodsGallery.GOODS_ID);
-			cond.setOperator(Condition.EQUALS);
-			cond.setValue(goodsId);
-			criteria.addCondition(cond);
-			List<GoodsGallery> t1 = new ArrayList<GoodsGallery>();
-			super.getList(t1, ModelNames.GOODSGALLERY, criteria, -1, -1);
-			System.out.println("size: "+t1.size());
-			
-			res = txattach(to);
+//			for(GoodsGallery gallery:galleries) {
+//				System.out.println("galleryId: "+gallery.getPkId());
+//			}
+//			String goodsId = to.getPkId();
+//			System.out.println("goodsId="+goodsId);
+//			
+//			Criteria criteria = new Criteria();
+//			Condition cond = new Condition();
+//			cond.setField(IGoodsGallery.GOODS_ID);
+//			cond.setOperator(Condition.EQUALS);
+//			cond.setValue(goodsId);
+//			criteria.addCondition(cond);
+//			List<GoodsGallery> t1 = new ArrayList<GoodsGallery>();
+//			super.getList(t1, ModelNames.GOODSGALLERY, criteria, -1, -1);
+//			System.out.println("size: "+t1.size());
+//			res = txattach(to);
 			
 			return res;
     	}catch (Exception e) {
@@ -276,7 +291,7 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
     	
     	
     }
-    public boolean updateGoods(Goods to) {
+    public boolean updateGoods(Goods to, String locale) {
     	try {
     		String id = to.getPkId();
     		System.out.println("id: "+id);
@@ -351,11 +366,18 @@ public class CustomizedManagerImpl extends DefaultManagerImpl implements Customi
 			System.out.println("System.out.println(updateResponse);");
 			txattach(po);
 			
-			GoogleBaseUtil gbUtil = new GoogleBaseUtil(SpringUtil.getShopConfigManager().getCachedShopConfig("en"));
-			String token = gbUtil.authenticate();
-			gbUtil.buildDataItem(po);
-			String updateResponse = gbUtil.updateItem( token , po.getGoogleBaseDataId());
-			System.out.println(updateResponse);
+			// TODO Datastore commit and this submission are not transactional (and could not be)
+			try {
+			    GoogleBaseUtil gbUtil = new GoogleBaseUtil(SpringUtil.getShopConfigManager().getCachedShopConfig(locale));
+			    String token = gbUtil.authenticate();
+			    gbUtil.buildDataItem(po);
+			    String updateResponse = gbUtil.updateItem( token , po.getGoogleBaseDataId());
+			    System.out.println("Google Data response: "+updateResponse);
+			} catch (Exception ex) {
+			    ex.printStackTrace();
+			    // ignore the exception? 
+			    // TODO or showing some msg on GUI saying that DS save succeeded but GoogleData failed.
+			}
 			
 			return true;
     	}catch (Exception e) {

@@ -76,7 +76,7 @@ public class GWTHttpDynaForm {
       	    	int status = response.getStatusCode();
       	      if (200 == response.getStatusCode()) {
 //      	    	  if("0".equals(text)) {
-      	    	  if(result!=null && result.contains("200 OK")) {
+      	    	  if(result!=null && result.contains("WeAreDone")) {
       	    		  getListener().onSuccess(result);
       	    	  }
       	    	  else {

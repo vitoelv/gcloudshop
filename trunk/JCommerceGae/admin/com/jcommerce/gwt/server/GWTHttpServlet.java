@@ -56,7 +56,8 @@ public class GWTHttpServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		debug("==========================GWTHttpServlet doPost()==================================");
-
+		String locale = (String)request.getSession().getAttribute(IAdminConstants.KEY_LOCALE);
+		
 		int contentLength = request.getContentLength();
 		debug("contentLength: " + contentLength);
 		if (contentLength < 0) {
@@ -79,6 +80,7 @@ public class GWTHttpServlet extends HttpServlet {
 				gwtAction = (BaseGWTHttpAction) Class.forName(action)
 						.newInstance();
 				gwtAction.setCtx(ctx);
+				gwtAction.setLocale(locale);
 				m = gwtAction.getClass().getMethod(method, paras);
 
 			} catch (Exception ex) {
@@ -246,13 +248,13 @@ public class GWTHttpServlet extends HttpServlet {
 			m.invoke(gwtAction, ref);
 			// process(form);
 
+			// moved here to address the bug that it will always return success even exception is thrown
+		    processSuccess(response);
+		    System.out.println("==========================end of UploadFileServlet doPost()==================================");
 		} catch (Exception e) {
 			e.printStackTrace();
 			processError(response, e.getMessage());
 		}
-		
-		processSuccess(response);
-		System.out.println("==========================end of UploadFileServlet doPost()==================================");
 
 	}
 
@@ -266,7 +268,7 @@ public class GWTHttpServlet extends HttpServlet {
 
 	public void processSuccess(HttpServletResponse response) {
 		try {
-			response.getWriter().print("200 OK");
+			response.getWriter().print("WeAreDone");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

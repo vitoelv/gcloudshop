@@ -52,6 +52,7 @@ public interface IShopConfigMeta {
 	// goods
 	public static final String CFG_KEY_SHOW_MARKETPRICE = "showMarketprice";
 	public static final String CFG_KEY_SHOW_GOODSWEIGHT = "showGoodsweight";
+	public static final String CFG_KEY_GOODS_THUMB_SIZE = "GoodsThumbSize";
 	
 	// shopping_flow
 	public static final String CFG_KEY_CART_CONFIRM = "cart_confirm";
