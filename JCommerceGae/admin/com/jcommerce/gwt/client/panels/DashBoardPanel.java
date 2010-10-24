@@ -34,6 +34,14 @@ public class DashBoardPanel extends ContentWidget{
         String DashBoard_warning();
         String DashBoard_Order_Stats();
         String DashBoard_Goods_Stats();
+        
+        String DashBoard_Pending_Orders();
+        String DashBoard_UnConfirmed_Orders();
+        String DashBoard_UnPaid_Orders();
+        
+        String DashBoard_Total_Goods();
+        String DashBoard_Total_Hot_Goods();
+        String DashBoard_Total_New_Goods();
     }
     
     public static class State extends PageState {
@@ -102,11 +110,11 @@ public class DashBoardPanel extends ContentWidget{
         cp = new ContentPanel();
         cp.setHeading(Resources.constants.DashBoard_Order_Stats());
         cp.setLayout(new TableLayout(4));
-        Text label2 = new Text("Pending Orders:");
+        Text label2 = new Text(Resources.constants.DashBoard_Pending_Orders());
         pendingOrder = new Text("TODO");
-        Text label4 = new Text("UnConfirmed Orders:");
+        Text label4 = new Text(Resources.constants.DashBoard_UnConfirmed_Orders());
         unConfirmOrder = new Text("TODO");
-        Text label6 = new Text("Unpaid Orders:");
+        Text label6 = new Text(Resources.constants.DashBoard_UnPaid_Orders());
         unPaidOrder = new Text("TODO");
         TableData tdLabel = new TableData();
         tdLabel.setHeight("30");
@@ -127,11 +135,11 @@ public class DashBoardPanel extends ContentWidget{
         cp = new ContentPanel();
         cp.setHeading(Resources.constants.DashBoard_Goods_Stats());
         cp.setLayout(new TableLayout(4));
-        label2 = new Text("Total Goods:");
+        label2 = new Text(Resources.constants.DashBoard_Total_Goods());
         totalGoods = new Text("TODO");
-        label4 = new Text("Number of new Goods:");
+        label4 = new Text(Resources.constants.DashBoard_Total_New_Goods());
         numberOfNG = new Text("TODO");
-        label6 = new Text("Number of hot Goods:");
+        label6 = new Text(Resources.constants.DashBoard_Total_Hot_Goods());
         numberOfHG = new Text("TODO");
         
         cp.add(label2, tdLabel);

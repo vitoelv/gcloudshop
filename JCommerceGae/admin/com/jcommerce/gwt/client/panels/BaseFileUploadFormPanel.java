@@ -19,11 +19,11 @@ public abstract class BaseFileUploadFormPanel extends BaseEntityEditPanel {
 				// TODO result is somehow become sth like <pre style="word-wrap: break-word; white-space: pre-wrap;">0</pre>
 				// here we workaround the problem, but need to figure out what happened.
 				
-				if(result!=null && result.contains("200 OK")) {
+				if(result!=null && result.contains("WeAreDone")) {
 					gotoSuccessPanel();
 				}
 				else {
-					Window.alert("Error: "+result);	
+					Window.alert("Some error happened and you changes could be partially saved. Reason: "+result);	
 				}
 				} 
         });

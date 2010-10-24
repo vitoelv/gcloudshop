@@ -16,8 +16,8 @@ public interface CustomizedManager {
     public boolean updateBrand(Brand to);
 //    public String addPerson(Person to, Address a);
     
-    public String addGoods(Goods to);
-    public boolean updateGoods(Goods to);
+    public String addGoods(Goods to, String locale);
+    public boolean updateGoods(Goods to, String locale);
     
     public void getShippingAreaWithRegionName(List<ShippingArea> resultSet, String shippingId);
     

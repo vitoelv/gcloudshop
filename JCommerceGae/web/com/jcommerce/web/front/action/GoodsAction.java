@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
 import com.jcommerce.core.model.Brand;
@@ -85,8 +86,12 @@ public class GoodsAction extends BaseAction {
 	    request.setAttribute("goods", gw);
 	        
 	    String brandId = goods.getBrandId();
-	    Brand brand = (Brand)manager.get(ModelNames.BRAND, brandId);
-	    gw.put(GoodsWrapper.GOODS_BRAND, brand.getBrandName());
+	    if(StringUtils.isNotEmpty(brandId)) {
+	        Brand brand = (Brand)manager.get(ModelNames.BRAND, brandId);
+	        gw.put(GoodsWrapper.GOODS_BRAND, brand.getBrandName());
+	    }else {
+	        gw.put(GoodsWrapper.GOODS_BRAND, "");
+	    }
 	    
 	    //获得用户评价等级
 	    String id = gw.getGoods().getPkId();

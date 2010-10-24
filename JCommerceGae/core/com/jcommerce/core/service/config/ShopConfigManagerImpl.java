@@ -1,56 +1,5 @@
 package com.jcommerce.core.service.config;
 
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_ANONYMOUS_BUY;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_ARTICLE_NUMBER;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_CART_CONFIRM;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_COLLECTION_NUMBER;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_COMMENTS_NUMBER;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_COMMENT_CHECK;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_DEFAULT_ADMIN_DISABLED;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_GOOGLE_ACCOUNT;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_GOOGLE_DEVELOPER_KEY;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_GOOGLE_PASSWORD;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_GOOGLE_WEBSITEPATH;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_HISTORY_NUMBER;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_INTEGRAL_NAME;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_NAME_OF_REGION_1;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_NAME_OF_REGION_2;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_NAME_OF_REGION_3;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_NAME_OF_REGION_4;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_ONE_STEP_BUY;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_PAGE_SIZE;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_PAGE_STYLE;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_ADDRESS;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_COPYRIGHT;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_COUNTRY;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_DESC;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_KEYWORDS;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_MSN;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_NAME;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_NOTICE;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_POSTCODE;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_QQ;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_REG_CLOSED;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_SERVICE_EMAIL;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_SERVICE_PHONE;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_SKYPE;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_TITLE;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_WW;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOP_YM;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_GOODSWEIGHT;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_GOODS_ATTRIBUTE;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_GOODS_IN_CART;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_MARKETPRICE;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SHOW_ORDER_TYPE;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SORT_ORDER_METHOD;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_SORT_ORDER_TYPE;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_TIME_FORMAT;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_KEY_USER_NOTICE;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_TYPE_OPTIONS;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_TYPE_PASSWORD;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_TYPE_SELECT;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_TYPE_TEXT;
-import static com.jcommerce.gwt.client.panels.system.IShopConfigMeta.CFG_TYPE_TEXTAREA;
 import com.jcommerce.core.model.AdminUser;
 import com.jcommerce.core.model.ShopConfig;
 import com.jcommerce.core.service.Condition;
@@ -72,7 +21,7 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 
-public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopConfigManager {
+public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopConfigManager, IShopConfigMeta {
 
 
 
@@ -299,7 +248,9 @@ public class ShopConfigManagerImpl extends DefaultManagerImpl implements IShopCo
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_GOODS"), CFG_KEY_SHOW_GOODSWEIGHT, "1", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_SHOW_GOODSWEIGHT"), 
 				new String[][]{new String[]{"1",bundle.getString("CFG_DISPLAY")}, new String[]{"0",bundle.getString("CFG_CONCEAL")}}, null));
 		metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_GOODS"), CFG_KEY_SHOW_MARKETPRICE, "1", CFG_TYPE_SELECT, bundle.getString("CFG_KEY_SHOW_MARKETPRICE"), 
-				new String[][]{new String[]{"1",bundle.getString("CFG_DISPLAY")}, new String[]{"0",bundle.getString("CFG_CONCEAL")}}, null));	
+				new String[][]{new String[]{"1",bundle.getString("CFG_DISPLAY")}, new String[]{"0",bundle.getString("CFG_CONCEAL")}}, null));
+        metaList.add(new ShopConfigMeta(bundle.getString("CFG_GROUP_GOODS"), CFG_KEY_GOODS_THUMB_SIZE, "200,200", CFG_TYPE_TEXT, bundle.getString("CFG_KEY_GOODS_THUMB_SIZE"), null, null));   
+		
 		defaultShopConfigMap.put(5, metaList);
 		
 		metaList = new ArrayList<ShopConfigMeta>();

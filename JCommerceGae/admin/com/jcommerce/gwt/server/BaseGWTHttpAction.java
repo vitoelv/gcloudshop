@@ -8,6 +8,9 @@ import com.jcommerce.core.service.IDefaultManager;
 
 
 public class BaseGWTHttpAction {
+    
+    private String locale;
+    
 	private WebApplicationContext ctx;
 
 	public WebApplicationContext getCtx() {
@@ -25,6 +28,14 @@ public class BaseGWTHttpAction {
 	public CustomizedManager getCustomizedManager() {
 		return (CustomizedManager)ctx.getBean("CustomizedManager");
 	}
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
 	
 	
 }
