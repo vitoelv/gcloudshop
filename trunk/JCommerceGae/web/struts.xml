@@ -74,6 +74,7 @@
 		<action name="user" method="execute" class="userAction">
 			<result name="user_clips" type="freemarker">/web/front/user_clips.ftl</result>
 			<result name="user_passport" type="freemarker">/web/front/user_passport.ftl</result>
+			<result name="get_password" type="freemarker">/web/front/user_passport.ftl</result>
 			<result name="user_transaction" type="freemarker">/web/front/user_transaction.ftl</result>
 			<result name="is_registered" type="stream">
      			<param name="contentType">html/text</param>
@@ -114,7 +115,11 @@
 		<action name="search" method="execute" class="searchAction">
 			<result name="success" type="freemarker">/web/front/search.ftl</result>
 			<result name="error" type="redirectAction">home</result>
-		</action>		
+		</action>	
+		<action name="compare" method="execute" class="compareAction">
+			<result name="success" type="freemarker">/web/front/compare.ftl</result>
+			<result name="error" type="redirectAction">home</result>
+		</action>	
 	</package>
 </struts>
 
