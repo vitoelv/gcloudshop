@@ -108,6 +108,11 @@
         parent="baseAction" >
 
 	</bean>	
+	<bean name="compareAction" scope="prototype"
+        class="com.jcommerce.web.front.action.CompareAction"
+        parent="baseAction" >
+
+	</bean>	
 	
 				
 </beans>

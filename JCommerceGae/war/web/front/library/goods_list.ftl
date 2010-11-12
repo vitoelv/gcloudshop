@@ -91,7 +91,7 @@
             </#if>
            <a href="javascript:collect(${goods.goodsId});" class="f6">${lang.btnCollect}</a> |
            <a href="javascript:addToCart(${goods.goodsId})" class="f6">${lang.btnBuy}</a> |
-           <a href="javascript:;" id="compareLink" onClick="Compare.add(${goods.goodsId},'${goods.goodsName}:"quotes"','${goods.type}')" class="f6">${lang.compare}</a>
+           <a href="javascript:;" id="compareLink" onClick="Compare.add(${goods.goodsId},'${goods.goodsName}','${goods.type}')" class="f6">${lang.compare}</a>
         </div>
     </#if>
     </#list>
@@ -102,7 +102,7 @@
     <#list goodsList as goods>
      <ul class="clearfix bgcolor"<#if ( goods_index % 2 == 0  ) >id=""<#else>id="bgcolor"</#if>>
     <li style="margin-right:15px;">
-    <a href="javascript:;" id="compareLink" onClick="Compare.add(${goods.goodsId},'${goods.goodsName}:"quotes"','${goods.type}')" class="f6">${lang.compare}</a>
+    <a href="javascript:;" id="compareLink" onClick="Compare.add(${goods.goodsId},'${goods.goodsName}','${goods.type}')" class="f6">${lang.compare}</a>
     </li>
     <li class="goodsName">
     <a href="${goods.url}" class="f6 f5">

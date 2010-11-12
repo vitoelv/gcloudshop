@@ -55,7 +55,7 @@ function remove(id, url)
                 <td  align="center" bgcolor="#ffffff" style="padding:5px;"><a href="${goods.url}"><img src="${goods.goodsThumb}" alt="${goods.goodsName}" class="ent_img" /></a></td>
                 </#list>
               </tr>
-              <#if ( TODO: sth wrong here > 2  ) >
+              <#if ( goodsList?size > 2  ) >
               <tr>
                 <td bgcolor="#ffffff">&nbsp;</td>
                 <#list goodsList as goods>
