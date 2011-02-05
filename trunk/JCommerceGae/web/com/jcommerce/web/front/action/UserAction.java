@@ -485,6 +485,9 @@ public class UserAction extends BaseAction {
 		    		return "message";
 				}
 				else {
+				    
+				    // send email
+				    // TODO using gmail and make it configurable
 					User user = users.get(0);
 					
 					Properties props = new Properties();
@@ -493,7 +496,7 @@ public class UserAction extends BaseAction {
 				    props.put("mail.from", "tianyinlq@sina.com");
 				    props.put("mail.smtp.auth", "true");
 				    
-				    MyAuthenticator au = new MyAuthenticator("tianyinlq","j987jkkm"); 
+				    MyAuthenticator au = new MyAuthenticator("user","password"); 
 				    Session session = Session.getDefaultInstance(props, au);
 				    session.setDebug(true);
 				
